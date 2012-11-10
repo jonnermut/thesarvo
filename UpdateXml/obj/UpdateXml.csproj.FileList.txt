@@ -1,0 +1,10 @@
+bin\Debug\UpdateXml.exe
+bin\Debug\UpdateXml.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\UpdateXml.exe
+obj\Debug\UpdateXml.pdb
+obj\Release\ResolveAssemblyReference.cache
+bin\Release\UpdateXml.exe
+bin\Release\UpdateXml.pdb
+obj\Release\UpdateXml.exe
+obj\Release\UpdateXml.pdb

@@ -1,0 +1,27 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    xmlns:x='urn:import:com.thesarvo.xphone.client.ui.widgets'
+    xmlns:s='urn:import:com.thesarvo.xphone.client.ui.widgets.simplebind'>
+
+  <ui:with field='r'  type='com.thesarvo.guide.client.view.res.Resources'/>
+  
+
+  <g:HTMLPanel >
+  	<div class='{r.s.climbtext}'>
+  		
+  		<span ui:field='editButtonsSpan'>
+	  		<g:Button ui:field='editButton' >Edit</g:Button>
+	  		&nbsp;
+	  		<g:Button ui:field='deleteButton' >Delete</g:Button>
+  		</span>
+  		
+  		<span ui:field='editingButtonsSpan'>
+	  		<g:Button ui:field='saveButton' >Save</g:Button>
+	  		&nbsp;
+	  		<g:Button ui:field='cancelButton' >Cancel</g:Button>
+	  	</span>
+  	</div>
+  </g:HTMLPanel>
+ 
+</ui:UiBinder>

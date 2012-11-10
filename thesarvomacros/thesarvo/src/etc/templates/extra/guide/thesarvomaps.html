@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>thesarvo.com Google Maps</title>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAKsgDQTt0s-n_qBW3HFYtDRT2BVD5EQ4YYKYmRI3vP8GF5xUB5xQIX6hQbBCdEu7mkZMy4YsDGLH7kg"
+      type="text/javascript"></script>
+    <script type="text/javascript">
+
+    //<![CDATA[
+
+    var map;
+    var geoXml;
+
+	function gup( name )
+	{
+	  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+	  var regexS = "[\\?&]"+name+"=([^&#]*)";
+	  var regex = new RegExp( regexS );
+	  var results = regex.exec( window.location.href );
+	  if( results == null )
+	    return "";
+	  else
+	    return unescape( results[1] );
+	}
+
+    function load() {
+      if (GBrowserIsCompatible()) {
+        map = new GMap2(document.getElementById("map"));
+
+        map.addMapType(G_HYBRID_MAP);
+        map.addMapType(G_PHYSICAL_MAP);
+        
+        //map.addMapType(G_AERIAL_HYBRID_MAP);
+        
+
+        map.addControl(new GLargeMapControl());
+        map.addControl(new GHierarchicalMapTypeControl());
+        map.addControl(new GScaleControl());
+        map.addControl(new GOverviewMapControl());
+        map.enableGoogleBar();
+        
+
+		var url = gup("url");
+       var url2 = gup("url2");
+       var url3 = gup("url3");
+		var lat = gup("lat");
+		var long = gup("long");
+		var zoom = gup("zoom");
+       if (zoom==null || zoom=='')
+            zoom="15";
+        
+        zoom = parseFloat(zoom);
+
+        map.setCenter(new GLatLng( long, lat), zoom);
+
+        map.setMapType(G_HYBRID_MAP);
+
+        geoXml = new GGeoXml(url);
+        map.addOverlay(geoXml);
+        geoXml.gotoDefaultViewport(map);
+ 
+        if (url2!=null && url2.length > 0)
+        {
+            geoXml = new GGeoXml(url2);
+            map.addOverlay(geoXml);       
+        }        
+        if (url3!=null && url3.length > 0)
+        {
+            geoXml = new GGeoXml(url3);
+            map.addOverlay(geoXml);       
+        } 
+
+      }
+    }
+
+    //]]>
+    </script>
+  </head>
+  <body onload="load()" onunload="GUnload()">
+    <div id="map" style="width: 100%; height: 600px"></div>
+  </body>
+</html>

@@ -1,0 +1,99 @@
+##
+## configuration and layout file for the Sydney Rockclimbing Guide
+##
+
+#
+# URL for confluence instance
+#
+site routes.sydneyrockies.org.au
+
+#
+# confluence space name
+#
+space nswrock
+
+#
+# working directory where XML, images, etc will be cached
+#
+#path /home/speedie/Documents/climbing/Guidebooks
+path C:\Users\auryanda2\Desktop\Stu Dobbie\guidebooks
+
+#
+# sequence of guide pages (only pageId is required)
+#
+guide 2392106 Introduction 
+
+#guide 1310736 North+Shore
+guide 1310843 North+Shore West Roseville
+guide 1310866 North+Shore Balls Head
+guide 1310874 North+Shore Project Wall
+###guide 1310890 North+Shore Pearl Bay --- looks rubbish
+guide 1310943 North+Shore Middle Cove
+###guide 1310945 North+Shore Crumbly ---- needs investigation
+guide 1310980 North+Shore Tambourine Bay
+guide 1310981 North+Shore Sissy Crag
+guide 6357004 North+Shore Lindfield
+guide 6356994 North+Shore Other North Shore Crags
+
+#guide 1310735 Northern+Beaches
+guide 1310770 Northern+Beaches Barrenjoey 
+guide 1310812 Northern+Beaches Narrabeen Slabs
+guide 1310867 Northern+Beaches Narrabeen Steep Side
+guide 1310914 Northern+Beaches Pootang Crag -- could possibly integrate with steep side
+guide 1310848 Northern+Beaches Terrey Hills
+guide 1310829 Northern+Beaches Elanora Heights
+guide 1310821 Northern+Beaches Freshwater Beach
+guide 1310774 Northern+Beaches Whale Beach
+guide 1310777 Northern+Beaches North Head
+guide 6357019 Northern+Beaches Other
+
+#guide 1310742 Hornsby+and+the+North --- rename ???
+guide 1310958 Hornsby+and+the+North Berowra
+guide 1310975 Hornsby+and+the+North Mt Kuringai
+guide 1311014 Hornsby+and+the+North Browns Road Wahrooga --- Hills ??
+guide 1310822 Hornsby+and+the+North The Great North Cliff
+guide 1310911 Hornsby+and+the+North Crosslands
+###guide Hornsby+and+the+North Mt Colah --- within kuringai NP
+guide 1310965 Hornsby+and+the+North Planet Clare
+guide 6357049 Hornsby+and+the+North Other --- many more to add
+
+#guide North West --- rename "Hills ??"
+guide 1310923 North+West The Stables
+guide 6357036 North+West Other
+
+
+#
+# image layout control
+#
+image cathslabtopo2.jpg fullpage
+image kuringai_approach_map.jpg fullpage
+image rainfall_small.png 
+image temperature_small.png    
+image diamondbayaccess.jpg fullpage
+image cathleftend.jpg fullpage
+image cathedraltopo2.jpg fullpage
+image Cathrightslabs.jpg fullpage
+image abs+bosch+bow+wall.JPG fullpage
+image Bangor_Roof.jpg fullpage
+image bondimap2.jpg fullpage
+image prowess1.JPG fullpage
+image hot+axis+bow+wall.JPG fullpage
+image rabies+DB.jpg fullpage
+image Sw+Diamond+bay.jpg fullpage
+image fish+fingers+Gap.jpg fullpage
+image duelling+biceps22.jpg fullpage
+image Browns+Rd.jpg fullpage
+image north_head.jpg fullpage
+
+
+
+
+
+
+
+
+
+ 
+
+
+

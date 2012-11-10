@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<kml xmlns='http://earth.google.com/kml/2.1'>
+	<Document>
+		<name>thesarvo.com Tasmanian Climbing</name>
+		<description>
+			<![CDATA[Locations of climbing and bouldering areas in Tasmania, Australia.]]>
+		</description>
+		<Style id='style1'>
+			<IconStyle>
+				<Icon>
+					<href>
+						http://maps.google.com/mapfiles/ms/icons/blue-dot.png
+					</href>
+				</Icon>
+			</IconStyle>
+		</Style>
+		<Placemark>
+			<name>EX</name>
+			<description>Example point Bellerive boulder</description>
+			<styleUrl>#style1</styleUrl>
+			<Point>
+				<coordinates>
+					-42.86948748942413,147.38592960255951,0
+				</coordinates>
+			</Point>
+		</Placemark>
+	</Document>
+</kml>

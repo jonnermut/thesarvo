@@ -1,0 +1,29 @@
+<atlassian-plugin name='thesarvo Macros' key='confluence.extra.thesarvo'>
+    <plugin-info>
+        <description>Macros to generate simple task lists</description>
+        <vendor name="Atlassian Software Systems" url="http://www.atlassian.com"/>
+        <version>1.4</version>
+    </plugin-info>
+
+    <macro name='guide' class='com.thesarvo.confluence.GuideMacro' key='guide'>
+        <description>Creates a guide</description>
+    </macro>
+    
+    <resource name="guide.js" type="download" location="guide.js">
+           <property key="content-type" value="text/plain"/>
+    </resource>
+    
+        <macro name='guidecontents' class='com.thesarvo.confluence.GuideContentsMacro' key='guidecontents'>
+            <description>Creates toc for guide</description>
+    </macro>
+    
+    <!--
+    <macro name='news' class='com.thesarvo.confluence.NewsMacro' key='news'>
+                <description>Shows blog posts that start with a certain string</description>
+    </macro>
+    
+        <macro name='html-snippet' class='com.thesarvo.confluence.HtmlSnippet' key='html-snippet'>
+                    <description>html-snippet</description>
+    </macro>
+    -->
+</atlassian-plugin>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="UpdateXml">
+</Property><Property Name="Solution File" Value="F:\svn\thesarvo\trunk\UpdateXml\UpdateXml.sln">
+</Property><Property Name="Date" Value="Saturday, 26 March 2011">
+</Property><Property Name="Time" Value="14:35 PM">
+</Property></Properties><Event ErrorLevel="0" Project="UpdateXml" Source="UpdateXml.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="UpdateXml" Source="UpdateXml.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="UpdateXml.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="UpdateXml.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="UpdateXml" Source="UpdateXml.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

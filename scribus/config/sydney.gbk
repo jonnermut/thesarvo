@@ -1,0 +1,180 @@
+##
+## configuration and layout file for the Sydney Rockclimbing Guide
+##
+
+#
+# URL for confluence instance
+#
+site routes.sydneyrockies.org.au
+
+#
+# confluence space name
+#
+space nswrock
+
+#
+# working directory where XML, images, etc will be cached
+#
+#path /home/speedie/Documents/climbing/Guidebooks
+path C:\Users\auryanda2\Desktop\Stu Dobbie\guidebooks
+
+#
+# sequence of guide pages (only pageId is required)
+#
+guide 2392106 Introduction 
+
+#guide 1310748 Sutherland
+guide 1310892 Sutherland Bonnet Bay
+guide 1310900 Sutherland Janalli
+guide 1310837 Sutherland The Cathedral
+guide 1310853 Sutherland Bangor
+guide 1310997 Sutherland The Lost World
+guide 1310934 Sutherland Alfords Point
+guide 1310918 Sutherland Moonah Road
+guide 1310996 Sutherland Illawong
+guide 1310956 Sutherland Bluebell
+guide 2850833 Sutherland Lomandra  --- needs access info
+guide 1310784 Sutherland Picnic Point
+guide 3244052 Sutherland Palmer Close
+guide 1310917 Sutherland Prices Cave
+guide 1310920 Sutherland Bardens Ridge
+guide 1310987 Sutherland Lucas Heights
+guide 1310948 Sutherland Heathcode Weir
+guide 1310865 Sutherland The Wastelands
+###guide 1310966 Sutherland The Wok   --- may be dropped?
+###guide 1310991 Sutherland Smokers Lookout  --- prob not
+###guide 1310898 Sutherland Dickheads --- prob not
+guide 1310889 Sutherland Bass and Flinders Point
+guide 1310935 Sutherland Stanwell Tops
+guide 1310800 Sutherland Bald Face Point
+guide 1310814 Sutherland Oatley Park
+guide 7733607 Sutherland Other Sutherland Crags
+
+#guide 1310750 South+West
+guide 1310833 South+West The Woolwash
+guide 7733812 South+West Other
+
+#guide 1310731 Eastern+Suburbs
+guide 1310888 Eastern+Suburbs South Coogee
+guide 1310788 Eastern+Suburbs Clovelly
+guide 1310828 Eastern+Suburbs Bronte
+guide 1310766 Eastern+Suburbs Bondi
+guide 1310876 Eastern+Suburbs Bow Wall
+guide 1311007 Eastern+Suburbs Diamond Bay
+guide 1310803 Eastern+Suburbs Rosa Gully
+guide 1310973 Eastern+Suburbs Trendies Corner
+guide 1310787 Eastern+Suburbs The Gap
+guide 1310906 Eastern+Suburbs Camp Cove
+guide 6357025 Eastern+Suburbs Other Eastern Suburbs Crags
+
+#guide 1310733 Inner+West+and+City
+guide 1310786 Inner+West+and+City Earlwood
+guide 5963821 Inner+West+and+City City Centre
+guide 6357014 Inner+West+and+City Other Inner West Crags
+
+#guide 1310736 North+Shore
+guide 1310843 North+Shore West Roseville
+guide 1310866 North+Shore Balls Head
+guide 1310874 North+Shore Project Wall
+###guide 1310890 North+Shore Pearl Bay --- looks rubbish
+guide 1310943 North+Shore Middle Cove
+###guide 1310945 North+Shore Crumbly ---- needs investigation
+guide 1310980 North+Shore Tambourine Bay
+guide 1310981 North+Shore Sissy Crag
+guide 6357004 North+Shore Lindfield
+guide 6356994 North+Shore Other North Shore Crags
+
+#guide 1310735 Northern+Beaches
+guide 1310770 Northern+Beaches Barrenjoey 
+guide 1310812 Northern+Beaches Narrabeen Slabs
+guide 1310867 Northern+Beaches Narrabeen Steep Side
+guide 1310914 Northern+Beaches Pootang Crag -- could possibly integrate with steep side
+guide 1310848 Northern+Beaches Terrey Hills
+guide 1310829 Northern+Beaches Elanora Heights
+guide 1310821 Northern+Beaches Freshwater Beach
+guide 1310774 Northern+Beaches Whale Beach
+guide 1310777 Northern+Beaches North Head
+guide 6357019 Northern+Beaches Other
+
+#guide 1310742 Hornsby+and+the+North --- rename ???
+guide 1310958 Hornsby+and+the+North Berowra
+guide 1310975 Hornsby+and+the+North Mt Kuringai
+guide 1311014 Hornsby+and+the+North Browns Road Wahrooga --- Hills ??
+guide 1310822 Hornsby+and+the+North The Great North Cliff
+guide 1310911 Hornsby+and+the+North Crosslands
+###guide Hornsby+and+the+North Mt Colah --- within kuringai NP
+guide 1310965 Hornsby+and+the+North Planet Clare
+guide 6357049 Hornsby+and+the+North Other --- many more to add
+
+#guide North West --- rename "Hills ??"
+guide 1310923 North+West The Stables
+guide 6357036 North+West Other
+
+guide 1310740 Western+Suburbs
+
+#guide Lower+Blue+Mountains
+guide 1310967 Lower+Blue+Mountains Nortons Basin
+guide 1310983 Lower+Blue+Mountains Glenbrook Gorge
+guide 1310891 Lower+Blue+Mountains Slab World
+guide 1310873 Lower+Blue+Mountains The Heights
+guide 3440645 Lower+Blue+Mountains Birdwood Gully
+
+#guide Hawkesbury+River
+guide 1310785 Hawkesbury+River Brooklyn
+guide 1310810 Hawkesbury+River Gunyah Point --- research! ROCK mag
+guide 1310971 Hawkesbury+River Jolls Bridge
+guide 1310805 Hawkesbury+River Wondabyne East
+guide 1310970 Hawkesbury+River Wondabyne Mainline
+guide 1310953 Hawkesbury+River Wondabyne North
+###guide Hawkesbury+River --- shitloads up here
+
+#guide Colo+River
+guide 1310830 Colo+River Mandalay
+guide 1311005 Colo+River Slab City
+guide 1310854 Colo+River Cracks Corner
+guide 1310863 Colo+River Funnelweb Gulch
+
+#guide Central+Coast
+guide 1310782 Central+Coast Blackwall Mountain
+guide 1310846 Central+Coast South Lobster Beach
+guide 1310849 Central+Coast Kingsview Umina
+guide 1310869 Central+Coast Dog Face Rocks --- in Boudi? banned?
+guide 1310896 Central+Coast Bogas Cave
+guide 1310903 Central+Coast Phegans Bay
+
+
+#
+# image layout control
+#
+image cathslabtopo2.jpg fullpage
+image kuringai_approach_map.jpg fullpage
+image rainfall_small.png 
+image temperature_small.png    
+image diamondbayaccess.jpg fullpage
+image cathleftend.jpg fullpage
+image cathedraltopo2.jpg fullpage
+image Cathrightslabs.jpg fullpage
+image abs+bosch+bow+wall.JPG fullpage
+image Bangor_Roof.jpg fullpage
+image bondimap2.jpg fullpage
+image prowess1.JPG fullpage
+image hot+axis+bow+wall.JPG fullpage
+image rabies+DB.jpg fullpage
+image Sw+Diamond+bay.jpg fullpage
+image fish+fingers+Gap.jpg fullpage
+image duelling+biceps22.jpg fullpage
+image Browns+Rd.jpg fullpage
+image north_head.jpg fullpage
+
+
+
+
+
+
+
+
+
+ 
+
+
+

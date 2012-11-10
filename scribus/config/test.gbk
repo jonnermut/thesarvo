@@ -1,0 +1,130 @@
+##
+## configuration and layout file for the Sydney Rockclimbing Guide
+##
+
+#
+# URL for confluence instance
+#
+site routes.sydneyrockies.org.au
+
+#
+# confluence space name
+#
+space nswrock
+
+#
+# working directory where XML, images, etc will be cached
+#
+path /home/speedie/Documents/climbing/Guidebooks/downloads
+#path C:\Users\auryanda2\Desktop\Stu Dobbie\guidebooks
+
+#
+# sequence of guide pages (only pageId is required)
+#
+
+#guide 7734180 Introduction Introduction
+#guide 7734184 Introduction Using This Guide
+#guide 7734182 Introduction Notes for the Visitor
+#guide 7734234 Introduction Good Bolts Bad Bolts
+
+#guide 1310748 Sutherland+Shire Sutherland
+#guide 1310892 Sutherland+Shire Bonnet Bay
+#guide 1310837 Sutherland+Shire The Cathedral
+#guide 1310853 Sutherland+Shire Bangor
+#guide 1310997 Sutherland+Shire The Lost World
+#guide 1310934 Sutherland+Shire Alfords Point
+#guide 1310900 Sutherland+Shire Janalli
+#guide 1310918 Sutherland+Shire Moonah Road
+#guide 1310996 Sutherland+Shire Illawong
+#guide 1310956 Sutherland+Shire Bluebell
+#guide 1310784 Sutherland+Shire Picnic Point
+#guide 3244052 Sutherland+Shire Palmer Close
+#guide 2850833 Sutherland+Shire Lomandra  --- needs access info
+#guide 1310917 Sutherland+Shire Prices Cave
+#guide 1310920 Sutherland+Shire Bardens Ridge
+#guide 1310987 Sutherland+Shire Lucas Heights
+#guide 1310948 Sutherland+Shire Heathcode Weir
+#guide 1310814 Sutherland+Shire Oatley Park
+#guide 1310865 Sutherland+Shire The Wastelands
+#guide 1310889 Sutherland+Shire Bass and Flinders Point
+#guide 1310935 Sutherland+Shire Stanwell Tops
+#guide 1310800 Sutherland+Shire Bald Face Point
+#guide 7733607 Sutherland+Shire Other Sutherland Crags
+
+#guide 1310750 South+West
+#guide 1310833 South+West The Woolwash
+#guide 7733812 South+West Other
+
+guide 1310731 Eastern+Suburbs
+#guide 1310888 Eastern+Suburbs South Coogee
+#guide 1310788 Eastern+Suburbs Clovelly
+#guide 1310828 Eastern+Suburbs Bronte
+#guide 1310766 Eastern+Suburbs Bondi
+#guide 1310876 Eastern+Suburbs Bow Wall
+#guide 1311007 Eastern+Suburbs Diamond Bay
+#guide 1310803 Eastern+Suburbs Rosa Gully
+#guide 1310973 Eastern+Suburbs Trendies Corner
+#guide 1310787 Eastern+Suburbs The Gap
+#guide 1310906 Eastern+Suburbs Camp Cove
+#guide 6357025 Eastern+Suburbs Other Eastern Suburbs Crags
+
+#guide 1310733 Inner+West+and+City
+#guide 1310786 Inner+West+and+City Earlwood
+#guide 5963821 Inner+West+and+City City Centre
+#guide 6357014 Inner+West+and+City Other Inner West Crags
+
+
+#
+# image layout control
+#
+image cathslabtopo2.jpg fullpage
+image kuringai_approach_map.jpg fullpage
+image rainfall_small.png 
+image temperature_small.png    
+image diamondbayaccess.jpg fullpage
+image cathleftend.jpg fullpage
+image cathedraltopo2.jpg fullpage
+image Cathrightslabs.jpg fullpage
+image abs+bosch+bow+wall.JPG fullpage
+image Bangor_Roof.jpg fullpage
+image bondimap2.jpg fullpage
+image prowess1.JPG fullpage
+image hot+axis+bow+wall.JPG fullpage
+image rabies+DB.jpg fullpage
+image Sw+Diamond+bay.jpg fullpage
+image fish+fingers+Gap.jpg fullpage
+image duelling+biceps22.jpg fullpage
+image Browns+Rd.jpg fullpage
+image north_head.jpg fullpage
+image silly_grading_chart.jpg fullpage
+image bom_observatory_hill.png fullpage
+image eastern+suburbs.png maxwidth=99
+#image sutherland.png fullpage
+image silly_grading_chart.jpg fullpage
+image bom_observatory_hill.png fullpage
+image six_bolt_collage.png fullpage
+
+#
+# route aliases
+#
+alias Quintin's+Climb Trendies+Corner
+
+#
+# turn these on or off
+# contents 2nd param is how many pages to set aside for contents
+#
+contents 0 1
+indexbygrade no
+indexbyname no
+
+
+
+
+
+
+
+
+ 
+
+
+

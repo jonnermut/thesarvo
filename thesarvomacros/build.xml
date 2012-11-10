@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!-- Build file for custom Confluence plugins -->
+<project name="confluence-plugins" default="usage" basedir=".">
+
+	<property file="build.properties"/>
+	<property file="project.properties"/>
+
+	<path id="all-libs">
+        <pathelement path="${webapp.classes.dir}"/>
+		<fileset dir="${webapp.lib.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+
+		<fileset dir="${plugins.lib.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="usage">
+         <echo message=""/>
+         <echo message="${name} build file"/>
+         <echo message="------------------------------------------------------"/>
+         <echo message=""/>
+         <echo message="To build a plugin jar:"/>
+         <echo message=""/>
+         <echo message="build     --> build a specific plugin library"/>
+         <echo message=""/>
+         <echo message="Deprecated Targets:"/>
+         <echo message=""/>
+         <echo message="The following targets are deprecated, as they install the plugins directly into"/>
+         <echo message="the Confluence web application. We recommend building the jars, and deploying"/>
+         <echo message="them to Confluence via the web interface."/>
+         <echo message=""/>
+         <echo message="install   --> build and install a specific plugin library into the default web application"/>
+         <echo message="uninstall --> uninstall a specific plugin library from the default web application"/>
+         <echo message="clean     --> clean a specific plugin library"/>
+         <echo message=""/>
+         <echo message="To specify a plugin library, use -Dlibrary=X where X is the directory of the library."/>
+         <echo message="eg. 'ant -Dlibrary=tasklist build' will build the tasklist plugin library." />
+         <echo message=""/>
+
+	</target>
+
+	<target name="build" description="Compile a plugin library" depends="checklibrary">
+		<mkdir dir="${library}/classes"/>
+		<javac destdir="${library}/classes"  debug="${debug}" deprecation="false" optimize="false" failonerror="true">
+			<src path="${library}/src/java"/>
+			<classpath refid="all-libs"/>
+		</javac>
+
+		<mkdir dir="${library}/dist"/>
+		<jar jarfile="${library}/dist/plugins-${library}.jar">
+			<fileset dir="${library}/classes" />
+			<fileset dir="${library}/src/etc" />
+			
+
+			<zipfileset src="${plugins.lib.dir}/dytechcommon.jar" />
+			
+			<zipfileset src="${plugins.lib.dir}/commons-pool-1.2.jar" />
+			
+			<!--
+			<zipfileset src="${plugins.lib.dir}/jsonrpc-0.8.jar" />
+			-->
+			<zipfileset src="${plugins.lib.dir}/chart-plugin-1.8.jar" />
+			<zipfileset src="${plugins.lib.dir}/iText-2.0.7.jar" />
+
+		</jar>
+
+
+    </target>
+
+	<target name="install" description="Install a plugin library" depends="build">
+		<copy file="${library}/dist/plugins-${library}.jar"
+            todir="${library.install.dir}" overwrite="true" />
+            <copy file="${plugins.lib.dir}/dytechcommon.jar" todir="${library.install.dir}" overwrite="true" />
+            <copy file="${plugins.lib.dir}/jsonrpc-0.8.jar" todir="${library.install.dir}" overwrite="true" />
+
+        <echo message="plugins-${library}.jar installed - restart Confluence to use the plugin." />
+    </target>
+
+	<target name="uninstall" description="Uninstall a plugin library" depends="checklibrary">
+        <delete file="${library.install.dir}/plugins-${library}.jar" />
+    </target>
+
+	<target name="clean" description="Clean a plugin library" depends="checklibrary">
+		<delete dir="${library}/dist"/>
+		<delete dir="${library}/classes"/>
+    </target>
+
+    <target name="checklibrary" description="Ensure a library system property exists.">
+        <fail unless="library">No library specified.
+    You must specify -Dlibrary=X where X is the library name.
+        </fail>
+    </target>
+</project>

@@ -1,0 +1,2 @@
+C:\MtWellingtonGuide\UpdateXml\obj\Debug\UpdateXml.exe
+C:\MtWellingtonGuide\UpdateXml\obj\Debug\UpdateXml.pdb

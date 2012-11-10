@@ -1,0 +1,30 @@
+
+#ContentLocations=C:\guides\boulderingGuide\topos\maps,C:\guides\boulderingGuide\topos\intro
+
+book=SydneyClimbingGuide.indb
+
+#Sections
+
+#Freycinet -.RunningColour=220,220,230
+#Freycinet - Coastal -.RunningColour=220,220,230
+#Freycinet - Hazards -.RunningColour=247,93,0
+#East -.RunningColour=220,220,230
+#Ben Lomond -.RunningColour=130,224,0
+#Esk Rivers -.RunningColour=251,224,0
+#Fingal Valley -.RunningColour=207,83,18
+#North East -.RunningColour=206,186,218
+#North West -.RunningColour=240,96,255
+#South East -.RunningColour=207,214,119
+#Tasman Peninsula -.RunningColour=122,162,221
+#Mt Wellington -.RunningColour=207,232,255
+#West -.RunningColour=220,220,220
+
+
+#Intro
+#tasoverview.png.FitToPage=true
+#40_deepwz.jpg.TwoColumns=true
+#coles bay hmw overview.jpg.Rotate=true
+#coles bay hmw left.jpg.Width=800
+#The Gonk.NewPage=true
+
+#ferntreesmall.png.Border=true

@@ -1,0 +1,58 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    xmlns:x='urn:import:com.thesarvo.xphone.client.ui'
+    xmlns:s='urn:import:com.thesarvo.xphone.client.ui.widgets.simplebind'>
+
+  <ui:with field='r' type='com.thesarvo.guide.client.view.res.Resources'/>
+  
+  <g:HTMLPanel >
+ 
+  
+	<h1 class='heading1'><s:BoundLabel bindValue='@name' /></h1>
+ 	<table cellpadding='4' cellspacing='0' width='100%' >
+
+		<tr >
+			<td width='100px'>Name </td>
+			<td><s:BoundTextBox bindValue='@name' styleName='{r.s.faTextBox}' /> </td>
+		</tr>
+
+		<tr >
+			<td>Walk </td>
+			<td><s:BoundTextBox bindValue='@walk' styleName='{r.s.faTextBox}' /> </td>
+		</tr>
+		<tr >
+			<td>Sun </td>
+			<td><s:BoundTextBox bindValue='@sun' styleName='{r.s.faTextBox}' /> </td>
+		</tr>
+		<tr >
+			<td>Rock </td>
+			<td><s:BoundTextBox bindValue='@rock' styleName='{r.s.faTextBox}' /> </td>
+		</tr>
+
+	 	<tr  > 
+	 		<td  >Acknowledgement</td>
+	 		<td><s:BoundTextArea  bindValue='@acknowledgement' styleName='{r.s.textArea}' /></td>
+	 	</tr>
+	 	<tr  >
+	 		<td >Introduction</td>
+	 		<td><s:BoundTextArea bindValue='@intro' styleName='{r.s.textArea}' /></td>
+	 	</tr>
+	 	<tr  >
+	 		<td >History</td>
+	 		<td><s:BoundTextArea bindValue='@history' styleName='{r.s.textArea}' /></td>
+	 	</tr>
+	 	<tr  >
+	 		<td  >Access</td>
+	 		<td><s:BoundTextArea bindValue='@access' styleName='{r.s.textArea}' /></td>
+	 	</tr>
+	 	
+	 	<tr  >
+	 		<td  >Camping</td>
+	 		<td><s:BoundTextArea bindValue='@camping' styleName='{r.s.textArea}' /></td>
+	 	</tr>
+	 </table>
+	 	
+  </g:HTMLPanel>
+ 
+</ui:UiBinder>

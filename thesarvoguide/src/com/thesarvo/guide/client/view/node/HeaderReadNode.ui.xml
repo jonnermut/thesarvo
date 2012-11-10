@@ -1,0 +1,59 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    xmlns:x='urn:import:com.thesarvo.xphone.client.ui'
+    xmlns:s='urn:import:com.thesarvo.xphone.client.ui.widgets.simplebind'>
+
+  <ui:with field='r' type='com.thesarvo.guide.client.view.res.Resources'/>
+  <ui:with field='t' type='com.thesarvo.guide.client.view.node.HeaderReadNode' />
+
+  <g:HTMLPanel >
+	<h1 class='heading1' ui:field='heading'><s:BoundLabel bindValue='@name' /></h1>
+ 	<table cellpadding='4' cellspacing='0'  >
+	 	<tr class='{r.s.tstr}'>
+	 		<td>
+	 			<g:Image ui:field='imageGraph'  />
+	 		
+	 		</td>
+	 		<td>
+	 			<table>
+	 				<tr ui:field='walkTR'  class='{r.s.tstr}'>
+	 					<td><g:Image resource='{t.walk}' width="{t.getImageSize}" height="{t.getImageSize}" /> </td>
+	 					<td><s:BoundMultlineLabel styleName='{r.s.tssubcont}' bindValue='@walk' /> </td>
+	 				</tr>
+	 				<tr ui:field='sunTR'  class='{r.s.tstr}'>
+	 					<td><g:Image resource='{t.sun}' width="{t.getImageSize}" height="{t.getImageSize}" /> </td>
+	 					<td><s:BoundMultlineLabel styleName='{r.s.tssubcont}' bindValue='@sun' /> </td>
+	 				</tr>
+	 				<tr ui:field='rockTR'  class='{r.s.tstr}'>
+	 					<td><g:Image resource='{t.rock}' width="{t.getImageSize}" height="{t.getImageSize}" /> </td>
+	 					<td><s:BoundMultlineLabel styleName='{r.s.tssubcont}' bindValue='@rock' /> </td>
+	 				</tr>
+	 			</table> 
+	 		</td>
+	 	</tr>
+	 	<tr  ui:field='acknowledgementTR' class='{r.s.tstr}'> 
+	 		<td class='{r.s.tsleftcell}'><div class='{r.s.tssubhead}' >Acknowledgement</div></td>
+	 		<td><s:BoundMultlineLabel styleName='{r.s.tssubcont}' bindValue='@acknowledgement' /></td>
+	 	</tr>
+	 	<tr  ui:field='introductionTR' class='{r.s.tstr}'>
+	 		<td class='{r.s.tsleftcell}'><div class='{r.s.tssubhead}' >Introduction</div></td>
+	 		<td><s:BoundMultlineLabel styleName='{r.s.tssubcont}' bindValue='@intro' /></td>
+	 	</tr>
+	 	<tr  ui:field='historyTR' class='{r.s.tstr}'>
+	 		<td class='{r.s.tsleftcell}'><div class='{r.s.tssubhead}' >History</div></td>
+	 		<td><s:BoundMultlineLabel styleName='{r.s.tssubcont}' bindValue='@history' /></td>
+	 	</tr>
+	 	<tr  ui:field='accessTR' class='{r.s.tstr}'>
+	 		<td class='{r.s.tsleftcell}'><div class='{r.s.tssubhead}' >Access</div></td>
+	 		<td><s:BoundMultlineLabel styleName='{r.s.tssubcont}' bindValue='@access' /></td>
+	 	</tr>
+	 	<tr  ui:field='campingTR' class='{r.s.tstr}'>
+	 		<td class='{r.s.tsleftcell}'><div class='{r.s.tssubhead}' >Camping</div></td>
+	 		<td><s:BoundMultlineLabel styleName='{r.s.tssubcont}' bindValue='@camping' /></td>
+	 	</tr>
+	 </table>
+	 	
+  </g:HTMLPanel>
+ 
+</ui:UiBinder>

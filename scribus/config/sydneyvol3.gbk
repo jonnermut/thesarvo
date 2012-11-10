@@ -1,0 +1,96 @@
+##
+## configuration and layout file for the Sydney Rockclimbing Guide
+##
+
+#
+# URL for confluence instance
+#
+site routes.sydneyrockies.org.au
+
+#
+# confluence space name
+#
+space nswrock
+
+#
+# working directory where XML, images, etc will be cached
+#
+#path /home/speedie/Documents/climbing/Guidebooks
+path C:\Users\auryanda2\Desktop\Stu Dobbie\guidebooks
+
+#
+# sequence of guide pages (only pageId is required)
+#
+guide 2392106 Introduction 
+
+
+
+
+#guide Lower+Blue+Mountains
+guide 1310967 Lower+Blue+Mountains Nortons Basin
+guide 1310983 Lower+Blue+Mountains Glenbrook Gorge
+guide 1310891 Lower+Blue+Mountains Slab World
+guide 1310873 Lower+Blue+Mountains The Heights
+guide 3440645 Lower+Blue+Mountains Birdwood Gully
+
+guide 1310740 Western+Suburbs
+
+#guide Colo+River
+guide 1310830 Colo+River Mandalay
+guide 1311005 Colo+River Slab City
+guide 1310854 Colo+River Cracks Corner
+guide 1310863 Colo+River Funnelweb Gulch
+
+#guide Hawkesbury+River
+guide 1310785 Hawkesbury+River Brooklyn
+guide 1310810 Hawkesbury+River Gunyah Point --- research! ROCK mag
+guide 1310971 Hawkesbury+River Jolls Bridge
+guide 1310805 Hawkesbury+River Wondabyne East
+guide 1310970 Hawkesbury+River Wondabyne Mainline
+guide 1310953 Hawkesbury+River Wondabyne North
+###guide Hawkesbury+River --- shitloads up here
+
+#guide Central+Coast
+guide 1310782 Central+Coast Blackwall Mountain
+guide 1310846 Central+Coast South Lobster Beach
+guide 1310849 Central+Coast Kingsview Umina
+guide 1310869 Central+Coast Dog Face Rocks --- in Boudi? banned?
+guide 1310896 Central+Coast Bogas Cave
+guide 1310903 Central+Coast Phegans Bay
+
+
+#
+# image layout control
+#
+image cathslabtopo2.jpg fullpage
+image kuringai_approach_map.jpg fullpage
+image rainfall_small.png 
+image temperature_small.png    
+image diamondbayaccess.jpg fullpage
+image cathleftend.jpg fullpage
+image cathedraltopo2.jpg fullpage
+image Cathrightslabs.jpg fullpage
+image abs+bosch+bow+wall.JPG fullpage
+image Bangor_Roof.jpg fullpage
+image bondimap2.jpg fullpage
+image prowess1.JPG fullpage
+image hot+axis+bow+wall.JPG fullpage
+image rabies+DB.jpg fullpage
+image Sw+Diamond+bay.jpg fullpage
+image fish+fingers+Gap.jpg fullpage
+image duelling+biceps22.jpg fullpage
+image Browns+Rd.jpg fullpage
+image north_head.jpg fullpage
+
+
+
+
+
+
+
+
+
+ 
+
+
+

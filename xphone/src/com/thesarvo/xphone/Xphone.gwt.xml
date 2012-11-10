@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='xphone'>
+  <!-- Inherit the core Web Toolkit stuff.                        -->
+  <inherits name='com.google.gwt.user.User'/>
+
+  <!-- Inherit the default GWT style sheet.  You can change       -->
+  <!-- the theme of your GWT application by uncommenting          -->
+  <!-- any one of the following lines.                            -->
+  <!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
+  <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
+  <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
+
+  <inherits name="com.google.gwt.http.HTTP" />
+  <inherits name="com.google.gwt.xml.XML" />
+  <inherits name="com.google.gwt.json.JSON" />-->
+
+	  <!-- For production most teams prefer to set the default log level to `OFF` -->
+	  <!-- <inherits name="com.allen_sauer.gwt.log.gwt-log-OFF" /> -->
+
+    <define-property name="mobile.user.agent" values="iphone, android, none"/>
+
+    <property-provider name="mobile.user.agent"><![CDATA[
+      var ua = navigator.userAgent.toLowerCase();
+      if (ua.indexOf("iphone") != -1  || ua.indexOf("ipod") !=-1 || ua.indexOf("ipad") !=-1 || ua.indexOf("chrome") != -1 || ua.indexOf("safari") != -1  ) {
+        return "iphone";
+      }
+      else if (ua.indexOf("android") != -1 ) {
+      	return "android";
+      }
+      return "none";
+  ]]></property-provider>
+
+	<set-property name="mobile.user.agent" value="none" >
+        <none>
+            <when-property-is name="user.agent" value="safari" />
+        </none>
+    </set-property>
+
+   <replace-with class="com.google.gwt.user.client.impl.DOMImplMobileWebkit">
+        <when-type-is class="com.google.gwt.user.client.impl.DOMImpl"/>
+        <all>
+            <when-property-is name="user.agent" value="safari"/>
+            <when-property-is name="mobile.user.agent" value="iphone"/>
+        </all>
+    </replace-with>
+
+   <replace-with class="com.google.gwt.user.client.impl.DOMImplMobileWebkit">
+        <when-type-is class="com.google.gwt.user.client.impl.DOMImpl"/>
+        <all>
+            <when-property-is name="user.agent" value="safari"/>
+            <when-property-is name="mobile.user.agent" value="android"/>
+        </all>
+    </replace-with>
+
+
+  <!-- Other module inherits                                      -->
+
+  <!-- Specify the app entry point class.                         -->
+  <entry-point class='com.thesarvo.xphone.client.Xphone'/>
+
+  <!-- Specify the paths for translatable code                    -->
+  <source path='client'/>
+
+
+	<!--  <script src='client/mobilewebkit/touchscroll/touchscroll.js' />-->
+</module>

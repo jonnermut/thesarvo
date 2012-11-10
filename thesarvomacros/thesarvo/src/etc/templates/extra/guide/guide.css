@@ -1,0 +1,53 @@
+
+h1.heading1 {
+  font-size: 20pt;
+  font-family: Tahoma;
+}
+
+
+h2.heading2
+{
+  font-size: 18pt;
+  font-family: Tahoma;
+  border-bottom: 1px solid #cccccc;
+}
+h3.heading3
+{
+  font-family: Tahoma;
+  font-size: 14pt;
+  font-weight:bold;
+  color: black;
+}
+
+.header1
+{
+/* background-image: url(/confluence/download/attachments/9207843/banner1.png);
+background-repeat: no-repeat;
+background-position: top left; */
+/*align:center;*/
+padding: 6px;
+padding-top: 2px;
+}
+
+.tssubhead
+{
+  font-size: 14pt;
+  font-family: Tahoma;
+  font-weight:bold;
+  border-bottom: 1px solid silver;
+  padding-top: 6px;
+}
+
+.tssubcont
+{
+padding-top: 10px;
+padding-right:80px;
+text-align: justify;
+}
+
+.tsleftcell
+{
+  width: 210px;
+  min-width: 210px;
+  vertical-align: top;
+}

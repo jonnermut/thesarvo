@@ -1,0 +1,5 @@
+F:\svn\thesarvo\trunk\UpdateXml\obj\Debug\UpdateXml.exe
+F:\svn\thesarvo\trunk\UpdateXml\obj\Debug\UpdateXml.pdb
+F:\svn\thesarvo\trunk\UpdateXml\bin\Debug\UpdateXml.exe
+F:\svn\thesarvo\trunk\UpdateXml\bin\Debug\UpdateXml.pdb
+F:\svn\thesarvo\trunk\UpdateXml\obj\Debug\ResolveAssemblyReference.cache

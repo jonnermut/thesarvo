@@ -1,0 +1,80 @@
+##
+## configuration and layout file for the Buffalo Guide
+
+#
+# URL for confluence instance
+#
+site guides.vicclimb.org.au/confluence
+
+#
+# confluence space name
+#
+space guides
+
+#
+# working directory where XML, images, etc will be cached
+#
+path /home/speedie/Documents/climbing/Guidebooks/vcc
+#path c:\guides\working
+
+#
+# sequence of guide pages (only pageId is required)
+#
+guide 3833876 Introduction
+
+guide 3932198 The+Road+Up
+guide 3342348 The+Road+Up 
+guide 2097401 The+Road+Up 
+
+guide 3604482 South+Side+Of+The+Gorge
+guide 3604528 South+Side+Of+The+Gorge 
+guide 3342354 South+Side+Of+The+Gorge 
+guide 3604496 South+Side+Of+The+Gorge 
+guide 3604489 South+Side+Of+The+Gorge 
+guide 3604498 South+Side+Of+The+Gorge 
+guide 3604502 South+Side+Of+The+Gorge 
+
+guide 3342357 North+Side+Of+The+Gorge 
+guide 3604484 North+Side+Of+The+Gorge 
+
+guide 3932201 Catani+Environs
+guide 3342359 Catani+Environs
+guide 3342371 Catani+Environs
+guide 3342375 Catani+Environs
+guide 3342369 Catani+Environs
+
+guide 3932203 Upper+Plateau
+guide 3342361 Upper+Plateau
+guide 3342363 Upper+Plateau
+guide 3604517 Upper+Plateau
+guide 2097726 Upper+Plateau
+guide 3604523 Upper+Plateau
+
+guide 3932205 The+Horn+Environs
+guide 3833871 The+Horn+Environs
+guide 3604506 The+Horn+Environs
+guide 3604509 The+Horn+Environs
+
+guide 3932207 Other+Areas
+guide 3604530 Other+Areas
+
+#
+# image layout control
+#
+image BentsLookoutTopo1_JG.png fullpage
+image BentsLookoutTopo2_JG.png fullpage
+image BackWallRapTopo.jpg fullpage
+
+#
+# route aliases
+#
+alias Fat+Wall+Ordinaire+Banana+Blasé Banana+Blasé
+
+#
+# turn these on or off
+# contents 2nd param is how many pages to set aside for contents
+#
+contents 3 1
+indexbygrade yes
+indexbyname yes
+

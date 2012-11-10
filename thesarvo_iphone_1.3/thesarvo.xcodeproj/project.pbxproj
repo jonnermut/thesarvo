@@ -1,0 +1,541 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FC3024EB1492DBF900E73DBB /* index.plist in Resources */ = {isa = PBXBuildFile; fileRef = FC3024EA1492DBF900E73DBB /* index.plist */; };
+		FC3024EE1493054B00E73DBB /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = FC3024ED1493054B00E73DBB /* config.xml */; };
+		FC3024F1149307A200E73DBB /* XMLReader.m in Sources */ = {isa = PBXBuildFile; fileRef = FC3024F0149307A200E73DBB /* XMLReader.m */; };
+		FC302550149366A900E73DBB /* www in Resources */ = {isa = PBXBuildFile; fileRef = FC30254F149366A900E73DBB /* www */; };
+		FC30255414936FAA00E73DBB /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC30255314936FAA00E73DBB /* CoreLocation.framework */; };
+		FC30255614936FB900E73DBB /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC30255514936FB900E73DBB /* MapKit.framework */; };
+		FC83BDFE1436CF4F007192D2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC83BDFD1436CF4F007192D2 /* UIKit.framework */; };
+		FC83BE001436CF4F007192D2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC83BDFF1436CF4F007192D2 /* Foundation.framework */; };
+		FC83BE061436CF4F007192D2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FC83BE041436CF4F007192D2 /* InfoPlist.strings */; };
+		FC83BE081436CF4F007192D2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FC83BE071436CF4F007192D2 /* main.m */; };
+		FC83BE0C1436CF4F007192D2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FC83BE0B1436CF4F007192D2 /* AppDelegate.m */; };
+		FC83BE0F1436CF4F007192D2 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC83BE0E1436CF4F007192D2 /* MasterViewController.m */; };
+		FC83BE121436CF4F007192D2 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC83BE111436CF4F007192D2 /* DetailViewController.m */; };
+		FC83BE151436CF50007192D2 /* MasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC83BE131436CF50007192D2 /* MasterViewController.xib */; };
+		FC83BE181436CF50007192D2 /* MasterViewController~ipad. blahxib in Resources */ = {isa = PBXBuildFile; fileRef = FC83BE161436CF50007192D2 /* MasterViewController~ipad. blahxib */; };
+		FC83BE1B1436CF50007192D2 /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC83BE191436CF50007192D2 /* DetailViewController.xib */; };
+		FC83BE1E1436CF50007192D2 /* DetailViewController~ipad blah.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC83BE1C1436CF50007192D2 /* DetailViewController~ipad blah.xib */; };
+		FC83BE261436CF50007192D2 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC83BE251436CF50007192D2 /* SenTestingKit.framework */; };
+		FC83BE271436CF50007192D2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC83BDFD1436CF4F007192D2 /* UIKit.framework */; };
+		FC83BE281436CF50007192D2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC83BDFF1436CF4F007192D2 /* Foundation.framework */; };
+		FC83BE301436CF50007192D2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FC83BE2E1436CF50007192D2 /* InfoPlist.strings */; };
+		FC83BE331436CF50007192D2 /* guideTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FC83BE321436CF50007192D2 /* guideTests.m */; };
+		FCBC849A1499940A0091A8CB /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = FCBC84971499940A0091A8CB /* Default.png */; };
+		FCBC849B1499940A0091A8CB /* icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = FCBC84981499940A0091A8CB /* icon-72.png */; };
+		FCBC849C1499940A0091A8CB /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FCBC84991499940A0091A8CB /* icon.png */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FC83BE291436CF50007192D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FC83BDF01436CF4F007192D2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FC83BDF81436CF4F007192D2;
+			remoteInfo = guide;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		FC3024EA1492DBF900E73DBB /* index.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = index.plist; sourceTree = "<group>"; };
+		FC3024ED1493054B00E73DBB /* config.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
+		FC3024EF149307A200E73DBB /* XMLReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLReader.h; sourceTree = "<group>"; };
+		FC3024F0149307A200E73DBB /* XMLReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMLReader.m; sourceTree = "<group>"; };
+		FC30254F149366A900E73DBB /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
+		FC30255314936FAA00E73DBB /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		FC30255514936FB900E73DBB /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		FC83BDF91436CF4F007192D2 /* thesarvo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = thesarvo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC83BDFD1436CF4F007192D2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		FC83BDFF1436CF4F007192D2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		FC83BE031436CF4F007192D2 /* thesarvo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "thesarvo-Info.plist"; sourceTree = "<group>"; };
+		FC83BE051436CF4F007192D2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		FC83BE071436CF4F007192D2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		FC83BE091436CF4F007192D2 /* thesarvo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "thesarvo-Prefix.pch"; sourceTree = "<group>"; };
+		FC83BE0A1436CF4F007192D2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		FC83BE0B1436CF4F007192D2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		FC83BE0D1436CF4F007192D2 /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
+		FC83BE0E1436CF4F007192D2 /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
+		FC83BE101436CF4F007192D2 /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
+		FC83BE111436CF4F007192D2 /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
+		FC83BE141436CF50007192D2 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MasterViewController.xib; sourceTree = "<group>"; };
+		FC83BE171436CF50007192D2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = en; path = "en.lproj/MasterViewController~ipad. blahxib"; sourceTree = "<group>"; };
+		FC83BE1A1436CF50007192D2 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DetailViewController.xib; sourceTree = "<group>"; };
+		FC83BE1D1436CF50007192D2 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "en.lproj/DetailViewController~ipad blah.xib"; sourceTree = "<group>"; };
+		FC83BE241436CF50007192D2 /* thesarvoTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = thesarvoTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC83BE251436CF50007192D2 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		FC83BE2D1436CF50007192D2 /* thesarvoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "thesarvoTests-Info.plist"; sourceTree = "<group>"; };
+		FC83BE2F1436CF50007192D2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		FC83BE311436CF50007192D2 /* guideTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = guideTests.h; sourceTree = "<group>"; };
+		FC83BE321436CF50007192D2 /* guideTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = guideTests.m; sourceTree = "<group>"; };
+		FCBC84971499940A0091A8CB /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = SOURCE_ROOT; };
+		FCBC84981499940A0091A8CB /* icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-72.png"; sourceTree = SOURCE_ROOT; };
+		FCBC84991499940A0091A8CB /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FC83BDF61436CF4F007192D2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC30255614936FB900E73DBB /* MapKit.framework in Frameworks */,
+				FC30255414936FAA00E73DBB /* CoreLocation.framework in Frameworks */,
+				FC83BDFE1436CF4F007192D2 /* UIKit.framework in Frameworks */,
+				FC83BE001436CF4F007192D2 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FC83BE201436CF50007192D2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC83BE261436CF50007192D2 /* SenTestingKit.framework in Frameworks */,
+				FC83BE271436CF50007192D2 /* UIKit.framework in Frameworks */,
+				FC83BE281436CF50007192D2 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FC83BDEE1436CF4F007192D2 = {
+			isa = PBXGroup;
+			children = (
+				FC30255514936FB900E73DBB /* MapKit.framework */,
+				FC30255314936FAA00E73DBB /* CoreLocation.framework */,
+				FC83BE011436CF4F007192D2 /* guide */,
+				FC83BE2B1436CF50007192D2 /* guideTests */,
+				FC83BDFC1436CF4F007192D2 /* Frameworks */,
+				FC83BDFA1436CF4F007192D2 /* Products */,
+				FC30254F149366A900E73DBB /* www */,
+			);
+			sourceTree = "<group>";
+		};
+		FC83BDFA1436CF4F007192D2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FC83BDF91436CF4F007192D2 /* thesarvo.app */,
+				FC83BE241436CF50007192D2 /* thesarvoTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FC83BDFC1436CF4F007192D2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FC83BDFD1436CF4F007192D2 /* UIKit.framework */,
+				FC83BDFF1436CF4F007192D2 /* Foundation.framework */,
+				FC83BE251436CF50007192D2 /* SenTestingKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FC83BE011436CF4F007192D2 /* guide */ = {
+			isa = PBXGroup;
+			children = (
+				FC83BE0A1436CF4F007192D2 /* AppDelegate.h */,
+				FC83BE0B1436CF4F007192D2 /* AppDelegate.m */,
+				FC83BE0D1436CF4F007192D2 /* MasterViewController.h */,
+				FC83BE0E1436CF4F007192D2 /* MasterViewController.m */,
+				FC83BE101436CF4F007192D2 /* DetailViewController.h */,
+				FC83BE111436CF4F007192D2 /* DetailViewController.m */,
+				FC83BE131436CF50007192D2 /* MasterViewController.xib */,
+				FC83BE161436CF50007192D2 /* MasterViewController~ipad. blahxib */,
+				FC83BE191436CF50007192D2 /* DetailViewController.xib */,
+				FC83BE1C1436CF50007192D2 /* DetailViewController~ipad blah.xib */,
+				FC83BE021436CF4F007192D2 /* Supporting Files */,
+				FC3024EF149307A200E73DBB /* XMLReader.h */,
+				FC3024F0149307A200E73DBB /* XMLReader.m */,
+			);
+			path = guide;
+			sourceTree = "<group>";
+		};
+		FC83BE021436CF4F007192D2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FCBC84971499940A0091A8CB /* Default.png */,
+				FCBC84981499940A0091A8CB /* icon-72.png */,
+				FCBC84991499940A0091A8CB /* icon.png */,
+				FC83BE031436CF4F007192D2 /* thesarvo-Info.plist */,
+				FC83BE041436CF4F007192D2 /* InfoPlist.strings */,
+				FC83BE071436CF4F007192D2 /* main.m */,
+				FC83BE091436CF4F007192D2 /* thesarvo-Prefix.pch */,
+				FC3024EA1492DBF900E73DBB /* index.plist */,
+				FC3024ED1493054B00E73DBB /* config.xml */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		FC83BE2B1436CF50007192D2 /* guideTests */ = {
+			isa = PBXGroup;
+			children = (
+				FC83BE311436CF50007192D2 /* guideTests.h */,
+				FC83BE321436CF50007192D2 /* guideTests.m */,
+				FC83BE2C1436CF50007192D2 /* Supporting Files */,
+			);
+			path = guideTests;
+			sourceTree = "<group>";
+		};
+		FC83BE2C1436CF50007192D2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FC83BE2D1436CF50007192D2 /* thesarvoTests-Info.plist */,
+				FC83BE2E1436CF50007192D2 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FC83BDF81436CF4F007192D2 /* thesarvo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FC83BE361436CF50007192D2 /* Build configuration list for PBXNativeTarget "thesarvo" */;
+			buildPhases = (
+				FC83BDF51436CF4F007192D2 /* Sources */,
+				FC83BDF61436CF4F007192D2 /* Frameworks */,
+				FC83BDF71436CF4F007192D2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = thesarvo;
+			productName = guide;
+			productReference = FC83BDF91436CF4F007192D2 /* thesarvo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FC83BE231436CF50007192D2 /* thesarvoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FC83BE391436CF50007192D2 /* Build configuration list for PBXNativeTarget "thesarvoTests" */;
+			buildPhases = (
+				FC83BE1F1436CF50007192D2 /* Sources */,
+				FC83BE201436CF50007192D2 /* Frameworks */,
+				FC83BE211436CF50007192D2 /* Resources */,
+				FC83BE221436CF50007192D2 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FC83BE2A1436CF50007192D2 /* PBXTargetDependency */,
+			);
+			name = thesarvoTests;
+			productName = guideTests;
+			productReference = FC83BE241436CF50007192D2 /* thesarvoTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FC83BDF01436CF4F007192D2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "Asdeq Labs";
+			};
+			buildConfigurationList = FC83BDF31436CF4F007192D2 /* Build configuration list for PBXProject "thesarvo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = FC83BDEE1436CF4F007192D2;
+			productRefGroup = FC83BDFA1436CF4F007192D2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FC83BDF81436CF4F007192D2 /* thesarvo */,
+				FC83BE231436CF50007192D2 /* thesarvoTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FC83BDF71436CF4F007192D2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC83BE061436CF4F007192D2 /* InfoPlist.strings in Resources */,
+				FC83BE151436CF50007192D2 /* MasterViewController.xib in Resources */,
+				FC83BE181436CF50007192D2 /* MasterViewController~ipad. blahxib in Resources */,
+				FC83BE1B1436CF50007192D2 /* DetailViewController.xib in Resources */,
+				FC83BE1E1436CF50007192D2 /* DetailViewController~ipad blah.xib in Resources */,
+				FC3024EB1492DBF900E73DBB /* index.plist in Resources */,
+				FC3024EE1493054B00E73DBB /* config.xml in Resources */,
+				FC302550149366A900E73DBB /* www in Resources */,
+				FCBC849A1499940A0091A8CB /* Default.png in Resources */,
+				FCBC849B1499940A0091A8CB /* icon-72.png in Resources */,
+				FCBC849C1499940A0091A8CB /* icon.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FC83BE211436CF50007192D2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC83BE301436CF50007192D2 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		FC83BE221436CF50007192D2 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FC83BDF51436CF4F007192D2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC83BE081436CF4F007192D2 /* main.m in Sources */,
+				FC83BE0C1436CF4F007192D2 /* AppDelegate.m in Sources */,
+				FC83BE0F1436CF4F007192D2 /* MasterViewController.m in Sources */,
+				FC83BE121436CF4F007192D2 /* DetailViewController.m in Sources */,
+				FC3024F1149307A200E73DBB /* XMLReader.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FC83BE1F1436CF50007192D2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC83BE331436CF50007192D2 /* guideTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FC83BE2A1436CF50007192D2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FC83BDF81436CF4F007192D2 /* thesarvo */;
+			targetProxy = FC83BE291436CF50007192D2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		FC83BE041436CF4F007192D2 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FC83BE051436CF4F007192D2 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		FC83BE131436CF50007192D2 /* MasterViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FC83BE141436CF50007192D2 /* en */,
+			);
+			name = MasterViewController.xib;
+			sourceTree = "<group>";
+		};
+		FC83BE161436CF50007192D2 /* MasterViewController~ipad. blahxib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FC83BE171436CF50007192D2 /* en */,
+			);
+			name = "MasterViewController~ipad. blahxib";
+			sourceTree = "<group>";
+		};
+		FC83BE191436CF50007192D2 /* DetailViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FC83BE1A1436CF50007192D2 /* en */,
+			);
+			name = DetailViewController.xib;
+			sourceTree = "<group>";
+		};
+		FC83BE1C1436CF50007192D2 /* DetailViewController~ipad blah.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FC83BE1D1436CF50007192D2 /* en */,
+			);
+			name = "DetailViewController~ipad blah.xib";
+			sourceTree = "<group>";
+		};
+		FC83BE2E1436CF50007192D2 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FC83BE2F1436CF50007192D2 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		FC83BE341436CF50007192D2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FC83BE351436CF50007192D2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FC83BE371436CF50007192D2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					armv6,
+					"$(ARCHS_STANDARD_32_BIT)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "guide/thesarvo-Prefix.pch";
+				INFOPLIST_FILE = "guide/thesarvo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				PRODUCT_NAME = thesarvo;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		FC83BE381436CF50007192D2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					armv6,
+					"$(ARCHS_STANDARD_32_BIT)",
+				);
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "guide/thesarvo-Prefix.pch";
+				INFOPLIST_FILE = "guide/thesarvo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				PRODUCT_NAME = thesarvo;
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		FC83BE3A1436CF50007192D2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/guide.app/guide";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "guide/guide-Prefix.pch";
+				INFOPLIST_FILE = "guideTests/thesarvoTests-Info.plist";
+				PRODUCT_NAME = thesarvoTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		FC83BE3B1436CF50007192D2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/guide.app/guide";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "guide/guide-Prefix.pch";
+				INFOPLIST_FILE = "guideTests/thesarvoTests-Info.plist";
+				PRODUCT_NAME = thesarvoTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FC83BDF31436CF4F007192D2 /* Build configuration list for PBXProject "thesarvo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC83BE341436CF50007192D2 /* Debug */,
+				FC83BE351436CF50007192D2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FC83BE361436CF50007192D2 /* Build configuration list for PBXNativeTarget "thesarvo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC83BE371436CF50007192D2 /* Debug */,
+				FC83BE381436CF50007192D2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FC83BE391436CF50007192D2 /* Build configuration list for PBXNativeTarget "thesarvoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC83BE3A1436CF50007192D2 /* Debug */,
+				FC83BE3B1436CF50007192D2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FC83BDF01436CF4F007192D2 /* Project object */;
+}

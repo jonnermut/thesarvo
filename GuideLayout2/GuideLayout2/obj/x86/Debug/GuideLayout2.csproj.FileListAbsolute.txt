@@ -1,0 +1,7 @@
+F:\svn\thesarvo\trunk\GuideLayout2\GuideLayout2\obj\x86\Debug\GuideLayout2.csproj.ResolveComReference.cache
+F:\svn\thesarvo\trunk\GuideLayout2\GuideLayout2\obj\x86\Debug\ResolveAssemblyReference.cache
+F:\svn\thesarvo\trunk\GuideLayout2\GuideLayout2\obj\x86\Debug\Interop.InDesign.dll
+F:\svn\thesarvo\trunk\GuideLayout2\GuideLayout2\bin\Debug\GuideLayout2.exe
+F:\svn\thesarvo\trunk\GuideLayout2\GuideLayout2\bin\Debug\GuideLayout2.pdb
+F:\svn\thesarvo\trunk\GuideLayout2\GuideLayout2\obj\x86\Debug\GuideLayout2.exe
+F:\svn\thesarvo\trunk\GuideLayout2\GuideLayout2\obj\x86\Debug\GuideLayout2.pdb

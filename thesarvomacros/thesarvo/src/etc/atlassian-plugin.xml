@@ -1,0 +1,71 @@
+<atlassian-plugin name='Thesarvo Macros' key='confluence.extra.guide'>
+    <plugin-info>
+        <description>Thesarvo Macros</description>
+        <vendor name="Atlassian Software Systems" url="http://www.atlassian.com"/>
+        <version>1.10.0</version>
+    </plugin-info>
+
+    <!--
+    <resource name="guide184.js" type="download"   location="templates/extra/guide/guide.js" >
+           <property key="content-type" value="text/plain"/>
+    </resource>
+
+    <resource name="jsonrpc.js" type="download"   location="templates/extra/guide/jsonrpc.js" >
+               <property key="content-type" value="text/plain"/>
+    </resource>
+    -->
+
+    <resource name="0star.gif" type="download"   location="templates/extra/guide/0star.gif" />
+    <resource name="1star.gif" type="download"   location="templates/extra/guide/1star.gif" />
+    <resource name="2star.gif" type="download"   location="templates/extra/guide/2star.gif" />
+    <resource name="3star.gif" type="download"   location="templates/extra/guide/3star.gif" />
+
+    <resource name="walk1.png" type="download"   location="templates/extra/guide/walk1.png" />
+    <resource name="sun1.png" type="download"   location="templates/extra/guide/sun1.png" />
+    <resource name="rock1.png" type="download"   location="templates/extra/guide/rock1.png" />
+
+    <resource name="gpsicon.png" type="download"   location="templates/extra/guide/gpsicon.png" />
+
+    <resource name="guide.css" type="download"   location="templates/extra/guide/guide.css" />
+    
+    
+    <resource name="thesarvomaps.html" type="download"   location="templates/extra/guide/thesarvomaps.html" />
+
+    <macro name='guide' class='com.thesarvo.confluence.GuideMacro' key='guide'>
+        <description>Creates a guide</description>
+    </macro>
+
+
+
+     <macro name='guidecontents' class='com.thesarvo.confluence.GuideContentsMacro' key='guidecontents'>
+            <description>Creates toc for guide</description>
+    </macro>
+
+    <macro name='forum' class='com.thesarvo.confluence.ForumMacro' key='forum'>
+        <description>Shows a forum</description>
+    </macro>
+<!--
+    <macro name='recent2' class='com.thesarvo.confluence.RecentlyUpdated' key='recent2'>
+        <description>Modified recently updated</description>
+    </macro>
+ -->
+    <!--
+    <servlet name='JSON servlet' key='jsonServlet'
+        class='com.metaparadigm.jsonrpc.JSONRPCServlet'>
+        <description>JSON servlet</description>
+        <url-pattern>/json</url-pattern>
+    </servlet>
+    -->
+	<servlet name="KML Servlet" key="kmlServlet" class="com.thesarvo.confluence.KmlServlet">
+        <url-pattern>/ts.kml</url-pattern>
+    </servlet>
+
+	<servlet name="Graph Servlet" key="graphServlet" class="com.thesarvo.confluence.GraphServlet">
+        <url-pattern>/graph</url-pattern>
+    </servlet>
+
+	<servlet name="Guide Servlet" key="guideServlet" class="com.thesarvo.confluence.GuideServlet">
+        <url-pattern>/guide/*</url-pattern>
+    </servlet>
+
+</atlassian-plugin>
