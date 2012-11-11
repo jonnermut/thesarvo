@@ -1,0 +1,59 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    xmlns:s='urn:import:com.thesarvo.guide.client.view.node'
+    xmlns:n='urn:import:com.thesarvo.guide.client.view.node'>
+
+  <ui:with field='r' type='com.thesarvo.guide.client.view.res.Resources'/>
+
+  <g:HTMLPanel >
+  	<div>
+		Select Image:
+		<s:BoundListBox bindValue='@src' ui:field='srcListBox' />
+		&nbsp;&nbsp;
+		<g:Anchor ui:field='uploadAnchor' >Upload an Image</g:Anchor>
+		
+	</div>
+	<div>
+		Width:
+		<s:BoundListBox bindValue='@width' ui:field='widthListBox' />	
+		&nbsp;&nbsp;&nbsp;&nbsp;	
+		<s:BoundCheckBox bindValue='@noPrint' ui:field='noPrint' >Not in print</s:BoundCheckBox>
+		&nbsp;&nbsp;
+		<s:BoundCheckBox bindValue='@legend' ui:field='legendCheckBox' >Add Legend</s:BoundCheckBox>
+	</div>
+	<div ui:field='legendEditPanel' style='display:none'>
+		Title: <s:BoundTextBox bindValue='@legendTitle' ui:field='legendTitle' styleName='{r.s.medText}'/>
+		<br/>
+		Footer: <s:BoundTextBox bindValue='@legendFooter' ui:field='legendFooter' styleName='{r.s.medText}'/>
+		<br/>
+		
+		x: <s:BoundTextBox bindValue='@legendx' ui:field='legendx' styleName='{r.s.smallText}'/>
+		&nbsp;&nbsp;
+		y: <s:BoundTextBox bindValue='@legendy' ui:field='legendy'  styleName='{r.s.smallText}'/>
+		<br/>
+		
+		Insert extra climbs: 
+		<s:BoundTextBox bindValue='@legendExtraPage' styleName='{r.s.smallText}' ui:field='legendExtraPage' />
+		<s:BoundCheckBox bindValue='@legendInsertExtraBefore' ui:field='legendInsertExtraBefore' >Include before</s:BoundCheckBox>
+		
+		 
+		<!-- 
+		style: <s:BoundTextBox bindValue='@legendstyle' styleName='{r.s.smallText}'/>
+		 -->
+		 
+		<div zzclass='{r.s.legendClimbs}' >
+			<s:BoundListBox ui:field='climbsListBox' 
+			bindValue='legend'
+			extendedSelect='true' styleName='{r.s.legendClimbs}'/>
+			<!-- <g:VerticalPanel ui:field='legendClimbsPanel'  /> -->
+		</div>
+	</div>
+	<div style='margin-top: 10px'>
+		<n:ImageReadNode ui:field='img' />
+		<!-- <g:Image ui:field='img' /> -->
+	</div>
+	
+  </g:HTMLPanel>
+ 
+</ui:UiBinder>

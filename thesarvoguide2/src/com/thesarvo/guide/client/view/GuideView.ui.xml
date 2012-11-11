@@ -1,0 +1,28 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui'
+>
+
+  <ui:with field='r' type='com.thesarvo.guide.client.view.res.Resources'/>
+
+  <g:HTMLPanel  >
+
+
+
+   <div class='{r.s.savingPopup}' ui:field='savingDiv' >
+   		<g:Image resource='{r.loading}' />
+   		Saving...
+   </div>
+  
+  		<div>
+			<g:Button ui:field='editGuideButton' visible='false'  >Edit This Guide</g:Button>
+			<g:Button ui:field='upgradeGuideButton' visible='false'  >Upgrade</g:Button>
+			<g:VerticalPanel ui:field='logPanel' visible='false' /> 
+		</div> 
+  	<g:FlowPanel ui:field="guideContainer" styleName='{r.s.guideView}' > 		
+  	</g:FlowPanel> 
+	<div style='height:100px'>&nbsp;</div>  	
+  </g:HTMLPanel>
+
+
+</ui:UiBinder>

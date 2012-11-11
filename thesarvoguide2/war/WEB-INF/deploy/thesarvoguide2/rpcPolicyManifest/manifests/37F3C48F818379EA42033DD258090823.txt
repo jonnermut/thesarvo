@@ -1,0 +1,2 @@
+serviceClass: com.thesarvo.guide2.client.GreetingService
+path: C140937E808F7C56FBF9440FDD5BD881.gwt.rpc

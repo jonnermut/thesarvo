@@ -1,0 +1,517 @@
+@external heading1, heading2, heading3, text, heading1mobile, heading2mobile, heading3mobile, 
+Discussion, Editor, DiscussionNoIndents, indentedHeader, intro, access, description, savingPopup,
+showHideButton, showHideHidden, active;
+
+@eval FONT com.thesarvo.guide.client.view.res.StyleHelper.font();
+
+@def FONTSIZE 9pt;
+
+body, body > *
+{
+
+}
+
+table, tr, td
+{
+
+}
+
+.displayNone
+{
+	display:none;
+}
+
+.guideView
+{
+	padding: 4px;
+	background: white;
+}
+
+.viewcontainer
+{
+	background: black !important;
+}
+	
+
+.smallText { width:40px }
+.medText { width:300px }
+.textArea {width:90%; height:250px } 
+.faTextBox {width: 90%}
+.editMode { border: 1px #aaaaff dashed; padding: 8px; margin: 8px; margin-top:12px;};
+.editMode:hover { background-color:#eeeeee; border: 1px #aaaaff solid; }
+.editing { background-color:#eeeeee; border: 1px #aaaaff solid; padding: 8px; margin: 8px; margin-top:12px; };
+
+h1.heading1 {
+  font-size: 20pt;
+  font-family: FONT;
+
+  font-weight:bold;
+  border-bottom: 1px solid silver;
+  text-align: left;
+  margin-left:0px;
+  
+}
+
+
+
+h2.heading2
+{
+  font-size: 18pt;
+  font-family: FONT;
+  border-bottom: 1px solid silver;
+  margin-left:0px;
+  margin-top: 16px;
+}
+h3.heading3
+{
+  font-family: FONT;
+  font-size: 14pt;
+  font-weight:bold;
+  color: black;
+  margin-top:16px;
+}
+
+
+
+
+.active
+{
+	background: none !important;
+	backgroung-image: none !important;
+	background-color: #194fdb !important;
+    color: #fff;
+}
+
+
+h2.heading2mobile, h1.heading1mobile
+{
+  font-size: 18pt;
+  font-family: FONT;
+  
+  padding: 4px !important;
+  margin-top: 0px !important;;
+  margin-bottom: 0px !important;;
+  margin-left:0px;
+  
+  
+    /*color: #fff;*/    
+}
+
+@url uiTableNextButtonUrl uiTableNextButtonImg;
+h3.heading3mobile
+{
+  font-size: 14pt;
+  font-weight:bold;
+  font-family: FONT;
+  margin-left:0px;
+  
+    
+     /* color: #fff;*/
+ 
+    padding-left: 30px;
+}
+
+
+
+.header1
+{
+/* background-image: url(/confluence/download/attachments/9207843/banner1.png);
+background-repeat: no-repeat;
+background-position: top left; */
+/*align:center;*/
+padding: 6px;
+padding-top: 2px;
+}
+
+.image
+{
+	background: white !important;
+}
+
+.climb
+{
+	font-family:  FONT;
+	font-size: FONTSIZE  !important;
+	margin-top:8px;
+	margin-bottom:4px;
+	position: relative;
+}
+
+.text, .Discussion, .Editor, .DiscussionNoIndents, .indentedHeader, .intro, .access, .description
+{
+	font-family: FONT;
+	font-size: FONTSIZE !important;
+	margin-top:8px;
+	margin-bottom:4px;
+	color: black;
+	text-align: justify;
+}
+
+
+
+.climbtext
+{
+	xxmargin-left: 78px;
+	text-align: justify;
+	padding: 0px;
+	font-size: FONTSIZE !important;
+}
+
+.climbmultitext
+{
+	text-align: justify;
+	padding:0px;
+	padding-top: 1px;
+	padding-bottom: 2px;
+	xxposition: absolute;
+	xxleft: 78px;
+	font-size: FONTSIZE !important;
+	width: 99%;
+}
+
+.climbmultilabel
+{
+	xxdisplay:inline-block;
+	xxmin-width: 80px; 
+	xxwidth: 80px;
+	width: 1px;
+	padding-top: 1px;
+	
+	padding-right: 8px;
+	font-weight:bold;
+	xxtext-align: right;
+	font-size:8pt !important;	
+	vertical-align: top;
+	color: #0000A0;
+	white-space: nowrap;	
+}
+
+.climbnum
+{
+	xxdisplay:inline-block;
+	min-width: 28px; 
+	padding-left:2px;
+	font-weight:bold;
+	white-space: nowrap;
+	font-size: FONTSIZE !important;
+}
+
+.climbname
+{
+	xxdisplay:inline-block;
+	min-width: 200px;
+	width: 200px;
+	
+	xxpadding-left:6px;
+	font-weight:bold;
+	white-space: nowrap;
+	font-size: FONTSIZE !important;
+}
+
+.climbgrade
+{
+	xxdisplay:inline-block;
+	min-width: 40px;
+	width: 40px;
+	padding-left:8px;
+	font-weight:bold;
+	white-space: nowrap;
+	font-size: FONTSIZE !important; 
+}
+
+
+.climblength
+{
+	xxdisplay:inline-block;
+	min-width: 40px;
+	width: 40px;
+	padding-left:8px;
+	font-weight:bold; 
+	white-space: nowrap;
+	font-size: FONTSIZE !important;
+}
+
+.climbstars
+{
+	xxdisplay:inline-block;
+	min-width: 80px;
+	width: 80px;
+	text-align: right;
+	color: #0000A0;
+	padding: 0px;
+	padding-right: 10px;
+	white-space: nowrap;
+	vertical-align: top;
+	font-size: FONTSIZE !important;
+}
+
+
+.climbextra
+{
+	padding-left:8px;
+	font-size: FONTSIZE !important;
+	white-space: nowrap;
+}
+
+
+
+.climbfa
+{
+	xxmargin-left: 78px; 
+	font-size:7pt !important;
+	color:gray;
+	font-style: italic; 
+}
+
+
+
+.grid
+{
+	border: 1px solid silver;
+	border-collapse: collapse;
+}
+
+table.grid > tbody > tr > td 
+{
+	font-family:  FONT;
+	border: 1px solid silver;
+	border-collapse: collapse;
+}
+
+.gpsHeader
+{
+	font-weight: bold;
+	
+}
+
+
+.legendClimbs
+{
+	height: 250px;
+	width: 400px;
+	background-color: #ffffff;
+}
+
+
+.legendDiv
+{	
+	/*opacity: 0.5;*/
+
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	
+	box-shadow: rgba(0,0,0,.3) 1px 1px 3px;
+    -webkit-box-shadow: rgba(0,0,0,.3) 1px 1px 3px;
+    -moz-box-shadow: rgba(0,0,0,.3) 1px 1px 3px;
+	
+	width: 160px;
+	
+	font-family: FONT;
+	font-size: 10px !important;
+	color: white;
+	
+}
+
+@if user.agent ie ie8 {
+	
+.legendDiv
+{	
+	background-color: black ;	
+	filter:Alpha(Opacity=40);/* IE7 and under */
+	-ms-filter: "Alpha(Opacity=40)"; /* IE8 */
+}
+}	
+
+
+
+.legendTable
+{
+	/*position: absolute;*/
+	
+	width: 160px;
+	border: 1px solid #999999;
+	color: white;
+	border-collapse: collapse;
+
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	
+	
+	/*background-color:rgb(0,0,0) ;*/
+	background-color:rgba(0,0,0,0.4) ;
+	
+}
+
+
+
+.legendNameCol, .legendSmallCol
+{
+	font-family: FONT;
+	font-size: 10px !important;
+	color: white;
+	
+	border: 1px solid #999999;
+	border: 1px solid rgba(255,255,255,0.5);
+	border-collapse: collapse;
+	
+	padding: 1px;
+	/*max-width: 100px;*/
+	white-space:nowrap;
+	ms-text-overflow:ellipsis;
+	text-overflow:ellipsis;
+	overflow:hidden;
+	line-height:12px !important;	
+}
+
+.legendTitle
+{
+	font-size: 12px !important;
+	font-weight: bold;
+	text-align: center;
+	font-family: FONT;
+	border: 1px solid #999999;
+	border: 1px solid rgba(255,255,255,0.5);
+	color: white;
+	border-collapse: collapse;
+	padding: 1px;
+	
+}
+
+.legendFooter
+{
+	font-size: 10px !important;
+	color: white;
+	font-weight: bold;
+	text-align: left;
+	font-family: FONT;
+	border: 1px solid #999999;
+	border: 1px solid rgba(255,255,255,0.5);
+	color: white;
+	border-collapse: collapse;
+	padding: 1px;
+	
+}
+
+
+.legendNameCol
+{
+	width: 100px;
+	max-width: 100px;
+}
+
+.legendNameDiv
+{
+	width: 100px;
+	max-width: 100px;
+	white-space:nowrap;
+	ms-text-overflow:ellipsis;
+	text-overflow:ellipsis;
+	moz-text-overflow:ellipsis;
+	overflow:hidden;	
+		
+}	
+
+.legendSmallCol
+{
+	width: 5%;
+}
+
+.tssubhead
+{
+  font-size: 14pt;
+  font-family: FONT;
+  font-weight:bold;
+  border-bottom: 1px solid silver;
+  padding-top: 6px;
+}
+
+.tssubcont
+{
+	padding-top: 10px;
+	padding-right:80px;
+	text-align: justify;
+	font-size: 10pt;
+	font-family:  FONT;
+}
+
+.tsleftcell
+{
+  width: 210px;
+  min-width: 210px;
+  vertical-align: top;
+}
+
+.tstr
+{
+}
+
+@if user.agent iphone android {
+.tsleftcell
+{
+	display:block;
+}
+.tssubcont
+{
+	padding-right:0px;
+}
+.tstr
+{
+	display:block;
+}
+	
+.climbfa
+{
+	margin-left: 0px; 
+}	
+	
+}
+  
+
+.savingPopup
+{
+	width:100px;
+	/*height: 40px;*/ 
+	text-align: center;
+	padding: 4px;
+	position:absolute;
+	position:fixed;
+	top: 0px;
+	left:90%;
+	background-color: red;
+	/*background-color:rgba(255,0,0,0.5) ;*/
+	color: white;	
+	display: none;
+}
+
+.transparentDiv
+{	
+
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	
+	box-shadow: rgba(0,0,0,.3) 1px 1px 3px;
+    -webkit-box-shadow: rgba(0,0,0,.3) 1px 1px 3px;
+    -moz-box-shadow: rgba(0,0,0,.3) 1px 1px 3px;
+	
+	width: 100px;
+	
+	font-family: FONT;
+	font-size: 10px !important;
+	color: white;
+	background-color:rgba(0,0,0,0.4) ;	
+	
+}
+
+@if user.agent ie ie8 {
+	
+.transparentDiv
+{	
+	background-color: black ;
+	filter:Alpha(Opacity=40);/* IE7 and under */
+	-ms-filter: "Alpha(Opacity=40)"; /* IE8 */
+}
+}
+
