@@ -26,12 +26,15 @@ import com.google.web.bindery.event.shared.EventBus;
 
 import com.thesarvo.guide.client.application.Application;
 import com.thesarvo.guide.client.model.Guide;
+import com.thesarvo.guide.client.model.NodeType;
 import com.thesarvo.guide.client.util.BrowserUtil;
 import com.thesarvo.guide.client.util.StringUtil;
 import com.thesarvo.guide.client.util.WidgetUtil;
 import com.thesarvo.guide.client.view.GuideView;
 import com.thesarvo.guide.client.view.NodeWrapper;
+import com.thesarvo.guide.client.view.node.BoundListBox;
 import com.thesarvo.guide.client.xml.XPath;
+import com.thesarvo.guide.client.xml.XmlSimpleModel;
 
 public class Controller 
 {
@@ -423,25 +426,25 @@ public class Controller
 	public List<String[]> getClimbStrings(Document document, String prefix)
 	{
 		List<String[]> ret = new ArrayList<String[]>();
-//		for (NodeWrapper nw: getNodeWrappers())
-//		{
-//			if (nw.getNodeType().equals(NodeType.climb) || nw.getNodeType().equals(NodeType.problem))
-//			{
-//				SimpleModel model = nw.getReadNode().getModel();
-//				String s = notNull(string(model.get("@number"))) + " " 
-//							+ notNull(StringUtil.string(model.get("@name"))) + " "
-//							+ notNull(StringUtil.string(model.get("@grade")));
-//				ret.add(new String[]{s,StringUtil.string(model.get("@id")) } );
-//			}
-//		}
+		for (NodeWrapper nw: getCurrentGuide().getNodeWrappers())
+		{
+			if (nw.getNodeType().equals(NodeType.climb) || nw.getNodeType().equals(NodeType.problem))
+			{
+				XmlSimpleModel model = nw.getReadNode().getModel();
+				String s = notNull(StringUtil.string(model.get("@number"))) + " " 
+							+ notNull(StringUtil.string(model.get("@name"))) + " "
+							+ notNull(StringUtil.string(model.get("@grade")));
+				ret.add(new String[]{s,StringUtil.string(model.get("@id")) } );
+			}
+		}
 		
-		List<Node> climbs = XPath.selectNodes(document, "guide/climb");
-		if (climbs!=null && climbs.size() > 0)
-			addClimbStringToList(climbs, ret, prefix);
-
-		climbs = XPath.selectNodes(document, "guide/problem");
-		if (climbs!=null && climbs.size() > 0)
-			addClimbStringToList(climbs, ret, prefix);
+//		List<Node> climbs = XPath.selectNodes(document, "guide/climb");
+//		if (climbs!=null && climbs.size() > 0)
+//			addClimbStringToList(climbs, ret, prefix);
+//
+//		climbs = XPath.selectNodes(document, "guide/problem");
+//		if (climbs!=null && climbs.size() > 0)
+//			addClimbStringToList(climbs, ret, prefix);
 
 		
 		return ret;
@@ -833,10 +836,9 @@ public class Controller
 		
 	}
 
-	/* FIXME
-	
-	public void populateClimbs(final BoundListBox climbsListBox,
-			final SimpleDataBinder binder, final String extraPageId, final boolean insertBefore)	
+
+	 
+	public void populateClimbs(final BoundListBox climbsListBox, final String extraPageId, final boolean insertBefore)	
 	{
 		climbsListBox.clear();
 		final List<String[]> climbs = getClimbStrings(getXml(), "");
@@ -852,11 +854,12 @@ public class Controller
 					climbsListBox.addItem(s[0], s[1]);
 				}
 				
-				binder.updateWidget(climbsListBox);
+				//binder.updateWidget(climbsListBox);
 				
 			}
 		};
 		
+		/*
 		if (StringUtil.isNotEmpty(extraPageId))
 		{
 			XmlRequestCallback cb = new XmlRequestCallback()
@@ -886,11 +889,11 @@ public class Controller
 			
 			getGuideXml(extraPageId, true, false, cb);
 		}
-		else
+		else*/
 			DeferredCommand.addCommand(cmd);
 		
 	}
-*/
+
 
 	/**
 	 * @return the multiPage

@@ -20,6 +20,7 @@
   <!-- Other module inherits                                      -->
   <inherits name="com.google.gwt.logging.Logging"/>
   <inherits name="com.google.gwt.xml.XML" />
+  <inherits name="com.google.gwt.resources.Resources" />
   
   <!--  new maps - move to this at some time
   <inherits name='com.google.gwt.maps.Maps' />

@@ -1,7 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
     xmlns:g='urn:import:com.google.gwt.user.client.ui'
-    
+    xmlns:c="urn:import:com.google.gwt.user.cellview.client"
     xmlns:s='urn:import:com.thesarvo.guide.client.view.node'
     xmlns:n='urn:import:com.thesarvo.guide.client.view.node'
     >
@@ -10,9 +10,19 @@
 
   <g:HTMLPanel >
 
+	<style>
+		TD
+		{
+			border: red 1px !important;
+		}
+	
+	</style>
   		
   	<div >
   			
+  		<c:CellTable ui:field='cellTable' />
+  			
+  			<!--  FIXME
   					<g:FlexTable columns='7' cellPadding='4' styleName='grid' ui:field='gpsTable'>
 			
 						<g:InlineLabel styleName='gpsHeader'>Code</g:InlineLabel>
@@ -23,7 +33,7 @@
 						<g:InlineLabel styleName='gpsHeader'>Height</g:InlineLabel>
 						<g:InlineLabel></g:InlineLabel>
 			
-			<!--  FIXME
+			
 						<s:Repeater bindList='point'>
 					
 						
@@ -35,8 +45,9 @@
 							<s:BoundTextBox bindValue='@height' />
 							<s:BoundButton ui:field='removeButton' bindValue='_row' >Remove</s:BoundButton>
 						</s:Repeater>
-			  		-->
+			  		
 			  		</g:FlexTable>
+			  		-->
   			
   				<g:Button ui:field='addButton' >Add Row</g:Button>
   			

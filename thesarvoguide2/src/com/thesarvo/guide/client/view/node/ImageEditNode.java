@@ -1,13 +1,20 @@
 package com.thesarvo.guide.client.view.node;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.TableSectionElement;
+import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Window;
@@ -16,9 +23,14 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.MultiSelectionModel;
+import com.google.gwt.xml.client.Element;
+import com.google.gwt.xml.client.Node;
 import com.thesarvo.guide.client.controller.Controller;
 import com.thesarvo.guide.client.util.StringUtil;
 import com.thesarvo.guide.client.util.WidgetUtil;
+import com.thesarvo.guide.client.xml.XPath;
+import com.thesarvo.guide.client.xml.XmlSimpleModel;
 
 public class ImageEditNode extends EditNode
 {
@@ -26,12 +38,14 @@ public class ImageEditNode extends EditNode
 	
 	private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 	
-	@UiField ListBox climbsListBox;
+	@UiField BoundListBox climbsListBox;
 	@UiField ImageReadNode img;
 	@UiField CheckBox legendCheckBox;
-	@UiField DivElement legendEditPanel;
+	@UiField TableSectionElement legendEditPanel;
 	@UiField TextBox legendExtraPage;
 	@UiField TextBox legendFooter;
+	@UiField TextBox legendx;
+	@UiField TextBox legendy;
 	@UiField CheckBox legendInsertExtraBefore;
 	@UiField TextBox legendTitle;
 	@UiField CheckBox noPrint;
@@ -39,7 +53,11 @@ public class ImageEditNode extends EditNode
 	@UiField Anchor uploadAnchor;
 	@UiField ListBox widthListBox;
 	
-
+	//@UiField(provided=true) 
+	//CellList<String> climbsCellList;
+	
+	XmlSimpleModel previewModel;
+	
 	public ImageEditNode()
 	{
 	}
@@ -47,13 +65,35 @@ public class ImageEditNode extends EditNode
 	@Override
 	public void init()
 	{
+		
+		/*
+		TextCell textCell = new TextCell();
+		climbsCellList = new CellList<String>(textCell);
+	    final MultiSelectionModel<String> selectionModel = new MultiSelectionModel<String>();
+	    climbsCellList.setSelectionModel(selectionModel);
+//	    selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+//	      public void onSelectionChange(SelectionChangeEvent event) {
+//	        String selected = selectionModel.getSelectedObject();
+//	        if (selected != null) {
+//	          Window.alert("You selected: " + selected);
+//	        }
+//	      }
+//	    });
+	    List<String> DAYS = Arrays.asList("Sunday", "Monday",
+	    	      "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
+	    climbsCellList.setRowData(0, DAYS);
+		
+		*/
+		
 		initWidget(uiBinder.createAndBindUi(this));	
 		
 		boundWidgets = new Widget[] {
-				climbsListBox, legendCheckBox,legendExtraPage,legendFooter,legendInsertExtraBefore,legendTitle,noPrint,srcListBox, widthListBox
+				legendCheckBox, legendx, legendy, legendExtraPage,legendFooter,legendInsertExtraBefore,legendTitle,noPrint,srcListBox, widthListBox
 		};
 		
-		img.setModel(getModel());
+		previewModel = new XmlSimpleModel( getModel().getNode().cloneNode(true) );
+		
+		img.setModel(previewModel);
 		img.init();
 		
 		//img.updateAllWidgets();
@@ -74,7 +114,9 @@ public class ImageEditNode extends EditNode
 		widthListBox.addItem("1000");
 		
 		Controller.get().populateAttachments(srcListBox);
+		populateClimbs();
 		
+
 		DeferredCommand.addCommand (
 			new Command()
 			{
@@ -120,6 +162,58 @@ public class ImageEditNode extends EditNode
 		*/
 	}
 	
+	@Override
+	public void setWidgetValuesFromModel() 
+	{
+		
+		super.setWidgetValuesFromModel();
+		
+		List<String> legends = XPath.selectNodesText(getModel().getNode(), "legend");
+		climbsListBox.setSelectedValues(legends);
+	}
+	
+	@Override
+	public void setModelValuesFromWidgets() 
+	{
+		super.setModelValuesFromWidgets();
+		
+		setModelLegends(getModel());
+		
+		
+		
+	}
+
+	private void setModelLegends(XmlSimpleModel model) 
+	{
+		List<String> vals = WidgetUtil.getSelectedMultipleValue(climbsListBox);
+		
+		XPath.removeNodes(model.getNode(), "legend");
+		for (String val : vals)
+		{
+			Element el = model.getNode().getOwnerDocument().createElement("legend");
+			XPath.setText(el, val);
+			model.getNode().appendChild(el);
+		}
+	}
+	
+	@UiHandler({"widthListBox","srcListBox","climbsListBox" ,"legendExtraPage","legendFooter","legendTitle", "legendx", "legendy"})	
+	public void onChange(ChangeEvent event)
+	{
+		updatePreview();
+	}
+	
+	@UiHandler({"legendCheckBox","legendInsertExtraBefore"})	
+	public void onCheckboxClick(ClickEvent event)
+	{
+		updatePreview();
+	}
+	
+	public void updatePreview()
+	{
+		setModelValuesFromWidgets(boundWidgets, previewModel);
+		setModelLegends(previewModel);
+		img.updateAllWidgets();
+	}
 
 	@UiHandler("legendCheckBox")
 	public void onLegendClick(ClickEvent event)
@@ -144,15 +238,14 @@ public class ImageEditNode extends EditNode
 	{
 		climbsListBox.clear();
 		
-		/*
-		 * FIXME - all broken
+ 
 		 
-		Controller.get().populateClimbs(climbsListBox, 
+		Controller.get().populateClimbs((BoundListBox) climbsListBox, 
 				 
 				legendExtraPage.getValue(),
 				legendInsertExtraBefore.getValue() );
 		
-		*/
+		
 		
 	}
 	
@@ -164,7 +257,7 @@ public class ImageEditNode extends EditNode
 		if (value)
 		{
 			//legendClimbsPanel.clear();
-			populateClimbs();
+			
 		}
 	}
 

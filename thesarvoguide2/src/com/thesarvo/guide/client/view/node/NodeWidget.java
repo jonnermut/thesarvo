@@ -1,6 +1,7 @@
 package com.thesarvo.guide.client.view.node;
 
 import com.google.gwt.uibinder.client.UiFactory;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasValue;
@@ -25,11 +26,11 @@ public class NodeWidget extends Composite implements com.thesarvo.guide.client.x
 		
 	}
 	
-	@UiFactory 
-	public static Resources getResources() 
-	{
-		return Resources.INSTANCE;
-	}
+	//@UiFactory
+	//public static Resources getResources() 
+	//{
+	//	return Resources.INSTANCE;
+	//}
 	
 	public void init()
 	{
@@ -70,8 +71,15 @@ public class NodeWidget extends Composite implements com.thesarvo.guide.client.x
 					{
 						String val = getModel().get(bindValue);
 						
-						if (w instanceof HasText)
+						if (w instanceof CheckBox)
+						{
+							((CheckBox)w).setValue( StringUtil.bool(val) );
+							
+						}
+						else if (w instanceof HasText)
+						{
 							((HasText)w).setText(val);
+						}
 						else if (w instanceof HasValue)
 							((HasValue)w).setValue(val);
 						else if (w instanceof ListBox)
@@ -97,6 +105,11 @@ public class NodeWidget extends Composite implements com.thesarvo.guide.client.x
 	
 	public void setModelValuesFromWidgets()
 	{
+		setModelValuesFromWidgets(boundWidgets,  model);
+	}
+	
+	public void setModelValuesFromWidgets(Widget[] boundWidgets, XmlSimpleModel model)
+	{
 		if (boundWidgets != null)
 		{
 			for (Widget w : boundWidgets)
@@ -104,14 +117,22 @@ public class NodeWidget extends Composite implements com.thesarvo.guide.client.x
 				if (w instanceof HasBindValue)
 				{
 					String bindValue = ((HasBindValue)w).getBindValue();
-					if (bindValue != null && bindValue.length() > 0 && getModel() != null)
+					if (bindValue != null && bindValue.length() > 0 && model != null)
 					{
 						String val = null;
 						
-						if (w instanceof HasText)
+						if (w instanceof CheckBox)
+						{
+							val = StringUtil.notNullToString( ((CheckBox)w).getValue() );
+						}
+						else if (w instanceof HasText)
+						{
 							val = ((HasText)w).getText();
+						}
 						else if (w instanceof HasValue)
+						{
 							val = StringUtil.string( ((HasValue)w).getValue() );
+						}
 						else if (w instanceof ListBox)
 						{
 							ListBox lb = (ListBox)w;
@@ -123,14 +144,16 @@ public class NodeWidget extends Composite implements com.thesarvo.guide.client.x
 									val = lb.getItemText(s);
 							}
 						}
-						val = StringUtil.notNull(val);
+						//val = StringUtil.notNull(val);
 						
-						getModel().put(bindValue, val);
+						if (val!=null)
+							model.put(bindValue, val);
 					}
 				}
 			}
 		}
 	}
+	
 	
 	@Override
 	public XmlSimpleModel getModel()

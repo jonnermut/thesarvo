@@ -3,14 +3,16 @@
     xmlns:g='urn:import:com.google.gwt.user.client.ui'
     xmlns:s='urn:import:com.thesarvo.guide.client.view.node'>
 
-  <ui:with field='r'  type='com.thesarvo.guide.client.view.res.Resources'/>
+  <ui:with field='r'  type='com.thesarvo.guide.client.view.res.Resources' />
   
 
   <g:HTMLPanel >
   	<div ui:field='textDiv' >
   		<s:BoundTextArea bindValue='.' ui:field='text' styleName='{r.s.textArea}' />
+  		<br/>
   		<s:BoundListBox bindValue='@class' ui:field='classListBox'  /> 
   	</div>
+
   </g:HTMLPanel>
  
 </ui:UiBinder>

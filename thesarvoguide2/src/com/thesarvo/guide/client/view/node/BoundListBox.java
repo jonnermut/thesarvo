@@ -128,6 +128,13 @@ public class BoundListBox extends ListBox implements HasBindValue
 		return ret;
 	}
 	
-	
+	public void setSelectedValues( List<String> selected)
+	{
+		for (int i=0;i<this.getItemCount();i++)
+		{
+			boolean sel =  getValue(i) != null && selected.contains(getValue(i));
+			setItemSelected(i, sel);
+		}
+	}
 	
 }

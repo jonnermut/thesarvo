@@ -178,8 +178,8 @@ public class ImageReadNode extends ReadNode
 			{
 				legendTable.setText(0, 0, legendTitle);
 				
-				// FIXME - broken call below
-				//legendTable.getCellFormatter().setColSpan(0, 0, 4);
+				
+				legendTable.getFlexCellFormatter().setColSpan(0, 0, 4);
 				
 				legendTable.getCellFormatter().setStyleName(0, 0, Resources.INSTANCE.s().legendTitle());
 				r++;
@@ -190,8 +190,8 @@ public class ImageReadNode extends ReadNode
 				int frow = r + list.size();
 				legendTable.setText(frow, 0, legendFooter);
 				
-				// FIXME - broken call below
-				//legendTable.getCellFormatter().setColSpan(frow, 0, 4);
+
+				legendTable.getFlexCellFormatter().setColSpan(frow, 0, 4);
 				
 				legendTable.getCellFormatter().setStyleName(frow, 0, Resources.INSTANCE.s().legendFooter());
 				

@@ -32,6 +32,15 @@ public class StringUtil
 		else
 			return str;
 	}
+	
+	public static String notNullToString(Object obj)
+	{
+		if (obj==null)
+			return "";
+		else
+			return obj.toString();
+	}
+	
 
 	public static boolean isEmpty(Object obj)
 	{

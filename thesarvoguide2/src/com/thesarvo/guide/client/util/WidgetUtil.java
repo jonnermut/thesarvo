@@ -35,7 +35,7 @@ public class WidgetUtil
 	}
 
 
-	public static Object getSelectedMultipleValue(ListBox listbox)
+	public static List<String> getSelectedMultipleValue(ListBox listbox)
 	{
 		List<String> ret = new ArrayList<String>();
 		for (int i=0;i<listbox.getItemCount();i++)

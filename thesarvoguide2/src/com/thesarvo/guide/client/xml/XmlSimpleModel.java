@@ -1,5 +1,6 @@
 package com.thesarvo.guide.client.xml;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.xml.client.Element;
@@ -44,9 +45,11 @@ public class XmlSimpleModel
 		
 	}
 
-	public void createNode(String string, String string2) 
+	public void createNode(String name, String val) 
 	{
-		// FIXME Auto-generated method stub
+		Element el = node.getOwnerDocument().createElement(name);
+		XPath.setText(el, val);
+		node.appendChild(el);
 		
 	}
 	
@@ -67,10 +70,16 @@ public class XmlSimpleModel
 		return "";
 	}
 
-	public List<XmlSimpleModel> getList(String string) 
+	public List<XmlSimpleModel> getList(String path) 
 	{
-		// FIXME Auto-generated method stub
-		return null;
+		
+		List<Node> nodes = XPath.selectNodes(node, path);
+		ArrayList<XmlSimpleModel> ret = new ArrayList<XmlSimpleModel>(nodes.size());
+		for (Node node : nodes)
+		{
+			ret.add(new XmlSimpleModel(node));
+		}
+		return ret;
 	}
 
 }

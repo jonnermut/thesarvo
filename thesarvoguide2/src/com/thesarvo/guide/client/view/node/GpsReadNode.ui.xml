@@ -1,7 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
     xmlns:g='urn:import:com.google.gwt.user.client.ui'
-    
+    xmlns:c="urn:import:com.google.gwt.user.cellview.client"
     xmlns:s='urn:import:com.thesarvo.guide.client.view.node'
     xmlns:n='urn:import:com.thesarvo.guide.client.view.node'
     >
@@ -24,6 +24,9 @@
 			  			<g:Button ui:field='mapButton2' styleName='button'  >Open Map</g:Button>
 			  		</div>
 
+					<c:CellTable
+			            ui:field='cellTable' />
+<!--  
 			  		<g:FlexTable   cellPadding='4' styleName='grid' ui:field='gpsTable' >
 			
 						<g:InlineLabel styleName='gpsHeader'>Code</g:InlineLabel>
@@ -35,7 +38,7 @@
 						<g:InlineLabel styleName='gpsHeader'>Datum</g:InlineLabel>
 						
 						
-			<!--  FIXME
+			
 						<s:Repeater bindList='point'>
 						
 							<s:BoundInlineLabel bindValue='@code' />
@@ -47,9 +50,9 @@
 							<g:InlineLabel>GDA94 UTM</g:InlineLabel>
 							
 						</s:Repeater>
-			  		-->
+			  	
 			  		</g:FlexTable>
-
+-->
 			
 
 					

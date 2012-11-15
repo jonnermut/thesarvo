@@ -3,17 +3,22 @@ package com.thesarvo.guide.client.view.node;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.IdentityColumn;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.xml.client.Node;
 import com.thesarvo.guide.client.xml.XPath;
 import com.thesarvo.guide.client.xml.XmlSimpleModel;
@@ -21,13 +26,18 @@ import com.thesarvo.guide.client.xml.XmlSimpleModel;
 
 public class GpsEditNode extends EditNode
 {
-	@UiField
-	FlexTable gpsTable;
+	//@UiField
+	//FlexTable gpsTable;
 	
 	@UiField
 	Button addButton;
 	
+	@UiField(provided=true)
+	CellTable<XmlSimpleModel> cellTable;
+	
 	List<Button> buttonsWithHandler = new ArrayList<Button>();
+	
+	ListDataProvider<XmlSimpleModel> dataProvider = new ListDataProvider<XmlSimpleModel>();
 
 	interface MyUiBinder extends UiBinder<Widget, GpsEditNode> {}
 	private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
@@ -39,6 +49,34 @@ public class GpsEditNode extends EditNode
 	@Override
 	public void init()
 	{
+		cellTable = GpsReadNode.setupTable(getModel(), dataProvider);
+		GpsReadNode.initTableCols(cellTable, true);
+		
+	    IdentityColumn<XmlSimpleModel> removeColumn = new IdentityColumn<XmlSimpleModel>(
+	    		new ActionCell<XmlSimpleModel>("Remove", 
+	    				new ActionCell.Delegate<XmlSimpleModel>() 
+	    				{
+					        @Override
+					        public void execute(XmlSimpleModel model) 
+					        {
+					        	//Window.alert("You clicked " + model.getNode());
+								if ( Window.confirm("Are you sure you want to remove this?\n You wont be able to undo") )
+								{
+									Node node = model.getNode();
+									node.getParentNode().removeChild(node);
+									updateAllWidgets();
+								}
+					        }
+	    				}
+	    		)
+	    	);
+
+	    
+	    
+		cellTable.setColumnWidth(removeColumn, 5, Unit.PCT);
+		cellTable.addColumn(removeColumn, "");
+		
+		
 		initWidget(uiBinder.createAndBindUi(this));	
 		
 		super.init();
@@ -49,7 +87,9 @@ public class GpsEditNode extends EditNode
 			public void onClick(ClickEvent event)
 			{
 				((XmlSimpleModel)getModel()).createNode("point", "");
-				updateAllWidgets();	
+				updateAllWidgets();
+				
+
 			}
 		});
 		
@@ -60,88 +100,14 @@ public class GpsEditNode extends EditNode
 	{
 		super.updateAllWidgets();
 		
-		DeferredCommand.addCommand(new Command()
-		{
-			
-			@Override
-			public void execute()
-			{
-				// TODO major hacks - FIXME!
-				for (int i=1;i<gpsTable.getRowCount();i++)
-				{
-					if (gpsTable.getCellCount(i) > 0)
-					{
-						/* FIXME - broken api
-						
-						Widget w = gpsTable.getWidget(i, gpsTable.getColumns()-1);
-						if (w!=null && w instanceof Button)
-						{
-							if (! buttonsWithHandler.contains(w))
-							{
-								((Button) w).addClickHandler(new RemoveHandler());
-								buttonsWithHandler.add((Button) w);
-							}
-						}
-						*/
-					}
-				}				
-			}
-		});
+		List<XmlSimpleModel> data = getModel().getList("point");	
+	    dataProvider.setList(data);
+		cellTable.redraw();
+		
+
 	}
 	
-//	@UiHandler("addButton")
-//	public void onClick(ClickEvent event)
-//	{
-//		((XmlSimpleModel)this.getModel()).createNode("point", "");
-//		updateAllWidgets();
-//	}
-//
-//	@UiHandler("removeButton")
-//	void onRemoveClick(ClickEvent e)
-//	{
-//		if ( Window.confirm("Are you sure you want to remove this? You wont be able to undo") )
-//			Controller.get().removeGpsRow(null);
-//	}
+
 	
-//	public void removeRow(Integer row)
-//	{
-//		List<Node> nodes = XPath.selectNodes( ((XmlSimpleModel) this.getModel()).getXml(), "point" );
-//		
-//		if (nodes!=null && nodes.size() > row)
-//		{
-//			Node n = nodes.get(row);
-//			n.getParentNode().removeChild(n);
-//			
-//			this.updateAllWidgets();
-//		}
-//	}
-	
-	private final class RemoveHandler implements ClickHandler
-	{
-//		int row;
-//		
-//		public RemoveHandler(int i)
-//		{
-//			row = i;
-//		}
-		
-		@Override
-		public void onClick(ClickEvent event)
-		{
-			/* FIXME
-			if ( Window.confirm("Are you sure you want to remove this? You wont be able to undo") )
-			{
-				Integer row = (Integer) ((BoundButton)event.getSource()).getValue();
-				//int row = Integer.valueOf(srow);
-				
-				List<Node> nodes = XPath.selectNodes(((XmlSimpleModel)getModel()).getXml(), "point");
-				if (nodes!=null && nodes.size() > row)
-				{
-					nodes.get(row).getParentNode().removeChild(nodes.get(row));
-					updateAllWidgets();
-				}		
-			}
-			*/
-		}
-	}	
+
 }

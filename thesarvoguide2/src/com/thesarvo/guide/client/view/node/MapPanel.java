@@ -133,7 +133,7 @@ public class MapPanel extends FlowPanel
 		map.setCurrentMapType(MapType.getHybridMap());
 		map.setContinuousZoom(true);
 		
-		map.addMapMouseMoveHandler(new MouseMoveHandler());
+		//map.addMapMouseMoveHandler(new MouseMoveHandler());
 		
 		
 		this.getElement().getStyle().setPosition(Position.RELATIVE);

@@ -9,14 +9,17 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.Text;
 
+/**
+ * Very simple naive and manual implentations of some xpath methods
+ * Could be massively improved by wrapping the native xpath stuff which exists in most browsers
+ * 
+ * @author jon
+ *
+ */
 public class XPath 
 {
 
-	public static List<Node> selectNodes(Document document, String string) 
-	{
-		// FIXME - implement
-		return new ArrayList<Node>();
-	}
+
 
 	public static Element selectSingleNode(Document xml, String string) 
 	{
@@ -43,13 +46,42 @@ public class XPath
 		//node.setNodeValue(text);
 		
 		Node child = node.getFirstChild();
-		if (child != null )
+		if (child != null && child.getNodeType()==3)
 		{
 			child.setNodeValue(text);
+		}
+		else
+		{
+			Text txtNode = node.getOwnerDocument().createTextNode(text);
+			node.appendChild(txtNode);
 		}
 			
 	}
 	
+	public static  List<Node> getChildren(Node node)
+	{
+		return XPath.nodeListToList(node.getChildNodes());
+	}
+	
+	public static void removeNodes(Node node, String name)
+	{
+		for (int i=node.getChildNodes().getLength() -1;i>=0;i--)
+		{
+			Node child = node.getChildNodes().item(i);
+			if (child.getNodeName().equals(name))
+				node.removeChild( child );
+				
+		}
+	}
+	
+	public  static List<Node> nodeListToList(NodeList childNodes) 
+	{
+		ArrayList<Node> ret = new ArrayList<Node>(childNodes.getLength());
+		for (int i=0;i<childNodes.getLength();i++)
+			ret.add(childNodes.item(i));
+		return ret;
+	}
+
 	public static String getAttr(Node node, String name)
 	{
 		if (name.startsWith("@"))
@@ -62,10 +94,48 @@ public class XPath
 		return ret;
 	}
 
-	public static List<Node> selectNodes(Node xml, String string) 
+	public static List<String> selectNodesText(Node node, String path) 
 	{
-		// FIXME Auto-generated method stub
-		return null;
+		List<String> ret = new ArrayList<String>();
+		List<Node> nodes = selectNodes( node,  path);
+		for (Node n : nodes)
+			ret.add( getText(n));
+		
+		return ret;
+	}
+	
+	public static List<Node> selectNodes(Node node, String path) 
+	{
+		List<Node> ret = new ArrayList<Node>();
+		
+		if (path.contains("/"))
+		{
+			String[] segments = path.split("/");
+			
+			List<Node> temp = new ArrayList<Node>();
+			temp.add(node);
+			for (String seg : segments)
+			{
+				List<Node> next = new ArrayList<Node>(); 
+				for (Node parent: temp)
+				{
+					next.addAll( selectNodes(parent, seg));
+				}
+				temp = next;
+			}
+			return temp;
+		}
+		else
+		{
+			NodeList nl = node.getChildNodes();
+			for (int i=0; i < nl.getLength(); i++)
+			{
+				Node child = nl.item(i);
+				if (child.getNodeName() != null && child.getNodeName().equals(path))
+					ret.add(child);
+			}
+			return ret;
+		}
 	}
 
 	public static void setAttr(Node node, String key, String val) 

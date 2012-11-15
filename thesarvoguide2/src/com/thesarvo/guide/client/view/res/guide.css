@@ -16,6 +16,13 @@ table, tr, td
 
 }
 
+tr > td > div > input
+{
+	width: 95%;
+	height: 95%;
+}
+
+
 .displayNone
 {
 	display:none;
