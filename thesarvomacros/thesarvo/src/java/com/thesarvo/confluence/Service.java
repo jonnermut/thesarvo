@@ -13,6 +13,8 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import com.atlassian.confluence.core.BodyContent;
+import com.atlassian.confluence.core.BodyType;
 import com.atlassian.confluence.core.DefaultSaveContext;
 import com.atlassian.confluence.core.SaveContext;
 import com.atlassian.confluence.pages.Attachment;
@@ -53,10 +55,12 @@ public class Service
 	
 	public static String getGuideString(Page p)
 	{
-		String content = p.getContent();
-		if (content != null && content.indexOf("<guide") >= 0)
+		String content = p.getBodyAsString();
+		if (content != null && content.indexOf("<guide>") >= 0)
 		{
+			
 			int start = content.indexOf(Service.GUIDE_MACRO);
+			
 			if (start >= 0)
 			{
 				start += Service.GUIDE_MACRO.length();
@@ -67,6 +71,16 @@ public class Service
 					return xml;
 				}
 
+			}
+			else
+			{
+				start = content.indexOf("<guide>");
+				int end = content.indexOf("</guide>", start);
+				if (end >= 0)
+				{
+					String xml = content.substring(start, end + 8);
+					return xml;
+				}
 			}
 		}
 
@@ -128,41 +142,51 @@ public class Service
 			logger.error(e);
 		}
 
-		String content = p.getContent();
+		String content = p.getBodyAsString();
 
-		int start = content.indexOf("{guide}") + 7;
-		int end = content.indexOf("{guide}", start);
+		int start = content.indexOf("<guide>") ;
+		int end = content.indexOf("</guide>", start);
 
 		String suffix = "";
 
+		/*
 		if (end < 0)
 		{
 			end = start;
 			suffix = "\n {guide} \n";
-		}
-
-
-		String newContent = content.substring(0, start) + xml
-				+ suffix + content.substring(end);
-
-		Calendar c = new GregorianCalendar();
-		c.setTime(old.getLastModificationDate());
-
-		p.setContent(newContent);
-		SaveContext sc = new DefaultSaveContext();
-		sc.setMinorEdit(true);
-		p.setLastModificationDate(new Date());
-		p.setLastModifierName(user);
-
-		logger.debug("saving now");
-		if (c.get(Calendar.DAY_OF_YEAR) == new GregorianCalendar()
-				.get(Calendar.DAY_OF_YEAR) && user!=null && user.equals(old.getLastModifierName()))
+		}*/
+		
+		if (start > -1 && end > -1)
 		{
-			pm.saveContentEntity(p, sc);
-		}
-		else
-		{
-			pm.saveContentEntity(p, old, sc);
+			end = end + 8;
+
+			String newContent = content.substring(0, start) + xml
+					+ suffix + content.substring(end);
+	
+			Calendar c = new GregorianCalendar();
+			c.setTime(old.getLastModificationDate());
+	
+			//BodyContent bc = p.getBodyContent(BodyType.XHTML);
+			//bc.setBody(newContent);
+			
+			//p.setContent(newContent);
+			p.setBodyAsString(newContent);
+			
+			SaveContext sc = new DefaultSaveContext();
+			sc.setMinorEdit(true);
+			p.setLastModificationDate(new Date());
+			p.setLastModifierName(user);
+	
+			logger.debug("saving now");
+			if (c.get(Calendar.DAY_OF_YEAR) == new GregorianCalendar()
+					.get(Calendar.DAY_OF_YEAR) && user!=null && user.equals(old.getLastModifierName()))
+			{
+				pm.saveContentEntity(p, sc);
+			}
+			else
+			{
+				pm.saveContentEntity(p, old, sc);
+			}
 		}
 
 	}

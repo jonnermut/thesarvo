@@ -11,8 +11,11 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
+import com.atlassian.confluence.content.render.xhtml.ConversionContext;
 import com.atlassian.confluence.core.ContentEntityObject;
 import com.atlassian.confluence.core.ContentPropertyManager;
+import com.atlassian.confluence.macro.Macro;
+import com.atlassian.confluence.macro.MacroExecutionException;
 import com.atlassian.confluence.pages.Attachment;
 import com.atlassian.confluence.pages.AttachmentManager;
 import com.atlassian.confluence.pages.Page;
@@ -33,7 +36,7 @@ import com.opensymphony.webwork.ServletActionContext;
  *
  *
  */
-public class GuideMacro extends InlineHtmlMacro implements ResourceAware, com.atlassian.plugin.StateAware
+public class GuideMacro extends InlineHtmlMacro implements ResourceAware, com.atlassian.plugin.StateAware, Macro
 {
 
 	/**
@@ -71,7 +74,7 @@ public class GuideMacro extends InlineHtmlMacro implements ResourceAware, com.at
 
 
 
-    public String execute(Map parameters, String fullBody, RenderContext renderContext) throws MacroException
+    public String execute(Map parameters2, String fullBody, RenderContext renderContext) throws MacroException
     {
 
     	logger.debug("execute");
@@ -157,9 +160,6 @@ public class GuideMacro extends InlineHtmlMacro implements ResourceAware, com.at
 	        		out.append("';\n");
 	        	}
 
-	        	
-	        	
-	        	
 	        	String u = user == null ? "" : user.getName();
 	        	out.append("var guide_user='" + u + "';\n");
 	        	
@@ -170,193 +170,13 @@ public class GuideMacro extends InlineHtmlMacro implements ResourceAware, com.at
 	        	out.append("var guide_pagename=\'" + contentObject.getTitle() + "\';\n");
 	        	out.append("\n /*--*//*]]>*/ \n</script>");
 	        	out.append("<iframe src=\"javascript:''\" id='__gwt_historyFrame' tabIndex='-1' style='position:absolute;width:0;height:0;border:0'></iframe>");
-	        	out.append("<script src=\'/thesarvoguide/thesarvoguide.nocache.js\' ></script> \n");
+	        	out.append("<script  src=\'/thesarvoguide2/thesarvoguide2.nocache.js\' ></script> \n");
 	        	out.append("<div id='guidediv' ></div>\n");
 	        	
 	        	return out.toString();
 	        }
         	
-        	// get the body of the macro, and create the task list model
-        	//Page p;
 
-//        	logger.debug("content:" + fullBody);
-//
-//        	//int start = macroParameter.getContentStart();
-//        	int start = fullBody.indexOf("{guide}") + 7;
-//        	int end = fullBody.indexOf("{guide}",start);
-//
-//        	if (end<0)
-//        		end = start;
-
-        	//logger.debug("start:"+start);
-        	//logger.debug("end:"+end);
-
-//        	String body = fullBody.substring(start,end);
-//
-//        	logger.debug("body:" + body);
-
-        	//String body = macroParameter.getContent();
-
-        	//body = body.replaceAll("&lt;","<").replaceAll("&gt;",">").replaceAll("&apos;","\'").replaceAll("&quot;","\"").replaceAll("&#039;","\'").replaceAll("&#034;","\"");
-
-        	//String body = contentPropertyManager.getStringProperty(contentObject,"guide.content2");
-
-
-
-////        	Guide guide = new Guide( contentObject, fullBody, contentPropertyManager,  subRenderer, renderContext, this);
-////
-////			// check if any request parameters came in to complete or uncomplete tasks
-////		    final HttpServletRequest request = ServletActionContext.getRequest();
-////
-////		    if (request.getParameter("guide.editGuide")!=null )
-////		    {
-////		    	JSONRPCBridge bridge = null;
-////		    	
-////		    	// causes class cast errors on upgrade
-////	    		//JSONRPCBridge bridge = (JSONRPCBridge) request.getSession().getAttribute("JSONRPCBridge");
-////	    		//if (bridge==null)
-////	    		//{
-////	    			logger.debug("Creating json rpc bridge");
-////	    			bridge = new JSONRPCBridge();
-////	    			bridge.setDebug(false);
-////	    			request.getSession().setAttribute("JSONRPCBridge",bridge);
-////
-////	    		//}
-////				if (bridge!=null)
-////				{
-////					logger.debug("registering object");
-////
-////					bridge.registerObject("guideMacro",guide);
-////				}
-////		    }
-////
-////		    boolean render = true;
-////		    if (request != null)
-////		    {
-////		        //String remoteUser = request.getRemoteUser();
-////
-////	        	String action = request.getParameter("guide.action");
-////
-////	        	//String gid = request.getParameter("guide.id");
-////
-////	        	String spage = request.getParameter("guide.page");
-////
-////	        	if (spage!=null && spage.length()>0)
-////	        	{
-////	        		if (spage.equals("all"))
-////	        			guide.setPage(-1);
-////	        		else
-////	        			guide.setPage( Integer.parseInt(spage) );
-////	        	}
-////
-////	        	//int id=-1;
-////	        	//if (gid!=null && gid.length()>0)
-////	        	//	id = Integer.parseInt(gid);
-////
-////	        	//String id = request.getParameter("guide.id");
-////
-////	            if ( action != null)
-////	            {
-////	            	logger.debug("action=" + action);
-////	            	if (action.equals("showxml") )
-////	            	{
-////	            		ret = "<!-- guide.xml.start " + fullBody + " guide.xml.end -->";
-////	            		render = false;
-////	            	}
-////	            	if (action.equals("showattach"))
-////	            	{
-////	            		//XMLFacade attach = new XMLFacade();
-////	            		Document attach = DocumentHelper.createDocument();
-////	                    Element attachmentsNode = attach.addElement( "attachments" );
-////	            		
-////	            		//Node attachmentsNode = attach.createNode("attachments","");
-////	        			List atlist = contentObject.getLatestVersionsOfAttachments();
-////	        			for (int n=0;n<atlist.size();n++)
-////	        			{
-////	        				Attachment at = (Attachment) atlist.get(n);
-////	        				
-////	        				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-////	        				String modDate = sdf.format( at.getLastModificationDate() );	        		        
-////
-////	        		        Element attachmentNode = attachmentsNode.addElement( "attachment" )
-////	        		            .addAttribute( "filename", at.getFileName() )
-////	        		            .addAttribute( "url", at.getDownloadPath() )
-////	        		            .addAttribute( "version", at.getAttachmentVersion().toString() )
-////	        		            .addAttribute( "modificationDate", modDate );
-////	        		            
-////	        				//Node attachmentNode = attach.createNode(attachmentsNode,"attachment","");
-//////	        				attach.setAttribute(attachmentNode,"filename",at.getFileName());
-//////	        				attach.setAttribute(attachmentNode,"url",at.getDownloadPath() );
-//////	        				attach.setAttribute(attachmentNode,"version",at.getAttachmentVersion().toString());
-//////
-//////	        				attach.setAttribute(attachmentNode,"modificationDate",modDate);
-////	        			}
-////	        			ret = "<!-- guide.xml.start " + attach.asXML() + " guide.xml.end -->";
-////	            		render = false;
-////	            	}
-//////	            	if (action.equals("edit"))
-//////	            	{
-//////	            		logger.debug("edit");
-//////	            		guide.setEditIndex(id);
-//////	            	}
-//////	            	if (action.equals("insert"))
-//////	            	{
-//////	            		logger.debug("insert");
-//////	            		String type = request.getParameter("guide.type");
-//////
-//////	            		guide.insert(id,type);
-//////	            		guide.setEditIndex(id+1);
-//////
-//////	            		saveGuide();
-//////	            	}
-//////	            	if (action.equals("submit"))
-//////	            	{
-//////	            		logger.debug("submit");
-//////	            		String classVal = request.getParameter("class");
-//////	            		if ("import".equals(classVal))
-//////	            		{
-//////	            			importGuides();
-//////	            		}
-//////	            		else
-//////	            		{
-//////	            			guide.edit(id,request);
-//////	            			saveGuide();
-//////	            		}
-//////	            	}
-//////	            	if (action.equals("delete"))
-//////	            	{
-//////	            		logger.debug("delete");
-//////	            		guide.delete(id);
-//////	            		saveGuide();
-//////	            	}
-////	            }
-////		    }
-////
-////		    //String content = contentObject.getContent();
-////		    //content.replaceAll(body,guide.getDataXml());
-////		    //contentObject.setContent(content);
-////
-////		    User user = AuthenticatedUserThreadLocal.getUser();
-////		    boolean canEdit = false;
-////		    if (user!=null)
-////		    {
-////		    	canEdit = permissionManager.hasPermission(user, Permission.EDIT, contentObject);
-////		    }
-////		    
-////			if (render)
-////				ret = guide.render(request, canEdit);
-//////
-////        // now create a simple velocity context and render a template for the output
-////        //Map contextMap = MacroUtils.defaultVelocityContext();
-////        //contextMap.put("tasklist", taskList);
-////        //contextMap.put("content", contentObject);
-////
-////
-////        //    return VelocityUtils.getRenderedTemplate("templates/extra/thesarvo/guidemacro.vm", contextMap);
-////
-//
-//
-//        	return ret;
         }
         catch (Exception e)
         {
@@ -368,64 +188,7 @@ public class GuideMacro extends InlineHtmlMacro implements ResourceAware, com.at
         }
     }
 
-	/**
-	 *
-	 */
-	private void importGuides() throws Exception
-	{
-//		Page currentPage  = pageManager.getPage(contentObject.getId() );
-//		Page parentPage  = pageManager.getPage(84 );
-//
-//		File dir = new File("C:\\Inetpub\\wwwroot\\guide\\guides2");
-//		File[] files = dir.listFiles();
-//		for (int i=0;i<files.length;i++)
-//		{
-//			String filename = files[i].getName();
-//			String name = filename.substring(0,filename.indexOf("."));
-//			System.out.println("Processing:" + name);
-//			XMLFacade guideXML = new XMLFacade( files[i]);
-//			Guide newGuide = new Guide(contentObject,"",null, null);
-//			newGuide.convertOldGuide(guideXML.getXML());
-//
-//
-//
-//			System.out.println("Creating page");
-//			Page newPage = new Page();
-//			newPage.setTitle(name + " bouldering");
-//			newPage.setSpace( currentPage.getSpace() );
-//			newPage.setContent("{guide}\n" + newGuide.getDataXml().replaceFirst("<\\?xml.+\\?>", "") + "\n{guide}");
-//			newPage.setParentPage(parentPage);
-//			currentPage.getSpace().addAbstractPage(newPage);
-//
-//
-//
-//			File[] attachments = new File("C:\\Inetpub\\wwwroot\\guide\\img\\").listFiles();
-//
-//			for (int a=0;a<attachments.length;a++)
-//			{
-//
-//				String imgfn = attachments[a].getName();
-//				if (imgfn.startsWith(name))
-//				{
-//					Attachment att = new Attachment();
-//					att.setFileName(attachments[a].getName() );
-//					att.setFileSize( attachments[a].length() );
-//					newPage.addAttachment(att);
-//					if (imgfn.toLowerCase().endsWith(".jpg") || imgfn.toLowerCase().endsWith(".jpe") || imgfn.toLowerCase().endsWith(".jpeg"))
-//						att.setContentType("image/jpeg");
-//					if (imgfn.toLowerCase().endsWith(".gif"))
-//						att.setContentType("image/gif");
-//					if (imgfn.toLowerCase().endsWith(".png"))
-//						att.setContentType("image/png");
-//					//attachmentManager.
-//					attachmentManager.saveAttachment(att, null, new FileInputStream( attachments[a]) );
-//				}
-//			}
-//
-//			pageManager.saveContentEntity(newPage);
-//		}
-//
-	}
+
 
 
 
@@ -434,62 +197,7 @@ public class GuideMacro extends InlineHtmlMacro implements ResourceAware, com.at
     	this.pageManager = pm;
     }
 
-//    /**
-//	 * @param contentObject
-//	 * @param guide
-//	 * @throws Exception
-//	 */
-//	protected void saveGuide(Guide guide) throws Exception
-//	{
-//		logger.debug("saveGuide");
-//
-//
-//		ContentEntityObject old = (ContentEntityObject) guide.getContent().clone();
-//
-//		String content = guide.getContent().getContent();
-//		//Pattern
-//		//int index = content.indexOf(body);
-//
-//    	int start = content.indexOf("{guide}")+7;
-//    	int end = content.indexOf("{guide}",start);
-//
-//    	String suffix = "";
-//
-//    	if (end<0)
-//    	{
-//    		end = start;
-//    		suffix = "\n {guide} \n";
-//    	}
-//
-//		//System.out.println(index);
-////		System.out.println(macro.getContentStart());
-////		System.out.println(macro.getContentEnd());
-////		System.out.println(macro.getLength());
-////		System.out.println(macro.getEnd());
-////		System.out.println("content:" + content);
-////		System.out.println("macro content:" + macro.getContent() );
-////		System.out.println(index);
-//
-//		//content.replaceAll(macro.getContent())
-//
-//
-//
-//		String newContent = content.substring(0,start) + guide.getDataXml() + suffix + content.substring( end );
-//		//System.out.println("new: " + newContent);
-//
-//		Calendar c= new GregorianCalendar();
-//		c.setTime(old.getLastModificationDate());
-//
-//		guide.getContent().setContent(newContent);
-//		SaveContext sc = new DefaultSaveContext();
-//		sc.setMinorEdit(true);
-//
-//		logger.debug("saving now");
-//		if ( c.get(Calendar.DAY_OF_YEAR)==new GregorianCalendar().get(Calendar.DAY_OF_YEAR) )
-//			pageManager.saveContentEntity(guide.getContent(),sc);
-//		else
-//			pageManager.saveContentEntity(guide.getContent(),old,sc);
-//	}
+
 
 	public String getName()
     {
@@ -622,6 +330,39 @@ public class GuideMacro extends InlineHtmlMacro implements ResourceAware, com.at
 			bannerGrabber.start();
 		}
 		
+	}
+
+
+
+	  @Override
+	public String execute(Map<String, String> params, String body, ConversionContext conversionContext) throws MacroExecutionException	
+	{
+		try 
+		{
+			return execute( params, body, conversionContext.getPageContext() );
+		} 
+		catch (MacroException e) 
+		{
+			
+			e.printStackTrace();
+			throw new MacroExecutionException("Error rendering guide macro", e);
+		}
+	}
+
+
+
+	@Override
+	public BodyType getBodyType() 
+	{
+		return BodyType.PLAIN_TEXT;
+	}
+
+
+
+	@Override
+	public OutputType getOutputType() 
+	{
+		return OutputType.BLOCK;
 	}
 
 

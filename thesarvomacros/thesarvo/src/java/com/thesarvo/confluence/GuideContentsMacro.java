@@ -101,7 +101,8 @@ public class GuideContentsMacro extends AbstractHtmlGeneratingMacro
 			String name = child.getTitle();
 			String friendlyName = name.replaceAll(" bouldering","");
 
-			boolean noContent = (child.getContent()==null || child.getContent().length()==0);
+			String bodyAsString = child.getBodyAsString();
+			boolean noContent = (bodyAsString==null || bodyAsString.length()==0);
 
 			//String wiki = "";
 			ret.append("<tr " + (noContent? "style='margin-top:8px'":"") +  " ><td>");
@@ -111,8 +112,8 @@ public class GuideContentsMacro extends AbstractHtmlGeneratingMacro
 
 
 
-			int problems = child.getContent().split("<problem").length -1;
-			int climbs = child.getContent().split("<climb").length -1;
+			int problems = bodyAsString.split("<problem").length -1;
+			int climbs = bodyAsString.split("<climb").length -1;
 
 			if (!noContent  )
 			{
@@ -121,12 +122,12 @@ public class GuideContentsMacro extends AbstractHtmlGeneratingMacro
 				
 				if (problems>0 || climbs>0)
 				{
-					int index =  child.getContent().indexOf("guidestars=");				
+					int index =  bodyAsString.indexOf("guidestars=");				
 					if (index>=0)
 					{
 						index += 12;
 						for (int s=0;s<3;s++)
-						if (child.getContent().charAt(index+s)=='*')
+						if (bodyAsString.charAt(index+s)=='*')
 							stars ++ ;
 					}
 				}

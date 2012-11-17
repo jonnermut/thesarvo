@@ -19,12 +19,16 @@ import com.thesarvo.guide.client.xml.XmlService;
  */
 public class Thesarvoguide2 implements EntryPoint 
 {
+
+	
 	
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad()
 	{
+		//Window.alert("Hello world!");
+		
 		boolean testMode = Window.Location.getHost().startsWith("127.0.0.1");
 		
 		//Log.setUncaughtExceptionHandler();
@@ -96,7 +100,13 @@ public class Thesarvoguide2 implements EntryPoint
 			Element editLink = com.google.gwt.dom.client.Document.get().getElementById("editPageLink");
 			if (editLink !=null)
 			{
-				WidgetUtil.setVisible(editLink, false);
+				String user = getVarGuideUser();
+				if (user == null || ( !user.equals("admin") && !user.equals("jnermut")))
+				{
+					WidgetUtil.setVisible(editLink, false);
+				}
+				
+				
 				allowEdit = true;
 			}
 			

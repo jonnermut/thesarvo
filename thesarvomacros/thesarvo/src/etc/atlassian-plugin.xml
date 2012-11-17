@@ -36,6 +36,13 @@
     </macro>
 
 
+	<xhtml-macro key="guide-xhtml"
+	             name="guide"
+	             class="com.thesarvo.confluence.GuideMacro">
+	    <category name="development"/>
+	    <parameters/>
+	</xhtml-macro>
+
 
      <macro name='guidecontents' class='com.thesarvo.confluence.GuideContentsMacro' key='guidecontents'>
             <description>Creates toc for guide</description>

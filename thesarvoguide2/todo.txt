@@ -1,0 +1,13 @@
+
+======= Bugs ========
+- header multiline text blocks are stripping line breaks
+- 'extra page' stuff on image legend not working. Maybe get rid of this
+
+
+======= Features ========
+
+- Comment on climbs
+-- Use confluence's comments, and hack them so that a thread is created per climb,
+	and is move by GWT to the climb
+	
+
