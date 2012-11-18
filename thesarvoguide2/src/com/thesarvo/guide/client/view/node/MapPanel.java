@@ -51,7 +51,7 @@ public class MapPanel extends FlowPanel
 	
 	TransparentDiv posDiv;
 	
-	static final NumberFormat LATFORMAT = NumberFormat.getFormat("0.00000");;
+	
 	
 	Label latLonLabel = new Label();
 	Label utmLabel = new Label();
@@ -195,10 +195,11 @@ public class MapPanel extends FlowPanel
 				
 				final String easting = StringUtil.notNull(point.getAttribute("easting"));
 				final String northing = StringUtil.notNull(point.getAttribute("northing"));
+				final String zone = StringUtil.notNull(point.getAttribute("zone"));
 				final String code = StringUtil.notNull(point.getAttribute("code"));
 				final String description = StringUtil.notNull(point.getAttribute("description"));
 				
-				double[] ll = GeoUtil.getLatLong(easting, northing);
+				double[] ll = GeoUtil.getLatLong(easting, northing, zone);
 				if (ll!=null)
 				{
 					LabelOverlay overlay = new LabelOverlay(LatLng.newInstance(ll[0], ll[1]), code + " - " + description);
@@ -286,8 +287,8 @@ public class MapPanel extends FlowPanel
 				@Override
 				public void execute()
 				{
-					
-					String latlong = LATFORMAT.format( ll.getLatitude() ) + "," + LATFORMAT.format( ll.getLongitude() ) ;
+					double[] lla = new double[] { ll.getLatitude(), ll.getLongitude() };
+					String latlong = GeoUtil.formatLatLong(lla);
 					latLonLabel.setText(latlong);
 					
 					String utm = coordinates.latLon2UTM(ll.getLatitude(), ll.getLongitude()).toString();

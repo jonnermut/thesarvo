@@ -26,15 +26,35 @@ import com.google.gwt.xml.client.Node;
 import com.sun.corba.se.pept.transport.ContactInfo;
 import com.thesarvo.guide.client.Thesarvoguide2;
 import com.thesarvo.guide.client.controller.Controller;
+import com.thesarvo.guide.client.geo.CoordinateConversion;
+import com.thesarvo.guide.client.geo.CoordinateConversion.UTM;
+import com.thesarvo.guide.client.geo.GeoUtil;
 import com.thesarvo.guide.client.geo.Point;
 import com.thesarvo.guide.client.util.BrowserUtil;
 import com.thesarvo.guide.client.util.StringUtil;
+import static com.thesarvo.guide.client.util.StringUtil.*;
 import com.thesarvo.guide.client.xml.XPath;
 import com.thesarvo.guide.client.xml.XmlSimpleModel;
 
 public class GpsReadNode extends ReadNode
 {
 	
+	private static final String LONGITUDE = "@longitude";
+
+	private static final String LATITUDE = "@latitude";
+
+	private static final String HEIGHT = "@height";
+
+	private static final String NORTHING = "@northing";
+
+	private static final String EASTING = "@easting";
+
+	private static final String ZONE = "@zone";
+
+	private static final String DESCRIPTION = "@description";
+
+	private static final String CODE = "@code";
+
 	private static final double LN2 = Math.log(2);
 
 	//@UiField
@@ -175,45 +195,110 @@ public class GpsReadNode extends ReadNode
 	    return cellTable;
 	}
 
-	private static void updateDataProvider(XmlSimpleModel model,
+	public static void updateDataProvider(XmlSimpleModel model,
 			ListDataProvider<XmlSimpleModel> dataProvider)
 	{
 		List<XmlSimpleModel> data = model.getList("point");		    
-	    dataProvider.setList(data);
+	    
+		normalizeData(data);
+		
+		dataProvider.setList(data);
 	    dataProvider.refresh();
 	}
 	
+	public static void normalizeData(List<XmlSimpleModel> data)
+	{
+		for (XmlSimpleModel xsm : data)
+		{
+			String east = xsm.get(EASTING);
+			String north = xsm.get(NORTHING);
+			String zone = xsm.get(ZONE);
+			String lat = xsm.get(LATITUDE);
+			String lon = xsm.get(LONGITUDE);
+			
+			if (isNotEmpty(east) 
+					&& isNotEmpty(north) )
+			{
+				if (isEmpty(zone))
+				{
+					zone = "55G"; // tassie zone
+					xsm.put(ZONE, zone);
+				}
+				
+				if (isEmpty(lat)
+					|| isEmpty(lon)	)
+				{
+					// calculate the lat/lon
+					
+					try
+					{
+						CoordinateConversion cc = new CoordinateConversion();
+						
+						double[] latlon = GeoUtil.getLatLong(east, north, zone);
+						if (latlon != null)
+						{
+							xsm.put(LATITUDE, GeoUtil.formatLatLong(latlon[0]));
+							xsm.put(LONGITUDE, GeoUtil.formatLatLong(latlon[1]));
+						}
+					}
+					catch (Exception e)
+					{
+						
+					}
+				}
+				
+			}
+			else
+			{
+				// UTM is (partially) empty - calculate it
+				if (isNotEmpty(lat)
+						&& isNotEmpty(lon))
+				{
+					UTM utm = GeoUtil.getUTMFromLatLon(lat, lon);
+					if (utm != null)
+					{
+						xsm.put(EASTING, "" + (int) utm.getEasting() );
+						xsm.put(NORTHING, "" + (int) utm.getNorthing() );
+						xsm.put(ZONE, "" + utm.getLongZone() + utm.getLatZone() );
+					}
+				}
+			}
+					
+		}
+		
+	}
+
 	public static void initTableCols(CellTable<XmlSimpleModel> cellTable2, boolean editable)
 	{
-	    Column<XmlSimpleModel, String> codeColumn = new BoundColumn(editable, "@code");
+	    Column<XmlSimpleModel, String> codeColumn = new BoundColumn(editable, CODE);
 		cellTable2.setColumnWidth(codeColumn, 10, Unit.PCT);
 		cellTable2.addColumn(codeColumn, "Code");
 
-	    Column<XmlSimpleModel, String> descColumn = new BoundColumn(editable, "@description");
+	    Column<XmlSimpleModel, String> descColumn = new BoundColumn(editable, DESCRIPTION);
 		cellTable2.setColumnWidth(descColumn, 30, Unit.PCT);
 		cellTable2.addColumn(descColumn, "Description");
 
-	    Column<XmlSimpleModel, String> zoneColumn = new BoundColumn(editable, "@zone");
+	    Column<XmlSimpleModel, String> zoneColumn = new BoundColumn(editable, ZONE);
 		cellTable2.setColumnWidth(zoneColumn, 5, Unit.PCT);
 		cellTable2.addColumn(zoneColumn, "UTM Zone");
 
-	    Column<XmlSimpleModel, String> eastingColumn = new BoundColumn(editable, "@easting");
+	    Column<XmlSimpleModel, String> eastingColumn = new BoundColumn(editable, EASTING);
 		cellTable2.setColumnWidth(eastingColumn, 10, Unit.PCT);
 		cellTable2.addColumn(eastingColumn, "UTM Easting");
 		
-	    Column<XmlSimpleModel, String> northingColumn = new BoundColumn(editable, "@northing");
+	    Column<XmlSimpleModel, String> northingColumn = new BoundColumn(editable, NORTHING);
 		cellTable2.setColumnWidth(northingColumn, 10, Unit.PCT);
 		cellTable2.addColumn(northingColumn, "UTM Northing");
 		
-	    Column<XmlSimpleModel, String> heightColumn = new BoundColumn(editable, "@height");
+	    Column<XmlSimpleModel, String> heightColumn = new BoundColumn(editable, HEIGHT);
 		cellTable2.setColumnWidth(heightColumn, 6, Unit.PCT);
 		cellTable2.addColumn(heightColumn, "Height");
 
-	    Column<XmlSimpleModel, String> latColumn = new BoundColumn(editable, "@latitude");
+	    Column<XmlSimpleModel, String> latColumn = new BoundColumn(editable, LATITUDE);
 		cellTable2.setColumnWidth(latColumn, 10, Unit.PCT);
 		cellTable2.addColumn(latColumn, "Latitude");
 
-	    Column<XmlSimpleModel, String> longColumn = new BoundColumn(editable, "@longitude");
+	    Column<XmlSimpleModel, String> longColumn = new BoundColumn(editable, LONGITUDE);
 		cellTable2.setColumnWidth(longColumn, 10, Unit.PCT);
 		cellTable2.addColumn(longColumn, "Longitude");
 		

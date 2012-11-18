@@ -105,9 +105,9 @@ public class GpsEditNode extends EditNode
 	{
 		super.updateAllWidgets();
 
-		List<XmlSimpleModel> data = getModel().getList("point");
-		dataProvider.setList(data);
-		cellTable.redraw();
+		//List<XmlSimpleModel> data = getModel().getList("point");
+		//dataProvider.setList(data);
+		//cellTable.redraw();
 
 	}
 	
@@ -117,7 +117,16 @@ public class GpsEditNode extends EditNode
 		
 		super.setModelValuesFromWidgets();
 		
+		GpsReadNode.updateDataProvider(model, dataProvider);
+	}
+	
+	@Override
+	public void setWidgetValuesFromModel()
+	{
 		
+		super.setWidgetValuesFromModel();
+		
+		GpsReadNode.updateDataProvider(model, dataProvider);
 	}
 
 }
