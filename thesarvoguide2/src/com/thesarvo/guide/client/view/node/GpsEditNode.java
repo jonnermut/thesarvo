@@ -23,91 +23,101 @@ import com.google.gwt.xml.client.Node;
 import com.thesarvo.guide.client.xml.XPath;
 import com.thesarvo.guide.client.xml.XmlSimpleModel;
 
-
 public class GpsEditNode extends EditNode
 {
-	//@UiField
-	//FlexTable gpsTable;
-	
+	// @UiField
+	// FlexTable gpsTable;
+
 	@UiField
 	Button addButton;
-	
-	@UiField(provided=true)
+
+	@UiField(provided = true)
 	CellTable<XmlSimpleModel> cellTable;
-	
+
 	List<Button> buttonsWithHandler = new ArrayList<Button>();
-	
+
 	ListDataProvider<XmlSimpleModel> dataProvider = new ListDataProvider<XmlSimpleModel>();
 
-	interface MyUiBinder extends UiBinder<Widget, GpsEditNode> {}
+	//Node tempNode;
+	///Node realNode;
+	
+	interface MyUiBinder extends UiBinder<Widget, GpsEditNode>
+	{
+	}
+
 	private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
 	public GpsEditNode()
-	{		
+	{
 	}
 
 	@Override
 	public void init()
 	{
+//		realNode = getModel().getNode();
+//		tempNode = realNode.cloneNode(true);
+//		getModel().setNode(tempNode);
+		
 		cellTable = GpsReadNode.setupTable(getModel(), dataProvider);
 		GpsReadNode.initTableCols(cellTable, true);
-		
-	    IdentityColumn<XmlSimpleModel> removeColumn = new IdentityColumn<XmlSimpleModel>(
-	    		new ActionCell<XmlSimpleModel>("Remove", 
-	    				new ActionCell.Delegate<XmlSimpleModel>() 
-	    				{
-					        @Override
-					        public void execute(XmlSimpleModel model) 
-					        {
-					        	//Window.alert("You clicked " + model.getNode());
-								if ( Window.confirm("Are you sure you want to remove this?\n You wont be able to undo") )
+
+		IdentityColumn<XmlSimpleModel> removeColumn = new IdentityColumn<XmlSimpleModel>(
+				new ActionCell<XmlSimpleModel>("Remove",
+						new ActionCell.Delegate<XmlSimpleModel>()
+						{
+							@Override
+							public void execute(XmlSimpleModel model)
+							{
+								// Window.alert("You clicked " +
+								// model.getNode());
+								if (Window
+										.confirm("Are you sure you want to remove this?\n You wont be able to undo"))
 								{
 									Node node = model.getNode();
 									node.getParentNode().removeChild(node);
 									updateAllWidgets();
 								}
-					        }
-	    				}
-	    		)
-	    	);
+							}
+						}));
 
-	    
-	    
 		cellTable.setColumnWidth(removeColumn, 5, Unit.PCT);
 		cellTable.addColumn(removeColumn, "");
-		
-		
-		initWidget(uiBinder.createAndBindUi(this));	
-		
+
+		initWidget(uiBinder.createAndBindUi(this));
+
 		super.init();
-		
+
 		addButton.addClickHandler(new ClickHandler()
 		{
 			@Override
 			public void onClick(ClickEvent event)
 			{
-				((XmlSimpleModel)getModel()).createNode("point", "");
+				((XmlSimpleModel) getModel()).createNode("point", "");
 				updateAllWidgets();
-				
 
 			}
 		});
-		
+
 	}
-	
+
 	@Override
 	public void updateAllWidgets()
 	{
 		super.updateAllWidgets();
-		
-		List<XmlSimpleModel> data = getModel().getList("point");	
-	    dataProvider.setList(data);
+
+		List<XmlSimpleModel> data = getModel().getList("point");
+		dataProvider.setList(data);
 		cellTable.redraw();
-		
 
 	}
 	
-
-	
+	@Override
+	public void setModelValuesFromWidgets()
+	{
+		
+		super.setModelValuesFromWidgets();
+		
+		
+	}
 
 }

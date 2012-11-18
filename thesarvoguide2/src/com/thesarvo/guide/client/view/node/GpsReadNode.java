@@ -155,16 +155,32 @@ public class GpsReadNode extends ReadNode
 		}
 
 	}
+	
+	@Override
+	public void setWidgetValuesFromModel()
+	{
+		
+		super.setWidgetValuesFromModel();
+		updateDataProvider(model, dataProvider);   
+		
+	}
 
 	public static CellTable<XmlSimpleModel> setupTable(XmlSimpleModel model, ListDataProvider<XmlSimpleModel> dataProvider) 
 	{
 		CellTable<XmlSimpleModel> cellTable = new CellTable<XmlSimpleModel>();
-		List<XmlSimpleModel> data = model.getList("point");	
-	    cellTable.setWidth("100%", true);
-	    dataProvider.setList(data);
+		updateDataProvider(model, dataProvider);    
 	    
+	    cellTable.setWidth("100%", true);
 	    dataProvider.addDataDisplay(cellTable);
 	    return cellTable;
+	}
+
+	private static void updateDataProvider(XmlSimpleModel model,
+			ListDataProvider<XmlSimpleModel> dataProvider)
+	{
+		List<XmlSimpleModel> data = model.getList("point");		    
+	    dataProvider.setList(data);
+	    dataProvider.refresh();
 	}
 	
 	public static void initTableCols(CellTable<XmlSimpleModel> cellTable2, boolean editable)
@@ -190,7 +206,7 @@ public class GpsReadNode extends ReadNode
 		cellTable2.addColumn(northingColumn, "UTM Northing");
 		
 	    Column<XmlSimpleModel, String> heightColumn = new BoundColumn(editable, "@height");
-		cellTable2.setColumnWidth(heightColumn, 5, Unit.PCT);
+		cellTable2.setColumnWidth(heightColumn, 6, Unit.PCT);
 		cellTable2.addColumn(heightColumn, "Height");
 
 	    Column<XmlSimpleModel, String> latColumn = new BoundColumn(editable, "@latitude");

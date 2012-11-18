@@ -1,11 +1,15 @@
 
 ======= Bugs ========
 
+Maps
 - save GPS busted
 - Add row on GPS clears non saved data
+- maps constantly reloading in dev mode??
+- lat / long not populated yet
+
+Misc
 - header multiline text blocks are stripping line breaks
 - 'extra page' stuff on image legend not working. Maybe get rid of this
-- maps constantly reloading??
 
 ======= Features ========
 
