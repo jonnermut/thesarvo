@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.xml.client.Node;
 import com.sun.corba.se.pept.transport.ContactInfo;
+import com.thesarvo.guide.client.Thesarvoguide2;
 import com.thesarvo.guide.client.controller.Controller;
 import com.thesarvo.guide.client.geo.Point;
 import com.thesarvo.guide.client.util.BrowserUtil;
@@ -145,23 +146,14 @@ public class GpsReadNode extends ReadNode
 		
 		
 		
-		if (! BrowserUtil.isMobileBrowser())
+		if (! Thesarvoguide2.isGWTDevMode())
 		{
 		
 			mapPanel.setKmlUrl(kmlUrl);
 			//mapPanel.setPoints(nodes);
 			mapPanel.init(nodes);
-				
 		}
-		else
-		{
-			mapPanel.setVisible(false);
-			googleEarthAnchor.setVisible(false);
-			
-			//gpsTable.getColumnFormatter().addStyleName(5, Resources.INSTANCE.s().displayNone());
-			//gpsTable.getColumnFormatter().addStyleName(6, Resources.INSTANCE.s().displayNone());
-			
-		}
+
 	}
 
 	public static CellTable<XmlSimpleModel> setupTable(XmlSimpleModel model, ListDataProvider<XmlSimpleModel> dataProvider) 

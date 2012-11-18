@@ -1,13 +1,33 @@
 
 ======= Bugs ========
+
+- save GPS busted
+- Add row on GPS clears non saved data
 - header multiline text blocks are stripping line breaks
 - 'extra page' stuff on image legend not working. Maybe get rid of this
-
+- maps constantly reloading??
 
 ======= Features ========
+
+- Drag to reorder
 
 - Comment on climbs
 -- Use confluence's comments, and hack them so that a thread is created per climb,
 	and is move by GWT to the climb
 	
+- Make 'upload an image' more user friendly
+
+- Incorporate theCrag editable topos
+
+- Make map editable
+- Single 'crag' co-ordinate for large scale maps
+- Make GPS accept lat/long as well as UTM
+
+https://developers.google.com/maps/documentation/javascript/reference#DrawingManager
+https://developers.google.com/maps/documentation/javascript/overlays#drawing_tools
+http://gmaps-samples-v3.googlecode.com/svn-history/r282/trunk/drawing/drawing-tools.html
+
+polygon.enableDrawing(), enableEditing(), disableEditing() 
+setEditable(true)
+
 

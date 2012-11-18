@@ -1,6 +1,7 @@
 package com.thesarvo.guide.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -29,7 +30,7 @@ public class Thesarvoguide2 implements EntryPoint
 	{
 		//Window.alert("Hello world!");
 		
-		boolean testMode = Window.Location.getHost().startsWith("127.0.0.1");
+		boolean testMode = isGWTDevMode();
 		
 		//Log.setUncaughtExceptionHandler();
 		
@@ -138,6 +139,12 @@ public class Thesarvoguide2 implements EntryPoint
 			
 		}
 
+	}
+
+	public static boolean isGWTDevMode()
+	{
+		return !GWT.isProdMode() || Window.Location.getHost().startsWith("127.0.0.1");
+		
 	}
 
 	/*

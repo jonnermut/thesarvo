@@ -26,7 +26,6 @@ import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.web.bindery.event.shared.EventBus;
-
 import com.thesarvo.guide.client.application.Application;
 import com.thesarvo.guide.client.model.Guide;
 import com.thesarvo.guide.client.model.NodeType;
@@ -37,9 +36,11 @@ import com.thesarvo.guide.client.view.GuideView;
 import com.thesarvo.guide.client.view.NodeWrapper;
 import com.thesarvo.guide.client.view.node.BoundListBox;
 import com.thesarvo.guide.client.xml.XPath;
+import com.thesarvo.guide.client.xml.XmlService;
 import com.thesarvo.guide.client.xml.XmlSimpleModel;
 
-public class Controller {
+public class Controller
+{
 	// private static final String CONFLUENCE_PLUGINS_SERVLET =
 	// "http://www.thesarvo.com/confluence/plugins/servlet/";
 
@@ -66,19 +67,22 @@ public class Controller {
 
 	RootPanel viewContainer = null;
 
-	public Controller(EventBus eventBus) {
+	public Controller(EventBus eventBus)
+	{
 		super();
 		this.eventBus = eventBus;
 	}
 
-	public static Controller get() {
+	public static Controller get()
+	{
 		return (Controller) Application.get().getController();
 	}
 
 	/**
 	 * @return the editMode
 	 */
-	public boolean isEditMode() {
+	public boolean isEditMode()
+	{
 		return editMode;
 	}
 
@@ -86,14 +90,16 @@ public class Controller {
 	 * @param editMode
 	 *            the editMode to set
 	 */
-	public void setEditMode(boolean editMode) {
+	public void setEditMode(boolean editMode)
+	{
 		this.editMode = editMode;
 	}
 
 	/**
 	 * @return the currentEditor
 	 */
-	public NodeWrapper getCurrentEditor() {
+	public NodeWrapper getCurrentEditor()
+	{
 		return currentEditor;
 	}
 
@@ -101,42 +107,51 @@ public class Controller {
 	 * @param currentEditor
 	 *            the currentEditor to set
 	 */
-	public void setCurrentEditor(NodeWrapper currentEditor) {
+	public void setCurrentEditor(NodeWrapper currentEditor)
+	{
 		this.currentEditor = currentEditor;
 	}
 
-	public void toggleEditMode() {
-		GWT.runAsync(new RunAsyncCallback() {
+	public void toggleEditMode()
+	{
+		GWT.runAsync(new RunAsyncCallback()
+		{
 
 			@Override
-			public void onSuccess() {
+			public void onSuccess()
+			{
 				editMode = !editMode;
 
-				for (NodeWrapper nw : getCurrentGuide().getNodeWrappers()) {
+				for (NodeWrapper nw : getCurrentGuide().getNodeWrappers())
+				{
 					nw.setupEditNode();
 					nw.setEditMode(editMode);
 				}
 			}
 
 			@Override
-			public void onFailure(Throwable reason) {
+			public void onFailure(Throwable reason)
+			{
 				Window.alert("Something happened, could not enter edit mode!");
 			}
 		});
 	}
 
-	public void onEdit(NodeWrapper nw) {
+	public void onEdit(NodeWrapper nw)
+	{
 		onEdit(nw, true);
 	}
 
-	public void onDelete(NodeWrapper nw) {
+	public void onDelete(NodeWrapper nw)
+	{
 		removeNode(nw);
 
 		saveAll();
 
 	}
 
-	private void removeNode(NodeWrapper nw) {
+	private void removeNode(NodeWrapper nw)
+	{
 		Node n = nw.getNode();
 		n.getParentNode().removeChild(n);
 		getCurrentGuide().getNodeWrappers().remove(nw);
@@ -144,7 +159,8 @@ public class Controller {
 		getCurrentGuide().getGuideView().remove(nw);
 	}
 
-	private void saveAll() {
+	private void saveAll()
+	{
 		if (Window.Location.getHost().startsWith("127.0.0.1"))
 			return;
 
@@ -163,32 +179,34 @@ public class Controller {
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST,
 				URL.encode(url));
 
-		try {
+		try
+		{
 			Request request = builder.sendRequest(data,
-					
-			new RequestCallback() 
+
+			new RequestCallback()
 			{
 
 				@Override
 				public void onResponseReceived(Request request,
-						Response response) 
+						Response response)
 				{
 					if (response.getStatusCode() != 200)
-						saveError(" status code was " + response.getStatusCode());
-					
+						saveError(" status code was "
+								+ response.getStatusCode());
+
 					getCurrentGuide().getGuideView().showPopup(false);
 				}
 
 				@Override
-				public void onError(Request request, Throwable exception) 
+				public void onError(Request request, Throwable exception)
 				{
 					saveError(exception.getMessage());
-					
+
 				}
-				
+
 			});
-		} 
-		catch (RequestException e) 
+		}
+		catch (RequestException e)
 		{
 			saveError(e.getMessage());
 		}
@@ -215,13 +233,15 @@ public class Controller {
 
 	public void saveError(String msg)
 	{
-		Window.alert("Error saving data: " + msg +
-				  "\nI will reload the page so you can try again.\n" + ERROR_MSG);
-				 
+		Window.alert("Error saving data: " + msg
+				+ "\nI will reload the page so you can try again.\n"
+				+ ERROR_MSG);
+
 		Window.Location.reload();
 	}
-	
-	public void onSave(NodeWrapper nw) {
+
+	public void onSave(NodeWrapper nw)
+	{
 		nw.setDeleteOnCancel(false);
 		currentEditNodeClone = null;
 
@@ -233,15 +253,20 @@ public class Controller {
 		saveAll();
 	}
 
-	public void onCancel(NodeWrapper nw) {
-		if (nw.isDeleteOnCancel()) {
+	public void onCancel(NodeWrapper nw)
+	{
+		if (nw.isDeleteOnCancel())
+		{
 			currentEditor = null;
 			removeNode(nw);
-		} else {
+		}
+		else
+		{
 			nw.setEditing(false);
 			currentEditor = null;
 
-			if (currentEditNodeClone != null) {
+			if (currentEditNodeClone != null)
+			{
 				nw.getNode().getParentNode()
 						.replaceChild(currentEditNodeClone, nw.getNode());
 				nw.setNode(currentEditNodeClone);
@@ -253,9 +278,11 @@ public class Controller {
 		}
 	}
 
-	public void onEdit(NodeWrapper nw, boolean allowCancel) {
+	public void onEdit(NodeWrapper nw, boolean allowCancel)
+	{
 
-		if (currentEditor != null && currentEditor != nw) {
+		if (currentEditor != null && currentEditor != nw)
+		{
 			if (allowCancel)
 				onCancel(currentEditor);
 			else
@@ -268,14 +295,17 @@ public class Controller {
 		scrollToNode(nw);
 	}
 
-	private void scrollToNode(NodeWrapper nw) {
+	private void scrollToNode(NodeWrapper nw)
+	{
 		Window.scrollTo(0, nw.getAbsoluteTop() - 20);
 	}
 
-	public String convertToCached(String url, boolean fromHtml) {
+	public String convertToCached(String url, boolean fromHtml)
+	{
 		String ret = url;
 
-		if (Window.Location.getProtocol().startsWith("file:")) {
+		if (Window.Location.getProtocol().startsWith("file:"))
+		{
 			// ret = "file:///C:/GuideData/" + URL.encodeComponent(url);
 			String enc = URL.encodeComponent(url);
 			enc = enc.replace("+", "%20");
@@ -288,26 +318,31 @@ public class Controller {
 		return ret;
 	}
 
-	public String getAttachmentUrl(String src, boolean thumbnail, String width) {
+	public String getAttachmentUrl(String src, boolean thumbnail, String width)
+	{
 		// 4489230
 		// http://www.thesarvo.com/confluence/download/thumbnails/222/Adamsfieldsubzero.jpg
 
 		String ret = "";
 
 		if (Window.Location.getProtocol().startsWith("file")
-				|| Window.Location.getHost().equals("127.0.0.1:8888")) {
+				|| Window.Location.getHost().equals("127.0.0.1:8888"))
+		{
 			// hardcoded path for debugging in the GWT debugger
 			ret = "http://www.thesarvo.com/confluence/plugins/servlet/guide/image/"
 					+ getGuideId() + "/" + src;
 
 			if (StringUtil.isNotEmpty(width))
 				ret += "?width=" + width;
-		} else {
+		}
+		else
+		{
 			ret = "../../download/";
 
 			if (thumbnail)
 				ret += "thumbnails/" + getGuideId() + "/" + src;
-			else {
+			else
+			{
 				ret += "attachments/" + getGuideId() + "/" + src;
 			}
 		}
@@ -316,40 +351,70 @@ public class Controller {
 
 	}
 
-	public String getGuideId() {
+	public String getGuideId()
+	{
 		if (getCurrentGuide() != null)
 			return getCurrentGuide().getGuideId();
 		else
 			return null;
 	}
 
-	public void populateAttachments(final ListBox srcListBox) {
+	public void populateAttachments(final ListBox srcListBox)
+	{
 		if (getCurrentGuide().getAttachments() != null)
 			WidgetUtil.populateListBox(srcListBox, getCurrentGuide()
 					.getAttachments());
-		else {
+		else
+		{
 			String url = getServletUrl() + "guide/attachments/"
 					+ getCurrentGuide().getGuideId();
 
-			/*
-			 * FIXME - rewrite
-			 * 
-			 * 
-			 * XmlService.doXmlRequest(url, new XmlRequestCallback() {
-			 * 
-			 * @Override public void onError(Request request, Throwable
-			 * exception) { }
-			 * 
-			 * @Override public void handleXml(Document xml) { List<Node> list =
-			 * XPath.selectNodes(xml, "attachments/attachment");
-			 * 
-			 * List<String> attachments = new ArrayList<String>();
-			 * getCurrentGuide().setAttachments(attachments);
-			 * 
-			 * for (Node n : list) attachments.add(XPath.getText(n));
-			 * 
-			 * WidgetUtil.populateListBox(srcListBox, attachments); } });
-			 */
+			RequestBuilder builder = new RequestBuilder(RequestBuilder.GET,
+					URL.encode(url));
+
+			
+			try
+			{
+				
+				Request request = builder.sendRequest(null, 
+
+				new RequestCallback()
+				{
+
+					@Override
+					public void onResponseReceived(Request request,
+							Response response)
+					{
+						Document xml = XmlService.parseXml(response.getText());
+						
+						List<Node> list = XPath.selectNodes(xml, "attachments/attachment");
+								  
+						List<String> attachments = new ArrayList<String>();
+						getCurrentGuide().setAttachments(attachments);
+								 
+						for (Node n : list) 
+							attachments.add(XPath.getText(n));
+								 
+						WidgetUtil.populateListBox(srcListBox, attachments); }
+
+
+
+					@Override
+					public void onError(Request request, Throwable exception)
+					{
+						
+
+					}
+
+				});
+				
+				
+			}
+			catch (RequestException e)
+			{
+			}
+			
+
 		}
 	}
 
@@ -390,11 +455,14 @@ public class Controller {
 	 * callback.handleXml(xml); } }) ; }
 	 */
 
-	public List<String[]> getClimbStrings(Document document, String prefix) {
+	public List<String[]> getClimbStrings(Document document, String prefix)
+	{
 		List<String[]> ret = new ArrayList<String[]>();
-		for (NodeWrapper nw : getCurrentGuide().getNodeWrappers()) {
+		for (NodeWrapper nw : getCurrentGuide().getNodeWrappers())
+		{
 			if (nw.getNodeType().equals(NodeType.climb)
-					|| nw.getNodeType().equals(NodeType.problem)) {
+					|| nw.getNodeType().equals(NodeType.problem))
+			{
 				XmlSimpleModel model = nw.getReadNode().getModel();
 				String s = notNull(StringUtil.string(model.get("@number")))
 						+ " " + notNull(StringUtil.string(model.get("@name")))
@@ -415,8 +483,10 @@ public class Controller {
 	}
 
 	private void addClimbStringToList(List<Node> climbs, List<String[]> ret,
-			String prefix) {
-		for (Node n : climbs) {
+			String prefix)
+	{
+		for (Node n : climbs)
+		{
 			Element el = (Element) n;
 			String str = notNull(el.getAttribute("number"));
 			str += " " + notNull(el.getAttribute("name"));
@@ -430,7 +500,8 @@ public class Controller {
 	/**
 	 * @return the xml
 	 */
-	public Document getXml() {
+	public Document getXml()
+	{
 		return getCurrentGuide().getXml();
 	}
 
@@ -443,29 +514,35 @@ public class Controller {
 	// addNodesToGuideView();
 	// }
 
-	GuideView getGuideView() {
+	GuideView getGuideView()
+	{
 		return getCurrentGuide().getGuideView();
 	}
 
-	private void addNodesToGuideView(final GuideView gv) {
+	private void addNodesToGuideView(final GuideView gv)
+	{
 		gv.getGuide().addNodesToGuideView();
 
-		DeferredCommand.addCommand(new Command() {
+		DeferredCommand.addCommand(new Command()
+		{
 
 			@Override
-			public void execute() {
+			public void execute()
+			{
 				if (isCanEdit() && getUser() != null)
 					gv.setEditVisible(true);
 
 				if (isCanEdit() && getUser() != null
-						&& getUser().equals("jnermut")) {
+						&& getUser().equals("jnermut"))
+				{
 					gv.showAdvanced();
 				}
 			}
 		});
 	}
 
-	public Node getNode(String id) {
+	public Node getNode(String id)
+	{
 
 		NodeWrapper nodeWrapper = getCurrentGuide().getNodesById().get(id);
 		if (nodeWrapper != null)
@@ -478,7 +555,8 @@ public class Controller {
 	/**
 	 * @return the canEdit
 	 */
-	public boolean isCanEdit() {
+	public boolean isCanEdit()
+	{
 		return canEdit;
 	}
 
@@ -486,11 +564,13 @@ public class Controller {
 	 * @param canEdit
 	 *            the canEdit to set
 	 */
-	public void setCanEdit(boolean canEdit) {
+	public void setCanEdit(boolean canEdit)
+	{
 		this.canEdit = canEdit;
 	}
 
-	public String getGraphUrl() {
+	public String getGraphUrl()
+	{
 
 		return getServletUrl() + "graph?type=png&pageId="
 				+ getCurrentGuide().getGuideId();
@@ -499,7 +579,8 @@ public class Controller {
 	/**
 	 * @return the user
 	 */
-	public String getUser() {
+	public String getUser()
+	{
 		return user;
 	}
 
@@ -507,39 +588,48 @@ public class Controller {
 	 * @param user
 	 *            the user to set
 	 */
-	public void setUser(String user) {
+	public void setUser(String user)
+	{
 		this.user = user;
 	}
 
-	public void onAdd(NodeWrapper nw, String type) {
+	public void onAdd(NodeWrapper nw, String type)
+	{
 
 		NodeWrapper newNw = getCurrentGuide().add(nw, type);
 
 		onEdit(newNw, true);
 	}
 
-	private void log(String log) {
+	private void log(String log)
+	{
 		getGuideView().addLogLine(log);
 	}
 
-	public void upgrade() {
-		GWT.runAsync(new RunAsyncCallback() {
+	public void upgrade()
+	{
+		GWT.runAsync(new RunAsyncCallback()
+		{
 
 			@Override
-			public void onSuccess() {
+			public void onSuccess()
+			{
 				tryUpgrade();
 			}
 
 			@Override
-			public void onFailure(Throwable reason) {
+			public void onFailure(Throwable reason)
+			{
 				Window.alert("run async for tryUpgrade failed!");
 			}
 		});
 
 	}
 
-	private void tryUpgrade() {
-		try {
+	private void tryUpgrade()
+	{
+		try
+		{
 			Element guide = (Element) XPath.selectSingleNode(getXml(), "guide");
 			String v = guide.getAttribute("version");
 
@@ -551,15 +641,18 @@ public class Controller {
 
 			int newVersion = version;
 
-			if (version < 1) {
+			if (version < 1)
+			{
 				upgradeTo1();
 				newVersion = 1;
 			}
-			if (version < 2) {
+			if (version < 2)
+			{
 				upgradeTo2();
 				newVersion = 2;
 			}
-			if (version < 3) {
+			if (version < 3)
+			{
 				upgradeTo3();
 				newVersion = 3;
 			}
@@ -568,7 +661,9 @@ public class Controller {
 
 			for (NodeWrapper nw : getCurrentGuide().getNodeWrappers())
 				nw.update();
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			log("Error upgrading!");
 			log(e.getMessage());
 			log(e.toString());
@@ -577,7 +672,8 @@ public class Controller {
 		}
 	}
 
-	private void upgradeTo2() {
+	private void upgradeTo2()
+	{
 		log("Upgrading to version 2");
 
 		removeFluff(XPath.selectNodes(getXml(), "guide/problem"), false);
@@ -588,13 +684,16 @@ public class Controller {
 
 		List<Node> climbs = XPath.selectNodes(getXml(), "guide/climb");
 
-		for (Node c : climbs) {
+		for (Node c : climbs)
+		{
 			String fa = ((Element) c).getAttribute("fa");
-			if (fa != null && fa.length() > 0) {
+			if (fa != null && fa.length() > 0)
+			{
 				fa = fa.trim();
 				String newfa = DateFixer.fixDates(fa).trim();
 
-				if (!fa.equals(newfa)) {
+				if (!fa.equals(newfa))
+				{
 					log("Changing fa from=" + fa + " to=" + newfa);
 					fa = newfa;
 				}
@@ -604,16 +703,19 @@ public class Controller {
 		}
 	}
 
-	private void upgradeTo3() {
+	private void upgradeTo3()
+	{
 		log("Upgrading to version 3");
 
 		// Pattern pattern1 = new
 		// Pattern("([\\(]*\\d+[a-z]?[\\),\\.])\\s([\\d,\\(,\\),m,\\s]+)(\\.?)");
 
 		List<Node> climbs = XPath.selectNodes(getXml(), "guide/climb");
-		for (Node c : climbs) {
+		for (Node c : climbs)
+		{
 			String text = XPath.getText(c);
-			if (text != null && text.length() > 0) {
+			if (text != null && text.length() > 0)
+			{
 				text = text
 						.replaceAll(
 								"([\\r,\\n]*)([\\(]*)(\\d+[a-z]?)([\\),\\.])\\s([\\d,\\(,\\),m,\\-,\\s]+)(\\.?)",
@@ -621,13 +723,16 @@ public class Controller {
 
 				String[] bits = text.split("__");
 				text = "";
-				for (String bit : bits) {
-					if (bit.startsWith("((")) {
+				for (String bit : bits)
+				{
+					if (bit.startsWith("(("))
+					{
 						bit = bit.replace("(", "");
 						bit = bit.replace(")", "");
 						bit = bit.trim();
 						bit = "\r\n" + bit + ". ";
-					} else
+					}
+					else
 						bit = bit.trim();
 
 					text += bit;
@@ -639,12 +744,14 @@ public class Controller {
 		}
 	}
 
-	private void upgradeTo1() {
+	private void upgradeTo1()
+	{
 		log("Upgrading to version 1");
 
 		List<Node> climbs = XPath.selectNodes(getXml(), "guide/climb");
 
-		for (Node c : climbs) {
+		for (Node c : climbs)
+		{
 			Element climb = (Element) c;
 			climb.removeAttribute("new");
 			climb.removeAttribute("value");
@@ -691,22 +798,28 @@ public class Controller {
 			// String[] splits = stop.split(text);
 
 			String[] splits = text.split("\\S{2}\\. ");
-			if (splits.length > 1) {
+			if (splits.length > 1)
+			{
 				fa = splits[splits.length - 1];
 				if (!(fa.contains("20") || fa.contains("19")
 						|| fa.contains("6") || fa.contains("7")
 						|| fa.contains("8") || fa.contains("9") || fa
-							.contains("0"))) {
+							.contains("0")))
+				{
 					fa = null;
 				}
 
 			}
-			if (fa != null) {
+			if (fa != null)
+			{
 				int len = fa.length();
 
-				try {
+				try
+				{
 					fa = DateFixer.fixDates(fa);
-				} catch (Exception e) {
+				}
+				catch (Exception e)
+				{
 					log("Exception trying to fix dates for: " + fa + " - "
 							+ e.getMessage());
 				}
@@ -718,16 +831,21 @@ public class Controller {
 
 				climb.setAttribute("fa", fa);
 				XPath.setText(climb, text);
-			} else {
+			}
+			else
+			{
 				log("*** Couldnt find fa for name=" + name);
 			}
 		}
 
 	}
 
-	private static void removeFluff(List<Node> nodes, boolean removeNum) {
-		if (nodes != null) {
-			for (Node n : nodes) {
+	private static void removeFluff(List<Node> nodes, boolean removeNum)
+	{
+		if (nodes != null)
+		{
+			for (Node n : nodes)
+			{
 				Element e = (Element) n;
 				e.removeAttribute("new");
 				e.removeAttribute("value");
@@ -739,15 +857,19 @@ public class Controller {
 	}
 
 	public void populateClimbs(final BoundListBox climbsListBox,
-			final String extraPageId, final boolean insertBefore) {
+			final String extraPageId, final boolean insertBefore)
+	{
 		climbsListBox.clear();
 		final List<String[]> climbs = getClimbStrings(getXml(), "");
 
-		final Command cmd = new Command() {
+		final Command cmd = new Command()
+		{
 			@Override
-			public void execute() {
+			public void execute()
+			{
 				// climbsListBox.addItem("","");
-				for (String[] s : climbs) {
+				for (String[] s : climbs)
+				{
 					climbsListBox.addItem(s[0], s[1]);
 				}
 
@@ -782,7 +904,8 @@ public class Controller {
 	/**
 	 * @return the multiPage
 	 */
-	public boolean isMultiPage() {
+	public boolean isMultiPage()
+	{
 		return multiPage;
 	}
 
@@ -790,19 +913,23 @@ public class Controller {
 	 * @param multiPage
 	 *            the multiPage to set
 	 */
-	public void setMultiPage(boolean multiPage) {
+	public void setMultiPage(boolean multiPage)
+	{
 		this.multiPage = multiPage;
 	}
 
-	public boolean isMobileApp() {
+	public boolean isMobileApp()
+	{
 		return isMultiPage() && BrowserUtil.isMobileBrowser()
 				&& Window.Location.getProtocol().startsWith("file");
 	}
 
-	public GuideView createGuideView(String id, Document xml) {
+	public GuideView createGuideView(String id, Document xml)
+	{
 		final GuideView gv = new GuideView(id);
 
-		if (xml != null) {
+		if (xml != null)
+		{
 			gv.getGuide().setXml(xml);
 			addNodesToGuideView(gv);
 		}
@@ -838,7 +965,8 @@ public class Controller {
 	/**
 	 * @return the currentGuide
 	 */
-	public Guide getCurrentGuide() {
+	public Guide getCurrentGuide()
+	{
 		Widget w = getCurrentView();
 		if (w instanceof GuideView)
 			return ((GuideView) w).getGuide();
@@ -850,14 +978,16 @@ public class Controller {
 	/**
 	 * @return the guideXmlCache
 	 */
-	public Map<String, Document> getGuideXmlCache() {
+	public Map<String, Document> getGuideXmlCache()
+	{
 		return guideXmlCache;
 	}
 
 	/**
 	 * @return the servletUrl
 	 */
-	public String getServletUrl() {
+	public String getServletUrl()
+	{
 		if (servletUrl == null)
 			servletUrl = "../../plugins/servlet/";
 
@@ -868,21 +998,25 @@ public class Controller {
 	 * @param servletUrl
 	 *            the servletUrl to set
 	 */
-	public void setServletUrl(String servletUrl) {
+	public void setServletUrl(String servletUrl)
+	{
 		this.servletUrl = servletUrl;
 	}
 
 	// /// Resurrected from missing base class
-	public Widget getCurrentView() {
+	public Widget getCurrentView()
+	{
 		return currentView;
 	}
 
-	public void setViewContainer(RootPanel rootPanel) {
+	public void setViewContainer(RootPanel rootPanel)
+	{
 		viewContainer = rootPanel;
 
 	}
 
-	public void setCurrentView(Widget gv, String id) {
+	public void setCurrentView(Widget gv, String id)
+	{
 		currentView = gv;
 
 	}
