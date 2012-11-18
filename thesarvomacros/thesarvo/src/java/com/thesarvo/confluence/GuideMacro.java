@@ -146,8 +146,8 @@ public class GuideMacro extends InlineHtmlMacro implements ResourceAware, com.at
 	        	out.append("<script  >\n /*<![CDATA[*//*---->*/ \n");
 	        	out.append( "var guide_xml=\'");
 	        	String xml = fullBody.replaceAll("\'", "\\\\'");
-	        	xml = xml.replaceAll("\\n", "\\\\n");
-	        	xml = xml.replaceAll("\\r", "\\\\r");
+	        	xml = xml.replaceAll("\\n", "&#10;");
+	        	xml = xml.replaceAll("\\r", "&#13;");
 	        	out.append(xml);
 	        	out.append("\';\n");
 	        	

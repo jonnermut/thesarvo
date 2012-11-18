@@ -1,6 +1,7 @@
 package com.thesarvo.confluence;
 
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,7 +12,9 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
 
 import com.atlassian.confluence.core.BodyContent;
 import com.atlassian.confluence.core.BodyType;
@@ -127,6 +130,27 @@ public class Service
 
 	public static void saveGuide(Page p, String xml, String user)
 	{
+		/*
+		try
+		{
+			Document doc = parse(xml);
+			OutputFormat format = OutputFormat.createPrettyPrint();
+			StringWriter sw = new StringWriter();
+		    XMLWriter writer = new XMLWriter( sw, format );
+		    writer.write( doc );
+		    writer.close();
+		    xml = sw.toString();
+		    xml = xml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
+		    xml = xml.trim();
+		    xml = xml.substring(0, xml.indexOf("</guide>") + 8);
+		}
+		catch (Exception e)
+		{
+			
+		}
+		*/
+		
+		
 		PageManager pm = getPageManager();
 
 		

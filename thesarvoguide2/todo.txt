@@ -3,20 +3,22 @@
 
 Maps
 - maps constantly reloading in dev mode??
+- gps points not showing
 
 Misc
-- header multiline text blocks are stripping line breaks
 - 'extra page' stuff on image legend not working. Maybe get rid of this
 
 ======= Features ========
 
-- Drag to reorder
+- Reorder
 
 - Comment on climbs
 -- Use confluence's comments, and hack them so that a thread is created per climb,
 	and is move by GWT to the climb
 	
 - Make 'upload an image' more user friendly
+
+- Pretty print xml on save
 
 - Incorporate theCrag editable topos
 
