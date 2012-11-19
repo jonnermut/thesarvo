@@ -222,7 +222,19 @@ public class MapPanel extends FlowPanel
 					Logger.debug("Adding overlay for point " + ll[0] + "," + ll[1]);
 					
 					LatLng latlng = LatLng.newInstance(ll[0], ll[1]);
-					final String text = code + " - " + description;
+					
+					String t = "";
+					if (StringUtil.isNotEmpty(code))
+						t += code;
+					if (StringUtil.isNotEmpty(description))
+					{
+						if (StringUtil.isNotEmpty(t))
+							t+= " - ";
+						
+						t+= description;
+					}
+					
+					final String text = t;
 					LabelOverlay overlay = new LabelOverlay(latlng, text);
 					map.addOverlay(overlay);
 					
@@ -244,17 +256,17 @@ public class MapPanel extends FlowPanel
 							
 						}
 					});
-					marker.addMarkerInfoWindowOpenHandler( new MarkerInfoWindowOpenHandler()
-					{
-						
-						@Override
-						public void onInfoWindowOpen(MarkerInfoWindowOpenEvent event)
-						{
-							map.getInfoWindow().open(marker.getLatLng(), 
-							        new InfoWindowContent(text) );
-							
-						}
-					});
+//					marker.addMarkerInfoWindowOpenHandler( new MarkerInfoWindowOpenHandler()
+//					{
+//						
+//						@Override
+//						public void onInfoWindowOpen(MarkerInfoWindowOpenEvent event)
+//						{
+//							map.getInfoWindow().open(marker.getLatLng(), 
+//							        new InfoWindowContent(text) );
+//							
+//						}
+//					});
 					
 					
 					if (bounds == null)

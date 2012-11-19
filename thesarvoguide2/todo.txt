@@ -2,8 +2,8 @@
 ======= Bugs ========
 
 Maps
-- maps constantly reloading in dev mode??
-- gps points not showing
+- GPS changes not actually persisted
+- GPS changes dont update points on map
 
 Misc
 - 'extra page' stuff on image legend not working. Maybe get rid of this
