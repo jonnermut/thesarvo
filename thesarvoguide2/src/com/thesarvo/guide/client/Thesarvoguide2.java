@@ -10,6 +10,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
 import com.thesarvo.guide.client.application.Application;
 import com.thesarvo.guide.client.controller.Controller;
+import com.thesarvo.guide.client.util.Logger;
 import com.thesarvo.guide.client.util.WidgetUtil;
 import com.thesarvo.guide.client.view.GuideView;
 import com.thesarvo.guide.client.view.res.Resources;
@@ -28,6 +29,8 @@ public class Thesarvoguide2 implements EntryPoint
 	 */
 	public void onModuleLoad()
 	{
+		Logger.debug("Starting up");
+		
 		//Window.alert("Hello world!");
 		
 		boolean testMode = isGWTDevMode();

@@ -182,6 +182,24 @@ public class GuideView extends FlowPanel
 	{
 		this.capturingPanel = capturingPanel;
 	}
+
+	public void moveNode(NodeWrapper nw, int dir)
+	{
+		
+		int wix = guideContainer.getWidgetIndex(nw);
+		int newIdx = wix + dir;
+		if (dir > 0)
+			newIdx++;
+		
+		if (newIdx < 0)
+			newIdx = 0;
+		if (newIdx >= guideContainer.getWidgetCount())
+			newIdx = wix;
+		
+		guideContainer.insert(nw, newIdx);
+		
+		
+	}
 	
 }
 

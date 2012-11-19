@@ -64,4 +64,16 @@ public class EditControls extends Composite
 	{
 		Controller.get().onCancel(nw);
 	}
+	
+	@UiHandler("moveUp")
+	public void onMoveUp(ClickEvent event)
+	{
+		Controller.get().onMove(nw, -1);
+	}
+	
+	@UiHandler("moveDown")
+	public void onMoveDown(ClickEvent event)
+	{
+		Controller.get().onMove(nw, 1);
+	}
 }

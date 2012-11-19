@@ -1021,4 +1021,45 @@ public class Controller
 
 	}
 
+
+
+	public void onMove(NodeWrapper nw, int dir)
+	{
+		// move the xml first
+		Node n = nw.getNode();
+		Node p = n.getParentNode();
+		GuideView gv = getCurrentGuide().getGuideView();
+		
+		gv.moveNode(nw, dir);
+
+		
+		if (dir < 0)
+		{
+			Node prev = n.getPreviousSibling();
+			if (prev != null)
+			{
+				p.removeChild(n);
+				p.insertBefore(n, prev);
+			}
+			
+		}
+		else
+		{
+			Node next = n.getNextSibling();
+			if (next != null)
+			{
+				Node nextNext = next.getNextSibling();
+				p.removeChild(n);
+				if (nextNext != null)
+					p.insertBefore(n, nextNext);
+				else
+					p.appendChild(n);
+			}
+		}
+		
+		
+		saveAll();
+		
+	}
+
 }

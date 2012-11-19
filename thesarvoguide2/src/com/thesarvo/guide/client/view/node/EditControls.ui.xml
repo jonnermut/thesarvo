@@ -8,18 +8,30 @@
 
   <g:HTMLPanel >
   	<div class='{r.s.climbtext}'>
+  		<table width='100%' border='0'>
+  			<tr>
+  				<td>
+			  		<span ui:field='editButtonsSpan'>
+				  		<g:Button ui:field='editButton' >Edit</g:Button>
+				  		&nbsp;
+				  		<g:Button ui:field='deleteButton' >Delete</g:Button>
+			  		</span>
+			  		
+			  		<span ui:field='editingButtonsSpan'>
+				  		<g:Button ui:field='saveButton' >Save</g:Button>
+				  		&nbsp;
+				  		<g:Button ui:field='cancelButton' >Cancel</g:Button>
+				  	</span>
+  				</td>
+  				<td align='right' >
+  					<g:Button width="120px" ui:field='moveUp'>Move Up ▲</g:Button>
+  					<br/>
+  					<g:Button width="120px" ui:field='moveDown'>Move Down ▼</g:Button>
+  				</td>
+  			</tr>
+  		</table> 
   		
-  		<span ui:field='editButtonsSpan'>
-	  		<g:Button ui:field='editButton' >Edit</g:Button>
-	  		&nbsp;
-	  		<g:Button ui:field='deleteButton' >Delete</g:Button>
-  		</span>
-  		
-  		<span ui:field='editingButtonsSpan'>
-	  		<g:Button ui:field='saveButton' >Save</g:Button>
-	  		&nbsp;
-	  		<g:Button ui:field='cancelButton' >Cancel</g:Button>
-	  	</span>
+	  	
   	</div>
   </g:HTMLPanel>
  

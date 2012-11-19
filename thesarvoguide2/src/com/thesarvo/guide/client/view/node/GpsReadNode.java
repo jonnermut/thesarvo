@@ -166,7 +166,7 @@ public class GpsReadNode extends ReadNode
 		
 		
 		
-		if (! Thesarvoguide2.isGWTDevMode())
+		//if (! Thesarvoguide2.isGWTDevMode())
 		{
 		
 			mapPanel.setKmlUrl(kmlUrl);

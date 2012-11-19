@@ -51,12 +51,13 @@
   			
   				<g:Button ui:field='addButton' >Add Row</g:Button>
   			
+  			<!-- deprecated - we will do something more clever
   				<div style='padding: 16px;'>
   					Extra KML (content must be a full KML file) <br/>
   					<s:BoundTextArea bindValue="@kml" styleName='{r.s.textArea}' />
   				
   				</div>
-  			
+  			 -->
 				 
 	</div>
   </g:HTMLPanel>

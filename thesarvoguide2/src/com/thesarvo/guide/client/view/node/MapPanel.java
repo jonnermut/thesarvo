@@ -10,6 +10,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.maps.client.Copyright;
 import com.google.gwt.maps.client.CopyrightCollection;
+import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapType;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.Maps;
@@ -19,6 +20,11 @@ import com.google.gwt.maps.client.control.LargeMapControl3D;
 import com.google.gwt.maps.client.control.OverviewMapControl;
 import com.google.gwt.maps.client.control.ScaleControl;
 import com.google.gwt.maps.client.event.MapMouseMoveHandler;
+import com.google.gwt.maps.client.event.MarkerClickHandler;
+import com.google.gwt.maps.client.event.MarkerInfoWindowOpenHandler;
+import com.google.gwt.maps.client.event.MarkerClickHandler.MarkerClickEvent;
+import com.google.gwt.maps.client.event.MarkerInfoWindowOpenHandler.MarkerInfoWindowOpenEvent;
+import com.google.gwt.maps.client.geom.Bounds;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.geom.LatLngBounds;
 import com.google.gwt.maps.client.geom.MercatorProjection;
@@ -26,6 +32,8 @@ import com.google.gwt.maps.client.geom.Point;
 import com.google.gwt.maps.client.geom.Projection;
 import com.google.gwt.maps.client.overlay.GeoXmlLoadCallback;
 import com.google.gwt.maps.client.overlay.GeoXmlOverlay;
+import com.google.gwt.maps.client.overlay.Marker;
+import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Window;
@@ -36,6 +44,7 @@ import com.google.gwt.xml.client.Node;
 import com.thesarvo.guide.client.geo.CoordinateConversion;
 import com.thesarvo.guide.client.geo.CoordinateConversion.UTM;
 import com.thesarvo.guide.client.geo.GeoUtil;
+import com.thesarvo.guide.client.util.Logger;
 import com.thesarvo.guide.client.util.StringUtil;
 
 public class MapPanel extends FlowPanel
@@ -133,7 +142,7 @@ public class MapPanel extends FlowPanel
 		map.setCurrentMapType(MapType.getHybridMap());
 		map.setContinuousZoom(true);
 		
-		//map.addMapMouseMoveHandler(new MouseMoveHandler());
+		map.addMapMouseMoveHandler(new MouseMoveHandler());
 		
 		
 		this.getElement().getStyle().setPosition(Position.RELATIVE);
@@ -156,10 +165,11 @@ public class MapPanel extends FlowPanel
 			map.addMapType(mt);
 		}
 		
-		//handlePoints();
+		handlePoints();
 		
 		String url = kmlUrl;
 		
+		/* Deprecated
 		GeoXmlOverlay.load(url, new GeoXmlLoadCallback()
 		{
 			
@@ -169,7 +179,7 @@ public class MapPanel extends FlowPanel
 				map.addOverlay(overlay);
 				overlay.gotoDefaultViewport(map);
 				
-				handlePoints();
+				//handlePoints();
 			}
 			
 			@Override
@@ -178,20 +188,27 @@ public class MapPanel extends FlowPanel
 				Window.setStatus("Failed to load map overlay");
 			}
 		});
-		
+		*/
 	}
 
 	private void handlePoints()
 	{
+		Logger.debug("handlePoints" + points);
+		
 		if (points != null && points.size() > 0)
 		{
 //			double centx=0;
 //			double centy=0;
 //			int count = 0;
 			
+			LatLngBounds bounds = null;
+			
+			
 			for (Node n : points)
 			{
 				Element point = (Element) n;
+				
+				Logger.debug("point:" + point);
 				
 				final String easting = StringUtil.notNull(point.getAttribute("easting"));
 				final String northing = StringUtil.notNull(point.getAttribute("northing"));
@@ -202,12 +219,62 @@ public class MapPanel extends FlowPanel
 				double[] ll = GeoUtil.getLatLong(easting, northing, zone);
 				if (ll!=null)
 				{
-					LabelOverlay overlay = new LabelOverlay(LatLng.newInstance(ll[0], ll[1]), code + " - " + description);
+					Logger.debug("Adding overlay for point " + ll[0] + "," + ll[1]);
+					
+					LatLng latlng = LatLng.newInstance(ll[0], ll[1]);
+					final String text = code + " - " + description;
+					LabelOverlay overlay = new LabelOverlay(latlng, text);
 					map.addOverlay(overlay);
+					
+					MarkerOptions mo = MarkerOptions.newInstance();
+					mo.setClickable(true);
+					mo.setTitle(text);
+					
+					final Marker marker = new Marker(latlng, mo);
+					map.addOverlay(marker);
+					
+					marker.addMarkerClickHandler(new MarkerClickHandler()
+					{
+						
+						@Override
+						public void onClick(MarkerClickEvent event)
+						{
+							map.getInfoWindow().open(marker.getLatLng(), 
+							        new InfoWindowContent(text) );
+							
+						}
+					});
+					marker.addMarkerInfoWindowOpenHandler( new MarkerInfoWindowOpenHandler()
+					{
+						
+						@Override
+						public void onInfoWindowOpen(MarkerInfoWindowOpenEvent event)
+						{
+							map.getInfoWindow().open(marker.getLatLng(), 
+							        new InfoWindowContent(text) );
+							
+						}
+					});
+					
+					
+					if (bounds == null)
+						bounds = LatLngBounds.newInstance(latlng, latlng);
+					else
+						bounds.extend(latlng);
 				}
 			}
 
-
+			if (bounds != null )
+			{
+				
+				
+				map.setCenter(bounds.getCenter());
+				int zoom = map.getBoundsZoomLevel(bounds);
+				if (zoom < 10)
+					zoom = 10;
+				map.setZoomLevel(zoom);
+			}
+			
 		
 		}
 	}
