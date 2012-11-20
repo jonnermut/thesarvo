@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -59,7 +60,7 @@ public class Service
 	public static String getGuideString(Page p)
 	{
 		String content = p.getBodyAsString();
-		if (content != null && content.indexOf("<guide>") >= 0)
+		if (content != null && content.indexOf("<guide") >= 0)
 		{
 			
 			int start = content.indexOf(Service.GUIDE_MACRO);
@@ -77,7 +78,7 @@ public class Service
 			}
 			else
 			{
-				start = content.indexOf("<guide>");
+				start = content.indexOf("<guide");
 				int end = content.indexOf("</guide>", start);
 				if (end >= 0)
 				{
@@ -128,91 +129,110 @@ public class Service
 //		}
 //	}
 
+	@SuppressWarnings("unchecked")
 	public static void saveGuide(Page p, String xml, String user)
 	{
-		/*
+		
 		try
 		{
 			Document doc = parse(xml);
-			OutputFormat format = OutputFormat.createPrettyPrint();
-			StringWriter sw = new StringWriter();
-		    XMLWriter writer = new XMLWriter( sw, format );
-		    writer.write( doc );
-		    writer.close();
-		    xml = sw.toString();
-		    xml = xml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
-		    xml = xml.trim();
-		    xml = xml.substring(0, xml.indexOf("</guide>") + 8);
-		}
-		catch (Exception e)
-		{
 			
+			if (doc != null)
+			{
+				// bit of a hack - get rid of spurious parseerror elements
+				List<Element> pes = doc.getRootElement().elements("parseerror");
+				for (Element e: pes)
+					doc.getRootElement().remove(e);
+				
+				// parse and pretty print the xml
+				OutputFormat format = OutputFormat.createPrettyPrint();
+				StringWriter sw = new StringWriter();
+			    XMLWriter writer = new XMLWriter( sw, format );
+			    writer.write( doc );
+			    writer.close();
+			    xml = sw.toString();
+			    xml = xml.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");		    
+			    xml = xml.substring(0, xml.indexOf("</guide>") + 8);
+			    xml = xml.trim();
+			}
 		}
-		*/
+		catch (Throwable t)
+		{
+			logger.error("Error parsing saved xml", t);
+			t.printStackTrace();
+		}
 		
 		
-		PageManager pm = getPageManager();
-
-		
-		Page old=null;
 		try
 		{
-			old = (Page) p.clone();
-		} 
-		catch (CloneNotSupportedException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			logger.error(e);
-		}
-
-		String content = p.getBodyAsString();
-
-		int start = content.indexOf("<guide>") ;
-		int end = content.indexOf("</guide>", start);
-
-		String suffix = "";
-
-		/*
-		if (end < 0)
-		{
-			end = start;
-			suffix = "\n {guide} \n";
-		}*/
 		
-		if (start > -1 && end > -1)
-		{
-			end = end + 8;
-
-			String newContent = content.substring(0, start) + xml
-					+ suffix + content.substring(end);
+			PageManager pm = getPageManager();
 	
-			Calendar c = new GregorianCalendar();
-			c.setTime(old.getLastModificationDate());
-	
-			//BodyContent bc = p.getBodyContent(BodyType.XHTML);
-			//bc.setBody(newContent);
 			
-			//p.setContent(newContent);
-			p.setBodyAsString(newContent);
-			
-			SaveContext sc = new DefaultSaveContext();
-			sc.setMinorEdit(true);
-			p.setLastModificationDate(new Date());
-			p.setLastModifierName(user);
-	
-			logger.debug("saving now");
-			if (c.get(Calendar.DAY_OF_YEAR) == new GregorianCalendar()
-					.get(Calendar.DAY_OF_YEAR) && user!=null && user.equals(old.getLastModifierName()))
+			Page old=null;
+			try
 			{
-				pm.saveContentEntity(p, sc);
+				old = (Page) p.clone();
+			} 
+			catch (CloneNotSupportedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				logger.error(e);
 			}
-			else
+	
+			String content = p.getBodyAsString();
+	
+			int start = content.indexOf("<guide") ;
+			int end = content.indexOf("</guide>", start);
+	
+			String suffix = "";
+	
+			/*
+			if (end < 0)
 			{
-				pm.saveContentEntity(p, old, sc);
+				end = start;
+				suffix = "\n {guide} \n";
+			}*/
+			
+			if (start > -1 && end > -1)
+			{
+				end = end + 8;
+	
+				String newContent = content.substring(0, start) + xml
+						+ suffix + content.substring(end);
+		
+				Calendar c = new GregorianCalendar();
+				c.setTime(old.getLastModificationDate());
+		
+				//BodyContent bc = p.getBodyContent(BodyType.XHTML);
+				//bc.setBody(newContent);
+				
+				//p.setContent(newContent);
+				p.setBodyAsString(newContent);
+				
+				SaveContext sc = new DefaultSaveContext();
+				sc.setMinorEdit(true);
+				p.setLastModificationDate(new Date());
+				p.setLastModifierName(user);
+		
+				logger.debug("saving now");
+				if (c.get(Calendar.DAY_OF_YEAR) == new GregorianCalendar()
+						.get(Calendar.DAY_OF_YEAR) && user!=null && user.equals(old.getLastModifierName()))
+				{
+					pm.saveContentEntity(p, sc);
+				}
+				else
+				{
+					pm.saveContentEntity(p, old, sc);
+				}
 			}
 		}
-
+		catch (Throwable t)
+		{
+			logger.error("Error saving guide", t);
+			t.printStackTrace();
+		}
 	}
 
 	public static Document getAttachments(String id)

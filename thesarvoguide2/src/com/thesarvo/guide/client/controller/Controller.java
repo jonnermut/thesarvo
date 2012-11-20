@@ -30,6 +30,7 @@ import com.thesarvo.guide.client.application.Application;
 import com.thesarvo.guide.client.model.Guide;
 import com.thesarvo.guide.client.model.NodeType;
 import com.thesarvo.guide.client.util.BrowserUtil;
+import com.thesarvo.guide.client.util.Logger;
 import com.thesarvo.guide.client.util.StringUtil;
 import com.thesarvo.guide.client.util.WidgetUtil;
 import com.thesarvo.guide.client.view.GuideView;
@@ -66,6 +67,9 @@ public class Controller
 	Widget currentView = null;
 
 	RootPanel viewContainer = null;
+	
+	boolean saving = false;
+	boolean queuedSave = false;
 
 	public Controller(EventBus eventBus)
 	{
@@ -163,24 +167,39 @@ public class Controller
 	{
 		if (Window.Location.getHost().startsWith("127.0.0.1"))
 			return;
-
-		String url = getServletUrl() + "guide/xml/"
-				+ getCurrentGuide().getGuideId();
-		url += "?user=" + getUser();
-
-		// TODO: how to get at the xml!
-		String data = this.getXml().toString();
-
-		// Window.alert(data);
-
-		// Window.setStatus("Saving guide data...");
-		getCurrentGuide().getGuideView().showPopup(true);
-
-		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST,
-				URL.encode(url));
-
+		
+		if (saving)
+		{
+			Logger.debug("Queued Save");
+			queuedSave = true;
+			return;
+		}
+		
+		queuedSave = false;
+		saving = true;
+	
 		try
 		{
+
+			String url = getServletUrl() + "guide/xml/"
+					+ getCurrentGuide().getGuideId();
+			url += "?user=" + getUser();
+	
+			
+			String data = this.getXml().toString();
+	
+			// Window.alert(data);
+	
+			// Window.setStatus("Saving guide data...");
+			getCurrentGuide().getGuideView().showPopup(true);
+	
+			Logger.debug("Saving...");
+			//Logger.debug("Saving xml: " + data);
+			
+			RequestBuilder builder = new RequestBuilder(RequestBuilder.POST,
+					URL.encode(url));
+
+
 			Request request = builder.sendRequest(data,
 
 			new RequestCallback()
@@ -190,45 +209,54 @@ public class Controller
 				public void onResponseReceived(Request request,
 						Response response)
 				{
-					if (response.getStatusCode() != 200)
-						saveError(" status code was "
-								+ response.getStatusCode());
-
-					getCurrentGuide().getGuideView().showPopup(false);
+					try
+					{
+						if (response.getStatusCode() != 200)
+							saveError(" status code was "
+									+ response.getStatusCode());
+						
+						Logger.debug("save onResponseReceived status code=" + response.getStatusCode());
+	
+						getCurrentGuide().getGuideView().showPopup(false);
+					}
+					catch (Exception e)
+					{
+						
+					}
+					
+					saving = false;
+					if (queuedSave)
+						saveAll();
 				}
 
 				@Override
 				public void onError(Request request, Throwable exception)
 				{
-					saveError(exception.getMessage());
-
+					try
+					{
+						saveError(exception.getMessage());
+	
+						Logger.debug("save onError"); 
+					}
+					catch (Exception e)
+					{
+						
+					}
+					
+					saving = false;
+					if (queuedSave)
+						saveAll();
 				}
 
 			});
 		}
-		catch (RequestException e)
+		catch (Exception e)
 		{
+			saving = false;
 			saveError(e.getMessage());
 		}
 
-		// Window.alert("FIXME!");
-		/*
-		 * FIXME - rewrite simpler
-		 * 
-		 * 
-		 * XmlService.doXmlRequest(url, RequestBuilder.POST, data, new
-		 * XmlRequestCallback() {
-		 * 
-		 * @Override public void onError(Request request, Throwable exception) {
-		 * Window.alert("Error saving data: " + exception.getMessage() +
-		 * "\nI will reload the page so you can try again.\n" + ERROR_MSG);
-		 * 
-		 * Window.Location.reload(); }
-		 * 
-		 * @Override public void handleXml(Document xml) { // do nothing
-		 * //Window.setStatus("Guide data saved ok.");
-		 * getCurrentGuide().getGuideView().showPopup(false); } });
-		 */
+
 	}
 
 	public void saveError(String msg)

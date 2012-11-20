@@ -2,35 +2,34 @@
 ======= Bugs ========
 
 Maps
-- GPS changes not actually persisted
-- GPS changes dont update points on map
+- GPS changes dont update points on map immediately
 
 Misc
+- Reorder not saving every button click properly
 - 'extra page' stuff on image legend not working. Maybe get rid of this
 
 ======= Features ========
 
-- Reorder
-
 - Comment on climbs
--- Use confluence's comments, and hack them so that a thread is created per climb,
-	and is move by GWT to the climb
+-- Use confluence's comments, and hack them so that a thread is created per climb, and is move by GWT to the climb
 	
 - Make 'upload an image' more user friendly
 
-- Pretty print xml on save
-
 - Incorporate theCrag editable topos
 
-- Make map editable
 - Single 'crag' co-ordinate for large scale maps
+
+- Make map editable
+	https://developers.google.com/maps/documentation/javascript/reference#DrawingManager
+	https://developers.google.com/maps/documentation/javascript/overlays#drawing_tools
+	http://gmaps-samples-v3.googlecode.com/svn-history/r282/trunk/drawing/drawing-tools.html	
+	polygon.enableDrawing(), enableEditing(), disableEditing()  setEditable(true)
+
+======= Done ========
+
+- Reorder buttons
+- Maps work without kml servlet
+- Fixup missing code
+- Convert to conf 4.3.2
+- Pretty print xml on save
 - Make GPS accept lat/long as well as UTM
-
-https://developers.google.com/maps/documentation/javascript/reference#DrawingManager
-https://developers.google.com/maps/documentation/javascript/overlays#drawing_tools
-http://gmaps-samples-v3.googlecode.com/svn-history/r282/trunk/drawing/drawing-tools.html
-
-polygon.enableDrawing(), enableEditing(), disableEditing() 
-setEditable(true)
-
-
