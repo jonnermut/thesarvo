@@ -1,1 +1,0 @@
-java -cp C:\eclipse\plugins\com.google.gwt.eclipse.sdkbundle.2.0.0_2.0.0.v200912062003\gwt-2.0.0\gwt-dev.jar;C:\eclipse\plugins\com.google.gwt.eclipse.sdkbundle.2.0.0_2.0.0.v200912062003\gwt-2.0.0\gwt-user.jar com.google.gwt.resources.css.InterfaceGenerator -standalone -typeName com.thesarvo.guide.client.view.res.GuideStyle -css guide.css > GuideStyle.java
