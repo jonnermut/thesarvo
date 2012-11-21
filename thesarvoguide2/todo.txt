@@ -1,8 +1,6 @@
 
 ======= Bugs ========
 
-Maps
-- GPS changes dont update points on map immediately
 
 Misc
 - Reorder not saving every button click properly
@@ -19,7 +17,15 @@ Misc
 
 - Single 'crag' co-ordinate for large scale maps
 
-- Make map editable
+- Make markers editable
+
+- Drawing on map - need Google maps v3 to use DrawingManager, see:
+	http://code.google.com/p/gwt-google-apis/issues/detail?id=381
+	
+	Alternative
+	https://github.com/branflake2267/GWT-Maps-V3-Api/
+	
+	JS Apis:
 	https://developers.google.com/maps/documentation/javascript/reference#DrawingManager
 	https://developers.google.com/maps/documentation/javascript/overlays#drawing_tools
 	http://gmaps-samples-v3.googlecode.com/svn-history/r282/trunk/drawing/drawing-tools.html	
@@ -27,9 +33,10 @@ Misc
 
 ======= Done ========
 
-- Reorder buttons
-- Maps work without kml servlet
 - Fixup missing code
+- Maps work without kml servlet
 - Convert to conf 4.3.2
 - Pretty print xml on save
 - Make GPS accept lat/long as well as UTM
+- Reorder buttons
+- map points are selectable

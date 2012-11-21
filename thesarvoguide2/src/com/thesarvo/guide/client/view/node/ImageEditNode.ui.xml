@@ -89,6 +89,7 @@
 				</td>
 				
 			</tr>
+			<!-- Commented out FTB until I decide what to do with this
 			<tr>
 				
 				<td>
@@ -104,7 +105,7 @@
 					<s:BoundCheckBox bindValue='@legendInsertExtraBefore' ui:field='legendInsertExtraBefore' >Include before</s:BoundCheckBox>
 				</td>
 			</tr>
-		
+		 	-->
 			<tr>
 				
 				<td colspan='4'>

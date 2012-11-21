@@ -42,11 +42,11 @@ public class ImageEditNode extends EditNode
 	@UiField ImageReadNode img;
 	@UiField CheckBox legendCheckBox;
 	@UiField TableSectionElement legendEditPanel;
-	@UiField TextBox legendExtraPage;
+	//@UiField TextBox legendExtraPage;
 	@UiField TextBox legendFooter;
 	@UiField TextBox legendx;
 	@UiField TextBox legendy;
-	@UiField CheckBox legendInsertExtraBefore;
+	//@UiField CheckBox legendInsertExtraBefore;
 	@UiField TextBox legendTitle;
 	@UiField CheckBox noPrint;
 	@UiField ListBox srcListBox;
@@ -88,8 +88,9 @@ public class ImageEditNode extends EditNode
 		initWidget(uiBinder.createAndBindUi(this));	
 		
 		boundWidgets = new Widget[] {
-				legendCheckBox, legendx, legendy, legendExtraPage,legendFooter,legendInsertExtraBefore,legendTitle,noPrint,srcListBox, widthListBox
-		};
+				legendCheckBox, legendx, legendy, legendFooter,legendTitle,noPrint,srcListBox, widthListBox
+		}; // legendExtraPage, legendInsertExtraBefore
+		
 		
 		previewModel = new XmlSimpleModel( getModel().getNode().cloneNode(true) );
 		
@@ -196,13 +197,13 @@ public class ImageEditNode extends EditNode
 		}
 	}
 	
-	@UiHandler({"widthListBox","srcListBox","climbsListBox" ,"legendExtraPage","legendFooter","legendTitle", "legendx", "legendy"})	
+	@UiHandler({"widthListBox","srcListBox","climbsListBox" ,"legendFooter","legendTitle", "legendx", "legendy"})	//,"legendExtraPage"
 	public void onChange(ChangeEvent event)
 	{
 		updatePreview();
 	}
 	
-	@UiHandler({"legendCheckBox","legendInsertExtraBefore"})	
+	@UiHandler({"legendCheckBox"})	//,"legendInsertExtraBefore"
 	public void onCheckboxClick(ClickEvent event)
 	{
 		updatePreview();
@@ -222,17 +223,17 @@ public class ImageEditNode extends EditNode
 		showLegendEdit(value);
 	}
 	
-	@UiHandler("legendExtraPage")
-	public void onLegendExtraPageChange(ValueChangeEvent<String> event)
-	{
-		populateClimbs();
-	}
-	
-	@UiHandler("legendInsertExtraBefore")
-	public void onlegendInsertExtraBeforeChange(ValueChangeEvent<Boolean> event)
-	{
-		populateClimbs();
-	}
+//	@UiHandler("legendExtraPage")
+//	public void onLegendExtraPageChange(ValueChangeEvent<String> event)
+//	{
+//		populateClimbs();
+//	}
+//	
+//	@UiHandler("legendInsertExtraBefore")
+//	public void onlegendInsertExtraBeforeChange(ValueChangeEvent<Boolean> event)
+//	{
+//		populateClimbs();
+//	}
 
 	private void populateClimbs()
 	{
@@ -242,8 +243,8 @@ public class ImageEditNode extends EditNode
 		 
 		Controller.get().populateClimbs((BoundListBox) climbsListBox, 
 				 
-				legendExtraPage.getValue(),
-				legendInsertExtraBefore.getValue() );
+				null,
+				false );
 		
 		
 		

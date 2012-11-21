@@ -19,8 +19,8 @@ public class LabelOverlay extends Overlay
 
 
 
-	private final LatLng pos;
-	private final String text;
+	private LatLng pos;
+	private String text;
 
 	private MapWidget map;
 
@@ -156,5 +156,37 @@ public class LabelOverlay extends Overlay
 			}
 
 		}
+	}
+
+	/**
+	 * @return the pos
+	 */
+	public LatLng getPos()
+	{
+		return pos;
+	}
+
+	/**
+	 * @return the text
+	 */
+	public String getText()
+	{
+		return text;
+	}
+
+	/**
+	 * @param pos the pos to set
+	 */
+	public void setPos(LatLng pos)
+	{
+		this.pos = pos;
+	}
+
+	/**
+	 * @param text the text to set
+	 */
+	public void setText(String text)
+	{
+		this.text = text;
 	}
 }

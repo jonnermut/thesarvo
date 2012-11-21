@@ -1,13 +1,14 @@
 package com.thesarvo.guide.client.view.node;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.maps.client.Copyright;
 import com.google.gwt.maps.client.CopyrightCollection;
 import com.google.gwt.maps.client.InfoWindowContent;
@@ -21,17 +22,11 @@ import com.google.gwt.maps.client.control.OverviewMapControl;
 import com.google.gwt.maps.client.control.ScaleControl;
 import com.google.gwt.maps.client.event.MapMouseMoveHandler;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
-import com.google.gwt.maps.client.event.MarkerInfoWindowOpenHandler;
-import com.google.gwt.maps.client.event.MarkerClickHandler.MarkerClickEvent;
-import com.google.gwt.maps.client.event.MarkerInfoWindowOpenHandler.MarkerInfoWindowOpenEvent;
-import com.google.gwt.maps.client.geom.Bounds;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.geom.LatLngBounds;
 import com.google.gwt.maps.client.geom.MercatorProjection;
 import com.google.gwt.maps.client.geom.Point;
 import com.google.gwt.maps.client.geom.Projection;
-import com.google.gwt.maps.client.overlay.GeoXmlLoadCallback;
-import com.google.gwt.maps.client.overlay.GeoXmlOverlay;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.user.client.Command;
@@ -50,17 +45,17 @@ import com.thesarvo.guide.client.util.StringUtil;
 public class MapPanel extends FlowPanel
 {
 
-	
-
 	List<Node> points;
+	
+	Map<Node, LabelOverlay> labelOverlays = new HashMap<Node, LabelOverlay>();
+	Map<Node, Marker> markers = new HashMap<Node, Marker>();
+	Map<Marker, MarkerClickHandler> clickHandlers = new HashMap<Marker, MarkerClickHandler>();
 	
 	MapWidget map;
 	
 	String kmlUrl;
 	
 	TransparentDiv posDiv;
-	
-	
 	
 	Label latLonLabel = new Label();
 	Label utmLabel = new Label();
@@ -165,7 +160,7 @@ public class MapPanel extends FlowPanel
 			map.addMapType(mt);
 		}
 		
-		handlePoints();
+		updateAllPoints();
 		
 		String url = kmlUrl;
 		
@@ -191,15 +186,14 @@ public class MapPanel extends FlowPanel
 		*/
 	}
 
-	private void handlePoints()
+	public void updateAllPoints()
 	{
 		Logger.debug("handlePoints" + points);
 		
+		removeOverlays();
+		
 		if (points != null && points.size() > 0)
 		{
-//			double centx=0;
-//			double centy=0;
-//			int count = 0;
 			
 			LatLngBounds bounds = null;
 			
@@ -208,66 +202,10 @@ public class MapPanel extends FlowPanel
 			{
 				Element point = (Element) n;
 				
-				Logger.debug("point:" + point);
+				LatLng latlng = updatePoint(point);
 				
-				final String easting = StringUtil.notNull(point.getAttribute("easting"));
-				final String northing = StringUtil.notNull(point.getAttribute("northing"));
-				final String zone = StringUtil.notNull(point.getAttribute("zone"));
-				final String code = StringUtil.notNull(point.getAttribute("code"));
-				final String description = StringUtil.notNull(point.getAttribute("description"));
-				
-				double[] ll = GeoUtil.getLatLong(easting, northing, zone);
-				if (ll!=null)
+				if (latlng!=null)
 				{
-					Logger.debug("Adding overlay for point " + ll[0] + "," + ll[1]);
-					
-					LatLng latlng = LatLng.newInstance(ll[0], ll[1]);
-					
-					String t = "";
-					if (StringUtil.isNotEmpty(code))
-						t += code;
-					if (StringUtil.isNotEmpty(description))
-					{
-						if (StringUtil.isNotEmpty(t))
-							t+= " - ";
-						
-						t+= description;
-					}
-					
-					final String text = t;
-					LabelOverlay overlay = new LabelOverlay(latlng, text);
-					map.addOverlay(overlay);
-					
-					MarkerOptions mo = MarkerOptions.newInstance();
-					mo.setClickable(true);
-					mo.setTitle(text);
-					
-					final Marker marker = new Marker(latlng, mo);
-					map.addOverlay(marker);
-					
-					marker.addMarkerClickHandler(new MarkerClickHandler()
-					{
-						
-						@Override
-						public void onClick(MarkerClickEvent event)
-						{
-							map.getInfoWindow().open(marker.getLatLng(), 
-							        new InfoWindowContent(text) );
-							
-						}
-					});
-//					marker.addMarkerInfoWindowOpenHandler( new MarkerInfoWindowOpenHandler()
-//					{
-//						
-//						@Override
-//						public void onInfoWindowOpen(MarkerInfoWindowOpenEvent event)
-//						{
-//							map.getInfoWindow().open(marker.getLatLng(), 
-//							        new InfoWindowContent(text) );
-//							
-//						}
-//					});
-					
 					
 					if (bounds == null)
 						bounds = LatLngBounds.newInstance(latlng, latlng);
@@ -291,49 +229,125 @@ public class MapPanel extends FlowPanel
 		}
 	}
 
-	
-	
-//	centx += Double.valueOf(easting);
-//	centy += Double.valueOf(northing);
-//	count ++;
-	
-	//Icon
-	
-//	final Marker marker = new Marker(LatLng.newInstance(ll[0], ll[1]));
-//	
-//	map.addOverlay(marker );
-//	
-//	marker.addMarkerClickHandler(new MarkerClickHandler()
-//	{
-//		
-//		@Override
-//		public void onClick(MarkerClickEvent event)
-//		{
-//			map.getInfoWindow().open(marker.getLatLng(), 
-//			        new InfoWindowContent(code + " - " + description));
-//			
-//		}
-//	});
-//	
-//	marker.addMarkerInfoWindowOpenHandler(new MarkerInfoWindowOpenHandler()
-//	{
-//		
-//		@Override
-//		public void onInfoWindowOpen(MarkerInfoWindowOpenEvent event)
-//		{
-//			map.getInfoWindow().open(marker.getLatLng(), 
-//			        new InfoWindowContent(code + " - " + description));
-//			
-//		}
-//	});
-//	centx = centx / count;
-//	centy = centy / count;
-//	double[] ll = getLatLong(centx, centy);
-//	
-//	map.setCenter(LatLng.newInstance(ll[0], ll[1]));	
-	
-	
-	
+	private LatLng updatePoint(Element point)
+	{
+		Logger.debug("point:" + point);
+		
+		LatLng latlng = getLatLng(point);				
+		final String text = getTextForPoint(point);
+		
+		
+		if (latlng!=null)
+		{
+			//Logger.debug("Adding overlay for point " + ll[0] + "," + ll[1]);
+			
+			
+
+			LabelOverlay overlay = labelOverlays.get(point);
+			if (overlay == null)
+			{
+				overlay = new LabelOverlay(latlng, text);
+				
+			}
+			else
+			{
+				map.removeOverlay(overlay);
+				overlay.setPos(latlng);
+				overlay.setText(text);
+			}
+			map.addOverlay(overlay);
+			labelOverlays.put(point, overlay);
+					
+			Marker existing = markers.get(point);
+			if (existing != null)
+			{
+				existing.setLatLng(latlng);
+				// TODO - change text
+			}
+			else
+			{
+				MarkerOptions mo = MarkerOptions.newInstance();
+				mo.setClickable(true);
+				mo.setTitle(text);
+				
+				final Marker marker = new Marker(latlng, mo);
+				map.addOverlay(marker);
+				
+				MarkerClickHandler handler = new MarkerInfoWindowClickHandler(text, marker);
+				clickHandlers.put(marker, handler);
+				marker.addMarkerClickHandler(handler);
+				
+				markers.put(point, marker);
+			}
+		}
+		return latlng;
+	}
+
+	private LatLng getLatLng(Element point)
+	{
+		final String easting = StringUtil.notNull(point.getAttribute("easting"));
+		final String northing = StringUtil.notNull(point.getAttribute("northing"));
+		final String zone = StringUtil.notNull(point.getAttribute("zone"));
+		final String latitude = StringUtil.notNull(point.getAttribute("latitude"));
+		final String longitude = StringUtil.notNull(point.getAttribute("longitude"));
+		
+		LatLng latlng = null;
+		if (StringUtil.isEmpty(latitude) || StringUtil.isEmpty(longitude))
+		{
+			// use utm
+			double[] ll = GeoUtil.getLatLong(easting, northing, zone);
+			latlng = LatLng.newInstance(ll[0], ll[1]);
+		}
+		else
+		{
+			// use lat,lng
+			try
+			{
+				double lat = Double.parseDouble(latitude);
+				double lon = Double.parseDouble(longitude);
+				latlng = LatLng.newInstance(lat, lon);
+			}
+			catch (Exception e)
+			{
+				
+			}
+		}
+		return latlng;
+	}
+
+	private String getTextForPoint(Element point)
+	{
+		final String code = StringUtil.notNull(point.getAttribute("code"));
+		final String description = StringUtil.notNull(point.getAttribute("description"));
+		String t = "";
+		if (StringUtil.isNotEmpty(code))
+			t += code;
+		if (StringUtil.isNotEmpty(description))
+		{
+			if (StringUtil.isNotEmpty(t))
+				t+= " - ";
+			
+			t+= description;
+		}
+		
+		final String text = t;
+		return text;
+	}
+
+	private void removeOverlays()
+	{
+		for (LabelOverlay lo : labelOverlays.values())
+			map.removeOverlay(lo);
+		
+		labelOverlays.clear();
+		
+		for (Marker m : markers.values())
+			map.removeOverlay(m);
+		
+		markers.clear();
+	}
+
+
 
 	/**
 	 * @return the kmlUrl
@@ -351,6 +365,27 @@ public class MapPanel extends FlowPanel
 		this.kmlUrl = kmlUrl;
 	}
 	
+	private  final class MarkerInfoWindowClickHandler implements
+			MarkerClickHandler
+	{
+		private String text;
+		private Marker marker;
+
+		private MarkerInfoWindowClickHandler(String text, Marker marker)
+		{
+			this.text = text;
+			this.marker = marker;
+		}
+
+		@Override
+		public void onClick(MarkerClickEvent event)
+		{
+			map.getInfoWindow().open(marker.getLatLng(), 
+			        new InfoWindowContent(text) );
+			
+		}
+	}
+
 	private final class MouseMoveHandler implements MapMouseMoveHandler
 	{
 		
@@ -422,6 +457,18 @@ public class MapPanel extends FlowPanel
 		public boolean isPng()
 		{
 			return false;
+		}
+		
+	}
+
+	public void selectPoint(Node node)
+	{
+		Marker m = markers.get((Element)node);
+		if (m!=null)
+		{
+			MarkerClickHandler mch = clickHandlers.get(m);
+			if (mch != null)
+				mch.onClick(null);
 		}
 		
 	}
