@@ -93,7 +93,9 @@ public class GuideMacro extends InlineHtmlMacro implements ResourceAware, com.at
 
         	// check if any request parameters came in to complete or uncomplete tasks
         	final HttpServletRequest request = ServletActionContext.getRequest();
-        	String action = request.getParameter("guide.action");
+        	String action = null;
+        	if (request != null)
+        		action = request.getParameter("guide.action");
 
 	        if ( action != null)
 	        {
@@ -159,13 +161,16 @@ public class GuideMacro extends InlineHtmlMacro implements ResourceAware, com.at
 	        	out.append("\";\n");
 	        	
 	        	//HttpServletRequest request = ServletActionContext.getRequest();
+	        	String contextPath = "/confluence";
 	        	if (request != null)
 	        	{
-	        		out.append("var guide_servletUrl='");
-	        		String path = request.getContextPath() + "/plugins/servlet/";
-	        		out.append(path);
-	        		out.append("';\n");
+	        		contextPath = request.getContextPath();
 	        	}
+        		out.append("var guide_servletUrl='");
+        		String path = contextPath + "/plugins/servlet/";
+        		out.append(path);
+        		out.append("';\n");
+	        	
 
 	        	String u = user == null ? "" : user.getName();
 	        	out.append("var guide_user='" + u + "';\n");

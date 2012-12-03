@@ -20,6 +20,7 @@ import org.dom4j.io.XMLWriter;
 import com.atlassian.confluence.core.BodyContent;
 import com.atlassian.confluence.core.BodyType;
 import com.atlassian.confluence.core.DefaultSaveContext;
+import com.atlassian.confluence.core.Modification;
 import com.atlassian.confluence.core.SaveContext;
 import com.atlassian.confluence.pages.Attachment;
 import com.atlassian.confluence.pages.Page;
@@ -130,7 +131,7 @@ public class Service
 //	}
 
 	@SuppressWarnings("unchecked")
-	public static void saveGuide(Page p, String xml, String user)
+	public static void saveGuide(Page p, String xml, final String user)
 	{
 		
 		try
@@ -169,17 +170,17 @@ public class Service
 			PageManager pm = getPageManager();
 	
 			
-			Page old=null;
-			try
-			{
-				old = (Page) p.clone();
-			} 
-			catch (CloneNotSupportedException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				logger.error(e);
-			}
+//			Page old=null;
+//			try
+//			{
+//				old = (Page) p.clone();
+//			} 
+//			catch (CloneNotSupportedException e)
+//			{
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//				logger.error(e);
+//			}
 	
 			String content = p.getBodyAsString();
 	
@@ -199,32 +200,48 @@ public class Service
 			{
 				end = end + 8;
 	
-				String newContent = content.substring(0, start) + xml
+				final String newContent = content.substring(0, start) + xml
 						+ suffix + content.substring(end);
 		
 				Calendar c = new GregorianCalendar();
-				c.setTime(old.getLastModificationDate());
+				c.setTime(p.getLastModificationDate());
 		
 				//BodyContent bc = p.getBodyContent(BodyType.XHTML);
 				//bc.setBody(newContent);
 				
 				//p.setContent(newContent);
-				p.setBodyAsString(newContent);
+				
 				
 				SaveContext sc = new DefaultSaveContext();
-				sc.setMinorEdit(true);
-				p.setLastModificationDate(new Date());
-				p.setLastModifierName(user);
+				
+
 		
 				logger.debug("saving now");
-				if (c.get(Calendar.DAY_OF_YEAR) == new GregorianCalendar()
-						.get(Calendar.DAY_OF_YEAR) && user!=null && user.equals(old.getLastModifierName()))
+				boolean minor = c.get(Calendar.DAY_OF_YEAR) == new GregorianCalendar()
+						.get(Calendar.DAY_OF_YEAR) && user!=null && user.equals(p.getLastModifierName());
+				sc.setMinorEdit(minor);
+				
+				if (minor)
 				{
+					p.setBodyAsString(newContent);
+					p.setLastModificationDate(new Date());
+					p.setLastModifierName(user);
+					p.setVersionComment("Guide edited");
 					pm.saveContentEntity(p, sc);
 				}
 				else
 				{
-					pm.saveContentEntity(p, old, sc);
+					 pm.<Page>saveNewVersion(p, new Modification<Page>() 
+					{
+					      public void modify(Page page) 
+					      {
+					    	  page.setBodyAsString(newContent);
+					    	  page.setLastModificationDate(new Date());
+					    	  page.setLastModifierName(user);
+					    	  page.setVersionComment("Guide edited");
+					    	  
+					      }
+					 });
 				}
 			}
 		}
