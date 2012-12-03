@@ -26,36 +26,6 @@
 
 					<c:CellTable
 			            ui:field='cellTable' />
-<!--  
-			  		<g:FlexTable   cellPadding='4' styleName='grid' ui:field='gpsTable' >
-			
-						<g:InlineLabel styleName='gpsHeader'>Code</g:InlineLabel>
-						<g:InlineLabel styleName='gpsHeader'>Description</g:InlineLabel>
-						<g:InlineLabel styleName='gpsHeader'>Zone</g:InlineLabel>
-						<g:InlineLabel styleName='gpsHeader'>Easting</g:InlineLabel>
-						<g:InlineLabel styleName='gpsHeader'>Northing</g:InlineLabel>
-						<g:InlineLabel styleName='gpsHeader'>Height</g:InlineLabel>
-						<g:InlineLabel styleName='gpsHeader'>Datum</g:InlineLabel>
-						
-						
-			
-						<s:Repeater bindList='point'>
-						
-							<s:BoundInlineLabel bindValue='@code' />
-							<s:BoundInlineLabel bindValue='@description' />
-							<g:InlineLabel>55G</g:InlineLabel>
-							<s:BoundInlineLabel bindValue='@easting' />
-							<s:BoundInlineLabel bindValue='@northing' />
-							<s:BoundInlineLabel bindValue='@height' />
-							<g:InlineLabel>GDA94 UTM</g:InlineLabel>
-							
-						</s:Repeater>
-			  	
-			  		</g:FlexTable>
--->
-			
-
-					
   			
 				 </td>
 			</tr>

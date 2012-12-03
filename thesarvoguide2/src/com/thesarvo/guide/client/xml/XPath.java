@@ -63,6 +63,19 @@ public class XPath
 		return XPath.nodeListToList(node.getChildNodes());
 	}
 	
+	public static  List<Element> getElementChildren(Node node)
+	{
+		NodeList childNodes = node.getChildNodes();
+		ArrayList<Element> ret = new ArrayList<Element>(childNodes.getLength());
+		for (int i=0;i<childNodes.getLength();i++)
+		{
+			Node n = childNodes.item(i);
+			if (n instanceof Element)
+				ret.add((Element)n);
+		}
+		return ret;
+	}
+	
 	public static void removeNodes(Node node, String name)
 	{
 		for (int i=node.getChildNodes().getLength() -1;i>=0;i--)

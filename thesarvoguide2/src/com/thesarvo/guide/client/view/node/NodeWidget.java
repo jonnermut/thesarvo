@@ -76,6 +76,11 @@ public class NodeWidget extends Composite implements com.thesarvo.guide.client.x
 							((CheckBox)w).setValue( StringUtil.bool(val) );
 							
 						}
+						else if (w instanceof BoundTextArea)
+						{
+							val = val.replaceAll("<br/>", "\n");
+							((BoundTextArea)w).setText(val);
+						}
 						else if (w instanceof HasText)
 						{
 							((HasText)w).setText(val);
@@ -124,6 +129,12 @@ public class NodeWidget extends Composite implements com.thesarvo.guide.client.x
 						if (w instanceof CheckBox)
 						{
 							val = StringUtil.notNullToString( ((CheckBox)w).getValue() );
+						}
+						else if (w instanceof BoundTextArea)
+						{
+							val = ((HasText)w).getText();
+							val = val.replaceAll("\\\n", "<br/>");
+							
 						}
 						else if (w instanceof HasText)
 						{

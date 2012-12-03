@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
+import com.thesarvo.guide.client.util.StringUtil;
 
 public class XmlSimpleModel 
 {
@@ -45,12 +46,12 @@ public class XmlSimpleModel
 		
 	}
 
-	public void createNode(String name, String val) 
+	public Element createElement(String name, String val) 
 	{
 		Element el = node.getOwnerDocument().createElement(name);
 		XPath.setText(el, val);
 		node.appendChild(el);
-		
+		return el;
 	}
 	
 
@@ -68,6 +69,23 @@ public class XmlSimpleModel
 		}
 		
 		return "";
+	}
+	
+	public Double getDouble(String key)
+	{
+		String raw = get(key);
+		if (StringUtil.isNotEmpty(key))
+		{
+			try
+			{
+				return (Double) Double.parseDouble(raw);
+			}
+			catch (Exception e)
+			{
+				
+			}
+		}
+		return null;
 	}
 
 	public List<XmlSimpleModel> getList(String path) 

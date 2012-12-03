@@ -9,57 +9,85 @@
   <ui:with field='r' type='com.thesarvo.guide.client.view.res.Resources'/>
 
   <g:HTMLPanel >
-
-	<style>
-		TD
-		{
-			border: red 1px !important;
-		}
-	
-	</style>
   		
-  	<div >
+  	  	<div >
+
+  		<!--  
+  		<table cellpadding='8' cellspacing='0' width='100%' >
+  			<tr class='{r.s.tstr}'>
+  				<td>
+
+					<c:CellTable
+			            ui:field='cellTable' />
   			
-  		<c:CellTable ui:field='cellTable' />
-  			
-  			<!--  FIXME
-  					<g:FlexTable columns='7' cellPadding='4' styleName='grid' ui:field='gpsTable'>
-			
-						<g:InlineLabel styleName='gpsHeader'>Code</g:InlineLabel>
-						<g:InlineLabel styleName='gpsHeader'>Description</g:InlineLabel>
-						<g:InlineLabel styleName='gpsHeader'>Zone</g:InlineLabel>
-						<g:InlineLabel styleName='gpsHeader'>Easting</g:InlineLabel>
-						<g:InlineLabel styleName='gpsHeader'>Northing</g:InlineLabel>
-						<g:InlineLabel styleName='gpsHeader'>Height</g:InlineLabel>
-						<g:InlineLabel></g:InlineLabel>
-			
-			
-						<s:Repeater bindList='point'>
+  					<g:Button ui:field='addButton' >Add Row</g:Button>
+				 </td>
+			</tr>
+		</table>
+		-->
+		
+
+		
+		<table cellpadding='8' cellspacing='0' width='100%' >
+  			<tr class='{r.s.tstr}'>
+				 <td width='200px'>
+				 	<g:Label ui:field='selectMsg' >
+				 		Please select an object to edit it
+				 	</g:Label>
+					<g:VerticalPanel ui:field='editPanel' visible="false">
 					
-						
-							<s:BoundTextBox bindValue='@code' />
-							<s:BoundTextBox bindValue='@description'  />
-							<g:InlineLabel>55G</g:InlineLabel>
-							<s:BoundTextBox bindValue='@easting' />
-							<s:BoundTextBox bindValue='@northing' />
-							<s:BoundTextBox bindValue='@height' />
-							<s:BoundButton ui:field='removeButton' bindValue='_row' >Remove</s:BoundButton>
-						</s:Repeater>
-			  		
-			  		</g:FlexTable>
-			  		-->
+						<g:Label ui:field='editLabel' />
+				 		
+				 		<g:Label>Code</g:Label>
+				 		<g:TextBox ui:field='code' />
+				 		
+				 		<g:Label>Description</g:Label>
+				 		<g:TextArea ui:field='description' />
+
+						<g:VerticalPanel ui:field='pointFields' visible="false">
+					 		<g:Label>UTM Zone</g:Label>
+					 		<g:TextBox ui:field='zone' />
+					 	
+					 		<g:Label>UTM Easting</g:Label>
+					 		<g:TextBox ui:field='easting' />
+	
+					 		<g:Label>UTM Northing</g:Label>
+					 		<g:TextBox ui:field='northing' />
+					 		
+					 		<g:Label>Height</g:Label>
+					 		<g:TextBox ui:field='height' />	
+	
+					 		<g:Label>Latitude</g:Label>
+					 		<g:TextBox ui:field='latitude' />	
+	
+					 		<g:Label>Longitude</g:Label>
+					 		<g:TextBox ui:field='longitude' />	
+				 		</g:VerticalPanel>
+				 		
+				 						 	
+				 	</g:VerticalPanel>
+				 	
+				 </td>
+
+  				<td width='*'>
+					<n:MapPanel ui:field='mapPanel' />
+				
   			
-  				<g:Button ui:field='addButton' >Add Row</g:Button>
-  			
-  			<!-- deprecated - we will do something more clever
-  				<div style='padding: 16px;'>
-  					Extra KML (content must be a full KML file) <br/>
-  					<s:BoundTextArea bindValue="@kml" styleName='{r.s.textArea}' />
-  				
-  				</div>
-  			 -->
-				 
-	</div>
+  					
+				 </td>
+
+			</tr>
+		</table>
+		
+		
+		<div style='font-size:7pt; margin-bottom:8px' ui:field='linksDiv' >
+
+			<g:Anchor ui:field='googleEarthAnchor' title='Click to download a KML file that will open in Google Earth or can be loaded into your GPS' >Show in Google Earth</g:Anchor>
+		</div>
+		
+	</div>	
+  		
   </g:HTMLPanel>
+  
  
 </ui:UiBinder>

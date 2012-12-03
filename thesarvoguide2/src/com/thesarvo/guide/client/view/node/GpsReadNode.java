@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.sun.corba.se.pept.transport.ContactInfo;
 import com.thesarvo.guide.client.Thesarvoguide2;
@@ -32,30 +33,16 @@ import com.thesarvo.guide.client.geo.CoordinateConversion;
 import com.thesarvo.guide.client.geo.CoordinateConversion.UTM;
 import com.thesarvo.guide.client.geo.GeoUtil;
 import com.thesarvo.guide.client.geo.Point;
+import com.thesarvo.guide.client.model.MapDrawingObject;
 import com.thesarvo.guide.client.util.BrowserUtil;
 import com.thesarvo.guide.client.util.StringUtil;
 import static com.thesarvo.guide.client.util.StringUtil.*;
 import com.thesarvo.guide.client.xml.XPath;
 import com.thesarvo.guide.client.xml.XmlSimpleModel;
 
-public class GpsReadNode extends ReadNode
+public class GpsReadNode extends ReadNode implements GPSConstants
 {
 
-	private static final String LONGITUDE = "@longitude";
-
-	private static final String LATITUDE = "@latitude";
-
-	private static final String HEIGHT = "@height";
-
-	private static final String NORTHING = "@northing";
-
-	private static final String EASTING = "@easting";
-
-	private static final String ZONE = "@zone";
-
-	private static final String DESCRIPTION = "@description";
-
-	private static final String CODE = "@code";
 
 	private static final double LN2 = Math.log(2);
 
@@ -95,7 +82,8 @@ public class GpsReadNode extends ReadNode
 
 	// NativeMap nativeMap;
 
-	private List<Node> nodes;
+	private List<Element> nodes;
+	private List<MapDrawingObject> mapDrawingObjects;
 
 	private static List<XmlSimpleModel> data;
 
@@ -138,8 +126,19 @@ public class GpsReadNode extends ReadNode
 
 		mapPanel.setKmlUrl(kmlUrl);
 		// mapPanel.setPoints(nodes);
-		mapPanel.init(nodes);
+		setupMapDrawingObjects();
+		mapPanel.init(mapDrawingObjects);
 
+	}
+	
+	private void setupMapDrawingObjects()
+	{
+		List<Element> els = XPath.getElementChildren(getModel().getXml() );
+		mapDrawingObjects = new ArrayList<MapDrawingObject>(els.size());
+		for (Element el : els)
+		{
+			mapDrawingObjects.add(new MapDrawingObject(el));
+		}
 	}
 
 	@Override
@@ -148,12 +147,14 @@ public class GpsReadNode extends ReadNode
 
 		super.setWidgetValuesFromModel();
 		updateDataProvider(model, dataProvider);
-		nodes = XPath.selectNodes(((XmlSimpleModel) getModel()).getXml(),
-				"point");
+		nodes = XPath.getElementChildren(getModel().getXml() );
 
 		if (mapPanel != null)
 		{
-			mapPanel.setPoints(nodes);
+			setupMapDrawingObjects();
+			
+
+			mapPanel.setDrawingObjects(mapDrawingObjects);
 			mapPanel.updateAllPoints();
 		}
 	}
@@ -184,53 +185,58 @@ public class GpsReadNode extends ReadNode
 	{
 		for (XmlSimpleModel xsm : data)
 		{
-			String east = xsm.get(EASTING);
-			String north = xsm.get(NORTHING);
-			String zone = xsm.get(ZONE);
-			String lat = xsm.get(LATITUDE);
-			String lon = xsm.get(LONGITUDE);
-
-			if (isNotEmpty(east) && isNotEmpty(north))
+			// TODO - move this to the model object
+			if (xsm.getXml().getNodeName().equals("point"))
 			{
-				if (isEmpty(zone))
+			
+				String east = xsm.get(EASTING);
+				String north = xsm.get(NORTHING);
+				String zone = xsm.get(ZONE);
+				String lat = xsm.get(LATITUDE);
+				String lon = xsm.get(LONGITUDE);
+	
+				if (isNotEmpty(east) && isNotEmpty(north))
 				{
-					zone = "55G"; // tassie zone
-					xsm.put(ZONE, zone);
-				}
-
-				if (isEmpty(lat) || isEmpty(lon))
-				{
-					// calculate the lat/lon
-
-					try
+					if (isEmpty(zone))
 					{
-						CoordinateConversion cc = new CoordinateConversion();
-
-						double[] latlon = GeoUtil.getLatLong(east, north, zone);
-						if (latlon != null)
+						zone = "55G"; // tassie zone
+						xsm.put(ZONE, zone);
+					}
+	
+					if (isEmpty(lat) || isEmpty(lon))
+					{
+						// calculate the lat/lon
+	
+						try
 						{
-							xsm.put(LATITUDE, GeoUtil.formatLatLong(latlon[0]));
-							xsm.put(LONGITUDE, GeoUtil.formatLatLong(latlon[1]));
+							CoordinateConversion cc = new CoordinateConversion();
+	
+							double[] latlon = GeoUtil.getLatLong(east, north, zone);
+							if (latlon != null)
+							{
+								xsm.put(LATITUDE, GeoUtil.formatLatLong(latlon[0]));
+								xsm.put(LONGITUDE, GeoUtil.formatLatLong(latlon[1]));
+							}
+						}
+						catch (Exception e)
+						{
+	
 						}
 					}
-					catch (Exception e)
-					{
-
-					}
+	
 				}
-
-			}
-			else
-			{
-				// UTM is (partially) empty - calculate it
-				if (isNotEmpty(lat) && isNotEmpty(lon))
+				else
 				{
-					UTM utm = GeoUtil.getUTMFromLatLon(lat, lon);
-					if (utm != null)
+					// UTM is (partially) empty - calculate it
+					if (isNotEmpty(lat) && isNotEmpty(lon))
 					{
-						xsm.put(EASTING, "" + (int) utm.getEasting());
-						xsm.put(NORTHING, "" + (int) utm.getNorthing());
-						xsm.put(ZONE, "" + utm.getLongZone() + utm.getLatZone());
+						UTM utm = GeoUtil.getUTMFromLatLon(lat, lon);
+						if (utm != null)
+						{
+							xsm.put(EASTING, "" + (int) utm.getEasting());
+							xsm.put(NORTHING, "" + (int) utm.getNorthing());
+							xsm.put(ZONE, "" + utm.getLongZone() + utm.getLatZone());
+						}
 					}
 				}
 			}

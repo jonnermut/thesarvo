@@ -122,6 +122,7 @@ public class ClimbReadNode extends ReadNode
 		
 		if (text!=null && ((text=text.trim()).length() > 0) )
 		{	
+			text = text.replaceAll("<br/>", "\n");
 			if (text.indexOf('\n') < 0 || text.indexOf(". ") < 0)
 			{
 				sb.append("<tr>");

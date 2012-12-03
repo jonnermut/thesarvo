@@ -8,16 +8,24 @@ Misc
 
 ======= Features ========
 
+Maps
+- Move to maps v3
+- Single 'crag' co-ordinate for large scale maps
+- Aggregated map on contents pages
+- Make markers editable
+
 - Comment on climbs
 -- Use confluence's comments, and hack them so that a thread is created per climb, and is move by GWT to the climb
 	
 - Make 'upload an image' more user friendly
 
 - Incorporate theCrag editable topos
+	https://github.com/brendanheywood/PhotoTopo
+	
+Other drawing stuff
+	- http://code.google.com/p/raphaelgwt/
+	- 
 
-- Single 'crag' co-ordinate for large scale maps
-
-- Make markers editable
 
 - Drawing on map - need Google maps v3 to use DrawingManager, see:
 	http://code.google.com/p/gwt-google-apis/issues/detail?id=381

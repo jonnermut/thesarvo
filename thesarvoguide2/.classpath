@@ -5,6 +5,7 @@
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/guava-gwt-13.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/gwt-maps.jar"/>
+	<classpathentry kind="lib" path="lib/Apis_Google_Maps-3.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/gwt-ajaxloader.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
