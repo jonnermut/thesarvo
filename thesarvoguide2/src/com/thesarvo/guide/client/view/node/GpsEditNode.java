@@ -3,9 +3,15 @@ package com.thesarvo.guide.client.view.node;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.digester.SetNextRule;
+
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
@@ -153,7 +159,7 @@ public class GpsEditNode extends EditNode implements MapPanel.MapEditedCallback,
 	{
 		super.updateAllWidgets();
 		
-
+		
 
 		//List<XmlSimpleModel> data = getModel().getList("point");
 		//dataProvider.setList(data);
@@ -223,10 +229,16 @@ public class GpsEditNode extends EditNode implements MapPanel.MapEditedCallback,
 	@Override
 	public void elementSelected(MapDrawingObject element)
 	{
-		selectMsg.setVisible(false);
-		editPanel.setVisible(true);
 		editElement = element;
 		
+		setWidgetValuesFromEditElement(element);
+		
+	}
+
+	private void setWidgetValuesFromEditElement(MapDrawingObject element)
+	{
+		selectMsg.setVisible(false);
+		editPanel.setVisible(true);
 		
 		editLabel.setText("Editing: " + element.getType());
 		code.setText(editElement.getCode() );
@@ -246,7 +258,38 @@ public class GpsEditNode extends EditNode implements MapPanel.MapEditedCallback,
 		{
 			pointFields.setVisible(false);
 		}
-		
+	}
+	
+
+	
+	@UiHandler({"code", "description"})
+	void onCodeValueChange(ValueChangeEvent<String> event)
+	{
+		if (editElement != null)
+		{
+			editElement.setCode(code.getText());
+			editElement.setDescription(description.getText());
+		}
+	}
+	
+	@UiHandler({"code", "description"})
+	void onCodeKeyPress(KeyPressEvent event)
+	{
+		onCodeValueChange(null);
 	}
 
+	@UiHandler({"zone", "easting", "northing"})
+	void onUTMValueChange(ValueChangeEvent<String> event)
+	{
+		if (editElement != null)
+		{
+			editElement.setZone(zone.getText());
+			editElement.setEasting(easting.getText());
+			editElement.setNorthing(northing.getText());
+			
+			editElement.setLatLngFromUTM();
+			
+			mapPanel.updateDrawingObject(editElement);
+		}
+	}
 }

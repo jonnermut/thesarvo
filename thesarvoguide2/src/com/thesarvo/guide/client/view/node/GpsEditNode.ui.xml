@@ -26,42 +26,63 @@
 		</table>
 		-->
 		
+		<style>
+		.gpsInput
+		{
+			width:180px;
+			font-size:8pt;
+		}
+		
+		.gpsLabel
+		{
+			font-weight:bold;
+			padding-top:8px;
+		}
+		
+		.gpsTextarea
+		{
+			width:180px;
+			height:100px;
+			font-size:8pt;
+		}
+		
+		</style>
 
 		
 		<table cellpadding='8' cellspacing='0' width='100%' >
   			<tr class='{r.s.tstr}'>
-				 <td width='200px'>
-				 	<g:Label ui:field='selectMsg' >
+				 <td width='200px' valign='top' >
+				 	<g:Label ui:field='selectMsg' styleName='gpsLabel' >
 				 		Please select an object to edit it
 				 	</g:Label>
 					<g:VerticalPanel ui:field='editPanel' visible="false">
 					
-						<g:Label ui:field='editLabel' />
+						<g:Label ui:field='editLabel'  styleName='gpsLabel' />
 				 		
-				 		<g:Label>Code</g:Label>
-				 		<g:TextBox ui:field='code' />
+				 		<g:Label styleName='gpsLabel'>Code</g:Label>
+				 		<g:TextBox styleName='gpsInput' ui:field='code'  />
 				 		
-				 		<g:Label>Description</g:Label>
-				 		<g:TextArea ui:field='description' />
+				 		<g:Label styleName='gpsLabel'>Description</g:Label>
+				 		<g:TextArea  styleName='gpsTextarea' ui:field='description' />
 
 						<g:VerticalPanel ui:field='pointFields' visible="false">
-					 		<g:Label>UTM Zone</g:Label>
-					 		<g:TextBox ui:field='zone' />
+					 		<g:Label styleName='gpsLabel'>UTM Zone</g:Label>
+					 		<g:TextBox styleName='gpsInput' ui:field='zone' />
 					 	
-					 		<g:Label>UTM Easting</g:Label>
-					 		<g:TextBox ui:field='easting' />
+					 		<g:Label styleName='gpsLabel'>UTM Easting</g:Label>
+					 		<g:TextBox styleName='gpsInput' ui:field='easting' />
 	
-					 		<g:Label>UTM Northing</g:Label>
-					 		<g:TextBox ui:field='northing' />
+					 		<g:Label styleName='gpsLabel'>UTM Northing</g:Label>
+					 		<g:TextBox styleName='gpsInput' ui:field='northing' />
 					 		
-					 		<g:Label>Height</g:Label>
-					 		<g:TextBox ui:field='height' />	
+					 		<g:Label styleName='gpsLabel'>Height</g:Label>
+					 		<g:TextBox styleName='gpsInput' ui:field='height' />	
 	
-					 		<g:Label>Latitude</g:Label>
-					 		<g:TextBox ui:field='latitude' />	
+					 		<g:Label styleName='gpsLabel'>Latitude</g:Label>
+					 		<g:TextBox styleName='gpsInput' ui:field='latitude' />	
 	
-					 		<g:Label>Longitude</g:Label>
-					 		<g:TextBox ui:field='longitude' />	
+					 		<g:Label styleName='gpsLabel'>Longitude</g:Label>
+					 		<g:TextBox styleName='gpsInput' ui:field='longitude' />	
 				 		</g:VerticalPanel>
 				 		
 				 						 	

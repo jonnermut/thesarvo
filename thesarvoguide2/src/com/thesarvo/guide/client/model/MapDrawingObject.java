@@ -1,5 +1,7 @@
 package com.thesarvo.guide.client.model;
 
+import static com.thesarvo.guide.client.util.StringUtil.isEmpty;
+
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.base.LatLng;
 import com.google.gwt.maps.client.mvc.MVCArray;
@@ -9,6 +11,7 @@ import com.google.gwt.maps.client.overlays.Polygon;
 import com.google.gwt.maps.client.overlays.Polyline;
 import com.google.gwt.maps.client.overlays.Rectangle;
 import com.google.gwt.xml.client.Element;
+import com.thesarvo.guide.client.geo.CoordinateConversion;
 import com.thesarvo.guide.client.geo.GeoUtil;
 import com.thesarvo.guide.client.geo.CoordinateConversion.UTM;
 import com.thesarvo.guide.client.util.StringUtil;
@@ -441,6 +444,26 @@ public class MapDrawingObject implements GPSConstants
 				
 			}
 		}
+	}
+	
+	public void setLatLngFromUTM()
+	{
+		try
+		{
+			CoordinateConversion cc = new CoordinateConversion();
+
+			double[] latlon = GeoUtil.getLatLong(getEasting(), getNorthing(), getZone());
+			if (latlon != null)
+			{
+				setLatitude(GeoUtil.formatLatLong(latlon[0]));
+				setLongitude(GeoUtil.formatLatLong(latlon[1]));
+			}
+		}
+		catch (Exception e)
+		{
+
+		}
+		
 	}
 	
 }

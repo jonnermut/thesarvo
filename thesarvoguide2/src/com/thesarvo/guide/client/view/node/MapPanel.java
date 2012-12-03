@@ -284,30 +284,7 @@ public class MapPanel extends FlowPanel implements GPSConstants
 			{
 				
 
-				LatLng latlng = null;
-				
-				String name = n.getType();
-				
-				if (name.equals("point"))
-				{
-					latlng = updatePoint(n);
-				}
-				else if (name.equals("circle"))
-				{
-					latlng = updateCircle(n);
-				}
-				else if (name.equals("polyline"))
-				{
-					latlng = updatePolyline(n);
-				}
-				else if (name.equals("polygon"))
-				{
-					latlng = updatePolygon(n);
-				}
-				else if (name.equals("rectangle"))
-				{
-					latlng = updateRectangle(n);
-				}
+				LatLng latlng = updateDrawingObject(n);
 				
 				if (latlng != null)
 				{
@@ -327,6 +304,35 @@ public class MapPanel extends FlowPanel implements GPSConstants
 			}
 
 		}
+	}
+
+	public LatLng updateDrawingObject(MapDrawingObject n)
+	{
+		LatLng latlng = null;
+		
+		String name = n.getType();
+		
+		if (name.equals("point"))
+		{
+			latlng = updatePoint(n);
+		}
+		else if (name.equals("circle"))
+		{
+			latlng = updateCircle(n);
+		}
+		else if (name.equals("polyline"))
+		{
+			latlng = updatePolyline(n);
+		}
+		else if (name.equals("polygon"))
+		{
+			latlng = updatePolygon(n);
+		}
+		else if (name.equals("rectangle"))
+		{
+			latlng = updateRectangle(n);
+		}
+		return latlng;
 	}
 
 	private LatLng updateRectangle(MapDrawingObject element)
@@ -495,20 +501,23 @@ public class MapPanel extends FlowPanel implements GPSConstants
 			 * overlay.setText(text); } map.addOverlay(overlay);
 			 * labelOverlays.put(point, overlay);
 			 */
+			
+			removeExistingFromMap(point);
+			final Marker marker = createMarker(latlng, text, point);	
 
-			MapDrawingObject existing = getExistingObject(point);
-			if (existing != null && existing==point)
-			{
-				Marker existingMarker = (Marker)existing.getOverlay();
-				existingMarker.setPosition(latlng);
-				existingMarker.setMap((MapWidget)null);
-				existingMarker.setMap(map);
-				// TODO - change text
-			}
-			else
-			{
-				final Marker marker = createMarker(latlng, text, point);		
-			}
+//			MapDrawingObject existing = getExistingObject(point);
+//			if (existing != null && existing==point)
+//			{
+//				Marker existingMarker = (Marker)existing.getOverlay();
+//				existingMarker.setPosition(latlng);
+//				existingMarker.setMap((MapWidget)null);
+//				existingMarker.setMap(map);
+//				// TODO - change text
+//			}
+//			else
+//			{
+//				final Marker marker = createMarker(latlng, text, point);		
+//			}
 		}
 		return latlng;
 	}
