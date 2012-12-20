@@ -117,10 +117,12 @@ public class GuideServlet extends HttpServlet
 			if (src.toLowerCase().contains("png"))
 			{
 				outf = "png";
+				resp.setContentType("image/png");
 				ImageIO.write(img, outf, resp.getOutputStream());
 			}
 			else
 			{
+				resp.setContentType("image/jpeg");
 				
 				Iterator writers = ImageIO.getImageWritersByFormatName( "jpg" );
 				// Fetch the first writer in the list

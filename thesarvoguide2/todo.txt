@@ -6,38 +6,32 @@ Misc
 - Reorder not saving every button click properly
 - 'extra page' stuff on image legend not working. Maybe get rid of this
 
-======= Features ========
+======= Phototopo =========
+- Make 'upload an image' more user friendly
+- dbl click point broken?
+- click on line broken
+- non-editable mouse over -> should highlight climb in legend
+- non-editable click route should go to description?
+- link to a route should auto include route in legend
+- remove glow from icons
+- redraw lower off to match Jeds version
 
-Maps
-- Move to maps v3
+======= Maps =========
+- default view port for when no markers
 - Single 'crag' co-ordinate for large scale maps
 - Aggregated map on contents pages
-- Make markers editable
+
+
+
+
+======= Features ========
+
 
 - Comment on climbs
 -- Use confluence's comments, and hack them so that a thread is created per climb, and is move by GWT to the climb
 	
-- Make 'upload an image' more user friendly
-
-- Incorporate theCrag editable topos
-	https://github.com/brendanheywood/PhotoTopo
-	
-Other drawing stuff
-	- http://code.google.com/p/raphaelgwt/
-	- 
 
 
-- Drawing on map - need Google maps v3 to use DrawingManager, see:
-	http://code.google.com/p/gwt-google-apis/issues/detail?id=381
-	
-	Alternative
-	https://github.com/branflake2267/GWT-Maps-V3-Api/
-	
-	JS Apis:
-	https://developers.google.com/maps/documentation/javascript/reference#DrawingManager
-	https://developers.google.com/maps/documentation/javascript/overlays#drawing_tools
-	http://gmaps-samples-v3.googlecode.com/svn-history/r282/trunk/drawing/drawing-tools.html	
-	polygon.enableDrawing(), enableEditing(), disableEditing()  setEditable(true)
 
 ======= Done ========
 
@@ -47,4 +41,7 @@ Other drawing stuff
 - Pretty print xml on save
 - Make GPS accept lat/long as well as UTM
 - Reorder buttons
-- map points are selectable
+- map points are selectable and editable
+- Move to maps v3
+- map drawing tools
+

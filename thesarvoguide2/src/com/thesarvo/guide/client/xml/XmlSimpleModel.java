@@ -49,7 +49,8 @@ public class XmlSimpleModel
 	public Element createElement(String name, String val) 
 	{
 		Element el = node.getOwnerDocument().createElement(name);
-		XPath.setText(el, val);
+		if (val != null)
+			XPath.setText(el, val);
 		node.appendChild(el);
 		return el;
 	}
@@ -71,6 +72,24 @@ public class XmlSimpleModel
 		return "";
 	}
 	
+	public boolean getBoolean(String key)
+	{
+		String raw = get(key);
+		if (StringUtil.isNotEmpty(key))
+		{
+			try
+			{
+				return Boolean.parseBoolean(raw);
+			}
+			catch (Exception e)
+			{
+				
+			}
+		}
+		
+		return false;
+	}
+	
 	public Double getDouble(String key)
 	{
 		String raw = get(key);
@@ -86,6 +105,23 @@ public class XmlSimpleModel
 			}
 		}
 		return null;
+	}
+	
+	public int getInt(String key)
+	{
+		String raw = get(key);
+		if (StringUtil.isNotEmpty(key))
+		{
+			try
+			{
+				return Integer.parseInt(raw);
+			}
+			catch (Exception e)
+			{
+				
+			}
+		}
+		return 0;
 	}
 
 	public List<XmlSimpleModel> getList(String path) 

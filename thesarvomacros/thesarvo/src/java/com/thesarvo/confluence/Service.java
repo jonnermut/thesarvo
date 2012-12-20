@@ -263,12 +263,16 @@ public class Service
 		
 		for (Attachment att : p.getAttachments())
 		{
-			Element atel = DocumentHelper.createElement("attachment");
-			el.add(atel);
-			atel.setText(att.getFileName());
-			atel.addAttribute("version", Integer.toString( att.getVersion() ));
-			
-			atel.addAttribute("lastModificationDate",sdf.format( att.getLastModificationDate() ));
+			if (att != null)
+			{
+				Element atel = DocumentHelper.createElement("attachment");
+				el.add(atel);
+				atel.setText(att.getFileName());
+				atel.addAttribute("version", Integer.toString( att.getVersion() ));
+				
+				if (att.getLastModificationDate() != null)
+					atel.addAttribute("lastModificationDate",sdf.format( att.getLastModificationDate() ));
+			}
 		}
 		return doc;
 	}

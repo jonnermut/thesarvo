@@ -6,9 +6,10 @@
   <ui:with field='r' type='com.thesarvo.guide.client.view.res.Resources'/>
 
   <g:HTMLPanel styleName='{r.s.climb}' >
-  	<div style='position:relative'>
   	
-  	<!-- 
+  	
+  	<!--
+  	<div style='position:relative'> 
   	 			<table class='{r.s.legendTable}'>
 				  	<s:Repeater bindList='point' tag='tbody'>
 				  		<n:PointRow />
@@ -16,7 +17,7 @@
 				  	</s:Repeater>
 				 </table>
   	
-  	 -->
+  	 
   	 	<div ui:field='legendDiv' class='{r.s.legendDiv}' >
   	 		<div style="position:relative;">
   			<g:FlexTable ui:field='legendTable' styleName='{r.s.legendTable}' visible='true' />
@@ -26,6 +27,9 @@
 			<g:Image ui:field='img' styleName='{r.s.image}' ></g:Image>
 		</g:FlowPanel>
 	</div>
+	-->
+		<g:FlowPanel ui:field='flowPanel'>
+		</g:FlowPanel>
   </g:HTMLPanel>
  
 </ui:UiBinder>

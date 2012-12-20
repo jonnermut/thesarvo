@@ -1,7 +1,5 @@
 package com.thesarvo.guide.client.model;
 
-import static com.thesarvo.guide.client.util.StringUtil.isEmpty;
-
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.base.LatLng;
 import com.google.gwt.maps.client.mvc.MVCArray;
@@ -12,11 +10,10 @@ import com.google.gwt.maps.client.overlays.Polyline;
 import com.google.gwt.maps.client.overlays.Rectangle;
 import com.google.gwt.xml.client.Element;
 import com.thesarvo.guide.client.geo.CoordinateConversion;
-import com.thesarvo.guide.client.geo.GeoUtil;
 import com.thesarvo.guide.client.geo.CoordinateConversion.UTM;
+import com.thesarvo.guide.client.geo.GeoUtil;
 import com.thesarvo.guide.client.util.StringUtil;
 import com.thesarvo.guide.client.view.node.GPSConstants;
-import com.thesarvo.guide.client.xml.XPath;
 import com.thesarvo.guide.client.xml.XmlSimpleModel;
 
 public class MapDrawingObject implements GPSConstants
@@ -25,7 +22,6 @@ public class MapDrawingObject implements GPSConstants
 
 	XmlSimpleModel model = null;
 	Object overlay = null;
-	
 	
 	static int pointId = 0;
 	
@@ -422,8 +418,9 @@ public class MapDrawingObject implements GPSConstants
 
 	public void setLatLng(LatLng pos)
 	{
-		setLatitude( "" + pos.getLatitude());
-		setLongitude("" + pos.getLongitude());
+		
+		setLatitude( "" + GeoUtil.formatLatLong(pos.getLatitude()));
+		setLongitude("" + GeoUtil.formatLatLong(pos.getLongitude()));
 		setUTMFromLatLng();
 		
 	}

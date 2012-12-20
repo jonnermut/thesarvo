@@ -92,6 +92,7 @@ public class NodeWrapper extends FlowPanel
 				inner.insert(editNode, 0);
 		}
 		
+		
 		if (editControls == null)
 		{
 			editControls = new EditControls(this);
@@ -234,8 +235,11 @@ public class NodeWrapper extends FlowPanel
 			readNode.updateAllWidgets();
 		
 		if (editNode!=null)
+		{
 			editNode.setVisible(editing);
-		
+			
+			editNode.setEditing(editing);
+		}
 		
 		
 		getEditControls().setEditing(editing);

@@ -3,134 +3,16 @@
     xmlns:g='urn:import:com.google.gwt.user.client.ui'
     xmlns:c='urn:import:com.google.gwt.user.cellview.client'
     xmlns:s='urn:import:com.thesarvo.guide.client.view.node'
-    xmlns:n='urn:import:com.thesarvo.guide.client.view.node'>
+    xmlns:n='urn:import:com.thesarvo.guide.client.view.node'
+    xmlns:p='urn:import:com.thesarvo.guide.client.phototopo'>
 
   <ui:with field='r' type='com.thesarvo.guide.client.view.res.Resources'/>
 
   <g:HTMLPanel >
 
-	<table>
-		<tbody style='border:1px silver'>
-			<tr>
-				<td>
-					Select Image:
-				</td>
-				<td>
-					<s:BoundListBox bindValue='@src' ui:field='srcListBox'  />
-				</td>
-				<td>
-				
-				</td>
-				<td>
-					<g:Anchor ui:field='uploadAnchor' >Upload an Image</g:Anchor>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					Width:
-				</td>
-				<td>
-					<s:BoundListBox bindValue='@width' ui:field='widthListBox' />	
-				</td>
-				<td>
-					
-				</td>
-				<td>
-					<s:BoundCheckBox bindValue='@noPrint' ui:field='noPrint'  >Image doesn't appear in print guidebook</s:BoundCheckBox>
-				</td>
-			
-			
-			
-			</tr>
-			<tr>
-				<td>
-				Include Legend
-				</td>
-				<td>
-					<s:BoundCheckBox bindValue='@legend' ui:field='legendCheckBox' ></s:BoundCheckBox>
-				</td>
-				<td>
-					
-				</td>
-				<td>
-					
-				</td>
+	<g:FlowPanel ui:field='flowPanel'>
+	</g:FlowPanel>
 	
-			</tr>
-		</tbody>
-		<tbody  ui:field='legendEditPanel' style='display:none; border:1px silver'>
-		
-			<tr>
-				<td>
-					Title: 
-				</td>
-				<td>
-					<s:BoundTextBox bindValue='@legendTitle' ui:field='legendTitle' styleName='{r.s.medText}'/>
-				</td>
-				<td>
-					Footer: 
-				</td>
-				<td>
-					<s:BoundTextBox bindValue='@legendFooter' ui:field='legendFooter' styleName='{r.s.medText}'/>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					Legend x position: 
-				</td>
-				<td>
-					<s:BoundTextBox bindValue='@legendx' ui:field='legendx' styleName='{r.s.smallText}'/>
-				</td>
-				<td>
-					Legend y position: 
-				</td>
-				<td>
-					<s:BoundTextBox bindValue='@legendy' ui:field='legendy'  styleName='{r.s.smallText}'/>
-				</td>
-				
-			</tr>
-			<!-- Commented out FTB until I decide what to do with this
-			<tr>
-				
-				<td>
-					Insert extra climbs: 
-				</td>
-				<td>
-					<s:BoundTextBox bindValue='@legendExtraPage' styleName='{r.s.smallText}' ui:field='legendExtraPage' />
-				</td>
-				<td>
-					
-				</td>
-				<td>
-					<s:BoundCheckBox bindValue='@legendInsertExtraBefore' ui:field='legendInsertExtraBefore' >Include before</s:BoundCheckBox>
-				</td>
-			</tr>
-		 	-->
-			<tr>
-				
-				<td colspan='4'>
-					Include these climbs in the legend:<br/>
-					
-					<s:BoundListBox ui:field='climbsListBox' 
-						bindValue='legend'
-						extendedSelect='true' styleName='{r.s.legendClimbs}'/>
-						
-					
-				</td>
-				
-			</tr>
-
-		
-		</tbody>
-		
-	
-	</table>
-  
-	<strong>Preview</strong>
-	<div style='margin-top: 10px'>
-		<n:ImageReadNode ui:field='img' />
-		<!-- <g:Image ui:field='img' /> -->
-	</div>
 	
   </g:HTMLPanel>
  

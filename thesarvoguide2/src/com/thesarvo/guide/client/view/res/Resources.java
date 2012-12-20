@@ -48,6 +48,19 @@ public interface Resources extends ClientBundle
 	@Source("ajax-loader.gif") 
 	ImageResource loading();
 
+	@Source("curvedlinetool.png")
+	ImageResource curvedTool();
+
+	@Source("recttool.png")
+	ImageResource rectTool();
+
+	@Source("select.png")
+	ImageResource selectTool();
+
+	@Source("texttool.png")
+	ImageResource textTool();
+
+	
 	//@Source("UITableNextButton.png")
 	//DataResource uiTableNextButtonImg();
 	

@@ -522,3 +522,53 @@ table.grid > tbody > tr > td
 }
 }
 
+
+		.paletteInput
+		{
+			width:160px;
+			font-size:7pt;
+		}
+		
+		.paletteLabel
+		{
+			font-size:9pt;
+			padding-top:10px;
+		}
+		
+		.paletteLabelSubheading
+		{
+			font-weight:bold;
+			padding-top:10px;
+			font-size:10pt;
+			border-bottom:1px solid silver;
+			
+		}
+		
+		.paletteTextarea
+		{
+			width:160px;
+			height:100px;
+			font-size:8pt;
+		}
+
+		.paletteTextbox
+		{
+			width:160px;
+			font-size:8pt;
+		}
+
+		.paletteListbox
+		{
+			width:160px;
+			font-size:8pt;
+		}
+		
+		.paletteButton
+		{
+			width:150px;
+			margin-top: 30px;
+			margin: 8px;
+			font-size:8pt;
+		}
+
+

@@ -483,6 +483,11 @@ public class Controller
 	 * callback.handleXml(xml); } }) ; }
 	 */
 
+	public List<String[]> getClimbStrings()
+	{
+		return getClimbStrings(getXml(), "");
+	}
+	
 	public List<String[]> getClimbStrings(Document document, String prefix)
 	{
 		List<String[]> ret = new ArrayList<String[]>();
@@ -884,10 +889,10 @@ public class Controller
 
 	}
 
-	public void populateClimbs(final BoundListBox climbsListBox,
-			final String extraPageId, final boolean insertBefore)
+	public void populateClimbs(final ListBox climbsListBox,
+			final String extraPageId, final boolean insertBefore, final String selectedId)
 	{
-		climbsListBox.clear();
+		//climbsListBox.clear();
 		final List<String[]> climbs = getClimbStrings(getXml(), "");
 
 		final Command cmd = new Command()
@@ -896,9 +901,15 @@ public class Controller
 			public void execute()
 			{
 				// climbsListBox.addItem("","");
+				int i=0;
 				for (String[] s : climbs)
 				{
 					climbsListBox.addItem(s[0], s[1]);
+					
+					if (StringUtil.isNotEmpty(selectedId) && selectedId.equals(s[1]))
+						climbsListBox.setSelectedIndex(i+1);
+					
+					i++;
 				}
 
 				// binder.updateWidget(climbsListBox);
