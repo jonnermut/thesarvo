@@ -60,6 +60,9 @@ public interface Resources extends ClientBundle
 	@Source("texttool.png")
 	ImageResource textTool();
 
+	@Source("fancy_close.png")
+	ImageResource fancyClose();
+	
 	
 	//@Source("UITableNextButton.png")
 	//DataResource uiTableNextButtonImg();

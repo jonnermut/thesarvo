@@ -3,6 +3,7 @@ package com.thesarvo.guide.client.controller;
 import static com.thesarvo.guide.client.util.StringUtil.notNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -387,11 +388,16 @@ public class Controller
 			return null;
 	}
 
-	public void populateAttachments(final ListBox srcListBox)
+	public void populateAttachments(final ListBox srcListBox, final String selected, final boolean selectNew)
 	{
+		srcListBox.addItem("<select>", "");
+		
 		if (getCurrentGuide().getAttachments() != null)
-			WidgetUtil.populateListBox(srcListBox, getCurrentGuide()
-					.getAttachments());
+		{
+			Collections.sort(getCurrentGuide().getAttachments());
+			WidgetUtil.populateListBox(srcListBox, getCurrentGuide().getAttachments());
+			WidgetUtil.setValue(srcListBox, selected);
+		}
 		else
 		{
 			String url = getServletUrl() + "guide/attachments/"
@@ -418,12 +424,24 @@ public class Controller
 						List<Node> list = XPath.selectNodes(xml, "attachments/attachment");
 								  
 						List<String> attachments = new ArrayList<String>();
+						
 						getCurrentGuide().setAttachments(attachments);
 								 
 						for (Node n : list) 
 							attachments.add(XPath.getText(n));
-								 
-						WidgetUtil.populateListBox(srcListBox, attachments); }
+						
+						String vsel = selected;
+						if (StringUtil.isEmpty(vsel) && selectNew)
+						{
+							if (attachments.size() > 0)
+								vsel = attachments.get(attachments.size()-1);
+						}
+						
+						Collections.sort(attachments);
+						
+						WidgetUtil.populateListBox(srcListBox, attachments); 
+						WidgetUtil.setValue(srcListBox, vsel);
+					}
 
 
 
@@ -626,12 +644,33 @@ public class Controller
 		this.user = user;
 	}
 
-	public void onAdd(NodeWrapper nw, String type)
+	public void onAdd(final NodeWrapper nw, final String type)
 	{
-
+		
 		NodeWrapper newNw = getCurrentGuide().add(nw, type);
 
 		onEdit(newNw, true);
+		
+//		GWT.runAsync(new RunAsyncCallback()
+//		{
+//			
+//
+//			
+//			@Override
+//			public void onSuccess()
+//			{
+//
+//				
+//			}
+//			
+//			@Override
+//			public void onFailure(Throwable reason)
+//			{
+//				Window.alert("Could not add for some reason;" + reason);
+//				
+//			}
+//		});
+		
 	}
 
 	private void log(String log)

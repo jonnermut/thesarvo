@@ -155,8 +155,8 @@ public class GuideMacro extends InlineHtmlMacro implements ResourceAware, com.at
 	        		xml = xml.substring(0, lastIdx+8);
 	        	
 	        	xml = xml.replace("'", "\\'");
-	        	xml = xml.replace("\n", "&#10;");
-	        	xml = xml.replace("\r", "&#13;");
+	        	xml = xml.replace("\n", " ");
+	        	xml = xml.replace("\r", " ");
 	        	out.append(xml);
 	        	out.append("\";\n");
 	        	

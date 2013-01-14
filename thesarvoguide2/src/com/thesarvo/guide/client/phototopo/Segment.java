@@ -2,9 +2,13 @@ package com.thesarvo.guide.client.phototopo;
 
 import java.util.List;
 
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Event;
 import com.thesarvo.guide.client.raphael.ClickCallback;
+import com.thesarvo.guide.client.raphael.MouseoverCallback;
 import com.thesarvo.guide.client.raphael.RaphaelJS;
+import com.thesarvo.guide.client.util.StringUtil;
 
 public class Segment
 {
@@ -258,10 +262,45 @@ public class Segment
 			@Override
 			public void onClick(Event e)
 			{
-				route.onClick(e);
-				e.stopPropagation();
+				Console.log("curve onclick");
+				route.onClick(e, curve);
+				if (e!=null)
+					e.stopPropagation();
+				
+
 			}
 		});
+		curve.mouseover(new MouseoverCallback()
+		{
+			
+			@Override
+			public void onMouseOver()
+			{
+				Console.log("curve onMouseOver");
+				phototopo.routeMouseOver(route);
+				
+			}
+			
+			@Override
+			public void onMouseOut()
+			{
+				Console.log("curve onMouseOut");
+				phototopo.routeMouseOver(null);
+			}
+		});
+//		curve.addHandler(new MouseOverHandler()
+//		{
+//			
+//			@Override
+//			public void onMouseOver(MouseOverEvent event)
+//			{
+//				Console.log("curve onMouseOver");
+//				phototopo.routeMouseOver(route);
+//				
+//			}
+//		}, MouseOverEvent.getType());
+		
+		
 		
 		point1.bringCircleAndIconToFront();
 		point2.bringCircleAndIconToFront();

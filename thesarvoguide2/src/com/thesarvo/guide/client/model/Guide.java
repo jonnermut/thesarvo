@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.xml.client.Document;
@@ -221,6 +222,8 @@ public class Guide
 					@Override
 					public void execute()
 					{
+						
+						
 						NodeWrapper nw = createNodeWrapper(n);
 						guideView.addNode(nw);	
 						if (nw.getNodeType() == NodeType.image)

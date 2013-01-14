@@ -3,6 +3,7 @@ package com.thesarvo.guide.client.view.node;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Position;
@@ -13,6 +14,7 @@ import com.google.gwt.http.client.Request;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -52,6 +54,8 @@ public class ImageReadNode extends ReadNode
 
 	boolean thumb = false;
 	
+
+	
 	public ImageReadNode()
 	{
 		super();
@@ -64,6 +68,17 @@ public class ImageReadNode extends ReadNode
 	{
 				
 		super.init();
+		
+		
+		flowPanel.clear();
+		
+		
+		ImageNode imageNode = new ImageNode(getModel());
+			
+		boolean allowEdit = false;
+		
+		
+		createPhotoTopo(imageNode, flowPanel, allowEdit);
 
 		/*
 		if (BrowserUtil.isMobileBrowser())
@@ -116,18 +131,54 @@ public class ImageReadNode extends ReadNode
 //			setImgSrc(false);
 //		}
 
+
+	}
+
+	public void setEditing(boolean editing)
+	{
+		
+		super.setEditing(editing);
+		
 		flowPanel.clear();
 		
-		
-		ImageNode imageNode = new ImageNode(getModel());
+		if (!editing)
+		{
 			
-		PhotoTopo pt = new PhotoTopo(imageNode, 600, 400);
-			
-		flowPanel.add(pt);
-			
-		pt.getOptions().editable = false;
-		pt.init();
+			ImageNode imageNode = new ImageNode(getModel());			
+			ImageReadNode.createPhotoTopo(imageNode, flowPanel, false);
+		}
 	}
+	
+	public static void createPhotoTopo(final ImageNode imageNode, final FlowPanel flowPanel, final boolean allowEdit)
+	{
+		GWT.runAsync(new RunAsyncCallback()
+		{
+			
+			@Override
+			public void onSuccess()
+			{
+				PhotoTopo pt = new PhotoTopo(imageNode, 600, 400);
+				
+				flowPanel.add(pt);
+					
+				pt.getOptions().editable = allowEdit;
+				pt.init();
+				
+				//parent.setPhototopo(pt);
+				
+			}
+			
+			@Override
+			public void onFailure(Throwable reason)
+			{
+				Window.alert("Could not load photo topo code!");
+				
+			}
+		});
+
+	}
+
+
 
 //	private void setImgSrc(boolean thumb)
 //	{

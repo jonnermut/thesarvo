@@ -289,6 +289,10 @@ public class Raphael extends Widget {
       el.drag(callback);
     }
     
+    public void mouseover(MouseoverCallback callback) {
+        el.mouseover(callback);
+      }
+    
     public void dblclick(DblClickCallback callback) {
         el.dblclick(callback);
     }

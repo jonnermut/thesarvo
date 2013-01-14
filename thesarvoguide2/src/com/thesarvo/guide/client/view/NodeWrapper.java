@@ -1,7 +1,10 @@
 package com.thesarvo.guide.client.view;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.xml.client.Node;
 import com.thesarvo.guide.client.controller.Controller;
@@ -85,19 +88,39 @@ public class NodeWrapper extends FlowPanel
 	
 	public void setupEditNode()
 	{
-		if (editNode==null)
-		{
-			editNode = createEditNode();
-			if (editNode!=null)
-				inner.insert(editNode, 0);
-		}
-		
-		
 		if (editControls == null)
 		{
-			editControls = new EditControls(this);
+			editControls = new EditControls(NodeWrapper.this);
 			inner.add(editControls);
 		}
+		
+		GWT.runAsync(new RunAsyncCallback()
+		{
+			
+			@Override
+			public void onSuccess()
+			{
+				if (editNode==null)
+				{
+					editNode = createEditNode();
+					if (editNode!=null)
+						inner.insert(editNode, 0);
+				}
+				
+				
+
+				
+			}
+			
+			@Override
+			public void onFailure(Throwable reason)
+			{
+				Window.alert("Could not load editing code!");
+				
+			}
+		});
+		
+
 	}
 	
 	private EditNode createEditNode()
@@ -228,11 +251,15 @@ public class NodeWrapper extends FlowPanel
 		// force create
 		if (editing)
 		{
-			setupEditNode();
+			//setupEditNode();
 			getEditNode().updateAllWidgets();
 		}
 		else
+		{
 			readNode.updateAllWidgets();
+			
+		}
+		readNode.setEditing(editing);
 		
 		if (editNode!=null)
 		{

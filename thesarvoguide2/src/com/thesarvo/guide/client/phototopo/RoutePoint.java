@@ -4,10 +4,12 @@ import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.UIObject;
 import com.thesarvo.guide.client.raphael.Attr;
 import com.thesarvo.guide.client.raphael.ClickCallback;
 import com.thesarvo.guide.client.raphael.DblClickCallback;
 import com.thesarvo.guide.client.raphael.DragCallback;
+import com.thesarvo.guide.client.raphael.MouseoverCallback;
 import com.thesarvo.guide.client.raphael.Raphael;
 import com.thesarvo.guide.client.raphael.Raphael.Circle;
 import com.thesarvo.guide.client.util.StringUtil;
@@ -15,6 +17,44 @@ import com.thesarvo.guide.client.util.StringUtil;
 public class RoutePoint extends SimplePoint
 {
 	
+
+	private final class PointClick implements ClickCallback
+	{
+		UIObject source;
+		
+		public PointClick(UIObject source)
+		{
+			this.source = source;
+		}
+		
+		@Override
+		public void onClick(Event e)
+		{
+			route.onClick(e, source);
+			
+		}
+	}
+
+
+
+	private final class PointMouseOver implements MouseoverCallback
+	{
+		@Override
+		public void onMouseOver()
+		{
+			phototopo.routeMouseOver(route);
+			
+		}
+
+		@Override
+		public void onMouseOut()
+		{
+			phototopo.routeMouseOver(null);
+			
+		}
+	}
+
+
 
 	double ox, oy;
 	private String type;
@@ -237,6 +277,7 @@ public class RoutePoint extends SimplePoint
 		}
 		this.type = type;
 
+		
 		redrawIcon();
 
 		// if (this.circle != null)
@@ -286,8 +327,8 @@ public class RoutePoint extends SimplePoint
 
 				this.iconElement.scale(0.4, 0.4);
 				
-				if (!phototopo.getOptions().editable)
-					this.iconElement.glow("#ffffff", 6);
+				//if (!phototopo.getOptions().editable)
+				//	this.iconElement.glow("#ffffff", 6);
 
 			}
 			else if (type.equals("belay"))
@@ -297,22 +338,37 @@ public class RoutePoint extends SimplePoint
 				this.iconElement.attr("fill", "#262262").attr("stroke", "white")
 						.attr("stroke-width", 2).attr("r", 7);
 
-				if (!phototopo.getOptions().editable)
-					this.iconElement.glow("#ffffff", 4);
+				//if (!phototopo.getOptions().editable)
+				//	this.iconElement.glow("#ffffff", 4);
 				// this.iconEl.glowEl =
 				// this.iconEl.glow({color:'#ffffff',width:4});
 			}
+			
+			/*
 			else
 			{
 
 				this.iconElement = phototopo.image(phototopo.getOptions().baseUrl + "images/"
 						+ type + ".png", 0, 0, 16, 16);
 			}
+			*/
+			
+			if (iconElement != null)
+			{
+				iconElement.click(new PointClick(iconElement));
+				iconElement.mouseover(new PointMouseOver());
+			}
+			
 
 
 		}
-		this.iconElement.setStyleName("pt_label pt_icon " + this.type);
-		this.updateIconPosition();
+		if (this.iconElement != null)
+		{
+			this.iconElement.setStyleName("pt_label pt_icon " + this.type);
+			this.updateIconPosition();
+			
+
+		}
 		
 		bringCircleAndIconToFront();
 	}
@@ -407,6 +463,18 @@ public class RoutePoint extends SimplePoint
 					.fill("#ffffff"));
 
 
+			if (labelElement != null)
+			{
+				labelElement.click(new PointClick(labelElement));
+				labelElement.mouseover(new PointMouseOver());
+				
+				if (labelText != null)
+				{
+					labelText.click(new PointClick(labelText));
+					labelText.mouseover(new PointMouseOver());
+
+				}
+			}
 
 		}
 		else
@@ -418,10 +486,10 @@ public class RoutePoint extends SimplePoint
 			
 		}
 		
-		if (!phototopo.isLoading())
-		{
-			this.updateLabelPosition();
-		}
+		//if (!phototopo.isLoading())
+		//{
+		this.updateLabelPosition();
+		//}
 
 		if (route.getData().isSportClimb())
 			labelElement.attr("fill", "#ff0000");
@@ -580,8 +648,11 @@ public class RoutePoint extends SimplePoint
 		if (labelElement == null)
 			return;
 		
+
 		Circle label = this.labelElement;
 
+
+		
 		double offsetX, offsetY = 0;
 		double width, top, left;
 		PhotoTopo topo = phototopo;
@@ -590,6 +661,24 @@ public class RoutePoint extends SimplePoint
 			return;
 
 		width = (labelWidth) / 2;
+		
+		//if (!topo.isEditable())
+		//	label.glow("#ffffff", 2);
+		
+		if (prevPath!=null)
+		{
+			// if we are not the first point, dont do any of this 
+			if (label != null)
+			{
+				label.attr("cx", x).attr("cy", y);
+				labelText.attr("x", x).attr("y", y);
+				
+				label.toFront();
+				labelText.toFront();
+			}
+			return;
+		}
+		
 
 		offsetX = this.pointGroup.getSplitOffset(this) * labelWidth;
 		// find out which compas direction the route is heading in
@@ -665,8 +754,7 @@ public class RoutePoint extends SimplePoint
 		// if (label.glowEl)
 		// label.glowEl.remove();
 
-		if (!topo.getOptions().editable)
-			label.glow("#ffffff", 4);
+
 
 	};
 

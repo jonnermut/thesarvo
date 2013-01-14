@@ -1,38 +1,11 @@
 package com.thesarvo.guide.client.view.node;
 
-import java.util.Arrays;
-import java.util.List;
-
-import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.TableSectionElement;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.cellview.client.CellList;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.MultiSelectionModel;
-import com.google.gwt.xml.client.Element;
-import com.google.gwt.xml.client.Node;
-import com.thesarvo.guide.client.controller.Controller;
 import com.thesarvo.guide.client.model.ImageNode;
-import com.thesarvo.guide.client.phototopo.PhotoTopo;
-import com.thesarvo.guide.client.util.StringUtil;
-import com.thesarvo.guide.client.util.WidgetUtil;
-import com.thesarvo.guide.client.xml.XPath;
 import com.thesarvo.guide.client.xml.XmlSimpleModel;
 
 public class ImageEditNode extends EditNode
@@ -81,12 +54,7 @@ public class ImageEditNode extends EditNode
 //					false );
 //			
 			
-			PhotoTopo pt = new PhotoTopo(imageNode, 600, 400);
-			
-			flowPanel.add(pt);
-			
-			pt.getOptions().editable = true;
-			pt.init();
+			ImageReadNode.createPhotoTopo(imageNode, flowPanel, true);
 		}
 	}
 	

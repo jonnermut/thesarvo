@@ -20,6 +20,8 @@ public class NodeWidget extends Composite implements com.thesarvo.guide.client.x
 	
 	protected Widget[] boundWidgets = null;
 	
+	boolean editing;
+	
 	public NodeWidget()
 	{
 		super();
@@ -36,6 +38,12 @@ public class NodeWidget extends Composite implements com.thesarvo.guide.client.x
 	{
 		bindWidgets();
 		updateAllWidgets();
+	}
+	
+	
+	public void setEditing(boolean editing)
+	{
+		this.editing = editing;
 	}
 	
 	public String getText()

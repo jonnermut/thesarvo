@@ -15,13 +15,16 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -35,6 +38,8 @@ import com.thesarvo.guide.client.view.res.Resources;
 
 public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 {
+
+
 
 	private static final int FIELDWIDTH = 105;
 	
@@ -59,6 +64,12 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 	private StackPanel stackPanel;
 	private Grid toolsGrid;
 	int tool = 0;
+
+	private List<CheckBox> legendCheckboxes;
+
+	private List<String> legendIds;
+
+	private ListBox attachmentListBox;
 	
 	public PaletteView(EventBus eventBus, PhotoTopo phototopo)
 	{
@@ -115,6 +126,24 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 		selectTool(selectToolButton, ToolType.select);
 		
 		stackPanel.showStack(0);
+	}
+	
+	public  void setLegendCheckboxValue(boolean checked, String id)
+	{
+		if (checked)
+		{
+			legendIds.clear();
+			for (CheckBox c : legendCheckboxes)
+			{
+				if (c.getValue())
+					legendIds.add(c.getName());
+			}
+		}
+		else
+			legendIds.remove(id);
+		
+		phototopo.getImage().setLegendValues(legendIds);
+		phototopo.updateLegend();
 	}
 
 	/*
@@ -251,6 +280,8 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 			{
 				phototopo.getImage().setLegendFooter(tb.getText());
 				phototopo.updateLegend();
+				
+
 			}
 		});
 		tb.addKeyUpHandler(new KeyUpHandler()
@@ -278,8 +309,8 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 		fp.getElement().getStyle().setBorderColor("silver");
 		fp.getElement().getStyle().setBorderWidth(1, Unit.PX);
 		
-		final List<CheckBox> allChecks = new ArrayList<CheckBox>();
-		final List<String> legendIds = phototopo.getImage().getLegendValues();
+		legendCheckboxes = new ArrayList<CheckBox>();
+		legendIds = phototopo.getImage().getLegendValues();
 		int i=0;
 		for (String[] val : Controller.get().getClimbStrings() )
 		{
@@ -287,7 +318,7 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 			final String id = val[1];
 			final CheckBox cb = new CheckBox(val[0]);
 			cb.setName(id);
-			allChecks.add(cb);
+			legendCheckboxes.add(cb);
 			FlowPanel fp2 = new FlowPanel();
 			fp2.add(cb);
 			fp.add(fp2);
@@ -297,28 +328,7 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 			cb.setStyleName("paletteInput");
 			cb.setTitle(val[0]);
 			cb.setValue(legendIds.contains(id));
-			cb.addValueChangeHandler(new ValueChangeHandler<Boolean>()
-			{
-
-				@Override
-				public void onValueChange(ValueChangeEvent<Boolean> event)
-				{
-					if (cb.getValue())
-					{
-						legendIds.clear();
-						for (CheckBox c : allChecks)
-						{
-							if (c.getValue())
-								legendIds.add(c.getName());
-						}
-					}
-					else
-						legendIds.remove(id);
-					
-					phototopo.getImage().setLegendValues(legendIds);
-					phototopo.updateLegend();
-				}
-			});
+			cb.addValueChangeHandler(new LegendCheckboxValueChangeHandler(cb, id));
 		}
 		
 	}
@@ -330,29 +340,55 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 		l.setStyleName("paletteLabel");
 		imageProperties.add(l);
 		
-		final ListBox lb = new ListBox();
-		lb.setStyleName("paletteListbox");
-		imageProperties.add(lb);
-		lb.addItem("<select>", "");
+		attachmentListBox = new ListBox();
+		attachmentListBox.setStyleName("paletteListbox");
+		imageProperties.add(attachmentListBox);
+		
 		
 		//for (Attachment att: phototopo.getAttachments())
 		//	lb.addItem(att.getName(), att.getSrc());
-		Controller.get().populateAttachments(lb);
 		
+		populateAttachments(false);
+
 		
-		setSelected(lb, phototopo.getImage().getSrc());
-		lb.addChangeHandler(new ChangeHandler()
+		attachmentListBox.addChangeHandler(new ChangeHandler()
 		{
 			
 			@Override
 			public void onChange(ChangeEvent event)
 			{
-				String val = lb.getValue( lb.getSelectedIndex() );
+				String val = attachmentListBox.getValue( attachmentListBox.getSelectedIndex() );
 				if (val != null && val.length() > 0)
 					phototopo.setNewImageSrc(val);
 				
 			}
 		});
+		
+		Anchor uploadAnchor = new Anchor("Upload an image");
+		imageProperties.add(uploadAnchor);
+		//uploadAnchor.setHref("../../pages/viewpageattachments.action?pageId=" + Controller.get().getGuideId() + "#attachFile");
+		//Window.op
+		uploadAnchor.addClickHandler(new ClickHandler()
+		{
+			
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				final UploadPopup up = new UploadPopup(PaletteView.this);
+				
+				//up.show();
+				up.setPopupPositionAndShow(new PopupPanel.PositionCallback() 
+				{
+			          public void setPosition(int offsetWidth, int offsetHeight) 
+			          {
+			            int left = (Window.getClientWidth() - offsetWidth) / 3;
+			            int top = Window.getScrollTop() + (Window.getClientHeight() - offsetHeight) / 3;
+			            up.setPopupPosition(left, top);
+			          }
+				});
+			}
+		});
+		
 		
 		l = new Label("Width");
 		l.setStyleName("paletteLabel");
@@ -404,6 +440,11 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 				
 			}
 		});
+	}
+
+	public void populateAttachments(boolean selectNew)
+	{
+		Controller.get().populateAttachments(attachmentListBox, phototopo.getImage().getSrc(), selectNew);
 	}
 
 	private void addGeneralProperties()
@@ -543,6 +584,7 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 		lb.addItem("none", "");
 		lb.addItem("belay", "belay");
 		lb.addItem("lower off", "lower");
+		lb.addItem("label", "label");
 		
 		String val = selectedPoint.getType();
 		setSelected(lb, val);
@@ -555,6 +597,10 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 				String val = lb.getValue( lb.getSelectedIndex() );
 				selectedPoint.setType(val);
 				selectedPoint.route.saveData();
+				
+				if ("label".equals(val))
+					selectedPoint.route.updateLabel();
+
 			}
 		});
 		
@@ -643,6 +689,19 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 				route.getData().setLinkedTo(val);
 				labelBox.setValue(route.getData().getLabelText());
 				route.updateLabel();
+				
+				
+				if (legendCheckboxes != null)
+				{
+					for (CheckBox cb : legendCheckboxes)
+					{
+						if (cb.getName() != null && cb.getName().equals(val))
+						{
+							cb.setValue(true);
+							setLegendCheckboxValue(true, val);
+						}
+					}
+				}
 			}
 		});
 		
@@ -717,15 +776,6 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 				
 			}
 		});
-//		ta.addKeyPressHandler(new KeyPressHandler()
-//		{
-//			
-//			@Override
-//			public void onKeyPress(KeyPressEvent event)
-//			{
-//				text.setText(ta.getText());			
-//			}
-//		});
 
 		addGenPropsLabel("Style");
 		final ListBox lb = new ListBox();
@@ -790,6 +840,38 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 	}
 
 
+	private final class LegendCheckboxValueChangeHandler implements ValueChangeHandler<Boolean>
+	{
+		private final CheckBox cb;
+		private final String id;
+		
+		private LegendCheckboxValueChangeHandler(CheckBox cb, String id)
+		{
+			this.cb = cb;
+			this.id = id;
+		}
+	
+		@Override
+		public void onValueChange(ValueChangeEvent<Boolean> event)
+		{
+			setLegendCheckboxValue(cb.getValue(), id);
+		}
+	
+	
+	}
+
+
+	public void uploadPopupClosed()
+	{
+		if (attachmentListBox != null)
+		{
+			attachmentListBox.clear();
+			Controller.get().getCurrentGuide().setAttachments(null);
+			populateAttachments(true);
+		}
+		
+	}
+	
 
 //	private void setText()
 //	{

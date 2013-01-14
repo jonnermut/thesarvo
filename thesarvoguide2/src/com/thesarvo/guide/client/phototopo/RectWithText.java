@@ -274,9 +274,12 @@ public class RectWithText
 		{
 			BBox textBox = mainText.getBBox();
 
-			data.setWidth((int) textBox.width() + PADDING);
+			if (phototopo.isEditable())
+			{
+				data.setWidth((int) textBox.width() + PADDING);
 		
-			data.setHeight((int) textBox.height() + PADDING);
+				data.setHeight((int) textBox.height() + PADDING);
+			}
 			
 			setRectAndTextPosition();
 			
@@ -470,6 +473,8 @@ public class RectWithText
 			textBackgroundRect.remove();
 		textBackgroundRect = null;
 		
+		if (data != null)
+			data.remove();
 	}
 
 	/**

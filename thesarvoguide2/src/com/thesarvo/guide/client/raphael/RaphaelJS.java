@@ -378,6 +378,17 @@ public class RaphaelJS extends JavaScriptObject {
       };
       this.drag(move, start, up);
     }-*/;
+    
+    public final native void mouseover(MouseoverCallback callback) /*-{
+    var mouseover = function () {
+      callback.@com.thesarvo.guide.client.raphael.MouseoverCallback::onMouseOver()();
+    },
+    mouseout = function (dx, dy, x, y) {
+      callback.@com.thesarvo.guide.client.raphael.MouseoverCallback::onMouseOut()();
+    }
+    this.mouseover(mouseover);
+    this.mouseout(mouseout);
+  }-*/;
 
 	public final native void click(ClickCallback callback) /*-{
 		var func = function(e) {

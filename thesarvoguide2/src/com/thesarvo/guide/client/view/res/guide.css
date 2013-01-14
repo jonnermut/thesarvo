@@ -241,7 +241,7 @@ padding-top: 2px;
 .climbstars
 {
 	xxdisplay:inline-block;
-	min-width: 80px;
+	min-width: 60px;
 	width: 80px;
 	text-align: right;
 	color: #0000A0;
@@ -351,6 +351,13 @@ table.grid > tbody > tr > td
 	
 }
 
+.legendHighlight
+{
+	
+	color: white;
+	background-color:rgba(0,0,100,1) ;
+	
+}
 
 
 .legendNameCol, .legendSmallCol
@@ -571,4 +578,23 @@ table.grid > tbody > tr > td
 			font-size:8pt;
 		}
 
+.popupCloseButton
+{
+	position:absolute;
+	background:none;
+	background-image:none;
+	top:-8px;
+	left:-8px;
+	line-height:30px;
+	font-size:30px;
+}
 
+.routePopup
+{
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border:1px solid black;
+
+	background-color:rgba(255,255,255,0.95) ;
+}

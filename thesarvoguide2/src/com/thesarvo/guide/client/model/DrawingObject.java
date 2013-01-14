@@ -1,5 +1,7 @@
 package com.thesarvo.guide.client.model;
 
+import com.google.gwt.xml.client.Node;
+import com.thesarvo.guide.client.phototopo.Console;
 import com.thesarvo.guide.client.xml.XmlSimpleModel;
 
 public abstract class DrawingObject
@@ -67,5 +69,18 @@ public abstract class DrawingObject
 	}
 	
 	public abstract String getType();
+	
+	public void remove()
+	{
+		if (model != null)
+		{
+			Node p = model.getNode().getParentNode();
+			if (p!=null)
+				p.removeChild(model.getNode());
+			
+			Console.log("DrawingObject removed, parent xml is now: \n" + p.toString());
+		}
+		
+	}
 	
 }

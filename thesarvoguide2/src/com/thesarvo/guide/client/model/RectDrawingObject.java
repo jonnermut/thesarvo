@@ -186,4 +186,5 @@ public class RectDrawingObject extends DrawingObject
 		else
 			this.text = text;
 	}
+
 }

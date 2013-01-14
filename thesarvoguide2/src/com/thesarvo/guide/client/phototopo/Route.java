@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.UIObject;
 import com.thesarvo.guide.client.model.PathDrawingObject;
 import com.thesarvo.guide.client.util.StringUtil;
 
@@ -163,8 +164,22 @@ public class Route
 
 		if (labelText != null && this.getPoints().size() > 0)
 		{
-			this.getPoints().get(0).setLabel("start " + this.data.getLabelClasses(),
-					this.data.getLabelText());
+			boolean found = false;
+			this.getPoints().get(0).setLabel("","");
+			
+			for (RoutePoint p : getPoints())
+			{
+				if ("label".equals(p.getType() ) )
+				{
+					found = true;
+					p.setLabel("start " + this.data.getLabelClasses(),this.data.getLabelText());
+				}
+			}
+			
+			if (!found)
+				this.getPoints().get(0).setLabel("start " + this.data.getLabelClasses(),this.data.getLabelText());
+			
+				
 		}
 		// else draw the label somewhere else so notify that it is missing??
 	};
@@ -252,11 +267,11 @@ public class Route
 
 		getPhototopo().selectedRoute = this;
 
-		if (this.data.getLabelText() != null && this.getPoints().size() > 0)
-		{
-			this.getPoints().get(0).setLabel("selected start " + this.data.getLabelClasses(),
-					this.data.getLabelText());
-		}
+//		if (this.data.getLabelText() != null && this.getPoints().size() > 0)
+//		{
+//			this.getPoints().get(0).setLabel("selected start " + this.data.getLabelClasses(),
+//					this.data.getLabelText());
+//		}
 
 		if (selectedPoint == null)
 		{
@@ -347,11 +362,11 @@ public class Route
 
 			}
 		}
-		if (this.data.getLabelText() != null && this.getPoints().size() > 0)
-		{
-			this.getPoints().get(0).setLabel("start " + this.data.getLabelClasses(),
-					this.data.getLabelText());
-		}
+//		if (this.data.getLabelText() != null && this.getPoints().size() > 0)
+//		{
+//			this.getPoints().get(0).setLabel("start " + this.data.getLabelClasses(),
+//					this.data.getLabelText());
+//		}
 		getPhototopo().updateHint();
 
 
@@ -367,11 +382,13 @@ public class Route
 			if (path != null)
 				path.redraw();
 		}
+		
+		updateLabel();
 	}
 
-	public void onClick(Event e)
+	public void onClick(Event e, UIObject source)
 	{
-		getPhototopo().routeClicked(this, e);
+		getPhototopo().routeClicked(this, e, source);
 		
 	}
 
@@ -457,10 +474,7 @@ public class Route
 			}
 		}
 
-	
-
-		// FIXME
-		setLabel("" + data.getLabelText(), "");
+		updateLabel();
 		
 	}
 

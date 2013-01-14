@@ -41,6 +41,7 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Node;
@@ -83,8 +84,8 @@ public class PhotoTopo extends FlowPanel
 	
 	List<Attachment> attachments = new ArrayList<Attachment>();
 	
-	FlexTable legendTable;
-	FocusPanel legendDiv;
+	
+	Legend legendDiv;
 	
 	
 	String selectBlue = "#3D80DF";
@@ -204,6 +205,9 @@ public class PhotoTopo extends FlowPanel
 		{
 			backgroundImage.setWidth(width);
 			backgroundImage.getElement().setAttribute("width", width);
+			backgroundImage.getElement().setAttribute("height", "auto");
+			backgroundImage.getElement().getStyle().setProperty("height", "auto");
+			backgroundImage.getElement().getStyle().setProperty("width", width + "px");
 		}
 		canvasContainer.add(backgroundImage);
 		
@@ -577,7 +581,7 @@ public class PhotoTopo extends FlowPanel
 	/**
 	 * @private
 	 */
-	void redraw()
+	public void redraw()
 	{
 
 		for (Route r : this.getRoutes().values())
@@ -933,11 +937,32 @@ public class PhotoTopo extends FlowPanel
 		
 	}
 
-	public void routeClicked(Route route, Event e)
+	public void routeClicked(Route route, Event e, UIObject source)
 	{
-		selectedRoute = route;
-		selectRoute(route.getId(), true);
-		palette.setSelectedRoute(route);
+		if (isEditable())
+		{
+			selectedRoute = route;
+			
+			String id = route == null ? null : route.getId();
+			selectRoute(id, true);
+			palette.setSelectedRoute(route);
+		}
+		else
+		{
+
+			if (StringUtil.isNotEmpty( route.getData().getLinkedTo()) )
+			{
+				selectRoute(route.getId(),false);
+				
+				RoutePopover rp = new RoutePopover( route.getData().getLinkedTo());
+				
+				if (source != null)
+					rp.showRelativeTo(source);
+				else
+					rp.show();
+			}
+			
+		}
 		
 	}
 
@@ -1020,243 +1045,35 @@ public class PhotoTopo extends FlowPanel
 		Boolean legend = imageNode.getLegend();
 		if (legend)
 		{
-			legendDiv = new FocusPanel();
-			legendDiv.setStyleName(Resources.INSTANCE.s().legendDiv());
-			FlowPanel innerDiv = new FlowPanel();
-			innerDiv.getElement().getStyle().setPosition(Position.RELATIVE);
-			legendDiv.add(innerDiv);
-			legendTable = new FlexTable();
-			legendTable.setStyleName(Resources.INSTANCE.s().legendTable());
-			innerDiv.add(legendTable);
-			legendDiv.getElement().getStyle().setZIndex(2);
-			innerDiv.getElement().getStyle().setZIndex(2);
+			legendDiv = new Legend(this);
 			
 
 			canvasContainer.add(legendDiv);
 			canvasContainer.getElement().getStyle().setPosition(Position.RELATIVE);
-			
-				
-			//legendTable.setVisible(legend);
-			//WidgetUtil.setVisible(legendDiv, legend);
-			
-			if (legend )
-			{
-				Integer x = imageNode.getLegendX();
-				Integer y = imageNode.getLegendY();
-				
-				if (x==null)
-					x=0;
-				if (y==null)
-					y=0;
-				
-				String legendTitle = imageNode.getLegendTitle();
-				
-				String legendFooter = imageNode.getLegendFooter();
-				
-				//String legendExtraPage = StringUtil.string(getModel().get("@legendExtraPage"));
-				//boolean legendInsertExtraBefore = StringUtil.bool(getModel().get("@legendInsertExtraBefore"));
-				
-				//if (x==null || x.trim().length()==0)
-				//	x = "0";
-				//if (y==null || y.trim().length()==0)
-				//	y = "0";
-				
-				Style style = legendDiv.getElement().getStyle();
-				style.setPosition(Position.ABSOLUTE);
-				style.setTop(y, Unit.PX);
-				style.setLeft(x, Unit.PX);
-				
-				
-				//final List<XmlSimpleModel> list = getModel().getList("legend");
-				//List<String> list= CollectionUtil.list(l);;
-				
-				int r=0;
-				legendTable.removeAllRows();
-				
-				List<String> legendIds = imageNode.getLegendValues();
-				
-				if (StringUtil.isNotEmpty(legendTitle))
-				{
-					legendTable.setText(0, 0, legendTitle);
-					
-					
-					legendTable.getFlexCellFormatter().setColSpan(0, 0, 4);
-					
-					legendTable.getCellFormatter().setStyleName(0, 0, Resources.INSTANCE.s().legendTitle());
-					r++;
-				}	
-				
-				if (StringUtil.isNotEmpty(legendFooter))
-				{
-					int frow = r + legendIds.size();
-					//int frow = 2;
-					legendTable.setText(frow, 0, legendFooter);
-					
-	
-					legendTable.getFlexCellFormatter().setColSpan(frow, 0, 4);
-					
-					legendTable.getCellFormatter().setStyleName(frow, 0, Resources.INSTANCE.s().legendFooter());
-					
-				}
-				
-				if (getOptions().editable)
-				{
-					if (legendDragHandler == null)
-						legendDragHandler = new LegendDragHandler();
-	//				legendDiv.addDragStartHandler(handler);
-	//				legendDiv.addDragEndHandler(handler);
-					
-					legendDiv.addMouseDownHandler(legendDragHandler);
-					
-					canvasFocusPanel.addMouseMoveHandler(legendDragHandler);			
-					canvasFocusPanel.addMouseUpHandler(legendDragHandler);
-					canvasFocusPanel.addMouseOutHandler(legendDragHandler);
-					
-					legendDiv.getElement().getStyle().setCursor(Cursor.MOVE);
-				}
-				
-				final LegendPopulator cmd = new LegendPopulator(legendIds, r);
-				
-				cmd.execute();
-			}
-			
-			
-			//legendDiv.getElement().setDraggable(Element.DRAGGABLE_TRUE);
-//			legendDiv.addHandler(new DragHandler()
-//			{
-//				
-//				@Override
-//				public void onDrag(DragEvent event)
-//				{
-//					Console.log("drag " + event.getNativeEvent().getClientX() + "," + event.getNativeEvent().getClientY());
-//					
-//				}
-//			}, DragEvent.getType());
-			
 
-			
-////			if (StringUtil.isNotEmpty(legendExtraPage))
-////			{
-				// make sure we have xml for extra page cached
+			legendDiv.init();
+
+			if (getOptions().editable)
+			{
+				if (legendDragHandler == null)
+					legendDragHandler = new LegendDragHandler();
+//				legendDiv.addDragStartHandler(handler);
+//				legendDiv.addDragEndHandler(handler);
 				
-				/*
-				 * FIXME - she broken 
-				 
-				Controller.get().getGuideXml(legendExtraPage, true, true, new XmlRequestCallback()
-				{
-					
-					@Override
-					public void onError(Request request, Throwable exception)
-					{
-						// ignore
-						cmd.execute();
-					}
-					
-					@Override
-					public void handleXml(Document xml)
-					{
-						cmd.setExtraXml(xml);
-						cmd.execute();
-					}
-				});
-				*/
-//			}
-//			else
-	
+				legendDiv.addMouseDownHandler(legendDragHandler);
+				
+				canvasFocusPanel.addMouseMoveHandler(legendDragHandler);			
+				canvasFocusPanel.addMouseUpHandler(legendDragHandler);
+				canvasFocusPanel.addMouseOutHandler(legendDragHandler);
+				
+				legendDiv.getElement().getStyle().setCursor(Cursor.MOVE);
+			}
 			
 			
 		}
 	}
 
-	// FIXME - do this via a model obj
-	protected void populateRow(int r, com.google.gwt.xml.client.Element e)
-	{
-		legendTable.setText(r, 0, StringUtil.notNull(e.getAttribute("stars")));
-		legendTable.setText(r, 1, StringUtil.notNull(e.getAttribute("number")));
-		
-		String name = StringUtil.notNull( e.getAttribute("name") );
-		Label l = new Label(name);
-		l.setStyleName(Resources.INSTANCE.s().legendNameDiv());
-		
-		legendTable.setWidget(r, 2, l);
-		
-		String grade = StringUtil.notNull(e.getAttribute("grade"));
-		int idx = grade.indexOf("/"); 
-		if (idx > -1)
-			grade = grade.substring(0, idx);
-		
-		legendTable.setText(r, 3, grade);
-		
-		
-		legendTable.getCellFormatter().addStyleName(r, 0, Resources.INSTANCE.s().legendSmallCol());
-		legendTable.getCellFormatter().addStyleName(r, 1, Resources.INSTANCE.s().legendSmallCol());
-		legendTable.getCellFormatter().addStyleName(r, 2, Resources.INSTANCE.s().legendNameCol());
-		legendTable.getCellFormatter().addStyleName(r, 3, Resources.INSTANCE.s().legendSmallCol());
-	}		
-				
-	
-	// FIXME - do this via a model obj
-	private final class LegendPopulator implements Command
-	{
-		private final List<String> list;
-		int r;
-		private Document extraXml;
-		
-		private LegendPopulator(List<String> legendIds, int row)
-		{
-			this.list = legendIds;
-			r = row;
-		}
 
-		@Override
-		public void execute()
-		{
-			if (list!=null)
-			{
-				for (String id: list)
-				{
-					//String id = (String) sm.get(".");
-					com.google.gwt.xml.client.Element e = null;
-					
-					if (id.indexOf(':') < 0)
-						e = (com.google.gwt.xml.client.Element) Controller.get().getNode(id);
-					else
-					{
-						if (extraXml!=null)
-						{
-							if (extraXml.getDocumentElement()!=null)
-							{
-								id = id.substring(id.indexOf(':') + 1);
-								
-								NodeList nl = extraXml.getDocumentElement().getChildNodes();
-								for (int i=0;i<nl.getLength();i++)
-								{
-									Node n = nl.item(i);
-									if (n instanceof com.google.gwt.xml.client.Element)
-									{
-										String nid = ((com.google.gwt.xml.client.Element)n).getAttribute("id");
-										if (nid!=null && nid.equals(id))
-										{
-											e = (com.google.gwt.xml.client.Element) n;
-										}
-									}
-								}
-							}
-							
-							
-						}
-					}
-					
-					if (e!=null)
-					{										
-						populateRow(r, e);	
-						r++;
-					}
-				}	
-			}
-		}
-	}
-	
 	
 	private final class LegendDragHandler implements MouseMoveHandler, MouseUpHandler, MouseDownHandler, MouseOutHandler
 	{
@@ -1348,6 +1165,36 @@ public class PhotoTopo extends FlowPanel
 	{
 		getImage().setWidth(val);
 		setBackgroundImage(imageNode.getUrl());
+	}
+
+	public void routeMouseOver(Route route)
+	{
+		if (legendDiv != null)
+		{
+			if (route != null)
+				legendDiv.highlightId(route.getData().getLinkedTo());
+			else
+				legendDiv.clearHighlight();
+		}
+		
+	}
+
+	public boolean isEditable()
+	{
+		return getOptions().editable;
+	}
+
+	public void selectClimbId(String id)
+	{
+		if (StringUtil.isEmpty(id))
+			return;
+		
+		for (Route r : routes.values())
+		{
+			if (id.equals(r.getData().getLinkedTo()))
+				selectRoute(r.getId(), false);
+		}
+		
 	}
 
 
