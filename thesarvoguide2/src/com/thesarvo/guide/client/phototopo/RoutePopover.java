@@ -28,7 +28,7 @@ public class RoutePopover extends PopupPanel
 		this.id = _climbid;
 		this.phototopo = _phototopo;
 		
-		this.phototopo.routePopoverIsVisible = true;
+		this.phototopo.setRoutePopoverIsVisible(true);
 		
 		this.setWidth("480px");
 		this.getElement().getStyle().setZIndex(5);
