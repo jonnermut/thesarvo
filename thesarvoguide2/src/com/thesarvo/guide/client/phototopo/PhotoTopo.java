@@ -125,6 +125,8 @@ public class PhotoTopo extends FlowPanel
 	int lastBackgroundX,lastBackgroundY;
 	long lastBackgroundClick;
 
+	protected boolean routePopoverIsVisible = false;
+
 	// var errors = false,
 	// data,
 	// pc, c,
@@ -544,7 +546,7 @@ public class PhotoTopo extends FlowPanel
 	 * 
 	 * @param {Route} route the route to select
 	 * @param {Boolean} [toggle] if true and the route is already selected will
-	 *        delesect
+	 *        deselect
 	 */
 	Route selectRoute(String routeId, boolean toggle)
 	{
@@ -954,7 +956,7 @@ public class PhotoTopo extends FlowPanel
 			{
 				selectRoute(route.getId(),false);
 				
-				RoutePopover rp = new RoutePopover( route.getData().getLinkedTo());
+				RoutePopover rp = new RoutePopover( route.getData().getLinkedTo(), this);
 				
 				if (source != null)
 					rp.showRelativeTo(source);
@@ -1009,7 +1011,6 @@ public class PhotoTopo extends FlowPanel
 		setupLegend();
 		
 	}
-
 
 	
 	/**
@@ -1171,12 +1172,36 @@ public class PhotoTopo extends FlowPanel
 	{
 		if (legendDiv != null)
 		{
-			if (route != null)
-				legendDiv.highlightId(route.getData().getLinkedTo());
+			// Console.log("routeMouseOver phototopo.RoutePopoverVisible");
+			// Console.log(String.valueOf(this.RoutePopoverIsVisible));
+
+			if (this.routePopoverIsVisible)
+			{
+				// don't change any highlights
+			}
 			else
-				legendDiv.clearHighlight();
+			{
+				// route == null --> "curve onMouseOut"
+				// route != null --> "curve onMouseOver"
+				if (route != null)
+				{
+					legendDiv.highlightId(route.getData().getLinkedTo());
+				}
+				else
+				{
+					legendDiv.clearHighlight();
+				}
+			}
 		}
-		
+	}
+
+	public void routePopoverClosed()
+	{
+		this.routePopoverIsVisible = false;
+		Console.log("routePopoverClosed phototopo.RoutePopoverVisible");
+		Console.log(String.valueOf(this.routePopoverIsVisible));
+		this.deselectAll();
+		this.legendDiv.clearHighlight();
 	}
 
 	public boolean isEditable()
@@ -1197,5 +1222,12 @@ public class PhotoTopo extends FlowPanel
 		
 	}
 
+	public void deselectAll()
+	{
+		for (Route r : routes.values())
+		{
+			r.deselect();
+		}
+	}
 
 }

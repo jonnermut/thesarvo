@@ -9,7 +9,18 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -24,11 +35,10 @@ import com.thesarvo.guide.client.view.res.Resources;
 
 public class Legend extends FocusPanel
 {
-	
-	FlexTable legendTable;
-	
 	PhotoTopo phototopo;
 	
+	LegendTable legendTable;
+
 	Map<String, Integer> idToRow = new HashMap<String, Integer>();
 	Map<Integer, String> rowToId = new HashMap<Integer, String>();
 	
@@ -45,7 +55,8 @@ public class Legend extends FocusPanel
 		FlowPanel innerDiv = new FlowPanel();
 		innerDiv.getElement().getStyle().setPosition(Position.RELATIVE);
 		this.add(innerDiv);
-		legendTable = new FlexTable();
+		legendTable = new LegendTable();
+		legendTable.legend = this;
 		legendTable.setStyleName(Resources.INSTANCE.s().legendTable());
 		innerDiv.add(legendTable);
 		this.getElement().getStyle().setZIndex(2);
@@ -110,10 +121,9 @@ public class Legend extends FocusPanel
 			legendTable.getCellFormatter().setStyleName(frow, 0, Resources.INSTANCE.s().legendFooter());
 			
 		}
-		
+
 		legendTable.addClickHandler(new ClickHandler()
 		{
-			
 			@Override
 			public void onClick(ClickEvent event)
 			{
@@ -122,8 +132,6 @@ public class Legend extends FocusPanel
 				{
 					if (!phototopo.isEditable())
 					{
-
-						
 						int row = cell.getRowIndex();
 						String id = rowToId.get(row);
 						if (StringUtil.isNotEmpty(id))
@@ -134,7 +142,7 @@ public class Legend extends FocusPanel
 							
 							phototopo.selectClimbId(id);
 							
-							RoutePopover rp = new RoutePopover(id);
+							RoutePopover rp = new RoutePopover(id, phototopo);
 							rp.showRelativeTo(legendTable);
 						}
 					}
@@ -146,6 +154,53 @@ public class Legend extends FocusPanel
 		
 		cmd.execute();
 	}
+
+
+	public void onMouseOver(Element tr)
+	{
+		if (tr != null)
+		{
+			if (!phototopo.isEditable())
+			{
+				if (phototopo.routePopoverIsVisible)
+				{
+					// don't change lines
+					Console.log("Legend onMouseOver phototopo.RoutePopoverVisible");
+					Console.log(String.valueOf(phototopo.routePopoverIsVisible));
+				}
+				else
+				{
+					Element tbody = DOM.getParent(tr);
+					int row = DOM.getChildIndex(tbody, tr);
+					String id = rowToId.get(row);
+
+					if (StringUtil.isNotEmpty(id))
+					{
+						clearHighlight();
+						highlightId(id);
+						phototopo.selectClimbId(id);
+					}
+				}
+			}
+		}
+	}
+
+
+	public void onMouseOut(Element tr)
+	{
+		if (phototopo.routePopoverIsVisible)
+		{
+			// don't change lines
+			Console.log("Legend onMouseOut phototopo.RoutePopoverVisible");
+			Console.log(String.valueOf(phototopo.routePopoverIsVisible));
+		}
+		else
+		{
+			clearHighlight();
+			phototopo.deselectAll();
+		}
+	}
+
 	
 	public void highlightId(String id)
 	{
@@ -274,8 +329,4 @@ public class Legend extends FocusPanel
 			}
 		}
 	}
-
-
-
-	
 }

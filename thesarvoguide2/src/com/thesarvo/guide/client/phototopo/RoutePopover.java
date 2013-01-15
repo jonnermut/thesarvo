@@ -4,6 +4,8 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -17,12 +19,17 @@ import com.thesarvo.guide.client.xml.XmlSimpleModel;
 public class RoutePopover extends PopupPanel
 {
 	String id;
+	PhotoTopo phototopo;
 	
-	public RoutePopover(String climbid)
+	public RoutePopover(String _climbid, PhotoTopo _phototopo)
 	{
 		super(true, false);
 		
-		this.id = climbid;
+		this.id = _climbid;
+		this.phototopo = _phototopo;
+		
+		this.phototopo.routePopoverIsVisible = true;
+		
 		this.setWidth("480px");
 		this.getElement().getStyle().setZIndex(5);
 		this.setStyleName("routePopup");
@@ -39,17 +46,26 @@ public class RoutePopover extends PopupPanel
 		
 		pb.addClickHandler(new ClickHandler()
 		{
-			
 			@Override
 			public void onClick(ClickEvent event)
 			{
+				// fire close handler
 				hide();
-				
+			}
+		});
+		
+		this.addCloseHandler(new CloseHandler<PopupPanel>()
+		{
+			@Override
+			public void onClose(CloseEvent<PopupPanel> closeEvent)
+			{
+				// Console.log("phototopo Closed");
+				phototopo.routePopoverClosed();
 			}
 		});
 		
 		ClimbReadNode crn = new ClimbReadNode();
-		Node n = Controller.get().getNode(climbid);
+		Node n = Controller.get().getNode(this.id);
 		if (n!=null)
 		{
 			crn.setModel(new XmlSimpleModel(n));
