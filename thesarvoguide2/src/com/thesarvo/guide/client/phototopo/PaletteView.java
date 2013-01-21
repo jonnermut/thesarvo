@@ -584,6 +584,8 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 		lb.addItem("none", "");
 		lb.addItem("belay", "belay");
 		lb.addItem("lower off", "lower");
+		lb.addItem("lower off (left)", "lower-left");
+		lb.addItem("lower off (right)", "lower-right");
 		lb.addItem("label", "label");
 		
 		String val = selectedPoint.getType();
