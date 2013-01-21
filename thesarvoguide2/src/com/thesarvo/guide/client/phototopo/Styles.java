@@ -146,9 +146,30 @@ public class Styles
 																		'stroke-opacity': 0.01 
 																		} }-*/;
 
+	public final static native JavaScriptObject stroke_dash(double thickness) /*-{ 
+																			return {
+																			'stroke': 'white',
+																			'stroke-dasharray': '- ',
+																			'stroke-width': thickness,
+																			'stroke-linejoin': 'miter',
+																			'stroke-linecap': 'round',
+																			'stroke-opacity': 1 
+																			} }-*/;
+
+	public final static native JavaScriptObject stroke_dot(double thickness) /*-{ 
+																			return {
+																			'stroke': 'white',
+																			'stroke-dasharray': '.',  // dots seem broken in raphael... TODO: where to fix?
+																			'stroke-width': thickness,
+																			'stroke-linejoin': 'miter',
+																			'stroke-linecap': 'round',
+																			'stroke-opacity': 1 
+																			} }-*/;
+
 	public final static native JavaScriptObject stroke(double thickness) /*-{ 
 																			return {
 																			'stroke': 'white',
+																			'stroke-dasharray': '',
 																			'stroke-width': thickness,
 																			'stroke-linejoin': 'miter',
 																			'stroke-linecap': 'round',
