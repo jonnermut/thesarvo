@@ -125,7 +125,7 @@ public class PhotoTopo extends FlowPanel
 	int lastBackgroundX,lastBackgroundY;
 	long lastBackgroundClick;
 
-	protected boolean routePopoverIsVisible = false;
+	private boolean routePopoverIsVisible = false;
 
 	// var errors = false,
 	// data,
@@ -1175,7 +1175,7 @@ public class PhotoTopo extends FlowPanel
 			// Console.log("routeMouseOver phototopo.RoutePopoverVisible");
 			// Console.log(String.valueOf(this.RoutePopoverIsVisible));
 
-			if (this.routePopoverIsVisible)
+			if (this.isRoutePopoverIsVisible())
 			{
 				// don't change any highlights
 			}
@@ -1197,9 +1197,9 @@ public class PhotoTopo extends FlowPanel
 
 	public void routePopoverClosed()
 	{
-		this.routePopoverIsVisible = false;
+		this.setRoutePopoverIsVisible(false);
 		Console.log("routePopoverClosed phototopo.RoutePopoverVisible");
-		Console.log(String.valueOf(this.routePopoverIsVisible));
+		Console.log(String.valueOf(this.isRoutePopoverIsVisible()));
 		this.deselectAll();
 		this.legendDiv.clearHighlight();
 	}
@@ -1228,6 +1228,16 @@ public class PhotoTopo extends FlowPanel
 		{
 			r.deselect();
 		}
+	}
+
+	protected boolean isRoutePopoverIsVisible()
+	{
+		return routePopoverIsVisible;
+	}
+
+	protected void setRoutePopoverIsVisible(boolean routePopoverIsVisible)
+	{
+		this.routePopoverIsVisible = routePopoverIsVisible;
 	}
 
 }

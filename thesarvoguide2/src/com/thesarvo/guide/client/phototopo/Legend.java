@@ -9,19 +9,9 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseMoveEvent;
-import com.google.gwt.event.dom.client.MouseMoveHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -162,11 +152,11 @@ public class Legend extends FocusPanel
 		{
 			if (!phototopo.isEditable())
 			{
-				if (phototopo.routePopoverIsVisible)
+				if (phototopo.isRoutePopoverIsVisible())
 				{
 					// don't change lines
 					Console.log("Legend onMouseOver phototopo.RoutePopoverVisible");
-					Console.log(String.valueOf(phototopo.routePopoverIsVisible));
+					Console.log(String.valueOf(phototopo.isRoutePopoverIsVisible()));
 				}
 				else
 				{
@@ -188,11 +178,11 @@ public class Legend extends FocusPanel
 
 	public void onMouseOut(Element tr)
 	{
-		if (phototopo.routePopoverIsVisible)
+		if (phototopo.isRoutePopoverIsVisible())
 		{
 			// don't change lines
 			Console.log("Legend onMouseOut phototopo.RoutePopoverVisible");
-			Console.log(String.valueOf(phototopo.routePopoverIsVisible));
+			Console.log(String.valueOf(phototopo.isRoutePopoverIsVisible()));
 		}
 		else
 		{
