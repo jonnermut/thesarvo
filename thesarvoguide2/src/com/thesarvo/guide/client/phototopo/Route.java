@@ -3,6 +3,7 @@ package com.thesarvo.guide.client.phototopo;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.UIObject;
@@ -348,10 +349,8 @@ public class Route
 		{
 			if (path != null)
 			{
-				path.curve.attr(Styles.stroke(getPhototopo().getOptions().thickness));
+				path.curve.attr(path.route.routeCurveAttr());
 				//path.outline.attr(Styles.outline());
-
-
 			}
 		}
 		if (getPhototopo().getOptions().editable)
@@ -493,6 +492,25 @@ public class Route
 	{
 		this.data = data;
 	};
+
+	public JavaScriptObject routeCurveAttr()
+	{
+		String lineStyle = this.getData().getLineStyle();
+
+		if (lineStyle.equals("dashed"))
+		{
+			return Styles.stroke_dash(getPhototopo().getOptions().thickness);
+		}
+		else if (lineStyle.equals("dotted"))
+		{
+			return Styles.stroke_dot(getPhototopo().getOptions().thickness);
+		}
+		else
+		{
+			return Styles.stroke(getPhototopo().getOptions().thickness);
+		}
+
+	}
 
 	/**
 	 * @private

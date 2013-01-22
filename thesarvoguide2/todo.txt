@@ -48,53 +48,87 @@ Misc
 
 ======= Deano's ========
 
-Here's some bugs / suggestions / etc on the topo stuff.
-I can add these to the github issue tracker if you would prefer that, and let me know if you want to clarify any of them! I hope they make sense...
+
+### In progress
+
+An "over-the-back" abseil symbol
+For abseils that go out of view
+
+needs some svg ninja work...
 
 
-Bugs:
+### Done
+
+Topo line styles
+  Dotted and dashed lines, for access paths and "out of view" climbs
+  NOTE: bug in Raphael for dots?
+
+Hover to highlight
+  lines are highlighted when hovering over the corresponding row in the legend
+  (along with the row itself also being highlighted)
+  popup description appears when row is clicked
+
+
+### Bugs
 
 Line breaks in text area
 These appear in edit mode, but not when viewed the guide page.
-The text area background seems to expand though (see access topo at http://www.thesarvo.com/confluence/display/thesarvo/Cape+Raoul)
+The text area background seems to expand though
+see access topo at
+http://www.thesarvo.com/confluence/display/thesarvo/Cape+Raoul
 
 Can't delete text areas
 (Jed said you might have fixed this already?)
 
 Text wrapping in popups
-Take a look at the SSSSI topo at http://thesarvo.com/confluence/display/thesarvo/Bulging+Buttress
-With route #1, the route description goes outside the border of the popup box (after clicking on the line). I'm not sure why, it doesn't seem to be because it is a multi-pitch route (with the special formatting) because similar routes on other pages work fine... a bit weird.
+Take a look at the SSSSI topo at
+http://thesarvo.com/confluence/display/thesarvo/Bulging+Buttress
+
+With route #1, the route description goes outside the border of the popup box
+(after clicking on the line). I'm not sure why, it doesn't seem to be because
+it is a multi-pitch route (with the special formatting) because similar routes
+on other pages work fine... a bit weird.
 
 
 
-Feature Ideas:
+### Feature Ideas
 
 An option to hide the topo lines
 Sometimes the thick lines hide the detail on the route when trying to figure out where to go.
 
-An "over-the-back" abseil symbol
-For abseils that go out of view
-
-Topo line styles
-Dotted and dashed lines, for access paths and "out of view" climbs
-
-Hover to highlight
-I was originally thinking it would be nice to somehow deselect a route (e.g. clicking on an empty part of the image?). But instead, what if lines were highlighted when hovering over the corresponding row in the legend (along with the row itself also being highlighted), and the popup description appears when you click it? Sort of like the inverse behaviour of hovering over the lines (where the row gets highlighted), and then clicking on the line to show the popup.
 
 Anchor point for route description popup (when clicking on legend)
-When clicking on row in legend, the popup always appears below the legend, and left-aligned to the bottom left corner. On some topos, e.g. the Paradiso Left Side topo, it would be neat to specify where the popup appears, and which edge is fixed (if applicable). For example, for that topo the top-left corner of the popup could be anchored to the top-right corner of the legend, so it doesnt cover the routes as much. For other topos, in might be useful to have the top-right corner of the popup fixed to the bottom-right corner of the legend (or anywhere else, etc.)
+When clicking on row in legend, the popup always appears below the legend, and
+left-aligned to the bottom left corner. On some topos, e.g. the Paradiso Left
+Side topo, it would be neat to specify where the popup appears, and which edge
+is fixed (if applicable). For example, for that topo the top-left corner of the
+popup could be anchored to the top-right corner of the legend, so it doesnt
+cover the routes as much. For other topos, in might be useful to have the
+top-right corner of the popup fixed to the bottom-right corner of the legend
+(or anywhere else, etc.)
 (http://www.thesarvo.com/confluence/display/thesarvo/Mount+Brown)
 
 
-Enhancements:
+### Enhancements
 
-Take a look at SSSSI topo again http://thesarvo.com/confluence/display/thesarvo/Bulging+Buttress
+Take a look at SSSSI topo again
+http://thesarvo.com/confluence/display/thesarvo/Bulging+Buttress
 
 Diverging/common topo lines
-If selecting a route that branches off one of the others, it would be good if the entire line was highlighted. For example, when selecting #2, the bottom section off the ground isn't highlighted because it is associated with #3 only.
+If selecting a route that branches off one of the others, it would be good if
+the entire line was highlighted. For example, when selecting #2, the bottom
+section off the ground isn't highlighted because it is associated with #3 only.
 
 Better display of merging of lines
-Often when the lines merge, they stick out a bit and look untidy. You probably already know this (and have probably spent a considerable amount of time tweaking and making it pretty good already!). Another example is Paradiso Left Side topo merging Kraken into Offender, this was the best i could do. Another example is the join of routes #3 and #4 on the SSSSI topo.
+Often when the lines merge, they stick out a bit and look untidy. You probably
+already know this (and have probably spent a considerable amount of time
+tweaking and making it pretty good already!). Another example is Paradiso Left
+Side topo merging Kraken into Offender, this was the best i could do. Another
+example is the join of routes #3 and #4 on the SSSSI topo.
 
-Currently you have to drag the 'floating' end point on top of the existing point manually. If there was a way to 'snap' the point on top, or (perhaps better) link into the existing point that could make it easier to draw tidier curved lines? It may also make it simpler to associate common line segments with multiple routes (for the Diverging/common topo lines item above)?
+Currently you have to drag the 'floating' end point on top of the existing
+point manually. If there was a way to 'snap' the point on top, or (perhaps
+better) link into the existing point that could make it easier to draw tidier
+curved lines? It may also make it simpler to associate common line segments
+with multiple routes (for the Diverging/common topo lines item above)?
 

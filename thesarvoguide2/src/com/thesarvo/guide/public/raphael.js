@@ -4038,6 +4038,10 @@ window.Raphael.svg && function (R) {
         "--..": [8, 3, 1, 3, 1, 3]
     },
     addDashes = function (o, value, params) {
+        var dots = false;
+        if (value.indexOf(".") > -1) {
+            dots = true;
+        }
         value = dasharray[Str(value).toLowerCase()];
         if (value) {
             var width = o.attrs["stroke-width"] || "1",
@@ -4046,6 +4050,16 @@ window.Raphael.svg && function (R) {
                 i = value.length;
             while (i--) {
                 dashes[i] = value[i] * width + ((i % 2) ? 1 : -1) * butt;
+            }
+            // dots should never have a 0 in the stroke-array...? is it this simple? surely not.
+            // TODO: this should be handled in the above algorithm. bug in raphael? can't find anything online
+            if (dots) {
+                var j = dashes.length;
+                while (j--) {
+                    if (dashes[j] == 0) {
+                        dashes[j] = 1;
+                    }
+                }
             }
             $(o.node, {"stroke-dasharray": dashes.join(",")});
         }
