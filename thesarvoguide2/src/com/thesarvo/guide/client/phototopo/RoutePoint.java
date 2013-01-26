@@ -18,6 +18,10 @@ public class RoutePoint extends SimplePoint
 {
 	
 
+	private static final String BELAY_DOT_BLUE = "#262262";
+
+
+
 	private final class PointClick implements ClickCallback
 	{
 		UIObject source;
@@ -321,7 +325,7 @@ public class RoutePoint extends SimplePoint
 						+ "c0,8.88-6.419,16.25-14.859,17.73" + "v12.55z";
 
 				this.iconElement = phototopo.path(p);
-				this.iconElement.attr("fill", "#262262").attr("stroke", "white")
+				this.iconElement.attr("fill", BELAY_DOT_BLUE).attr("stroke", "white")
 						.attr("stroke-width", 2);
 
 				this.iconElement.scale(0.4, 0.4);
@@ -348,10 +352,9 @@ public class RoutePoint extends SimplePoint
 //						+ "0,-22 32,0 32,0 0,22 0,22 -32,0 -32,0 0,-22 z m 46.88927,8.43972 c 7.87973,-6.63036 2.22729,-19.21139 -8.22248,-18.30135 -1.74173,0.15168 -4.98842,-0.31141 -7.21487,-1.02908 -3.48161,-1.12228 -4.58932,-1.07872 -7.91602,0.31126 -3.71649,1.55285 -3.95667,1.53279 -6.1337,-0.51243 l -2.26575,-2.12856 -1.12052,4.36022 c -0.61629,2.39812 -1.72746,6.51391 -2.46926,9.1462 -1.22719,4.35468 -1.19995,4.74242 0.3023,4.30268 0.90806,-0.26582 4.57603,-1.21688 8.15103,-2.11347 7.51626,-1.88505 8.67412,-2.67083 6.54238,-4.44002 -1.944,-1.61338 -1.95709,-2.66205 -0.0424,-3.3968 3.04826,-1.16972 4.00995,0.239 3.65473,5.35356 -0.30742,4.42633 -0.0144,5.30228 2.67307,7.98972 3.99717,3.99716 9.63715,4.18089 14.06147,0.45807 z m -12.25441,-1.5123 c -2.81584,-2.21494 -3.58785,-7.27822 -1.65921,-10.88193 0.80664,-1.50722 0.44777,-2.04168 -2.0717,-3.08528 -2.58167,-1.06936 -3.58936,-1.00378 -6.59414,0.4291 -3.42665,1.63405 -3.48736,1.75702 -1.79218,3.63017 1.40957,1.55756 1.48203,2.02392 0.36849,2.3716 -0.76237,0.23803 -2.92159,0.92444 -4.79828,1.52536 -1.87668,0.60092 -3.60886,0.89587 -3.84928,0.65545 -0.73641,-0.73641 0.87342,-8.52306 1.89226,-9.15274 0.52623,-0.32523 1.62052,-0.0405 2.43174,0.63277 1.17864,0.97818 1.82276,0.91068 3.2062,-0.336 2.60943,-2.35147 6.46337,-2.97301 9.77027,-1.57568 1.62853,0.68813 5.0914,1.28102 7.69527,1.31753 5.46275,0.0766 8.36516,2.28954 9.32999,7.11369 0.48281,2.41404 0.0446,3.73992 -2.06459,6.24652 -3.22699,3.83507 -7.85019,4.26736 -11.86484,1.10944 z" + "v12.55z";
 
 				// TODO: draw lower off with arrow to the left
-				// Colour changed below so different icon is distinguishable
 
 				this.iconElement = phototopo.path(p);
-				this.iconElement.attr("fill", "#a44747").attr("stroke", "white")
+				this.iconElement.attr("fill", BELAY_DOT_BLUE).attr("stroke", "white")
 						.attr("stroke-width", 2);
 
 				this.iconElement.scale(0.4, 0.4);
@@ -368,10 +371,9 @@ public class RoutePoint extends SimplePoint
 						+ "c0,8.88-6.419,16.25-14.859,17.73" + "v12.55z";
 
 				// TODO: draw lower off with arrow to the right
-				// Colour changed below so different icon is distinguishable
 
 				this.iconElement = phototopo.path(p);
-				this.iconElement.attr("fill", "#47a647").attr("stroke", "white")
+				this.iconElement.attr("fill", BELAY_DOT_BLUE).attr("stroke", "white")
 						.attr("stroke-width", 2);
 
 				this.iconElement.scale(0.4, 0.4);
@@ -381,7 +383,7 @@ public class RoutePoint extends SimplePoint
 			{
 				Console.log("Drawing belay");
 				this.iconElement = phototopo.circle(this.x, this.y, 8);
-				this.iconElement.attr("fill", "#262262").attr("stroke", "white")
+				this.iconElement.attr("fill", BELAY_DOT_BLUE).attr("stroke", "white")
 						.attr("stroke-width", 2).attr("r", 7);
 
 				//if (!phototopo.getOptions().editable)
