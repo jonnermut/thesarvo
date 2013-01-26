@@ -665,71 +665,21 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 	{
 		addGenPropsLabel("Route Line").setStyleName("paletteLabelSubheading");
 		
+		// Linked to selection
 		addGenPropsLabel("Linked To");
 		final ListBox lb = new ListBox();
 		lb.setStyleName("paletteListbox");
 		generalproperties.add(lb);
+		lb.addItem("<select>", "");
+		Controller.get().populateClimbs(lb, "", false,  route.getData().getLinkedTo());
+
 		
+		// Label
 		addGenPropsLabel("Label");
 		final TextBox labelBox = new TextBox();
 		labelBox.setStyleName("paletteTextbox");
 		generalproperties.add(labelBox);
 
-		addGenPropsLabel("Line Style");
-		final ListBox lbStyle = new ListBox();
-		lbStyle.setStyleName("paletteListbox");
-		generalproperties.add(lbStyle);
-		
-//		lb.addItem("<select>", "");
-//		lb.addItem("Some route", "1");
-//		lb.addItem("Some other route", "2");
-		lb.addItem("<select>", "");
-		Controller.get().populateClimbs(lb, "", false,  route.getData().getLinkedTo());
-		
-		lbStyle.addItem("Solid", "solid");
-		lbStyle.addItem("Dashed", "dashed");
-		lbStyle.addItem("Dotted", "dotted");
-		
-		setSelected(lbStyle, route.getData().getLineStyle());
-		
-		lb.addChangeHandler(new ChangeHandler()
-		{		
-			@Override
-			public void onChange(ChangeEvent event)
-			{
-				String val = lb.getValue(lb.getSelectedIndex());
-				route.getData().setLinkedTo(val);
-				labelBox.setValue(route.getData().getLabelText());
-				route.updateLabel();
-				
-				
-				if (legendCheckboxes != null)
-				{
-					for (CheckBox cb : legendCheckboxes)
-					{
-						if (cb.getName() != null && cb.getName().equals(val))
-						{
-							cb.setValue(true);
-							setLegendCheckboxValue(true, val);
-						}
-					}
-				}
-			}
-		});
-
-		lbStyle.addChangeHandler(new ChangeHandler()
-		{
-			@Override
-			public void onChange(ChangeEvent event)
-			{
-				String val = lbStyle.getValue(lbStyle.getSelectedIndex());
-				route.getData().setLineStyle(val);
-
-				// redraw the (selected) route with the new line
-				route.deselect();
-				phototopo.selectRoute(route.getId(), false);
-			}
-		});
 
 		labelBox.setValue(route.getData().getLabelText());
 		labelBox.addValueChangeHandler(new ValueChangeHandler<String>()
@@ -756,7 +706,57 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 		});
 		
 		
+		lb.addChangeHandler(new ChangeHandler()
+		{		
+			@Override
+			public void onChange(ChangeEvent event)
+			{
+				String val = lb.getValue(lb.getSelectedIndex());
+				route.getData().setLinkedTo(val);
+				labelBox.setValue(route.getData().getLabelText());
+				route.updateLabel();
+				
+				
+				if (legendCheckboxes != null)
+				{
+					for (CheckBox cb : legendCheckboxes)
+					{
+						if (cb.getName() != null && cb.getName().equals(val))
+						{
+							cb.setValue(true);
+							setLegendCheckboxValue(true, val);
+						}
+					}
+				}
+			}
+		});
+
+		// Line style
+		addGenPropsLabel("Line Style");
+		final ListBox lbStyle = new ListBox();
+		lbStyle.setStyleName("paletteListbox");
+		generalproperties.add(lbStyle);
+		for (LineStyle ls : LineStyle.values())
+		{
+			lbStyle.addItem(ls.getDescription(), ls.name());
+		}
+		setSelected(lbStyle, route.getData().getLineStyle());
+
+		lbStyle.addChangeHandler(new ChangeHandler()
+		{
+			@Override
+			public void onChange(ChangeEvent event)
+			{
+				String val = lbStyle.getValue(lbStyle.getSelectedIndex());
+				route.getData().setLineStyle(val);
+
+				// redraw the (selected) route with the new line
+				route.deselect();
+				phototopo.selectRoute(route.getId(), false);
+			}
+		});
 		
+		// Remove button
 		Button removeButton = new Button("Remove Line");
 		removeButton.setStyleName("paletteButton");
 		generalproperties.add(removeButton);
