@@ -16,7 +16,7 @@ public class PathDrawingObject extends DrawingObject
 	private String labelText;
 	private String labelClasses;
 	
-	
+	Boolean arrow = false;
 	
 	public PathDrawingObject(XmlSimpleModel xsm)
 	{
@@ -155,6 +155,23 @@ public class PathDrawingObject extends DrawingObject
 	public void setLabelClasses(String labelClasses)
 	{
 		this.labelClasses = labelClasses;
+	}
+	/**
+	 * @return the arrow
+	 */
+	public Boolean getArrow()
+	{
+		if (model != null)
+			return model.getBoolean("@arrow");
+		return false;
+	}
+	/**
+	 * @param arrow the arrow to set
+	 */
+	public void setArrow(Boolean arrow)
+	{
+		if (model != null)
+			model.put("@arrow", "" + arrow);
 	}
 	
 }

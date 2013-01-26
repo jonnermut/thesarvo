@@ -210,6 +210,8 @@ public class Segment
 
 		String path = "M" + points[0].x + "," + points[0].y + this.svg_part;
 
+
+		
 		/*
 		 * End of path embellishments
 		 * 
@@ -262,6 +264,21 @@ public class Segment
 			//glow.attr("opacity", 0.5);
 		}
 
+		String arrow = "none";
+		if (point2.nextPath == null )
+		{
+			// last point
+			if (route.getData().getArrow())
+			{
+				arrow = "block-wide-long";
+				
+				
+				//if (this.ghost != null)
+				//	this.ghost.attr("arrow-end", "block-medium-medium");
+			}
+			
+		}
+		this.curve.attr("arrow-end", arrow);
 		
 		curve.click(new ClickCallback()
 		{

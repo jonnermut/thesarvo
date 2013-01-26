@@ -756,6 +756,21 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 			}
 		});
 		
+		final CheckBox arrowCB = new CheckBox("Arrow Head");
+		generalproperties.add(arrowCB);
+		arrowCB.setValue(route.getData().getArrow());
+		arrowCB.addValueChangeHandler(new ValueChangeHandler<Boolean>()
+		{
+			
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event)
+			{
+				route.getData().setArrow(arrowCB.getValue());
+				route.redraw();
+			}
+		});
+		
+		
 		// Remove button
 		Button removeButton = new Button("Remove Line");
 		removeButton.setStyleName("paletteButton");
