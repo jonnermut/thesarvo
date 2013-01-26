@@ -50,6 +50,13 @@
 	 		<td  >Camping</td>
 	 		<td><s:BoundTextArea bindValue='@camping' ui:field='camping' styleName='{r.s.textArea}' /></td>
 	 	</tr>
+	 	
+	 	<tr  >
+	 		<td>Options</td>
+	 		<td>
+	 			<s:BoundCheckBox bindValue='@autonumber' ui:field='autonumber'  /> Auto number
+	 		</td>
+	 	</tr>
 	 </table>
 	 	
   </g:HTMLPanel>

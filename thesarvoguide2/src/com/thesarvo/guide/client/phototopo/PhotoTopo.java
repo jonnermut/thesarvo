@@ -66,9 +66,6 @@ import com.thesarvo.guide.client.xml.XmlSimpleModel;
 public class PhotoTopo extends FlowPanel
 {
 
-
-
-
 	public static final int HANDLE_RADIUS = 5;
 	
 	private EventBus eventBus = null;
@@ -203,12 +200,17 @@ public class PhotoTopo extends FlowPanel
 		
 		backgroundImage = new com.google.gwt.user.client.ui.Image(imageUrl);
 		String width = imageNode.getWidth();
+		String height = imageNode.getHeight();
 		if (StringUtil.isNotEmpty(width))
 		{
 			backgroundImage.setWidth(width);
 			backgroundImage.getElement().setAttribute("width", width);
-			backgroundImage.getElement().setAttribute("height", "auto");
-			backgroundImage.getElement().getStyle().setProperty("height", "auto");
+			
+			if (StringUtil.isEmpty(height))
+				height = "auto";
+			
+			backgroundImage.getElement().setAttribute("height", height);
+			backgroundImage.getElement().getStyle().setProperty("height", height);
 			backgroundImage.getElement().getStyle().setProperty("width", width + "px");
 		}
 		canvasContainer.add(backgroundImage);
@@ -227,6 +229,8 @@ public class PhotoTopo extends FlowPanel
 						
 				getOptions().height = backgroundImage.getHeight();
 				shownHeight = backgroundImage.getHeight();
+				
+				getImage().setHeight(""+shownHeight);
 				
 				setupCanvas();
 				
@@ -737,6 +741,7 @@ public class PhotoTopo extends FlowPanel
 	public void setNewImageSrc(String val)
 	{
 		imageNode.setSrc(val);
+		imageNode.setHeight("auto");
 		setBackgroundImage(imageNode.getUrl());
 		
 	}
@@ -1165,6 +1170,7 @@ public class PhotoTopo extends FlowPanel
 	public void setImageWidth(String val)
 	{
 		getImage().setWidth(val);
+		getImage().setHeight("auto");
 		setBackgroundImage(imageNode.getUrl());
 	}
 

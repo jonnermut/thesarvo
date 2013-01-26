@@ -14,6 +14,7 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 import com.thesarvo.guide.client.view.GuideView;
 import com.thesarvo.guide.client.view.NodeWrapper;
+import com.thesarvo.guide.client.xml.XmlSimpleModel;
 
 public class Guide
 {
@@ -32,6 +33,8 @@ public class Guide
 	int maxId=0;
 	
 	List<NodeWrapper> deferredUpdates = new ArrayList<NodeWrapper>();
+	private boolean autonumber = false;
+	private int climbNumber = 1;
 
 	public Guide(GuideView guideView)
 	{
@@ -205,8 +208,8 @@ public class Guide
 		nodeWrappers.clear();
 		
 		
-		Node guideNode = xml.getLastChild();
-		nodeList = guideNode.getChildNodes();
+		update();
+		
 		maxId = 0;
 		
 		//SetupNodes setupNodesCmd = new SetupNodes();
@@ -251,6 +254,51 @@ public class Guide
 				
 			}
 		});
+	}
+
+	public void update()
+	{
+		setNodeList();	
+		setOptions();
+		autonumberIfNecessary();
+	}
+
+	public void setNodeList()
+	{
+		Node guideNode = xml.getLastChild();
+		nodeList = guideNode.getChildNodes();
+	}
+
+	public void autonumberIfNecessary()
+	{
+		climbNumber = 1;
+		if (this.autonumber)
+		{
+			for (int i = 0; i < nodeList.getLength(); i++)
+			{
+				Node node = nodeList.item(i);
+				if (node instanceof Element && node.getNodeName().equals("climb") || node.getNodeName().equals("problem"))
+				{
+					((Element)node).setAttribute("number", climbNumber + ".");
+					climbNumber ++ ;
+				}
+				
+			}
+		}
+	}
+
+	public void setOptions()
+	{
+		for (int i=0;i<nodeList.getLength() && i<5;i++)
+		{
+			Node first = nodeList.item(i);
+			if (first.getNodeName().equals("header"))
+			{
+				XmlSimpleModel xsm = new XmlSimpleModel(first);
+				this.autonumber = xsm.getBoolean("@autonumber");
+				break;
+			}
+		}
 	}
 
 	private NodeWrapper createNodeWrapper(Node n)

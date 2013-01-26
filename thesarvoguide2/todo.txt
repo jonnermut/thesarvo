@@ -6,19 +6,18 @@ Misc
 - Reorder not saving every button click properly
 - 'extra page' stuff on image legend not working. Maybe get rid of this
 
+- Northern buttress - graph says 76 routes, is actually 53!!
 
 - sometimes get edits by 'anonymous' users
 - editing a stale page can overwrite newer edits - need to check versions etc
 
 ======= Phototopo =========
-- arrow ends colour get munged by raphael
+
 - link to for text boxes - link to other pages/topos
-- arrow heads for bouldering 
+- arrow heads by default for bouldering 
 - dbl click point broken?
-- click on line broken?
 - redraw lower off to match Jeds version
-- sort attachment list alpha
-- detect new upload and select that
+- attachment list lists all versions??
 - adding text doesnt add at the cursor, and often adds 2 text boxes
 - adding line often adds 2 points at the start
 - text boxes lose their line breaks
@@ -44,7 +43,9 @@ Misc
 - map points are selectable and editable
 - Move to maps v3
 - map drawing tools
-
+- arrow ends colour get munged by raphael
+- arrow heads
+- autonumbering
 
 ======= Deano's ========
 

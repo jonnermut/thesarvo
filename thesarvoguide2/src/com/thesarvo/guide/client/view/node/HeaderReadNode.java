@@ -127,6 +127,7 @@ public class HeaderReadNode extends ReadNode
 		{
 			imageGraph.setVisible(false);
 		}
+		
 	}
 
 	@Override

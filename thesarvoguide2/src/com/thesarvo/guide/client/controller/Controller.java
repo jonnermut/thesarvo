@@ -278,6 +278,8 @@ public class Controller
 
 		onCancel(nw);
 		nw.update();
+		
+		getCurrentGuide().update();
 
 		saveAll();
 	}

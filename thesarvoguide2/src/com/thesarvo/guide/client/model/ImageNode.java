@@ -14,6 +14,7 @@ public class ImageNode extends NodeModel
 {
 	String src = "";
 	String width = "auto";
+	String height = "auto";
 	Boolean noPrint = false;
 	Boolean legend = false;
 	String legendTitle = "";
@@ -347,6 +348,29 @@ public class ImageNode extends NodeModel
 		drawingObjects.add(pdo);
 		pdo.setId("" + (int)(Math.random() * 100000) ); 
 		return pdo;
+	}
+
+	/**
+	 * @return the height
+	 */
+	public String getHeight()
+	{
+		if (model != null)
+			return model.get("@height");
+
+		
+		return height;
+	}
+
+	/**
+	 * @param height the height to set
+	 */
+	public void setHeight(String height)
+	{
+		if (model != null)
+			model.put("@height",height);
+		
+		this.height = height;
 	}
 
 
