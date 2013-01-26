@@ -584,6 +584,8 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 		lb.addItem("none", "");
 		lb.addItem("belay", "belay");
 		lb.addItem("lower off", "lower");
+		lb.addItem("lower off (left)", "lower-left");
+		lb.addItem("lower off (right)", "lower-right");
 		lb.addItem("label", "label");
 		
 		String val = selectedPoint.getType();
@@ -672,6 +674,11 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 		final TextBox labelBox = new TextBox();
 		labelBox.setStyleName("paletteTextbox");
 		generalproperties.add(labelBox);
+
+		addGenPropsLabel("Line Style");
+		final ListBox lbStyle = new ListBox();
+		lbStyle.setStyleName("paletteListbox");
+		generalproperties.add(lbStyle);
 		
 //		lb.addItem("<select>", "");
 //		lb.addItem("Some route", "1");
@@ -679,7 +686,12 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 		lb.addItem("<select>", "");
 		Controller.get().populateClimbs(lb, "", false,  route.getData().getLinkedTo());
 		
-		//setSelected(lb, route.getData().getLinkedTo());
+		lbStyle.addItem("Solid", "solid");
+		lbStyle.addItem("Dashed", "dashed");
+		lbStyle.addItem("Dotted", "dotted");
+		
+		setSelected(lbStyle, route.getData().getLineStyle());
+		
 		lb.addChangeHandler(new ChangeHandler()
 		{		
 			@Override
@@ -704,7 +716,20 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 				}
 			}
 		});
-		
+
+		lbStyle.addChangeHandler(new ChangeHandler()
+		{
+			@Override
+			public void onChange(ChangeEvent event)
+			{
+				String val = lbStyle.getValue(lbStyle.getSelectedIndex());
+				route.getData().setLineStyle(val);
+
+				// redraw the (selected) route with the new line
+				route.deselect();
+				phototopo.selectRoute(route.getId(), false);
+			}
+		});
 
 		labelBox.setValue(route.getData().getLabelText());
 		labelBox.addValueChangeHandler(new ValueChangeHandler<String>()

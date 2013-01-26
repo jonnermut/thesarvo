@@ -8,6 +8,7 @@ public abstract class DrawingObject
 {
 	String id;
 	String linkedTo;
+	String lineStyle;
 	XmlSimpleModel model;
 	
 	public DrawingObject()
@@ -68,6 +69,32 @@ public abstract class DrawingObject
 			this.linkedTo = linkedTo;
 	}
 	
+
+	/**
+	 * @return the lineStyle
+	 */
+	public String getLineStyle()
+	{
+		if (model != null)
+		{
+			return model.get("@lineStyle");
+		}
+		else
+			return lineStyle;
+	}
+	/**
+	 * @param lineStyle the lineStyle to set
+	 */
+	public void setLineStyle(String lineStyle)
+	{
+		if (model != null)
+		{
+			model.put("@lineStyle", lineStyle);
+		}
+		else
+			this.lineStyle = lineStyle;
+	}
+
 	public abstract String getType();
 	
 	public void remove()

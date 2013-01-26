@@ -2,6 +2,7 @@ package com.thesarvo.guide.client.phototopo;
 
 import java.util.List;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Event;
@@ -78,6 +79,7 @@ public class Segment
 //			phototopo.getBackground().toBack();
 //		}
 
+		// the base path (straight lines)
 		this.curve = phototopo.path(path);
 
 		//this.outline.attr(Styles.outline());
@@ -94,7 +96,10 @@ public class Segment
 		{
 			this.ghost.attr(Styles.ghost(phototopo.getOptions().thickness));
 		}
-		this.curve.attr(Styles.stroke(phototopo.getOptions().thickness));
+//		Console.log("route.routeCurveAttr()");
+//		Console.log(route.routeCurveAttr());
+		this.curve.attr(route.routeCurveAttr());
+		
 
 //		if (this.point1.route.getAutoColor() != null)
 //		{
@@ -237,8 +242,10 @@ public class Segment
 		 */
 
 		Console.log("Path redraw path:" + path);
+		
+		// apply curves to flat path
 		this.curve.attr("path", path);
-
+		
 		// if (this.point1.type === "hidden"){
 		// this.curve.attr(phototopo.styles.strokeHidden);
 		// } else {
