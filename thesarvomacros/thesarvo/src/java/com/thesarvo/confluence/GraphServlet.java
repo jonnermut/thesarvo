@@ -98,8 +98,8 @@ public class GraphServlet extends HttpServlet
 				
 				//NodeList nl = xml.findNodes("//climb");
 				
-				List<Node> nlc = xml.selectNodes("//climb");
-				List<Node> nlp = xml.selectNodes("//problem");
+				List<Node> nlc = xml.selectNodes("guide/climb");
+				List<Node> nlp = xml.selectNodes("guide/problem");
 				
 				List<Node> nl = nlc;
 				

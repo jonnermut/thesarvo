@@ -5,9 +5,6 @@
 Misc
 - Reorder not saving every button click properly
 - 'extra page' stuff on image legend not working. Maybe get rid of this
-
-- Northern buttress - graph says 76 routes, is actually 53!!
-
 - sometimes get edits by 'anonymous' users
 - editing a stale page can overwrite newer edits - need to check versions etc
 
@@ -23,6 +20,7 @@ Misc
 - text boxes lose their line breaks
 
 ======= Maps =========
+- labels & links for drawing objects
 - default view port for when no markers
 - Single 'crag' co-ordinate for large scale maps
 - Aggregated map on contents pages
@@ -46,6 +44,7 @@ Misc
 - arrow ends colour get munged by raphael
 - arrow heads
 - autonumbering
+- Northern buttress - graph says 76 routes, is actually 53!!
 
 ======= Deano's ========
 
