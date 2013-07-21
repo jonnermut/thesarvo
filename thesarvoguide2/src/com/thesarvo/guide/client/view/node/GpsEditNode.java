@@ -3,8 +3,6 @@ package com.thesarvo.guide.client.view.node;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.digester.SetNextRule;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;

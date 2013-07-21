@@ -28,7 +28,7 @@
   <inherits name='com.google.gwt.maps.Maps' />
 	-->
 	
-  <inherits name='com.google.gwt.maps.Apis_Google_Maps' />
+  <inherits name='com.google.gwt.maps.Maps' />
   
   <set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>
    <inherits name='com.google.gwt.json.JSON'/>

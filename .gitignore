@@ -2,3 +2,7 @@
 # gwt stuff
 thesarvoguide2/war/WEB-INF/*
 thesarvoguide2/gwt-unitCache/*
+jonProdCopy.sh
+thesarvoguide2/extras
+.gwt-log
+phototopogwt
