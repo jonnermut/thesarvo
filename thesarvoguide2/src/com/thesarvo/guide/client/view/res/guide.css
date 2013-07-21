@@ -137,7 +137,7 @@ padding-top: 2px;
 
 .climb
 {
-	font-family:  FONT;
+	font-family:  FONT !important;;
 	font-size: FONTSIZE  !important;
 	margin-top:8px;
 	margin-bottom:4px;
@@ -162,6 +162,7 @@ padding-top: 2px;
 	text-align: justify;
 	padding: 0px;
 	font-size: FONTSIZE !important;
+	font-family:  FONT !important;
 }
 
 .climbmultitext
@@ -173,6 +174,7 @@ padding-top: 2px;
 	xxposition: absolute;
 	xxleft: 78px;
 	font-size: FONTSIZE !important;
+	font-family:  FONT !important;
 	width: 99%;
 }
 
@@ -191,6 +193,7 @@ padding-top: 2px;
 	vertical-align: top;
 	color: #0000A0;
 	white-space: nowrap;	
+	font-family:  FONT !important;
 }
 
 .climbnum
@@ -201,6 +204,7 @@ padding-top: 2px;
 	font-weight:bold;
 	white-space: nowrap;
 	font-size: FONTSIZE !important;
+	font-family:  FONT !important;
 }
 
 .climbname
@@ -213,6 +217,7 @@ padding-top: 2px;
 	font-weight:bold;
 	white-space: nowrap;
 	font-size: FONTSIZE !important;
+	font-family:  FONT !important;
 }
 
 .climbgrade
@@ -224,6 +229,7 @@ padding-top: 2px;
 	font-weight:bold;
 	white-space: nowrap;
 	font-size: FONTSIZE !important; 
+	font-family:  FONT !important;
 }
 
 
@@ -236,6 +242,7 @@ padding-top: 2px;
 	font-weight:bold; 
 	white-space: nowrap;
 	font-size: FONTSIZE !important;
+	font-family:  FONT !important;
 }
 
 .climbstars
@@ -250,6 +257,7 @@ padding-top: 2px;
 	white-space: nowrap;
 	vertical-align: top;
 	font-size: FONTSIZE !important;
+	font-family:  FONT !important;
 }
 
 
@@ -258,6 +266,7 @@ padding-top: 2px;
 	padding-left:8px;
 	font-size: FONTSIZE !important;
 	white-space: nowrap;
+	font-family:  FONT !important;
 }
 
 

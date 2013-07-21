@@ -7,7 +7,6 @@ GPS
 
 
 Misc
-- Reorder not saving every button click properly
 - 'extra page' stuff on image legend not working. Maybe get rid of this
 - sometimes get edits by 'anonymous' users
 - editing a stale page can overwrite newer edits - need to check versions etc

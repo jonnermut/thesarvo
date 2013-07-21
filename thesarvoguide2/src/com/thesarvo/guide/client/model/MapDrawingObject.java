@@ -31,6 +31,8 @@ public class MapDrawingObject implements GPSConstants
 		super();
 		this.xml = xml;
 		model = new XmlSimpleModel(xml);
+		
+		getPid();
 	}
 
 
@@ -253,6 +255,12 @@ public class MapDrawingObject implements GPSConstants
 			ret = "" + pointId++;
 			setPid( ret );
 			
+		}
+		else
+		{
+			// make sure the max pid is set
+			
+			pointId = Math.max(pointId, model.getInt(PID) );
 		}
 		return ret;
 	}

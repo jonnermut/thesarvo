@@ -67,6 +67,7 @@ import com.google.gwt.xml.client.Node;
 import com.thesarvo.guide.client.geo.CoordinateConversion;
 import com.thesarvo.guide.client.geo.GeoUtil;
 import com.thesarvo.guide.client.model.MapDrawingObject;
+import com.thesarvo.guide.client.phototopo.Console;
 import com.thesarvo.guide.client.util.Logger;
 import com.thesarvo.guide.client.util.StringUtil;
 import com.thesarvo.guide.client.xml.XPath;
@@ -195,12 +196,16 @@ public class MapPanel extends FlowPanel implements GPSConstants
 
 	protected void setupMapWidget()
 	{
+		Console.log("setupMapWidget");
+		
 		// MapOptions mo = MapOptions.newInstance();
 
-		// LatLng center = LatLng.newInstance(49.496675, -102.65625);
+		//LatLng center = LatLng.newInstance(40.74, -73.94);
+		
+		LatLng center = LatLng.newInstance(-42.130, 146.7);
 		MapOptions opts = MapOptions.newInstance();
-		opts.setZoom(4);
-		// opts.setCenter(center);
+		opts.setZoom(7);
+		opts.setCenter(center);
 		opts.setMapTypeId(MapTypeId.HYBRID);
 		
 
@@ -214,10 +219,10 @@ public class MapPanel extends FlowPanel implements GPSConstants
 		map = new MapWidget(opts);
 		
 		
-		map.setWidth("100%");
-		//map.setWidth("800px");
-		map.setHeight(Window.getClientHeight() * 4 / 5 + "px");
-		//map.setHeight("400px");
+		//map.setWidth("100%");
+		map.setWidth("800px");
+		//map.setHeight(Window.getClientHeight() * 4 / 5 + "px");
+		map.setHeight("400px");
 		
 		this.add(map);
 
@@ -231,8 +236,10 @@ public class MapPanel extends FlowPanel implements GPSConstants
 		map.setControls(ControlPosition.RIGHT_BOTTOM, posDiv);
 
 		if (editable)
+		{
 			setupDrawing();
-
+		}
+		
 		updateAllPoints();
 
 		String url = kmlUrl;
@@ -256,6 +263,7 @@ public class MapPanel extends FlowPanel implements GPSConstants
 	
 	void resize()
 	{
+		Console.log("resize()");
 		if (map!= null)
 		{
 			resizeImpl(map.getJso());
@@ -271,14 +279,17 @@ public class MapPanel extends FlowPanel implements GPSConstants
 	public void updateAllPoints()
 	{
 
-		Logger.debug("handlePoints" + drawingObjects);
+		
+		Console.log("updateAllPoints: " + drawingObjects);
 
 		removeOverlays();
+		
+		bounds = null;
 
 		if (map!=null && drawingObjects != null && drawingObjects.size() > 0)
 		{
 
-			bounds = null;
+
 
 			for (MapDrawingObject n : drawingObjects)
 			{
@@ -295,15 +306,34 @@ public class MapPanel extends FlowPanel implements GPSConstants
 						bounds.extend(latlng);
 				}
 			}
+			
 
-			if (bounds != null && map != null)
-			{
-				map.setCenter(bounds.getCenter());
-
-				map.fitBounds(bounds);
-			}
 
 		}
+
+//		if (bounds == null && map != null)
+//		{
+//			LatLng sw = LatLng.newInstance(-43.66, 144.613  );
+//			LatLng ne = LatLng.newInstance(-39.54, 148.62 );
+//			bounds = LatLngBounds.newInstance(sw, ne);
+//		}
+		
+		
+		if (bounds != null && map != null)
+		{
+			map.setCenter(bounds.getCenter());
+
+			map.fitBounds(bounds);
+			
+			if (map.getZoom() > 15)
+				map.setZoom(15);
+		}
+//		else if (map != null)
+//		{
+//			LatLng sw = LatLng.newInstance(-43.66, 144.613  );
+//			map.setCenter(sw);
+//			map.setZoom(12);
+//		}
 	}
 
 	public LatLng updateDrawingObject(MapDrawingObject n)
@@ -733,6 +763,7 @@ public class MapPanel extends FlowPanel implements GPSConstants
 
 	private void setupDrawing()
 	{
+		Console.log("setupMapWidget");
 
 		DrawingControlOptions drawingControlOptions = DrawingControlOptions
 				.newInstance();
