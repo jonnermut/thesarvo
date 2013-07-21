@@ -69,11 +69,15 @@ public class EditControls extends Composite
 	public void onMoveUp(ClickEvent event)
 	{
 		Controller.get().onMove(nw, -1);
+		
+		Window.scrollTo(0, nw.getAbsoluteTop());
 	}
 	
 	@UiHandler("moveDown")
 	public void onMoveDown(ClickEvent event)
 	{
 		Controller.get().onMove(nw, 1);
+		
+		Window.scrollTo(0, nw.getAbsoluteTop());
 	}
 }

@@ -1,6 +1,10 @@
 
 ======= Bugs ========
 
+GPS
+- adding a new GPS block sucks badly
+- Adding new stuff onto map doesnt set the pid properly so they dont show up
+
 
 Misc
 - Reorder not saving every button click properly
@@ -20,6 +24,8 @@ Misc
 - text boxes lose their line breaks
 
 ======= Maps =========
+
+
 - labels & links for drawing objects
 - default view port for when no markers
 - Single 'crag' co-ordinate for large scale maps

@@ -183,7 +183,7 @@ public class GuideView extends FlowPanel
 		this.capturingPanel = capturingPanel;
 	}
 
-	public void moveNode(NodeWrapper nw, int dir)
+	public NodeWrapper moveNode(NodeWrapper nw, int dir)
 	{
 		
 		int wix = guideContainer.getWidgetIndex(nw);
@@ -194,11 +194,22 @@ public class GuideView extends FlowPanel
 		if (newIdx < 0)
 			newIdx = 0;
 		if (newIdx >= guideContainer.getWidgetCount())
-			newIdx = wix;
+			newIdx = guideContainer.getWidgetCount();
 		
 		guideContainer.insert(nw, newIdx);
 		
+		// returns the nodewrapper thats now *after* this one, so we know which xml node to insert before. Null if this is the last one
 		
+//		if (newIdx + 1 <= guideContainer.getWidgetCount())
+//			return (NodeWrapper) guideContainer.getWidget(newIdx + 1);
+//		else
+//			return null;
+		
+		int newSpot = guideContainer.getWidgetIndex(nw);
+		if (newSpot + 1 < guideContainer.getWidgetCount())
+			return (NodeWrapper) guideContainer.getWidget(newSpot + 1);
+		else
+			return null;
 	}
 	
 }

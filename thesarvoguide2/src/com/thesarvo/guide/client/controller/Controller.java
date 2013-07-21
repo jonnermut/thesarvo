@@ -30,6 +30,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.thesarvo.guide.client.application.Application;
 import com.thesarvo.guide.client.model.Guide;
 import com.thesarvo.guide.client.model.NodeType;
+import com.thesarvo.guide.client.phototopo.Console;
 import com.thesarvo.guide.client.util.BrowserUtil;
 import com.thesarvo.guide.client.util.Logger;
 import com.thesarvo.guide.client.util.StringUtil;
@@ -1110,9 +1111,20 @@ public class Controller
 		Node p = n.getParentNode();
 		GuideView gv = getCurrentGuide().getGuideView();
 		
-		gv.moveNode(nw, dir);
+		NodeWrapper newSuccessor = gv.moveNode(nw, dir);
 
+		p.removeChild(n);
+		if (newSuccessor != null)
+		{
+			p.insertBefore(n, newSuccessor.getNode());
+		}
+		else
+		{
+			// at the end
+			p.appendChild(n);
+		}
 		
+		/* This never worked properly because it didnt take into account text nodes that may come up as next sibling etc
 		if (dir < 0)
 		{
 			Node prev = n.getPreviousSibling();
@@ -1120,6 +1132,7 @@ public class Controller
 			{
 				p.removeChild(n);
 				p.insertBefore(n, prev);
+
 			}
 			
 		}
@@ -1136,6 +1149,7 @@ public class Controller
 					p.appendChild(n);
 			}
 		}
+		*/
 		
 		
 		saveAll();

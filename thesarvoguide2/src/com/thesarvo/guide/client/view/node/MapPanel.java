@@ -686,7 +686,7 @@ public class MapPanel extends FlowPanel implements GPSConstants
 	 * public ListTileLayer(CopyrightCollection cc) { super(cc , 9, 19);
 	 * cc.addCopyright(new Copyright(0, LatLngBounds.newInstance(
 	 * LatLng.newInstance(-50, 130), LatLng.newInstance(-30, 150)), 8,
-	 * "© Copyright State of Tasmania")); }
+	 * "ï¿½ Copyright State of Tasmania")); }
 	 * 
 	 * @Override public double getOpacity() { return 1; }
 	 * 
