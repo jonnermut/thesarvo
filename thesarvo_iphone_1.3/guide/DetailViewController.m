@@ -7,25 +7,25 @@
 //
 
 #import "DetailViewController.h"
-
+#import "AppDelegate.h"
+#import "MapViewController.h"
 
 
 @implementation DetailViewController
 
 
-@synthesize detailDescriptionLabel = _detailDescriptionLabel;
-@synthesize masterPopoverController = _masterPopoverController;
-@synthesize webview = _webview;
-@synthesize mapview = _mapview;
-@synthesize showMap;
-@synthesize guideId;
+
+- (AppDelegate*) delegate
+{
+    return (AppDelegate*)[[UIApplication sharedApplication]delegate];
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) 
     {
-        self.showMap = NO;
+        
         //self.title = NSLocalizedString(@"Detail", @"Detail");
     }
     return self;
@@ -43,29 +43,35 @@
 
 #pragma mark - View lifecycle
 
+- (BOOL) isHttp
+{
+    return [self.guideId hasPrefix:@"http"];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
     
-    if (showMap)
+    NSURL* url = [[NSBundle mainBundle] URLForResource:@"index" withExtension:@"html" subdirectory:@"www"];
+    
+    //NSData* data = [NSData dataWithContentsOfURL:url];
+    
+    NSString* str = [NSString stringWithContentsOfURL:url];
+    
+    if (self.isHttp)
     {
-        [self.webview setHidden:YES];
-        [self.mapview setHidden:NO];
-        self.mapview.centerCoordinate = CLLocationCoordinate2DMake(-31.25, 137.5);
+        NSURL* url = [NSURL URLWithString:self.guideId];
+        NSURLRequest* request = [NSURLRequest requestWithURL:url];
+        [self.webview loadRequest:request];
 
     }
     else
     {
-        NSURL* url = [[NSBundle mainBundle] URLForResource:@"index" withExtension:@"html" subdirectory:@"www"];
-        
-        //NSData* data = [NSData dataWithContentsOfURL:url];
-        
-        NSString* str = [NSString stringWithContentsOfURL:url];
-        
         [self.webview loadHTMLString:str baseURL:url];
         //[self.webview loadData:data MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:url];
     }
+    
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 5.0f)
         self.webview.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal;
                    
@@ -74,7 +80,6 @@
 - (void)viewDidUnload
 {
     [self setWebview:nil];
-    [self setMapview:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -125,25 +130,68 @@
     {
         return NO;
     }
+    else if ([scheme isEqualToString:@"ts"])
+    {
+        NSString* command = request.URL.host;
+        NSString* data = request.URL.path;
+        if ([data hasPrefix:@"/"])
+            data = [data substringFromIndex:1];
+        
+        if ([command isEqualToString:@"openImage"])
+        {
+            DetailViewController* dvc = [[DetailViewController alloc] init];
+            dvc.title = [NSString stringWithFormat:@"%@ Topo", self.title];
+            dvc.singleNodeData = data;
+            dvc.guideId = self.guideId;
+            [self.navigationController pushViewController:dvc animated:YES];
+        }
+        
+        if ([command isEqualToString:@"map"])
+        {
+            MapViewController* mvc = [[MapViewController alloc] init];
+            mvc.singleNodeData = data;
+            mvc.title = [NSString stringWithFormat:@"%@ Map", self.title];
+            //dvc.guideId = self.guideId;
+            [self.navigationController pushViewController:mvc animated:YES];
+        }
+        
+        return NO;
+    }
     
     return YES;
 }
+
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
     
 }
 
+
+
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
+    [self.activity stopAnimating];
+    self.activity.hidden = YES;
+    
     NSLog(@"webViewDidFinishLoad: %@", webView);
-    if (self.guideId)
+    if (self.guideId && !self.isHttp)
     {
-        NSString* prefix = @"http%3A%2F%2Fwww.thesarvo.com%2Fconfluence%2Fplugins%2Fservlet%2Fguide%2Fxml%2F";
-        NSString* filename = [NSString stringWithFormat:@"%@%@", prefix, guideId];
-        NSURL* url = [[NSBundle mainBundle] URLForResource:filename withExtension:@"" subdirectory:@"www/data/cache"];
+        NSString* data = @"";
+        BOOL callOut = NO;
         
-        NSError* error;
-        NSString* data = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:&error];
+        if (self.singleNodeData)
+        {
+            callOut = YES;
+            data = self.singleNodeData;
+            if ( [data rangeOfString:@"<guide"].length == 0 )
+            {
+                data = [NSString stringWithFormat:@"<guide>%@</guide>", data];
+            }
+        }
+        else
+        {
+            data = [self.delegate getGuideData: self.guideId];
+        }
         
         //NSLog(@"data = %@", data);
         
@@ -151,7 +199,13 @@
         data = [data stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
         data = [data stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
         
-        NSString* js = [NSString stringWithFormat:@"var guide_pageid='%@'; \n  var guide_xml='%@'; ", guideId, data];
+        NSString* js = [NSString stringWithFormat:@"var guide_pageid='%@'; \n  var guide_xml='%@'; guide_callOut=%@ ;", self.guideId, data, callOut ? @"true" : @"false"];
+        
+        if (self.elementId)
+        {
+            js = [NSString stringWithFormat:@"%@ var guide_showId='%@';", js, self.elementId];
+            
+        }
         
         //NSLog(@"js = %@", data);
 
@@ -163,6 +217,11 @@
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
+    [self.activity stopAnimating];
+    self.activity.hidden = YES;
+    
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Could not load page" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    [alert show];
     
 }
 

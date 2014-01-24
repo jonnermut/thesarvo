@@ -49,9 +49,16 @@ public class ImageNode extends NodeModel
 
 	public String getUrl()
 	{
+		return getUrl(false);
+	}
+	
+	public String getUrl(boolean thumb)
+	{
 		String src = StringUtil.string(getSrc());
 		String width = StringUtil.string(getWidth());
-		src = Controller.get().getAttachmentUrl(src, false, width);
+		
+		
+		src = Controller.get().getAttachmentUrl(src, thumb, width);
 		return src;
 	}
 	

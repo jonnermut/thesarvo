@@ -12,3 +12,16 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
 #endif
+
+
+
+
+#ifndef NDEBUG
+#define NSLog(__FORMAT__, args...) \
+{ NSString* newFormat = [NSString stringWithFormat:@"%s (%s:%i)\n" , __PRETTY_FUNCTION__,__FILE__,__LINE__ ]; \
+newFormat = [newFormat stringByAppendingString:__FORMAT__]; \
+NSLog(newFormat, args); }
+#else
+#define NSLog(x...)
+#endif
+

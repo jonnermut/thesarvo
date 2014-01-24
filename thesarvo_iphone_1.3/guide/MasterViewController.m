@@ -10,6 +10,7 @@
 
 #import "DetailViewController.h"
 #import "AppDelegate.h"
+#import "IndexEntry.h"
 
 @implementation MasterViewController 
 
@@ -37,17 +38,85 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
+#pragma mark UISearchDisplayDelegate
+
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
+//    if (searchString && [searchString length] > 2)
+//    {
+//        return YES;
+//    }
+//    else
+//    {
+//        self.searchResults = nil;
+//        return NO;
+//    }
+    
     if (searchString && [searchString length] > 1)
     {
-        return YES;
+        if (self.searching)
+            self.searchAgain = YES;
+        else
+        {
+            self.searching = YES;
+            self.searchAgain = NO;
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [self doSearch];
+            });
+        }
     }
-    else
+    
+    return NO;
+}
+
+- (void) doSearch
+{
+    self.searching = YES;
+    NSString* searchTerm = self.searchDisplayController.searchBar.text;
+    
+    NSMutableArray* results = [NSMutableArray array];
+    
+    int matches = 0;
+    NSDictionary* index = self.delegate.index;
+    for (NSString* text in index)
     {
-        self.searchResults = nil;
-        return NO;
+        NSRange range = [text rangeOfString:searchTerm options:NSCaseInsensitiveSearch];
+        
+        if (range.location != NSNotFound)
+        {
+            // match
+            [results addObject: index[text]];
+            matches++;
+            
+            if (matches < 13 || matches % 10 == 0 )
+            {
+                // update the results as we find them
+                [self updateSearchResults: results withSearchTerm:searchTerm];
+            }
+        }
     }
+    [self updateSearchResults: results withSearchTerm:searchTerm];
+    
+    if (self.searchAgain)
+    {
+        self.searchAgain = NO;
+        [self doSearch];
+    }
+    
+    self.searching = NO;
+    self.searchAgain = NO;
+    
+}
+
+- (void) updateSearchResults: (NSArray*) results withSearchTerm: (NSString*) term
+{
+    __block NSArray* resultsCopy = [NSArray arrayWithArray:results];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.searchResults = resultsCopy;
+        self.searchTerm = term;
+        [self.searchDisplayController.searchResultsTableView reloadData ];
+    });
 }
 
 #pragma mark - View lifecycle
@@ -59,6 +128,9 @@
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
     }
+    
+    self.searchDisplayController.searchResultsDataSource = self;
+    self.searchDisplayController.searchResultsDelegate = self;
 }
 
 - (void)viewDidUnload
@@ -69,9 +141,16 @@
     // e.g. self.myOutlet = nil;
 }
 
+- (void)update
+{
+    self.searchDisplayController.searchBar.hidden = !self.delegate.indexDone;
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self update];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -94,6 +173,8 @@
     return YES;
 }
 
+#pragma mark UITableView
+
 // Customize the number of sections in the table view.
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -102,107 +183,159 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [data count];
+    if (tableView == self.tableView)
+    {
+        return data.count;
+    }
+    else if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        return searchResults.count;
+    }
 }
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        //cell.textLabel.font.pointSize = 10;
-        
-    }
-
-    NSDictionary* cellData = (NSDictionary*) [data objectAtIndex:indexPath.row];
-    
-    /*
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) 
+    if (tableView == self.tableView)
     {
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }*/
-    NSString* viewId = [cellData objectForKey:@"viewId"];
-    
-    cell.accessoryType = viewId ? UITableViewCellAccessoryDetailDisclosureButton : UITableViewCellAccessoryNone;
-    
-    // Configure the cell.
-    cell.textLabel.text = [cellData objectForKey:@"text"];
-    cell.textLabel.adjustsFontSizeToFitWidth = YES;
-    int lev = 0;
-    NSString* level = [cellData objectForKey:@"level"];
-    if (level)
-    {
-        lev = [level intValue] -1;
         
+        static NSString *CellIdentifier = @"Cell";
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil)
+        {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+        
+        if (indexPath.row < data.count)
+        {
+            NSDictionary* cellData = (NSDictionary*) [data objectAtIndex:indexPath.row];
+        
+            
+            /*
+             if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+             {
+             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+             }*/
+            NSString* viewId = [cellData objectForKey:@"viewId"];
+            
+            cell.accessoryType = viewId ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+            
+            // Configure the cell.
+            cell.textLabel.text = [cellData objectForKey:@"text"];
+            cell.textLabel.adjustsFontSizeToFitWidth = YES;
+            int lev = 0;
+            NSString* level = [cellData objectForKey:@"level"];
+            if (level)
+            {
+                lev = [level intValue] -1;
+                
+            }
+            cell.textLabel.font = [UIFont systemFontOfSize:18-lev*2];
+            cell.indentationLevel = lev;
+            
+            cell.indentationWidth = 25;
+        }
+        
+        return cell;
     }
-    cell.textLabel.font = [UIFont systemFontOfSize:18-lev*2];    
-    cell.indentationLevel = lev;
-    
-    cell.indentationWidth = 25;
-    
-    
-    return cell;
+    else if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        static NSString *CellIdentifier = @"SearchCell";
+        const CGFloat fontSize = 18;
+ 
+        
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil)
+        {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        }
+        
+        UIFont *boldFont = [UIFont boldSystemFontOfSize:cell.textLabel.font.pointSize];
+        NSDictionary *boldattrs = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   boldFont, NSFontAttributeName, nil];
+        
+        if (self.searchResults && indexPath.row < self.searchResults.count)
+        {
+            IndexEntry* entry = self.searchResults[indexPath.row];
+            
+            NSMutableAttributedString *attributedText =
+            [[NSMutableAttributedString alloc] initWithString:entry.text attributes:nil];
+            
+            NSRange match = [entry.text rangeOfString:self.searchTerm options:NSCaseInsensitiveSearch];
+                             
+            if (match.location != NSNotFound)
+            {
+                [attributedText setAttributes:boldattrs range:match];
+            }
+            
+            if ([cell.textLabel respondsToSelector:@selector(setAttributedText:)])
+            {
+                cell.textLabel.attributedText = attributedText;
+            }
+            else
+                cell.textLabel.text = entry.text;
+                             
+            if (entry.elementId)
+            {
+                
+                cell.detailTextLabel.text = entry.viewName;
+            }
+            else
+            {
+                cell.detailTextLabel.text = @"";
+            }
+
+        }
+        return cell;
+    }
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source.
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
-    }   
-}
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+- (AppDelegate*) delegate
 {
+    return (AppDelegate*)[[UIApplication sharedApplication]delegate];
 }
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-	    if (!self.detailViewController) {
-	        self.detailViewController = [[DetailViewController alloc] initWithNibName:@"DetailViewController_iPhone" bundle:nil];
-	    }
-        [self.navigationController pushViewController:self.detailViewController animated:YES];
-    }*/
-    
-    NSDictionary* cellData = (NSDictionary*) [data objectAtIndex:indexPath.row];
-    NSString* viewId = [cellData objectForKey:@"viewId"];
 
-    NSString* title = [cellData objectForKey:@"text"];
+    NSString* viewId;
+    NSString* elementId;
+    NSString* title;
+    
+    if (tableView == self.tableView)
+    {
+        NSDictionary* cellData = (NSDictionary*) [data objectAtIndex:indexPath.row];
+        viewId = [cellData objectForKey:@"viewId"];
+
+        title = [cellData objectForKey:@"text"];
+    }
+    else if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        if (self.searchResults && indexPath.row < self.searchResults.count)
+        {
+            IndexEntry* entry = self.searchResults[indexPath.row];
+            viewId = entry.viewId;
+            title = entry.viewName;
+            elementId = entry.elementId;
+        }
+    }
 
     if (viewId)
-    
-        [(AppDelegate*)[[UIApplication sharedApplication]delegate] showView: viewId withTitle: title];
+    {
+        [self.searchDisplayController.searchBar resignFirstResponder ];
+        
+        [self.delegate showView: viewId
+                      withTitle: title
+                     clearStack:YES
+                  withElementId:elementId];
+        
+        
+        
+    }
 }
 
 @end

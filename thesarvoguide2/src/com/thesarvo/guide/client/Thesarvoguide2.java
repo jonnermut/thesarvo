@@ -96,6 +96,8 @@ public class Thesarvoguide2 implements EntryPoint
 			
 			controller.setViewContainer(rootPanel);
 			controller.setMultiPage(false);
+			controller.setCallOut(getVarGuideCallout());
+			controller.setShowId(getVarShowId());
 		
 			String xml = getVarGuideXml();
 			
@@ -133,6 +135,7 @@ public class Thesarvoguide2 implements EntryPoint
 				
 				//controller.showGuide();
 				rootPanel.add(gv);
+				
 				
 			}
 			else
@@ -191,6 +194,12 @@ public class Thesarvoguide2 implements EntryPoint
 	    	return $wnd.guide_xml;
 	    return null; 
 	  }-*/;
+	  
+	  private native boolean getVarGuideCallout() /*-{
+		if ($wnd.guide_callOut)
+	    	return $wnd.guide_callOut;
+	    return false; 
+	  }-*/;
 
 	  private native boolean getVarGuideAllowEdit() /*-{
 	    if ($wnd.guide_allowEdit)
@@ -222,6 +231,12 @@ public class Thesarvoguide2 implements EntryPoint
 	  private native String getVarGuideUser() /*-{
 	    if ($wnd.guide_user)
 	    	return $wnd.guide_user;
+	    return null; 
+	  }-*/;
+	  
+	  private native String getVarShowId() /*-{
+	    if ($wnd.guide_showId)
+	    	return $wnd.guide_showId;
 	    return null; 
 	  }-*/;
 }

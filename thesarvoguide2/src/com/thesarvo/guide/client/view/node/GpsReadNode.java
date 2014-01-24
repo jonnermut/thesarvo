@@ -1,23 +1,24 @@
 package com.thesarvo.guide.client.view.node;
 
+import static com.thesarvo.guide.client.util.StringUtil.isEmpty;
+import static com.thesarvo.guide.client.util.StringUtil.isNotEmpty;
+
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.EditTextCell;
-import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.IdentityColumn;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Widget;
@@ -25,18 +26,12 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.gwt.xml.client.Element;
-import com.google.gwt.xml.client.Node;
-import com.sun.corba.se.pept.transport.ContactInfo;
-import com.thesarvo.guide.client.Thesarvoguide2;
 import com.thesarvo.guide.client.controller.Controller;
 import com.thesarvo.guide.client.geo.CoordinateConversion;
 import com.thesarvo.guide.client.geo.CoordinateConversion.UTM;
 import com.thesarvo.guide.client.geo.GeoUtil;
-import com.thesarvo.guide.client.geo.Point;
 import com.thesarvo.guide.client.model.MapDrawingObject;
 import com.thesarvo.guide.client.util.BrowserUtil;
-import com.thesarvo.guide.client.util.StringUtil;
-import static com.thesarvo.guide.client.util.StringUtil.*;
 import com.thesarvo.guide.client.xml.XPath;
 import com.thesarvo.guide.client.xml.XmlSimpleModel;
 
@@ -54,6 +49,9 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 
 	@UiField
 	Anchor googleEarthAnchor;
+	
+	@UiField
+	Button mobileButton;
 
 	@UiField
 	MapPanel mapPanel;
@@ -123,12 +121,31 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 				+ Controller.get().getGuideId());
 
 		mapButton2.setVisible(false);
+		
+		boolean mobileApp = Controller.get().isMobileApp();
+		if (mobileApp)
+		{
+			googleEarthAnchor.setVisible(false);
+			mobileButton.setVisible(true);
+			mapPanel.setVisible(false);
+			linksDiv.getStyle().setTextAlign(TextAlign.RIGHT);
+		}
+		else
+		{
+		
+			mapPanel.setKmlUrl(kmlUrl);
+			// mapPanel.setPoints(nodes);
+			setupMapDrawingObjects();
+			mapPanel.init(mapDrawingObjects);
+		}
 
-		mapPanel.setKmlUrl(kmlUrl);
-		// mapPanel.setPoints(nodes);
-		setupMapDrawingObjects();
-		mapPanel.init(mapDrawingObjects);
-
+	}
+	
+	@UiHandler("mobileButton")
+	public void onMobileOpenClick(ClickEvent event)
+	{
+		String xml = getModel().getXml().toString();
+		Controller.get().sendCommandToApp("map", xml);
 	}
 	
 	private void setupMapDrawingObjects()
@@ -256,37 +273,48 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 		Column<XmlSimpleModel, String> descColumn = new BoundColumn(editable,
 				DESCRIPTION);
 		cellTable2.setColumnWidth(descColumn, 30, Unit.PCT);
-		cellTable2.addColumn(descColumn, "Description");
+		String desc = "Description";
+		if (BrowserUtil.isMobileBrowser())
+		{
+			cellTable2.setColumnWidth(descColumn, 20, Unit.PCT);
+			desc = "Desc";
+		}
+		
+		cellTable2.addColumn(descColumn, desc);
 
-		Column<XmlSimpleModel, String> zoneColumn = new BoundColumn(editable,
-				ZONE);
-		cellTable2.setColumnWidth(zoneColumn, 5, Unit.PCT);
-		cellTable2.addColumn(zoneColumn, "UTM Zone");
-
-		Column<XmlSimpleModel, String> eastingColumn = new BoundColumn(
-				editable, EASTING);
-		cellTable2.setColumnWidth(eastingColumn, 10, Unit.PCT);
-		cellTable2.addColumn(eastingColumn, "UTM Easting");
-
-		Column<XmlSimpleModel, String> northingColumn = new BoundColumn(
-				editable, NORTHING);
-		cellTable2.setColumnWidth(northingColumn, 10, Unit.PCT);
-		cellTable2.addColumn(northingColumn, "UTM Northing");
-
-		Column<XmlSimpleModel, String> heightColumn = new BoundColumn(editable,
-				HEIGHT);
-		cellTable2.setColumnWidth(heightColumn, 6, Unit.PCT);
-		cellTable2.addColumn(heightColumn, "Height");
+		if (!BrowserUtil.isMobileBrowser())
+		{
+		
+			Column<XmlSimpleModel, String> zoneColumn = new BoundColumn(editable,
+					ZONE);
+			cellTable2.setColumnWidth(zoneColumn, 5, Unit.PCT);
+			cellTable2.addColumn(zoneColumn, "UTM Zone");
+	
+			Column<XmlSimpleModel, String> eastingColumn = new BoundColumn(
+					editable, EASTING);
+			cellTable2.setColumnWidth(eastingColumn, 10, Unit.PCT);
+			cellTable2.addColumn(eastingColumn, "UTM Easting");
+	
+			Column<XmlSimpleModel, String> northingColumn = new BoundColumn(
+					editable, NORTHING);
+			cellTable2.setColumnWidth(northingColumn, 10, Unit.PCT);
+			cellTable2.addColumn(northingColumn, "UTM Northing");
+	
+			Column<XmlSimpleModel, String> heightColumn = new BoundColumn(editable,
+					HEIGHT);
+			cellTable2.setColumnWidth(heightColumn, 6, Unit.PCT);
+			cellTable2.addColumn(heightColumn, "Height");
+		}
 
 		Column<XmlSimpleModel, String> latColumn = new BoundColumn(editable,
 				LATITUDE);
 		cellTable2.setColumnWidth(latColumn, 10, Unit.PCT);
-		cellTable2.addColumn(latColumn, "Latitude");
+		cellTable2.addColumn(latColumn, "Lat");
 
 		Column<XmlSimpleModel, String> longColumn = new BoundColumn(editable,
 				LONGITUDE);
 		cellTable2.setColumnWidth(longColumn, 10, Unit.PCT);
-		cellTable2.addColumn(longColumn, "Longitude");
+		cellTable2.addColumn(longColumn, "Long");
 
 	}
 

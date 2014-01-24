@@ -20,9 +20,18 @@
 @property (strong, nonatomic) DetailViewController* detailViewController;
 
 @property (strong, nonatomic) NSArray* views;
+@property (strong, nonatomic) NSDictionary* viewIds;
+@property BOOL indexDone;
+@property (strong, nonatomic) NSDictionary* index;
+@property (strong, nonatomic) NSArray* allGps;
 
-- (void) showView: (NSString*) viewId withTitle: (NSString*) title;
+- (void) showView: (NSString*) viewId
+        withTitle: (NSString*) title
+       clearStack: (BOOL) clearStack
+    withElementId: (NSString*) elementId;
 
 - (BOOL)splitViewController:(UISplitViewController *)svc shouldHideViewController:(UIViewController *)vc inOrientation:(UIInterfaceOrientation)orientation;
+
+- (NSString *) getGuideData: (NSString*) _guideId;
 
 @end

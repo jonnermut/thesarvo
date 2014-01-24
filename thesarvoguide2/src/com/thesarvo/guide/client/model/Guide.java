@@ -6,12 +6,17 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
+import com.thesarvo.guide.client.controller.Controller;
 import com.thesarvo.guide.client.view.GuideView;
 import com.thesarvo.guide.client.view.NodeWrapper;
 import com.thesarvo.guide.client.xml.XmlSimpleModel;
@@ -215,28 +220,61 @@ public class Guide
 		//SetupNodes setupNodesCmd = new SetupNodes();
 		//DeferredCommand.addCommand(setupNodesCmd);
 		
-		for (int i=0;i<nodeList.getLength();i++)
+		NodeWrapper scrollNw = null;
+		
+		Timer t = null;
+		final String showId = Controller.get().getShowId();
+		if (showId != null)
+		{
+			
+			t = new Timer()
+			{
+				
+				@Override
+				public void run()
+				{
+					final NodeWrapper nw = getNodesById().get(showId);
+					if (nw != null)
+					{
+						
+						//Window.alert("Scrolling into view:" + showId);
+						
+						Window.scrollTo(0, nw.getElement().getAbsoluteTop());
+						//nw.getElement().scrollIntoView();
+						//nw.getEditControls().getElement().scrollIntoView();
+						nw.getElement().getStyle().setBackgroundColor("#ffb");
+					}
+					
+				}
+			};
+			t.schedule(500);
+		}
+		
+		int length = nodeList.getLength();
+		for (int i=0;i<length;i++)
 		{
 			final Node n = nodeList.item(i);
 			if (n instanceof Element && n.getNodeType() != Node.TEXT_NODE)
-			{
-				DeferredCommand.addCommand(new Command()
+			{				
+				
+				Scheduler.get().scheduleDeferred(new ScheduledCommand()
 				{
 					@Override
 					public void execute()
-					{
-						
-						
+					{						
 						NodeWrapper nw = createNodeWrapper(n);
 						guideView.addNode(nw);	
 						if (nw.getNodeType() == NodeType.image)
-							deferredUpdates.add(nw);		
+							deferredUpdates.add(nw);	
+
 					}
 				});
 			}
 		}
 		
-		DeferredCommand.addCommand(new Command()
+		
+		
+		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
 			
 			@Override
@@ -248,9 +286,6 @@ public class Guide
 				}
 				
 				//if (isCanEdit() && getUser()!=null && (getUser().equals("jnermut") || getUser().equals("dave") ) )
-				
-
-
 				
 			}
 		});

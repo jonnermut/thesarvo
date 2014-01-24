@@ -10,6 +10,8 @@ import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
@@ -57,8 +59,10 @@ public class Controller
 	private Node currentEditNodeClone = null;
 
 	boolean canEdit;
+	boolean callOut;
 	String user;
 	String servletUrl;
+	String showId = null;
 
 	Map<String, Document> guideXmlCache = new HashMap<String, Document>();
 
@@ -341,11 +345,12 @@ public class Controller
 			// ret = "file:///C:/GuideData/" + URL.encodeComponent(url);
 			String enc = URL.encodeComponent(url);
 			enc = enc.replace("+", "%20");
+			enc = enc.replace("%", "-");
 
 			if (!fromHtml)
-				ret = "../data/cache/" + enc;
+				ret = "../data/" + enc;
 			else
-				ret = "data/cache/" + URL.encodeComponent(enc);
+				ret = "data/" + URL.encodeComponent(enc);
 		}
 		return ret;
 	}
@@ -357,15 +362,24 @@ public class Controller
 
 		String ret = "";
 
-		if (Window.Location.getProtocol().startsWith("file")
-				|| Window.Location.getHost().equals("127.0.0.1:8888"))
+		if ( Window.Location.getProtocol().startsWith("file") ||
+				 Window.Location.getHost().equals("127.0.0.1:8888"))
 		{
-			// hardcoded path for debugging in the GWT debugger
-			ret = "http://www.thesarvo.com/confluence/plugins/servlet/guide/image/"
-					+ getGuideId() + "/" + src;
-
-			if (StringUtil.isNotEmpty(width))
-				ret += "?width=" + width;
+			
+			// hardcoded path for debugging in the GWT debugger & for mobile app
+			
+			if (thumbnail)
+			{
+				ret = "http://www.thesarvo.com/confluence/download/thumbnails/" + getGuideId() + "/" + src;
+			}
+			else
+			{
+				ret = "http://www.thesarvo.com/confluence/plugins/servlet/guide/image/"
+						+ getGuideId() + "/" + src;
+	
+				if (StringUtil.isNotEmpty(width))
+					ret += "?width=" + width;
+			}
 		}
 		else
 		{
@@ -604,6 +618,11 @@ public class Controller
 		else
 			return null;
 
+	}
+	
+	public NodeWrapper getNodeWrapper(String id)
+	{
+		return getCurrentGuide().getNodesById().get(id);
 	}
 
 	/**
@@ -1001,8 +1020,8 @@ public class Controller
 
 	public boolean isMobileApp()
 	{
-		return isMultiPage() && BrowserUtil.isMobileBrowser()
-				&& Window.Location.getProtocol().startsWith("file");
+		//return true;
+		return BrowserUtil.isMobileBrowser() && Window.Location.getProtocol().startsWith("file");
 	}
 
 	public GuideView createGuideView(String id, Document xml)
@@ -1156,4 +1175,43 @@ public class Controller
 		
 	}
 
+	public void sendCommandToApp(String command, String data)
+	{
+		String url = "ts://" + command + "/" + URL.encodePathSegment(data);
+		Window.Location.replace(url);
+	}
+
+	/**
+	 * @return the callOut
+	 */
+	public boolean isCallOut()
+	{
+		return callOut;
+	}
+
+	/**
+	 * @param callOut the callOut to set
+	 */
+	public void setCallOut(boolean callOut)
+	{
+		this.callOut = callOut;
+	}
+
+
+
+	/**
+	 * @return the showId
+	 */
+	public String getShowId()
+	{
+		return showId;
+	}
+
+	/**
+	 * @param showId the showId to set
+	 */
+	public void setShowId(String showId)
+	{
+		this.showId = showId;
+	}
 }

@@ -2,6 +2,7 @@ package com.thesarvo.guide.client.view.node;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -118,10 +119,14 @@ public class HeaderReadNode extends ReadNode
 		};
 		super.init();
 		
+		//introductionTR.getStyle().setDisplay(Display.BLOCK);
+		
 		if (!BrowserUtil.isMobileBrowser())
 		{
 			String graphUrl = Controller.get().getGraphUrl();
 			imageGraph.setUrl( graphUrl );
+			
+			
 		}
 		else
 		{

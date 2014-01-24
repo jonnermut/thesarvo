@@ -12,6 +12,8 @@
 
 #import "DetailViewController.h"
 #import "XMLReader.h"
+#import "IndexEntry.h"
+#import "MapViewController.h"
 
 @implementation AppDelegate
 
@@ -24,7 +26,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    CGRect bounds = [[UIScreen mainScreen] bounds];
+    self.window = [[UIWindow alloc] initWithFrame: bounds];
     
     //NSURL *filePath = [[NSBundle mainBundle] URLForResource:@"config" withExtension:@"xml" ];
     
@@ -35,11 +38,27 @@
     
     
     
-    self.views = [[config objectForKey:@"config"] objectForKey:@"view"];
+    self.views = config[@"config"][@"view"];
     
-    NSLog(@"%@", views);
+    
     
     NSArray* homedata = [[[self.views objectAtIndex:0] objectForKey:@"data"] objectForKey:@"listItem"];
+    
+    self.viewIds = [NSMutableDictionary dictionary];
+    for (NSDictionary* view in views)
+    {
+        for (NSDictionary* listItem in view[@"data"][@"listItem"])
+        {
+            NSString* text = listItem[@"text"];
+            NSString* viewId = listItem[@"viewId" ];
+            
+            if (viewId && text)
+                [self.viewIds setValue:text forKey:viewId];
+        }
+    }
+    
+    NSLog(@"%@", views);
+    NSLog(@"%@", self.viewIds);
     
     // Override point for customization after application launch.
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) 
@@ -47,7 +66,10 @@
         MasterViewController *masterViewController = [[MasterViewController alloc] initWithNibName:@"MasterViewController" bundle:nil];
         self.navigationController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
         
+        self.navigationController.view.frame = self.window.frame;
+        
         self.window.rootViewController = self.navigationController;
+        self.navigationController.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         
         masterViewController.data = homedata;
     } 
@@ -76,17 +98,135 @@
         self.window.rootViewController = self.splitViewController;
     }
     
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    //self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
     //self.navigationController.navigationBar.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:1 alpha:1];
     //self.navigationController.navigationBar.tintColor = [UIColor blueColor];
-    self.detailNavigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+    //self.detailNavigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
     //self.detailNavigationController.navigationBar.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:1 alpha:1];
     
     [self.window makeKeyAndVisible];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self createIndex];
+    });
+    
+    
     return YES;
 }
 
-- (void) showView: (NSString*) viewId withTitle: (NSString*) title
+- (void) createIndex
+{
+    NSMutableDictionary* index = [NSMutableDictionary dictionary];
+    NSMutableArray* allGps = [NSMutableArray array];
+    
+    for (NSString* viewId in self.viewIds)
+    {
+        NSString* viewName = self.viewIds[viewId];
+        
+        // index entry for the view itself
+        IndexEntry* entry = [[IndexEntry alloc]init];
+        entry.viewId = viewId;
+        entry.text = viewName;
+        index[viewName] = entry;
+        
+        if ([viewId hasPrefix:@"guide."])
+        {
+            NSDictionary* guide;
+            {
+                // load the guide xml
+                NSString* xml = [self getGuideData:viewId];
+                // parse it
+                guide = [XMLReader dictionaryForXMLString:xml];
+            }
+            
+            if (guide)
+            {
+                //NSLog(@"%@", guide);
+                NSArray* climbs = guide[@"guide"][@"climb"];
+                if ([climbs.class isSubclassOfClass:NSDictionary.class])
+                {
+                    climbs = @[climbs];
+                }
+                for (NSDictionary* climb in climbs)
+                {
+                    IndexEntry* entry = [[IndexEntry alloc]init];
+                    entry.viewId = viewId;
+                    entry.viewName = viewName;
+                    entry.elementId = climb[@"id"];
+                    
+                    NSString* stars = climb[@"stars"] ? climb[@"stars"] : @"";
+                    stars = [stars stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                    NSString* grade = climb[@"grade"] ? climb[@"grade"] : @"";
+                    NSString* name = climb[@"name"] ? climb[@"name"] : @"";
+                    
+                    NSString* text = [NSString stringWithFormat:@"%@ %@ %@", stars, grade, name];
+                    text = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                    
+                    //NSLog(@"%@", text);
+                    entry.text = text;
+                    index[text] = entry;
+                }
+                
+                NSArray* texts = guide[@"guide"][@"text"];
+                if ([texts.class isSubclassOfClass:NSDictionary.class])
+                    texts = @[texts];
+                
+                for (NSDictionary* text in texts)
+                {
+                    NSString* clazz = text[@"class"];
+                    if (clazz && [clazz hasPrefix:@"h"])
+                    {
+                        //NSLog(@"%@", text);
+                        IndexEntry* entry = [[IndexEntry alloc]init];
+                        entry.viewId = viewId;
+                        entry.viewName = viewName;
+                        entry.elementId = text[@"id"];
+                        NSString* str = text[@"__text"];
+                        str = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                        entry.text = str;
+                        index[str] = entry;
+                        
+                    }
+                }
+                
+                NSArray* gps = guide[@"guide"][@"gps"];
+                if ([gps.class isSubclassOfClass:NSDictionary.class])
+                {
+                    gps = @[gps];
+                }
+                for (NSMutableDictionary* g in gps)
+                {
+                    IndexEntry* entry = [[IndexEntry alloc]init];
+                    entry.viewId = viewId;
+                    entry.viewName = viewName;
+                    entry.elementId = g[@"id"];
+                    
+                    g[@"indexEntry"]= entry;
+                }
+                
+                [allGps addObjectsFromArray:gps];
+
+            }
+        }
+    }
+    NSLog(@"Indexing finished",@"");
+    self.allGps = allGps;
+    self.index = index;
+    self.indexDone = YES;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController* top = self.navigationController.topViewController;
+        if ([top.class isSubclassOfClass:MasterViewController.class])
+        {
+            [(MasterViewController*)top update];
+        }
+    });
+}
+
+- (void) showView: (NSString*) viewId
+        withTitle: (NSString*) title
+       clearStack: (BOOL) clearStack
+    withElementId: (NSString*) elementId
 {
     NSDictionary* view;
     for (NSDictionary* v in self.views)
@@ -100,33 +240,61 @@
      
 
         
-    if ([viewId hasPrefix:@"guide."] || [viewId isEqualToString:@"map"])
+    if ([viewId hasPrefix:@"guide."]
+        || [viewId isEqualToString:@"Map"]
+        || [viewId hasPrefix:@"http"])
     {
-        DetailViewController* newView = [[DetailViewController alloc] initWithNibName:@"DetailViewController" bundle:nil];
+        UIViewController* newView = nil;
         
-        newView.title = title;
         
-        if ([viewId isEqualToString:@"map"])
+        
+        if ([viewId isEqualToString:@"Map"])
         {
-            // TODO - get hold of map data
-            newView.showMap = YES;
+            MapViewController* mvc = [[MapViewController alloc] init];
+            mvc.allGpsNodes = self.allGps;
+            newView = mvc;
+
         }
         else
         {
-            newView.guideId = [viewId substringFromIndex:6];
+            DetailViewController* dvc = [[DetailViewController alloc] initWithNibName:@"DetailViewController" bundle:nil];
+            
+            if ([viewId hasPrefix:@"guide."])
+                viewId = [viewId substringFromIndex:6];
+            
+            dvc.guideId = viewId;
+            
+            if (elementId)
+            {
+                dvc.elementId = elementId;
+            }
+            
+            if (self.splitViewController)
+                dvc.masterPopoverController = self.detailViewController.masterPopoverController;
+            
+            newView = dvc;
         }
+        
+        newView.title = title;
         
         if (self.splitViewController)
         {
             //self.splitViewController.viewControllers = [NSArray arrayWithObjects:self.navigationController, newView, nil];
             
-            self.detailNavigationController.viewControllers = [NSArray arrayWithObject:newView];
+            if (clearStack)
+            {
+                self.detailNavigationController.viewControllers = [NSArray arrayWithObject:newView];
+            }
+            else
+            {
+                [self.detailNavigationController pushViewController:newView animated:YES];
+            }
             
             UIBarButtonItem* bbi = [self.detailViewController.navigationItem leftBarButtonItem];
             if (bbi)
             {
                 [newView.navigationItem setLeftBarButtonItem:bbi];
-                newView.masterPopoverController = self.detailViewController.masterPopoverController;
+                
             }
         }
         else
@@ -208,6 +376,27 @@
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
+}
+
+
+
+
+- (NSString *) getGuideData: (NSString*) _guideId
+{
+    if ([_guideId hasPrefix:@"guide."])
+    {
+        _guideId = [_guideId substringFromIndex:6];
+    }
+    
+    
+    NSString *data;
+    NSString* prefix = @"http-3A-2F-2Fwww.thesarvo.com-2Fconfluence-2Fplugins-2Fservlet-2Fguide-2Fxml-2F";
+    NSString* filename = [NSString stringWithFormat:@"%@%@", prefix, _guideId];
+    NSURL* url = [[NSBundle mainBundle] URLForResource:filename withExtension:@"" subdirectory:@"www/data"];
+    
+    NSError* error;
+    data = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:&error];
+    return data;
 }
 
 @end

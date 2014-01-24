@@ -13,15 +13,16 @@
 
 
 @property (strong, nonatomic) NSString* guideId;
+@property (strong, nonatomic) NSString* elementId;
+@property (strong, nonatomic) NSString* singleNodeData;
 
 @property (strong, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 @property (unsafe_unretained, nonatomic) IBOutlet UIWebView *webview;
 
-@property (unsafe_unretained, nonatomic) IBOutlet MKMapView *mapview;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activity;
 
-@property BOOL showMap;
 
 - (void)configureView;
 

@@ -173,20 +173,7 @@ public class MapPanel extends FlowPanel implements GPSConstants
 
 		loadMapApi();
 
-		/*
-		 * GWT.runAsync(new RunAsyncCallback() {
-		 * 
-		 * @Override public void onSuccess() { Runnable onLoad = new Runnable()
-		 * {
-		 * 
-		 * @Override public void run() { setupMapWidget(); } };
-		 * //Maps.loadMapsApi(
-		 * "ABQIAAAAKsgDQTt0s-n_qBW3HFYtDRT2BVD5EQ4YYKYmRI3vP8GF5xUB5xQIX6hQbBCdEu7mkZMy4YsDGLH7kg"
-		 * , "2.x", false, onLoad); }
-		 * 
-		 * @Override public void onFailure(Throwable reason) {
-		 * Window.setStatus("Failed to load Google Maps"); } });
-		 */
+
 	}
 
 	private native static JavaScriptObject getAerialMapType() /*-{
@@ -196,6 +183,9 @@ public class MapPanel extends FlowPanel implements GPSConstants
 
 	protected void setupMapWidget()
 	{
+		if (map != null)
+			return;
+		
 		Console.log("setupMapWidget");
 		
 		// MapOptions mo = MapOptions.newInstance();
@@ -203,6 +193,8 @@ public class MapPanel extends FlowPanel implements GPSConstants
 		//LatLng center = LatLng.newInstance(40.74, -73.94);
 		
 		LatLng center = LatLng.newInstance(-42.130, 146.7);
+		bounds = LatLngBounds.newInstance(center, center);
+		//bounds.extend(point)
 		MapOptions opts = MapOptions.newInstance();
 		opts.setZoom(7);
 		opts.setCenter(center);
@@ -237,6 +229,15 @@ public class MapPanel extends FlowPanel implements GPSConstants
 
 		if (editable)
 		{
+			
+			
+			if (this.drawingObjects.size() == 0)
+			{
+				final MapDrawingObject point = delegate.createDrawingObject("point");
+				point.setLatLng(center);
+				
+			}
+			
 			setupDrawing();
 		}
 		
@@ -258,7 +259,7 @@ public class MapPanel extends FlowPanel implements GPSConstants
 				resize();
 				return false;
 			}
-		}, 50);
+		}, 100);
 	}
 	
 	void resize()
@@ -267,7 +268,9 @@ public class MapPanel extends FlowPanel implements GPSConstants
 		if (map!= null)
 		{
 			resizeImpl(map.getJso());
-			map.fitBounds(bounds);
+			
+			if (bounds != null)
+				map.fitBounds(bounds);
 		}
 		
 	}

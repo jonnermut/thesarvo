@@ -470,7 +470,7 @@ table.grid > tbody > tr > td
 {
 }
 
-@if user.agent iphone android {
+@if (com.thesarvo.guide.client.util.BrowserUtil.isMobileBrowser()) {
 .tsleftcell
 {
 	display:block;

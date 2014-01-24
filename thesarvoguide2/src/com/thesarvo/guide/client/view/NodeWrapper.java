@@ -73,7 +73,10 @@ public class NodeWrapper extends FlowPanel
 		this.addHandler(ch, ClickEvent.getType());
 	}
 	
-
+	public XmlSimpleModel getModel()
+	{
+		return readNode.getModel();
+	}
 	
 	public EditNode getEditNode()
 	{
@@ -272,7 +275,7 @@ public class NodeWrapper extends FlowPanel
 		getEditControls().setEditing(editing);
 	}
 
-	private EditControls getEditControls()
+	public EditControls getEditControls()
 	{
 
 		return editControls;

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
@@ -33,6 +35,7 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -590,19 +593,36 @@ public class PhotoTopo extends FlowPanel
 	public void redraw()
 	{
 
-		for (Route r : this.getRoutes().values())
+		for (Route route : this.getRoutes().values())
 		{
-
-			r.redraw();
-
-			// dirty hack? should be inside the route object
-			if (r.getPoints() != null && r.getPoints().size() > 0)
+			final Route r = route;
+			
+			// do the redraws on the UI loop so as to not block the drawing of the UI incrementally on slow devices
+			Scheduler.get().scheduleDeferred(new ScheduledCommand()
 			{
-				r.select(null); // select them all to flush the outline z-index
-				r.getPoints().get(0).updateLabelPosition();
-			}
+				public void execute()
+				{
+					r.redraw();
+
+					// dirty hack? should be inside the route object
+					if (r.getPoints() != null && r.getPoints().size() > 0)
+					{
+						r.select(null); // select them all to flush the outline z-index
+						r.getPoints().get(0).updateLabelPosition();
+					}
+					
+				}
+			});
+
 		}
-		this.selectRoute(null, false); // select nothing
+		Scheduler.get().scheduleDeferred(new ScheduledCommand()
+		{
+			public void execute()
+			{
+				selectRoute(null, false); // select nothing
+			}
+		});
+		
 	};
 
 	/**

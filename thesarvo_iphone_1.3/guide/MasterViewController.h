@@ -15,7 +15,12 @@
 @property (strong, nonatomic) DetailViewController *detailViewController;
 @property (strong, nonatomic) NSArray* data;
 @property (strong, nonatomic) NSArray* searchResults;
+@property (strong, nonatomic) NSString* searchTerm;
 @property (strong, nonatomic) IBOutlet UISearchDisplayController *searchDisplayController;
 
+@property BOOL searching;
+@property BOOL searchAgain;
+
+- (void)update;
 
 @end

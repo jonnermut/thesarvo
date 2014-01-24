@@ -6,7 +6,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -17,6 +19,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -73,19 +76,82 @@ public class ImageReadNode extends ReadNode
 		flowPanel.clear();
 		
 		
-		ImageNode imageNode = new ImageNode(getModel());
+		final ImageNode imageNode = new ImageNode(getModel());
 			
 		boolean allowEdit = false;
 		
 		
-		createPhotoTopo(imageNode, flowPanel, allowEdit);
-
-		/*
-		if (BrowserUtil.isMobileBrowser())
+		
+		boolean mobileTopo = Controller.get().isMobileApp() && !Controller.get().isCallOut();
+		
+		//mobileTopo = true;
+		
+		if (mobileTopo)
 		{
-			smallImage();
+			//smallImage();
 			thumb=true;
 			
+			Hyperlink link = new Hyperlink();
+			
+			final String url = imageNode.getUrl(true);
+			
+			Image image = new Image(url);
+			image.getElement().getStyle().setDisplay(Display.BLOCK);
+			image.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+			
+			link.getElement().appendChild(image.getElement());
+			link.setStyleName("imgBtnLink");
+			link.getElement().getStyle().setBorderWidth(1, Unit.PX);
+			
+			String title = "Open Topo";
+			if (imageNode.getLegend() && imageNode.getLegendTitle() != null && imageNode.getLegendTitle().length() > 0)
+				title += " - " + imageNode.getLegendTitle();
+			title += " ▶";
+			
+			link.setText(title);
+			flowPanel.add(link);
+			
+			
+			//Label l = new Label(url);
+			//flowPanel.add(l);
+			
+
+			
+			link.addClickHandler(new ClickHandler()
+			{
+				
+				@Override
+				public void onClick(ClickEvent event)
+				{
+					//Window.alert("URL:" + url);
+					//Window.alert("hello!");
+					//String xml = ;
+					
+					String imgXml = "<guide>" + getModel().getXml().toString();
+					List<String> list = imageNode.getLegendValues();
+					
+					for (String id: list)
+					{
+						//String id = (String) sm.get(".");
+						com.google.gwt.xml.client.Element e = null;
+						
+						if (id.indexOf(':') < 0)
+							e = (com.google.gwt.xml.client.Element) Controller.get().getNode(id);
+						
+						if (e !=null)
+						{
+							imgXml += e.toString();
+						}
+					}
+					final String xml = imgXml + "</guide>";
+					
+					
+					//Window.alert("xml=" + xml);
+					Controller.get().sendCommandToApp("openImage", xml);
+				}
+			});
+			
+			/*
 			imageTouchPanel.getElement().getStyle().setPadding(5, Unit.PX);
 			imageTouchPanel.getTouchManager().initTouchTracking();
 			
@@ -108,8 +174,12 @@ public class ImageReadNode extends ReadNode
 					thumb = !thumb;
 				}
 			});
+			*/
 		}
-		*/
+		else
+		{
+			createPhotoTopo(imageNode, flowPanel, allowEdit);
+		}
 	}
 
 //	private void smallImage()

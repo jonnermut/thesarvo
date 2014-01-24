@@ -96,6 +96,8 @@ public class GuideServlet extends HttpServlet
 			Page p = Service.getPage(id);
 			Attachment att = p.getAttachmentNamed(src);
 			att = (Attachment) att.getLatestVersion();
+			resp.addHeader("LastModified", "" + att.getLastModificationDate().getTime());
+			
 			InputStream is = att.getContentsAsStream();
 			BufferedImage img = ImageIO.read(is);
 

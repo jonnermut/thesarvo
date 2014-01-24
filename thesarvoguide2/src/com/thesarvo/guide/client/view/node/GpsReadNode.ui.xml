@@ -38,7 +38,10 @@
 		<div style='font-size:7pt; margin-bottom:8px' ui:field='linksDiv' >
 
 			<g:Anchor ui:field='googleEarthAnchor' title='Click to download a KML file that will open in Google Earth or can be loaded into your GPS' >Show in Google Earth</g:Anchor>
+		
+			<g:Button ui:field="mobileButton" visible="false" >Open Map ▶</g:Button>
 		</div>
+		
 		
 	</div>
   </g:HTMLPanel>

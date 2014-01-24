@@ -8,8 +8,13 @@ public final class BrowserUtil
 
 	private static Boolean mobileBrowser = null;
 	
+
+	
 	public static final boolean isMobileBrowser()
 	{
+		//return true;
+		
+		
 		if (mobileBrowser == null)
 		{
 			String ua = Navigator.getUserAgent();
@@ -21,6 +26,7 @@ public final class BrowserUtil
 			( (ua.contains("Chrome") || ua.contains("Safari")) && (host.contains("127.0.0.1") || host.contains("192.168"))  );
 		}
 		return mobileBrowser;
+		
 	}
 
 	public static final boolean isAndroid()

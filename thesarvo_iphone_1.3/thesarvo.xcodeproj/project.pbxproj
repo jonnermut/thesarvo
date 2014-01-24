@@ -29,9 +29,26 @@
 		FC83BE281436CF50007192D2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC83BDFF1436CF4F007192D2 /* Foundation.framework */; };
 		FC83BE301436CF50007192D2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FC83BE2E1436CF50007192D2 /* InfoPlist.strings */; };
 		FC83BE331436CF50007192D2 /* guideTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FC83BE321436CF50007192D2 /* guideTests.m */; };
+		FC8EFA1A187BE82B00345427 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FC8EFA18187BE82B00345427 /* icon.png */; };
+		FC8EFA1B187BE82B00345427 /* icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = FC8EFA19187BE82B00345427 /* icon-72.png */; };
 		FCBC849A1499940A0091A8CB /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = FCBC84971499940A0091A8CB /* Default.png */; };
-		FCBC849B1499940A0091A8CB /* icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = FCBC84981499940A0091A8CB /* icon-72.png */; };
-		FCBC849C1499940A0091A8CB /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FCBC84991499940A0091A8CB /* icon.png */; };
+		FCF4E96F1870DAC400B3E219 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCF4E96D1870DAC400B3E219 /* MapViewController.m */; };
+		FCF4E9701870DAC400B3E219 /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FCF4E96E1870DAC400B3E219 /* MapViewController.xib */; };
+		FCF4E9731870FF1C00B3E219 /* MapPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = FCF4E9721870FF1C00B3E219 /* MapPoint.m */; };
+		FCF4E9F718711B7800B3E219 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCF4E9F618711B7800B3E219 /* Images.xcassets */; };
+		FCF4E9FA187388D100B3E219 /* IndexEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = FCF4E9F9187388D100B3E219 /* IndexEntry.m */; };
+		FCFB7CDD187A4A3500EB2618 /* thesarvoAppLogo-120.png in Resources */ = {isa = PBXBuildFile; fileRef = FCFB7CDB187A4A3500EB2618 /* thesarvoAppLogo-120.png */; };
+		FCFB7CDE187A4A3500EB2618 /* thesarvoAppLogo-152.png in Resources */ = {isa = PBXBuildFile; fileRef = FCFB7CDC187A4A3500EB2618 /* thesarvoAppLogo-152.png */; };
+		FCFB7CE5187A7A5400EB2618 /* thesarvoAppLogo-144.png in Resources */ = {isa = PBXBuildFile; fileRef = FCFB7CDF187A7A5400EB2618 /* thesarvoAppLogo-144.png */; };
+		FCFB7CE7187A7A5400EB2618 /* thesarvoAppLogo-76.png in Resources */ = {isa = PBXBuildFile; fileRef = FCFB7CE1187A7A5400EB2618 /* thesarvoAppLogo-76.png */; };
+		FCFB7CE8187A7A5400EB2618 /* thesarvoAppLogo-72.png in Resources */ = {isa = PBXBuildFile; fileRef = FCFB7CE2187A7A5400EB2618 /* thesarvoAppLogo-72.png */; };
+		FCFB7CE9187A7A5400EB2618 /* thesarvoAppLogo-60.png in Resources */ = {isa = PBXBuildFile; fileRef = FCFB7CE3187A7A5400EB2618 /* thesarvoAppLogo-60.png */; };
+		FCFB7CEA187A7A5400EB2618 /* thesarvoAppLogo-57.png in Resources */ = {isa = PBXBuildFile; fileRef = FCFB7CE4187A7A5400EB2618 /* thesarvoAppLogo-57.png */; };
+		FCFB7CEC187A7B1400EB2618 /* thesarvoAppLogo-114.png in Resources */ = {isa = PBXBuildFile; fileRef = FCFB7CEB187A7B1400EB2618 /* thesarvoAppLogo-114.png */; };
+		FCFB7CF1187A8C8C00EB2618 /* thesarvoAppLaunch-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = FCFB7CED187A8C8C00EB2618 /* thesarvoAppLaunch-1024.png */; };
+		FCFB7CF2187A8C8C00EB2618 /* thesarvoAppLaunch-2048.png in Resources */ = {isa = PBXBuildFile; fileRef = FCFB7CEE187A8C8C00EB2618 /* thesarvoAppLaunch-2048.png */; };
+		FCFB7CF3187A8C8C00EB2618 /* thesarvoAppLaunchPhone-960.png in Resources */ = {isa = PBXBuildFile; fileRef = FCFB7CEF187A8C8C00EB2618 /* thesarvoAppLaunchPhone-960.png */; };
+		FCFB7CF4187A8C8C00EB2618 /* thesarvoAppLaunchPhone-1136.png in Resources */ = {isa = PBXBuildFile; fileRef = FCFB7CF0187A8C8C00EB2618 /* thesarvoAppLaunchPhone-1136.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,9 +92,29 @@
 		FC83BE2F1436CF50007192D2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		FC83BE311436CF50007192D2 /* guideTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = guideTests.h; sourceTree = "<group>"; };
 		FC83BE321436CF50007192D2 /* guideTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = guideTests.m; sourceTree = "<group>"; };
+		FC8EFA18187BE82B00345427 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		FC8EFA19187BE82B00345427 /* icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-72.png"; sourceTree = "<group>"; };
 		FCBC84971499940A0091A8CB /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = SOURCE_ROOT; };
-		FCBC84981499940A0091A8CB /* icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-72.png"; sourceTree = SOURCE_ROOT; };
-		FCBC84991499940A0091A8CB /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = SOURCE_ROOT; };
+		FCF4E96C1870DAC400B3E219 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
+		FCF4E96D1870DAC400B3E219 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		FCF4E96E1870DAC400B3E219 /* MapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapViewController.xib; sourceTree = "<group>"; };
+		FCF4E9711870FF1C00B3E219 /* MapPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapPoint.h; sourceTree = "<group>"; };
+		FCF4E9721870FF1C00B3E219 /* MapPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapPoint.m; sourceTree = "<group>"; };
+		FCF4E9F618711B7800B3E219 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = thesarvo/Images.xcassets; sourceTree = "<group>"; };
+		FCF4E9F8187388D100B3E219 /* IndexEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndexEntry.h; sourceTree = "<group>"; };
+		FCF4E9F9187388D100B3E219 /* IndexEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndexEntry.m; sourceTree = "<group>"; };
+		FCFB7CDB187A4A3500EB2618 /* thesarvoAppLogo-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thesarvoAppLogo-120.png"; sourceTree = SOURCE_ROOT; };
+		FCFB7CDC187A4A3500EB2618 /* thesarvoAppLogo-152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thesarvoAppLogo-152.png"; sourceTree = SOURCE_ROOT; };
+		FCFB7CDF187A7A5400EB2618 /* thesarvoAppLogo-144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thesarvoAppLogo-144.png"; sourceTree = SOURCE_ROOT; };
+		FCFB7CE1187A7A5400EB2618 /* thesarvoAppLogo-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thesarvoAppLogo-76.png"; sourceTree = SOURCE_ROOT; };
+		FCFB7CE2187A7A5400EB2618 /* thesarvoAppLogo-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thesarvoAppLogo-72.png"; sourceTree = SOURCE_ROOT; };
+		FCFB7CE3187A7A5400EB2618 /* thesarvoAppLogo-60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thesarvoAppLogo-60.png"; sourceTree = SOURCE_ROOT; };
+		FCFB7CE4187A7A5400EB2618 /* thesarvoAppLogo-57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thesarvoAppLogo-57.png"; sourceTree = SOURCE_ROOT; };
+		FCFB7CEB187A7B1400EB2618 /* thesarvoAppLogo-114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thesarvoAppLogo-114.png"; sourceTree = SOURCE_ROOT; };
+		FCFB7CED187A8C8C00EB2618 /* thesarvoAppLaunch-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thesarvoAppLaunch-1024.png"; sourceTree = "<group>"; };
+		FCFB7CEE187A8C8C00EB2618 /* thesarvoAppLaunch-2048.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thesarvoAppLaunch-2048.png"; sourceTree = "<group>"; };
+		FCFB7CEF187A8C8C00EB2618 /* thesarvoAppLaunchPhone-960.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thesarvoAppLaunchPhone-960.png"; sourceTree = "<group>"; };
+		FCFB7CF0187A8C8C00EB2618 /* thesarvoAppLaunchPhone-1136.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thesarvoAppLaunchPhone-1136.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +145,7 @@
 		FC83BDEE1436CF4F007192D2 = {
 			isa = PBXGroup;
 			children = (
+				FCF4E9F618711B7800B3E219 /* Images.xcassets */,
 				FC30255514936FB900E73DBB /* MapKit.framework */,
 				FC30255314936FAA00E73DBB /* CoreLocation.framework */,
 				FC83BE011436CF4F007192D2 /* guide */,
@@ -142,14 +180,21 @@
 			children = (
 				FC83BE0A1436CF4F007192D2 /* AppDelegate.h */,
 				FC83BE0B1436CF4F007192D2 /* AppDelegate.m */,
-				FC83BE0D1436CF4F007192D2 /* MasterViewController.h */,
-				FC83BE0E1436CF4F007192D2 /* MasterViewController.m */,
 				FC83BE101436CF4F007192D2 /* DetailViewController.h */,
 				FC83BE111436CF4F007192D2 /* DetailViewController.m */,
-				FC83BE131436CF50007192D2 /* MasterViewController.xib */,
-				FC83BE161436CF50007192D2 /* MasterViewController~ipad. blahxib */,
 				FC83BE191436CF50007192D2 /* DetailViewController.xib */,
 				FC83BE1C1436CF50007192D2 /* DetailViewController~ipad blah.xib */,
+				FCF4E9F8187388D100B3E219 /* IndexEntry.h */,
+				FCF4E9F9187388D100B3E219 /* IndexEntry.m */,
+				FCF4E9711870FF1C00B3E219 /* MapPoint.h */,
+				FCF4E9721870FF1C00B3E219 /* MapPoint.m */,
+				FCF4E96C1870DAC400B3E219 /* MapViewController.h */,
+				FCF4E96D1870DAC400B3E219 /* MapViewController.m */,
+				FCF4E96E1870DAC400B3E219 /* MapViewController.xib */,
+				FC83BE0D1436CF4F007192D2 /* MasterViewController.h */,
+				FC83BE0E1436CF4F007192D2 /* MasterViewController.m */,
+				FC83BE131436CF50007192D2 /* MasterViewController.xib */,
+				FC83BE161436CF50007192D2 /* MasterViewController~ipad. blahxib */,
 				FC83BE021436CF4F007192D2 /* Supporting Files */,
 				FC3024EF149307A200E73DBB /* XMLReader.h */,
 				FC3024F0149307A200E73DBB /* XMLReader.m */,
@@ -160,15 +205,27 @@
 		FC83BE021436CF4F007192D2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FC8EFA18187BE82B00345427 /* icon.png */,
+				FC8EFA19187BE82B00345427 /* icon-72.png */,
+				FCFB7CED187A8C8C00EB2618 /* thesarvoAppLaunch-1024.png */,
+				FCFB7CEE187A8C8C00EB2618 /* thesarvoAppLaunch-2048.png */,
+				FCFB7CEF187A8C8C00EB2618 /* thesarvoAppLaunchPhone-960.png */,
+				FCFB7CF0187A8C8C00EB2618 /* thesarvoAppLaunchPhone-1136.png */,
+				FCFB7CEB187A7B1400EB2618 /* thesarvoAppLogo-114.png */,
+				FC3024ED1493054B00E73DBB /* config.xml */,
 				FCBC84971499940A0091A8CB /* Default.png */,
-				FCBC84981499940A0091A8CB /* icon-72.png */,
-				FCBC84991499940A0091A8CB /* icon.png */,
-				FC83BE031436CF4F007192D2 /* thesarvo-Info.plist */,
+				FC3024EA1492DBF900E73DBB /* index.plist */,
 				FC83BE041436CF4F007192D2 /* InfoPlist.strings */,
 				FC83BE071436CF4F007192D2 /* main.m */,
+				FC83BE031436CF4F007192D2 /* thesarvo-Info.plist */,
 				FC83BE091436CF4F007192D2 /* thesarvo-Prefix.pch */,
-				FC3024EA1492DBF900E73DBB /* index.plist */,
-				FC3024ED1493054B00E73DBB /* config.xml */,
+				FCFB7CDB187A4A3500EB2618 /* thesarvoAppLogo-120.png */,
+				FCFB7CDF187A7A5400EB2618 /* thesarvoAppLogo-144.png */,
+				FCFB7CDC187A4A3500EB2618 /* thesarvoAppLogo-152.png */,
+				FCFB7CE4187A7A5400EB2618 /* thesarvoAppLogo-57.png */,
+				FCFB7CE3187A7A5400EB2618 /* thesarvoAppLogo-60.png */,
+				FCFB7CE2187A7A5400EB2618 /* thesarvoAppLogo-72.png */,
+				FCFB7CE1187A7A5400EB2618 /* thesarvoAppLogo-76.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -239,6 +296,11 @@
 			attributes = {
 				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = "Asdeq Labs";
+				TargetAttributes = {
+					FC83BDF81436CF4F007192D2 = {
+						DevelopmentTeam = 8K6T2FHY8E;
+					};
+				};
 			};
 			buildConfigurationList = FC83BDF31436CF4F007192D2 /* Build configuration list for PBXProject "thesarvo" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -264,16 +326,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC83BE061436CF4F007192D2 /* InfoPlist.strings in Resources */,
+				FCFB7CE7187A7A5400EB2618 /* thesarvoAppLogo-76.png in Resources */,
+				FCFB7CEC187A7B1400EB2618 /* thesarvoAppLogo-114.png in Resources */,
 				FC83BE151436CF50007192D2 /* MasterViewController.xib in Resources */,
+				FC8EFA1B187BE82B00345427 /* icon-72.png in Resources */,
 				FC83BE181436CF50007192D2 /* MasterViewController~ipad. blahxib in Resources */,
+				FCF4E9F718711B7800B3E219 /* Images.xcassets in Resources */,
 				FC83BE1B1436CF50007192D2 /* DetailViewController.xib in Resources */,
 				FC83BE1E1436CF50007192D2 /* DetailViewController~ipad blah.xib in Resources */,
+				FCFB7CF2187A8C8C00EB2618 /* thesarvoAppLaunch-2048.png in Resources */,
+				FCFB7CE9187A7A5400EB2618 /* thesarvoAppLogo-60.png in Resources */,
+				FCFB7CE5187A7A5400EB2618 /* thesarvoAppLogo-144.png in Resources */,
 				FC3024EB1492DBF900E73DBB /* index.plist in Resources */,
+				FCFB7CF4187A8C8C00EB2618 /* thesarvoAppLaunchPhone-1136.png in Resources */,
+				FCFB7CEA187A7A5400EB2618 /* thesarvoAppLogo-57.png in Resources */,
 				FC3024EE1493054B00E73DBB /* config.xml in Resources */,
+				FCFB7CF1187A8C8C00EB2618 /* thesarvoAppLaunch-1024.png in Resources */,
+				FCFB7CDD187A4A3500EB2618 /* thesarvoAppLogo-120.png in Resources */,
+				FCFB7CDE187A4A3500EB2618 /* thesarvoAppLogo-152.png in Resources */,
+				FCFB7CE8187A7A5400EB2618 /* thesarvoAppLogo-72.png in Resources */,
+				FCF4E9701870DAC400B3E219 /* MapViewController.xib in Resources */,
+				FC8EFA1A187BE82B00345427 /* icon.png in Resources */,
 				FC302550149366A900E73DBB /* www in Resources */,
 				FCBC849A1499940A0091A8CB /* Default.png in Resources */,
-				FCBC849B1499940A0091A8CB /* icon-72.png in Resources */,
-				FCBC849C1499940A0091A8CB /* icon.png in Resources */,
+				FCFB7CF3187A8C8C00EB2618 /* thesarvoAppLaunchPhone-960.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,9 +384,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCF4E9731870FF1C00B3E219 /* MapPoint.m in Sources */,
+				FCF4E9FA187388D100B3E219 /* IndexEntry.m in Sources */,
 				FC83BE081436CF4F007192D2 /* main.m in Sources */,
 				FC83BE0C1436CF4F007192D2 /* AppDelegate.m in Sources */,
 				FC83BE0F1436CF4F007192D2 /* MasterViewController.m in Sources */,
+				FCF4E96F1870DAC400B3E219 /* MapViewController.m in Sources */,
 				FC83BE121436CF4F007192D2 /* DetailViewController.m in Sources */,
 				FC3024F1149307A200E73DBB /* XMLReader.m in Sources */,
 			);
@@ -440,11 +519,16 @@
 					armv6,
 					"$(ARCHS_STANDARD_32_BIT)",
 				);
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "guide/thesarvo-Prefix.pch";
 				INFOPLIST_FILE = "guide/thesarvo-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = thesarvo;
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -457,12 +541,14 @@
 					armv6,
 					"$(ARCHS_STANDARD_32_BIT)",
 				);
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "guide/thesarvo-Prefix.pch";
 				INFOPLIST_FILE = "guide/thesarvo-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = thesarvo;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";

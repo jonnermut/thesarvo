@@ -10,10 +10,44 @@ namespace GuideDownloader
 {
     class Program
     {
+		static void HandleViewId (XmlAttribute viewId)
+		{
+			String[] split = viewId.Value.Split('.');
+    	    if (viewId.Value.StartsWith("guide.") && split.Length > 1)
+    	    {
+    	        String id = split[1];
+    	        String url = "http://www.thesarvo.com/confluence/plugins/servlet/guide/xml/" + id;
+    	
+    	        string path = GetURL(url);
+    	
+    	        XmlDocument doc = new XmlDocument();
+
+				if (path!=null)
+				{
+        	        doc.Load(path);
+        	
+        	        XmlNodeList images = doc.SelectNodes("//image");
+        	
+        	        foreach (XmlNode image in images)
+        	        {
+        	            String src = GetAttr(image, "src");
+        	            String width = GetAttr(image, "width");
+        	
+        	            String url1 = AttachmentUrl(id, src, false, width);
+        	            String url2 = AttachmentUrl(id, src, true, width);
+        	
+        	            GetURL(url1);
+        	            GetURL(url2);
+        	        }
+				}
+    	    }
+        	
+		}
+        
         static void Main(string[] args)
         {
             XmlDocument config = new XmlDocument();
-            config.Load(@"C:\Users\jnermut.ECLAUS\Documents\My Dropbox\code\thesarvoguide\war\data\config.xml");
+            config.Load(@"/git/thesarvo/thesarvo_iphone_1.3/guide/config.xml");
 
             XmlNodeList nl = config.SelectNodes("//listItem");
 
@@ -23,32 +57,19 @@ namespace GuideDownloader
 
                 if (viewId != null)
                 {
-                    String[] split = viewId.Value.Split('.');
-                    if (split.Length > 1)
-                    {
-                        String id = split[1];
-                        String url = "http://www.thesarvo.com/confluence/plugins/servlet/guide/xml/" + id;
-
-                        GetURL(url);
-
-                        XmlDocument doc = new XmlDocument();
-                        doc.Load(GetSavePath(url));
-
-                        XmlNodeList images = doc.SelectNodes("//image");
-
-                        foreach (XmlNode image in images)
-                        {
-                            String src = GetAttr(image, "src");
-                            String width = GetAttr(image, "width");
-
-                            String url1 = AttachmentUrl(id, src, false, width);
-                            String url2 = AttachmentUrl(id, src, true, width);
-
-                            GetURL(url1);
-                            GetURL(url2);
-                        }
-                    }
-                }
+					for (int i=0;i<3;i++)
+					{
+						try
+						{
+							HandleViewId (viewId);
+							break;
+						}						
+			            catch (Exception e)
+			            {
+			                Console.Out.WriteLine("!!! Error: " + e.ToString() + " retrying try=" + i);
+			            }
+					}
+				}
             }
 
         }
@@ -75,14 +96,14 @@ namespace GuideDownloader
 	        }
         }
 
-        static void GetURL(String url)
+        static string GetURL(String url)
         {
             BinaryReader br = null;
             FileStream fs = null;
-
+			String filepath = GetSavePath(url);
             try
             {
-                String filepath = GetSavePath(url);
+                
 
                 Console.Out.WriteLine("opening " + url + " and saving to " + filepath);
                 HttpWebRequest myReq = (HttpWebRequest)WebRequest.Create(url);
@@ -93,12 +114,46 @@ namespace GuideDownloader
 
                 WebResponse wr = myReq.GetResponse();
 
-                if (wr.ContentLength == 0)
+                if (wr.ContentLength == 0) 
                     throw new Exception("Content length was zero!");
 
+				string lastmod = wr.Headers["LastModified"];
+
+				if (lastmod == null)
+				{
+					lastmod = wr.Headers["ETag"];
+					
+				}
+
+
+				if (lastmod != null && lastmod.Length > 0)
+				{
+					lastmod = lastmod.Replace("\"","");
+					try
+					{
+						long javadt = long.Parse(lastmod);
+						DateTime dt = ConvertJavaMiliSecondToDateTime(javadt);
+
+						if (File.Exists(filepath))
+						{
+							DateTime filedt = File.GetLastWriteTime(filepath);
+							if (filedt.CompareTo(dt) > 0)
+							{
+								Console.Out.WriteLine("Not downloading as it hasnt changed: " + url);
+								wr.Close();
+								return null;
+							}
+						}
+					}
+					catch (Exception e)
+					{}
+				}
+
+				//string expectedlength = wr.Headers["ExpectedLength"];
                 
                 br = new BinaryReader(wr.GetResponseStream());
                 
+				System.IO.File.Delete(filepath);
 
                 byte[] buffer = new Byte[4096];
                 while (true)
@@ -113,11 +168,13 @@ namespace GuideDownloader
                     fs.Write(buffer, 0, count);
 
                 }
+				return filepath;
 
             }
             catch (Exception e)
             {
-                Console.Out.WriteLine("!!! Error: " + e.ToString());
+                Console.Out.WriteLine("!!! Error: " + url + "\n" + e.ToString());
+				//System.IO.File.Delete(filepath);
             }
             finally
             {
@@ -127,13 +184,29 @@ namespace GuideDownloader
                 if (br!=null)
                     br.Close();
             }
+			
+			return null;
         }
 
         private static String GetSavePath(String url)
         {
-            String filepath = @"c:\GuideData\" + Uri.EscapeDataString(url);
+            String filepath = @"/git/thesarvo/thesarvo_iphone_1.3/www/data/" + Uri.EscapeDataString(url).Replace("%","-");
             return filepath;
         }
+
+		public static DateTime ConvertJavaMiliSecondToDateTime(long javaMS)
+
+		{
+
+			DateTime UTCBaseTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+			DateTime dt = UTCBaseTime.Add(new TimeSpan(javaMS *
+
+			TimeSpan.TicksPerMillisecond)).ToLocalTime();
+
+			return dt;
+
+		}
 
     }
 }
