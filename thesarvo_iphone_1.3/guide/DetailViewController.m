@@ -199,7 +199,7 @@
         data = [data stringByReplacingOccurrencesOfString:@"\r" withString:@"\\r"];
         data = [data stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
         
-        NSString* js = [NSString stringWithFormat:@"var guide_pageid='%@'; \n  var guide_xml='%@'; guide_callOut=%@ ;", self.guideId, data, callOut ? @"true" : @"false"];
+        NSString* js = [NSString stringWithFormat:@"var guide_pageid='%@'; \n  var guide_xml='%@'; guide=%@ ;", self.guideId, data, callOut ? @"true" : @"false"];
         
         if (self.elementId)
         {
