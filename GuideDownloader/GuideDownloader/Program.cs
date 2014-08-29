@@ -190,8 +190,19 @@ namespace GuideDownloader
 
         private static String GetSavePath(String url)
         {
-            String filepath = @"/git/thesarvo/thesarvo_iphone_1.3/www/data/" + Uri.EscapeDataString(url).Replace("%","-");
-            return filepath;
+            //String filepath = @"/git/thesarvo/thesarvo_iphone_1.3/www/data/" + Uri.EscapeDataString(url).Replace("%","-");
+            
+			String filename = new Uri (url).Segments.Last ();
+			String ext = ".xml";
+			int idx = filename.LastIndexOf (".");
+			if (idx > -1) {
+				ext = filename.Substring (idx).ToLower();
+			}
+
+			String filepath = @"/git/thesarvo/thesarvo_iphone_1.3/www/data/" + HashFNV1a(url) + ext;
+
+
+			return filepath;
         }
 
 		public static DateTime ConvertJavaMiliSecondToDateTime(long javaMS)
@@ -206,6 +217,29 @@ namespace GuideDownloader
 
 			return dt;
 
+		}
+
+		public static ulong HashFNV1a(string str)
+		{
+			return HashFNV1a( System.Text.Encoding.UTF8.GetBytes(str) );
+		}
+
+		// From https://gist.github.com/rasmuskl/3786618
+		// FNV-1a (64-bit) non-cryptographic hash function.
+		// Adapted from: http://github.com/jakedouglas/fnv-java
+		public static ulong HashFNV1a(byte[] bytes)
+		{
+			const ulong fnv64Offset = 14695981039346656037;
+			const ulong fnv64Prime = 0x100000001b3;
+			ulong hash = fnv64Offset;
+		 
+			for (var i = 0; i < bytes.Length; i++)
+			{
+				hash = hash ^ bytes[i];
+				hash *= fnv64Prime;
+			}
+		 
+			return hash;
 		}
 
     }
