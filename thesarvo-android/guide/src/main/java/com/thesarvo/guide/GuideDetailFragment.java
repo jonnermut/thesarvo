@@ -19,8 +19,11 @@ import com.google.common.io.Files;
 
 import org.apache.commons.io.IOUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -123,7 +126,7 @@ public class GuideDetailFragment extends Fragment
                 guideData = guideData.replace("'", "\\'");
 
                 StringBuilder sb = new StringBuilder();
-                sb.append("var guide_pageid='").append(viewId).append("';\n");
+                sb.append("var guide_pageid='").append(getGuideId(viewId)).append("';\n");
                 sb.append("var guide_xml='").append(guideData).append("';\n");
 
 
@@ -202,23 +205,86 @@ public class GuideDetailFragment extends Fragment
 
     }
 
+    public String convertToCachedFilename(String url)
+    {
+        String ret = url;
+
+
+        String path = url;
+        if (path.lastIndexOf('/') > 0)
+            path = path.substring(path.lastIndexOf('/'));
+        if (path.lastIndexOf('?') >= 0)
+            path = path.substring(0, path.lastIndexOf('?') - 1 );
+
+        String ext = ".xml";
+        int idx = path.lastIndexOf(".");
+        if (idx > -1)
+        {
+            ext = path.substring(idx);
+        }
+        String enc = fnv1a_64(url) + ext.toLowerCase();
+
+
+
+        return enc;
+    }
+
+    private static final BigInteger INIT64  = new BigInteger("cbf29ce484222325", 16);
+    private static final BigInteger PRIME64 = new BigInteger("100000001b3",      16);
+    private static final BigInteger MOD64   = new BigInteger("2").pow(64);
+
+    public BigInteger fnv1a_64(String data)
+    {
+        try
+        {
+            return fnv1a_64( data.getBytes("UTF-8"));
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return BigInteger.ZERO;
+        }
+    }
+
+    public BigInteger fnv1a_64(byte[] data)
+    {
+        BigInteger hash = INIT64;
+
+        for (byte b : data)
+        {
+            hash = hash.xor(BigInteger.valueOf((int) b & 0xff));
+            hash = hash.multiply(PRIME64).mod(MOD64);
+        }
+
+        return hash;
+    }
+
+
+
 
     public String getGuideData(String guideId)
     {
         //String prefix = "file:///android_asset/www/data/http-3A-2F-2Fwww.thesarvo.com-2Fconfluence-2Fplugins-2Fservlet-2Fguide-2Fxml-2F";
 
-        String prefix = "www/data/http-3A-2F-2Fwww.thesarvo.com-2Fconfluence-2Fplugins-2Fservlet-2Fguide-2Fxml-2F";
+        //String prefix = "www/data/http-3A-2F-2Fwww.thesarvo.com-2Fconfluence-2Fplugins-2Fservlet-2Fguide-2Fxml-2F";
+        String urlPrefix = "http://www.thesarvo.com/confluence/plugins/servlet/guide/xml/";
 
-        String id = guideId;
-        if (id.startsWith("guide."))
-            id = id.substring(6);
 
-        //File file = new File(prefix+ id);
+        String id = getGuideId(guideId);
+
+        /*
+        String url = urlPrefix + id;
+        String filename = convertToCachedFilename(url);
+
+        //File file = new File("www/data/"+ filename);
+        */
+        String filename = id + ".xml";
 
         String ret = null;
         try
         {
-            InputStream is = getActivity().getAssets().open(prefix + id);
+            InputStream is = getActivity().getAssets().open("www/data/"+ filename);
             ret = IOUtils.toString(is, Charsets.UTF_8);
         }
         catch (IOException e)
@@ -228,6 +294,14 @@ public class GuideDetailFragment extends Fragment
         }
 
         return ret;
+    }
+
+    private String getGuideId(String guideId)
+    {
+        String id = guideId;
+        if (id.startsWith("guide."))
+            id = id.substring(6);
+        return id;
     }
 
     public class WVClient extends WebViewClient

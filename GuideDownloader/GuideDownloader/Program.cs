@@ -18,7 +18,7 @@ namespace GuideDownloader
     	        String id = split[1];
     	        String url = "http://www.thesarvo.com/confluence/plugins/servlet/guide/xml/" + id;
     	
-    	        string path = GetURL(url);
+				string path = GetURL(url, "" + id + ".xml");
     	
     	        XmlDocument doc = new XmlDocument();
 
@@ -36,8 +36,8 @@ namespace GuideDownloader
         	            String url1 = AttachmentUrl(id, src, false, width);
         	            String url2 = AttachmentUrl(id, src, true, width);
         	
-        	            GetURL(url1);
-        	            GetURL(url2);
+						GetURL(url1, "" + id + "-" + src.ToLower());
+						GetURL(url2, "" + id + "-t-" + src.ToLower());
         	        }
 				}
     	    }
@@ -96,11 +96,11 @@ namespace GuideDownloader
 	        }
         }
 
-        static string GetURL(String url)
+		static string GetURL(String url, String filename)
         {
             BinaryReader br = null;
             FileStream fs = null;
-			String filepath = GetSavePath(url);
+			String filepath = GetSavePath(url, filename);
             try
             {
                 
@@ -188,10 +188,11 @@ namespace GuideDownloader
 			return null;
         }
 
-        private static String GetSavePath(String url)
+		private static String GetSavePath(String url, String filename)
         {
             //String filepath = @"/git/thesarvo/thesarvo_iphone_1.3/www/data/" + Uri.EscapeDataString(url).Replace("%","-");
             
+			/*
 			String filename = new Uri (url).Segments.Last ();
 			String ext = ".xml";
 			int idx = filename.LastIndexOf (".");
@@ -203,6 +204,8 @@ namespace GuideDownloader
 
 
 			return filepath;
+			*/
+			return @"/git/thesarvo/thesarvo_iphone_1.3/www/data/" + filename;
         }
 
 		public static DateTime ConvertJavaMiliSecondToDateTime(long javaMS)

@@ -2,6 +2,10 @@ package com.thesarvo.guide.client.controller;
 
 import static com.thesarvo.guide.client.util.StringUtil.notNull;
 
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,8 +14,6 @@ import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
@@ -32,14 +34,12 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.thesarvo.guide.client.application.Application;
 import com.thesarvo.guide.client.model.Guide;
 import com.thesarvo.guide.client.model.NodeType;
-import com.thesarvo.guide.client.phototopo.Console;
 import com.thesarvo.guide.client.util.BrowserUtil;
 import com.thesarvo.guide.client.util.Logger;
 import com.thesarvo.guide.client.util.StringUtil;
 import com.thesarvo.guide.client.util.WidgetUtil;
 import com.thesarvo.guide.client.view.GuideView;
 import com.thesarvo.guide.client.view.NodeWrapper;
-import com.thesarvo.guide.client.view.node.BoundListBox;
 import com.thesarvo.guide.client.xml.XPath;
 import com.thesarvo.guide.client.xml.XmlService;
 import com.thesarvo.guide.client.xml.XmlSimpleModel;
@@ -336,21 +336,82 @@ public class Controller
 		Window.scrollTo(0, nw.getAbsoluteTop() - 20);
 	}
 
-	public String convertToCached(String url, boolean fromHtml)
+	  
+	private static final BigInteger INIT64  = new BigInteger("cbf29ce484222325", 16);
+	private static final BigInteger PRIME64 = new BigInteger("100000001b3",      16);	 
+	private static final BigInteger MOD64   = new BigInteger("2").pow(64);
+	
+	public BigInteger fnv1a_64(String data)
+	{
+		try
+		{
+			return fnv1a_64( data.getBytes("UTF-8"));
+		}
+		catch (UnsupportedEncodingException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return BigInteger.ZERO;
+		}
+	}
+	
+	public BigInteger fnv1a_64(byte[] data)
+	{
+		BigInteger hash = INIT64;
+
+		for (byte b : data)
+		{
+			hash = hash.xor(BigInteger.valueOf((int) b & 0xff));
+			hash = hash.multiply(PRIME64).mod(MOD64);
+		}
+
+		return hash;
+	}
+	
+	public String convertToCached(String url, String src, boolean thumbnail , boolean fromHtml)
 	{
 		String ret = url;
 
 		if (Window.Location.getProtocol().startsWith("file:"))
 		{
 			// ret = "file:///C:/GuideData/" + URL.encodeComponent(url);
+			/*
 			String enc = URL.encodeComponent(url);
 			enc = enc.replace("+", "%20");
 			enc = enc.replace("%", "-");
-
+			*/
+			/*
+			String path = url;
+			if (path.lastIndexOf('/') > 0)
+				path = path.substring(path.lastIndexOf('/'));
+			if (path.lastIndexOf('?') >= 0)
+				path = path.substring(0, path.lastIndexOf('?') - 1 );
+			
+			String ext = ".xml";
+			int idx = path.lastIndexOf(".");
+			if (idx > -1)
+			{
+				ext = path.substring(idx);
+			}
+			String enc = fnv1a_64(url) + ext.toLowerCase();
+			
 			if (!fromHtml)
 				ret = "../data/" + enc;
 			else
 				ret = "data/" + URL.encodeComponent(enc);
+				*/
+			String filename = "" + getGuideId();
+			if (thumbnail)
+				filename += "-t-";
+			else
+				filename += "-";
+			
+			filename += src.toLowerCase();
+			
+			if (!fromHtml)
+				ret = "../data/" + filename;
+			else
+				ret = "data/" + URL.encodeComponent(filename);
 		}
 		return ret;
 	}
@@ -393,7 +454,7 @@ public class Controller
 			}
 		}
 
-		return convertToCached(ret, true);
+		return convertToCached(ret, src, thumbnail, true);
 
 	}
 
