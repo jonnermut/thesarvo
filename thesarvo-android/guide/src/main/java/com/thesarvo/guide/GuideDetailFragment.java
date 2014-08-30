@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -129,6 +130,11 @@ public class GuideDetailFragment extends Fragment
                 sb.append("var guide_pageid='").append(getGuideId(viewId)).append("';\n");
                 sb.append("var guide_xml='").append(guideData).append("';\n");
 
+                if (singleNodeData != null)
+                {
+                    sb.append("var guide_callOut=true;\n");
+
+                }
 
 
                 //sb.append("var guide_callout='").append(guideData).append("';\n");
@@ -309,6 +315,7 @@ public class GuideDetailFragment extends Fragment
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url)
         {
+            Log.d("thesarvo", "shouldOverrideUrlLoading: " + url);
             if (url.startsWith("ts"))
             {
                 URI uri = null;
@@ -318,9 +325,12 @@ public class GuideDetailFragment extends Fragment
 
                     String command = uri.getHost();
                     String data = uri.getPath();
+                    if (data.startsWith("/"))
+                        data = data.substring(1);
 
                     if ("openImage".equals(command))
                     {
+                        Log.d("thesarvo", "openImage");
                         GuideListActivity.get().showDetail(GuideDetailFragment.this.viewId, data, true);
                     }
                 }
