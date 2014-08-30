@@ -119,28 +119,32 @@ public class GuideDetailFragment extends Fragment
                 else
                     guideData = getGuideData(viewId);
 
-                if (guideData.indexOf("<guide") < 0)
-                    guideData = "<guide>" + guideData + "</guide>";
-
-                guideData = guideData.replace("\n", "\\n");
-                guideData = guideData.replace("\r", "\\r");
-                guideData = guideData.replace("'", "\\'");
-
-                StringBuilder sb = new StringBuilder();
-                sb.append("var guide_pageid='").append(getGuideId(viewId)).append("';\n");
-                sb.append("var guide_xml='").append(guideData).append("';\n");
-
-                if (singleNodeData != null)
+                if (guideData != null)
                 {
-                    sb.append("var guide_callOut=true;\n");
 
+                    if (guideData.indexOf("<guide") < 0)
+                        guideData = "<guide>" + guideData + "</guide>";
+
+                    guideData = guideData.replace("\n", "\\n");
+                    guideData = guideData.replace("\r", "\\r");
+                    guideData = guideData.replace("'", "\\'");
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("var guide_pageid='").append(getGuideId(viewId)).append("';\n");
+                    sb.append("var guide_xml='").append(guideData).append("';\n");
+
+                    if (singleNodeData != null)
+                    {
+                        sb.append("var guide_callOut=true;\n");
+
+                    }
+
+
+                    //sb.append("var guide_callout='").append(guideData).append("';\n");
+                    String js = sb.toString();
+                    //webview.evaluateJavascript(js, null);
+                    webview.loadUrl("javascript:" + js);
                 }
-
-
-                //sb.append("var guide_callout='").append(guideData).append("';\n");
-                String js = sb.toString();
-                //webview.evaluateJavascript(js, null);
-                webview.loadUrl("javascript:" + js);
             }
         }
 
