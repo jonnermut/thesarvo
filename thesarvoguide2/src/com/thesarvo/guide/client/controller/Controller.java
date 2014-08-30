@@ -411,7 +411,11 @@ public class Controller
 			if (!fromHtml)
 				ret = "../data/" + filename;
 			else
-				ret = "data/" + URL.encodeComponent(filename);
+			{
+				String enc = URL.encodeComponent(filename);
+				enc = enc.replace("+", "%20");
+				ret = "data/" + enc;
+			}
 		}
 		return ret;
 	}
