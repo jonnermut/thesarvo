@@ -1,7 +1,6 @@
 package com.thesarvo.guide;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,15 +11,11 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.TextView;
 
 import com.google.common.base.Charsets;
-import com.google.common.io.CharStreams;
-import com.google.common.io.Files;
 
 import org.apache.commons.io.IOUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -336,6 +331,10 @@ public class GuideDetailFragment extends Fragment
                     {
                         Log.d("thesarvo", "openImage");
                         GuideListActivity.get().showDetail(GuideDetailFragment.this.viewId, data, true);
+                    }
+                    else if("map".equals(command))
+                    {
+                        //map needs to open here as well TODO
                     }
                 }
                 catch (URISyntaxException e)

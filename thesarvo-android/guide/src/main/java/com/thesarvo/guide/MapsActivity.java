@@ -1,23 +1,14 @@
 package com.thesarvo.guide;
 
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 public class MapsActivity extends FragmentActivity {
 
@@ -29,6 +20,8 @@ public class MapsActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -74,7 +67,7 @@ public class MapsActivity extends FragmentActivity {
      */
     private void setUpMap() {
 
-        for(GPSnode gpsNode : getGPSPoints())
+        for(GPSNode gpsNode : getGPSPoints())
         {
             for(Point point : gpsNode.getPoints())
             {
@@ -87,125 +80,14 @@ public class MapsActivity extends FragmentActivity {
         }
     }
 
-    List<GPSnode> GPSPoints = new ArrayList<>();
+    private static List<GPSNode> GPSPoints = new ArrayList<>();
 
-    public List<GPSnode> getGPSPoints()
+    public static List<GPSNode> getGPSPoints()
     {
-        if(GPSPoints.size() == 0)
-        {
-            try
-            {
-                Log.d("GPS List Builder", "Building");
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
-                DocumentBuilder builder = factory.newDocumentBuilder();
-                AssetManager manager = getAssets();
-
-                //load up all "ListItems"
-                for(ViewModel.ListItem listItem : ViewModel.get().getGuideListItems().values())
-                {
-                    //TODO make this better...
-                    String fileName = listItem.getViewId().substring(6) +  ".xml";
-                    //Log.d("GPS List Builder", "Looking at " + "www/data/" + fileName);
-
-                    Document dom = builder.parse(manager.open("www/data/"+fileName));
-
-                    //create the GPS nodes, should only be one but just in case...
-                    for(Element gps : Xml.getElements(dom.getElementsByTagName("gps")))
-                    {
-                        String id = gps.getAttribute("id");
-                        List<Point> points = new ArrayList<>();
-
-                        //Log.d("GPS List Builder", "Building at " + id);
-
-                        for(Element elPoint : Xml.getElements(gps.getElementsByTagName("point")))
-                        {
-                            try
-                            {
-                                Point point = new Point(new LatLng(Double.valueOf(elPoint.getAttribute("latitude")),
-                                        Double.valueOf(elPoint.getAttribute("longitude"))),
-                                        elPoint.getAttribute("description"),
-                                        elPoint.getAttribute("code"));
-
-                                //Log.d("GPS List Builder", "adding " + point.getDescription());
-
-                                points.add(point);
-                            }
-                            catch(NumberFormatException e)
-                            {
-                                e.printStackTrace();
-                                continue;
-                            }
-                        }
-
-                        GPSnode gpsNode = new GPSnode(id, points);
-
-                        GPSPoints.add(gpsNode);
-                    }
-                }
-
-
-            }
-            catch (Throwable t)
-            {
-                t.printStackTrace();
-            }
-
-        }
-
         return GPSPoints;
     }
 
-    public class Point
-    {
-        LatLng latLng;
-        String description;
-        String code;
-
-        public Point(LatLng latLng, String description, String code)
-        {
-            this.latLng = latLng;
-            this.description = description;
-            this.code = code;
-        }
-
-        public LatLng getLatLng()
-        {
-            return latLng;
-        }
-
-        public String getDescription()
-        {
-            return description;
-        }
-
-        public String getCode()
-        {
-            return code;
-        }
-    }
-
-    public class GPSnode
-    {
-        String id;
-        List<Point> points;
 
 
-        public GPSnode(String id, List<Point> point)
-        {
-            this.id = id;
-            this.points = point;
-        }
 
-        public String getId()
-        {
-            return id;
-        }
-
-
-        public List<Point> getPoints()
-        {
-            return points;
-        }
-    }
 }
