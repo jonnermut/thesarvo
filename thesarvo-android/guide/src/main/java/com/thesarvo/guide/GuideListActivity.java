@@ -5,15 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import java.io.InputStream;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 
 /**
  * An activity representing a list of Guides. This activity
@@ -101,6 +92,12 @@ public class GuideListActivity extends FragmentActivity
             showDetail(id, null, false);
 
         }
+        else if(id.startsWith("Map"))
+        {
+            //start the map activity
+            Intent intent = new Intent(this, MapsActivity.class);
+            startActivity(intent);
+        }
         else
         {
             if (mTwoPane)
@@ -172,5 +169,8 @@ public class GuideListActivity extends FragmentActivity
             ft.addToBackStack(null);
         ft.commit();
     }
+
+
+
 
 }

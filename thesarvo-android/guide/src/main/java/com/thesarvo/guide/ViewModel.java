@@ -1,16 +1,8 @@
 package com.thesarvo.guide;
 
-import android.app.Activity;
-
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -78,6 +70,16 @@ public class ViewModel
         {
             return listItems;
         }
+
+        @Override
+        public String toString()
+        {
+            return "ViewDef{" +
+                    "id='" + id + '\'' +
+                    ", type='" + type + '\'' +
+                    ", name='" + name + '\'' +
+                    '}';
+        }
     }
 
 
@@ -132,6 +134,7 @@ public class ViewModel
 
 
     Map<String, ViewDef> views = new LinkedHashMap<>();
+    Map<String, ListItem> guideListItems = new LinkedHashMap<>();
     ViewDef rootView = null;
 
     private static ViewModel instance = new ViewModel();
@@ -168,6 +171,18 @@ public class ViewModel
                     rootView = v;
             }
 
+            for(Element element1 : Xml.getElements(dom.getElementsByTagName("listItem")))
+            {
+                ListItem l = new ListItem(element1);
+
+                if(l.getViewId().startsWith("guide."))
+                {
+                    guideListItems.put(l.getViewId(), l);
+                }
+            }
+
+
+
         }
         catch (Throwable t)
         {
@@ -185,7 +200,8 @@ public class ViewModel
         return rootView;
     }
 
-
-
-
+    public Map<String, ListItem> getGuideListItems()
+    {
+        return guideListItems;
+    }
 }
