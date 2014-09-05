@@ -2,11 +2,14 @@ package com.thesarvo.guide;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.w3c.dom.Element;
+
 /**
  * Created by Karl on 4/09/2014.
  */
 public class Point
 {
+    private boolean valid;
     LatLng latLng;
     String description;
     String code;
@@ -25,6 +28,30 @@ public class Point
         latLng = new LatLng(0.0, 0.0);
     }
 
+    public Point(Element ePoint)
+    {
+        String longitude = ePoint.getAttribute("longitude");
+        String latitude = ePoint.getAttribute("latitude");
+        description = ePoint.getAttribute("description");
+        code = ePoint.getAttribute("code");
+
+        double lon=0, lat=0;
+
+        try
+        {
+            lon = Double.valueOf(longitude);
+            lat = Double.valueOf(latitude);
+            valid = true;
+        }
+        catch (NumberFormatException ex)
+        {
+            ex.printStackTrace();
+
+        }
+
+        LatLng latLng = new LatLng(lat, lon);
+    }
+
     public LatLng getLatLng()
     {
         return latLng;
@@ -39,4 +66,11 @@ public class Point
     {
         return code;
     }
+
+    public boolean isValid()
+    {
+        return valid;
+    }
+
+
 }

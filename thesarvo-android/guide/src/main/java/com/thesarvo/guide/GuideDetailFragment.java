@@ -348,11 +348,14 @@ public class GuideDetailFragment extends Fragment
                     if ("openImage".equals(command))
                     {
                         Log.d("thesarvo", "openImage");
-                        GuideListActivity.get().showDetail(GuideDetailFragment.this.viewId, data, true, null);
+                        GuideListActivity.get().showGuideDetail(GuideDetailFragment.this.viewId, data, true, null);
                     }
                     else if("map".equals(command))
                     {
-                        //map needs to open here as well TODO
+                        //map needs to open here as well
+                        Log.d("thesarvo", "map");
+                        GuideListActivity.get().showMap(data);
+
                     }
                 }
                 catch (URISyntaxException e)

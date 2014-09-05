@@ -137,8 +137,10 @@ public class GuideListActivity extends FragmentActivity
             //start the map activity
             if(indexed)
             {
-                Intent intent = new Intent(this, MapsActivity.class);
-                startActivity(intent);
+                //Intent intent = new Intent(this, MapsActivity.class);
+                //startActivity(intent);
+
+                showMap(null);
             }
             else
             {
@@ -147,32 +149,14 @@ public class GuideListActivity extends FragmentActivity
         }
         else
         {
-            if (mTwoPane)
-            {
-                // In two-pane mode, show the detail view in this activity by
-                // adding or replacing the detail fragment using a
-                // fragment transaction.
-                Bundle arguments = new Bundle();
-                arguments.putString(GuideDetailFragment.ARG_ITEM_ID, id);
-                GuideListFragment fragment = new GuideListFragment();
-                fragment.setArguments(arguments);
-                int guide_list_id = R.id.guide_list;
+            showGuideDetail(id, null, true, null);
 
-                addFragment(guide_list_id, fragment, true);
-
-
-            }
-            else
-            {
-                // FIXME - args not getting through!
-                Intent listIntent = new Intent(this, GuideListActivity.class);
-                listIntent.putExtra(GuideDetailFragment.ARG_ITEM_ID, id);
-                startActivity(listIntent);
-            }
         }
 
 
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -243,6 +227,15 @@ public class GuideListActivity extends FragmentActivity
             args.put(GuideDetailFragment.SINGLE_NODE_DATA, singleNodeData);
 
         showFragment(GuideDetailFragment.class, args, history);
+    }
+
+    public void showMap(String singleNodeData)
+    {
+        Map<String, String> args = new HashMap<>();
+        if (singleNodeData != null)
+            args.put(GuideDetailFragment.SINGLE_NODE_DATA, singleNodeData);
+
+        showFragment(MapsActivity.class, args, true);
     }
 
     public void showFragment( Class<?> fragmentClass, Map<String, String> args, boolean includeInHistory)
@@ -431,36 +424,14 @@ public class GuideListActivity extends FragmentActivity
 
                     List<GPSNode> gpsNodes = MapsActivity.getGPSPoints();
 
-                    for(Element e : Xml.getElements(dom.getElementsByTagName("gps")))
+                    for (Element e : Xml.getElements(dom.getElementsByTagName("gps")))
                     {
                         String id = e.getAttribute("id");
                         List<Point> points = new ArrayList<>();
 
                         for(Element ePoint : Xml.getElements(e.getElementsByTagName("point")))
                         {
-                            Point point;
-
-                            String longitude = ePoint.getAttribute("longitude");
-                            String latitude = ePoint.getAttribute("latitude");
-                            String description = ePoint.getAttribute("description");
-                            String code = ePoint.getAttribute("code");
-
-                            double lon, lat;
-
-                            try
-                            {
-                                lon = Double.valueOf(longitude);
-                                lat = Double.valueOf(latitude);
-                            }
-                            catch (NumberFormatException ex)
-                            {
-                                ex.printStackTrace();
-                                continue;
-                            }
-
-                            LatLng latLng = new LatLng(lat, lon);
-
-                            point = new Point(latLng, description, code);
+                            Point point = new Point(ePoint);
                             points.add(point);
 
                         }

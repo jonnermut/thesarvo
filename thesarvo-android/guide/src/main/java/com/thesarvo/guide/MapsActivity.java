@@ -1,7 +1,11 @@
 package com.thesarvo.guide;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -10,23 +14,44 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity {
+public class MapsActivity extends Fragment
+{
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private View rootView;
+    private String singleNodeData;
 
 
-
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
-        setUpMapIfNeeded();
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        //setContentView(R.layout.activity_maps);
 
+
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        if (getArguments().containsKey(GuideDetailFragment.SINGLE_NODE_DATA))
+        {
+            singleNodeData = getArguments().getString(GuideDetailFragment.SINGLE_NODE_DATA);
+        }
     }
 
     @Override
-    protected void onResume() {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    {
+
+
+        rootView = inflater.inflate(R.layout.activity_maps, container, false);
+
+        setUpMapIfNeeded();
+
+        return rootView;
+    }
+
+    @Override
+    public void onResume() {
         super.onResume();
         setUpMapIfNeeded();
     }
@@ -46,15 +71,23 @@ public class MapsActivity extends FragmentActivity {
      * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
      * method in {@link #onResume()} to guarantee that it will be called.
      */
-    private void setUpMapIfNeeded() {
+    private void setUpMapIfNeeded()
+    {
         // Do a null check to confirm that we have not already instantiated the map.
-        if (mMap == null) {
+        if (mMap == null)
+        {
             // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
-            // Check if we were successful in obtaining the map.
-            if (mMap != null) {
-                setUpMap();
+
+            SupportMapFragment mapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.map);
+
+            if (mapFragment != null)
+            {
+                mMap = mapFragment.getMap();
+                // Check if we were successful in obtaining the map.
+                if (mMap != null)
+                {
+                    setUpMap();
+                }
             }
         }
     }
@@ -65,9 +98,17 @@ public class MapsActivity extends FragmentActivity {
      * <p>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
-    private void setUpMap() {
+    private void setUpMap()
+    {
 
-        for(GPSNode gpsNode : getGPSPoints())
+        List<GPSNode> gpsPoints = getGPSPoints();
+
+        if (singleNodeData != null)
+        {
+
+        }
+
+        for(GPSNode gpsNode : gpsPoints)
         {
             for(Point point : gpsNode.getPoints())
             {
