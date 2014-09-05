@@ -258,6 +258,6 @@
 	<view id="guide" type="GuideView">
 	</view>
 
-	<view id="map" name="Map" type="com.thesarvo.xphone.client.phonegap.NativeMapView" />
+	<view id="map" name="Map" type="com.thesarvo.guide.MapActivity" />
 
 </config>
