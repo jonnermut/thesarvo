@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -23,6 +24,7 @@ import org.w3c.dom.Element;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -108,7 +110,7 @@ public class GuideListActivity extends FragmentActivity
             if(entry != null)
             {
                 //TODO make it so it goes to elementID
-                showDetail(entry.viewId, null, false, entry.elementID);
+                showGuideDetail(entry.viewId, null, false, entry.elementID);
             }
         }
 
@@ -127,7 +129,7 @@ public class GuideListActivity extends FragmentActivity
 
         if (id.startsWith("http") || id.startsWith("guide."))
         {
-            showDetail(id, null, false, null);
+            showGuideDetail(id, null, false, null);
 
         }
         else if(id.startsWith("Map"))
@@ -220,7 +222,30 @@ public class GuideListActivity extends FragmentActivity
 
     }
 
-    public void showDetail(String id, String singleNodeData, boolean history, String elementId)
+    /**
+     * Show a GuideDetailFragment
+     *
+     * @param id
+     * @param singleNodeData
+     * @param history
+     * @param elementId
+     */
+    public void showGuideDetail(String id, String singleNodeData, boolean history, String elementId)
+    {
+        Map<String, String> args = new HashMap<>();
+        if (id != null)
+            args.put(GuideDetailFragment.ARG_ITEM_ID, id);
+
+        if (elementId != null)
+            args.put(GuideDetailFragment.ELEMENT_ID, elementId);
+
+        if (singleNodeData != null)
+            args.put(GuideDetailFragment.SINGLE_NODE_DATA, singleNodeData);
+
+        showFragment(GuideDetailFragment.class, args, history);
+    }
+
+    public void showFragment( Class<?> fragmentClass, Map<String, String> args, boolean includeInHistory)
     {
         if (mTwoPane)
         {
@@ -228,27 +253,42 @@ public class GuideListActivity extends FragmentActivity
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(GuideDetailFragment.ARG_ITEM_ID, id);
-            arguments.putString(GuideDetailFragment.ELEMENT_ID, elementId);
 
-            if (singleNodeData != null)
-                arguments.putString(GuideDetailFragment.SINGLE_NODE_DATA, singleNodeData);
+            for (String key : args.keySet())
+            {
+                arguments.putString(key, args.get(key));
+            }
 
-            GuideDetailFragment fragment = new GuideDetailFragment();
+            Fragment fragment = null;
+
+            try
+            {
+                fragment = (Fragment) fragmentClass.newInstance();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
             fragment.setArguments(arguments);
 
 
-            addFragment(R.id.guide_detail_container, fragment, history);
+            addFragment(R.id.guide_detail_container, fragment, includeInHistory);
         }
         else
         {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
-            Intent detailIntent = new Intent(this, GuideDetailActivity.class);
-            detailIntent.putExtra(GuideDetailFragment.ARG_ITEM_ID, id);
+            Intent detailIntent = new Intent(this, fragmentClass);
+
+            for (String key : args.keySet())
+            {
+                detailIntent.putExtra(key, args.get(key));
+            }
             startActivity(detailIntent);
         }
     }
+
 
     public void addFragment(int fragmentId, android.support.v4.app.Fragment newFragment, boolean history)
     {
