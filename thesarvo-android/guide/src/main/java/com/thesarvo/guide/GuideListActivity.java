@@ -78,6 +78,7 @@ public class GuideListActivity extends FragmentActivity
         ViewModel.get().getRootView();
 
         String id = getIntent().getStringExtra(GuideDetailFragment.ARG_ITEM_ID);
+        String action = getIntent().getAction();
 
 
         setContentView(R.layout.activity_guide_list);
@@ -98,6 +99,16 @@ public class GuideListActivity extends FragmentActivity
             if (id != null)
             {
                 fragment.setViewDef( ViewModel.get().getViews().get(id) );
+            }
+        }
+
+        if(action.equals(SearchableActivity.SEARCH_ITEM_SELECTED))
+        {
+            IndexEntry entry = SearchableActivity.getLastResult();
+            if(entry != null)
+            {
+                //TODO make it so it goes to elementID
+                showDetail(entry.viewId, null, false);
             }
         }
 
@@ -129,7 +140,7 @@ public class GuideListActivity extends FragmentActivity
             }
             else
             {
-                Toast.makeText(this, "Maps not ready yet!", Toast.LENGTH_SHORT);
+                Toast.makeText(this, "Maps not ready yet!", Toast.LENGTH_SHORT).show();
             }
         }
         else
