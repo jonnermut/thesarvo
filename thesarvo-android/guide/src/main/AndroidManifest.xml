@@ -34,7 +34,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".MapsFragment"
             android:label="@string/title_activity_maps"
             android:parentActivityName=".GuideListActivity" >
             <meta-data

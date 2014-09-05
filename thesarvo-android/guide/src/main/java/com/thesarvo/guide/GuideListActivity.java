@@ -17,8 +17,6 @@ import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -137,7 +135,7 @@ public class GuideListActivity extends FragmentActivity
             //start the map activity
             if(indexed)
             {
-                //Intent intent = new Intent(this, MapsActivity.class);
+                //Intent intent = new Intent(this, MapsFragment.class);
                 //startActivity(intent);
 
                 showMap(null);
@@ -235,7 +233,7 @@ public class GuideListActivity extends FragmentActivity
         if (singleNodeData != null)
             args.put(GuideDetailFragment.SINGLE_NODE_DATA, singleNodeData);
 
-        showFragment(MapsActivity.class, args, true);
+        showFragment(MapsFragment.class, args, true);
     }
 
     public void showFragment( Class<?> fragmentClass, Map<String, String> args, boolean includeInHistory)
@@ -422,7 +420,7 @@ public class GuideListActivity extends FragmentActivity
                     }
 
 
-                    List<GPSNode> gpsNodes = MapsActivity.getGPSPoints();
+                    List<GPSNode> gpsNodes = MapsFragment.getGPSPoints();
 
                     for (Element e : Xml.getElements(dom.getElementsByTagName("gps")))
                     {

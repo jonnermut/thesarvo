@@ -14,7 +14,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsActivity extends Fragment
+public class MapsFragment extends Fragment
 {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
