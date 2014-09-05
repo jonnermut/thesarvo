@@ -260,4 +260,6 @@
 
 	<view id="map" name="Map" type="com.thesarvo.guide.MapActivity" />
 
+    <metadata guideId="1"/>
+
 </config>

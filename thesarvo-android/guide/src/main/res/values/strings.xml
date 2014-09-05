@@ -12,5 +12,6 @@
     <string name="search_hint">Search for a climb, grade or star rating!</string>
     <string name="title_activity_searchable">SearchableActivity</string>
     <string name="app_label">The Sarvo</string>
+    <string name="search_description">Search suggestions for the sarvo!</string>
 
 </resources>

@@ -2,7 +2,9 @@ package com.thesarvo.guide;
 
 import android.app.ListActivity;
 import android.app.SearchManager;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -23,11 +25,14 @@ public class SearchableActivity extends ListActivity
     public static final String SEARCH_ITEM_SELECTED = "com.thesarvo.guide.SEARCH_SELECT";
 
     private static IndexEntry lastResult = null;
+    private static final String[] COLS = {IndexContentProvider.COL_TEXT, IndexContentProvider.COL_VIEW_ID};
 
     public static IndexEntry getLastResult()
     {
         return lastResult;
     }
+
+    private Uri searchUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,17 @@ public class SearchableActivity extends ListActivity
             ListAdapter results = doMySearch(query);
             setListAdapter(results);
         }
+        else if (intent.ACTION_VIEW.equals(intent.getAction()))
+        {
+            Uri data = intent.getData();
+            Log.d("Selected suggestion", data.toString());
+        }
+
+        Uri.Builder builder = new Uri.Builder();
+        builder.authority(ContentResolver.SCHEME_CONTENT);
+        builder.authority(IndexContentProvider.AUTHORITY);
+        builder.path(IndexContentProvider.MAIN_TABLE);
+        searchUri = builder.build();
     }
 
     private ListAdapter doMySearch(String query)
@@ -62,6 +78,9 @@ public class SearchableActivity extends ListActivity
         }
 
         IndexEntry[] entries = new IndexEntry[results.size()];
+
+
+
         return new SearchResultsAdapter(this, R.layout.search_item,  results.toArray(entries));
     }
 

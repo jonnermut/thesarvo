@@ -1,9 +1,13 @@
 package com.thesarvo.guide;
 
 import android.app.SearchManager;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -49,6 +53,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 public class GuideListActivity extends FragmentActivity
         implements GuideListFragment.Callbacks
 {
+
+    private static final String DB_BUILD = "database build date";
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -193,7 +199,13 @@ public class GuideListActivity extends FragmentActivity
         searchView.setVisibility(View.INVISIBLE);
         this.searchView = searchView;
 
-        new SearchIndex().execute("test");
+        //TODO, we only want indexing to happen if things are changed
+        //TODO, we still need to traverse the maps when we don't index
+        //TODO, need to drop tables if re-creating
+        if(!indexed && isDatabaseDirty(10000003))
+            new SearchIndex().execute("test");
+        else
+            searchIndexed();
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -218,6 +230,11 @@ public class GuideListActivity extends FragmentActivity
         searchView.setVisibility(View.VISIBLE);
         searchViewMenuItem.setVisible(true);
 
+        //update the database build date
+        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(DB_BUILD, 10000003);
+        editor.apply();
     }
 
     public void showDetail(String id, String singleNodeData, boolean history)
@@ -263,6 +280,35 @@ public class GuideListActivity extends FragmentActivity
         ft.commit();
     }
 
+    /**
+     * Check if the database needs rebuilding
+     * @return true if the database is dirty and needs updating
+     */
+    private boolean isDatabaseDirty(int curBuildNum)
+    {
+        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+        if(prefs.contains(DB_BUILD))
+        {
+            int buildNum = prefs.getInt(DB_BUILD, 0);
+            //TODO put the buildNum somewhere
+            if(buildNum < curBuildNum)
+            {
+                Log.d("Database Check", "buildNum " + buildNum + " < cur build" + curBuildNum);
+                return true;
+            }
+            else
+            {
+                Log.d("Database Check", "Database up to date!");
+                return false;
+            }
+        }
+        else    //if the pref dosen't exist then we need to build
+        {
+            Log.d("Database Check", "No prefs present, first run");
+            return true;
+        }
+    }
+
     private class SearchIndex extends AsyncTask<String, Integer, Long>
     {
         final String WWW_PATH = "www/data/";
@@ -275,6 +321,7 @@ public class GuideListActivity extends FragmentActivity
             Map<String, ViewModel.ViewDef> views = ViewModel.get().getViews();
             Map<String, ViewModel.ListItem> guideListItems = ViewModel.get().getGuideListItems();
             Map<String, IndexEntry> index = IndexEntry.getIndex();
+            int key = 1;
 
             try
             {
@@ -287,8 +334,11 @@ public class GuideListActivity extends FragmentActivity
                     IndexEntry entry = new IndexEntry();
                     entry.viewId = viewDef.getId();
                     entry.text = viewDef.getName();
+                    entry.key = ++key;
+                    entry.type = IndexEntry.IndexType.MENU_ITEM;
 
                     index.put(entry.text, entry);
+                    addEntry(entry);
                 }
 
                 //allFiles = manager.list(WWW_PATH);
@@ -318,8 +368,11 @@ public class GuideListActivity extends FragmentActivity
                     IndexEntry entry = new IndexEntry();
                     entry.viewId = item.getViewId();
                     entry.text = item.getText();
+                    entry.key = ++key;
+                    entry.type = IndexEntry.IndexType.VIEW;
 
                     index.put(entry.text, entry);
+                    addEntry(entry);
                     //Log.d("Indexing", "adding " + entry.text);
 
 
@@ -345,8 +398,12 @@ public class GuideListActivity extends FragmentActivity
                         text = text.trim();
                         entry1.text = text;
 
+                        entry1.type = IndexEntry.IndexType.CLIMB;
+                        entry1.key = ++key;
+
                        //Log.d("Indexing", "adding climb " + text);
                         index.put(text, entry1);
+                        addEntry(entry1);
 
                     }
 
@@ -366,8 +423,12 @@ public class GuideListActivity extends FragmentActivity
                         text = text.trim();
                         entry1.text = text;
 
+                        entry1.type = IndexEntry.IndexType.PROBLEM;
+                        entry1.key = ++key;
+
                         //Log.d("Indexing", "adding boulder " + text);
                         index.put(text, entry1);
+                        addEntry(entry1);
                     }
 
                     for(Element e :Xml.getElements(dom.getElementsByTagName("text")))
@@ -382,8 +443,12 @@ public class GuideListActivity extends FragmentActivity
                             String text = e.getTextContent().trim();
                             entry1.text = text;
 
+                            entry1.type = IndexEntry.IndexType.HEADING;
+                            entry1.key = ++key;
+
                             //Log.d("Indexing", "adding heading " + text);
                             index.put(text, entry1);
+                            addEntry(entry1);
                         }
                     }
 
@@ -445,6 +510,44 @@ public class GuideListActivity extends FragmentActivity
             Log.d("Search Index", "Indexing complete!");
 
             return (long) 1;
+        }
+
+        /**
+         * helper to add an entry to the main table and the suggestions table
+         */
+        public void addEntry(IndexEntry entry)
+        {
+            //add normal entry and suggestions entry
+            ContentValues values = new ContentValues();
+            //values.put(IndexContentProvider.COL_ID, entry.key);
+            values.put(IndexContentProvider.COL_TEXT, entry.text);
+            values.put(IndexContentProvider.COL_ELEMENT_ID, entry.elementID);
+            values.put(IndexContentProvider.COL_TYPE, entry.type.ordinal());
+            values.put(IndexContentProvider.COL_VIEW_ID, entry.viewId);
+            values.put(IndexContentProvider.COL_VIEW_NAME, entry.viewName);
+
+            //add this one and then use the return to add the next
+            Uri.Builder builder = new Uri.Builder();
+            builder.scheme(ContentResolver.SCHEME_CONTENT);
+            builder.authority(IndexContentProvider.AUTHORITY);
+            builder.path(IndexContentProvider.MAIN_TABLE);
+            Uri uri = builder.build();
+
+            Uri normalUri = getContentResolver().insert(uri, values);
+
+            //create the suggestion entry
+            ContentValues suggestionValues = new ContentValues();
+            suggestionValues.put(SearchManager.SUGGEST_COLUMN_TEXT_1, entry.text);
+            suggestionValues.put(SearchManager.SUGGEST_COLUMN_TEXT_2, entry.viewName);
+            suggestionValues.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, normalUri.toString());
+
+            builder.clearQuery();
+            builder.scheme(ContentResolver.SCHEME_CONTENT);
+            builder.authority(IndexContentProvider.AUTHORITY);
+            builder.path(IndexContentProvider.SUGESTIONS_TABLE);
+            uri = builder.build();
+
+            getContentResolver().insert(uri, suggestionValues);
         }
 
         @Override
