@@ -36,7 +36,10 @@ public class GuideDetailFragment extends Fragment
      * represents.
      */
     public static final String ARG_ITEM_ID = "item_id";
+    public static final String ELEMENT_ID = "elementId";
     public static final String SINGLE_NODE_DATA = "singleNodeData";
+
+
 
     /**
      * The dummy content this fragment is presenting.
@@ -44,6 +47,7 @@ public class GuideDetailFragment extends Fragment
     private String viewId = null;
     private String singleNodeData = null;
     private JSInterface js;
+    private String elementId;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -66,6 +70,11 @@ public class GuideDetailFragment extends Fragment
             String itemId = getArguments().getString(ARG_ITEM_ID);
             //mItem = ViewModel.get().getViews().get(itemId);
             viewId = itemId;
+        }
+
+        if (getArguments().containsKey(ELEMENT_ID))
+        {
+            elementId = getArguments().getString(ELEMENT_ID);
         }
 
         if (getArguments().containsKey(SINGLE_NODE_DATA))
@@ -131,6 +140,15 @@ public class GuideDetailFragment extends Fragment
                     if (singleNodeData != null)
                     {
                         sb.append("var guide_callOut=true;\n");
+
+                    }
+
+                    if (elementId != null)
+                    {
+                        sb.append(" var guide_showId='");
+                        sb.append(elementId);
+                        sb.append("'; \n");
+
 
                     }
 
@@ -330,7 +348,7 @@ public class GuideDetailFragment extends Fragment
                     if ("openImage".equals(command))
                     {
                         Log.d("thesarvo", "openImage");
-                        GuideListActivity.get().showDetail(GuideDetailFragment.this.viewId, data, true);
+                        GuideListActivity.get().showDetail(GuideDetailFragment.this.viewId, data, true, null);
                     }
                     else if("map".equals(command))
                     {

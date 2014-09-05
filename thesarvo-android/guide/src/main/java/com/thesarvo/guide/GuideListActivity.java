@@ -108,7 +108,7 @@ public class GuideListActivity extends FragmentActivity
             if(entry != null)
             {
                 //TODO make it so it goes to elementID
-                showDetail(entry.viewId, null, false);
+                showDetail(entry.viewId, null, false, entry.elementID);
             }
         }
 
@@ -127,7 +127,7 @@ public class GuideListActivity extends FragmentActivity
 
         if (id.startsWith("http") || id.startsWith("guide."))
         {
-            showDetail(id, null, false);
+            showDetail(id, null, false, null);
 
         }
         else if(id.startsWith("Map"))
@@ -220,7 +220,7 @@ public class GuideListActivity extends FragmentActivity
 
     }
 
-    public void showDetail(String id, String singleNodeData, boolean history)
+    public void showDetail(String id, String singleNodeData, boolean history, String elementId)
     {
         if (mTwoPane)
         {
@@ -229,6 +229,7 @@ public class GuideListActivity extends FragmentActivity
             // fragment transaction.
             Bundle arguments = new Bundle();
             arguments.putString(GuideDetailFragment.ARG_ITEM_ID, id);
+            arguments.putString(GuideDetailFragment.ELEMENT_ID, elementId);
 
             if (singleNodeData != null)
                 arguments.putString(GuideDetailFragment.SINGLE_NODE_DATA, singleNodeData);
