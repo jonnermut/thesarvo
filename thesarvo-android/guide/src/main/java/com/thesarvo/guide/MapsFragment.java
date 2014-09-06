@@ -42,8 +42,8 @@ public class MapsFragment extends Fragment
                              Bundle savedInstanceState)
     {
 
-
-        rootView = inflater.inflate(R.layout.activity_maps, container, false);
+        if (rootView == null)
+            rootView = inflater.inflate(R.layout.activity_maps, container, false);
 
         setUpMapIfNeeded();
 

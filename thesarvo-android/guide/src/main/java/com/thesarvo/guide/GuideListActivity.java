@@ -150,7 +150,7 @@ public class GuideListActivity extends FragmentActivity
             //showGuideDetail(id, null, true, null);
             Map<String, String> args = new HashMap<String, String>();
             args.put(GuideDetailFragment.ARG_ITEM_ID, id);
-            showFragment(GuideListFragment.class, args, true );
+            showFragment(GuideListFragment.class, args, true, true );
 
 
         }
@@ -229,7 +229,7 @@ public class GuideListActivity extends FragmentActivity
         if (singleNodeData != null)
             args.put(GuideDetailFragment.SINGLE_NODE_DATA, singleNodeData);
 
-        showFragment(GuideDetailFragment.class, args, history);
+        showFragment(GuideDetailFragment.class, args, history, false);
     }
 
     public void showMap(String singleNodeData)
@@ -238,10 +238,10 @@ public class GuideListActivity extends FragmentActivity
         if (singleNodeData != null)
             args.put(GuideDetailFragment.SINGLE_NODE_DATA, singleNodeData);
 
-        showFragment(MapsFragment.class, args, true);
+        showFragment(MapsFragment.class, args, true, false);
     }
 
-    public void showFragment( Class<?> fragmentClass, Map<String, String> args, boolean includeInHistory)
+    public void showFragment( Class<?> fragmentClass, Map<String, String> args, boolean includeInHistory, boolean leftPane)
     {
         Bundle arguments = new Bundle();
 
@@ -271,8 +271,12 @@ public class GuideListActivity extends FragmentActivity
             // fragment transaction.
 
 
-
-            addFragment(R.id.guide_detail_container, fragment, includeInHistory);
+            int container = R.id.guide_detail_container;
+            if (leftPane)
+            {
+                container = R.id.guide_list;
+            }
+            addFragment(container, fragment, includeInHistory);
         }
         else
         {
