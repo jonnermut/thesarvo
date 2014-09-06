@@ -127,7 +127,7 @@ public class GuideListActivity extends FragmentActivity
 
         if (id.startsWith("http") || id.startsWith("guide."))
         {
-            showGuideDetail(id, null, false, null);
+            showGuideDetail(id, null, !mTwoPane, null);
 
         }
         else if(id.startsWith("Map"))
@@ -147,7 +147,11 @@ public class GuideListActivity extends FragmentActivity
         }
         else
         {
-            showGuideDetail(id, null, true, null);
+            //showGuideDetail(id, null, true, null);
+            Map<String, String> args = new HashMap<String, String>();
+            args.put(GuideDetailFragment.ARG_ITEM_ID, id);
+            showFragment(GuideListFragment.class, args, true );
+
 
         }
 
@@ -157,7 +161,8 @@ public class GuideListActivity extends FragmentActivity
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_bar, menu);
@@ -238,30 +243,33 @@ public class GuideListActivity extends FragmentActivity
 
     public void showFragment( Class<?> fragmentClass, Map<String, String> args, boolean includeInHistory)
     {
+        Bundle arguments = new Bundle();
+
+        for (String key : args.keySet())
+        {
+            arguments.putString(key, args.get(key));
+        }
+
+        Fragment fragment = null;
+
+        try
+        {
+            fragment = (Fragment) fragmentClass.newInstance();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        fragment.setArguments(arguments);
+
+
         if (mTwoPane)
         {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
-            Bundle arguments = new Bundle();
 
-            for (String key : args.keySet())
-            {
-                arguments.putString(key, args.get(key));
-            }
-
-            Fragment fragment = null;
-
-            try
-            {
-                fragment = (Fragment) fragmentClass.newInstance();
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-
-            fragment.setArguments(arguments);
 
 
             addFragment(R.id.guide_detail_container, fragment, includeInHistory);
@@ -270,6 +278,7 @@ public class GuideListActivity extends FragmentActivity
         {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
+            /*
             Intent detailIntent = new Intent(this, fragmentClass);
 
             for (String key : args.keySet())
@@ -277,6 +286,8 @@ public class GuideListActivity extends FragmentActivity
                 detailIntent.putExtra(key, args.get(key));
             }
             startActivity(detailIntent);
+            */
+            addFragment(R.id.guide_list, fragment, includeInHistory);
         }
     }
 

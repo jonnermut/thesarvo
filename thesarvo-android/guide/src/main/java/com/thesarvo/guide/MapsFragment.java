@@ -101,6 +101,9 @@ public class MapsFragment extends Fragment
     private void setUpMap()
     {
 
+        if (mMap == null)
+            return;
+
         List<GPSNode> gpsPoints = getGPSPoints();
 
         if (singleNodeData != null)
@@ -112,10 +115,15 @@ public class MapsFragment extends Fragment
         {
             for(Point point : gpsNode.getPoints())
             {
-                mMap.addMarker( new MarkerOptions()
-                        .position(point.getLatLng())
-                        .title(point.getDescription())
-                        .snippet(point.getLatLng().toString()));
+                if (point!=null
+                        && point.isValid()
+                        && point.getLatLng() != null)
+                {
+                    mMap.addMarker(new MarkerOptions()
+                            .position(point.getLatLng())
+                            .title("" + point.getDescription())
+                            .snippet(point.getLatLng().toString()));
+                }
             }
 
         }

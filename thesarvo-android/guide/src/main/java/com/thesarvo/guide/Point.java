@@ -49,7 +49,7 @@ public class Point
 
         }
 
-        LatLng latLng = new LatLng(lat, lon);
+        latLng = new LatLng(lat, lon);
     }
 
     public LatLng getLatLng()
