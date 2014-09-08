@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,11 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import android.widget.SimpleCursorAdapter;
 
 
 public class SearchableActivity extends ListActivity
@@ -78,28 +75,35 @@ public class SearchableActivity extends ListActivity
         searchUri = builder.build();
     }
 
+    private static final String[] SEARCH_PROJECTION = {IndexContentProvider.COL_TEXT,
+    IndexContentProvider.COL_VIEW_NAME, IndexContentProvider.COL_VIEW_ID,
+    IndexContentProvider.COL_ID/*, IndexContentProvider.COL_ELEMENT_ID*/};
+
+    private static final int[] TO_COLS = {R.id.textViewItem, R.id.placeSubtitle};
+
     //TODO make it use the adapter
     private ListAdapter doMySearch(String query)
     {
         Log.d("Search", "Searching");
 
-        Map<String, IndexEntry> index = IndexEntry.getIndex();
-        Set<String> keys = index.keySet();
-        List<IndexEntry> results = new ArrayList<>();
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme(ContentResolver.SCHEME_CONTENT);
+        builder.authority(IndexContentProvider.AUTHORITY);
+        builder.path(IndexContentProvider.MAIN_TABLE);
 
-        for(String s : keys)
-        {
-            if(s.toLowerCase().contains(query.toLowerCase()))
-            {
-                results.add(index.get(s));
-            }
-        }
+        Cursor cursor = getContentResolver().query(builder.build(),
+                SEARCH_PROJECTION, query, null, null);
 
-        IndexEntry[] entries = new IndexEntry[results.size()];
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+                R.layout.search_item,
+                cursor,
+                SEARCH_PROJECTION,
+                TO_COLS,
+                0);
 
+        adapter.setStringConversionColumn(3);   //sets the conversion column to the id column
 
-
-        return new SearchResultsAdapter(this, R.layout.search_item,  results.toArray(entries));
+        return adapter;
     }
 
 
@@ -125,16 +129,18 @@ public class SearchableActivity extends ListActivity
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id)
     {
-        IndexEntry entry = (IndexEntry) getListAdapter().getItem(position);
-
         //send an intent back to GuideListActivity to open this page.
         Intent intent = new Intent(this, GuideListActivity.class);
         intent.setAction(SEARCH_ITEM_SELECTED);
-        lastResult = entry;
 
-        //put the key in a bundle, dosen't work for 4.0....
-        Bundle options = new Bundle();
-        options.putString("result", entry.text);
+        //instead pass data as a URI
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme(ContentResolver.SCHEME_CONTENT);
+        builder.authority(IndexContentProvider.AUTHORITY);
+
+        builder.path(IndexContentProvider.MAIN_TABLE + "/" + id);
+
+        intent.setData(builder.build());
 
         startActivity(intent);
     }

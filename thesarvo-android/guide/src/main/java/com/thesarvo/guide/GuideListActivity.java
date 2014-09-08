@@ -117,40 +117,14 @@ public class GuideListActivity extends FragmentActivity
 
         if(action.equals(SearchableActivity.SEARCH_ITEM_SELECTED))
         {
-            IndexEntry entry = SearchableActivity.getLastResult();
-            if(entry != null)
-            {
-                //TODO make it so it goes to elementID
-                showGuideDetail(entry.viewId, null, false, entry.elementID);
-            }
+            Log.d("Normal search back", "URI is " + getIntent().getDataString());
+            showSearchResult(uri);
+
         }
         else if (action.equals(SearchableActivity.SEARCH_ITEM_QUICK_SELECT))
         {
             Log.d("Quick Search Back", uri.toString());
-            //get a cursor representing the entry
-            Cursor c = getContentResolver().query(uri, SEARCH_PROJECTION, null, null, null);
-            if(c.getCount() < 1)
-            {
-                Log.d("Quick Search Back", "Error, entry not found!");
-            }
-            else if (c.getCount() > 1)
-            {
-                Log.d("Quick Search Back", "Error, multiple found! found!");
-            }
-            else
-            {
-                int v = c.getColumnIndex(SEARCH_PROJECTION[0]);
-                int e = c.getColumnIndex(SEARCH_PROJECTION[1]);
-
-                //Log.d("Quick Search Back", "Looking at col " + v + " and " + e + " of " + c.getColumnCount());
-                c.moveToFirst();
-                String viewId = c.getString(v);
-                String elementID = c.getString(e);
-
-                Log.d("Quick Search Back", "Selected view " + viewId + " el " + elementID);
-
-                showGuideDetail(viewId, null, false, elementID);
-            }
+            showSearchResult(uri);
         }
 
         // TODO: If exposing deep links into your app, handle intents here.
@@ -265,6 +239,35 @@ public class GuideListActivity extends FragmentActivity
         editor.apply();
 
         indexed = true;
+    }
+
+    public void showSearchResult(Uri uri)
+    {
+        Log.d("Search Result", uri.toString());
+        //get a cursor representing the entry
+        Cursor c = getContentResolver().query(uri, SEARCH_PROJECTION, null, null, null);
+        if(c.getCount() < 1)
+        {
+            Log.d("Search Result", "Error, entry not found!");
+        }
+        else if (c.getCount() > 1)
+        {
+            Log.d("Search Result", "Error, multiple found! found!");
+        }
+        else
+        {
+            int v = c.getColumnIndex(SEARCH_PROJECTION[0]);
+            int e = c.getColumnIndex(SEARCH_PROJECTION[1]);
+
+            //Log.d("Quick Search Back", "Looking at col " + v + " and " + e + " of " + c.getColumnCount());
+            c.moveToFirst();
+            String viewId = c.getString(v);
+            String elementID = c.getString(e);
+
+            Log.d("Search Result", "Selected view " + viewId + " el " + elementID);
+
+            showGuideDetail(viewId, null, false, elementID);
+        }
     }
 
     /**

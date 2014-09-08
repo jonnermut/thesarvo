@@ -107,6 +107,7 @@ public class IndexContentProvider extends ContentProvider
         switch (table)
         {
             case MAIN_TABLE_I:
+                selection = COL_TEXT + " LIKE '%" + selection + "%'";
             case MAIN_TABLE_SINGLE:
                 qBuilder.setTables(MAIN_TABLE);
                 break;
