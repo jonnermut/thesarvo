@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/map"
-    tools:context="com.thesarvo.guide.MapsActivity"
+    tools:context="com.thesarvo.guide.MapsFragment"
     android:name="com.google.android.gms.maps.SupportMapFragment"
     class="com.google.android.gms.maps.SupportMapFragment"
     map:mapType="satellite"

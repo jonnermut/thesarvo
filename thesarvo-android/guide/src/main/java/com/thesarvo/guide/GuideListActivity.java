@@ -10,6 +10,7 @@ import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -20,13 +21,12 @@ import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -115,7 +115,7 @@ public class GuideListActivity extends FragmentActivity
             if(entry != null)
             {
                 //TODO make it so it goes to elementID
-                showDetail(entry.viewId, null, false);
+                showGuideDetail(entry.viewId, null, false, entry.elementID);
             }
         }
 
@@ -134,7 +134,7 @@ public class GuideListActivity extends FragmentActivity
 
         if (id.startsWith("http") || id.startsWith("guide."))
         {
-            showDetail(id, null, false);
+            showGuideDetail(id, null, !mTwoPane, null);
 
         }
         else if(id.startsWith("Map"))
@@ -142,8 +142,10 @@ public class GuideListActivity extends FragmentActivity
             //start the map activity
             if(indexed)
             {
-                Intent intent = new Intent(this, MapsActivity.class);
-                startActivity(intent);
+                //Intent intent = new Intent(this, MapsFragment.class);
+                //startActivity(intent);
+
+                showMap(null);
             }
             else
             {
@@ -152,35 +154,22 @@ public class GuideListActivity extends FragmentActivity
         }
         else
         {
-            if (mTwoPane)
-            {
-                // In two-pane mode, show the detail view in this activity by
-                // adding or replacing the detail fragment using a
-                // fragment transaction.
-                Bundle arguments = new Bundle();
-                arguments.putString(GuideDetailFragment.ARG_ITEM_ID, id);
-                GuideListFragment fragment = new GuideListFragment();
-                fragment.setArguments(arguments);
-                int guide_list_id = R.id.guide_list;
-
-                addFragment(guide_list_id, fragment, true);
+            //showGuideDetail(id, null, true, null);
+            Map<String, String> args = new HashMap<String, String>();
+            args.put(GuideDetailFragment.ARG_ITEM_ID, id);
+            showFragment(GuideListFragment.class, args, true, true );
 
 
-            }
-            else
-            {
-                // FIXME - args not getting through!
-                Intent listIntent = new Intent(this, GuideListActivity.class);
-                listIntent.putExtra(GuideDetailFragment.ARG_ITEM_ID, id);
-                startActivity(listIntent);
-            }
         }
 
 
     }
 
+
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_bar, menu);
@@ -238,34 +227,92 @@ public class GuideListActivity extends FragmentActivity
         editor.apply();
     }
 
-    public void showDetail(String id, String singleNodeData, boolean history)
+    /**
+     * Show a GuideDetailFragment
+     *
+     * @param id
+     * @param singleNodeData
+     * @param history
+     * @param elementId
+     */
+    public void showGuideDetail(String id, String singleNodeData, boolean history, String elementId)
     {
+        Map<String, String> args = new HashMap<>();
+        if (id != null)
+            args.put(GuideDetailFragment.ARG_ITEM_ID, id);
+
+        if (elementId != null)
+            args.put(GuideDetailFragment.ELEMENT_ID, elementId);
+
+        if (singleNodeData != null)
+            args.put(GuideDetailFragment.SINGLE_NODE_DATA, singleNodeData);
+
+        showFragment(GuideDetailFragment.class, args, history, false);
+    }
+
+    public void showMap(String singleNodeData)
+    {
+        Map<String, String> args = new HashMap<>();
+        if (singleNodeData != null)
+            args.put(GuideDetailFragment.SINGLE_NODE_DATA, singleNodeData);
+
+        showFragment(MapsFragment.class, args, true, false);
+    }
+
+    public void showFragment( Class<?> fragmentClass, Map<String, String> args, boolean includeInHistory, boolean leftPane)
+    {
+        Bundle arguments = new Bundle();
+
+        for (String key : args.keySet())
+        {
+            arguments.putString(key, args.get(key));
+        }
+
+        Fragment fragment = null;
+
+        try
+        {
+            fragment = (Fragment) fragmentClass.newInstance();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        fragment.setArguments(arguments);
+
+
         if (mTwoPane)
         {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(GuideDetailFragment.ARG_ITEM_ID, id);
-
-            if (singleNodeData != null)
-                arguments.putString(GuideDetailFragment.SINGLE_NODE_DATA, singleNodeData);
-
-            GuideDetailFragment fragment = new GuideDetailFragment();
-            fragment.setArguments(arguments);
 
 
-            addFragment(R.id.guide_detail_container, fragment, history);
+            int container = R.id.guide_detail_container;
+            if (leftPane)
+            {
+                container = R.id.guide_list;
+            }
+            addFragment(container, fragment, includeInHistory);
         }
         else
         {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
-            Intent detailIntent = new Intent(this, GuideDetailActivity.class);
-            detailIntent.putExtra(GuideDetailFragment.ARG_ITEM_ID, id);
+            /*
+            Intent detailIntent = new Intent(this, fragmentClass);
+
+            for (String key : args.keySet())
+            {
+                detailIntent.putExtra(key, args.get(key));
+            }
             startActivity(detailIntent);
+            */
+            addFragment(R.id.guide_list, fragment, includeInHistory);
         }
     }
+
 
     public void addFragment(int fragmentId, android.support.v4.app.Fragment newFragment, boolean history)
     {
@@ -454,38 +501,16 @@ public class GuideListActivity extends FragmentActivity
                     }
 
 
-                    List<GPSNode> gpsNodes = MapsActivity.getGPSPoints();
+                    List<GPSNode> gpsNodes = MapsFragment.getGPSPoints();
 
-                    for(Element e : Xml.getElements(dom.getElementsByTagName("gps")))
+                    for (Element e : Xml.getElements(dom.getElementsByTagName("gps")))
                     {
                         String id = e.getAttribute("id");
                         List<Point> points = new ArrayList<>();
 
                         for(Element ePoint : Xml.getElements(e.getElementsByTagName("point")))
                         {
-                            Point point;
-
-                            String longitude = ePoint.getAttribute("longitude");
-                            String latitude = ePoint.getAttribute("latitude");
-                            String description = ePoint.getAttribute("description");
-                            String code = ePoint.getAttribute("code");
-
-                            double lon, lat;
-
-                            try
-                            {
-                                lon = Double.valueOf(longitude);
-                                lat = Double.valueOf(latitude);
-                            }
-                            catch (NumberFormatException ex)
-                            {
-                                ex.printStackTrace();
-                                continue;
-                            }
-
-                            LatLng latLng = new LatLng(lat, lon);
-
-                            point = new Point(latLng, description, code);
+                            Point point = new Point(ePoint);
                             points.add(point);
 
                         }
