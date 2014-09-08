@@ -55,6 +55,7 @@ public class GuideListActivity extends FragmentActivity
 {
 
     private static final String DB_BUILD = "database build date";
+    private static final int TESTER = 10000005;
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -202,7 +203,7 @@ public class GuideListActivity extends FragmentActivity
         //TODO, we only want indexing to happen if things are changed
         //TODO, we still need to traverse the maps when we don't index
         //TODO, need to drop tables if re-creating
-        if(!indexed && isDatabaseDirty(10000003))
+        if(!indexed && isDatabaseDirty(TESTER))
             new SearchIndex().execute("test");
         else
             searchIndexed();
@@ -233,7 +234,7 @@ public class GuideListActivity extends FragmentActivity
         //update the database build date
         SharedPreferences prefs = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(DB_BUILD, 10000003);
+        editor.putInt(DB_BUILD, TESTER);
         editor.apply();
     }
 
@@ -539,7 +540,7 @@ public class GuideListActivity extends FragmentActivity
             ContentValues suggestionValues = new ContentValues();
             suggestionValues.put(SearchManager.SUGGEST_COLUMN_TEXT_1, entry.text);
             suggestionValues.put(SearchManager.SUGGEST_COLUMN_TEXT_2, entry.viewName);
-            suggestionValues.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, normalUri.toString());
+            suggestionValues.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, normalUri.getLastPathSegment());
 
             builder.clearQuery();
             builder.scheme(ContentResolver.SCHEME_CONTENT);

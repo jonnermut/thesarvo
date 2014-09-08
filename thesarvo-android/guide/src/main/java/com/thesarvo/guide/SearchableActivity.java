@@ -50,8 +50,23 @@ public class SearchableActivity extends ListActivity
         }
         else if (intent.ACTION_VIEW.equals(intent.getAction()))
         {
-            Uri data = intent.getData();
+            /*Uri data = intent.getData();
             Log.d("Selected suggestion", data.toString());
+
+            Intent newIntent = new Intent(this, GuideListActivity.class);
+            newIntent.setAction(SEARCH_ITEM_SELECTED);
+            //TODO pass the intent back, better if we can just make the list view searchable and handel it there
+            //WHAT I WAS DOING: trying to make it so it passed the intent back strait away
+            //but instead I'll try to do away with this activity alltogether
+            //IndexEntry entry = getContentResolver().q
+            lastResult = entry;
+
+            //put the key in a bundle, dosen't work for 4.0....
+            Bundle options = new Bundle();
+            options.putString("result", entry.text);
+
+            startActivity(newIntent);*/
+
         }
 
         Uri.Builder builder = new Uri.Builder();

@@ -5,6 +5,6 @@
             android:searchSuggestAuthority="com.thesarvo.guide.provider"
             android:searchSuggestIntentAction="android.intent.action.VIEW"
             android:includeInGlobalSearch="true"
-            android:searchSettingsDescription="@string/search_description">
-
+            android:searchSettingsDescription="@string/search_description"
+            android:searchSuggestIntentData="content://com.thesarvo.guide.provider/main">
 </searchable>
