@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -55,7 +56,8 @@ public class GuideListActivity extends FragmentActivity
 {
 
     private static final String DB_BUILD = "database build date";
-    private static final int TESTER = 10000005;
+    private static final int TESTER = 10000010;
+    private static final String[] SEARCH_PROJECTION = {"VIEW_ID", "ELEMENT_ID"};
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -86,6 +88,7 @@ public class GuideListActivity extends FragmentActivity
 
         String id = getIntent().getStringExtra(GuideDetailFragment.ARG_ITEM_ID);
         String action = getIntent().getAction();
+        Uri uri = getIntent().getData();
 
 
         setContentView(R.layout.activity_guide_list);
@@ -116,6 +119,34 @@ public class GuideListActivity extends FragmentActivity
             {
                 //TODO make it so it goes to elementID
                 showGuideDetail(entry.viewId, null, false, entry.elementID);
+            }
+        }
+        else if (action.equals(SearchableActivity.SEARCH_ITEM_QUICK_SELECT))
+        {
+            Log.d("Quick Search Back", uri.toString());
+            //get a cursor representing the entry
+            Cursor c = getContentResolver().query(uri, SEARCH_PROJECTION, null, null, null);
+            if(c.getCount() < 1)
+            {
+                Log.d("Quick Search Back", "Error, entry not found!");
+            }
+            else if (c.getCount() > 1)
+            {
+                Log.d("Quick Search Back", "Error, multiple found! found!");
+            }
+            else
+            {
+                int v = c.getColumnIndex(SEARCH_PROJECTION[0]);
+                int e = c.getColumnIndex(SEARCH_PROJECTION[1]);
+
+                //Log.d("Quick Search Back", "Looking at col " + v + " and " + e + " of " + c.getColumnCount());
+                c.moveToFirst();
+                String viewId = c.getString(v);
+                String elementID = c.getString(e);
+
+                Log.d("Quick Search Back", "Selected view " + viewId + " el " + elementID);
+
+                showGuideDetail(viewId, null, false, elementID);
             }
         }
 
@@ -225,6 +256,8 @@ public class GuideListActivity extends FragmentActivity
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(DB_BUILD, TESTER);
         editor.apply();
+
+        indexed = true;
     }
 
     /**
