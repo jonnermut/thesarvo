@@ -58,7 +58,7 @@ public class GuideListActivity extends FragmentActivity
 {
 
     private static final String DB_BUILD = "database build date";
-    private static final int TESTER = 10000013;
+    private static final int TESTER = 10000017;
     private static final String[] SEARCH_PROJECTION = {"VIEW_ID", "ELEMENT_ID"};
 
     /**
@@ -73,6 +73,8 @@ public class GuideListActivity extends FragmentActivity
     {
         return  instance;
     }
+
+    private static SearchIndex searchIndex = null;
 
     private SearchView searchView;
     private MenuItem searchViewMenuItem;
@@ -198,10 +200,12 @@ public class GuideListActivity extends FragmentActivity
         this.searchView = searchView;
 
         //TODO, we only want indexing to happen if things are changed
-        //TODO, we still need to traverse the maps when we don't index
-        //TODO, need to drop tables if re-creating
-        if(!indexed && isDatabaseDirty(TESTER))
-            new SearchIndex().execute("test");
+        if(!indexed && isDatabaseDirty(TESTER) && searchIndex == null)
+        {
+            //this stops the indexing from starting again on resume of activity
+            searchIndex = new SearchIndex();
+            searchIndex.execute("test");
+        }
         else
         {
             searchIndexed();
@@ -239,6 +243,7 @@ public class GuideListActivity extends FragmentActivity
         editor.apply();
 
         indexed = true;
+        searchIndex = null;
     }
 
     public void showSearchResult(Uri uri)
@@ -406,6 +411,9 @@ public class GuideListActivity extends FragmentActivity
 
         protected Long doInBackground(String... files)
         {
+            //delete the old database first
+            getBaseContext().deleteDatabase(IndexContentProvider.DBNAME);
+
             //find all XML files
             String[] allFiles;
             AssetManager manager = getAssets();

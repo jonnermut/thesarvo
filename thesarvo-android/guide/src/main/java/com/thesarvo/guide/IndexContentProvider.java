@@ -30,7 +30,7 @@ public class IndexContentProvider extends ContentProvider
 {
     private MainDatabaseHelper mOpenHelper;
 
-    private static final String DBNAME = "index";
+    public static final String DBNAME = "index";
     public static final String MAIN_TABLE = "main";
     private static final int MAIN_TABLE_I = 1;
     public static final String SUGESTIONS_TABLE = "suggesions";
