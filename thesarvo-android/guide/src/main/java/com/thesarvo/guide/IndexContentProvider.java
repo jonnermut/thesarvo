@@ -23,6 +23,8 @@ import android.util.Log;
  *
  *
  * Contract class not needed as this isn't intended to be used by other apps
+ *
+ * TODO needs to be a way to re-index in app via options etc
  */
 public class IndexContentProvider extends ContentProvider
 {
@@ -38,6 +40,10 @@ public class IndexContentProvider extends ContentProvider
     private static final int SUGGEST_TABLE_SINGLE = 4;
     private static final int SUGGEST_REQUEST = 5;
 
+    public static final String MAP_TABLE = "maps";
+    private static final int MAP_TABLE_I = 6;
+    private static final int MAP_TABLE_SINGLE = 7;
+
 
     public static final String COL_ID = "_id";
     public static final String COL_TEXT = "TEXT";
@@ -45,6 +51,12 @@ public class IndexContentProvider extends ContentProvider
     public static final String COL_VIEW_NAME = "VIEW_NAME";
     public static final String COL_ELEMENT_ID = "ELEMENT_ID";
     public static final String COL_TYPE = "TYPE";
+
+    public static final String COL_GPS_ID = "GPS_ID"; //this is the XML id in <gps>, not the unique key
+    public static final String COL_LAT = "LATITUDE";
+    public static final String COL_LNG = "LONGITUDE";
+    public static final String COL_DESC = "DESCRIPTION";
+    public static final String COL_CODE = "CODE";
 
     public static final String AUTHORITY = "com.thesarvo.guide.provider";
 
@@ -69,8 +81,10 @@ public class IndexContentProvider extends ContentProvider
 
         matcher.addURI(AUTHORITY, MAIN_TABLE, MAIN_TABLE_I);
         matcher.addURI(AUTHORITY, SUGESTIONS_TABLE, SUGGESTIONS_TABLE_I);
+        matcher.addURI(AUTHORITY, MAP_TABLE, MAP_TABLE_I);
         matcher.addURI(AUTHORITY, MAIN_TABLE+SINGLE_ROW, MAIN_TABLE_SINGLE);
         matcher.addURI(AUTHORITY, SUGESTIONS_TABLE+SINGLE_ROW, SUGGEST_TABLE_SINGLE);
+        matcher.addURI(AUTHORITY, MAP_TABLE+SINGLE_ROW, MAP_TABLE_SINGLE);
         matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SUGGEST_REQUEST);
 
 
@@ -105,13 +119,18 @@ public class IndexContentProvider extends ContentProvider
                 qBuilder.setTables(SUGESTIONS_TABLE);
                 break;
 
+            case MAP_TABLE_I:
+            case MAP_TABLE_SINGLE:
+                qBuilder.setTables(MAP_TABLE);
+                break;
+
             default:
                 Log.d("Content query", "URI not matched!");
                 return null;
         }
 
         //check for getting a single row
-        if(table == SUGGEST_TABLE_SINGLE || table == MAIN_TABLE_SINGLE)
+        if(table == SUGGEST_TABLE_SINGLE || table == MAIN_TABLE_SINGLE || table ==  MAP_TABLE_SINGLE)
         {
             qBuilder.appendWhere(COL_ID + "=" + uri.getLastPathSegment());
         }
@@ -147,6 +166,10 @@ public class IndexContentProvider extends ContentProvider
 
             case SUGGESTIONS_TABLE_I:
                 result = db.insert(SUGESTIONS_TABLE, null, contentValues);
+                break;
+
+            case MAP_TABLE_I:
+                result = db.insert(MAP_TABLE, null, contentValues);
                 break;
 
             default:
@@ -199,6 +222,15 @@ public class IndexContentProvider extends ContentProvider
             //SearchManager.SUGGEST_COLUMN_INTENT_DATA + " TEXT" +  //not needed, can define in xml
             SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID  + " TEXT" + ")";
 
+    private static final String SQL_CREATE_MAP = "CREATE TABLE " +
+            MAP_TABLE +
+            "(" +
+            COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COL_GPS_ID + " TEXT, " +
+            COL_LAT + " REAL, " +
+            COL_LNG + " REAL, " +
+            COL_DESC + " TEXT, " +
+            COL_CODE + " TEXT)";
 
     /**
      * Helper class that actually creates and manages the provider's underlying data repository.
@@ -223,6 +255,7 @@ public class IndexContentProvider extends ContentProvider
             // Creates the main table
             db.execSQL(SQL_CREATE_MAIN);
             db.execSQL(SQL_CREATE_SUGGEST);
+            db.execSQL(SQL_CREATE_MAP);
             Log.d("Table Helper", "Tables created");
         }
 

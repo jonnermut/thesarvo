@@ -19,6 +19,13 @@ public class Point
         this.latLng = latLng;
         this.description = description;
         this.code = code;
+
+        //if latLng is 0.0 0.0 we can assume it's not valid, none of the points are in africa
+        //saves having to save this data in the table
+        if(!(latLng.latitude == 0.0 && latLng.longitude == 0.0))
+        {
+            valid = true;
+        }
     }
 
     public Point()

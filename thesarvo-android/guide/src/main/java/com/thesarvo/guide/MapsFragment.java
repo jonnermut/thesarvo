@@ -2,7 +2,6 @@ package com.thesarvo.guide;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +41,7 @@ public class MapsFragment extends Fragment
                              Bundle savedInstanceState)
     {
 
+        //FIXME, if the maps button is pressed twice app crashes here
         if (rootView == null)
             rootView = inflater.inflate(R.layout.activity_maps, container, false);
 
