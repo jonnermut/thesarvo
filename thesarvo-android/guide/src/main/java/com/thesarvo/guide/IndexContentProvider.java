@@ -101,7 +101,6 @@ public class IndexContentProvider extends ContentProvider
         db = mOpenHelper.getWritableDatabase();
         SQLiteQueryBuilder qBuilder = new SQLiteQueryBuilder();
 
-        //TODO, most of this...
         //check which table we're querying to
         int table = matcher.match(uri);
         switch (table)

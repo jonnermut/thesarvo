@@ -1,7 +1,6 @@
 package com.thesarvo.guide;
 
 import android.app.SearchManager;
-import android.app.SearchableInfo;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -140,7 +139,6 @@ public class GuideListActivity extends FragmentActivity
         {
             searchView.setIconified(true);
 
-            //FIXME somehow this puts 3 transactions on the back stack
             //intent seems to be passed 3 times
             Log.d("Normal search back", "query is " + getIntent().getStringExtra(SearchableActivity.SEARCH_ITEM_QUERY));
             //showSearchResult(uri);
@@ -156,7 +154,6 @@ public class GuideListActivity extends FragmentActivity
         {
             Log.d("Quick Search Back", uri.toString());
 
-            //TODO this can put two transactions on the back stack when we want to do it as one
             //get the query and display it on the side if in two pane mode
             //if(mTwoPane)
            // {
@@ -170,7 +167,6 @@ public class GuideListActivity extends FragmentActivity
 
             //searchView.setIconified(true);
             showSearchResult(uri, query);
-            //TODO, dose not iconifiy or lose focus properly
            searchView.setIconified(true);
         }
     }
@@ -808,7 +804,6 @@ public class GuideListActivity extends FragmentActivity
                 String desc = cursor.getString(cursor.getColumnIndex(IndexContentProvider.COL_DESC));
                 String code = cursor.getString(cursor.getColumnIndex(IndexContentProvider.COL_CODE));
 
-                //todo need to see if it's valid...
                 points.add(new Point(new LatLng(lat, lng), desc, code));
             }
 

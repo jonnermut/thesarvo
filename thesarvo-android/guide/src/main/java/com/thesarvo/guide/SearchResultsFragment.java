@@ -36,7 +36,7 @@ public class SearchResultsFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-               // TODO: Change Adapter to display your content
+
         String query = "NOTHING AT ALL";
         if(getArguments() != null && getArguments().containsKey(SearchableActivity.SEARCH_ITEM_QUERY))
         {
@@ -117,7 +117,6 @@ public class SearchResultsFragment extends ListFragment {
     * >Communicating with Other Fragments</a> for more information.
     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onSearchFragmentInteraction(String id);
     }
 

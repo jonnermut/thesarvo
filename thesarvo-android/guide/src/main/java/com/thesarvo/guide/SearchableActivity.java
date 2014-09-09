@@ -57,7 +57,6 @@ public class SearchableActivity extends ListActivity
         }
         else if (intent.ACTION_VIEW.equals(intent.getAction()))
         {
-            //TODO, if a quick search is selected we don't get the query, this means we want to nagigate to the appropriate menu in the side
             Uri data = intent.getData();
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log.d("Selected suggestion", data.toString() + " " + query);
