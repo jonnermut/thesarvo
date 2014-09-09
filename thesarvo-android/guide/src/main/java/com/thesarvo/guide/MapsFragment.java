@@ -104,6 +104,8 @@ public class MapsFragment extends Fragment
         if (mMap == null)
             return;
 
+        mMap.setMyLocationEnabled(true);
+
         List<GPSNode> gpsPoints = getGPSPoints();
 
         if (singleNodeData != null)

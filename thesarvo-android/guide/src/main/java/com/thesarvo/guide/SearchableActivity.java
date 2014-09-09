@@ -21,16 +21,11 @@ public class SearchableActivity extends ListActivity
 
     public static final String SEARCH_ITEM_SELECTED = "com.thesarvo.guide.SEARCH_SELECT";
     public static final String SEARCH_ITEM_QUICK_SELECT = "com.thesarvo.guide.SEARCH_QUICK";
+    public static final String SEARCH_ITEM_QUERY = "com.thesarvo.guide.SEARCH_QUERY";
+    public static final String SEARCH_QUICK_QUERY = "com.thesarvo.guide.QUICK_QUERY";
+    public static final String SEARCH_QUICK_CHOICE = "com.thesarvo.guide.QUICK_ITEM";
 
-    private static IndexEntry lastResult = null;
     private static final String[] COLS = {IndexContentProvider.COL_TEXT, IndexContentProvider.COL_VIEW_ID};
-
-    public static IndexEntry getLastResult()
-    {
-        return lastResult;
-    }
-
-    private Uri searchUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +38,24 @@ public class SearchableActivity extends ListActivity
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            ListAdapter results = doMySearch(query);
-            setListAdapter(results);
+            //ListAdapter results = doMySearch(query);
+            //setListAdapter(results);
+
+            //pass the query as an intent back to main activity
+            Intent newIntent = new Intent(this, GuideListActivity.class);
+            newIntent.putExtra(SEARCH_ITEM_QUERY, query);
+            newIntent.setAction(SEARCH_ITEM_SELECTED);  //not really what's happening anymore but lets use it
+            newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            startActivity(newIntent);
+
         }
         else if (intent.ACTION_VIEW.equals(intent.getAction()))
         {
+            //TODO, if a quick search is selected we don't get the query, this means we want to nagigate to the appropriate menu in the side
             Uri data = intent.getData();
-            Log.d("Selected suggestion", data.toString());
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Log.d("Selected suggestion", data.toString() + " " + query);
 
             Intent newIntent = new Intent(this, GuideListActivity.class);
             newIntent.setAction(SEARCH_ITEM_QUICK_SELECT);
@@ -64,15 +70,10 @@ public class SearchableActivity extends ListActivity
             //might be able to manipulate the back stack somehow
             newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
+
             startActivity(newIntent);
             finish();
         }
-
-        Uri.Builder builder = new Uri.Builder();
-        builder.authority(ContentResolver.SCHEME_CONTENT);
-        builder.authority(IndexContentProvider.AUTHORITY);
-        builder.path(IndexContentProvider.MAIN_TABLE);
-        searchUri = builder.build();
     }
 
     private static final String[] SEARCH_PROJECTION = {IndexContentProvider.COL_TEXT,
@@ -81,7 +82,6 @@ public class SearchableActivity extends ListActivity
 
     private static final int[] TO_COLS = {R.id.textViewItem, R.id.placeSubtitle};
 
-    //TODO make it use the adapter
     private ListAdapter doMySearch(String query)
     {
         Log.d("Search", "Searching");

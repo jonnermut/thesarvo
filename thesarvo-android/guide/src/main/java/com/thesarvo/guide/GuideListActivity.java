@@ -1,6 +1,7 @@
 package com.thesarvo.guide;
 
 import android.app.SearchManager;
+import android.app.SearchableInfo;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -54,7 +55,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
  * to listen for item selections.
  */
 public class GuideListActivity extends FragmentActivity
-        implements GuideListFragment.Callbacks
+        implements GuideListFragment.Callbacks,
+        SearchResultsFragment.OnFragmentInteractionListener
 {
 
     private static final String DB_BUILD = "database build date";
@@ -92,9 +94,6 @@ public class GuideListActivity extends FragmentActivity
         ViewModel.get().getRootView();
 
         String id = getIntent().getStringExtra(GuideDetailFragment.ARG_ITEM_ID);
-        String action = getIntent().getAction();
-        Uri uri = getIntent().getData();
-
 
         setContentView(R.layout.activity_guide_list);
 
@@ -117,19 +116,54 @@ public class GuideListActivity extends FragmentActivity
             }
         }
 
+        // TODO: If exposing deep links into your app, handle intents here.
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent)
+    {
+        setIntent(intent);
+        String action = intent.getAction();
+        Uri uri = intent.getData();
+
+
+        Log.d("New Intent", "New intent " + action);
+
+        //TODO, instead of displaying results directly make it so the list adapter shows results and
+        //puts current state on back stack
         if(action.equals(SearchableActivity.SEARCH_ITEM_SELECTED))
         {
-            Log.d("Normal search back", "URI is " + getIntent().getDataString());
-            showSearchResult(uri);
+            Log.d("Normal search back", "query is " + getIntent().getStringExtra(SearchableActivity.SEARCH_ITEM_QUERY));
+            //showSearchResult(uri);
+
+            Map<String, String> args = new HashMap<String, String>();
+            args.put(SearchableActivity.SEARCH_ITEM_QUERY, getIntent().getStringExtra(SearchableActivity.SEARCH_ITEM_QUERY));
+
+            searchView.setIconified(true);
+
+            //todo, the listview does not disapear when this is called
+            showFragment(SearchResultsFragment.class, args, true, true);
 
         }
         else if (action.equals(SearchableActivity.SEARCH_ITEM_QUICK_SELECT))
         {
             Log.d("Quick Search Back", uri.toString());
+
+            //get the query and display it on the side if in two pane mode
+
+
+            if(mTwoPane)
+            {
+                String query = searchView.getQuery().toString();
+                Map<String, String> args = new HashMap<String, String>();
+                args.put(SearchableActivity.SEARCH_ITEM_QUERY, query);
+
+                showFragment(SearchResultsFragment.class, args, true, true);
+            }
+
+            searchView.setIconified(true);
             showSearchResult(uri);
         }
-
-        // TODO: If exposing deep links into your app, handle intents here.
     }
 
     /**
@@ -175,7 +209,16 @@ public class GuideListActivity extends FragmentActivity
 
     }
 
+    @Override
+    public void onSearchFragmentInteraction(String id)
+    {
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme(ContentResolver.SCHEME_CONTENT);
+        builder.authority(IndexContentProvider.AUTHORITY);
+        builder.path(IndexContentProvider.MAIN_TABLE + "/" + id);
 
+        showSearchResult(builder.build());
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -192,14 +235,12 @@ public class GuideListActivity extends FragmentActivity
         searchViewMenuItem.setVisible(false);
         SearchView searchView = (SearchView) searchViewItem.getActionView();
 
-        //TODO needs the component name of SearchableActivity, I think...
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setEnabled(false);
         searchView.setClickable(false);
         searchView.setVisibility(View.INVISIBLE);
         this.searchView = searchView;
 
-        //TODO, we only want indexing to happen if things are changed
         if(!indexed && isDatabaseDirty(TESTER) && searchIndex == null)
         {
             //this stops the indexing from starting again on resume of activity
@@ -271,7 +312,7 @@ public class GuideListActivity extends FragmentActivity
 
             Log.d("Search Result", "Selected view " + viewId + " el " + elementID);
 
-            showGuideDetail(viewId, null, false, elementID);
+            showGuideDetail(viewId, null, true, elementID);
         }
     }
 
@@ -374,6 +415,9 @@ public class GuideListActivity extends FragmentActivity
         if (history)
             ft.addToBackStack(null);
         ft.commit();
+
+
+        Log.d("Add Fragment", "Added");
     }
 
     /**

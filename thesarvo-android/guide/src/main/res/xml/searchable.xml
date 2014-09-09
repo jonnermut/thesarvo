@@ -6,5 +6,7 @@
             android:searchSuggestIntentAction="android.intent.action.VIEW"
             android:includeInGlobalSearch="true"
             android:searchSettingsDescription="@string/search_description"
-            android:searchSuggestIntentData="content://com.thesarvo.guide.provider/main">
+            android:searchSuggestIntentData="content://com.thesarvo.guide.provider/main"
+            android:searchMode="queryRewriteFromText"
+            android:searchSuggestThreshold="3">
 </searchable>
