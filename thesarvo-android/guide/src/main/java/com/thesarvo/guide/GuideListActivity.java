@@ -375,7 +375,10 @@ public class GuideListActivity extends FragmentActivity
         if (singleNodeData != null)
             args.put(GuideDetailFragment.SINGLE_NODE_DATA, singleNodeData);
 
-        showFragment(MapsFragment.class, args, true, false);
+        //instead of just creating a new one see if one exists
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.map);
+        if(fragment == null)
+            showFragment(MapsFragment.class, args, true, false);
     }
 
     public void showFragment( Class<?> fragmentClass, Map<String, String> args, boolean includeInHistory, boolean leftPane)

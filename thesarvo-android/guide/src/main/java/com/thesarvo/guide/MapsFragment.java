@@ -20,7 +20,6 @@ public class MapsFragment extends Fragment
     private View rootView;
     private String singleNodeData;
 
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -40,14 +39,23 @@ public class MapsFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-
-        //FIXME, if the maps button is pressed twice app crashes here
         if (rootView == null)
             rootView = inflater.inflate(R.layout.activity_maps, container, false);
 
         setUpMapIfNeeded();
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+        if(mMap != null){
+            getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.map))
+                    .commit();
+            mMap = null;
+        }
     }
 
     @Override
