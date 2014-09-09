@@ -30,6 +30,9 @@ public class SearchableActivity extends ListActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d("Search Activity", "Created");
+
         setContentView(R.layout.activity_searchable);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -41,11 +44,13 @@ public class SearchableActivity extends ListActivity
             //ListAdapter results = doMySearch(query);
             //setListAdapter(results);
 
-            //pass the query as an intent back to main activity
+            //pass the query as an intent back to main activity, might not be needed, can probably get easily
             Intent newIntent = new Intent(this, GuideListActivity.class);
             newIntent.putExtra(SEARCH_ITEM_QUERY, query);
             newIntent.setAction(SEARCH_ITEM_SELECTED);  //not really what's happening anymore but lets use it
             newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            Log.d("Search Activity", "Returning search results");
 
             startActivity(newIntent);
 
@@ -60,13 +65,8 @@ public class SearchableActivity extends ListActivity
             Intent newIntent = new Intent(this, GuideListActivity.class);
             newIntent.setAction(SEARCH_ITEM_QUICK_SELECT);
 
-            //TODO pass the intent back, better if we can just make the list view searchable and handel it there
-            //WHAT I WAS DOING: trying to make it so it passed the intent back strait away
-            //but instead I'll try to do away with this activity alltogether
-
             //pass the uri back
             newIntent.setData(data);
-            //TODO this is good on a table, but on phone it means it exits when you try to go back...
             //might be able to manipulate the back stack somehow
             newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -84,7 +84,7 @@ public class SearchableActivity extends ListActivity
 
     private ListAdapter doMySearch(String query)
     {
-        Log.d("Search", "Searching");
+        Log.d("Search Activity", "Searching");
 
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(ContentResolver.SCHEME_CONTENT);

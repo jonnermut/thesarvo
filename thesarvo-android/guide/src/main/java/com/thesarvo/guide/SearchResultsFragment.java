@@ -56,7 +56,7 @@ public class SearchResultsFragment extends ListFragment {
 
     private ListAdapter doMySearch(String query)
     {
-        Log.d("Search", "Searching");
+        Log.d("Search Fragment", "Searching");
 
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(ContentResolver.SCHEME_CONTENT);

@@ -95,7 +95,6 @@ public class GuideListActivity extends FragmentActivity
 
         String id = getIntent().getStringExtra(GuideDetailFragment.ARG_ITEM_ID);
 
-        //TODO guidelist fragment needs to be added as a fragment so it can be removed
         setContentView(R.layout.activity_guide_list);
 
         GuideListFragment fragment = new GuideListFragment();
@@ -137,42 +136,45 @@ public class GuideListActivity extends FragmentActivity
 
         Log.d("New Intent", "New intent " + action);
 
-        //TODO, instead of displaying results directly make it so the list adapter shows results and
-        //puts current state on back stack
         if(action.equals(SearchableActivity.SEARCH_ITEM_SELECTED))
         {
+            searchView.setIconified(true);
+
+            //FIXME somehow this puts 3 transactions on the back stack
+            //intent seems to be passed 3 times
             Log.d("Normal search back", "query is " + getIntent().getStringExtra(SearchableActivity.SEARCH_ITEM_QUERY));
             //showSearchResult(uri);
 
             Map<String, String> args = new HashMap<String, String>();
             args.put(SearchableActivity.SEARCH_ITEM_QUERY, getIntent().getStringExtra(SearchableActivity.SEARCH_ITEM_QUERY));
 
-            searchView.setIconified(true);
-
-            //todo, the listview does not disapear when this is called
             showFragment(SearchResultsFragment.class, args, true, true);
+            searchView.setIconified(true);
 
         }
         else if (action.equals(SearchableActivity.SEARCH_ITEM_QUICK_SELECT))
         {
             Log.d("Quick Search Back", uri.toString());
 
+            //TODO this can put two transactions on the back stack when we want to do it as one
             //get the query and display it on the side if in two pane mode
-
-
-            if(mTwoPane)
-            {
+            //if(mTwoPane)
+           // {
                 String query = searchView.getQuery().toString();
-                Map<String, String> args = new HashMap<String, String>();
-                args.put(SearchableActivity.SEARCH_ITEM_QUERY, query);
+                //Map<String, String> args = new HashMap<String, String>();
+                //args.put(SearchableActivity.SEARCH_ITEM_QUERY, query);
+                searchView.setIconified(true); //need to do this before the fragement transaction
 
-                showFragment(SearchResultsFragment.class, args, true, true);
-            }
+                //showFragment(SearchResultsFragment.class, args, true, true);
+            //}
 
-            searchView.setIconified(true);
-            showSearchResult(uri);
+            //searchView.setIconified(true);
+            showSearchResult(uri, query);
+            //TODO, dose not iconifiy or lose focus properly
+           searchView.setIconified(true);
         }
     }
+
 
     /**
      * Callback method from {@link GuideListFragment.Callbacks}
@@ -269,10 +271,10 @@ public class GuideListActivity extends FragmentActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-            case R.id.action_search:
+            /*case R.id.action_search:
                 SearchView searchView = (SearchView) item.getActionView();
                 //start the async process
-                return true;
+                return true;*/
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -297,6 +299,11 @@ public class GuideListActivity extends FragmentActivity
 
     public void showSearchResult(Uri uri)
     {
+        showSearchResult(uri, null);
+    }
+
+    public void showSearchResult(Uri uri, String query)
+    {
         Log.d("Search Result", uri.toString());
         //get a cursor representing the entry
         Cursor c = getContentResolver().query(uri, SEARCH_PROJECTION, null, null, null);
@@ -320,7 +327,26 @@ public class GuideListActivity extends FragmentActivity
 
             Log.d("Search Result", "Selected view " + viewId + " el " + elementID);
 
-            showGuideDetail(viewId, null, true, elementID);
+            if(mTwoPane && query != null)
+            {
+                Bundle args = new Bundle();
+                args.putString(GuideDetailFragment.ARG_ITEM_ID, viewId);
+                args.putString(GuideDetailFragment.ELEMENT_ID, elementID);
+                GuideDetailFragment fragment = new GuideDetailFragment();
+                fragment.setArguments(args);
+
+                args = new Bundle();
+                args.putString(SearchableActivity.SEARCH_ITEM_QUERY, query);
+                SearchResultsFragment resultsFragment = new SearchResultsFragment();
+                resultsFragment.setArguments(args);
+
+                addDoubleFragment(R.id.guide_detail_container, R.id.guide_list,
+                        fragment, resultsFragment, true);
+            }
+            else
+            {
+                showGuideDetail(viewId, null, true, elementID);
+            }
         }
     }
 
@@ -429,6 +455,24 @@ public class GuideListActivity extends FragmentActivity
 
 
         Log.d("Add Fragment", "Added");
+    }
+
+    public void addDoubleFragment(int fragId1, int fragId2, android.support.v4.app.Fragment frag1,
+                                  android.support.v4.app.Fragment frag2, boolean history)
+    {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        //getFragmentManager().beginTransaction();
+        ft.replace(fragId1, frag1);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.replace(fragId2, frag2);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+
+        if (history)
+            ft.addToBackStack(null);
+        ft.commit();
+
+
+        Log.d("Add Fragment", "Double Added");
     }
 
     /**
