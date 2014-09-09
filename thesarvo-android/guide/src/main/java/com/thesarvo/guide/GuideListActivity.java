@@ -95,7 +95,15 @@ public class GuideListActivity extends FragmentActivity
 
         String id = getIntent().getStringExtra(GuideDetailFragment.ARG_ITEM_ID);
 
+        //TODO guidelist fragment needs to be added as a fragment so it can be removed
         setContentView(R.layout.activity_guide_list);
+
+        GuideListFragment fragment = new GuideListFragment();
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.guide_list, fragment,"guidelist");  //make sure we can find it again if needed
+        ft.setTransition(FragmentTransaction.TRANSIT_NONE);
+        ft.commit();
 
         if (findViewById(R.id.guide_detail_container) != null)
         {
@@ -107,7 +115,7 @@ public class GuideListActivity extends FragmentActivity
 
             // In two-pane mode, list items should be given the
             // 'activated' state when touched.
-            GuideListFragment fragment = (GuideListFragment) getSupportFragmentManager().findFragmentById(R.id.guide_list);
+            //GuideListFragment fragment = (GuideListFragment) getSupportFragmentManager().findFragmentById(R.id.guide_list);
             fragment.setActivateOnItemClick(true);
 
             if (id != null)
@@ -352,9 +360,12 @@ public class GuideListActivity extends FragmentActivity
     {
         Bundle arguments = new Bundle();
 
-        for (String key : args.keySet())
+        if(args != null)
         {
-            arguments.putString(key, args.get(key));
+            for (String key : args.keySet())
+            {
+                arguments.putString(key, args.get(key));
+            }
         }
 
         Fragment fragment = null;

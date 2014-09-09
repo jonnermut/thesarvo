@@ -22,7 +22,7 @@
     http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
     -->
 
-    <fragment
+    <FrameLayout
         android:id="@+id/guide_list"
         android:name="com.thesarvo.guide.GuideListFragment"
         android:layout_width="0dp"

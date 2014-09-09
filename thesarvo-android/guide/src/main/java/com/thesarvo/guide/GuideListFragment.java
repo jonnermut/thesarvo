@@ -21,6 +21,8 @@ import android.widget.ListView;
 public class GuideListFragment extends ListFragment
 {
 
+    private boolean activateOnItemClickLater;
+
     public ViewModel.ViewDef getViewDef()
     {
         if (viewDef == null)
@@ -128,6 +130,9 @@ public class GuideListFragment extends ListFragment
         }
 
         getListView().setBackgroundColor(Color.WHITE);
+
+        if(activateOnItemClickLater)
+            setActivateOnItemClick(true);
     }
 
     @Override
@@ -182,9 +187,16 @@ public class GuideListFragment extends ListFragment
     {
         // When setting CHOICE_MODE_SINGLE, ListView will automatically
         // give items the 'activated' state when touched.
-        getListView().setChoiceMode(activateOnItemClick
-                ? ListView.CHOICE_MODE_SINGLE
-                : ListView.CHOICE_MODE_NONE);
+        if(!isVisible())    //wait till it's visible is it's not to avoid illegal state exception
+        {
+            activateOnItemClickLater = true;
+        }
+        else
+        {
+            getListView().setChoiceMode(activateOnItemClick
+                    ? ListView.CHOICE_MODE_SINGLE
+                    : ListView.CHOICE_MODE_NONE);
+        }
     }
 
     private void setActivatedPosition(int position)
