@@ -8,11 +8,12 @@ import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
+
+import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 /**
  * Created by Karl on 5/09/2014.
@@ -235,7 +236,7 @@ public class IndexContentProvider extends ContentProvider
     /**
      * Helper class that actually creates and manages the provider's underlying data repository.
      */
-    protected static final class MainDatabaseHelper extends SQLiteOpenHelper
+    protected static final class MainDatabaseHelper extends SQLiteAssetHelper
     {
 
         /*
@@ -250,14 +251,14 @@ public class IndexContentProvider extends ContentProvider
                  * Creates the data repository. This is called when the provider attempts to open the
                  * repository and SQLite reports that it doesn't exist.
                  */
-        public void onCreate(SQLiteDatabase db) {
+        /*public void onCreate(SQLiteDatabase db) {
 
             // Creates the main table
             db.execSQL(SQL_CREATE_MAIN);
             db.execSQL(SQL_CREATE_SUGGEST);
             db.execSQL(SQL_CREATE_MAP);
             Log.d("Table Helper", "Tables created");
-        }
+        }*/
 
         @Override
         public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2)

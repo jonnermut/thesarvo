@@ -248,7 +248,8 @@ public class GuideListActivity extends FragmentActivity
         searchView.setVisibility(View.INVISIBLE);
         this.searchView = searchView;
 
-        if(!indexed && isDatabaseDirty(TESTER) && searchIndex == null)
+        //if(!indexed && isDatabaseDirty(TESTER) && searchIndex == null)
+        if(false) //database re-indexing not yet implemented
         {
             //this stops the indexing from starting again on resume of activity
             searchIndex = new SearchIndex();
