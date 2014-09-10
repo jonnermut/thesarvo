@@ -135,22 +135,23 @@ public class GuideListActivity extends FragmentActivity
 
         Log.d("New Intent", "New intent " + action);
 
-        if(action.equals(SearchableActivity.SEARCH_ITEM_SELECTED))
+        if(action.equals(Intent.ACTION_SEARCH))
         {
+            String query = searchView.getQuery().toString();
             searchView.setIconified(true);
 
             //intent seems to be passed 3 times
-            Log.d("Normal search back", "query is " + getIntent().getStringExtra(SearchableActivity.SEARCH_ITEM_QUERY));
+            Log.d("Normal search back", "query is " + query);
             //showSearchResult(uri);
 
             Map<String, String> args = new HashMap<String, String>();
-            args.put(SearchableActivity.SEARCH_ITEM_QUERY, getIntent().getStringExtra(SearchableActivity.SEARCH_ITEM_QUERY));
+            args.put(SearchableActivity.SEARCH_ITEM_QUERY, query);
 
             showFragment(SearchResultsFragment.class, args, true, true);
             searchView.setIconified(true);
 
         }
-        else if (action.equals(SearchableActivity.SEARCH_ITEM_QUICK_SELECT))
+        else if (action.equals(Intent.ACTION_VIEW)) //probably shouldn't be something so generic, will need to be changed if ever end up using action view
         {
             Log.d("Quick Search Back", uri.toString());
 
