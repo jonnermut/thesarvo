@@ -1,6 +1,7 @@
 package com.thesarvo.guide;
 
 import android.annotation.TargetApi;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -8,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
+import android.webkit.MimeTypeMap;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -109,8 +112,8 @@ public class GuideDetailFragment extends Fragment
             }
             else if (viewId.startsWith("guide."))
             {
-                //url = "file:///android_asset/www/index.html";
-                url = GuideListActivity.getAssetPath("www.index.html");
+                url = "file:///android_asset/www/index.html";
+                //url = GuideListActivity.getAssetPath("www.index.html");
             }
 
             webview.loadUrl(url);
@@ -330,6 +333,8 @@ public class GuideDetailFragment extends Fragment
 
     public class WVClient extends WebViewClient
     {
+        MimeTypeMap map = MimeTypeMap.getSingleton();
+
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url)
         {
@@ -372,6 +377,27 @@ public class GuideDetailFragment extends Fragment
 
             return false;
         }
-    }
 
+        @Override
+        public WebResourceResponse shouldInterceptRequest(WebView view, String url)
+        {
+            Log.d("Intercept response", url);
+            if(Uri.parse(url).getHost() != null)
+            {
+                if (Uri.parse(url).getHost().equals(Uri.parse("file:///android_asset/...").getHost()))
+                {
+                    String path = Uri.parse(url).getPath();
+                    path = path.substring("/android_asset/".length());
+                    Log.d("Intercept response", path);
+
+                    InputStream stream = GuideListActivity.getWWWAsset(path);
+                    String mime = map.getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(url));
+
+                    return new WebResourceResponse(mime, "UTF-8", stream);
+                }
+            }
+
+            return super.shouldInterceptRequest(view, url);
+        }
+    }
 }

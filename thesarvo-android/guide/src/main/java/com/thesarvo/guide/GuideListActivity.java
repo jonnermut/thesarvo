@@ -25,13 +25,14 @@ import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.android.vending.expansion.zipfile.APKExpansionSupport;
+import com.android.vending.expansion.zipfile.ZipResourceFile;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -41,8 +42,6 @@ import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import com.android.vending.expansion.zipfile.ZipResourceFile;
 
 
 /**
@@ -92,10 +91,6 @@ public class GuideListActivity extends FragmentActivity
     private boolean mapsIndexed = false;
 
     private static ZipResourceFile resources;
-    private static StorageManager manager;
-    private static ObbListener obbListener;
-    private static String obbRawPath = null;
-    private static String obbPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -104,21 +99,10 @@ public class GuideListActivity extends FragmentActivity
 
         Log.d("Main", "Created " + getIntent().getAction());
 
-        calculateRawObbPath(EXP_VERSION_NO);
-        if(obbRawPath != null)
-        {
-            mountAssets();
-        }
-        else
-        {
-            Toast.makeText(this, "Error finding obb!", Toast.LENGTH_LONG).show();
-            Log.d("Main", "Error finding obb");
-        }
-
         //TODO, use this to check for the existance of the file and then mount it as a virtual file system
         //APKExpansionSupport.getAPKExpansionZipFile(this, EXP_VERSION_NO, 0);
 
-       /* try
+        try
         {
             resources = APKExpansionSupport.getAPKExpansionZipFile(this, EXP_VERSION_NO, 0);
         }
@@ -132,7 +116,7 @@ public class GuideListActivity extends FragmentActivity
         {
             Toast.makeText(this, "Error opening data", Toast.LENGTH_LONG).show();
             Log.d("Main", "Error opening data");
-        }*/
+        }
 
 
         if (instance ==  null)
@@ -881,72 +865,12 @@ public class GuideListActivity extends FragmentActivity
         }
     }
 
-    private void calculateRawObbPath(int versionNo)
-    {
-        String pkgName = getPackageName();
-        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-        {
-            String root = Environment.getExternalStorageDirectory().toString();
-            File expPath = new File(root + "/Android/obb/" + pkgName);
-            if(expPath.exists())
-            {
-                File exp = new File(expPath.toString() + File.separator + "main." + versionNo
-                        + "." + pkgName + ".obb");
-                if(exp.isFile())
-                {
-                    obbRawPath = exp.getPath();
-                    Log.d("Find obb", "Path is " + obbRawPath);
-                }
-            }
-        }
-    }
-
-    private void mountAssets()
-    {
-        Log.d("Mount assets", "Mounting");
-        manager = (StorageManager) getSystemService(STORAGE_SERVICE);
-        obbListener = new ObbListener();
-        manager.mountObb(obbRawPath, null, obbListener); //ques it only
-    }
-
-    public static String getObbPath()
-    {
-        return obbPath;
-    }
-
-    private static class ObbListener extends OnObbStateChangeListener
-    {
-        @Override
-        public void onObbStateChange(String path, int state)
-        {
-            Log.d("Obb state change", "Path + state " + path + " " + state);
-            //if(path.equals(obbRawPath))
-                switch (state)
-                {
-                    case MOUNTED:
-                        obbPath = manager.getMountedObbPath(path);
-                        Log.d("Obb State Change", path + "Mounted");
-                        break;
-                    //TODO handel other states
-                }
-        }
-    }
-
-    public static String getAssetPath(String file)
-    {
-        if(getObbPath() != null)
-        {
-            return getObbPath() + File.separator + file;
-        }
-        else return null;
-    }
-
     public static InputStream getWWWAsset(String file)
     {
         InputStream stream = null;
         try
         {
-            stream = new FileInputStream(getAssetPath(file));
+            stream = resources.getInputStream(file);
         }
         catch (IOException e)
         {
