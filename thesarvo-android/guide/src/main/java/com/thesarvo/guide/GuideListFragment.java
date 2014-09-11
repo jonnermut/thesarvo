@@ -115,6 +115,10 @@ public class GuideListFragment extends ListFragment
 
 
         setListAdapter(adapter);
+
+        //may as well set this to true, it will disappear on phones anyway
+        //TODO test this actually dosen't have negitive effects on phones
+        setActivateOnItemClick(true);
     }
 
     @Override

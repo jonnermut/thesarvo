@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/downloader_library/downloader_library.iml" filepath="$PROJECT_DIR$/downloader_library/downloader_library.iml" />
       <module fileurl="file://$PROJECT_DIR$/guide/guide.iml" filepath="$PROJECT_DIR$/guide/guide.iml" />
-      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
       <module fileurl="file://$PROJECT_DIR$/market_licensing/market_licensing.iml" filepath="$PROJECT_DIR$/market_licensing/market_licensing.iml" />
       <module fileurl="file://$PROJECT_DIR$/thesarvo-android.iml" filepath="$PROJECT_DIR$/thesarvo-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/zip_file/zip_file.iml" filepath="$PROJECT_DIR$/zip_file/zip_file.iml" />

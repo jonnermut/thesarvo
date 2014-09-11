@@ -1,19 +1,19 @@
 package com.thesarvo.guide;
 
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.storage.OnObbStateChangeListener;
-import android.os.storage.StorageManager;
+import android.os.Messenger;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -22,12 +22,21 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.vending.expansion.zipfile.APKExpansionSupport;
 import com.android.vending.expansion.zipfile.ZipResourceFile;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
+import com.google.android.vending.expansion.downloader.DownloaderClientMarshaller;
+import com.google.android.vending.expansion.downloader.DownloaderServiceMarshaller;
+import com.google.android.vending.expansion.downloader.Helpers;
+import com.google.android.vending.expansion.downloader.IDownloaderClient;
+import com.google.android.vending.expansion.downloader.IDownloaderService;
+import com.google.android.vending.expansion.downloader.IStub;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -62,13 +71,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
  */
 public class GuideListActivity extends FragmentActivity
         implements GuideListFragment.Callbacks,
-        SearchResultsFragment.OnFragmentInteractionListener
+        SearchResultsFragment.OnFragmentInteractionListener, IDownloaderClient
 {
 
     private static final String DB_BUILD = "database build date";
     private static final int TESTER = 10000017;
     private static final String[] SEARCH_PROJECTION = {"VIEW_ID", "ELEMENT_ID"};
     private static final int EXP_VERSION_NO = 1;
+    private static final long MAIN_EXP_FILE_SIZE = 191635456l;
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -95,16 +105,45 @@ public class GuideListActivity extends FragmentActivity
 
     private static boolean launched = false;
 
+    private IStub downloaderStub;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
-        Log.d("Main", "Created " + getIntent().getAction());
+        Log.d("Main", "Created " + getIntent().getAction() + " " + getIntent().getCategories());
 
         //TODO, use this to check for the existance of the file and then mount it as a virtual file system
+        //we want to do this without communicating with the server if possible
+        if(!expansionFilesDelivered(EXP_VERSION_NO))
+        {
+            Intent notifier = new Intent(this, GuideListActivity.class);
+            notifier.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifier,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
 
+            int downloading = -10;
+
+            try
+            {
+                downloading = DownloaderClientMarshaller.startDownloadServiceIfRequired(this,
+                        pendingIntent, AssetsDownloader.class);
+            }
+            catch (PackageManager.NameNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+
+            if(downloading != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED)
+            {
+                downloaderStub = DownloaderClientMarshaller.CreateStub(this, AssetsDownloader.class);
+                setContentView(R.layout.downloader_ui);
+                return;
+            }
+
+        }
         if(!haveResources)
         {
             try
@@ -127,19 +166,25 @@ public class GuideListActivity extends FragmentActivity
         }
 
 
-        if (instance ==  null)
+        //we always want to update this to the current instance
+        //if (instance ==  null)
             instance = this;
 
         //this on create can get called at other times, we only want to do this set up once
         String id = getIntent().getStringExtra(GuideDetailFragment.ARG_ITEM_ID);
         setContentView(R.layout.activity_guide_list);
 
+        //todo, this needs to be re-created on back press off back stack
         if(!launched)
         {
             ViewModel.get().getRootView();
 
+            launched = true;
+        }
 
-
+        //if this fragment dosen't exist (ie has been poped off the back stack, recreate
+        if(getSupportFragmentManager().findFragmentByTag("guidelist") == null)
+        {
             GuideListFragment fragment = new GuideListFragment();
             fragment.setActivateOnItemClick(true);
 
@@ -148,7 +193,6 @@ public class GuideListActivity extends FragmentActivity
             ft.setTransition(FragmentTransaction.TRANSIT_NONE);
             ft.commit();
 
-            launched = true;
         }
 
         if (findViewById(R.id.guide_detail_container) != null)
@@ -176,6 +220,7 @@ public class GuideListActivity extends FragmentActivity
 
         // TODO: If exposing deep links into your app, handle intents here.
     }
+
 
     @Override
     protected void onNewIntent(Intent intent)
@@ -557,6 +602,61 @@ public class GuideListActivity extends FragmentActivity
         }
     }
 
+    private IDownloaderService mRemoteService;
+
+    @Override
+    public void onServiceConnected(Messenger m)
+    {
+        mRemoteService = DownloaderServiceMarshaller.CreateProxy(m);
+        mRemoteService.onClientUpdated(downloaderStub.getMessenger());
+    }
+
+    @Override
+    public void onDownloadStateChanged(int newState)
+    {
+        switch (newState)
+        {
+            case IDownloaderClient.STATE_COMPLETED:
+                //restart the activity
+                Intent intent = new Intent(this, GuideListActivity.class);
+                intent.setAction(Intent.ACTION_MAIN);
+                startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onDownloadProgress(DownloadProgressInfo progress)
+    {
+        TextView downloadProgress = (TextView) findViewById(R.id.text_downloaded_amount);
+        downloadProgress.setText(Long.toString(progress.mOverallProgress * 100 / progress.mOverallTotal) + "%");
+
+        TextView timeRemaining = (TextView) (findViewById(R.id.text_time_remaing));
+        timeRemaining.setText(Helpers.getTimeRemaining(progress.mTimeRemaining));
+
+        TextView speed = (TextView) findViewById(R.id.speed_text);
+        speed.setText(Helpers.getSpeedString(progress.mCurrentSpeed));
+
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setMax((int)(progress.mOverallTotal >> 8));
+        progressBar.setProgress((int)(progress.mOverallTotal >> 8));
+    }
+
+    @Override
+    protected void onResume() {
+        if (null != downloaderStub) {
+            downloaderStub.connect(this);
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        if (null != downloaderStub) {
+            downloaderStub.disconnect(this);
+        }
+        super.onStop();
+    }
+
     private class SearchIndex extends AsyncTask<String, Integer, Long>
     {
         final String WWW_PATH = "www/data/";
@@ -898,5 +998,16 @@ public class GuideListActivity extends FragmentActivity
         }
 
         return stream;
+    }
+
+    //probably don't need anything this complex at this point
+    //I don't even see the point of this when in step two we can use a lib to verify this anyway
+    private boolean expansionFilesDelivered(int mainVersion)
+    {
+        String mainFile = Helpers.getExpansionAPKFileName(this, true, mainVersion);
+        Log.d("Checking EXAPK existance", Helpers.generateSaveFileName(this, mainFile));
+        File file = new File(Helpers.generateSaveFileName(this, mainFile));
+        return file.exists();
+        //return Helpers.doesFileExist(this, mainFile, MAIN_EXP_FILE_SIZE, false);
     }
 }

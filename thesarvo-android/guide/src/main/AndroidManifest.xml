@@ -64,6 +64,9 @@
             android:name="com.thesarvo.guide.IndexContentProvider"
             android:exported="false"/>
 
+        <service android:name=".AssetsDownloader"/>
+        <receiver android:name=".AssetAlarmReceiver"/>
+
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

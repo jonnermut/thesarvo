@@ -351,6 +351,8 @@ public class GuideDetailFragment extends Fragment
                     if (data.startsWith("/"))
                         data = data.substring(1);
 
+                    //problem with this is it's calling on a main activity with a changed state,
+                    //should use some sort of callback instead
                     if ("openImage".equals(command))
                     {
                         Log.d("thesarvo", "openImage");
