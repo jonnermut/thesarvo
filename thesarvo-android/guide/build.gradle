@@ -24,10 +24,13 @@ android {
 }
 
 dependencies {
-    compile group: 'com.google.guava', name: 'guava', version: '16.0'
+    compile 'com.google.guava:guava:16.0'
     compile 'com.android.support:appcompat-v7:20.0.0'
     compile 'com.android.support:support-v4:20.0.0'
     compile 'commons-io:commons-io:2.4'
     compile 'com.google.android.gms:play-services:5.0.89'
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
+    compile project(':downloader_library')
+    compile project(':market_licensing')
+    compile project(':zip_file')
 }

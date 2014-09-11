@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="2" >
+
+    <dataSet config="main" >
+        <source path="E:\Documents\programing\thesarvo\thesarvo-android\zip_file\src\main\res" />
+        <source path="E:\Documents\programing\thesarvo\thesarvo-android\zip_file\build\generated\res\rs\debug" />
+        <source path="E:\Documents\programing\thesarvo\thesarvo-android\zip_file\build\generated\res\generated\debug" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="E:\Documents\programing\thesarvo\thesarvo-android\zip_file\src\debug\res" />
+    </dataSet>
+
+</merger>

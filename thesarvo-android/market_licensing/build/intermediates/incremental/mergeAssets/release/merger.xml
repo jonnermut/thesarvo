@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="2" >
+
+    <dataSet config="main" >
+        <source path="E:\Documents\programing\thesarvo\thesarvo-android\market_licensing\src\main\assets" />
+    </dataSet>
+    <dataSet config="release" >
+        <source path="E:\Documents\programing\thesarvo\thesarvo-android\market_licensing\src\release\assets" />
+    </dataSet>
+
+</merger>

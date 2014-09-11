@@ -381,14 +381,14 @@ public class GuideDetailFragment extends Fragment
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, String url)
         {
-            Log.d("Intercept response", url);
+            //Log.d("Intercept response", url);
             if(Uri.parse(url).getHost() != null)
             {
                 if (Uri.parse(url).getHost().equals(Uri.parse("file:///android_asset/...").getHost()))
                 {
                     String path = Uri.parse(url).getPath();
                     path = path.substring("/android_asset/".length());
-                    Log.d("Intercept response", path);
+                    //Log.d("Intercept response", path);
 
                     InputStream stream = GuideListActivity.getWWWAsset(path);
                     String mime = map.getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(url));

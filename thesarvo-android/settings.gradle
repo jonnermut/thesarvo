@@ -1,1 +1,4 @@
-include ':guide'
+include ':guide', ':market_licensing', ':downloader_library'
+
+include ':library'
+include ':zip_file'

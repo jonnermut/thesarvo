@@ -86,6 +86,9 @@
     <orderEntry type="library" exported="" name="play-services-5.0.89" level="project" />
     <orderEntry type="library" exported="" name="support-v4-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="commons-io-2.4" level="project" />
+    <orderEntry type="module" module-name="market_licensing" exported="" />
+    <orderEntry type="module" module-name="zip_file" exported="" />
+    <orderEntry type="module" module-name="downloader_library" exported="" />
   </component>
 </module>
 

@@ -1,0 +1,19 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 15
+    buildToolsVersion "19.1.0"
+
+    defaultConfig {
+        applicationId "com.android.vending.expansion.zipfile"
+        minSdkVersion 5
+        targetSdkVersion 15
+    }
+
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}

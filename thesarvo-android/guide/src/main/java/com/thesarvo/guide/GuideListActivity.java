@@ -91,6 +91,9 @@ public class GuideListActivity extends FragmentActivity
     private boolean mapsIndexed = false;
 
     private static ZipResourceFile resources;
+    private static boolean haveResources;
+
+    private static boolean launched = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -100,40 +103,53 @@ public class GuideListActivity extends FragmentActivity
         Log.d("Main", "Created " + getIntent().getAction());
 
         //TODO, use this to check for the existance of the file and then mount it as a virtual file system
-        //APKExpansionSupport.getAPKExpansionZipFile(this, EXP_VERSION_NO, 0);
 
-        try
-        {
-            resources = APKExpansionSupport.getAPKExpansionZipFile(this, EXP_VERSION_NO, 0);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            Toast.makeText(this, "Error opening database!", Toast.LENGTH_LONG).show();
-        }
 
-        if(resources == null)
+        if(!haveResources)
         {
-            Toast.makeText(this, "Error opening data", Toast.LENGTH_LONG).show();
-            Log.d("Main", "Error opening data");
+            try
+            {
+                resources = APKExpansionSupport.getAPKExpansionZipFile(this, EXP_VERSION_NO, 0);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+                Toast.makeText(this, "Error opening database!", Toast.LENGTH_LONG).show();
+            }
+
+            if(resources == null)
+            {
+                Toast.makeText(this, "Error opening data", Toast.LENGTH_LONG).show();
+                Log.d("Main", "Error opening data");
+            }
+
+            haveResources = true;
         }
 
 
         if (instance ==  null)
             instance = this;
 
-        ViewModel.get().getRootView();
-
+        //this on create can get called at other times, we only want to do this set up once
         String id = getIntent().getStringExtra(GuideDetailFragment.ARG_ITEM_ID);
-
         setContentView(R.layout.activity_guide_list);
 
-        GuideListFragment fragment = new GuideListFragment();
+        if(!launched)
+        {
+            ViewModel.get().getRootView();
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.guide_list, fragment,"guidelist");  //make sure we can find it again if needed
-        ft.setTransition(FragmentTransaction.TRANSIT_NONE);
-        ft.commit();
+
+
+            GuideListFragment fragment = new GuideListFragment();
+            fragment.setActivateOnItemClick(true);
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.add(R.id.guide_list, fragment, "guidelist");  //make sure we can find it again if needed
+            ft.setTransition(FragmentTransaction.TRANSIT_NONE);
+            ft.commit();
+
+            launched = true;
+        }
 
         if (findViewById(R.id.guide_detail_container) != null)
         {
@@ -145,12 +161,16 @@ public class GuideListActivity extends FragmentActivity
 
             // In two-pane mode, list items should be given the
             // 'activated' state when touched.
-            //GuideListFragment fragment = (GuideListFragment) getSupportFragmentManager().findFragmentById(R.id.guide_list);
-            fragment.setActivateOnItemClick(true);
+            GuideListFragment fragment = (GuideListFragment) getSupportFragmentManager().findFragmentByTag("guidelist");
+            if(fragment != null)
+            {
+                fragment.setActivateOnItemClick(true);
+            }
+
 
             if (id != null)
             {
-                fragment.setViewDef( ViewModel.get().getViews().get(id) );
+                fragment.setViewDef(ViewModel.get().getViews().get(id));
             }
         }
 
