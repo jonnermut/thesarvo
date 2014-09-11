@@ -11,6 +11,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.storage.OnObbStateChangeListener;
+import android.os.storage.StorageManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -27,6 +30,9 @@ import com.google.android.gms.maps.model.LatLng;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +41,8 @@ import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import com.android.vending.expansion.zipfile.ZipResourceFile;
 
 
 /**
@@ -61,6 +69,7 @@ public class GuideListActivity extends FragmentActivity
     private static final String DB_BUILD = "database build date";
     private static final int TESTER = 10000017;
     private static final String[] SEARCH_PROJECTION = {"VIEW_ID", "ELEMENT_ID"};
+    private static final int EXP_VERSION_NO = 1;
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -82,10 +91,49 @@ public class GuideListActivity extends FragmentActivity
     private boolean indexed = false;
     private boolean mapsIndexed = false;
 
+    private static ZipResourceFile resources;
+    private static StorageManager manager;
+    private static ObbListener obbListener;
+    private static String obbRawPath = null;
+    private static String obbPath;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        Log.d("Main", "Created " + getIntent().getAction());
+
+        calculateRawObbPath(EXP_VERSION_NO);
+        if(obbRawPath != null)
+        {
+            mountAssets();
+        }
+        else
+        {
+            Toast.makeText(this, "Error finding obb!", Toast.LENGTH_LONG).show();
+            Log.d("Main", "Error finding obb");
+        }
+
+        //TODO, use this to check for the existance of the file and then mount it as a virtual file system
+        //APKExpansionSupport.getAPKExpansionZipFile(this, EXP_VERSION_NO, 0);
+
+       /* try
+        {
+            resources = APKExpansionSupport.getAPKExpansionZipFile(this, EXP_VERSION_NO, 0);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            Toast.makeText(this, "Error opening database!", Toast.LENGTH_LONG).show();
+        }
+
+        if(resources == null)
+        {
+            Toast.makeText(this, "Error opening data", Toast.LENGTH_LONG).show();
+            Log.d("Main", "Error opening data");
+        }*/
+
 
         if (instance ==  null)
             instance = this;
@@ -558,6 +606,8 @@ public class GuideListActivity extends FragmentActivity
                 //for(String s : actualFiles)
                 {
                     String s = WWW_PATH + item.getViewId().substring(6) +  ".xml";
+                    //NOTE assets are no longer bundeled but this is no longer used.
+                    //I'll keep it here for now for when this code is eventually ported to a separate app
                     InputStream stream = manager.open(s);
                     Document dom = builder.parse(stream);
 
@@ -831,5 +881,78 @@ public class GuideListActivity extends FragmentActivity
         }
     }
 
+    private void calculateRawObbPath(int versionNo)
+    {
+        String pkgName = getPackageName();
+        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+        {
+            String root = Environment.getExternalStorageDirectory().toString();
+            File expPath = new File(root + "/Android/obb/" + pkgName);
+            if(expPath.exists())
+            {
+                File exp = new File(expPath.toString() + File.separator + "main." + versionNo
+                        + "." + pkgName + ".obb");
+                if(exp.isFile())
+                {
+                    obbRawPath = exp.getPath();
+                    Log.d("Find obb", "Path is " + obbRawPath);
+                }
+            }
+        }
+    }
 
+    private void mountAssets()
+    {
+        Log.d("Mount assets", "Mounting");
+        manager = (StorageManager) getSystemService(STORAGE_SERVICE);
+        obbListener = new ObbListener();
+        manager.mountObb(obbRawPath, null, obbListener); //ques it only
+    }
+
+    public static String getObbPath()
+    {
+        return obbPath;
+    }
+
+    private static class ObbListener extends OnObbStateChangeListener
+    {
+        @Override
+        public void onObbStateChange(String path, int state)
+        {
+            Log.d("Obb state change", "Path + state " + path + " " + state);
+            //if(path.equals(obbRawPath))
+                switch (state)
+                {
+                    case MOUNTED:
+                        obbPath = manager.getMountedObbPath(path);
+                        Log.d("Obb State Change", path + "Mounted");
+                        break;
+                    //TODO handel other states
+                }
+        }
+    }
+
+    public static String getAssetPath(String file)
+    {
+        if(getObbPath() != null)
+        {
+            return getObbPath() + File.separator + file;
+        }
+        else return null;
+    }
+
+    public static InputStream getWWWAsset(String file)
+    {
+        InputStream stream = null;
+        try
+        {
+            stream = new FileInputStream(getAssetPath(file));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return stream;
+    }
 }

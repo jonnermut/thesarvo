@@ -109,7 +109,8 @@ public class GuideDetailFragment extends Fragment
             }
             else if (viewId.startsWith("guide."))
             {
-                url = "file:///android_asset/www/index.html";
+                //url = "file:///android_asset/www/index.html";
+                url = GuideListActivity.getAssetPath("www.index.html");
             }
 
             webview.loadUrl(url);
@@ -307,7 +308,7 @@ public class GuideDetailFragment extends Fragment
         String ret = null;
         try
         {
-            InputStream is = getActivity().getAssets().open("www/data/"+ filename);
+            InputStream is =  GuideListActivity.getWWWAsset("www/data/"+ filename);
             ret = IOUtils.toString(is, Charsets.UTF_8);
         }
         catch (IOException e)
