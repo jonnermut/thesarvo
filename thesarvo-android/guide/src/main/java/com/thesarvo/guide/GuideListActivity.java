@@ -77,7 +77,7 @@ public class GuideListActivity extends FragmentActivity
     private static final String DB_BUILD = "database build date";
     private static final int TESTER = 10000017;
     private static final String[] SEARCH_PROJECTION = {"VIEW_ID", "ELEMENT_ID"};
-    private static final int EXP_VERSION_NO = 1;
+    private static final int EXP_VERSION_NO = 2;
     private static final long MAIN_EXP_FILE_SIZE = 191635456l;
 
     /**
@@ -617,10 +617,11 @@ public class GuideListActivity extends FragmentActivity
         switch (newState)
         {
             case IDownloaderClient.STATE_COMPLETED:
-                //restart the activity
-                Intent intent = new Intent(this, GuideListActivity.class);
+                //restart the activity - won't do this...
+                /*Intent intent = new Intent(this, GuideListActivity.class);
                 intent.setAction(Intent.ACTION_MAIN);
-                startActivity(intent);
+                startActivity(intent);*/
+                finish();   //simply exit and let them reopen the app
         }
     }
 
@@ -633,12 +634,12 @@ public class GuideListActivity extends FragmentActivity
         TextView timeRemaining = (TextView) (findViewById(R.id.text_time_remaing));
         timeRemaining.setText(Helpers.getTimeRemaining(progress.mTimeRemaining));
 
-        TextView speed = (TextView) findViewById(R.id.speed_text);
+        TextView speed = (TextView) findViewById(R.id.text_speed_amount);
         speed.setText(Helpers.getSpeedString(progress.mCurrentSpeed));
 
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar3);
         progressBar.setMax((int)(progress.mOverallTotal >> 8));
-        progressBar.setProgress((int)(progress.mOverallTotal >> 8));
+        progressBar.setProgress((int)(progress.mOverallProgress >> 8));
     }
 
     @Override

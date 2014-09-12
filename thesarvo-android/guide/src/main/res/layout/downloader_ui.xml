@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/downloading_data"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar3"
+        android:layout_below="@+id/textView"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:layout_marginTop="211dp"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/Downloaded"
+        android:id="@+id/text_downloaded"
+        android:layout_below="@+id/progressBar3"
+        android:layout_alignLeft="@+id/progressBar3"
+        android:layout_alignStart="@+id/progressBar3"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text=""
+        android:id="@+id/text_downloaded_amount"
+        android:layout_below="@+id/progressBar3"
+        android:layout_alignRight="@+id/progressBar3"
+        android:layout_alignEnd="@+id/progressBar3"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/speed"
+        android:id="@+id/speed_text"
+        android:layout_below="@+id/text_downloaded"
+        android:layout_alignLeft="@+id/text_downloaded"
+        android:layout_alignStart="@+id/text_downloaded"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text=""
+        android:id="@+id/text_speed_amount"
+        android:layout_below="@+id/text_downloaded_amount"
+        android:layout_alignRight="@+id/text_downloaded_amount"
+        android:layout_alignEnd="@+id/text_downloaded_amount"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/time_remaning"
+        android:id="@+id/textView6"
+        android:layout_below="@+id/speed_text"
+        android:layout_alignLeft="@+id/speed_text"
+        android:layout_alignStart="@+id/speed_text"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text=""
+        android:id="@+id/text_time_remaing"
+        android:layout_below="@+id/text_speed_amount"
+        android:layout_alignRight="@+id/progressBar3"
+        android:layout_alignEnd="@+id/progressBar3"/>
+</RelativeLayout>

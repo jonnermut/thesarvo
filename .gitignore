@@ -14,3 +14,4 @@ thesarvo_iphone_1.3/old_data
 thesarvo_android/guide/src/main/assets/www/*
 thesarvo_android/guide/src/main/assets/www
 thesarvo_android/guide/src/main/assets
+thesarvo_android/guide/src/release/res/values/google_maps_api.xml #don't want to make API key public
