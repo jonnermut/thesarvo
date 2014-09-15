@@ -475,8 +475,8 @@ public class GuideListActivity extends FragmentActivity
             args.put(GuideDetailFragment.SINGLE_NODE_DATA, singleNodeData);
 
         //instead of just creating a new one see if one exists
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.map);
-        if(fragment == null)
+//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.map);
+//        if(fragment == null)
             showFragment(MapsFragment.class, args, true, false);
     }
 

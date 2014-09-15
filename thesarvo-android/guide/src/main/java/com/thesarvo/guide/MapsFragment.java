@@ -2,6 +2,7 @@ package com.thesarvo.guide;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ public class MapsFragment extends Fragment
 {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private View rootView;
+    private static View rootView;
     private String singleNodeData;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -39,8 +40,22 @@ public class MapsFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        if (rootView == null)
+        if (rootView != null)
+        {
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if(parent != null)
+            {
+                parent.removeView(rootView);
+            }
+        }
+        try
+        {
             rootView = inflater.inflate(R.layout.activity_maps, container, false);
+        }
+        catch (InflateException e)
+        {
+            //Map is already created, do nothing
+        }
 
         setUpMapIfNeeded();
 
@@ -52,8 +67,9 @@ public class MapsFragment extends Fragment
     {
         super.onDestroyView();
         if(mMap != null){
-            getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.map))
-                    .commit();
+            /*getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.map))
+                    .commit();*/
+            //rootView.setVisibility(View.GONE);
             mMap = null;
         }
     }
