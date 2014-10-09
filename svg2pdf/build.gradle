@@ -1,0 +1,249 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.5
+version = '1.0'
+
+repositories {
+    mavenCentral()
+//    maven {
+//        url "https://maven.atlassian.com/content/repositories/atlassian-public/"
+//    }
+
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath files('lib/svgSalamander.jar')
+        classpath 'com.itextpdf:itextpdf:5.5.3'
+        classpath "org.gebish:geb-core:0.9.3"
+        classpath "org.seleniumhq.selenium:selenium-firefox-driver:2.+"
+        classpath "org.seleniumhq.selenium:selenium-support:2.+"
+
+    }
+}
+
+dependencies {
+    //compile 'org.apache.xmlgraphics:batik-rasterizer:1.7'
+    //compile 'org.apache.xmlgraphics:batik-transcoder:1.7'
+    //runtime 'org.apache.xmlgraphics:fop:1.1'
+    compile files('lib/svgSalamander.jar')
+    //compile 'com.kitfox:kitfox-svg-salamander:1.0.8'
+    compile 'com.itextpdf:itextpdf:5.5.3'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+import geb.Browser
+
+def svgs = [];
+
+task getSvgs << {
+
+    Browser.drive {
+
+        def name = 'The_Columns'
+        def uname = name.replace('_', '+')
+
+        go "http://www.thesarvo.com/confluence/display/thesarvo/$uname"
+
+        waitFor 20, {  $("svg") }
+
+        int i = 0;
+        for (s in $("svg")) {
+            def html = s.getAttribute('outerHTML')
+
+            // various fixes to the svg so we can render it
+            html = html.replace("dasharray=\"-", "dasharray=\"")
+            html = html.replace("Impact,Tahoma,Helvetica", "Impact")
+            html = html.replace("Tahoma, Helvetica", "Tahoma")
+            html = html.replace("xlink:href", "href")
+
+            def img = s.parent().parent().find("img")
+            String src = img.getAttribute("src")
+            def imgfilename = src.substring(src.lastIndexOf('/') + 1)
+            println imgfilename
+
+            def table = s.parent().parent().find("table")
+            if (table) {
+                int sx = table.parent().parent().parent().x
+                int sy = table.parent().parent().parent().y
+                def tabhtml = table.getAttribute('outerHTML')
+                println tabhtml
+
+                int tx = Integer.parseInt(table.parent().parent().getAttribute("offsetLeft"))
+                int ty = Integer.parseInt(table.parent().parent().getAttribute("offsetTop"))
+                int tw = table.width
+                int th = table.height
+                def inc = ""
+                inc += "<rect x='${tx}' y='${ty}' width='${tw}' height='${th}' " +
+                        "r=\"0\" rx=\"4\" ry=\"4\" fill=\"#000000\" " +
+                        "stroke=\"#000000\" stroke-width=\"1\" " +
+                        "opacity=\"0.4\" style=\"opacity: 0.4;\"></rect>"
+
+                def cells = table.find("td")
+
+                for (cell in cells)
+                {
+                    boolean header = (cell.getAttribute("colspan") == "4")
+                    int x = tx + (cell.x - table.x)
+                    int y = ty + (cell.y - table.y) + 5
+                    int width = cell.width
+                    int height = cell.height
+
+                    String text = cell.text()
+                    String style = cell.getAttribute("style");
+
+                    String anchor = header ? "middle" : "left"
+                    String size = header ? "11px" : "9px"
+                    if (text.contains("★"))
+                        size = "7px"
+
+                    String weight = header ? "bold" : "normal"
+
+                    def str = "\n<text x='${x}' y='${y}' width='${width}' height='${height}' " +
+                            "text-anchor='${anchor}'  stroke='none' fill='#ffffff' " +
+                            "style='text-anchor: left; font-weight: ${weight}; ${style}' " +
+                            "font-family='Tahoma' font-size='${size}'>" +
+                            "<tspan >${text}</tspan></text>"
+
+                    inc += str
+                }
+                println inc
+                html = html.replace("</svg>", inc + "</svg>")
+            }
+
+            def filename = name + "-" + i + ".svg"
+            svgs += filename
+            File f = new File(filename)
+            println "Writing to $filename"
+            f.text = html;
+            i = i + 1
+        }
+    }
+
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.1'
+}
+
+import java.awt.*;
+import java.awt.image.*;
+import java.io.*;
+import com.kitfox.svg.*;
+import javax.imageio.*;
+import com.itextpdf.awt.*;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.html.simpleparser.HTMLWorker;
+import com.itextpdf.text.html.simpleparser.StyleSheet;
+//import com.itextpdf.tool.xml.XMLWorkerHelper;
+import com.kitfox.svg.xml.*;
+
+
+
+def getDiagram(String svgFile)
+{
+    File f = new File(svgFile);
+    SVGUniverse svgUniverse = new SVGUniverse();
+    SVGDiagram diagram = svgUniverse.getDiagram(svgUniverse.loadSVG(f.toURL()));
+    SVGRoot r = diagram.getRoot();
+    for (int i=0;i<r.getNumChildren();i++)
+    {
+        SVGElement e = r.getChild(i);
+
+        if (e instanceof Text)
+        {
+            Text t = (Text) e;
+            StyleAttribute ff = t.getStyleAbsolute("font-family");
+            if (ff != null &&  ff.getStringValue() != null) {
+                String sff = "" + ff.getStringValue();
+                int comma = sff.indexOf(',');
+                if (comma > -1) {
+                    ff.setStringValue(sff.substring(0, comma));
+                    t.rebuild();
+                }
+
+                Shape shape = t.getShape();
+                Tspan ts = (Tspan) t.getChild(0);
+
+                Shape s2 = ts.getShape();
+            }
+
+        }
+    }
+    return diagram
+}
+
+def makePdf(String svgname, String img)
+{
+    File imgFile = new File(img);
+
+    SVGDiagram diagram = getDiagram(svgname);
+
+    int w = (int) diagram.getWidth();
+    int h = (int) diagram.getHeight();
+
+
+
+
+    Document document = new Document(new com.itextpdf.text.Rectangle(w,h ));
+    PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(svgname.replace(".svg", ".pdf") ));
+    document.open();
+
+    Image image = Image.getInstance(imgFile.absolutePath);
+    image.scaleAbsolute(w, h);
+    image.setAbsolutePosition(0, 0);
+    document.add(image);
+
+
+    PdfContentByte cb = writer.getDirectContent();
+
+    PdfTemplate template = cb.createTemplate(w, h);
+
+    Graphics2D g2d = new PdfGraphics2D(template, w, h);
+    diagram.render(g2d);
+
+    g2d.dispose();
+
+    cb.addTemplate(template, 0, 0);
+
+
+    //String snippet = "<table><tr><td>hello</td><td>world</td></tr></table>";
+    /*
+    def snippet = """<div tabindex="0" class="GPWAO5ICNJ" style="z-index: 2; position: absolute; top: 8px; left: 359px;width: 160px;  background-color: rgba(0, 0, 0, 0.4);"><input type="text" tabindex="-1" role="presentation" style="opacity: 0; height: 1px; width: 1px; z-index: -1; overflow: hidden; position: absolute;"><div style="position: relative; z-index: 2;">
+<table class="GPWAO5ICCK" style = 'width: 160px;  background-color: rgba(0, 0, 0, 0.4);' ><colgroup><col></colgroup><tbody><tr><td colspan="4" class="GPWAO5ICDK">Cairn Column</td></tr><tr class=""><td class="GPWAO5ICBK">★</td><td class="GPWAO5ICBK">1.</td><td class="GPWAO5ICPJ"><div class="GPWAO5ICAK">Pink Car</div></td><td class="GPWAO5ICBK">16</td></tr><tr class=""><td class="GPWAO5ICBK">★★</td><td class="GPWAO5ICBK">2.</td><td class="GPWAO5ICPJ"><div class="GPWAO5ICAK">The Great Bitch</div></td><td class="GPWAO5ICBK">19</td></tr><tr class=""><td class="GPWAO5ICBK">★</td><td class="GPWAO5ICBK">3.</td><td class="GPWAO5ICPJ"><div class="GPWAO5ICAK">Canis Minor</div></td><td class="GPWAO5ICBK">19</td></tr><tr class=""><td class="GPWAO5ICBK">★★★</td><td class="GPWAO5ICBK">4.</td><td class="GPWAO5ICPJ"><div class="GPWAO5ICAK">The Tower of Power</div></td><td class="GPWAO5ICBK">25</td></tr><tr class=""><td class="GPWAO5ICBK"></td><td class="GPWAO5ICBK">9.</td><td class="GPWAO5ICPJ"><div class="GPWAO5ICAK">Firebird</div></td><td class="GPWAO5ICBK">18</td></tr><tr class=""><td class="GPWAO5ICBK">★</td><td class="GPWAO5ICBK">10.</td><td class="GPWAO5ICPJ"><div class="GPWAO5ICAK">Pooh Corner</div></td><td class="GPWAO5ICBK">17</td></tr><tr class=""><td class="GPWAO5ICBK">★★</td><td class="GPWAO5ICBK">11.</td><td class="GPWAO5ICPJ"><div class="GPWAO5ICAK">He spoke human</div></td><td class="GPWAO5ICBK">24</td></tr><tr class=""><td class="GPWAO5ICBK">★★</td><td class="GPWAO5ICBK">13.</td><td class="GPWAO5ICPJ"><div class="GPWAO5ICAK">Anomia</div></td><td class="GPWAO5ICBK">24</td></tr><tr class=""><td class="GPWAO5ICBK">★★</td><td class="GPWAO5ICBK">15.</td><td class="GPWAO5ICPJ"><div class="GPWAO5ICAK">Cymbal</div></td><td class="GPWAO5ICBK">15</td></tr><tr class=""><td class="GPWAO5ICBK">★★★</td><td class="GPWAO5ICBK">18.</td><td class="GPWAO5ICPJ"><div class="GPWAO5ICAK">Tularaemia</div></td><td class="GPWAO5ICBK">25</td></tr></tbody></table></div></div>"""
+
+
+    StyleSheet styles = null;
+    HashMap<String,Object> providers = null;
+
+    def objects = HTMLWorker.parseToList(
+            new StringReader(snippet), styles, providers);
+
+    for (Element element : objects)
+        document.add(element);
+*/
+
+    //XMLWorkerHelper worker = XMLWorkerHelper.getInstance();
+    //worker.parseXHtml(writer, document, new StringReader(snippet));
+
+    document.close();
+}
+
+
+
+task makePdfTask << {
+
+
+    def svgname = "The_Columns-2.svg"
+    def img = "cairn side 2 1800.jpg"
+
+    makePdf(svgname, img)
+
+
+}
