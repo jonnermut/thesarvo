@@ -3,3 +3,8 @@ F:\svn\thesarvo\trunk\UpdateXml\obj\Debug\UpdateXml.pdb
 F:\svn\thesarvo\trunk\UpdateXml\bin\Debug\UpdateXml.exe
 F:\svn\thesarvo\trunk\UpdateXml\bin\Debug\UpdateXml.pdb
 F:\svn\thesarvo\trunk\UpdateXml\obj\Debug\ResolveAssemblyReference.cache
+C:\git\thesarvo\UpdateXml\obj\Debug\UpdateXml.exe
+C:\git\thesarvo\UpdateXml\obj\Debug\UpdateXml.pdb
+C:\git\thesarvo\UpdateXml\bin\Debug\UpdateXml.exe
+C:\git\thesarvo\UpdateXml\bin\Debug\UpdateXml.pdb
+C:\git\thesarvo\UpdateXml\obj\Debug\UpdateXml.csprojResolveAssemblyReference.cache
