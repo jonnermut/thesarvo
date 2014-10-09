@@ -22,8 +22,8 @@ namespace GuideLayout
 
         static object miss = System.Reflection.Missing.Value;
 
-        //public static string basePath = @"C:\guides\craglets\";
-        public static string basePath = @"D:\Dropbox\My Dropbox\thesarvo\guides\craglets\";
+        public static string basePath = @"C:\guides\craglets\";
+        //public static string basePath = @"D:\Dropbox\My Dropbox\thesarvo\guides\craglets\";
         
         static string bookPath;
 
@@ -207,6 +207,7 @@ namespace GuideLayout
             //book = application.ActiveBook;
             contents = book.BookContents;
 
+            //ExportBook(false);
             
             //Console.WriteLine("Repaginating of " + book.Name);
             //book.Repaginate();
@@ -250,6 +251,8 @@ namespace GuideLayout
                 
             }
 
+            ExportBook(false);
+
             // close book
             book.Close(idSaveOptions.idYes, miss, miss, true);
 
@@ -270,8 +273,16 @@ namespace GuideLayout
         {
             //application = new ApplicationClass();
 
-            application = (Application) Activator.CreateInstance(Type.GetTypeFromProgID("InDesign.Application"));
+            //InDesign.ApplicationClass App = new InDesign.ApplicationClass();
 
+            Type t = Type.GetTypeFromProgID("InDesign.Application");
+            object o = Activator.CreateInstance(t);
+            
+            //ApplicationClass ac = (ApplicationClass)o;
+            application = (Application) o;
+            //Application app = (Application)System.Runtime.InteropServices.Marshal.CreateWrapperOfType(o, typeof(ApplicationClass));
+
+            //Application app = (Application)System.Runtime.InteropServices.Marshal.CreateWrapperOfType(o, typeof(Application));
 
             //application.PDFPlacePreferences.PDFCrop = idPDFCrop.idCropContent;
         }
@@ -288,15 +299,26 @@ namespace GuideLayout
             string path = bookPath + name;
             Console.WriteLine("Opening book:" + path);
 
-            //if (application.Books application.ActiveBook.FullName != path)
+
+            Book currentBook = null;
+
+            try
+            {
+                currentBook = application.ActiveBook;
+            }
+            catch (Exception e)
+            { }
+
+            if (currentBook == null || currentBook.FullName != path)
+            {
                 book = (Book)application.Open(path, false);
-            /*
+            }
             else
             {
-                book = application.ActiveBook;
+                book = currentBook;
                 Console.WriteLine("Book already open");
             }
-             */
+             
         }
 
         private static void UpdateTOC()

@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1F791908-AAFA-449E-B65D-64D1F70FCE7C}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GuideLayout2</RootNamespace>
     <AssemblyName>GuideLayout2</AssemblyName>
@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -54,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="InDesign">
-      <Guid>{0EAE2841-EABD-4550-BC0B-2C5097031493}</Guid>
+      <Guid>{8A1622E3-F934-4088-975C-E36525105470}</Guid>
       <VersionMajor>1</VersionMajor>
       <VersionMinor>0</VersionMinor>
       <Lcid>0</Lcid>
