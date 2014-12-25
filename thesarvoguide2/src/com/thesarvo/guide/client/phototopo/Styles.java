@@ -169,7 +169,7 @@ public class Styles
 	public final static native JavaScriptObject stroke(double thickness) /*-{ 
 																			return {
 																			'stroke': 'white',
-																			'stroke-dasharray': '',
+																			//'stroke-dasharray': '',
 																			'stroke-width': thickness,
 																			'stroke-linejoin': 'miter',
 																			'stroke-linecap': 'round',

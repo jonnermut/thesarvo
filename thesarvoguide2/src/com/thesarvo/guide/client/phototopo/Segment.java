@@ -5,9 +5,6 @@ import java.util.List;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.user.client.Event;
-import com.thesarvo.guide.client.raphael.ClickCallback;
-import com.thesarvo.guide.client.raphael.MouseoverCallback;
 import com.thesarvo.guide.client.raphael.RaphaelJS;
 import com.thesarvo.guide.client.util.StringUtil;
 
@@ -22,12 +19,11 @@ public class Segment
 	PhotoTopo phototopo;
 	String pathPart;
 	Route route;
-	com.thesarvo.guide.client.raphael.Raphael.Path outline;
-	com.thesarvo.guide.client.raphael.Raphael.Path ghost;
+
 	com.thesarvo.guide.client.raphael.Raphael.Path curve;
 
 	static int idCount = 0;
-	private RaphaelJS.Element glow;
+	private String path;
 	
 	public void redraw()
 	{
@@ -43,9 +39,6 @@ public class Segment
 	 */
 	Segment(RoutePoint point1, RoutePoint point2)
 	{
-
-		// var offset, path, phototopo, options,nojs;
-
 		this.point1 = point1;
 		this.point2 = point2;
 		this.id = getID();
@@ -66,69 +59,27 @@ public class Segment
 
 		this.pathPart = " L" + this.point2.x + " " + this.point2.y;
 
-		//this.outline = phototopo.path(path);
-		if (!nojs)
+
+
+		if (phototopo.isEditable())
 		{
-			this.ghost = phototopo.path(path);
-			this.ghost.toBack();
-		}
-		//this.outline.toBack();
-
-//		if (phototopo.getBackground() != null)
-//		{
-//			phototopo.getBackground().toBack();
-//		}
-
-		// the base path (straight lines)
-		this.curve = phototopo.path(path);
-
-		//this.outline.attr(Styles.outline());
-
-		// TODO - manage glow on line?
 
 
-//		if (this.point1.route.getAutoColorBorder() != null)
-//		{
-//			this.outline.attr("stroke", this.point1.route.getAutoColorBorder());
-//		}
+//			if (phototopo.getBackground() != null)
+//			{
+//				phototopo.getBackground().toBack();
+//			}
 
-		if (!nojs)
-		{
-			this.ghost.attr(Styles.ghost(phototopo.getOptions().thickness));
-		}
-//		Console.log("route.routeCurveAttr()");
-//		Console.log(route.routeCurveAttr());
-		this.curve.attr(route.routeCurveAttr());
-		
+			// the base path (straight lines)
+			this.curve = phototopo.path(path);
 
-//		if (this.point1.route.getAutoColor() != null)
-//		{
-//			this.curve.attr("stroke", this.point1.route.getAutoColor());
-//		}
-
-		// TODO - not sure if these references will be needed
-		// this.curve.path = this;
-		// this.outline.path = this;
-		// if (!nojs){
-		// this.ghost.path = this;
-		// }
-
-		if (phototopo.getOptions().editable)
-		{
-			// commented it out and it still works fine! TODO
+			this.curve.attr(route.getRouteCurveAttr());
+			
 			this.point1.circle.toFront();
 			this.point2.circle.toFront();
 		}
 
-		/*
-		 * FIXME - event handlers this.curve.mouseover( mouseover );
-		 * this.curve.mouseout( mouseout ); this.outline.mouseover( mouseover );
-		 * this.outline.mouseout( mouseout ); if (!nojs){ this.ghost.mouseover(
-		 * mouseover ); this.ghost.mouseout( mouseout ); }
-		 * 
-		 * this.curve.click(PathClick); this.outline.click(PathClick); if
-		 * (!nojs){ this.ghost.click(PathClick); }
-		 */
+
 	}
 
 
@@ -176,16 +127,34 @@ public class Segment
 	 */
 	void redraw(RoutePoint point)
 	{
+		updateSvgPath();
+
+		Console.log("Path redraw path:" + path);
+		
+		// apply curves to flat path. We only do this in edit mode, otherwise the Route draws the path.		
+		if (phototopo.isEditable())
+		{
+			final com.thesarvo.guide.client.raphael.Raphael.Path curve = this.curve;
+			final Route route = this.route;
+			
+			this.curve.attr("path", path);
+
+			boolean arrow = (point2.nextPath == null) && route.getData().getArrow();
+			route.applyArrowStyle(curve, arrow);
+			
+			phototopo.addPathEventHandlers(curve, route);
+			
+			point1.bringCircleAndIconToFront();
+			point2.bringCircleAndIconToFront();
+		}
+		
+
+	}
+
+	private void updateSvgPath()
+	{
 		SimplePoint handle1 = this.point1.pointGroup.getAngle(this.point1);
 		SimplePoint handle2 = this.point2.pointGroup.getAngle(this.point2);
-
-		// points,
-		// path,
-		// phototopo = this.point1.route.phototopo,
-		// path_finish = "",
-		// off1, off2, thickness,
-		// delta, angle, aWidth, aHeight, size,
-		// ex, ey;
 
 		RoutePoint[] points = new RoutePoint[] {
 				this.point1,
@@ -194,141 +163,12 @@ public class Segment
 
 				this.point2 };
 
-		// if (phototopo.options.seperateRoutes)
-		// {
-		// thickness = phototopo.options.thickness;
-		// off1 = this.point1.pointGroup.getSplitOffset(this.point1) * thickness
-		// * 1.4;
-		// off2 = this.point2.pointGroup.getSplitOffset(this.point2) * thickness
-		// * 1.4;
-		// points = getBezierOffset(points, off1, off2);
-		// }
-
 		this.svg_part = "C" + points[1].x + "," + points[1].y + " "
 				+ points[2].x + "," + points[2].y + " " + points[3].x + ","
 				+ points[3].y;
 
-		String path = "M" + points[0].x + "," + points[0].y + this.svg_part;
-
-
-		
-		/*
-		 * End of path embellishments
-		 * 
-		 * delta = this.point2.pointGroup.getAngle(); angle =
-		 * Math.atan2(delta.dy, delta.dx); size = phototopo.options.thickness *
-		 * 0.5;
-		 * 
-		 * // x,y of end point ex = points[3].x; ey = points[3].y; // draw a T
-		 * bar stop if (!this.point2.nextPoint && this.point2.type ==
-		 * "jumpoff"){ aWidth = size*4; aHeight = size*0.1;
-		 * 
-		 * path_finish += offset(angle, ex, ey, 0, -aHeight ); // bottom middle
-		 * path_finish += offset(angle, ex, ey, -aWidth, -aHeight ); // bottom
-		 * left path_finish += offset(angle, ex, ey, -aWidth, aHeight ); // top
-		 * left path_finish += offset(angle, ex, ey, aWidth, aHeight ); // top
-		 * right path_finish += offset(angle, ex, ey, aWidth, -aHeight ); //
-		 * bottom left path_finish += offset(angle, ex, ey, -aWidth, -aHeight );
-		 * // bottom left
-		 * 
-		 * // If this is the end of the Path then draw an arrow head } else if
-		 * (!this.point2.nextPoint && (this.point2.type == "none" ||
-		 * !this.point2.type) ){ aWidth = size*1.5; aHeight = size*1.5;
-		 * path_finish += offset(angle, ex, ey, 0, size*1.2 ); // middle
-		 * path_finish += offset(angle, ex, ey, -aWidth, aHeight ); // bottom
-		 * left path_finish += offset(angle, ex, ey, aWidth, aHeight ); //
-		 * bottom right path_finish += offset(angle, ex, ey, 0, -size*2.3 ); //
-		 * top path_finish += offset(angle, ex, ey, -aWidth, aHeight ); //
-		 * bottom left path_finish += offset(angle, ex, ey, aWidth, aHeight );
-		 * // bottom right } this.svg_part += path_finish; path += path_finish;
-		 */
-
-		Console.log("Path redraw path:" + path);
-		
-		// apply curves to flat path
-		this.curve.attr("path", path);
-		
-		// if (this.point1.type === "hidden"){
-		// this.curve.attr(phototopo.styles.strokeHidden);
-		// } else {
-		// this.curve.attr(phototopo.styles.strokeVisible);
-		// }
-
-		//this.outline.attr("path", path);
-		if (!phototopo.getOptions().editable)
-		{
-			this.ghost.attr("path", path);
-			//this.ghost.toBack();
-			glow = this.ghost.glow("black", 6);
-			// glow.toBack();
-			//glow.attr("opacity", 0.5);
-		}
-
-		String arrow = "none";
-		if (point2.nextPath == null )
-		{
-			// last point
-			if (route.getData().getArrow())
-			{
-				arrow = "block-wide-long";
-				
-				
-				//if (this.ghost != null)
-				//	this.ghost.attr("arrow-end", "block-medium-medium");
-			}
-			
-		}
-		this.curve.attr("arrow-end", arrow);
-		
-		curve.click(new ClickCallback()
-		{
-			
-			@Override
-			public void onClick(Event e)
-			{
-				Console.log("curve onclick");
-				route.onClick(e, curve);
-				if (e!=null)
-					e.stopPropagation();
-				
-
-			}
-		});
-		curve.mouseover(new MouseoverCallback()
-		{
-			
-			@Override
-			public void onMouseOver()
-			{
-				Console.log("curve onMouseOver");
-				phototopo.routeMouseOver(route);
-				
-			}
-			
-			@Override
-			public void onMouseOut()
-			{
-				Console.log("curve onMouseOut");
-				phototopo.routeMouseOver(null);
-			}
-		});
-//		curve.addHandler(new MouseOverHandler()
-//		{
-//			
-//			@Override
-//			public void onMouseOver(MouseOverEvent event)
-//			{
-//				Console.log("curve onMouseOver");
-//				phototopo.routeMouseOver(route);
-//				
-//			}
-//		}, MouseOverEvent.getType());
-		
-		
-		
-		point1.bringCircleAndIconToFront();
-		point2.bringCircleAndIconToFront();
-	};
+		path = "M" + points[0].x + "," + points[0].y + this.svg_part;
+	}
 
 	double secant(double theta)
 	{
@@ -378,11 +218,12 @@ public class Segment
 		if (curve != null)
 			curve.remove();
 		
-		if (outline != null)
-			outline.remove();
+	}
+
+	public void remove()
+	{
+		removeAllCurves();
 		
-		if (ghost != null)
-			ghost.remove();
 		
 	}
 

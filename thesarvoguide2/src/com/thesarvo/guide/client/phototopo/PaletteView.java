@@ -33,6 +33,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import com.thesarvo.guide.client.controller.Controller;
 import com.thesarvo.guide.client.model.Attachment;
+import com.thesarvo.guide.client.model.ImageNode;
+import com.thesarvo.guide.client.model.ImageNode.PrintLayout;
 import com.thesarvo.guide.client.util.WidgetUtil;
 import com.thesarvo.guide.client.view.res.Resources;
 
@@ -335,6 +337,7 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 
 	private void addImageProperties()
 	{
+		final ImageNode image = phototopo.getImage();
 		
 		Label l = new Label("Image");
 		l.setStyleName("paletteLabel");
@@ -409,7 +412,8 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 		widthListBox.addItem("800");
 		widthListBox.addItem("900");
 		widthListBox.addItem("1000");
-		setSelected(widthListBox, phototopo.getImage().getWidth());
+		
+		setSelected(widthListBox, image.getWidth());
 		widthListBox.addChangeHandler(new ChangeHandler()
 		{
 			
@@ -427,6 +431,29 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 		
 		imageProperties.add(new Label("."));
 		
+		imageProperties.add(new Label("Print Layout"));
+		final ListBox lb = new ListBox();
+		imageProperties.add(lb);
+		lb.setStyleName("paletteListbox");
+		for (PrintLayout s : PrintLayout.values())
+		{
+			lb.addItem(s.name(), s.name());
+		}
+		
+		String val = image.getPrintLayout().name();
+		setSelected(lb, val);
+		lb.addChangeHandler(new ChangeHandler()
+		{
+			
+			@Override
+			public void onChange(ChangeEvent event)
+			{
+				String val = lb.getValue( lb.getSelectedIndex() );
+				image.setPrintLayout(PrintLayout.valueOf(val));
+			}
+		});
+		
+		/*
 		final CheckBox notInPrint = new CheckBox("Not in print version");
 		imageProperties.add(notInPrint);
 		notInPrint.setValue(phototopo.getImage().getNoPrint());
@@ -440,6 +467,7 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 				
 			}
 		});
+		*/
 	}
 
 	public void populateAttachments(boolean selectNew)

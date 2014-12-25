@@ -1,7 +1,6 @@
 package com.thesarvo.guide.client.model;
 
 import com.google.gwt.xml.client.Node;
-
 import com.thesarvo.guide.client.controller.Controller;
 import com.thesarvo.guide.client.util.StringUtil;
 import com.thesarvo.guide.client.xml.XPath;
@@ -165,6 +164,10 @@ public class PathDrawingObject extends DrawingObject
 			return model.getBoolean("@arrow");
 		return false;
 	}
+	
+			
+
+	
 	/**
 	 * @param arrow the arrow to set
 	 */

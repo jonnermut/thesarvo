@@ -57,9 +57,11 @@ import com.thesarvo.guide.client.model.ImageNode;
 import com.thesarvo.guide.client.model.PathDrawingObject;
 import com.thesarvo.guide.client.model.RectDrawingObject;
 import com.thesarvo.guide.client.raphael.ClickCallback;
+import com.thesarvo.guide.client.raphael.MouseoverCallback;
 import com.thesarvo.guide.client.raphael.Raphael;
 import com.thesarvo.guide.client.raphael.Raphael.Circle;
 import com.thesarvo.guide.client.raphael.Raphael.Image;
+import com.thesarvo.guide.client.raphael.Raphael.Path;
 import com.thesarvo.guide.client.raphael.Raphael.Rect;
 import com.thesarvo.guide.client.raphael.Raphael.Text;
 import com.thesarvo.guide.client.util.StringUtil;
@@ -607,7 +609,7 @@ public class PhotoTopo extends FlowPanel
 					// dirty hack? should be inside the route object
 					if (r.getPoints() != null && r.getPoints().size() > 0)
 					{
-						r.select(null); // select them all to flush the outline z-index
+						//r.select(null); // select them all to flush the outline z-index
 						r.getPoints().get(0).updateLabelPosition();
 					}
 					
@@ -615,6 +617,19 @@ public class PhotoTopo extends FlowPanel
 			});
 
 		}
+		
+		for (final Route route : this.getRoutes().values())
+		{
+			Scheduler.get().scheduleDeferred(new ScheduledCommand()
+			{
+				public void execute()
+				{
+					route.bringLabelAndPointsToFront();
+				}
+			});
+
+		}
+		/*
 		Scheduler.get().scheduleDeferred(new ScheduledCommand()
 		{
 			public void execute()
@@ -622,6 +637,7 @@ public class PhotoTopo extends FlowPanel
 				selectRoute(null, false); // select nothing
 			}
 		});
+		*/
 		
 	};
 
@@ -773,23 +789,10 @@ public class PhotoTopo extends FlowPanel
 	 */
 	void clickBackground(int relX, int relY)
 	{
-//		Element target = event.getCurrentTarget();
-//		int clientX = event.getClientX();
-//		int clientY = event.getClientY();
-//		
-//		int relX = clientX - target.getAbsoluteLeft() + target.getScrollLeft() +
-//			      target.getOwnerDocument().getScrollLeft();		
-//		
-//		int relY = clientY - target.getAbsoluteTop() + target.getScrollTop() +
-//		target.getOwnerDocument().getScrollTop();
-		
-		
-//		int relX = event.getX();
-//		int relY = event.getY();
-		
-		Console.log("clickBackground x=" + relX + "," + relY);
 		
 		long now = System.currentTimeMillis();
+		Console.log("clickBackground x=" + relX + "," + relY + " now=" + now);
+
 		if (relX == lastBackgroundX && relY == lastBackgroundY && now-lastBackgroundClick < 2000)
 		{
 			Console.log("Ignoring duplicate click");
@@ -1264,6 +1267,56 @@ public class PhotoTopo extends FlowPanel
 	protected void setRoutePopoverIsVisible(boolean routePopoverIsVisible)
 	{
 		this.routePopoverIsVisible = routePopoverIsVisible;
+	}
+
+	void addPathEventHandlers(
+			final Path curve, final Route route)
+	{
+		curve.click(new ClickCallback()
+		{
+			
+			@Override
+			public void onClick(Event e)
+			{
+				Console.log("curve onclick");
+				route.onClick(e, curve);
+				if (e!=null)
+					e.stopPropagation();
+				
+	
+			}
+		});
+		curve.mouseover(new MouseoverCallback()
+		{
+			
+			@Override
+			public void onMouseOver()
+			{
+				Console.log("curve onMouseOver");
+				routeMouseOver(route);
+				
+			}
+			
+			@Override
+			public void onMouseOut()
+			{
+				Console.log("curve onMouseOut");
+				routeMouseOver(null);
+			}
+		});
+		
+		
+//		curve.addHandler(new MouseOverHandler()
+//		{
+//			
+//			@Override
+//			public void onMouseOver(MouseOverEvent event)
+//			{
+//				Console.log("curve onMouseOver");
+//				phototopo.routeMouseOver(route);
+//				
+//			}
+//		}, MouseOverEvent.getType());
 	}
 
 }

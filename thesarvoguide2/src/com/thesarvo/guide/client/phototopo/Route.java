@@ -8,6 +8,9 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.UIObject;
 import com.thesarvo.guide.client.model.PathDrawingObject;
+import com.thesarvo.guide.client.raphael.Raphael.Path;
+import com.thesarvo.guide.client.raphael.Raphael.Shape;
+import com.thesarvo.guide.client.raphael.RaphaelJS.Element;
 import com.thesarvo.guide.client.util.StringUtil;
 
 public class Route
@@ -20,6 +23,8 @@ public class Route
 	private List<Segment> paths = new ArrayList<Segment>();
 	
 	private PathDrawingObject data;
+	private Path curve;
+	private Element glow;
 
 	/**
 	 * @constructor
@@ -149,6 +154,8 @@ public class Route
 
 	public void updateLabel()
 	{
+		Console.log("updateLabel " + this);
+		
 		setLabel(data.getLabelText(), data.getLabelClasses());
 	}
 	
@@ -191,18 +198,13 @@ public class Route
 	 */
 	void saveData()
 	{
-		/*
-		 * FIXME - save data var routeId, data = {routes: [], changed: false },
-		 * route, routeData; if (this.loading){ return; } if (this.changed){
-		 * data.changed = true; } if (!this.changed){ this.changed = true; } if
-		 * (!this.options.onchange ){ return; }
-		 * 
-		 * for(routeId in this.routes){ route = this.routes[routeId];
-		 * data.routes[data.routes.length] = route.getJSON(); }
-		 * 
-		 * this.options.onchange(data);
-		 */
 		
+		String svg = updateSvgPath();
+		
+	}
+
+	private String updateSvgPath()
+	{
 		String spoints = "";
 		String svg = "";
 		for (RoutePoint point: points)
@@ -228,20 +230,10 @@ public class Route
 		Console.log("saveData:" + spoints);
 		data.setPoints(spoints);
 		data.setSvgPath(svg);
+		return svg;
 	};
 
-	/**
-	 * @private serialise the point data and send back to the page to be saved
-	 */
-	/*
-	 * FIXME - serialise route Route.prototype.getJSON = function(){ var points
-	 * = "", path = "", point, c; for(c=0; c<this.points.length; c++){ point =
-	 * this.points[c]; if (c!== 0){ points += ","; } else { path += "M" +
-	 * point.x + " "+point.y; } points += point.x + " " + point.y; if
-	 * (point.type && point.type != "none"){ points += " " + point.type; } if
-	 * (point.nextPath){ path += point.nextPath.svg_part; } } return { id:
-	 * this.id, points: points, // svg_path: path, order: this.order }; };
-	 */
+
 
 	/**
 	 * @private select this route, and optionally specifies which point to
@@ -287,39 +279,33 @@ public class Route
 			selectedPoint.select(true);
 		}
 
-		/*
-		 * FIXME - on select handler if (phototopo.options.onselect){
-		 * phototopo.options.onselect(this); }
-		 */
 
-		// now highlight the new route and make sure it is at the front
-		for (Segment path : getPaths())
+		if (getPhototopo().isEditable())
 		{
-			if (path != null)
+
+			// now highlight the new route and make sure it is at the front
+			for (Segment segment : getPaths())
 			{
-				//path.outline.attr(Styles.outlineSelected());
-				// FIXME ?? .insertBefore(phototopo.layerRoutesSel);
-
-				path.curve.attr(Styles
-						.strokeSelected(getPhototopo().getOptions().thickness));
-				// .insertBefore(phototopo.layerRoutesSel);
-
-				if (getPhototopo().getOptions().editable)
+				if (segment != null && segment.curve != null)
 				{
-					path.point2.circle.attr(Styles.handleSelected());
+					segment.curve.attr(Styles
+							.strokeSelected(getPhototopo().getOptions().thickness));
+					
+					segment.point2.circle.attr(Styles.handleSelected());
+					
 				}
+	
 			}
-
-		}
-
-		if (getPhototopo().getOptions().editable)
-		{
-
 			if (getPoints().size() > 0)
 			{
-				this.getPoints().get(0).circle.attr(Styles.handleSelected());// .insertBefore(phototopo.layerRoutesSel);
+				this.getPoints().get(0).circle.attr(Styles.handleSelected());
 			}
 		}
+		else
+		{
+			this.curve.attr( Styles.strokeSelected(getPhototopo().getOptions().thickness));
+		}
+
 
 		getPhototopo().updateHint();
 
@@ -331,41 +317,33 @@ public class Route
 	 */
 	void deselect()
 	{
-
-		// var autoColor = this.autoColor,
-		// autoColorBorder = this.autoColorBorder,
-		// phototopo = this.phototopo,
-		int c;
-
-		// FIXME - route deselect
-		// if (phototopo.options.ondeselect){
-		// phototopo.options.ondeselect(this);
-		// }
+		Console.log("deselect " + this);
 
 		getPhototopo().selectedRoute = null;
 		getPhototopo().setSelectedPoint(null);
 
-		for (Segment path : getPaths())
+
+		if (getPhototopo().isEditable())
 		{
-			if (path != null)
+			for (Segment path : getPaths())
 			{
-				path.curve.attr(path.route.routeCurveAttr());
-				//path.outline.attr(Styles.outline());
+				if (path != null && path.curve != null)
+				{
+					path.curve.attr(getRouteCurveAttr());
+				}
 			}
-		}
-		if (getPhototopo().getOptions().editable)
-		{
+			
 			for (RoutePoint p : getPoints())
 			{
 				p.circle.attr(Styles.handle());
 
 			}
 		}
-//		if (this.data.getLabelText() != null && this.getPoints().size() > 0)
-//		{
-//			this.getPoints().get(0).setLabel("start " + this.data.getLabelClasses(),
-//					this.data.getLabelText());
-//		}
+		else
+		{
+			this.curve.attr(getRouteCurveAttr());
+		}
+
 		getPhototopo().updateHint();
 
 
@@ -376,10 +354,46 @@ public class Route
 	 */
 	void redraw()
 	{
+		Console.log("redraw " + this);
+		
+		boolean editable = phototopo.isEditable();
+		
 		for (Segment path : getPaths())
 		{
 			if (path != null)
 				path.redraw();
+		}
+		
+		if (!editable)
+		{
+			String svg = updateSvgPath();
+			
+			this.curve = this.phototopo.path(svg);
+			this.curve.attr( getRouteCurveAttr());
+			
+			//this.ghost.attr("path", path);
+			//this.ghost.toBack();
+			glow = this.curve.glow("black", 6);
+			// glow.toBack();
+			//glow.attr("opacity", 0.5);
+			
+			phototopo.addPathEventHandlers(curve, this);
+			
+			boolean arrow = getData().getArrow();
+			applyArrowStyle(this.curve, arrow);
+		}
+
+
+
+		
+		bringLabelAndPointsToFront();
+	}
+
+	public void bringLabelAndPointsToFront()
+	{
+		for (RoutePoint point : points)
+		{
+			point.bringCircleAndIconToFront();
 		}
 		
 		updateLabel();
@@ -439,8 +453,27 @@ public class Route
 
 	public void remove()
 	{
-		Window.alert("to do");
+		//Window.alert("to do");
 		
+		if (curve != null)
+			curve.remove();
+		
+		if (glow != null)
+			glow.remove();
+		
+		for (Segment s: paths)
+		{
+			if (s!=null)
+				s.remove();
+		}
+		for (RoutePoint p : points)
+		{
+			p.removeShapes();
+		}
+		
+		
+		if (data != null)
+			data.remove();
 	}
 
 	public void init()
@@ -493,7 +526,13 @@ public class Route
 		this.data = data;
 	};
 
-	public JavaScriptObject routeCurveAttr()
+	public void applyArrowStyle(Shape shape, boolean arrow)
+	{
+		String style = arrow ? "block-wide-long" : "none";
+		shape.attr("arrow-end", style);	
+	}
+	
+	public JavaScriptObject getRouteCurveAttr()
 	{
 		String lineStyle = this.getData().getLineStyle();
 
@@ -510,6 +549,12 @@ public class Route
 			return Styles.stroke(getPhototopo().getOptions().thickness);
 		}
 
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Route [" + data.getId() + "]";
 	}
 
 	/**
@@ -537,5 +582,6 @@ public class Route
 	 * (this.phototopo.options.onclick){ this.phototopo.options.onclick(this); }
 	 * };
 	 */
+
 
 }

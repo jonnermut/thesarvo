@@ -460,21 +460,7 @@ public class RoutePoint extends SimplePoint
 	void setLabel(String classes, String text)
 	{
 
-		// var label = this.labelEl,
-		// labelText = this.labelText,
-		// point = this,
-		// topo = phototopo,
-		// size = topo.options.labelSize,
-		// canvas = topo.canvas,
-		// styles = topo.styles;
-
 		double size = phototopo.getOptions().labelSize;
-
-		/*
-		 * FIXME function clickHandler(event){ point.select(); // should this
-		 * only be in edit mode? var opts = topo.options; if (opts.onclick){
-		 * opts.onclick(point.route); } };
-		 */
 
 		if (StringUtil.isEmpty(text))
 		{
@@ -531,6 +517,8 @@ public class RoutePoint extends SimplePoint
 			labelText.attr(new Attr().text(text));
 			// TODO - classes
 			
+			labelElement.toFront();
+			labelText.toFront();
 			
 		}
 		
@@ -544,17 +532,6 @@ public class RoutePoint extends SimplePoint
 		else
 			labelElement.attr("fill", "#000000");
 		
-		/*
-		 * if (classes.indexOf('selected') !== -1){ label.attr({fill:
-		 * styles.strokeSelected.stroke, stroke: styles.outlineSelected.stroke
-		 * }); labelText.attr({fill: styles.outlineSelected.stroke }); } else {
-		 * if (this.route.autoColor){ label.attr({fill: this.route.autoColor,
-		 * stroke: this.route.autoColorBorder }); if (this.route.autoColorText){
-		 * labelText.attr({fill: this.route.autoColorText }); } else {
-		 * labelText.attr({fill: this.route.autoColorBorder }); } } else {
-		 * label.attr({fill: styles.stroke.stroke, stroke: styles.outline.stroke
-		 * }); labelText.attr({fill: styles.outline.stroke }); } }
-		 */
 		labelElement.toFront();
 		labelText.toFront();
 		// TODO
@@ -572,8 +549,7 @@ public class RoutePoint extends SimplePoint
 
 		remove = "todo";
 
-		// remove handle from raphael
-		circle.remove();
+		removeShapes();
 
 		// remove from point group
 		pointGroup.remove(this);
@@ -643,14 +619,7 @@ public class RoutePoint extends SimplePoint
 			// just one point so delete it
 		}
 
-		if (this.labelElement != null)
-		{
-			this.labelElement.remove();
-			this.labelText.remove();
-			this.labelElement = null;
-			this.labelText = null;
-		}
-		removeIcon();
+
 
 		if (phototopo.getSelectedPoint() == this)
 		{
@@ -679,6 +648,23 @@ public class RoutePoint extends SimplePoint
 
 
 
+	public void removeShapes()
+	{
+		// remove handle from raphael
+		circle.remove();
+		
+		if (this.labelElement != null)
+		{
+			this.labelElement.remove();
+			this.labelText.remove();
+			this.labelElement = null;
+			this.labelText = null;
+		}
+		removeIcon();
+	}
+
+
+
 	public void removeAllCurves(Segment path)
 	{
 		if (path != null)
@@ -699,7 +685,8 @@ public class RoutePoint extends SimplePoint
 
 		Circle label = this.labelElement;
 
-
+		label.toFront();
+		labelText.toFront();
 		
 		double offsetX, offsetY = 0;
 		double width, top, left;
@@ -941,12 +928,19 @@ public class RoutePoint extends SimplePoint
 
 	public void bringCircleAndIconToFront()
 	{
+		Console.log("bringCircleAndIconToFront " + this);
+		
 		if (iconElement != null)
 			iconElement.toFront();
 		
 		if (circle != null)
 			circle.toFront();
 		
+		if (labelElement != null)
+			labelElement.toFront();
+		
+		if (labelText != null)
+			labelText.toFront();
 	}
 
 

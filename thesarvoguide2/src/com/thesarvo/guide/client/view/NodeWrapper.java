@@ -97,22 +97,21 @@ public class NodeWrapper extends FlowPanel
 			inner.add(editControls);
 		}
 		
+		if (editNode==null)
+		{
+			editNode = createEditNode();
+			if (editNode!=null)
+				inner.insert(editNode, 0);
+		}
+		
+		/*
 		GWT.runAsync(new RunAsyncCallback()
 		{
 			
 			@Override
 			public void onSuccess()
 			{
-				if (editNode==null)
-				{
-					editNode = createEditNode();
-					if (editNode!=null)
-						inner.insert(editNode, 0);
-				}
-				
-				
 
-				
 			}
 			
 			@Override
@@ -122,7 +121,7 @@ public class NodeWrapper extends FlowPanel
 				
 			}
 		});
-		
+		*/
 
 	}
 	

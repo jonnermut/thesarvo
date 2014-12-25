@@ -3,6 +3,7 @@ package com.thesarvo.guide.client.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.thesarvo.guide.client.controller.Controller;
@@ -380,7 +381,40 @@ public class ImageNode extends NodeModel
 		this.height = height;
 	}
 
-
+	public PrintLayout getPrintLayout()
+	{
+		String val = null;
+		if (model != null)
+			val =  model.get("@printLayout");
+		
+		if (val != null && !val.isEmpty())
+			return PrintLayout.valueOf(val);
+		
+		if (getNoPrint() != null && getNoPrint())
+			return PrintLayout.NotInPrint;
+		
+		return PrintLayout.auto;
+	}
 	
+	public void setPrintLayout(PrintLayout pl)
+	{
+		if (pl == null)
+			pl = PrintLayout.auto;
+		
+		if (model != null)
+			model.put("@printLayout", pl.name());
+	}
+
+
+	public enum PrintLayout
+	{
+		auto,
+		NotInPrint,
+		OneColumn,
+		TwoColumns,
+		FitToPage,
+		Rotate,
+		DontRotate
+	}
 	
 }

@@ -3,12 +3,18 @@ package com.thesarvo.guide.client.view.node;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.IdentityColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
@@ -18,10 +24,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.xml.client.Element;
-import com.thesarvo.guide.client.geo.CoordinateConversion.UTM;
-import com.thesarvo.guide.client.geo.GeoUtil;
 import com.thesarvo.guide.client.model.MapDrawingObject;
-import com.thesarvo.guide.client.util.StringUtil;
 import com.thesarvo.guide.client.xml.XPath;
 import com.thesarvo.guide.client.xml.XmlSimpleModel;
 
@@ -30,14 +33,14 @@ public class GpsEditNode extends EditNode implements MapPanel.MapEditedCallback,
 	// @UiField
 	// FlexTable gpsTable;
 
-//	@UiField
-//	Button addButton;
+	@UiField
+	Button addButton;
 
 	@UiField
 	MapPanel mapPanel;
 	
-//	@UiField(provided = true)
-//	CellTable<XmlSimpleModel> cellTable;
+	@UiField(provided = true)
+	CellTable<XmlSimpleModel> cellTable;
 	
 	@UiField Label editLabel;
 	
@@ -86,7 +89,7 @@ public class GpsEditNode extends EditNode implements MapPanel.MapEditedCallback,
 //		tempNode = realNode.cloneNode(true);
 //		getModel().setNode(tempNode);
 		
-		/*
+		
 		cellTable = GpsReadNode.setupTable(getModel(), dataProvider);
 		GpsReadNode.initTableCols(cellTable, true);
 
@@ -102,7 +105,7 @@ public class GpsEditNode extends EditNode implements MapPanel.MapEditedCallback,
 								if (Window
 										.confirm("Are you sure you want to remove this?\n You wont be able to undo"))
 								{
-									Node node = model.getNode();
+									com.google.gwt.xml.client.Node node = getModel().getNode();
 									node.getParentNode().removeChild(node);
 									updateAllWidgets();
 								}
@@ -111,25 +114,33 @@ public class GpsEditNode extends EditNode implements MapPanel.MapEditedCallback,
 
 		cellTable.setColumnWidth(removeColumn, 5, Unit.PCT);
 		cellTable.addColumn(removeColumn, "");
-		*/
+		
+		
 
 		initWidget(uiBinder.createAndBindUi(this));
 
 		super.init();
+		
+		cellTable.setVisible(false);
+		addButton.setVisible(false);
 
-		/*
+		
 		addButton.addClickHandler(new ClickHandler()
 		{
+			
 			@Override
 			public void onClick(ClickEvent event)
 			{
-				Element point = ((XmlSimpleModel) getModel()).createElement("point", "");
+				//Element point = getModel().createElement("point", "");
+				
+				final MapDrawingObject point = createDrawingObject("point");
 				mapPanel.addNewPointAndSetToCentre(point);
 				updateAllWidgets();
-
+				
 			}
 		});
-		*/
+
+		
 
 		if (!mapInited)
 		{
@@ -162,7 +173,7 @@ public class GpsEditNode extends EditNode implements MapPanel.MapEditedCallback,
 		//List<XmlSimpleModel> data = getModel().getList("point");
 		//dataProvider.setList(data);
 		//cellTable.redraw();
-
+		GpsReadNode.updateDataProvider(getModel(), dataProvider);
 	}
 	
 	@Override

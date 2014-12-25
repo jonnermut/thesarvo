@@ -169,16 +169,26 @@ public class RectDrawingObject extends DrawingObject
 	 */
 	public String getText()
 	{
-		if (model != null)
-			return model.get("@text");
+		String ret = "";
 		
-		return text;
+		if (model != null)
+			ret = model.get("@text");
+		else
+			ret =  text;
+		
+		if (ret != null)
+			ret = ret.replace("<br/>", "\n");
+		
+		return ret;
 	}
 	/**
 	 * @param text the text to set
 	 */
 	public void setText(String text)
 	{
+		if (text != null)
+			text = text.replace("\n", "<br/>");
+		
 		if (model != null)
 		{
 			model.put("@text", text);
