@@ -286,7 +286,7 @@
 			name = thesarvoTests;
 			productName = guideTests;
 			productReference = FC83BE241436CF50007192D2 /* thesarvoTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 /* End PBXNativeTarget section */
 

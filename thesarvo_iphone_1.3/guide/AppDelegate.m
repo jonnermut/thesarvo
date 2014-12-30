@@ -390,8 +390,8 @@
     
     
     NSString *data;
-    NSString* prefix = @"http-3A-2F-2Fwww.thesarvo.com-2Fconfluence-2Fplugins-2Fservlet-2Fguide-2Fxml-2F";
-    NSString* filename = [NSString stringWithFormat:@"%@%@", prefix, _guideId];
+    //NSString* prefix = @"http-3A-2F-2Fwww.thesarvo.com-2Fconfluence-2Fplugins-2Fservlet-2Fguide-2Fxml-2F";
+    NSString* filename = [NSString stringWithFormat:@"%@.xml", _guideId];
     NSURL* url = [[NSBundle mainBundle] URLForResource:filename withExtension:@"" subdirectory:@"www/data"];
     
     NSError* error;
