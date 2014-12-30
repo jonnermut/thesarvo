@@ -1234,7 +1234,7 @@ public class Controller
 			}
 		}
 		*/
-		
+		getCurrentGuide().update();
 		
 		saveAll();
 		

@@ -1,19 +1,16 @@
 package com.thesarvo.guide.client.view.node;
 
-import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasValue;
-import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.thesarvo.guide.client.util.StringUtil;
 import com.thesarvo.guide.client.view.HasBindValue;
-import com.thesarvo.guide.client.view.res.Resources;
 import com.thesarvo.guide.client.xml.XmlSimpleModel;
 
-public class NodeWidget extends Composite implements com.thesarvo.guide.client.xml.HasSimpleModel
+public class NodeWidget extends Composite implements com.thesarvo.guide.client.xml.HasSimpleModel, Updateable
 {
 	XmlSimpleModel model;
 	//private SimpleDataBinder binder = new SimpleDataBinder( this);
@@ -56,6 +53,10 @@ public class NodeWidget extends Composite implements com.thesarvo.guide.client.x
 	}
 
 
+	/* (non-Javadoc)
+	 * @see com.thesarvo.guide.client.view.node.Updateable#updateAllWidgets()
+	 */
+	@Override
 	public void updateAllWidgets()
 	{
 		setWidgetValuesFromModel();

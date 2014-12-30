@@ -194,6 +194,13 @@ public class ImageReadNode extends ReadNode
 	public void updateAllWidgets()
 	{
 		super.updateAllWidgets();
+		
+		for (int i =0;i<flowPanel.getWidgetCount();i++)
+		{
+			Widget w = flowPanel.getWidget(i);
+			if (w instanceof Updateable)
+				((Updateable) w).updateAllWidgets();
+		}
 			
 //		if (!Controller.get().isMobileApp())
 //		{

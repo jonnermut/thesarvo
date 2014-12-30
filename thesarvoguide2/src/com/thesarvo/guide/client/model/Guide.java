@@ -262,7 +262,7 @@ public class Guide
 					@Override
 					public void execute()
 					{						
-						NodeWrapper nw = createNodeWrapper(n);
+						NodeWrapper nw = createNodeWrapper(n, null);
 						guideView.addNode(nw);	
 						if (nw.getNodeType() == NodeType.image)
 							deferredUpdates.add(nw);	
@@ -319,6 +319,11 @@ public class Guide
 				}
 				
 			}
+			
+			for (NodeWrapper nw : getNodeWrappers())
+			{
+				nw.update();
+			}
 		}
 	}
 
@@ -336,10 +341,21 @@ public class Guide
 		}
 	}
 
-	private NodeWrapper createNodeWrapper(Node n)
+	private NodeWrapper createNodeWrapper(Node n, NodeWrapper afterThisOne)
 	{
-		NodeWrapper nw = new NodeWrapper(n, this);				
-		getNodeWrappers().add(nw);
+		NodeWrapper nw = new NodeWrapper(n, this);
+		
+		int idx = -1;
+		if (afterThisOne != null)
+		{
+			idx = getNodeWrappers().indexOf(afterThisOne);
+			if (idx == -1)
+				idx = 0;
+		
+			getNodeWrappers().add(idx+1, nw);
+		}
+		else
+			getNodeWrappers().add(nw);
 		
 		String id = ((Element)n).getAttribute("id");
 		if (id==null)
@@ -360,7 +376,7 @@ public class Guide
 		Element newNode = getXml().createElement(type);
 		Node after = nw.getNode().getNextSibling();
 		nw.getNode().getParentNode().insertBefore(newNode, after);
-		NodeWrapper newNw = createNodeWrapper(newNode);
+		NodeWrapper newNw = createNodeWrapper(newNode, nw);
 		newNw.setDeleteOnCancel(true);
 		newNw.setupEditNode();
 		

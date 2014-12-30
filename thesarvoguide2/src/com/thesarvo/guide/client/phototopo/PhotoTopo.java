@@ -65,10 +65,11 @@ import com.thesarvo.guide.client.raphael.Raphael.Path;
 import com.thesarvo.guide.client.raphael.Raphael.Rect;
 import com.thesarvo.guide.client.raphael.Raphael.Text;
 import com.thesarvo.guide.client.util.StringUtil;
+import com.thesarvo.guide.client.view.node.Updateable;
 import com.thesarvo.guide.client.view.res.Resources;
 import com.thesarvo.guide.client.xml.XmlSimpleModel;
 
-public class PhotoTopo extends FlowPanel
+public class PhotoTopo extends FlowPanel implements Updateable
 {
 
 	public static final int HANDLE_RADIUS = 5;
@@ -1317,6 +1318,13 @@ public class PhotoTopo extends FlowPanel
 //				
 //			}
 //		}, MouseOverEvent.getType());
+	}
+
+	@Override
+	public void updateAllWidgets()
+	{
+		redraw();
+		
 	}
 
 }
