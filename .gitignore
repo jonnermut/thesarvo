@@ -15,3 +15,9 @@ thesarvo_android/guide/src/main/assets/www/*
 thesarvo_android/guide/src/main/assets/www
 thesarvo_android/guide/src/main/assets
 thesarvo_android/guide/src/release/res/values/google_maps_api.xml #don't want to make API key public
+thesarvo_iphone_2.0/thesarvo/www/data
+thesarvo_iphone_2.0/thesarvo/www/thesarvoguide2
+svg2pdf/.gradle
+thesarvo_iphone_2.0/thesarvo.xcworkspace/xcuserdata/jon.xcuserdatad
+thesarvo_iphone_2.0/thesarvo/thesarvo.xcodeproj/project.xcworkspace/xcuserdata/jon.xcuserdatad
+thesarvo_iphone_2.0/thesarvo/thesarvo.xcodeproj/xcuserdata/jon.xcuserdatad

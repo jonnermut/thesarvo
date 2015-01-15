@@ -9,7 +9,8 @@
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate
+{
 
     var window: UIWindow?
     
@@ -30,7 +31,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             splitViewController = self.window!.rootViewController as? UISplitViewController
             navigationController = splitViewController?.viewControllers[splitViewController!.viewControllers.count-1] as? UINavigationController
             
-            navigationController?.topViewController.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem()
+            if isIOS8OrLater()
+            {
+                setupSplitViewButtons()
+                splitViewController?.preferredDisplayMode = UISplitViewControllerDisplayMode.AllVisible
+                splitViewController?.preferredPrimaryColumnWidthFraction = 0.3
+            }
             
             splitViewController?.delegate = self
         }
@@ -39,6 +45,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         Model.instance.load()
         
         return true
+    }
+    
+    class func instance() -> AppDelegate
+    {
+        return UIApplication.sharedApplication().delegate as AppDelegate
+    }
+    
+    func setupSplitViewButtons(detail: UIViewController? = nil)
+    {
+        if isIOS8OrLater()
+        {
+            var button = splitViewController?.displayModeButtonItem()
+            
+            var vc = detail
+            
+            if (vc == nil)
+            {
+                vc = navigationController?.topViewController
+            }
+            
+            if let button = button
+            {
+                if let vc = vc
+                {
+                    vc.navigationItem.leftItemsSupplementBackButton = true
+                    vc.navigationItem.leftBarButtonItem =
+                    UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItemStyle.Plain, target: button.target, action: button.action)
+                }
+            }
+        }
+        
     }
 
     func applicationWillResignActive(application: UIApplication)

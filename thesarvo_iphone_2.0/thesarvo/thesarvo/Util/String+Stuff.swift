@@ -18,4 +18,14 @@ extension String
         }
         return self
     }
+    
+    func startsWith(prefix: String) -> Bool
+    {
+        return hasPrefix(prefix)
+    }
+    
+    func endsWith(suffix: String) -> Bool
+    {
+        return hasSuffix(suffix)
+    }
 }

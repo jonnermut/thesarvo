@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FC28B3621A56A8F800C75D50 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3611A56A8F800C75D50 /* Model.swift */; };
+		FC28B3661A56A91900C75D50 /* MapPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3641A56A91900C75D50 /* MapPoint.swift */; };
+		FC28B3681A56A92C00C75D50 /* Guide.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3671A56A92C00C75D50 /* Guide.swift */; };
+		FC28B36A1A56A93600C75D50 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3691A56A93600C75D50 /* Config.swift */; };
+		FC28B36C1A57A82A00C75D50 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B36B1A57A82A00C75D50 /* MapViewController.swift */; };
+		FC28B36E1A57AA4600C75D50 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC28B36D1A57AA4600C75D50 /* CoreLocation.framework */; };
+		FC28B3701A57AA5400C75D50 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC28B36F1A57AA5300C75D50 /* MapKit.framework */; };
+		FC28B3741A57FBC800C75D50 /* PageSearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3731A57FBC800C75D50 /* PageSearchTableViewController.swift */; };
+		FC28B3761A59501D00C75D50 /* GenericTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3751A59501D00C75D50 /* GenericTableDataSource.swift */; };
 		FCAACE911A5559FD00C7A03F /* www in Resources */ = {isa = PBXBuildFile; fileRef = FCAACE901A5559FD00C7A03F /* www */; };
 		FCAACE931A55F27300C7A03F /* String+Stuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAACE921A55F27300C7A03F /* String+Stuff.swift */; };
 		FCF795191A5277B300A7C808 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795181A5277B300A7C808 /* AppDelegate.swift */; };
@@ -16,9 +25,6 @@
 		FCF795221A5277B300A7C808 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCF795211A5277B300A7C808 /* Images.xcassets */; };
 		FCF795251A5277B300A7C808 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = FCF795231A5277B300A7C808 /* LaunchScreen.xib */; };
 		FCF795311A5277B300A7C808 /* thesarvoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795301A5277B300A7C808 /* thesarvoTests.swift */; };
-		FCF7953C1A527F0300A7C808 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF7953B1A527F0300A7C808 /* Model.swift */; };
-		FCF7953E1A527F2000A7C808 /* IndexEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF7953D1A527F2000A7C808 /* IndexEntry.swift */; };
-		FCF795401A527F3100A7C808 /* MapPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF7953F1A527F3100A7C808 /* MapPoint.swift */; };
 		FCF795451A5289C900A7C808 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = FCF795441A5289C900A7C808 /* config.xml */; };
 		FCF795771A553A2400A7C808 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795671A553A2400A7C808 /* Array.swift */; };
 		FCF795781A553A2400A7C808 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795681A553A2400A7C808 /* Dictionary.swift */; };
@@ -31,7 +37,7 @@
 		FCF7957F1A553A2400A7C808 /* Range.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795701A553A2400A7C808 /* Range.swift */; };
 		FCF795801A553A2400A7C808 /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795711A553A2400A7C808 /* Sequence.swift */; };
 		FCF795811A553A2400A7C808 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795721A553A2400A7C808 /* String.swift */; };
-		FCF795821A553A2400A7C808 /* GCD.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795731A553A2400A7C808 /* GCD.swift */; };
+		FCF795821A553A2400A7C808 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795731A553A2400A7C808 /* Util.swift */; };
 		FCF795831A553A2400A7C808 /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795741A553A2400A7C808 /* NSDate.swift */; };
 		FCF795841A553A2400A7C808 /* NSURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795751A553A2400A7C808 /* NSURL.swift */; };
 		FCF795851A553A2400A7C808 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795761A553A2400A7C808 /* SWXMLHash.swift */; };
@@ -50,6 +56,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FC28B3611A56A8F800C75D50 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		FC28B3641A56A91900C75D50 /* MapPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPoint.swift; sourceTree = "<group>"; };
+		FC28B3671A56A92C00C75D50 /* Guide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Guide.swift; sourceTree = "<group>"; };
+		FC28B3691A56A93600C75D50 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		FC28B36B1A57A82A00C75D50 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		FC28B36D1A57AA4600C75D50 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		FC28B36F1A57AA5300C75D50 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		FC28B3731A57FBC800C75D50 /* PageSearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageSearchTableViewController.swift; sourceTree = "<group>"; };
+		FC28B3751A59501D00C75D50 /* GenericTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericTableDataSource.swift; sourceTree = "<group>"; };
 		FCAACE901A5559FD00C7A03F /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
 		FCAACE921A55F27300C7A03F /* String+Stuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Stuff.swift"; sourceTree = "<group>"; };
 		FCF795131A5277B300A7C808 /* thesarvo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = thesarvo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,9 +79,6 @@
 		FCF7952F1A5277B300A7C808 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FCF795301A5277B300A7C808 /* thesarvoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = thesarvoTests.swift; sourceTree = "<group>"; };
 		FCF7953A1A527D5800A7C808 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; };
-		FCF7953B1A527F0300A7C808 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
-		FCF7953D1A527F2000A7C808 /* IndexEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexEntry.swift; sourceTree = "<group>"; };
-		FCF7953F1A527F3100A7C808 /* MapPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPoint.swift; sourceTree = "<group>"; };
 		FCF795441A5289C900A7C808 /* config.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
 		FCF795671A553A2400A7C808 /* Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		FCF795681A553A2400A7C808 /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
@@ -80,7 +92,7 @@
 		FCF795701A553A2400A7C808 /* Range.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Range.swift; sourceTree = "<group>"; };
 		FCF795711A553A2400A7C808 /* Sequence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sequence.swift; sourceTree = "<group>"; };
 		FCF795721A553A2400A7C808 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
-		FCF795731A553A2400A7C808 /* GCD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCD.swift; sourceTree = "<group>"; };
+		FCF795731A553A2400A7C808 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		FCF795741A553A2400A7C808 /* NSDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDate.swift; sourceTree = "<group>"; };
 		FCF795751A553A2400A7C808 /* NSURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURL.swift; sourceTree = "<group>"; };
 		FCF795761A553A2400A7C808 /* SWXMLHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SWXMLHash.swift; sourceTree = "<group>"; };
@@ -93,6 +105,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC28B3701A57AA5400C75D50 /* MapKit.framework in Frameworks */,
+				FC28B36E1A57AA4600C75D50 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,9 +120,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FC28B3601A56A8F800C75D50 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FC28B3641A56A91900C75D50 /* MapPoint.swift */,
+				FC28B3611A56A8F800C75D50 /* Model.swift */,
+				FC28B3671A56A92C00C75D50 /* Guide.swift */,
+				FC28B3691A56A93600C75D50 /* Config.swift */,
+				FC28B3751A59501D00C75D50 /* GenericTableDataSource.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		FCF7950A1A5277B300A7C808 = {
 			isa = PBXGroup;
 			children = (
+				FC28B36F1A57AA5300C75D50 /* MapKit.framework */,
+				FC28B36D1A57AA4600C75D50 /* CoreLocation.framework */,
 				FCF795151A5277B300A7C808 /* thesarvo */,
 				FCF7952D1A5277B300A7C808 /* thesarvoTests */,
 				FCF795141A5277B300A7C808 /* Products */,
@@ -132,12 +160,12 @@
 				FCF795441A5289C900A7C808 /* config.xml */,
 				FCF7951C1A5277B300A7C808 /* DetailViewController.swift */,
 				FCF795211A5277B300A7C808 /* Images.xcassets */,
-				FCF7953D1A527F2000A7C808 /* IndexEntry.swift */,
 				FCF795231A5277B300A7C808 /* LaunchScreen.xib */,
 				FCF7951E1A5277B300A7C808 /* Main.storyboard */,
-				FCF7953F1A527F3100A7C808 /* MapPoint.swift */,
+				FC28B36B1A57A82A00C75D50 /* MapViewController.swift */,
 				FCF7951A1A5277B300A7C808 /* MasterViewController.swift */,
-				FCF7953B1A527F0300A7C808 /* Model.swift */,
+				FC28B3601A56A8F800C75D50 /* Model */,
+				FC28B3731A57FBC800C75D50 /* PageSearchTableViewController.swift */,
 				FCF795161A5277B300A7C808 /* Supporting Files */,
 				FCF795651A553A2400A7C808 /* Util */,
 			);
@@ -176,7 +204,7 @@
 				FCF795861A553A8B00A7C808 /* AEXML.swift */,
 				FCF795881A553BC500A7C808 /* AEXML+Stuff.swift */,
 				FCF795661A553A2400A7C808 /* ExSwift */,
-				FCF795731A553A2400A7C808 /* GCD.swift */,
+				FCF795731A553A2400A7C808 /* Util.swift */,
 				FCF795741A553A2400A7C808 /* NSDate.swift */,
 				FCF795751A553A2400A7C808 /* NSURL.swift */,
 				FCF795761A553A2400A7C808 /* SWXMLHash.swift */,
@@ -253,6 +281,7 @@
 				TargetAttributes = {
 					FCF795121A5277B300A7C808 = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = 8K6T2FHY8E;
 					};
 					FCF795291A5277B300A7C808 = {
 						CreatedOnToolsVersion = 6.1;
@@ -315,21 +344,25 @@
 				FCF795871A553A8B00A7C808 /* AEXML.swift in Sources */,
 				FCF795831A553A2400A7C808 /* NSDate.swift in Sources */,
 				FCF7957D1A553A2400A7C808 /* Int.swift in Sources */,
+				FC28B36C1A57A82A00C75D50 /* MapViewController.swift in Sources */,
 				FCF7951B1A5277B300A7C808 /* MasterViewController.swift in Sources */,
 				FCF795771A553A2400A7C808 /* Array.swift in Sources */,
 				FCF7957A1A553A2400A7C808 /* ExSwift.swift in Sources */,
 				FCF795801A553A2400A7C808 /* Sequence.swift in Sources */,
+				FC28B36A1A56A93600C75D50 /* Config.swift in Sources */,
+				FC28B3681A56A92C00C75D50 /* Guide.swift in Sources */,
 				FCF795191A5277B300A7C808 /* AppDelegate.swift in Sources */,
+				FC28B3741A57FBC800C75D50 /* PageSearchTableViewController.swift in Sources */,
 				FCF795841A553A2400A7C808 /* NSURL.swift in Sources */,
-				FCF7953E1A527F2000A7C808 /* IndexEntry.swift in Sources */,
+				FC28B3621A56A8F800C75D50 /* Model.swift in Sources */,
 				FCF795851A553A2400A7C808 /* SWXMLHash.swift in Sources */,
-				FCF7953C1A527F0300A7C808 /* Model.swift in Sources */,
 				FCF795791A553A2400A7C808 /* Double.swift in Sources */,
-				FCF795401A527F3100A7C808 /* MapPoint.swift in Sources */,
 				FCF795811A553A2400A7C808 /* String.swift in Sources */,
-				FCF795821A553A2400A7C808 /* GCD.swift in Sources */,
+				FCF795821A553A2400A7C808 /* Util.swift in Sources */,
+				FC28B3661A56A91900C75D50 /* MapPoint.swift in Sources */,
 				FCF795891A553BC500A7C808 /* AEXML+Stuff.swift in Sources */,
 				FCF7957F1A553A2400A7C808 /* Range.swift in Sources */,
+				FC28B3761A59501D00C75D50 /* GenericTableDataSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

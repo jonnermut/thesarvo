@@ -60,7 +60,14 @@ class MasterViewController: UITableViewController
     
     override func viewWillAppear(animated: Bool)
     {
-        self.navigationItem.title = data?.name
+        if (data == nil)
+        {
+            data = Model.instance.rootView
+        }
+        
+        self.navigationItem.title = data?.text
+        
+        
         
     }
 
@@ -108,8 +115,13 @@ class MasterViewController: UITableViewController
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data!.listItems.count
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
+        if let data = data
+        {
+            return data.listItems.count
+        }
+        return 0
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -119,11 +131,15 @@ class MasterViewController: UITableViewController
         let li = data?.listItems[indexPath.row]
         if let li = li
         {
-            cell.textLabel.text = li.name
+            cell.textLabel.text = li.text
 
             cell.accessoryType = li.viewId != nil ? UITableViewCellAccessoryType.DisclosureIndicator : UITableViewCellAccessoryType.None;
             cell.textLabel.adjustsFontSizeToFitWidth = true
-            var level = li.level - 1
+            var level = 0
+            if let l = li.level
+            {
+                level = l-1
+            }
 
             cell.textLabel.font = UIFont.systemFontOfSize( CGFloat(18-level*2) );
             cell.indentationLevel = level;
@@ -153,7 +169,11 @@ class MasterViewController: UITableViewController
         {
             if (viewId == "Map")
             {
-                
+                let callback = SegueCallback
+                {
+                    (vc: UIViewController) in
+                }
+                self.performSegueWithIdentifier("showMap", sender: callback)
             }
             else if (viewId.hasPrefix("guide.") || viewId.hasPrefix("http"))
             {
@@ -163,7 +183,13 @@ class MasterViewController: UITableViewController
                     if let fcvc = DetailViewController.getFromVC(vc)
                     {
                         fcvc.viewId = viewId
-                        fcvc.navigationItem.title = selected.name
+                        fcvc.navigationItem.title = selected.text
+                        //AppDelegate.instance().setupSplitViewButtons()
+//                        if let splitView = AppDelegate.instance().splitViewController
+//                        {
+//                            //fcvc.navigationItem.rightBarButtonItem = splitView.displayModeButtonItem()
+//                            fcvc.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: nil, action: nil)
+//                        }
                     }
                 }
                 

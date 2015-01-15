@@ -51,6 +51,8 @@ class DetailViewController: UIViewController, UIWebViewDelegate
     {
         webview?.delegate = self
         
+        webview?.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal
+        
         if isHttp()
         {
             if let url = NSURL( string: viewId)
@@ -66,6 +68,8 @@ class DetailViewController: UIViewController, UIWebViewDelegate
             }
 
         }
+        
+        AppDelegate.instance().setupSplitViewButtons(detail: self)
     }
 
 
@@ -90,6 +94,24 @@ class DetailViewController: UIViewController, UIWebViewDelegate
     {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)
+    {
+        let dest: UIViewController = segue.destinationViewController as UIViewController
+        
+        if (sender is SegueCallback)
+        {
+            (sender as SegueCallback).function(dest)
+        }
+        
+        if (segue.identifier == "showPageSearch")
+        {
+            if let vc = dest as? PageSearchTableViewController
+            {
+                vc.guide = guide
+            }
+        }
     }
 
     func JSEscape(data: String) -> String
@@ -171,8 +193,19 @@ class DetailViewController: UIViewController, UIWebViewDelegate
             }
             else if (command == "map")
             {
-                // TODO
+                let callback = SegueCallback
+                {
+                    (vc: UIViewController) in
+                    if let mvc = vc as? MapViewController
+                    {
+                        mvc.guide = self.guide
+                        //fcvc.navigationItem.title = self.navigationItem.title
+                    }
+                }
+                self.performSegueWithIdentifier("showMap", sender: callback)
             }
+            
+            return false
             
         }
         
