@@ -9,6 +9,31 @@
 import Foundation
 import UIKit
 
+/* Usage example
+
+
+    // Some array of model objects
+    var rows : Array<MyModel>
+
+    // our generic datasource
+    var ds = SingleSectionDataSource<MyModel> ( rows )
+    {
+
+        cell: UITableViewCell!, row: MyModel in
+
+        // cell configurator - set the properties of the cell based on the model. For eg.
+        cell?.textLabel.text = row.name
+    }
+
+    // plumb the datasource into the table view
+    self.tableView.datasource = ds.tableViewDataSource
+
+*/
+
+
+/**
+ * Represents a section with row datatype R
+ */
 class Section<R>
 {
     var header: String = ""
@@ -28,6 +53,9 @@ class Section<R>
     }
 }
 
+/**
+* Allows the UITableViewDataSource to talk to our datasource without knowing the underlying type is generic (which is against the rules for Obj-C objects)
+*/
 protocol SectionedDataSourceBridge
 {
     func numberOfSections() -> Int
@@ -41,6 +69,11 @@ protocol SectionedDataSourceBridge
     func titleForFooterInSection(section: Int) -> String?
 }
 
+/**
+* Represents a data source with arbitary sections with row type R.
+* Use the tableViewDataSource property to feed this to a UITableView.
+* Use the cellConfigurator or rowToString callbacks to configure the UITableViewCell.
+*/
 class SectionedDataSource<R> : SectionedDataSourceBridge
 {
     typealias RowToString = (R) -> (String)
@@ -149,6 +182,9 @@ class SectionedDataSource<R> : SectionedDataSourceBridge
     }
 }
 
+/**
+ * A non generic helper class which can be given to a UITableView as its datasource
+ */
 class TableViewDataSource : NSObject, UITableViewDataSource
 {
     var sectionedDataSource : SectionedDataSourceBridge
@@ -185,7 +221,9 @@ class TableViewDataSource : NSObject, UITableViewDataSource
 }
 
 
-
+/**
+ * A specialisation of SectionedDataSource which only has one section, and so exposes a rows property directly.
+ */
 class SingleSectionDataSource<R> : SectionedDataSource<R>
 {
     override init()
