@@ -225,26 +225,13 @@ public class Guide
 		Timer t = null;
 		final String showId = Controller.get().getShowId();
 		if (showId != null)
-		{
-			
+		{			
 			t = new Timer()
-			{
-				
+			{				
 				@Override
 				public void run()
 				{
-					final NodeWrapper nw = getNodesById().get(showId);
-					if (nw != null)
-					{
-						
-						//Window.alert("Scrolling into view:" + showId);
-						
-						Window.scrollTo(0, nw.getElement().getAbsoluteTop());
-						//nw.getElement().scrollIntoView();
-						//nw.getEditControls().getElement().scrollIntoView();
-						nw.getElement().getStyle().setBackgroundColor("#ffb");
-					}
-					
+					Controller.get().scrollToId(showId);					
 				}
 			};
 			t.schedule(500);

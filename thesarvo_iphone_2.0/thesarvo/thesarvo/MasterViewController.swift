@@ -24,9 +24,11 @@ class MasterViewController: UITableViewController
     
     var data : View?
 
-    override func awakeFromNib() {
+    override func awakeFromNib()
+    {
         super.awakeFromNib()
-        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+        if UIDevice.currentDevice().userInterfaceIdiom == .Pad
+        {
             self.clearsSelectionOnViewWillAppear = false
             self.preferredContentSize = CGSize(width: 320.0, height: 600.0)
         }
@@ -67,7 +69,7 @@ class MasterViewController: UITableViewController
         
         self.navigationItem.title = data?.text
         
-        
+        setupDatasource()
         
     }
 
@@ -77,6 +79,29 @@ class MasterViewController: UITableViewController
         // Dispose of any resources that can be recreated.
     }
 
+    func setupDatasource()
+    {
+        var rows = (data?.listItems).valueOr([])
+        let d = SingleSectionDataSource(rows: rows)
+        {
+            cell, li in
+
+            cell.textLabel?.text = li.text
+            cell.accessoryType = li.viewId != nil ? UITableViewCellAccessoryType.DisclosureIndicator : UITableViewCellAccessoryType.None;
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
+            var level = 0
+            if let l = li.level
+            {
+                level = l-1
+            }
+            
+            cell.textLabel?.font = UIFont.systemFontOfSize( CGFloat(18-level*2) );
+            cell.indentationLevel = level;
+            cell.indentationWidth = 25;
+        }
+
+        self.tableView.dataSource = d.tableViewDataSource
+    }
 
 
     // MARK: - Segues
@@ -109,47 +134,7 @@ class MasterViewController: UITableViewController
 */
     }
 
-    // MARK: - Table View
-
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
-    {
-        if let data = data
-        {
-            return data.listItems.count
-        }
-        return 0
-    }
-
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
-
-        let li = data?.listItems[indexPath.row]
-        if let li = li
-        {
-            cell.textLabel.text = li.text
-
-            cell.accessoryType = li.viewId != nil ? UITableViewCellAccessoryType.DisclosureIndicator : UITableViewCellAccessoryType.None;
-            cell.textLabel.adjustsFontSizeToFitWidth = true
-            var level = 0
-            if let l = li.level
-            {
-                level = l-1
-            }
-
-            cell.textLabel.font = UIFont.systemFontOfSize( CGFloat(18-level*2) );
-            cell.indentationLevel = level;
-            
-            cell.indentationWidth = 25;
-        }
-        
-        return cell
-    }
-
+    
     func segueToDrilldown(viewId: String)
     {
         let callback = SegueCallback
@@ -193,6 +178,7 @@ class MasterViewController: UITableViewController
                     }
                 }
                 
+                AppDelegate.instance().hideMasterIfNecessary()
                 self.performSegueWithIdentifier("showDetail", sender: callback)
 
             }
@@ -201,11 +187,6 @@ class MasterViewController: UITableViewController
                 segueToDrilldown(viewId)
             }
         }
-        
-
-
-        
-
         
     }
     

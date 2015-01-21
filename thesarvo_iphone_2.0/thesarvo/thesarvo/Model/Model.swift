@@ -27,7 +27,7 @@ class Model
     
     var allGpsNodes: [GpsNode] = []
     
-    func getGuide(guideId: String) -> Guide
+    func getGuide(guideId: String, name: String?) -> Guide
     {
         // lazy init of Guide objects
         return synchronized(self)
@@ -36,6 +36,7 @@ class Model
             if !self.guides.has(g)
             {
                 var ret = Guide(guideId: g)
+                ret.name = name
                 self.guides[g] = ret
                 return ret
             }
@@ -84,7 +85,7 @@ class Model
             {
                 if li.isGuide
                 {
-                    let guide = self.getGuide(li.viewId!)
+                    let guide = self.getGuide(li.viewId!,name: li.text)
                     if let guideElement = guide.guideElement
                     {
                         for child in guideElement.children

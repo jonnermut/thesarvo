@@ -16,6 +16,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     
     var splitViewController : UISplitViewController?
     var navigationController : UINavigationController?
+    var containerController : ContainerViewController?
+    
+    var preferredMode : UISplitViewControllerDisplayMode
+    {
+        return isIPhone() ? UISplitViewControllerDisplayMode.PrimaryOverlay : UISplitViewControllerDisplayMode.AllVisible
+    }
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool
     {
@@ -23,19 +29,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         
         if (self.window!.rootViewController is UINavigationController)
         {
-            // ios 7 :(
+            // ios 7 on iphone :(
             navigationController = self.window!.rootViewController as? UINavigationController
         }
         else if (self.window!.rootViewController is UISplitViewController)
         {
+            
             splitViewController = self.window!.rootViewController as? UISplitViewController
+            
             navigationController = splitViewController?.viewControllers[splitViewController!.viewControllers.count-1] as? UINavigationController
             
             if isIOS8OrLater()
             {
+                // wrap the split view in the ContainerViewController, so we can frig with the traits it receives
+                containerController = ContainerViewController()
+                containerController?.viewController = splitViewController
+                self.window!.rootViewController = containerController;
+                
                 setupSplitViewButtons()
-                splitViewController?.preferredDisplayMode = UISplitViewControllerDisplayMode.AllVisible
-                splitViewController?.preferredPrimaryColumnWidthFraction = 0.3
+                
+                splitViewController?.preferredDisplayMode = preferredMode
+                
+                if isIPhone()
+                {
+                    splitViewController?.preferredPrimaryColumnWidthFraction = 0.8
+                }
+                else
+                {
+                    splitViewController?.preferredPrimaryColumnWidthFraction = 0.3
+                }
+                
             }
             
             splitViewController?.delegate = self
@@ -50,6 +73,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     class func instance() -> AppDelegate
     {
         return UIApplication.sharedApplication().delegate as AppDelegate
+    }
+    
+    func animateClosed()
+    {
+        UIView.animateWithDuration(0.2, animations:
+        {
+            if let sv = self.splitViewController?
+            {
+                sv.preferredDisplayMode = UISplitViewControllerDisplayMode.PrimaryHidden
+            }
+        })
+    }
+    
+    func animateOpen()
+    {
+        UIView.animateWithDuration(0.2, animations:
+        {
+            if let sv = self.splitViewController?
+            {
+                sv.preferredDisplayMode = self.preferredMode
+            }
+        })
+    }
+    
+    func hideMasterIfNecessary()
+    {
+        if isIPhone() && isIOS8OrLater()
+        {
+            animateClosed()
+        }
     }
     
     func setupSplitViewButtons(detail: UIViewController? = nil)
@@ -71,11 +124,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                 {
                     vc.navigationItem.leftItemsSupplementBackButton = true
                     vc.navigationItem.leftBarButtonItem =
-                    UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItemStyle.Plain, target: button.target, action: button.action)
+                    UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("hamburgerToggle") )
+                    
+                    /*
+                    if isIPhone()
+                    {
+                        if let left = splitViewController?.viewControllers[0] as? UIViewController
+                        {
+                            left.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItemStyle.Plain, target: button.target, action: button.action)
+                        }
+                    }
+                    */
                 }
+                
+                
+                
             }
         }
         
+    }
+    
+    dynamic func hamburgerToggle()
+    {
+        if let sv = splitViewController
+        {
+            if sv.displayMode == .PrimaryHidden
+            {
+                animateOpen()
+            }
+            else
+            {
+                animateClosed()
+            }
+        }
     }
 
     func applicationWillResignActive(application: UIApplication)

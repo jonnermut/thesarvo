@@ -15,7 +15,9 @@
 		FC28B36E1A57AA4600C75D50 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC28B36D1A57AA4600C75D50 /* CoreLocation.framework */; };
 		FC28B3701A57AA5400C75D50 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC28B36F1A57AA5300C75D50 /* MapKit.framework */; };
 		FC28B3741A57FBC800C75D50 /* PageSearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3731A57FBC800C75D50 /* PageSearchTableViewController.swift */; };
-		FC28B3761A59501D00C75D50 /* GenericTableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3751A59501D00C75D50 /* GenericTableDataSource.swift */; };
+		FC28B3761A59501D00C75D50 /* SectionedDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3751A59501D00C75D50 /* SectionedDataSource.swift */; };
+		FC99CD001A6A290900C3228C /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC99CCFF1A6A290900C3228C /* Optional.swift */; };
+		FC99CD021A6B852900C3228C /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC99CD011A6B852900C3228C /* ContainerViewController.swift */; };
 		FCAACE911A5559FD00C7A03F /* www in Resources */ = {isa = PBXBuildFile; fileRef = FCAACE901A5559FD00C7A03F /* www */; };
 		FCAACE931A55F27300C7A03F /* String+Stuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAACE921A55F27300C7A03F /* String+Stuff.swift */; };
 		FCF795191A5277B300A7C808 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795181A5277B300A7C808 /* AppDelegate.swift */; };
@@ -64,7 +66,9 @@
 		FC28B36D1A57AA4600C75D50 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		FC28B36F1A57AA5300C75D50 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		FC28B3731A57FBC800C75D50 /* PageSearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageSearchTableViewController.swift; sourceTree = "<group>"; };
-		FC28B3751A59501D00C75D50 /* GenericTableDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericTableDataSource.swift; sourceTree = "<group>"; };
+		FC28B3751A59501D00C75D50 /* SectionedDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionedDataSource.swift; sourceTree = "<group>"; };
+		FC99CCFF1A6A290900C3228C /* Optional.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
+		FC99CD011A6B852900C3228C /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		FCAACE901A5559FD00C7A03F /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
 		FCAACE921A55F27300C7A03F /* String+Stuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Stuff.swift"; sourceTree = "<group>"; };
 		FCF795131A5277B300A7C808 /* thesarvo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = thesarvo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -127,7 +131,7 @@
 				FC28B3611A56A8F800C75D50 /* Model.swift */,
 				FC28B3671A56A92C00C75D50 /* Guide.swift */,
 				FC28B3691A56A93600C75D50 /* Config.swift */,
-				FC28B3751A59501D00C75D50 /* GenericTableDataSource.swift */,
+				FC28B3751A59501D00C75D50 /* SectionedDataSource.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -168,6 +172,7 @@
 				FC28B3731A57FBC800C75D50 /* PageSearchTableViewController.swift */,
 				FCF795161A5277B300A7C808 /* Supporting Files */,
 				FCF795651A553A2400A7C808 /* Util */,
+				FC99CD011A6B852900C3228C /* ContainerViewController.swift */,
 			);
 			path = thesarvo;
 			sourceTree = "<group>";
@@ -209,6 +214,7 @@
 				FCF795751A553A2400A7C808 /* NSURL.swift */,
 				FCF795761A553A2400A7C808 /* SWXMLHash.swift */,
 				FCAACE921A55F27300C7A03F /* String+Stuff.swift */,
+				FC99CCFF1A6A290900C3228C /* Optional.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -339,6 +345,7 @@
 				FCF7957B1A553A2400A7C808 /* Float.swift in Sources */,
 				FCF7951D1A5277B300A7C808 /* DetailViewController.swift in Sources */,
 				FCF7957E1A553A2400A7C808 /* NSArray.swift in Sources */,
+				FC99CD001A6A290900C3228C /* Optional.swift in Sources */,
 				FCF795781A553A2400A7C808 /* Dictionary.swift in Sources */,
 				FCAACE931A55F27300C7A03F /* String+Stuff.swift in Sources */,
 				FCF795871A553A8B00A7C808 /* AEXML.swift in Sources */,
@@ -357,12 +364,13 @@
 				FC28B3621A56A8F800C75D50 /* Model.swift in Sources */,
 				FCF795851A553A2400A7C808 /* SWXMLHash.swift in Sources */,
 				FCF795791A553A2400A7C808 /* Double.swift in Sources */,
+				FC99CD021A6B852900C3228C /* ContainerViewController.swift in Sources */,
 				FCF795811A553A2400A7C808 /* String.swift in Sources */,
 				FCF795821A553A2400A7C808 /* Util.swift in Sources */,
 				FC28B3661A56A91900C75D50 /* MapPoint.swift in Sources */,
 				FCF795891A553BC500A7C808 /* AEXML+Stuff.swift in Sources */,
 				FCF7957F1A553A2400A7C808 /* Range.swift in Sources */,
-				FC28B3761A59501D00C75D50 /* GenericTableDataSource.swift in Sources */,
+				FC28B3761A59501D00C75D50 /* SectionedDataSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

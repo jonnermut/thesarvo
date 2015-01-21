@@ -10,9 +10,11 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
 import com.thesarvo.guide.client.application.Application;
 import com.thesarvo.guide.client.controller.Controller;
+import com.thesarvo.guide.client.phototopo.Console;
 import com.thesarvo.guide.client.util.Logger;
 import com.thesarvo.guide.client.util.WidgetUtil;
 import com.thesarvo.guide.client.view.GuideView;
+import com.thesarvo.guide.client.view.NodeWrapper;
 import com.thesarvo.guide.client.view.res.Resources;
 import com.thesarvo.guide.client.xml.XmlService;
 
@@ -59,6 +61,8 @@ public class Thesarvoguide2 implements EntryPoint
 		
 		
 		Resources.INSTANCE.s().ensureInjected();
+		
+		exportNativeMethods();
 		
 		RootPanel rootPanel = RootPanel.get("rootdiv");
 				
@@ -239,4 +243,19 @@ public class Thesarvoguide2 implements EntryPoint
 	    	return $wnd.guide_showId;
 	    return null; 
 	  }-*/;
+	  
+
+	// Public functions
+	
+	public static native void exportNativeMethods() /*-{
+		$wnd.scrollToId =
+			$entry(@com.thesarvo.guide.client.Thesarvoguide2::scrollToId(Ljava/lang/String;));
+	}-*/;
+	
+	public static void scrollToId(String id)
+	{
+		Console.log("scrollToId(" + id + ")");
+		Controller.get().scrollToId(id);
+
+	}
 }

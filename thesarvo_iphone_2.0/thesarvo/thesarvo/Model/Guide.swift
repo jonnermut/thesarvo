@@ -40,12 +40,12 @@ class GuideElement : AEXMLElement
 
 class GuideNode : AEXMLElement
 {
-    var elementId: String? { return attr("id") }
+    var elementId: String { return attr("id").valueOr("") }
     
     var searchString : String? { return nil }
 }
 
-class TextNode : GuideNode
+class TextNode : GuideNode, Printable
 {
     var clazz: String? { return attr("class") }
     
@@ -66,18 +66,23 @@ class TextNode : GuideNode
         }
         return nil
     }
+    
+    var description: String { return value }
 }
 
-class ClimbNode : GuideNode
+class ClimbNode : GuideNode, Printable
 {
-    var climbName: String? { return attr("name") }
-    var stars: String? { return attr("stars")?.trimmed() }
-    var grade: String? { return attr("grade") }
+    var climbName: String { return attr("name").valueOr("").trimmed() }
+    var stars: String { return attr("stars").valueOr("").trimmed() }
+    var starsPretty: String { return "★"*stars.length }
+    var grade: String { return attr("grade").valueOr("").trimmed() }
     
     override var searchString : String?
     {
-        return "\(stars?) \(grade) \(climbName)"
+        return "\(stars) \(grade) \(climbName)"
     }
+    
+    var description: String { return "\(starsPretty) \(climbName) \(grade)" }
 }
 
 class ImageNode : GuideNode
@@ -101,6 +106,7 @@ struct IndexEntry
 class Guide
 {
     let guideId : String
+    var name : String?
     
     init(guideId: String)
     {
@@ -150,6 +156,38 @@ class Guide
         return texts.filter( { $0.heading } )
     }
     lazy var headings: [TextNode] = self.getHeadings()
+    
+    func getHeadingsAndClimbs() -> SectionedDataSource<GuideNode>
+    {
+        let d = SectionedDataSource<GuideNode>()
+        var current = Section<GuideNode>(header: name.valueOr("") )
+        if let kids = guideElement?.children
+        {
+            for node in kids
+            {
+                if let text = node as? TextNode
+                {
+                    if text.heading
+                    {
+                        if current.rows.count > 0
+                        {
+                            d.sections.append(current)
+                        }
+                        current = Section<GuideNode>(header: text.value)
+                    }
+                }
+                else if let climb = node as? ClimbNode
+                {
+                    current.rows.append(climb)
+                }
+            }
+            if current.rows.count > 0
+            {
+                d.sections.append(current)
+            }
+        }
+        return d
+    }
     
 
 }

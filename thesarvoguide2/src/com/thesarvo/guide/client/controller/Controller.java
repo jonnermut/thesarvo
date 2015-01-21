@@ -23,6 +23,7 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -34,8 +35,11 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.thesarvo.guide.client.application.Application;
 import com.thesarvo.guide.client.model.Guide;
 import com.thesarvo.guide.client.model.NodeType;
+import com.thesarvo.guide.client.phototopo.Console;
+import com.thesarvo.guide.client.util.BackgroundFader;
 import com.thesarvo.guide.client.util.BrowserUtil;
 import com.thesarvo.guide.client.util.Logger;
+import com.thesarvo.guide.client.util.RGB;
 import com.thesarvo.guide.client.util.StringUtil;
 import com.thesarvo.guide.client.util.WidgetUtil;
 import com.thesarvo.guide.client.view.GuideView;
@@ -1278,5 +1282,37 @@ public class Controller
 	public void setShowId(String showId)
 	{
 		this.showId = showId;
+	}
+	
+	public void scrollToId(String id)
+	{
+		Console.log("Contoller.scrollToId(" + id + ")");
+		final NodeWrapper nw = getNodeWrapper(id);
+		if (nw != null)
+		{
+			Window.scrollTo(0, nw.getElement().getAbsoluteTop());
+			
+
+			//BackgroundFader f = new BackgroundFader(nw.getElement());
+			//f.fade(2000, new RGB("#f0f0b0"), new RGB("#ffffff") ); 
+			
+			//Console.log("Setting BG");
+			nw.getElement().getStyle().setBackgroundColor("#ffb");
+			nw.getElement().getStyle().setProperty("transition", "0.2s");
+			
+			Timer t = new Timer()
+			{
+				
+				@Override
+				public void run()
+				{
+					Console.log("Fading out");
+					nw.getElement().getStyle().setBackgroundColor("#ffffff");
+					nw.getElement().getStyle().setProperty("transition", "2s");
+				}
+			};
+			t.schedule(2000);
+			
+		}
 	}
 }

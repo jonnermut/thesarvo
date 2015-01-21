@@ -44,3 +44,13 @@ func isIOS8OrLater() -> Bool
             return false
     }
 }
+
+func isIPhone() -> Bool
+{
+    return UIDevice.currentDevice().userInterfaceIdiom == .Phone
+}
+
+func isIPad() -> Bool
+{
+    return UIDevice.currentDevice().userInterfaceIdiom == .Pad
+}

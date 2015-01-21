@@ -46,8 +46,10 @@ extension NSURL
         for url in enumerator.allObjects
         {
             var nsurl = url as NSURL
-            var filename = nsurl.lastPathComponent
-            ret.append( filename )
+            if let filename = nsurl.lastPathComponent
+            {
+                ret.append( filename )
+            }
         }
         return ret
     }
@@ -91,7 +93,7 @@ extension NSURL
     func moveToDir( destinationDir: URL )
     {
         let fm = NSFileManager.defaultManager()
-        let destFullUrl = destinationDir.append(self.lastPathComponent)
+        let destFullUrl = destinationDir.append(self.lastPathComponent!)
         var err : NSError?
         fm.moveItemAtURL(self, toURL: destFullUrl, error: &err)
         

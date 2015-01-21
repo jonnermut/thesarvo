@@ -28,4 +28,14 @@ extension String
     {
         return hasSuffix(suffix)
     }
+    
+    func contains(other: String) -> Bool
+    {
+        return rangeOfString(other) != nil
+    }
+    
+    func containsCaseInsensitive(other: String) -> Bool
+    {
+        return lowercaseString.rangeOfString(other.lowercaseString) != nil
+    }
 }

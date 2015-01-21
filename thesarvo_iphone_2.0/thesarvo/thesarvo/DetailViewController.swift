@@ -77,12 +77,12 @@ class DetailViewController: UIViewController, UIWebViewDelegate
     {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        //self.configureView()
+        self.configureView()
     }
     
     override func viewWillAppear(animated: Bool)
     {
-        configureView()
+        //configureView()
     }
     
     override func viewWillDisappear(animated: Bool)
@@ -110,6 +110,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
             if let vc = dest as? PageSearchTableViewController
             {
                 vc.guide = guide
+                vc.detailViewController = self
             }
         }
     }
@@ -234,6 +235,12 @@ class DetailViewController: UIViewController, UIWebViewDelegate
         }
         
         return nil
+    }
+    
+    func scrollToId(id: String)
+    {
+        webview.stringByEvaluatingJavaScriptFromString("scrollToId('\(id)')")
+
     }
     
 }
