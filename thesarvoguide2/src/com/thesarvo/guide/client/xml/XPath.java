@@ -117,6 +117,17 @@ public class XPath
 		return ret;
 	}
 	
+	public static String selectSingleNodesText(Node node, String path) 
+	{
+		List<String> ret = new ArrayList<String>();
+		List<Node> nodes = selectNodes( node,  path);
+		if (nodes.size() == 0)
+			return "";
+		
+		return getText( nodes.get(0) );
+
+	}
+	
 	public static List<Node> selectNodes(Node node, String path) 
 	{
 		List<Node> ret = new ArrayList<Node>();

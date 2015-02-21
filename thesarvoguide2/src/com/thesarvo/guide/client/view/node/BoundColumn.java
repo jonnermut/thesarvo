@@ -8,6 +8,7 @@ import com.thesarvo.guide.client.xml.XmlSimpleModel;
 
 public class BoundColumn extends Column<XmlSimpleModel, String> implements FieldUpdater<XmlSimpleModel, String>
 {
+	
 	boolean editable = false;
 	String binding = "";
 	
@@ -16,7 +17,7 @@ public class BoundColumn extends Column<XmlSimpleModel, String> implements Field
 		super(editable ? new TextInputCell() : new TextCell());
 		this.editable = editable;
 		this.binding = binding;
-		
+
 		setFieldUpdater(this);
 	}
 
@@ -30,7 +31,12 @@ public class BoundColumn extends Column<XmlSimpleModel, String> implements Field
 	public void update(int index, XmlSimpleModel object, String value)
 	{
 		object.put(binding, value);
-		
+
+	}
+
+	public Object getBinding()
+	{
+		return binding;
 	}
 
 }

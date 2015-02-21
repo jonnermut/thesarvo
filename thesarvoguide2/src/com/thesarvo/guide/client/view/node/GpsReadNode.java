@@ -38,7 +38,6 @@ import com.thesarvo.guide.client.xml.XmlSimpleModel;
 public class GpsReadNode extends ReadNode implements GPSConstants
 {
 
-
 	private static final double LN2 = Math.log(2);
 
 	// @UiField
@@ -49,7 +48,7 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 
 	@UiField
 	Anchor googleEarthAnchor;
-	
+
 	@UiField
 	Button mobileButton;
 
@@ -60,7 +59,7 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 	// FlexTable gpsTable;
 
 	@UiField(provided = true)
-	CellTable<XmlSimpleModel> cellTable;
+	CellTable<MapDrawingObject> cellTable;
 
 	@UiField
 	Button mapButton2;
@@ -68,7 +67,7 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 	@UiField
 	DivElement linksDiv;
 
-	ListDataProvider<XmlSimpleModel> dataProvider = new ListDataProvider<XmlSimpleModel>();
+	ListDataProvider<MapDrawingObject> dataProvider = new ListDataProvider<MapDrawingObject>();
 
 	interface MyUiBinder extends UiBinder<Widget, GpsReadNode>
 	{
@@ -95,18 +94,18 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 	{
 
 		cellTable = setupTable(getModel(), dataProvider);
-		initTableCols(cellTable, false);
+		initTableCols(cellTable, false, null);
 
-		final SingleSelectionModel<XmlSimpleModel> selectionModel = new SingleSelectionModel<XmlSimpleModel>(null);
+		final SingleSelectionModel<MapDrawingObject> selectionModel = new SingleSelectionModel<MapDrawingObject>(null);
 		cellTable.setSelectionModel(selectionModel);
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler()
-				{
-					public void onSelectionChange(SelectionChangeEvent event)
-					{
-						XmlSimpleModel xsm = selectionModel.getSelectedObject();
-						mapPanel.selectPoint(xsm.getNode());
-					}
-				});
+		{
+			public void onSelectionChange(SelectionChangeEvent event)
+			{
+				MapDrawingObject mdo = selectionModel.getSelectedObject();
+				mapPanel.selectPoint(mdo);
+			}
+		});
 
 		initWidget(uiBinder.createAndBindUi(this));
 
@@ -114,14 +113,12 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 
 		// TODO - this has to be an absolute URL to work with good maps, get rid
 		// of hard codedness
-		String kmlUrl = "http://www.thesarvo.com/confluence/plugins/servlet/ts.kml?pageId="
-				+ Controller.get().getGuideId();
+		String kmlUrl = "http://www.thesarvo.com/confluence/plugins/servlet/ts.kml?pageId=" + Controller.get().getGuideId();
 
-		googleEarthAnchor.setHref("../../plugins/servlet/ts.kml?pageId="
-				+ Controller.get().getGuideId());
+		googleEarthAnchor.setHref("../../plugins/servlet/ts.kml?pageId=" + Controller.get().getGuideId());
 
 		mapButton2.setVisible(false);
-		
+
 		boolean mobileApp = Controller.get().isMobileApp();
 		if (mobileApp)
 		{
@@ -132,7 +129,7 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 		}
 		else
 		{
-		
+
 			mapPanel.setKmlUrl(kmlUrl);
 			// mapPanel.setPoints(nodes);
 			setupMapDrawingObjects();
@@ -140,17 +137,17 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 		}
 
 	}
-	
+
 	@UiHandler("mobileButton")
 	public void onMobileOpenClick(ClickEvent event)
 	{
 		String xml = getModel().getXml().toString();
 		Controller.get().sendCommandToApp("map", xml);
 	}
-	
+
 	private void setupMapDrawingObjects()
 	{
-		List<Element> els = XPath.getElementChildren(getModel().getXml() );
+		List<Element> els = XPath.getElementChildren(getModel().getXml());
 		mapDrawingObjects = new ArrayList<MapDrawingObject>(els.size());
 		for (Element el : els)
 		{
@@ -163,39 +160,48 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 	{
 
 		super.setWidgetValuesFromModel();
-		updateDataProvider(model, dataProvider);
-		nodes = XPath.getElementChildren(getModel().getXml() );
+		//updateDataProvider(model, dataProvider);
+		nodes = XPath.getElementChildren(getModel().getXml());
 
 		if (mapPanel != null)
 		{
 			setupMapDrawingObjects();
-			
 
 			mapPanel.setDrawingObjects(mapDrawingObjects);
 			mapPanel.updateAllPoints();
+			
+
 		}
+		
+		dataProvider.setList(mapDrawingObjects);
+		dataProvider.refresh();
 	}
 
-	public static CellTable<XmlSimpleModel> setupTable(XmlSimpleModel model,
-			ListDataProvider<XmlSimpleModel> dataProvider)
+	public static CellTable<MapDrawingObject> setupTable(XmlSimpleModel model, ListDataProvider<MapDrawingObject> dataProvider)
 	{
-		CellTable<XmlSimpleModel> cellTable = new CellTable<XmlSimpleModel>();
-		updateDataProvider(model, dataProvider);
+		CellTable<MapDrawingObject> cellTable = new CellTable<MapDrawingObject>();
+		//updateDataProvider(model, dataProvider);
 
 		cellTable.setWidth("100%", true);
 		dataProvider.addDataDisplay(cellTable);
 		return cellTable;
 	}
 
-	public static void updateDataProvider(XmlSimpleModel model,
-			ListDataProvider<XmlSimpleModel> dataProvider)
+	public static void updateDataProvider(XmlSimpleModel model, ListDataProvider<MapDrawingObject> dataProvider)
 	{
+		/*
 		data = model.getList("point");
 
 		normalizeData(data);
 
 		dataProvider.setList(data);
 		dataProvider.refresh();
+		
+		
+		dataProvider.setList(mapDrawingObjects);
+		dataProvider.refresh();
+		*/
+		
 	}
 
 	public static void normalizeData(List<XmlSimpleModel> data)
@@ -205,13 +211,13 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 			// TODO - move this to the model object
 			if (xsm.getXml().getNodeName().equals("point"))
 			{
-			
+
 				String east = xsm.get(EASTING);
 				String north = xsm.get(NORTHING);
 				String zone = xsm.get(ZONE);
 				String lat = xsm.get(LATITUDE);
 				String lon = xsm.get(LONGITUDE);
-	
+
 				if (isNotEmpty(east) && isNotEmpty(north))
 				{
 					if (isEmpty(zone))
@@ -219,15 +225,15 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 						zone = "55G"; // tassie zone
 						xsm.put(ZONE, zone);
 					}
-	
+
 					if (isEmpty(lat) || isEmpty(lon))
 					{
 						// calculate the lat/lon
-	
+
 						try
 						{
 							CoordinateConversion cc = new CoordinateConversion();
-	
+
 							double[] latlon = GeoUtil.getLatLong(east, north, zone);
 							if (latlon != null)
 							{
@@ -237,10 +243,10 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 						}
 						catch (Exception e)
 						{
-	
+
 						}
 					}
-	
+
 				}
 				else
 				{
@@ -262,16 +268,13 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 
 	}
 
-	public static void initTableCols(CellTable<XmlSimpleModel> cellTable2,
-			boolean editable)
+	public static void initTableCols(CellTable<MapDrawingObject> cellTable2, boolean editable, MapColumn.UpdateCallback updateCallback)
 	{
-		Column<XmlSimpleModel, String> codeColumn = new BoundColumn(editable,
-				CODE);
+		Column<MapDrawingObject, String> codeColumn = new MapColumn(editable, CODE, updateCallback);
 		cellTable2.setColumnWidth(codeColumn, 10, Unit.PCT);
 		cellTable2.addColumn(codeColumn, "Code");
 
-		Column<XmlSimpleModel, String> descColumn = new BoundColumn(editable,
-				DESCRIPTION);
+		Column<MapDrawingObject, String> descColumn = new MapColumn(editable, DESCRIPTION, updateCallback);
 		cellTable2.setColumnWidth(descColumn, 30, Unit.PCT);
 		String desc = "Description";
 		if (BrowserUtil.isMobileBrowser())
@@ -279,40 +282,34 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 			cellTable2.setColumnWidth(descColumn, 20, Unit.PCT);
 			desc = "Desc";
 		}
-		
+
 		cellTable2.addColumn(descColumn, desc);
 
 		if (!BrowserUtil.isMobileBrowser())
 		{
-		
-			Column<XmlSimpleModel, String> zoneColumn = new BoundColumn(editable,
-					ZONE);
+
+			Column<MapDrawingObject, String> zoneColumn = new MapColumn(editable, ZONE, updateCallback);
 			cellTable2.setColumnWidth(zoneColumn, 5, Unit.PCT);
 			cellTable2.addColumn(zoneColumn, "UTM Zone");
-	
-			Column<XmlSimpleModel, String> eastingColumn = new BoundColumn(
-					editable, EASTING);
+
+			Column<MapDrawingObject, String> eastingColumn = new MapColumn(editable, EASTING, updateCallback);
 			cellTable2.setColumnWidth(eastingColumn, 10, Unit.PCT);
 			cellTable2.addColumn(eastingColumn, "UTM Easting");
-	
-			Column<XmlSimpleModel, String> northingColumn = new BoundColumn(
-					editable, NORTHING);
+
+			Column<MapDrawingObject, String> northingColumn = new MapColumn(editable, NORTHING, updateCallback);
 			cellTable2.setColumnWidth(northingColumn, 10, Unit.PCT);
 			cellTable2.addColumn(northingColumn, "UTM Northing");
-	
-			Column<XmlSimpleModel, String> heightColumn = new BoundColumn(editable,
-					HEIGHT);
+
+			Column<MapDrawingObject, String> heightColumn = new MapColumn(editable, HEIGHT, updateCallback);
 			cellTable2.setColumnWidth(heightColumn, 6, Unit.PCT);
 			cellTable2.addColumn(heightColumn, "Height");
 		}
 
-		Column<XmlSimpleModel, String> latColumn = new BoundColumn(editable,
-				LATITUDE);
+		Column<MapDrawingObject, String> latColumn = new MapColumn(editable, LATITUDE, updateCallback);
 		cellTable2.setColumnWidth(latColumn, 10, Unit.PCT);
 		cellTable2.addColumn(latColumn, "Lat");
 
-		Column<XmlSimpleModel, String> longColumn = new BoundColumn(editable,
-				LONGITUDE);
+		Column<MapDrawingObject, String> longColumn = new MapColumn(editable, LONGITUDE, updateCallback);
 		cellTable2.setColumnWidth(longColumn, 10, Unit.PCT);
 		cellTable2.addColumn(longColumn, "Long");
 

@@ -604,7 +604,7 @@ public class MapPanel extends FlowPanel implements GPSConstants
 	{
 		LatLng pos = marker.getPosition();
 		point.setLatLng(pos);
-		
+		//point.setDescription("A point");
 		if (delegate != null)
 			delegate.elementEdited(point);
 	}
@@ -751,10 +751,10 @@ public class MapPanel extends FlowPanel implements GPSConstants
 	 * }
 	 */
 
-	public void selectPoint(Node node)
+	public void selectPoint(MapDrawingObject mdo)
 	{
 
-		Object obj = getExistingObject((MapDrawingObject) node);
+		Object obj = getExistingObject(mdo);
 
 		if (obj != null && obj instanceof Marker)
 		{
@@ -815,6 +815,7 @@ public class MapPanel extends FlowPanel implements GPSConstants
 					if (delegate != null)
 					{
 						final MapDrawingObject element = delegate.createDrawingObject("circle");
+						element.setDescription("Circle");
 						setCircleAttributes(circle, element);
 						
 						setupEditableCircle(circle, element);
@@ -831,6 +832,7 @@ public class MapPanel extends FlowPanel implements GPSConstants
 					if (delegate != null)
 					{
 						final MapDrawingObject point = delegate.createDrawingObject("point");
+						point.setDescription("Point");
 						setMarkerAttributes(point, marker);
 						setupEditableMarker(point, marker);
 						rememberOverlay(point, marker);
@@ -845,6 +847,7 @@ public class MapPanel extends FlowPanel implements GPSConstants
 					if (delegate != null)
 					{
 						final MapDrawingObject element = delegate.createDrawingObject("polygon");
+						element.setDescription("Polygon");
 						setPolygonAttributes(polygon, element);
 						
 						setupEditablePolygon(polygon, element);
@@ -858,6 +861,7 @@ public class MapPanel extends FlowPanel implements GPSConstants
 					if (delegate != null)
 					{
 						final MapDrawingObject element = delegate.createDrawingObject("polyline");
+						element.setDescription("Track");
 						setPolylineAttributes(polyline, element);
 						
 						setupEditablePolyline(polyline, element);
@@ -871,6 +875,7 @@ public class MapPanel extends FlowPanel implements GPSConstants
 					if (delegate != null)
 					{
 						final MapDrawingObject element = delegate.createDrawingObject("rectangle");
+						element.setDescription("Rectangle");
 						setRectangleAttributes(rectangle, element);
 						
 						setupEditableRectangle(rectangle, element);

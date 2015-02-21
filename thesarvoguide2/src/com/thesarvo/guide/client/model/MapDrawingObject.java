@@ -21,6 +21,11 @@ public class MapDrawingObject implements GPSConstants
 	Element xml;
 
 	XmlSimpleModel model = null;
+	public XmlSimpleModel getModel()
+	{
+		return model;
+	}
+
 	Object overlay = null;
 	
 	static int pointId = 0;
@@ -252,7 +257,7 @@ public class MapDrawingObject implements GPSConstants
 		
 		if (StringUtil.isEmpty(ret))
 		{
-			ret = "" + pointId++;
+			ret = "" + (++pointId);
 			setPid( ret );
 			
 		}
