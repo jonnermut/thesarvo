@@ -25,7 +25,7 @@ class PageSearchTableViewController: UITableViewController, UISearchBarDelegate
     var detailViewController : DetailViewController?
     
     var filter : String { return (searchBar?.text).valueOr("").lowercaseString.trimmed() }
-    var shouldFilter : Bool { return (filter.length >= 2) }
+    var shouldFilter : Bool { return (filter.characters.count >= 2) }
     
     /*
     {
@@ -61,7 +61,7 @@ class PageSearchTableViewController: UITableViewController, UISearchBarDelegate
     {
         if let guide = guide
         {
-            var filter = self.filter
+            let filter = self.filter
             if self.isShowingClimbs
             {
                 // sectioned by header then climb
@@ -75,7 +75,7 @@ class PageSearchTableViewController: UITableViewController, UISearchBarDelegate
                 d.rows = guide.headings
                 if shouldFilter
                 {
-                    d.rows = d.rows.filter( { $0.value.containsCaseInsensitive(filter) } )
+                    d.rows = d.rows.filter( { ($0.value ?? "").containsCaseInsensitive(filter) } )
                 }
                 self.datasource = d
             }
@@ -91,7 +91,7 @@ class PageSearchTableViewController: UITableViewController, UISearchBarDelegate
         if let node = datasource?.getRow(indexPath)
         {
             detailViewController?.scrollToId(node.elementId)
-            dismissViewControllerAnimated(true, nil)
+            dismissViewControllerAnimated(true, completion: nil)
         }
     }
     
@@ -123,7 +123,7 @@ class PageSearchTableViewController: UITableViewController, UISearchBarDelegate
     /// called when cancel button pressed
     func searchBarCancelButtonClicked(searchBar: UISearchBar)
     {
-        dismissViewControllerAnimated(true, nil)
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
     func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int)

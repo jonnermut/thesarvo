@@ -88,9 +88,18 @@ NSString *const kXMLReaderTextNodeKey = @"__text";
     // Get the dictionary for the current level in the stack
     NSMutableDictionary *parentDict = [dictionaryStack lastObject];
     
+    NSNumber *childNum = parentDict[@"__children"];
+    if (!childNum)
+        childNum = [NSNumber numberWithInteger:0];
+    
+    NSNumber* newChildren = [NSNumber numberWithInteger: childNum.integerValue + 1];
+    parentDict[@"__children"] = newChildren;
+    
+        
     // Create the child dictionary for the new element, and initilaize it with the attributes
     NSMutableDictionary *childDict = [NSMutableDictionary dictionary];
     [childDict addEntriesFromDictionary:attributeDict];
+    childDict[@"__index"] = childNum;
     
     // If there’s already an item for this key, it means we need to create an array
     id existingValue = [parentDict objectForKey:elementName];

@@ -20,7 +20,7 @@ func runOnMain(block: dispatch_block_t) {
 func synchronized<T>(lockObj: AnyObject!, closure: ()->T) -> T
 {
     objc_sync_enter(lockObj)
-    var retVal: T = closure()
+    let retVal: T = closure()
     objc_sync_exit(lockObj)
     return retVal
 }

@@ -28,7 +28,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
                 viewId = viewId.removePrefixIfPresent("guide.")
             }
             
-            if (!isHttp() && viewId.length > 0)
+            if (!isHttp() && viewId.characters.count > 0)
             {
                 guide = Guide(guideId: viewId)
             }
@@ -69,7 +69,8 @@ class DetailViewController: UIViewController, UIWebViewDelegate
 
         }
         
-        AppDelegate.instance().setupSplitViewButtons(detail: self)
+        AppDelegate.instance().setupSplitViewButtons(self)
+        
     }
 
 
@@ -102,7 +103,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
         
         if (sender is SegueCallback)
         {
-            (sender as SegueCallback).function(dest)
+            (sender as! SegueCallback).function(dest)
         }
         
         if (segue.identifier == "showPageSearch")
@@ -147,7 +148,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
             
             if let data = data
             {
-                var d = JSEscape(data)
+                let d = JSEscape(data)
                 
                 var js = "var guide_pageid='\(guide.guideId)'; \n  var guide_xml='\(d)'; var guide_callOut=\(callOut) ;"
                 
@@ -171,51 +172,52 @@ class DetailViewController: UIViewController, UIWebViewDelegate
     
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool
     {
-        var url = request.URL
-        if url.scheme == "ts"
+        if let url = request.URL
         {
-            var command = url.host
-            var commandData = url.path?.removePrefixIfPresent("/")
-            
-            if (command == "openImage")
+            if url.scheme == "ts"
             {
-                let callback = SegueCallback
+                var command = url.host
+                var commandData = url.path?.removePrefixIfPresent("/")
+                
+                if (command == "openImage")
                 {
-                    (vc: UIViewController) in
-                    if let fcvc = DetailViewController.getFromVC(vc)
+                    let callback = SegueCallback
                     {
-                        fcvc.viewId = self.viewId
-                        fcvc.guide = self.guide
-                        fcvc.singleNodeData = commandData
-                        fcvc.navigationItem.title = self.navigationItem.title
+                        (vc: UIViewController) in
+                        if let fcvc = DetailViewController.getFromVC(vc)
+                        {
+                            fcvc.viewId = self.viewId
+                            fcvc.guide = self.guide
+                            fcvc.singleNodeData = commandData
+                            fcvc.navigationItem.title = self.navigationItem.title
+                        }
                     }
+                    self.performSegueWithIdentifier("showDetail", sender: callback)
                 }
-                self.performSegueWithIdentifier("showDetail", sender: callback)
-            }
-            else if (command == "map")
-            {
-                let callback = SegueCallback
+                else if (command == "map")
                 {
-                    (vc: UIViewController) in
-                    if let mvc = vc as? MapViewController
+                    let callback = SegueCallback
                     {
-                        mvc.guide = self.guide
-                        //fcvc.navigationItem.title = self.navigationItem.title
+                        (vc: UIViewController) in
+                        if let mvc = vc as? MapViewController
+                        {
+                            mvc.guide = self.guide
+                            //fcvc.navigationItem.title = self.navigationItem.title
+                        }
                     }
+                    self.performSegueWithIdentifier("showMap", sender: callback)
                 }
-                self.performSegueWithIdentifier("showMap", sender: callback)
+                
+                return false
+                
             }
-            
-            return false
-            
         }
-        
         return true
     }
     
-    func webView(webView: UIWebView, didFailLoadWithError error: NSError)
+    func webView(webView: UIWebView, didFailLoadWithError error: NSError?)
     {
-        var alert = UIAlertView(title: "Error", message: "Could not load page", delegate: nil, cancelButtonTitle: "OK")
+        let alert = UIAlertView(title: "Error", message: "Could not load page", delegate: nil, cancelButtonTitle: "OK")
         alert.show()
     }
     

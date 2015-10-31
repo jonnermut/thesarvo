@@ -74,7 +74,18 @@
     
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 5.0f)
         self.webview.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal;
+    
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchPressed)];
+    self.navigationItem.rightBarButtonItem = rightButton;
                    
+}
+                                    
+- (void) searchPressed
+{
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        
+    }
 }
 
 - (void)viewDidUnload

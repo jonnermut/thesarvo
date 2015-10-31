@@ -117,11 +117,16 @@
 - (void) createIndex
 {
     NSMutableDictionary* index = [NSMutableDictionary dictionary];
+    NSMutableDictionary* viewToc = [NSMutableDictionary dictionary];
+    
     NSMutableArray* allGps = [NSMutableArray array];
     
     for (NSString* viewId in self.viewIds)
     {
         NSString* viewName = self.viewIds[viewId];
+        
+        NSMutableArray* viewEntries = [NSMutableArray array];
+        viewToc[viewId] = viewEntries;
         
         // index entry for the view itself
         IndexEntry* entry = [[IndexEntry alloc]init];
@@ -153,6 +158,7 @@
                     entry.viewId = viewId;
                     entry.viewName = viewName;
                     entry.elementId = climb[@"id"];
+                    entry.order = ((NSNumber*)climb[@"__index"]).integerValue;
                     
                     NSString* stars = climb[@"stars"] ? climb[@"stars"] : @"";
                     stars = [stars stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -165,6 +171,7 @@
                     //NSLog(@"%@", text);
                     entry.text = text;
                     index[text] = entry;
+                    [viewEntries addObject:entry];
                 }
                 
                 NSArray* texts = guide[@"guide"][@"text"];
@@ -181,11 +188,13 @@
                         entry.viewId = viewId;
                         entry.viewName = viewName;
                         entry.elementId = text[@"id"];
+                        entry.textClass = clazz;
+                        entry.order = ((NSNumber*)text[@"__index"]).integerValue;
                         NSString* str = text[@"__text"];
                         str = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                         entry.text = str;
                         index[str] = entry;
-                        
+                        [viewEntries addObject:entry];
                     }
                 }
                 
@@ -205,7 +214,22 @@
                 }
                 
                 [allGps addObjectsFromArray:gps];
+                
 
+                [viewEntries sortUsingComparator:
+                 ^NSComparisonResult(IndexEntry* e1, IndexEntry* e2){
+                     
+                     if (e1.order > e2.order) {
+                         return (NSComparisonResult)NSOrderedDescending;
+                     }
+                     
+                     if (e1.order > e2.order) {
+                         return (NSComparisonResult)NSOrderedAscending;
+                     }
+                     return (NSComparisonResult)NSOrderedSame;
+                 }
+                 ];
+                
             }
         }
     }
@@ -213,6 +237,7 @@
     self.allGps = allGps;
     self.index = index;
     self.indexDone = YES;
+    self.viewTOC = viewToc;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         UIViewController* top = self.navigationController.topViewController;

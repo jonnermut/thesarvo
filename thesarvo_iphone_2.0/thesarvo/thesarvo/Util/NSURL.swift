@@ -17,7 +17,7 @@ extension NSURL
     {
         let fm = NSFileManager.defaultManager()
         
-        var path = self.path
+        let path = self.path
         if (path != nil)
         {
             return fm.fileExistsAtPath(path!)
@@ -29,10 +29,10 @@ extension NSURL
     {
         let fm = NSFileManager.defaultManager()
         var ret = Array<NSURL>()
-        let enumerator : NSDirectoryEnumerator = fm.enumeratorAtURL(self, includingPropertiesForKeys: nil, options: nil, errorHandler: nil)!
+        let enumerator : NSDirectoryEnumerator = fm.enumeratorAtURL(self, includingPropertiesForKeys: nil, options: [], errorHandler: nil)!
         for url in enumerator.allObjects
         {
-            var nsurl = url as NSURL
+            var nsurl = url as! NSURL
             ret.append( nsurl )
         }
         return ret
@@ -42,10 +42,10 @@ extension NSURL
     {
         let fm = NSFileManager.defaultManager()
         var ret = Array<String>()
-        let enumerator : NSDirectoryEnumerator = fm.enumeratorAtURL(self, includingPropertiesForKeys: nil, options: nil, errorHandler: nil)!
+        let enumerator : NSDirectoryEnumerator = fm.enumeratorAtURL(self, includingPropertiesForKeys: nil, options: [], errorHandler: nil)!
         for url in enumerator.allObjects
         {
-            var nsurl = url as NSURL
+            var nsurl = url as! NSURL
             if let filename = nsurl.lastPathComponent
             {
                 ret.append( filename )
@@ -58,7 +58,11 @@ extension NSURL
     {
         let fm = NSFileManager.defaultManager()
         var err : NSError?
-        fm.createDirectoryAtURL(self, withIntermediateDirectories: true, attributes: nil, error: &err)
+        do {
+            try fm.createDirectoryAtURL(self, withIntermediateDirectories: true, attributes: nil)
+        } catch let error as NSError {
+            err = error
+        }
 
         return self
     }
@@ -72,7 +76,7 @@ extension NSURL
     {
         let fm = NSFileManager.defaultManager()
         var err : NSError?
-        let docsurl = fm.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: true, error: &err)!
+        let docsurl = try! fm.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: true)
         
         return docsurl
     }
@@ -81,11 +85,15 @@ extension NSURL
     {
         let fm = NSFileManager.defaultManager()
         var err : NSError?
-        fm.moveItemAtURL(self, toURL: destFullUrl, error: &err)
+        do {
+            try fm.moveItemAtURL(self, toURL: destFullUrl)
+        } catch let error as NSError {
+            err = error
+        }
         
         if let actualError = err
         {
-            println("Could not move \(self) to \(destFullUrl): \(actualError)")
+            print("Could not move \(self) to \(destFullUrl): \(actualError)")
         }
         // FIXME - return error
     }
@@ -95,11 +103,15 @@ extension NSURL
         let fm = NSFileManager.defaultManager()
         let destFullUrl = destinationDir.append(self.lastPathComponent!)
         var err : NSError?
-        fm.moveItemAtURL(self, toURL: destFullUrl, error: &err)
+        do {
+            try fm.moveItemAtURL(self, toURL: destFullUrl)
+        } catch let error as NSError {
+            err = error
+        }
         
         if let actualError = err
         {
-            println("Could not move \(self) to \(destFullUrl): \(actualError)")
+            print("Could not move \(self) to \(destFullUrl): \(actualError)")
         }
         // FIXME - return error
     }
@@ -111,10 +123,12 @@ extension NSURL
         
         if let p = self.path
         {
-            if let attributes : NSDictionary = fm.attributesOfItemAtPath(p, error: &err)
-            {
-                var lastMod = attributes.fileModificationDate()
+            do {
+                let attributes : NSDictionary = try fm.attributesOfItemAtPath(p)
+                let lastMod = attributes.fileModificationDate()
                 return lastMod
+            } catch let error as NSError {
+                err = error
             }
         }
         
@@ -128,10 +142,12 @@ extension NSURL
         
         if let p = self.path
         {
-            if let attributes : NSDictionary = fm.attributesOfItemAtPath(p, error: &err)
-            {
-                var c = attributes.fileCreationDate()
+            do {
+                let attributes : NSDictionary = try fm.attributesOfItemAtPath(p)
+                let c = attributes.fileCreationDate()
                 return c
+            } catch let error as NSError {
+                err = error
             }
         }
         

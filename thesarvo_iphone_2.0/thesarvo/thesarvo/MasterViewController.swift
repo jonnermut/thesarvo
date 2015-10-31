@@ -50,13 +50,13 @@ class MasterViewController: UITableViewController
             data = Model.instance.rootView
         }
 
-        
+        /* FIXME
         if let split = self.splitViewController
         {
             let controllers = split.viewControllers
             self.detailViewController = controllers[controllers.count-1].topViewController as? DetailViewController
         }
-        
+        */
         
     }
     
@@ -112,7 +112,7 @@ class MasterViewController: UITableViewController
         
         if (sender is SegueCallback)
         {
-            (sender as SegueCallback).function(dest)
+            (sender as! SegueCallback).function(dest)
         }
         
         /*
@@ -140,7 +140,7 @@ class MasterViewController: UITableViewController
         let callback = SegueCallback
         {
             (vc: UIViewController) in
-            let mtvc = vc as MasterViewController
+            let mtvc = vc as! MasterViewController
             var v = Model.instance.views[viewId]
             mtvc.data = v
         }

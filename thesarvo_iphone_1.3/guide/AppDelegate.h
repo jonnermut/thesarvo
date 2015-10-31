@@ -23,6 +23,7 @@
 @property (strong, nonatomic) NSDictionary* viewIds;
 @property BOOL indexDone;
 @property (strong, nonatomic) NSDictionary* index;
+@property (strong, nonatomic) NSDictionary* viewTOC;
 @property (strong, nonatomic) NSArray* allGps;
 
 - (void) showView: (NSString*) viewId

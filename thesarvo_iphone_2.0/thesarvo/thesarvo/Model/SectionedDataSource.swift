@@ -149,7 +149,7 @@ class SectionedDataSource<R> : SectionedDataSourceBridge
     
     func cellForRowAtIndexPath(tableView: UITableView, indexPath: NSIndexPath) -> UITableViewCell
     {
-        var row = getRow(indexPath)
+        let row = getRow(indexPath)
         var identifier = reuseIdentifier
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
         

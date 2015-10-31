@@ -33,7 +33,7 @@ class MapViewController: UIViewController
             }
         }
         
-        var barButton = MKUserTrackingBarButtonItem( mapView: self.mapView! )
+        let barButton = MKUserTrackingBarButtonItem( mapView: self.mapView! )
         self.navigationItem.rightBarButtonItem = barButton
         
         if let gpsNodes = gpsNodes

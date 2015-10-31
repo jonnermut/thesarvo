@@ -14,7 +14,7 @@ extension String
     {
         if (self.hasPrefix(prefix))
         {
-            return substringFromIndex( advance(self.startIndex, prefix.length) )
+            return self.substringFromIndex( self.startIndex.advancedBy( prefix.characters.count))
         }
         return self
     }
@@ -38,4 +38,57 @@ extension String
     {
         return lowercaseString.rangeOfString(other.lowercaseString) != nil
     }
+    
+    /**
+    Strips whitespaces from the beginning of self.
+    
+    - returns: Stripped string
+    */
+    func ltrimmed () -> String {
+        if let range = rangeOfCharacterFromSet(NSCharacterSet.whitespaceAndNewlineCharacterSet().invertedSet) {
+            return self[range.startIndex..<endIndex]
+        }
+        
+        return self
+    }
+    
+    /**
+    Strips whitespaces from the end of self.
+    
+    - returns: Stripped string
+    */
+    func rtrimmed () -> String {
+        if let range = rangeOfCharacterFromSet(NSCharacterSet.whitespaceAndNewlineCharacterSet().invertedSet, options: NSStringCompareOptions.BackwardsSearch) {
+            return self[startIndex..<range.endIndex]
+        }
+        
+        return self
+    }
+    
+    /**
+    Strips whitespaces from both the beginning and the end of self.
+    
+    - returns: Stripped string
+    */
+    func trimmed () -> String {
+        return ltrimmed().rtrimmed()
+    }
+    
+    
+}
+
+/**
+Repeats the string first n times
+*/
+public func * (first: String, n: Int) -> String
+{
+    var result = String()
+    
+    for var i=0;i<n;i++
+    {
+        
+        result += first
+    }
+    
+    return result
 }

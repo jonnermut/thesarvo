@@ -10,7 +10,9 @@ import Foundation
 
 class GuideDocument : AEXMLDocument
 {
-    override func addChild(name: String, value: String, attributes: [NSObject : AnyObject]) -> AEXMLElement
+    
+    
+    override func addChild(name name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement
     {
         return addChild( GuideElement(name, value: value, attributes: attributes) )
     }
@@ -19,7 +21,7 @@ class GuideDocument : AEXMLDocument
 
 class GuideElement : AEXMLElement
 {
-    override func addChild(name: String, value: String, attributes: [NSObject : AnyObject]) -> AEXMLElement
+    override func  addChild(name name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement
     {
         switch name
         {
@@ -45,7 +47,7 @@ class GuideNode : AEXMLElement
     var searchString : String? { return nil }
 }
 
-class TextNode : GuideNode, Printable
+class TextNode : GuideNode
 {
     var clazz: String? { return attr("class") }
     
@@ -67,14 +69,14 @@ class TextNode : GuideNode, Printable
         return nil
     }
     
-    var description: String { return value }
+    override var description: String { return value ?? "" }
 }
 
-class ClimbNode : GuideNode, Printable
+class ClimbNode : GuideNode
 {
     var climbName: String { return attr("name").valueOr("").trimmed() }
     var stars: String { return attr("stars").valueOr("").trimmed() }
-    var starsPretty: String { return "★"*stars.length }
+    var starsPretty: String { return "★" * stars.characters.count }
     var grade: String { return attr("grade").valueOr("").trimmed() }
     
     override var searchString : String?
@@ -82,7 +84,7 @@ class ClimbNode : GuideNode, Printable
         return "\(stars) \(grade) \(climbName)"
     }
     
-    var description: String { return "\(starsPretty) \(climbName) \(grade)" }
+    override var description: String { return "\(starsPretty) \(climbName) \(grade)" }
 }
 
 class ImageNode : GuideNode
@@ -126,8 +128,7 @@ class Guide
     {
         if let d = loadData()
         {
-            let newStr = NSString(data: d, encoding: NSUTF8StringEncoding)
-            return newStr
+            return String(data: d, encoding: NSUTF8StringEncoding)
         }
         return nil
     }
@@ -139,8 +140,7 @@ class Guide
         if let data = loadData()
         {
             // parse the guide...
-            var err: NSError?
-            if let doc = GuideDocument(xmlData: data, error: &err)
+            if let doc = try? GuideDocument(xmlData: data)
             {
                 return doc["guide"] as? GuideElement
             }
@@ -152,7 +152,7 @@ class Guide
     
     func getHeadings() -> [TextNode]
     {
-        var texts = guideElement?.childrenWithName("text") as [TextNode]
+        var texts = guideElement?.childrenWithName("text") as! [TextNode]
         return texts.filter( { $0.heading } )
     }
     lazy var headings: [TextNode] = self.getHeadings()
@@ -173,7 +173,7 @@ class Guide
                         {
                             d.sections.append(current)
                         }
-                        current = Section<GuideNode>(header: text.value)
+                        current = Section<GuideNode>(header: text.value ?? "")
                     }
                 }
                 else if let climb = node as? ClimbNode

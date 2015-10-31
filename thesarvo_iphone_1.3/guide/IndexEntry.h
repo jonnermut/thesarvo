@@ -14,5 +14,7 @@
 @property (nonatomic, strong) NSString* viewName;
 @property (nonatomic, strong) NSString* elementId;
 @property (nonatomic, strong) NSString* text;
+@property (nonatomic, strong) NSString* textClass;
+@property (nonatomic) NSInteger order;
 
 @end

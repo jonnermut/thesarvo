@@ -32,10 +32,10 @@ class Model
         // lazy init of Guide objects
         return synchronized(self)
         {
-            var g = guideId.removePrefixIfPresent("guide.")
+            let g = guideId.removePrefixIfPresent("guide.")
             if !self.guides.has(g)
             {
-                var ret = Guide(guideId: g)
+                let ret = Guide(guideId: g)
                 ret.name = name
                 self.guides[g] = ret
                 return ret
@@ -46,11 +46,11 @@ class Model
     
     func load()
     {
-        var path = NSBundle.mainBundle().pathForResource("config", ofType: "xml")
+        let path = NSBundle.mainBundle().pathForResource("config", ofType: "xml")
         var err: NSError?
-        var xmlData = NSData(contentsOfFile: path!)
+        let xmlData = NSData(contentsOfFile: path!)
         
-        if let xmlDoc = ConfigDocument(xmlData: xmlData!, error: &err)
+        if let xmlDoc = try? ConfigDocument(xmlData: xmlData!)
         {
             for elem in xmlDoc["config"].childrenWithName("view")
             {

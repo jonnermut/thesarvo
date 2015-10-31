@@ -17,7 +17,7 @@ extension AEXMLElement
     
     func attr(name: String) -> String?
     {
-        return self.attributes[name] as? String
+        return self.attributes[name] 
     }
     
     

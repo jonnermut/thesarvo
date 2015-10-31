@@ -10,7 +10,7 @@ import Foundation
 
 extension Optional
 {
-    func valueOr(val:T) -> T
+    func valueOr(val:Wrapped) -> Wrapped
     {
         if self != nil
         {

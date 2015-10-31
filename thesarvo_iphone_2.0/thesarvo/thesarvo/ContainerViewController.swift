@@ -21,8 +21,8 @@ class ContainerViewController: UIViewController
     override func viewDidLoad()
     {
         
-        var t1 = UITraitCollection(verticalSizeClass:.Regular)
-        var t2 = UITraitCollection(horizontalSizeClass:.Regular)
+        let t1 = UITraitCollection(verticalSizeClass:.Regular)
+        let t2 = UITraitCollection(horizontalSizeClass:.Regular)
         customTraitCollection = UITraitCollection(traitsFromCollections: [t1,t2])
     }
 
@@ -58,7 +58,7 @@ class ContainerViewController: UIViewController
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator)
     {
-        println( "viewWillTransitionToSize \(size)")
+        print( "viewWillTransitionToSize \(size)")
         
         let device = traitCollection.userInterfaceIdiom
         var portrait: Bool

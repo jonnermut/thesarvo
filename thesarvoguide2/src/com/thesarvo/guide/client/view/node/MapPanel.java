@@ -199,7 +199,7 @@ public class MapPanel extends FlowPanel implements GPSConstants
 		opts.setZoom(7);
 		opts.setCenter(center);
 		opts.setMapTypeId(MapTypeId.HYBRID);
-		
+		opts.setScrollWheel(false);
 
 		MapTypeControlOptions controlOptions = MapTypeControlOptions
 				.newInstance();
@@ -211,10 +211,13 @@ public class MapPanel extends FlowPanel implements GPSConstants
 		map = new MapWidget(opts);
 		
 		
-		//map.setWidth("100%");
-		map.setWidth("800px");
-		//map.setHeight(Window.getClientHeight() * 4 / 5 + "px");
-		map.setHeight("400px");
+		map.setWidth("100%");
+		//map.setWidth("800px");
+		int height = Window.getClientHeight() * 4 / 5;
+		if (height < 400)
+			height = 400;
+		map.setHeight("" + height + "px");
+		
 		
 		this.add(map);
 

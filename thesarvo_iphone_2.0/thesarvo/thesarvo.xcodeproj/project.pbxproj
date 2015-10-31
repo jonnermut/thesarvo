@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FC0D9D271BE36EDF00163F9C /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0D9D261BE36EDF00163F9C /* Dictionary.swift */; settings = {ASSET_TAGS = (); }; };
+		FC0D9D291BE3706A00163F9C /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0D9D281BE3706A00163F9C /* Array.swift */; settings = {ASSET_TAGS = (); }; };
 		FC28B3621A56A8F800C75D50 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3611A56A8F800C75D50 /* Model.swift */; };
 		FC28B3661A56A91900C75D50 /* MapPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3641A56A91900C75D50 /* MapPoint.swift */; };
 		FC28B3681A56A92C00C75D50 /* Guide.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3671A56A92C00C75D50 /* Guide.swift */; };
@@ -28,17 +30,6 @@
 		FCF795251A5277B300A7C808 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = FCF795231A5277B300A7C808 /* LaunchScreen.xib */; };
 		FCF795311A5277B300A7C808 /* thesarvoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795301A5277B300A7C808 /* thesarvoTests.swift */; };
 		FCF795451A5289C900A7C808 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = FCF795441A5289C900A7C808 /* config.xml */; };
-		FCF795771A553A2400A7C808 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795671A553A2400A7C808 /* Array.swift */; };
-		FCF795781A553A2400A7C808 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795681A553A2400A7C808 /* Dictionary.swift */; };
-		FCF795791A553A2400A7C808 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795691A553A2400A7C808 /* Double.swift */; };
-		FCF7957A1A553A2400A7C808 /* ExSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF7956B1A553A2400A7C808 /* ExSwift.swift */; };
-		FCF7957B1A553A2400A7C808 /* Float.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF7956C1A553A2400A7C808 /* Float.swift */; };
-		FCF7957C1A553A2400A7C808 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FCF7956D1A553A2400A7C808 /* Info.plist */; };
-		FCF7957D1A553A2400A7C808 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF7956E1A553A2400A7C808 /* Int.swift */; };
-		FCF7957E1A553A2400A7C808 /* NSArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF7956F1A553A2400A7C808 /* NSArray.swift */; };
-		FCF7957F1A553A2400A7C808 /* Range.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795701A553A2400A7C808 /* Range.swift */; };
-		FCF795801A553A2400A7C808 /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795711A553A2400A7C808 /* Sequence.swift */; };
-		FCF795811A553A2400A7C808 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795721A553A2400A7C808 /* String.swift */; };
 		FCF795821A553A2400A7C808 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795731A553A2400A7C808 /* Util.swift */; };
 		FCF795831A553A2400A7C808 /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795741A553A2400A7C808 /* NSDate.swift */; };
 		FCF795841A553A2400A7C808 /* NSURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795751A553A2400A7C808 /* NSURL.swift */; };
@@ -58,6 +49,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FC0D9D261BE36EDF00163F9C /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Dictionary.swift; path = ExSwift/Dictionary.swift; sourceTree = "<group>"; };
+		FC0D9D281BE3706A00163F9C /* Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Array.swift; path = ExSwift/Array.swift; sourceTree = "<group>"; };
 		FC28B3611A56A8F800C75D50 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		FC28B3641A56A91900C75D50 /* MapPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPoint.swift; sourceTree = "<group>"; };
 		FC28B3671A56A92C00C75D50 /* Guide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Guide.swift; sourceTree = "<group>"; };
@@ -84,18 +77,6 @@
 		FCF795301A5277B300A7C808 /* thesarvoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = thesarvoTests.swift; sourceTree = "<group>"; };
 		FCF7953A1A527D5800A7C808 /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; };
 		FCF795441A5289C900A7C808 /* config.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
-		FCF795671A553A2400A7C808 /* Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
-		FCF795681A553A2400A7C808 /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
-		FCF795691A553A2400A7C808 /* Double.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
-		FCF7956A1A553A2400A7C808 /* ExSwift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExSwift.h; sourceTree = "<group>"; };
-		FCF7956B1A553A2400A7C808 /* ExSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExSwift.swift; sourceTree = "<group>"; };
-		FCF7956C1A553A2400A7C808 /* Float.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Float.swift; sourceTree = "<group>"; };
-		FCF7956D1A553A2400A7C808 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FCF7956E1A553A2400A7C808 /* Int.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
-		FCF7956F1A553A2400A7C808 /* NSArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSArray.swift; sourceTree = "<group>"; };
-		FCF795701A553A2400A7C808 /* Range.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Range.swift; sourceTree = "<group>"; };
-		FCF795711A553A2400A7C808 /* Sequence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sequence.swift; sourceTree = "<group>"; };
-		FCF795721A553A2400A7C808 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		FCF795731A553A2400A7C808 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		FCF795741A553A2400A7C808 /* NSDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDate.swift; sourceTree = "<group>"; };
 		FCF795751A553A2400A7C808 /* NSURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURL.swift; sourceTree = "<group>"; };
@@ -206,9 +187,10 @@
 		FCF795651A553A2400A7C808 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				FC0D9D281BE3706A00163F9C /* Array.swift */,
+				FC0D9D261BE36EDF00163F9C /* Dictionary.swift */,
 				FCF795861A553A8B00A7C808 /* AEXML.swift */,
 				FCF795881A553BC500A7C808 /* AEXML+Stuff.swift */,
-				FCF795661A553A2400A7C808 /* ExSwift */,
 				FCF795731A553A2400A7C808 /* Util.swift */,
 				FCF795741A553A2400A7C808 /* NSDate.swift */,
 				FCF795751A553A2400A7C808 /* NSURL.swift */,
@@ -217,25 +199,6 @@
 				FC99CCFF1A6A290900C3228C /* Optional.swift */,
 			);
 			path = Util;
-			sourceTree = "<group>";
-		};
-		FCF795661A553A2400A7C808 /* ExSwift */ = {
-			isa = PBXGroup;
-			children = (
-				FCF795671A553A2400A7C808 /* Array.swift */,
-				FCF795681A553A2400A7C808 /* Dictionary.swift */,
-				FCF795691A553A2400A7C808 /* Double.swift */,
-				FCF7956A1A553A2400A7C808 /* ExSwift.h */,
-				FCF7956B1A553A2400A7C808 /* ExSwift.swift */,
-				FCF7956C1A553A2400A7C808 /* Float.swift */,
-				FCF7956D1A553A2400A7C808 /* Info.plist */,
-				FCF7956E1A553A2400A7C808 /* Int.swift */,
-				FCF7956F1A553A2400A7C808 /* NSArray.swift */,
-				FCF795701A553A2400A7C808 /* Range.swift */,
-				FCF795711A553A2400A7C808 /* Sequence.swift */,
-				FCF795721A553A2400A7C808 /* String.swift */,
-			);
-			path = ExSwift;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -282,6 +245,8 @@
 		FCF7950B1A5277B300A7C808 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = thesarvo;
 				TargetAttributes = {
@@ -323,7 +288,6 @@
 				FCF795201A5277B300A7C808 /* Main.storyboard in Resources */,
 				FCF795251A5277B300A7C808 /* LaunchScreen.xib in Resources */,
 				FCF795221A5277B300A7C808 /* Images.xcassets in Resources */,
-				FCF7957C1A553A2400A7C808 /* Info.plist in Resources */,
 				FCF795451A5289C900A7C808 /* config.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -342,34 +306,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FCF7957B1A553A2400A7C808 /* Float.swift in Sources */,
 				FCF7951D1A5277B300A7C808 /* DetailViewController.swift in Sources */,
-				FCF7957E1A553A2400A7C808 /* NSArray.swift in Sources */,
+				FC0D9D271BE36EDF00163F9C /* Dictionary.swift in Sources */,
 				FC99CD001A6A290900C3228C /* Optional.swift in Sources */,
-				FCF795781A553A2400A7C808 /* Dictionary.swift in Sources */,
 				FCAACE931A55F27300C7A03F /* String+Stuff.swift in Sources */,
 				FCF795871A553A8B00A7C808 /* AEXML.swift in Sources */,
 				FCF795831A553A2400A7C808 /* NSDate.swift in Sources */,
-				FCF7957D1A553A2400A7C808 /* Int.swift in Sources */,
 				FC28B36C1A57A82A00C75D50 /* MapViewController.swift in Sources */,
 				FCF7951B1A5277B300A7C808 /* MasterViewController.swift in Sources */,
-				FCF795771A553A2400A7C808 /* Array.swift in Sources */,
-				FCF7957A1A553A2400A7C808 /* ExSwift.swift in Sources */,
-				FCF795801A553A2400A7C808 /* Sequence.swift in Sources */,
 				FC28B36A1A56A93600C75D50 /* Config.swift in Sources */,
+				FC0D9D291BE3706A00163F9C /* Array.swift in Sources */,
 				FC28B3681A56A92C00C75D50 /* Guide.swift in Sources */,
 				FCF795191A5277B300A7C808 /* AppDelegate.swift in Sources */,
 				FC28B3741A57FBC800C75D50 /* PageSearchTableViewController.swift in Sources */,
 				FCF795841A553A2400A7C808 /* NSURL.swift in Sources */,
 				FC28B3621A56A8F800C75D50 /* Model.swift in Sources */,
 				FCF795851A553A2400A7C808 /* SWXMLHash.swift in Sources */,
-				FCF795791A553A2400A7C808 /* Double.swift in Sources */,
 				FC99CD021A6B852900C3228C /* ContainerViewController.swift in Sources */,
-				FCF795811A553A2400A7C808 /* String.swift in Sources */,
 				FCF795821A553A2400A7C808 /* Util.swift in Sources */,
 				FC28B3661A56A91900C75D50 /* MapPoint.swift in Sources */,
 				FCF795891A553BC500A7C808 /* AEXML+Stuff.swift in Sources */,
-				FCF7957F1A553A2400A7C808 /* Range.swift in Sources */,
 				FC28B3761A59501D00C75D50 /* SectionedDataSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -496,7 +452,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = thesarvo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -507,7 +463,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = thesarvo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

@@ -313,6 +313,7 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 		cellTable2.setColumnWidth(longColumn, 10, Unit.PCT);
 		cellTable2.addColumn(longColumn, "Long");
 
+		cellTable2.setPageSize(1000);
 	}
 
 	static Cell<String> newStringCell(boolean editable)

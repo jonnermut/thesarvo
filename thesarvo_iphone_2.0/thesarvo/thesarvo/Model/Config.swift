@@ -10,7 +10,7 @@ import Foundation
 
 class ConfigDocument : AEXMLDocument
 {
-    override func addChild(name: String, value: String, attributes: [NSObject : AnyObject]) -> AEXMLElement
+    override func addChild(name name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement
     {
         return addChild( ConfigElement(name, value: value, attributes: attributes) )
     }
@@ -19,7 +19,7 @@ class ConfigDocument : AEXMLDocument
 
 class ConfigElement : AEXMLElement
 {
-    override func addChild(name: String, value: String, attributes: [NSObject : AnyObject]) -> AEXMLElement
+    override func addChild(name name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement
     {
         switch name
         {
@@ -38,7 +38,14 @@ class ListItem : ConfigElement
     
     var viewId: String? { return attr("viewId") }
     var text: String?  { return attr("text") }
-    var level: Int? { return attr("level")?.toInt() }
+    var level: Int?
+    {
+        if let a = attr("level")
+        {
+            return Int(a)
+        }
+        return nil
+    }
     
     var isGuide : Bool
     {
@@ -62,7 +69,7 @@ class View : ConfigElement
     
     var listItems : [ListItem]
     {
-        return self["data"].childrenWithName("listItem").map( { return $0 as ListItem } )
+        return self["data"].childrenWithName("listItem").map( { return $0 as! ListItem } )
     }
 }
 
