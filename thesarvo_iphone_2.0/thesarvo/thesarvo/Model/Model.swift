@@ -64,6 +64,7 @@ class Model
         runInBackground()
         {
             self.createIndex()
+            self.indexingDone = true
             
             runOnMain()
             {
@@ -86,6 +87,8 @@ class Model
                 if li.isGuide
                 {
                     let guide = self.getGuide(li.viewId!,name: li.text)
+                    self.index.append( IndexEntry(searchString: guide.name ?? "", node: nil, guide: guide))
+                    
                     if let guideElement = guide.guideElement
                     {
                         for child in guideElement.children
@@ -94,7 +97,7 @@ class Model
                             {
                                 if let ss = node.searchString
                                 {
-                                    self.index.append( IndexEntry(searchString: ss, node: node) )
+                                    self.index.append( IndexEntry(searchString: ss, node: node, guide: guide) )
                                     
                                     /*
                                     synchronized(self.index)
@@ -116,4 +119,17 @@ class Model
         
     }
     
+    func search(searchTerm: String) -> [IndexEntry]
+    {
+        if (!self.indexingDone)
+        {
+            return []
+        }
+        
+        return self.index.filter()
+        {
+            indexEntry in
+            return indexEntry.searchString.containsCaseInsensitive(searchTerm)
+        }
+    }
 };

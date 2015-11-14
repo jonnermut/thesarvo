@@ -24,7 +24,7 @@ class PageSearchTableViewController: UITableViewController, UISearchBarDelegate
     
     var detailViewController : DetailViewController?
     
-    var filter : String { return (searchBar?.text).valueOr("").lowercaseString.trimmed() }
+    var filter : String { return (searchBar?.text ?? "").lowercaseString.trimmed() }
     var shouldFilter : Bool { return (filter.characters.count >= 2) }
     
     /*
@@ -66,6 +66,18 @@ class PageSearchTableViewController: UITableViewController, UISearchBarDelegate
             {
                 // sectioned by header then climb
                 let d = guide.getHeadingsAndClimbs()
+                if (shouldFilter)
+                {
+                    for sect in d.sections
+                    {
+                        sect.rows = sect.rows.filter()
+                        {
+                            (guideNode: GuideNode) in
+                            (guideNode.searchString ?? "").containsCaseInsensitive(filter)
+                        } 
+                    }
+                }
+                
                 self.datasource = d
             }
             else

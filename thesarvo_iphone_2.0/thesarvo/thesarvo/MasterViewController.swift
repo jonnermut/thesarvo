@@ -17,12 +17,44 @@ class SegueCallback
     }
 }
 
-class MasterViewController: UITableViewController
+class TOCCell: UITableViewCell
 {
+    var node: GuideNode?
+}
 
+class SearchCell: UITableViewCell
+{
+    var indexEntry: IndexEntry?
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?)
+    {
+        super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
+    }
+
+    required init?(coder aDecoder: NSCoder)
+    {
+        super.init(coder: aDecoder)
+    }
+}
+
+class MasterViewController: UITableViewController, UISearchResultsUpdating
+{
+    var guide: Guide?
+    var showingTOC: Bool { return self.guide != nil }
+    
     var detailViewController: DetailViewController? = nil
     
     var data : View?
+    
+    var searchController: UISearchController!
+    
+    var searchString: String?
+    
+    var mainDataSource: TableViewDataSource?
+    
+    
+    var searching = false
+    var searchAgain = false
 
     override func awakeFromNib()
     {
@@ -58,6 +90,23 @@ class MasterViewController: UITableViewController
         }
         */
         
+        //self.tableView.registerClass(SearchCell.self, forCellReuseIdentifier: "SearchCell")
+        //self.tableView.registerClass(TOCCell.self, forCellReuseIdentifier: "TOCCell")
+        
+        searchController = UISearchController(searchResultsController: nil)
+        self.searchController.searchResultsUpdater = self;
+        self.searchController.dimsBackgroundDuringPresentation = false;
+        //self.searchController.searchBar.scopeButtonTitles = @[NSLocalizedString(@"ScopeButtonCountry",@"Country"),NSLocalizedString(@"ScopeButtonCapital",@"Capital")];
+        //self.searchController.searchBar.delegate = self;
+        self.tableView.tableHeaderView = self.searchController.searchBar;
+        self.definesPresentationContext = true;
+        self.searchController.searchBar.sizeToFit()
+        self.searchController.searchBar.placeholder = "Search for crag, climb, grade, ***"
+        if showingTOC
+        {
+            self.searchController.searchBar.placeholder = "Search within page"
+        }
+        self.searchController.searchBar.backgroundColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
     }
     
     override func viewWillAppear(animated: Bool)
@@ -69,7 +118,10 @@ class MasterViewController: UITableViewController
         
         self.navigationItem.title = data?.text
         
-        setupDatasource()
+        if (mainDataSource == nil)
+        {
+            setupDatasource()
+        }
         
     }
 
@@ -78,10 +130,83 @@ class MasterViewController: UITableViewController
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func setupTOCDatasource()
+    {
+        if let guide = guide
+        {
+            let filter = self.searchString
+
+            // sectioned by header then climb
+            let d = guide.getHeadingsAndClimbs()
+            d.reuseIdentifier = "TOCCell"
+            
+            if let filter = filter
+            {
+                if filter.characters.count > 0
+                {
+                    d.rows = d.rows.filter()
+                    {
+                        (guideNode: GuideNode) in
+                        (guideNode.searchString ?? "").containsCaseInsensitive(filter)
+                    }
+                }
+            }
+            
+            d.cellConfigurator =
+            {
+                (cell: UITableViewCell!, node: GuideNode) in
+                if let cell = cell as? TOCCell
+                {
+                    cell.node = node
+                    cell.textLabel?.text = node.description
+                    cell.textLabel?.adjustsFontSizeToFitWidth = true
+                    
+                    if (node is TextNode)
+                    {
+                        cell.textLabel?.font = UIFont.boldSystemFontOfSize(14)
+                        cell.indentationLevel = 0
+                        cell.backgroundColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
+                    }
+                    else
+                    {
+                        cell.textLabel?.font = UIFont.systemFontOfSize(13)
+                        cell.indentationLevel = 3
+                        cell.backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
+                    }
+
+                }
+            }
+            /*
+            if (shouldFilter)
+            {
+                for sect in d.sections
+                {
+                    sect.rows = sect.rows.filter()
+                        {
+                            (guideNode: GuideNode) in
+                            (guideNode.searchString ?? "").containsCaseInsensitive(filter)
+                    }
+                }
+            }
+            */
+            self.tableView.rowHeight = 32
+            self.mainDataSource = d.tableViewDataSource
+            self.tableView.dataSource = mainDataSource
+            self.tableView.reloadData()
+        }
+
+    }
 
     func setupDatasource()
     {
-        var rows = (data?.listItems).valueOr([])
+        if guide != nil
+        {
+            setupTOCDatasource()
+            return
+        }
+        
+        let rows = (data?.listItems).valueOr([])
         let d = SingleSectionDataSource(rows: rows)
         {
             cell, li in
@@ -99,8 +224,9 @@ class MasterViewController: UITableViewController
             cell.indentationLevel = level;
             cell.indentationWidth = 25;
         }
-
-        self.tableView.dataSource = d.tableViewDataSource
+        self.mainDataSource = d.tableViewDataSource
+        self.tableView.dataSource = mainDataSource
+        self.tableView.reloadData()
     }
 
 
@@ -148,6 +274,54 @@ class MasterViewController: UITableViewController
         self.performSegueWithIdentifier("showMaster", sender: callback)
     }
     
+    func navigateToDetail(viewId: String, title: String?, elementId: String? = nil)
+    {
+        var vid = viewId.removePrefixIfPresent("guide.")
+        var guide: Guide?
+        if (!vid.hasPrefix("http.") && vid.characters.count > 0)
+        {
+            guide = Guide(guideId: vid)
+        }
+        
+        let callback = SegueCallback
+        {
+            (vc: UIViewController) in
+            if let fcvc = DetailViewController.getFromVC(vc)
+            {
+                fcvc.guide = guide
+                fcvc.viewId = viewId
+                fcvc.navigationItem.title = title
+                if let el = elementId
+                {
+                    fcvc.elemendId = el
+                }
+            }
+        }
+        
+        // drill down in the master to a TOC
+        var delay = 0.0
+        if let g = guide
+        {
+            delay = 0.2
+            let ddcallback = SegueCallback
+            {
+                (vc: UIViewController) in
+                let mtvc = vc as! MasterViewController
+                mtvc.guide = g
+                    
+            }
+            self.performSegueWithIdentifier("showMaster", sender: ddcallback)
+        }
+        
+        runAfterDelay(delay)
+        {
+        
+            AppDelegate.instance().hideMasterIfNecessary()
+            self.performSegueWithIdentifier("showDetail", sender: callback)
+        }
+    }
+    
+    
     func childSelected(selected: ListItem)
     {
         if let viewId = selected.viewId
@@ -162,24 +336,7 @@ class MasterViewController: UITableViewController
             }
             else if (viewId.hasPrefix("guide.") || viewId.hasPrefix("http"))
             {
-                let callback = SegueCallback
-                {
-                    (vc: UIViewController) in
-                    if let fcvc = DetailViewController.getFromVC(vc)
-                    {
-                        fcvc.viewId = viewId
-                        fcvc.navigationItem.title = selected.text
-                        //AppDelegate.instance().setupSplitViewButtons()
-//                        if let splitView = AppDelegate.instance().splitViewController
-//                        {
-//                            //fcvc.navigationItem.rightBarButtonItem = splitView.displayModeButtonItem()
-//                            fcvc.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: nil, action: nil)
-//                        }
-                    }
-                }
-                
-                AppDelegate.instance().hideMasterIfNecessary()
-                self.performSegueWithIdentifier("showDetail", sender: callback)
+                navigateToDetail(viewId, title: selected.text)
 
             }
             else
@@ -192,16 +349,126 @@ class MasterViewController: UITableViewController
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
     {
-        if (data?.listItems.count > indexPath.row)
+        let cell = tableView.dataSource?.tableView(tableView, cellForRowAtIndexPath: indexPath)
+        
+        if let searchCell = cell as? SearchCell
         {
-            if let c = data?.listItems[indexPath.row]
+            if let entry = searchCell.indexEntry
             {
-                childSelected(c)
+                let elementId = entry.node?.elementId
+                navigateToDetail(entry.guide.guideId, title: entry.guide.name, elementId: elementId)
             }
         }
-        
+        else if let tocCell = cell as? TOCCell
+        {
+            if let node = tocCell.node
+            {
+                if let dvc = DetailViewController.last
+                {
+                    dvc.scrollToId(node.elementId)
+                    AppDelegate.instance().hideMasterIfNecessary()
+                }
+            }
+        }
+        else
+        {
+            if (data?.listItems.count > indexPath.row)
+            {
+                if let c = data?.listItems[indexPath.row]
+                {
+                    childSelected(c)
+                }
+            }
+        }
     }
 
+    internal func updateSearchResultsForSearchController(searchController: UISearchController)
+    {
+        searchString = searchController.searchBar.text
+        updateSearchResults()
+    }
+
+    func updateSearchResults()
+    {
+        if self.showingTOC
+        {
+            setupTOCDatasource()
+            return
+        }
+        
+        let model = Model.instance
+        
+        if (!model.indexingDone)
+        {
+            return
+        }
+        
+        if (searching)
+        {
+            searchAgain = true
+            return
+        }
+        
+        if (searchString == nil || searchString!.characters.count < 2)
+        {
+            self.tableView.dataSource = mainDataSource
+            self.tableView.reloadData()
+            return
+        }
+        
+        if let searchString = searchString
+        {
+
+            
+            searching = true
+            runInBackground()
+            {
+                let results = model.search(searchString)
+                
+                let searchDataSource = SingleSectionDataSource(rows: results)
+                {
+                    (cell: UITableViewCell!, entry: IndexEntry) in
+                    if let c = cell as? SearchCell
+                    {
+                        c.indexEntry = entry
+                    }
+                    
+                    cell.textLabel?.text = entry.searchString.ltrimmed()
+                    
+                    cell.accessoryType = .None
+                    cell.textLabel?.adjustsFontSizeToFitWidth = true
+                    cell.textLabel?.font = UIFont.boldSystemFontOfSize(14)
+                    
+                    cell.indentationLevel = 0
+                    
+                    if entry.node != nil
+                    {
+                        cell.detailTextLabel?.text = entry.guide.name ?? ""
+                    }
+                    else
+                    {
+                        cell.detailTextLabel?.text = ""
+                    }
+                    
+                }
+                searchDataSource.reuseIdentifier = "SearchCell"
+                
+                runOnMain()
+                {
+                    self.tableView.dataSource = searchDataSource.tableViewDataSource
+                    self.tableView.reloadData()
+                    
+                    self.searching = false
+                    if (self.searchAgain)
+                    {
+                        self.searchAgain = false
+                        self.updateSearchResults()
+                    }
+                }
+            }
+        }
+    }
 
 }
+
 

@@ -20,25 +20,11 @@ class DetailViewController: UIViewController, UIWebViewDelegate
     var elemendId: String?
     
     var viewId: String = ""
-    {
-        didSet
-        {
-            if (viewId.hasPrefix("guide."))
-            {
-                viewId = viewId.removePrefixIfPresent("guide.")
-            }
-            
-            if (!isHttp() && viewId.characters.count > 0)
-            {
-                guide = Guide(guideId: viewId)
-            }
-            else
-            {
-                guide = nil
-            }
-            
-        }
-    }
+    
+    var guideLoadad = false
+
+    public static var last: DetailViewController? = nil
+    
     
     func isHttp() -> Bool
     {
@@ -83,13 +69,15 @@ class DetailViewController: UIViewController, UIWebViewDelegate
     
     override func viewWillAppear(animated: Bool)
     {
-        //configureView()
+        webview?.delegate = self
+        DetailViewController.last = self
     }
     
     override func viewWillDisappear(animated: Bool)
     {
         webview?.delegate = nil
     }
+
 
     override func didReceiveMemoryWarning()
     {
@@ -106,14 +94,14 @@ class DetailViewController: UIViewController, UIWebViewDelegate
             (sender as! SegueCallback).function(dest)
         }
         
-        if (segue.identifier == "showPageSearch")
-        {
-            if let vc = dest as? PageSearchTableViewController
-            {
-                vc.guide = guide
-                vc.detailViewController = self
-            }
-        }
+//        if (segue.identifier == "showPageSearch")
+//        {
+//            if let vc = dest as? PageSearchTableViewController
+//            {
+//                vc.guide = guide
+//                vc.detailViewController = self
+//            }
+//        }
     }
 
     func JSEscape(data: String) -> String
@@ -127,6 +115,12 @@ class DetailViewController: UIViewController, UIWebViewDelegate
     
     func loadGuideData()
     {
+        if guideLoadad
+        {
+            return
+        }
+        guideLoadad = true
+        
         if let guide = guide
         {
             var data: String?
@@ -154,7 +148,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
                 
                 if (elemendId != nil)
                 {
-                    js += " var guide_showId='\(elemendId)';"
+                    js += " var guide_showId='\(elemendId!)';"
                     
                 }
                 
@@ -168,6 +162,10 @@ class DetailViewController: UIViewController, UIWebViewDelegate
     {
         self.loadGuideData()
 
+//        if let el = self.elemendId
+//        {
+//            self.scrollToId(el)
+//        }
     }
     
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool
@@ -176,11 +174,12 @@ class DetailViewController: UIViewController, UIWebViewDelegate
         {
             if url.scheme == "ts"
             {
-                var command = url.host
-                var commandData = url.path?.removePrefixIfPresent("/")
+                let command = url.host
+                let commandData = url.path?.removePrefixIfPresent("/")
                 
                 if (command == "openImage")
                 {
+                    /*
                     let callback = SegueCallback
                     {
                         (vc: UIViewController) in
@@ -192,7 +191,16 @@ class DetailViewController: UIViewController, UIWebViewDelegate
                             fcvc.navigationItem.title = self.navigationItem.title
                         }
                     }
-                    self.performSegueWithIdentifier("showDetail", sender: callback)
+                    self.performSegueWithIdentifier("showDetailFromDetail", sender: callback)
+*/
+                    
+                    var fcvc = self.storyboard?.instantiateViewControllerWithIdentifier("detailViewController") as! DetailViewController
+                    //var fcvc = DetailViewController()
+                    fcvc.viewId = self.viewId
+                    fcvc.guide = self.guide
+                    fcvc.singleNodeData = commandData
+                    fcvc.navigationItem.title = self.navigationItem.title
+                    self.navigationController?.pushViewController(fcvc, animated: true)
                 }
                 else if (command == "map")
                 {

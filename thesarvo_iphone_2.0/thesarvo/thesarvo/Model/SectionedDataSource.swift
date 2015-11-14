@@ -150,8 +150,8 @@ class SectionedDataSource<R> : SectionedDataSourceBridge
     func cellForRowAtIndexPath(tableView: UITableView, indexPath: NSIndexPath) -> UITableViewCell
     {
         let row = getRow(indexPath)
-        var identifier = reuseIdentifier
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
+        let identifier = reuseIdentifier
+        let cell = tableView.dequeueReusableCellWithIdentifier(identifier, forIndexPath: indexPath) as UITableViewCell
         
         if let row = row
         {

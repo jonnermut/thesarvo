@@ -97,6 +97,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         })
     }
     
+
+    
     func animateOpen()
     {
         UIView.animateWithDuration(0.2, animations:
@@ -123,7 +125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         if isIOS8OrLater()
         {
            
-            let button = splitViewController?.displayModeButtonItem()
+            //let button = splitViewController?.displayModeButtonItem()
             
             
             var vc = detail

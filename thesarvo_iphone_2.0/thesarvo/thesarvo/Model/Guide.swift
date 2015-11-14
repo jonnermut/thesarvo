@@ -100,7 +100,8 @@ class GpsNode : GuideNode
 struct IndexEntry
 {
     var searchString : String
-    var node : GuideNode
+    var node : GuideNode?
+    var guide : Guide
 }
 
 
@@ -157,9 +158,30 @@ class Guide
     }
     lazy var headings: [TextNode] = self.getHeadings()
     
-    func getHeadingsAndClimbs() -> SectionedDataSource<GuideNode>
+    func getHeadingsAndClimbs() -> SingleSectionDataSource<GuideNode>
     {
-        let d = SectionedDataSource<GuideNode>()
+        var filtered = Array<GuideNode>()
+        if let kids = guideElement?.children
+        {
+            for node in kids
+            {
+                if let text = node as? TextNode
+                {
+                    if text.heading
+                    {
+                        filtered.append(text)
+                    }
+                }
+                else if let climb = node as? ClimbNode
+                {
+                    filtered.append(climb)
+                }
+            }
+        }
+        
+        return  SingleSectionDataSource(rows: filtered)
+        
+        /*
         var current = Section<GuideNode>(header: name.valueOr("") )
         if let kids = guideElement?.children
         {
@@ -186,7 +208,7 @@ class Guide
                 d.sections.append(current)
             }
         }
-        return d
+        return d*/
     }
     
 
