@@ -8,13 +8,10 @@
 
 import UIKit
 
-let PEEK_MARGIN: CGFloat = 44.0
+let PEEK_MARGIN: CGFloat = 32.0
 let ANIMATION_DURATION = 0.15
 
-func isIPhone() -> Bool
-{
-    return UIDevice.currentDevice().userInterfaceIdiom == .Phone
-}
+
 
 /*
 To use simply instantiate NVMDrawerController as your root view in your AppDelegate, or in the
@@ -115,6 +112,43 @@ class DrawerController: UIViewController {
     
     // MARK: - Drawing View
     
+    func toggle()
+    {
+        if openSide == DrawerController.NVMDrawerOpenLeft
+        {
+            openRightDrawer()
+        }
+        else
+        {
+            openLeftDrawer()
+        }
+    }
+    
+    func set2ViewFrames(size:CGSize)
+    {
+        let isLeft = (openSide == DrawerController.NVMDrawerOpenLeft)
+        
+        if isIPhone()
+        {
+            let smallWidth = size.width - PEEK_MARGIN
+            
+            let offset = isLeft ? 0 : smallWidth - PEEK_MARGIN
+            
+            // for the iPhone
+            leftViewController.view.frame = CGRect(x: 0.0 - offset, y: 0.0, width: size.width - PEEK_MARGIN, height: size.height)
+            
+            centerViewController.view.frame = CGRect(x: smallWidth - offset, y: 0.0, width: size.width - PEEK_MARGIN, height: size.height)
+        }
+        else
+        {
+            let leftWidth: CGFloat = isLeft ? 300 : 0
+         
+            leftViewController.view.frame = CGRect(x: 0.0 , y: 0.0, width: leftWidth, height: size.height)
+            
+            centerViewController.view.frame = CGRect(x: leftWidth, y: 0.0, width: size.width - leftWidth, height: size.height)
+        }
+    }
+    
     func drawDrawers(size:CGSize) {
         // Calculate Center View's Size
         let centerWidth = (size.width/drawerSize) * (drawerSize - 1)
@@ -134,13 +168,7 @@ class DrawerController: UIViewController {
         }
         else
         {
-            if isIPhone()
-            {
-                // for the iPhone
-                leftViewController.view.frame = CGRect(x: 0.0, y: 0.0, width: size.width - PEEK_MARGIN, height: size.height)
-                
-                centerViewController.view.frame = CGRect(x: leftViewController.view.frame.width, y: 0.0, width: size.width - PEEK_MARGIN, height: size.height)
-            }
+            set2ViewFrames(size)
         }
         
         // Capture the Swipes
@@ -154,6 +182,9 @@ class DrawerController: UIViewController {
         centerViewController.view.addGestureRecognizer(swipeLeft)
         leftViewController.view.addGestureRecognizer(swipeLeft)
         
+        self.logFrames()
+        
+        
         if (openSide == DrawerController.NVMDrawerOpenLeft)
         {
             openLeftDrawer()
@@ -164,6 +195,22 @@ class DrawerController: UIViewController {
         }
     }
     
+    func logFrames()
+    {
+        /*
+        self.view.layer.borderColor = UIColor.blueColor().CGColor
+        self.view.layer.borderWidth = 1
+        self.leftViewController.view.layer.borderColor = UIColor.redColor().CGColor
+        self.leftViewController.view.layer.borderWidth = 1
+        self.centerViewController.view.layer.borderColor = UIColor.greenColor().CGColor
+        self.centerViewController.view.layer.borderWidth = 1
+        
+        print("Drawer frame: \(self.view.frame)")
+        print("Left frame: \(self.leftViewController.view.frame)")
+        print("Center frame: \(self.centerViewController.view.frame)")
+        */
+    }
+    
     // MARK: - Open Drawers
     
     func openLeftDrawer() {
@@ -171,7 +218,17 @@ class DrawerController: UIViewController {
         UIView.animateWithDuration(ANIMATION_DURATION, delay: 0, options: UIViewAnimationOptions.CurveEaseIn, animations:
             { () -> Void in
                 // move views here
-                self.view.frame = CGRect(x: 0.0, y: 0.0, width: self.view.bounds.width, height: self.view.bounds.height)
+                
+                if (self.hasRightDrawer)
+                {
+                    self.view.frame = CGRect(x: 0.0, y: 0.0, width: self.view.bounds.width, height: self.view.bounds.height)
+                }
+                else
+                {
+                    self.set2ViewFrames(UIScreen.mainScreen().bounds.size)
+                }
+                
+                self.logFrames()
             }, completion:
             { finished in
         })
@@ -182,10 +239,22 @@ class DrawerController: UIViewController {
         UIView.animateWithDuration(ANIMATION_DURATION, delay: 0, options: UIViewAnimationOptions.CurveEaseIn, animations:
             { () -> Void in
                 // move views here
-                self.view.frame = CGRect(x: PEEK_MARGIN + self.view.bounds.origin.x - self.leftViewController.view.bounds.size.width,
+                
+                // PEEK_MARGIN + self.view.bounds.origin.x - self.leftViewController.view.bounds.size.width
+                
+                if self.hasRightDrawer
+                {
+                    self.view.frame = CGRect(x: self.leftViewController.view.bounds.size.width - PEEK_MARGIN,
                     y: 0.0,
                     width: self.view.bounds.width,
                     height: self.view.bounds.height)
+                }
+                else
+                {
+                    self.set2ViewFrames(UIScreen.mainScreen().bounds.size)
+                }
+                
+                self.logFrames()
             }, completion:
             { finished in
         })
@@ -210,4 +279,11 @@ class DrawerController: UIViewController {
         
         return UIViewController();
     }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle
+    {
+        return UIStatusBarStyle.LightContent
+    }
+    
+
 }

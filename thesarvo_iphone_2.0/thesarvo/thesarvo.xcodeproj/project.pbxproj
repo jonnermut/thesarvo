@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FC0D9D271BE36EDF00163F9C /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0D9D261BE36EDF00163F9C /* Dictionary.swift */; settings = {ASSET_TAGS = (); }; };
-		FC0D9D291BE3706A00163F9C /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0D9D281BE3706A00163F9C /* Array.swift */; settings = {ASSET_TAGS = (); }; };
+		FC0D9D271BE36EDF00163F9C /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0D9D261BE36EDF00163F9C /* Dictionary.swift */; };
+		FC0D9D291BE3706A00163F9C /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0D9D281BE3706A00163F9C /* Array.swift */; };
 		FC28B3621A56A8F800C75D50 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3611A56A8F800C75D50 /* Model.swift */; };
 		FC28B3661A56A91900C75D50 /* MapPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3641A56A91900C75D50 /* MapPoint.swift */; };
 		FC28B3681A56A92C00C75D50 /* Guide.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3671A56A92C00C75D50 /* Guide.swift */; };
@@ -20,8 +20,10 @@
 		FC28B3761A59501D00C75D50 /* SectionedDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3751A59501D00C75D50 /* SectionedDataSource.swift */; };
 		FC99CD001A6A290900C3228C /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC99CCFF1A6A290900C3228C /* Optional.swift */; };
 		FC99CD021A6B852900C3228C /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC99CD011A6B852900C3228C /* ContainerViewController.swift */; };
+		FCA40F421C2E8F3700DFC0B7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA40F411C2E8F3700DFC0B7 /* main.swift */; };
 		FCAACE911A5559FD00C7A03F /* www in Resources */ = {isa = PBXBuildFile; fileRef = FCAACE901A5559FD00C7A03F /* www */; };
 		FCAACE931A55F27300C7A03F /* String+Stuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAACE921A55F27300C7A03F /* String+Stuff.swift */; };
+		FCAB16A31BF6EAA300FABF7B /* DrawerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAB16A21BF6EAA300FABF7B /* DrawerController.swift */; };
 		FCF795191A5277B300A7C808 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795181A5277B300A7C808 /* AppDelegate.swift */; };
 		FCF7951B1A5277B300A7C808 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF7951A1A5277B300A7C808 /* MasterViewController.swift */; };
 		FCF7951D1A5277B300A7C808 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF7951C1A5277B300A7C808 /* DetailViewController.swift */; };
@@ -48,6 +50,18 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		FCA40F3D1C2E8F3700DFC0B7 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		FC0D9D261BE36EDF00163F9C /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Dictionary.swift; path = ExSwift/Dictionary.swift; sourceTree = "<group>"; };
 		FC0D9D281BE3706A00163F9C /* Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Array.swift; path = ExSwift/Array.swift; sourceTree = "<group>"; };
@@ -62,8 +76,11 @@
 		FC28B3751A59501D00C75D50 /* SectionedDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionedDataSource.swift; sourceTree = "<group>"; };
 		FC99CCFF1A6A290900C3228C /* Optional.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
 		FC99CD011A6B852900C3228C /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
+		FCA40F3F1C2E8F3700DFC0B7 /* Downloader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Downloader; sourceTree = BUILT_PRODUCTS_DIR; };
+		FCA40F411C2E8F3700DFC0B7 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		FCAACE901A5559FD00C7A03F /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
 		FCAACE921A55F27300C7A03F /* String+Stuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Stuff.swift"; sourceTree = "<group>"; };
+		FCAB16A21BF6EAA300FABF7B /* DrawerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawerController.swift; sourceTree = "<group>"; };
 		FCF795131A5277B300A7C808 /* thesarvo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = thesarvo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCF795171A5277B300A7C808 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FCF795181A5277B300A7C808 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +103,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		FCA40F3C1C2E8F3700DFC0B7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FCF795101A5277B300A7C808 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -117,6 +141,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		FCA40F401C2E8F3700DFC0B7 /* Downloader */ = {
+			isa = PBXGroup;
+			children = (
+				FCA40F411C2E8F3700DFC0B7 /* main.swift */,
+			);
+			path = Downloader;
+			sourceTree = "<group>";
+		};
 		FCF7950A1A5277B300A7C808 = {
 			isa = PBXGroup;
 			children = (
@@ -124,6 +156,7 @@
 				FC28B36D1A57AA4600C75D50 /* CoreLocation.framework */,
 				FCF795151A5277B300A7C808 /* thesarvo */,
 				FCF7952D1A5277B300A7C808 /* thesarvoTests */,
+				FCA40F401C2E8F3700DFC0B7 /* Downloader */,
 				FCF795141A5277B300A7C808 /* Products */,
 				FCAACE901A5559FD00C7A03F /* www */,
 			);
@@ -134,6 +167,7 @@
 			children = (
 				FCF795131A5277B300A7C808 /* thesarvo.app */,
 				FCF7952A1A5277B300A7C808 /* thesarvoTests.xctest */,
+				FCA40F3F1C2E8F3700DFC0B7 /* Downloader */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -142,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				FCF795181A5277B300A7C808 /* AppDelegate.swift */,
+				FCAB16A21BF6EAA300FABF7B /* DrawerController.swift */,
 				FCF795441A5289C900A7C808 /* config.xml */,
 				FCF7951C1A5277B300A7C808 /* DetailViewController.swift */,
 				FCF795211A5277B300A7C808 /* Images.xcassets */,
@@ -204,6 +239,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		FCA40F3E1C2E8F3700DFC0B7 /* Downloader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FCA40F451C2E8F3700DFC0B7 /* Build configuration list for PBXNativeTarget "Downloader" */;
+			buildPhases = (
+				FCA40F3B1C2E8F3700DFC0B7 /* Sources */,
+				FCA40F3C1C2E8F3700DFC0B7 /* Frameworks */,
+				FCA40F3D1C2E8F3700DFC0B7 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Downloader;
+			productName = Downloader;
+			productReference = FCA40F3F1C2E8F3700DFC0B7 /* Downloader */;
+			productType = "com.apple.product-type.tool";
+		};
 		FCF795121A5277B300A7C808 /* thesarvo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FCF795341A5277B300A7C808 /* Build configuration list for PBXNativeTarget "thesarvo" */;
@@ -246,10 +298,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftMigration = 0700;
-				LastSwiftUpdateCheck = 0700;
+				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = thesarvo;
 				TargetAttributes = {
+					FCA40F3E1C2E8F3700DFC0B7 = {
+						CreatedOnToolsVersion = 7.1.1;
+					};
 					FCF795121A5277B300A7C808 = {
 						CreatedOnToolsVersion = 6.1;
 						DevelopmentTeam = 8K6T2FHY8E;
@@ -275,6 +330,7 @@
 			targets = (
 				FCF795121A5277B300A7C808 /* thesarvo */,
 				FCF795291A5277B300A7C808 /* thesarvoTests */,
+				FCA40F3E1C2E8F3700DFC0B7 /* Downloader */,
 			);
 		};
 /* End PBXProject section */
@@ -302,6 +358,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		FCA40F3B1C2E8F3700DFC0B7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCA40F421C2E8F3700DFC0B7 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FCF7950F1A5277B300A7C808 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -316,6 +380,7 @@
 				FCF7951B1A5277B300A7C808 /* MasterViewController.swift in Sources */,
 				FC28B36A1A56A93600C75D50 /* Config.swift in Sources */,
 				FC0D9D291BE3706A00163F9C /* Array.swift in Sources */,
+				FCAB16A31BF6EAA300FABF7B /* DrawerController.swift in Sources */,
 				FC28B3681A56A92C00C75D50 /* Guide.swift in Sources */,
 				FCF795191A5277B300A7C808 /* AppDelegate.swift in Sources */,
 				FC28B3741A57FBC800C75D50 /* PageSearchTableViewController.swift in Sources */,
@@ -368,6 +433,32 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		FCA40F431C2E8F3700DFC0B7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		FCA40F441C2E8F3700DFC0B7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 		FCF795321A5277B300A7C808 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -506,6 +597,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		FCA40F451C2E8F3700DFC0B7 /* Build configuration list for PBXNativeTarget "Downloader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FCA40F431C2E8F3700DFC0B7 /* Debug */,
+				FCA40F441C2E8F3700DFC0B7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		FCF7950E1A5277B300A7C808 /* Build configuration list for PBXProject "thesarvo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

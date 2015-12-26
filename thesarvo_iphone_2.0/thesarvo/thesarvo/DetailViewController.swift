@@ -55,7 +55,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
 
         }
         
-        AppDelegate.instance().setupSplitViewButtons(self)
+        //AppDelegate.instance().setupSplitViewButtons(self)
         
     }
 
@@ -67,10 +67,25 @@ class DetailViewController: UIViewController, UIWebViewDelegate
         self.configureView()
     }
     
+    
+    
     override func viewWillAppear(animated: Bool)
     {
+        setupNavButtons()
         webview?.delegate = self
         DetailViewController.last = self
+    }
+    
+    func setupNavButtons()
+    {
+        self.navigationItem.leftItemsSupplementBackButton = true
+        self.navigationItem.leftBarButtonItem =
+            UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("hamburgerToggle") )
+    }
+    
+    dynamic func hamburgerToggle()
+    {
+        AppDelegate.instance().drawerController.toggle()
     }
     
     override func viewWillDisappear(animated: Bool)
@@ -199,7 +214,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
                     fcvc.viewId = self.viewId
                     fcvc.guide = self.guide
                     fcvc.singleNodeData = commandData
-                    fcvc.navigationItem.title = self.navigationItem.title
+                    fcvc.navigationItem.title = "Topo"
                     self.navigationController?.pushViewController(fcvc, animated: true)
                 }
                 else if (command == "map")

@@ -9,25 +9,25 @@
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate
+class AppDelegate: UIResponder, UIApplicationDelegate
 {
 
     var window: UIWindow?
     
-    var splitViewController : UISplitViewController?
-    var navigationController : UINavigationController?
-    var containerController : ContainerViewController?
+//    var splitViewController : UISplitViewController?
+//    var navigationController : UINavigationController?
+//    var containerController : ContainerViewController?
     
-    @available(iOS 8.0, *)
-    var preferredMode : UISplitViewControllerDisplayMode
-    {
-        return isIPhone() ? UISplitViewControllerDisplayMode.PrimaryOverlay : UISplitViewControllerDisplayMode.AllVisible
-    }
+    var drawerController: DrawerController!
+
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool
     {
         // Override point for customization after application launch.
         
+        drawerController = self.window!.rootViewController as! DrawerController
+        
+        /*
         if (self.window!.rootViewController is UINavigationController)
         {
             // ios 7 on iphone :(
@@ -73,6 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             
             splitViewController?.delegate = self
         }
+*/
         
         // main init of the model
         Model.instance.load()
@@ -87,6 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     
     func animateClosed()
     {
+        /*
         UIView.animateWithDuration(0.2, animations:
         {
             if let sv = self.splitViewController
@@ -95,12 +97,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                 
             }
         })
+*/
+        drawerController.openRightDrawer()
     }
     
 
     
     func animateOpen()
     {
+        drawerController.openLeftDrawer()
+        /*
         UIView.animateWithDuration(0.2, animations:
         {
             if let sv = self.splitViewController
@@ -109,6 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                 
             }
         })
+*/
     }
     
     func hideMasterIfNecessary()
@@ -118,59 +125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             animateClosed()
         }
     }
-    
-    @available(iOS 8.0, *)
-    func setupSplitViewButtons(detail: UIViewController? = nil)
-    {
-        if isIOS8OrLater()
-        {
-           
-            //let button = splitViewController?.displayModeButtonItem()
-            
-            
-            var vc = detail
-            
-            if (vc == nil)
-            {
-                vc = navigationController?.topViewController
-            }
-            
 
-            if let vc = vc
-            {
-                vc.navigationItem.leftItemsSupplementBackButton = true
-                vc.navigationItem.leftBarButtonItem =
-                UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("hamburgerToggle") )
-                
-                /*
-                if isIPhone()
-                {
-                    if let left = splitViewController?.viewControllers[0] as? UIViewController
-                    {
-                        left.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItemStyle.Plain, target: button.target, action: button.action)
-                    }
-                }
-                */
-            }
- 
-        }
-        
-    }
-    
-    dynamic func hamburgerToggle()
-    {
-        if let sv = splitViewController
-        {
-            if sv.displayMode == .PrimaryHidden
-            {
-                animateOpen()
-            }
-            else
-            {
-                animateClosed()
-            }
-        }
-    }
 
     func applicationWillResignActive(application: UIApplication)
     {
@@ -199,22 +154,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-    // MARK: - Split view
 
-    func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController:UIViewController, ontoPrimaryViewController primaryViewController:UIViewController) -> Bool
+    func setDetail(vc: UIViewController)
     {
-        if let secondaryAsNavController = secondaryViewController as? UINavigationController {
-            if let topAsDetailController = secondaryAsNavController.topViewController as? DetailViewController {
-                
-                /*
-                if topAsDetailController.detailItem == nil {
-                    // Return true to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
-                    return true
-                }*/
-                return true
-            }
+        let nc = drawerController.centerViewController as? UINavigationController
+        if let nc = nc
+        {
+            nc.viewControllers = [vc]
         }
-        return false
+        hideMasterIfNecessary()
     }
 
 }

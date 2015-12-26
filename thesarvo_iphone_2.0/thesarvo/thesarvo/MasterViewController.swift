@@ -98,7 +98,10 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         self.searchController.dimsBackgroundDuringPresentation = false;
         //self.searchController.searchBar.scopeButtonTitles = @[NSLocalizedString(@"ScopeButtonCountry",@"Country"),NSLocalizedString(@"ScopeButtonCapital",@"Capital")];
         //self.searchController.searchBar.delegate = self;
+        self.searchController.searchBar.scopeButtonTitles = []
         self.tableView.tableHeaderView = self.searchController.searchBar;
+        self.tableView.tableHeaderView?.opaque = true
+        self.searchController.searchBar.opaque = true
         self.definesPresentationContext = true;
         self.searchController.searchBar.sizeToFit()
         self.searchController.searchBar.placeholder = "Search for crag, climb, grade, ***"
@@ -111,12 +114,16 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     
     override func viewWillAppear(animated: Bool)
     {
+//        if (data != nil && data?.text != nil)
+//        {
+//             self.navigationItem.title = data?.text
+//        }
+        
         if (data == nil)
         {
             data = Model.instance.rootView
         }
-        
-        self.navigationItem.title = data?.text
+
         
         if (mainDataSource == nil)
         {
@@ -223,6 +230,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
             cell.textLabel?.font = UIFont.systemFontOfSize( CGFloat(18-level*2) );
             cell.indentationLevel = level;
             cell.indentationWidth = 25;
+            cell.backgroundColor = UIColor.clearColor()
         }
         self.mainDataSource = d.tableViewDataSource
         self.tableView.dataSource = mainDataSource
@@ -269,6 +277,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
             let mtvc = vc as! MasterViewController
             var v = Model.instance.views[viewId]
             mtvc.data = v
+            mtvc.navigationItem.title = viewId
         }
         
         self.performSegueWithIdentifier("showMaster", sender: callback)
@@ -283,6 +292,36 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
             guide = Guide(guideId: vid)
         }
         
+        var fcvc = self.storyboard?.instantiateViewControllerWithIdentifier("detailViewController") as! DetailViewController
+        fcvc.guide = guide
+        fcvc.viewId = viewId
+        fcvc.navigationItem.title = title
+        if let el = elementId
+        {
+            fcvc.elemendId = el
+        }
+        AppDelegate.instance().setDetail(fcvc)
+        
+        //var delay = 0.0
+        if let g = guide
+        {
+            //delay = 0.2
+            let ddcallback = SegueCallback
+            {
+                (vc: UIViewController) in
+                let mtvc = vc as! MasterViewController
+                mtvc.guide = g
+                let t = title ?? ""
+                mtvc.navigationItem.title = "\(t) TOC"
+            }
+            
+            if (g.getHeadingsAndClimbs().rows.count > 0)
+            {
+                self.performSegueWithIdentifier("showMaster", sender: ddcallback)
+            }
+        }
+        
+        /*
         let callback = SegueCallback
         {
             (vc: UIViewController) in
@@ -312,6 +351,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
             }
             self.performSegueWithIdentifier("showMaster", sender: ddcallback)
         }
+
         
         runAfterDelay(delay)
         {
@@ -319,7 +359,10 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
             AppDelegate.instance().hideMasterIfNecessary()
             self.performSegueWithIdentifier("showDetail", sender: callback)
         }
+*/
     }
+    
+
     
     
     func childSelected(selected: ListItem)
@@ -328,11 +371,16 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         {
             if (viewId == "Map")
             {
+                /*
                 let callback = SegueCallback
                 {
                     (vc: UIViewController) in
                 }
                 self.performSegueWithIdentifier("showMap", sender: callback)
+*/
+                let mc = self.storyboard?.instantiateViewControllerWithIdentifier("mapController") as! MapViewController
+                AppDelegate.instance().setDetail(mc)
+
             }
             else if (viewId.hasPrefix("guide.") || viewId.hasPrefix("http"))
             {

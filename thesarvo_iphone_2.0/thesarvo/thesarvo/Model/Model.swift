@@ -107,6 +107,11 @@ class Model
                                     }
 */
                                 }
+                                
+                                if let g = node as? GpsNode
+                                {
+                                    self.allGpsNodes.append(g)
+                                }
                             }
                         }
                     }
