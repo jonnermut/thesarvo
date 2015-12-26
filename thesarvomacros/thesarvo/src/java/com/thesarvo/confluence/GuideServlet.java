@@ -145,9 +145,18 @@ public class GuideServlet extends HttpServlet
 				//ImageIO.write(img, outf, resp.getOutputStream());
 			}
 		}
+		else if (action.equals("sync"))
+		{
+			long since = Long.parseLong(id);
+			Document doc = Service.getSync(since);
+			resp.getWriter().write( doc.asXML() );
+
+		}
 			
 		
 	}
+
+
 
 	private void handleXml(HttpServletRequest req, HttpServletResponse resp,
 			String method, String id, String user) throws IOException

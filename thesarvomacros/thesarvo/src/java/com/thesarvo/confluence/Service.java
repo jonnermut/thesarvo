@@ -13,6 +13,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
@@ -278,5 +279,141 @@ public class Service
 	}
 
 	static final String GUIDE_MACRO = "{guide}";
+
+	static final String BASE_URL = "http://www.thesarvo.com/confluence/";
+
+	private static final long CACHE_INTERVAL = 10 * 60 * 1000; // 10 minute cache
+	
+	static long maxLastMod = 0;
+	static long maxLastModSetTime = 0;
+
+	@SuppressWarnings("unchecked")
+	public static Document getSync(long since) 
+	{
+		long rootId = 414; // thesarvo.com root of all climbing guides
+		
+		PageManager pm = getPageManager();
+		
+		Page root = pm.getPage(rootId);
+		
+		if (root == null)
+		{
+			throw new RuntimeException("Could not find root page");
+		}
+		
+		Document doc = DocumentHelper.createDocument();
+		Element updates = DocumentHelper.createElement("updates");
+		doc.add( updates );
+		
+		long now = new Date().getTime();
+		
+		if (maxLastMod > 0)
+		{		
+			if (now - maxLastModSetTime < CACHE_INTERVAL)
+			{
+				if (since >= maxLastMod)
+				{
+					// bail out if our cached max last modified is less than the since
+					
+					updates.addAttribute("maxLastMod", "" + maxLastMod);
+					return doc;
+				}
+			}
+			else
+			{
+				maxLastMod = 0; // reset cache
+			}
+		}
+		
+		@SuppressWarnings("unchecked")
+		List<Page> pages = pm.getDescendents(root);
+		
+		for (Page page : pages)
+		{
+			long lastUpdate = page.getLastModificationDate().getTime();
+			
+			if (lastUpdate > maxLastMod)
+				maxLastMod = lastUpdate;
+			
+			if (lastUpdate > since)
+			{
+				String url = BASE_URL + "plugins/servlet/guide/xml/" + page.getId();
+				String idStr = "" + page.getId();
+				String filename = idStr + ".xml";
+				
+				addUpdate(updates, lastUpdate, url, filename);
+				
+				Document guidexml = null;
+				List<Element> imageNodes = null;
+				
+				for (Attachment att : page.getAttachments())
+				{
+					if (att != null && att.getLastModificationDate() != null)
+					{
+						long lastUpdate1 = att.getLastModificationDate().getTime();
+						
+						if (lastUpdate1 > maxLastMod)
+							maxLastMod = lastUpdate1;
+						
+						if (lastUpdate1 > since)
+						{
+							// double check that this attachment is referenced in the guide xml
+							
+							if (guidexml == null)
+							{
+								guidexml = getGuideXml(page);
+								if (guidexml != null)
+								{
+									imageNodes = guidexml.selectNodes("//image");
+								}
+							}
+							
+							if (imageNodes != null)
+							{
+								for (Element e : imageNodes)
+								{
+									String attsrc = att.getFileName();
+									if (attsrc.equals( e.attributeValue("src") ))
+									{
+										// match
+										String width = e.attributeValue("width");
+										boolean hasWidth = width != null && width.trim().length() > 0;
+										
+										String mainFilename = idStr + "-" + attsrc.toLowerCase();
+										String thumbFilename = idStr + "-t-" + attsrc.toLowerCase();
+										
+										String mainUrl = BASE_URL + "plugins/servlet/guide/image/" + idStr + "/" + attsrc + ( hasWidth ? "?width=" + width : "");
+										String thumbUrl = BASE_URL + "download/thumbnails/" + idStr + "/" + attsrc;
+										
+										addUpdate(updates, lastUpdate1, mainUrl, mainFilename);
+										addUpdate(updates, lastUpdate1, thumbUrl, thumbFilename);
+										
+										break;
+									}
+								}
+							}
+							
+						}
+					}
+
+				}
+				
+			}
+		}
+		
+		maxLastModSetTime = now;
+		updates.addAttribute("maxLastMod", "" + maxLastMod);
+		
+		return doc;
+		
+	}
+
+	private static void addUpdate(Element updates, long lastUpdate, String url, String filename) {
+		Element update = DocumentHelper.createElement("update");
+		update.addAttribute("url", url);
+		update.addAttribute("lastModified", "" + lastUpdate);
+		update.addAttribute("filename", filename);
+		updates.add(update);
+	}
 
 }
