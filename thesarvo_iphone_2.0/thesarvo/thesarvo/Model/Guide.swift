@@ -77,7 +77,7 @@ class ClimbNode : GuideNode
 {
     var climbName: String { return attr("name").valueOr("").trimmed() }
     var stars: String { return attr("stars").valueOr("").trimmed() }
-    var starsPretty: String { return "★" * stars.characters.count }
+    var starsPretty: String { return "★" * stars.trimmed().characters.count }
     var grade: String { return attr("grade").valueOr("").trimmed() }
     
     override var searchString : String?

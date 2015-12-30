@@ -71,7 +71,8 @@ extension String
     - returns: Stripped string
     */
     func trimmed () -> String {
-        return ltrimmed().rtrimmed()
+        
+        return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
     }
     
     func appendPathComponent(str:String) -> String

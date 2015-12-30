@@ -1,6 +1,10 @@
 Version 2.0
+
 LaunchScreen
 Add url to image nodes, and test updates
+
+H2 vs H2 in TOC not different enough in Mt Wellington / Intro? or Handsome crag bouldering
+add Header block in TOC
 
 Maps needs a back button
 Map annotations clickable
@@ -12,9 +16,33 @@ Weird width bug - eg lost world, handsome crag
 Constraint problem on progress bar
 
 Big white blank empty state on ipad
+ipad main search shows blank
+
+Big pipes topo has gone missing?
+
+Sync index
+
+coles bay bouldering borken
+hillwoood climbing - <br> in TOC - image busted
+
 
 2.1
 Remember where you were and reopen when app restarted
+Favourites
+Recents
 
 In topo mode, touching the route text should highlight the climb and vice versa
-On ipad, allow option to 
+On ipad, allow option to open topo inline rather than new page
+
+Increase/decrease font size
+
+Climb graph
+header icons need retina versions
+Make map more prominent - tab or button up the top
+
+2.2
+Editing
+
+2.3
+Ticks?
+

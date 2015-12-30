@@ -118,7 +118,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         self.searchController.searchBar.backgroundColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
     
     
-
+        self.tableView.allowsMultipleSelection = false
     }
     
     dynamic func updateUpdateView()
@@ -141,6 +141,8 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     
     override func viewWillAppear(animated: Bool)
     {
+        super.viewWillAppear(animated)
+        
 //        if (data != nil && data?.text != nil)
 //        {
 //             self.navigationItem.title = data?.text
@@ -158,7 +160,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         }
         
         
-        if data?.viewId == "home"
+        if data?.viewId == "home" && !showingTOC
         {
             updateUpdateView()
             updateTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("updateUpdateView"), userInfo: nil, repeats: true)
@@ -169,6 +171,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     
     override func viewWillDisappear(animated: Bool)
     {
+        super.viewWillDisappear(animated)
         if let ut = updateTimer
         {
             ut.invalidate()
@@ -357,7 +360,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                 let mtvc = vc as! MasterViewController
                 mtvc.guide = g
                 let t = title ?? ""
-                mtvc.navigationItem.title = "\(t) TOC"
+                mtvc.navigationItem.title = "\(t)"
             }
             
             if (g.getHeadingsAndClimbs().rows.count > 0)
@@ -440,8 +443,18 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         
     }
     
+    override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath)
+    {
+        
+        // I don't know why exactly, but this hammer seems essential 
+        // to clearing the previous selection, which is doing a lot of extra work, but buggered if I can get it to clear otherwise
+        tableView.reloadData()
+        
+    }
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
     {
+        
         let cell = tableView.dataSource?.tableView(tableView, cellForRowAtIndexPath: indexPath)
         
         if let searchCell = cell as? SearchCell
