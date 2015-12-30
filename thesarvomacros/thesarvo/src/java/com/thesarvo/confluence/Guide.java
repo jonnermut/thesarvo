@@ -643,7 +643,7 @@ public class Guide
 //			String grade = getAttr(node, "grade");
 //			String extra = getAttr(node, "extra");
 //
-//			boolean sport = extra.contains("Þ")
+//			boolean sport = extra.contains("XXXXXXXXX")
 //					|| BOLT_PAT.matcher(extra).find();
 //
 //			if (grade != null && grade.length() > 0)
@@ -1201,7 +1201,7 @@ public class Guide
 //			ret.append(grade + "&nbsp;&nbsp;");
 //
 //			extra += " ";
-//			extra = extra.replaceAll("B ", "Þ ");
+//			extra = extra.replaceAll("B ", "XXXXXXXXXXXXX ");
 //
 //			ret.append("</span>" + extra + " ");
 //			ret.append("</div>");

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: svgSalamander">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/svgSalamander.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

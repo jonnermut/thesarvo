@@ -27,6 +27,35 @@ class Model
     
     var allGpsNodes: [GpsNode] = []
     
+    let dataDir: String
+    let guideDownloader:GuideDownloader
+    
+    var lastSyncTry: NSDate?
+    let syncInterval = 600.0
+    
+    init()
+    {
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        dataDir = documentsPath.appendPathComponent("guideData")
+        try? NSFileManager.defaultManager().createDirectoryAtPath(dataDir, withIntermediateDirectories: true, attributes: nil)
+        
+        guideDownloader = GuideDownloader(directory: dataDir)
+
+    }
+    
+    func maybeSync()
+    {
+        if let lastSyncTry = lastSyncTry
+        {
+            if lastSyncTry.timeIntervalSinceNow < -syncInterval
+            {
+                return
+            }
+        }
+        lastSyncTry = NSDate()
+        guideDownloader.startSync()
+    }
+    
     func getGuide(guideId: String, name: String?) -> Guide
     {
         // lazy init of Guide objects

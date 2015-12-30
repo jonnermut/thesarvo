@@ -1,0 +1,15 @@
+Version 2.0
+
+Add url to image nodes, and test updates
+
+Maps needs a back button
+Map annotations clickable
+Map is not showing zoom view correctly
+Map should default to terrain
+
+Weird width bug - eg lost world, handsome crag
+Constraint problem on progress bar
+
+2.1
+Remember where you were and reopen when app restarted
+

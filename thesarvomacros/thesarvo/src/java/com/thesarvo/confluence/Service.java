@@ -2,12 +2,16 @@ package com.thesarvo.confluence;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -346,7 +350,7 @@ public class Service
 				Document guidexml = null;
 				List<Element> imageNodes = null;
 				
-				for (Attachment att : page.getAttachments())
+				for (Attachment att : page.getLatestVersionsOfAttachments())
 				{
 					if (att != null && att.getLastModificationDate() != null)
 					{
@@ -372,18 +376,28 @@ public class Service
 							{
 								for (Element e : imageNodes)
 								{
-									String attsrc = att.getFileName();
-									if (attsrc.equals( e.attributeValue("src") ))
+									String attFilename = att.getFileName();
+									if (attFilename.equals( e.attributeValue("src") ))
 									{
 										// match
 										String width = e.attributeValue("width");
 										boolean hasWidth = width != null && width.trim().length() > 0;
 										
-										String mainFilename = idStr + "-" + attsrc.toLowerCase();
-										String thumbFilename = idStr + "-t-" + attsrc.toLowerCase();
+										String mainFilename = idStr + "-" + attFilename.toLowerCase();
+										String thumbFilename = idStr + "-t-" + attFilename.toLowerCase();
 										
-										String mainUrl = BASE_URL + "plugins/servlet/guide/image/" + idStr + "/" + attsrc + ( hasWidth ? "?width=" + width : "");
-										String thumbUrl = BASE_URL + "download/thumbnails/" + idStr + "/" + attsrc;
+										String escapedFilename = attFilename;
+										try 
+										{
+											escapedFilename = URLEncoder.encode(attFilename, "UTF-8");
+										} 
+										catch (UnsupportedEncodingException e1) 
+										{
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+										String mainUrl = BASE_URL + "plugins/servlet/guide/image/" + idStr + "/" + escapedFilename + ( hasWidth ? "?width=" + width : "");
+										String thumbUrl = BASE_URL + "download/thumbnails/" + idStr + "/" + escapedFilename;
 										
 										addUpdate(updates, lastUpdate1, mainUrl, mainFilename);
 										addUpdate(updates, lastUpdate1, thumbUrl, thumbFilename);

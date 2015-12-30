@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MapKit
 
 class GuideDocument : AEXMLDocument
 {
@@ -94,8 +95,91 @@ class ImageNode : GuideNode
 
 class GpsNode : GuideNode
 {
-    
+    var gpsObjects: [GPSMapObject]
+    {
+        return self.children.map()
+        {
+            element in
+            return GPSMapObject(element: element)
+        }
+    }
 }
+
+class GPSMapObject
+{
+    let element: AEXMLElement
+    
+    var type: String
+    {
+        return element.name
+    }
+    
+    var latitude: Double
+    {
+        return Double( element.attributes["latitude"] ?? "0.0") ?? 0.0
+    }
+
+    var longitude: Double
+    {
+        return Double( element.attributes["longitude"] ?? "0.0") ?? 0.0
+    }
+    
+    var description: String
+    {
+        return element.attributes["description"] ?? ""
+    }
+    
+    var code: String
+    {
+        return element.attributes["code"] ?? ""
+    }
+    
+    init(element: AEXMLElement)
+    {
+        self.element = element
+    }
+    
+    func getMKAnnotation() -> MKAnnotation?
+    {
+        if type == "point" && latitude != 0.0 && longitude != 0.0 
+        {
+            let loc = CLLocationCoordinate2DMake(latitude, longitude)
+            let title = "\(description)"
+            var c = code
+            if c.characters.count != 0
+            {
+                c = c + ": "
+            }
+            let subtitle = "\(c)\(latitude),\(longitude)"
+            return MapPoint(mapObj: self, coordinate: loc, title: title, subtitle: subtitle)
+        }
+        
+        return nil
+    }
+}
+
+public class MapPoint : NSObject, MKAnnotation
+{
+    
+    // Center latitude and longitude of the annotation view.
+    // The implementation of this property must be KVO compliant.
+    public var coordinate: CLLocationCoordinate2D
+    
+    // Title and subtitle for use by selection UI.
+    public var title: String?
+    public var subtitle: String?
+    
+    var mapObj: GPSMapObject
+    
+    init(mapObj: GPSMapObject, coordinate: CLLocationCoordinate2D, title: String, subtitle: String)
+    {
+        self.mapObj = mapObj
+        self.coordinate = coordinate
+        self.title = title
+        self.subtitle = subtitle
+    }
+}
+
 
 struct IndexEntry
 {

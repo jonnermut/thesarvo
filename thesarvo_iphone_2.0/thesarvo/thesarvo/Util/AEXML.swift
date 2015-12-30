@@ -54,8 +54,13 @@ public class AEXMLElement: NSObject {
     
     /// String representation of `value` property with special characters escaped (if `value` is `nil` this is empty String).
     public var escapedStringValue: String {
+        return AEXMLElement.escape(stringValue)
+    }
+    
+    public class func escape(input: String) -> String
+    {
         // we need to make sure "&" is escaped first. Not doing this may break escaping the other characters
-        var escapedString = stringValue.stringByReplacingOccurrencesOfString("&", withString: "&amp;", options: .LiteralSearch)
+        var escapedString = input.stringByReplacingOccurrencesOfString("&", withString: "&amp;", options: .LiteralSearch)
         
         // replace the other four special characters
         let escapeChars = ["<" : "&lt;", ">" : "&gt;", "'" : "&apos;", "\"" : "&quot;"]
@@ -242,7 +247,7 @@ public class AEXMLElement: NSObject {
         if attributes.count > 0 {
             // insert attributes
             for (key, value) in attributes {
-                xml += " \(key)=\"\(value)\""
+                xml += " \(key)=\"\(AEXMLElement.escape(value))\""
             }
         }
         

@@ -74,6 +74,11 @@ extension String
         return ltrimmed().rtrimmed()
     }
     
+    func appendPathComponent(str:String) -> String
+    {
+        return (self as NSString).stringByAppendingPathComponent(str)
+    }
+    
     
 }
 

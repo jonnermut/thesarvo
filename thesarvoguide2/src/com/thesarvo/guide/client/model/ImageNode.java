@@ -58,6 +58,19 @@ public class ImageNode extends NodeModel
 		String src = StringUtil.string(getSrc());
 		String width = StringUtil.string(getWidth());
 		
+		if (model != null)
+		{
+			String modelurl =  model.get("@url");
+			if (thumb)
+			{
+				modelurl =  model.get("@thumburl");
+			}
+			
+			if (modelurl != null && modelurl.length() > 0)
+				return modelurl;
+
+		}
+		
 		
 		src = Controller.get().getAttachmentUrl(src, thumb, width);
 		return src;

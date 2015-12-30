@@ -52,9 +52,15 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     
     var mainDataSource: TableViewDataSource?
     
+    @IBOutlet weak var updateView: UIView!
+    @IBOutlet weak var progressView: UIProgressView!
+    @IBOutlet weak var updateLabel: UILabel!
+    
     
     var searching = false
     var searchAgain = false
+    
+    var updateTimer: NSTimer? = nil
 
     override func awakeFromNib()
     {
@@ -110,6 +116,27 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
             self.searchController.searchBar.placeholder = "Search within page"
         }
         self.searchController.searchBar.backgroundColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
+    
+    
+
+    }
+    
+    dynamic func updateUpdateView()
+    {
+        self.updateView.hidden = false
+        let gd = Model.instance.guideDownloader
+        
+        self.updateLabel.text = gd.labelText
+        
+        if (gd.syncing)
+        {
+            self.progressView.hidden = false
+            self.progressView.progress = gd.progress
+        }
+        else
+        {
+            self.progressView.hidden = true
+        }
     }
     
     override func viewWillAppear(animated: Bool)
@@ -130,7 +157,25 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
             setupDatasource()
         }
         
+        
+        if data?.viewId == "home"
+        {
+            updateUpdateView()
+            updateTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("updateUpdateView"), userInfo: nil, repeats: true)
+            
+        }
+        
     }
+    
+    override func viewWillDisappear(animated: Bool)
+    {
+        if let ut = updateTimer
+        {
+            ut.invalidate()
+        }
+        self.updateTimer = nil
+    }
+    
 
     override func didReceiveMemoryWarning()
     {

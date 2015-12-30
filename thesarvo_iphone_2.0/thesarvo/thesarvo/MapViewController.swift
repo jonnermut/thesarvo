@@ -17,9 +17,15 @@ class MapViewController: UIViewController
     var guide: Guide?
     var gpsNodes: [GpsNode]?
     
+    var annots: [MKAnnotation] = []
+    
+    let loc = CLLocationManager()
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        
+        loc.requestWhenInUseAuthorization()
 
         if let guide = guide
         {
@@ -36,13 +42,32 @@ class MapViewController: UIViewController
         let barButton = MKUserTrackingBarButtonItem( mapView: self.mapView! )
         self.navigationItem.rightBarButtonItem = barButton
         
+        var zoomRect = MKMapRectNull;
         if let gpsNodes = gpsNodes
         {
             for gps in gpsNodes
             {
-                gps.
+                for gpsObj in gps.gpsObjects
+                {
+                    if let a = gpsObj.getMKAnnotation()
+                    {
+                        annots.append(a)
+                        
+                        print("Adding annotation: \(a.title) - \(a.subtitle)")
+                        
+                        let annotationPoint = MKMapPointForCoordinate(a.coordinate);
+                        let pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
+                        zoomRect = MKMapRectUnion(zoomRect, pointRect);
+                    }
+                    
+                }
             }
         }
+        
+        self.mapView.addAnnotations(annots)
+        zoomRect = self.mapView.mapRectThatFits(zoomRect)
+        self.mapView.setVisibleMapRect(zoomRect, animated: false)
+        print("Setting zoom rect to \(zoomRect)")
     }
 
     override func didReceiveMemoryWarning()

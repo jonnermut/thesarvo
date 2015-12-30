@@ -10,3 +10,13 @@ import Foundation
 
 print("Hello, World!")
 
+let gd = GuideDownloader(directory: "/git/thesarvo/thesarvo_iphone_2.0/thesarvo/www/data")
+gd.desktopMode = true
+gd.startSync()
+
+NSThread.sleepForTimeInterval(5.0)
+while(gd.syncing)
+{
+    NSThread.sleepForTimeInterval(1.0)
+    print(gd.labelText)
+}
