@@ -21,6 +21,8 @@ class MapViewController: UIViewController
     
     let loc = CLLocationManager()
     
+    var zoomRect = MKMapRectNull
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -42,7 +44,7 @@ class MapViewController: UIViewController
         let barButton = MKUserTrackingBarButtonItem( mapView: self.mapView! )
         self.navigationItem.rightBarButtonItem = barButton
         
-        var zoomRect = MKMapRectNull;
+        
         if let gpsNodes = gpsNodes
         {
             for gps in gpsNodes
@@ -65,9 +67,19 @@ class MapViewController: UIViewController
         }
         
         self.mapView.addAnnotations(annots)
-        zoomRect = self.mapView.mapRectThatFits(zoomRect)
-        self.mapView.setVisibleMapRect(zoomRect, animated: false)
-        print("Setting zoom rect to \(zoomRect)")
+
+    }
+    
+    override func viewDidAppear(animated: Bool)
+    {
+        let zoomRect2 = self.mapView.mapRectThatFits(zoomRect)
+        self.mapView.setVisibleMapRect(zoomRect2, edgePadding: UIEdgeInsets(top: 20,left: 20,bottom: 20,right: 20), animated: false)
+        print("Setting zoom rect to \(zoomRect2)")
+    }
+    
+    override func viewWillAppear(animated: Bool)
+    {
+
     }
 
     override func didReceiveMemoryWarning()

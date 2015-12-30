@@ -1,15 +1,20 @@
 Version 2.0
-
+LaunchScreen
 Add url to image nodes, and test updates
 
 Maps needs a back button
 Map annotations clickable
-Map is not showing zoom view correctly
-Map should default to terrain
+Shouldnt show map unless indexing finished
+Map paths
+Map other shapes ??
 
 Weird width bug - eg lost world, handsome crag
 Constraint problem on progress bar
 
+Big white blank empty state on ipad
+
 2.1
 Remember where you were and reopen when app restarted
 
+In topo mode, touching the route text should highlight the climb and vice versa
+On ipad, allow option to 
