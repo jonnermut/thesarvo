@@ -25,3 +25,4 @@ svg2pdf/build
 svg2pdf/out
 thesarvo_iphone_2.0/www/deferredjs
 thesarvo_iphone_2.0/www/gwt
+*.cache.html
