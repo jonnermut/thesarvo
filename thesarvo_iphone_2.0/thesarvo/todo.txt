@@ -3,7 +3,6 @@ Version 2.0
 LaunchScreen
 Add url to image nodes, and test updates
 
-H2 vs H2 in TOC not different enough in Mt Wellington / Intro? or Handsome crag bouldering
 add Header block in TOC
 
 Maps needs a back button
@@ -20,11 +19,12 @@ ipad main search shows blank
 
 Big pipes topo has gone missing?
 
-Sync index
+Sync index xml
 
 coles bay bouldering borken
 hillwoood climbing - <br> in TOC - image busted
 
+get title of topo and push that into nav controller title
 
 2.1
 Remember where you were and reopen when app restarted

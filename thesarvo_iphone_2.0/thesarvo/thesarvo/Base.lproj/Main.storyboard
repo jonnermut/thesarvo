@@ -297,7 +297,7 @@
                                     <segue destination="7bK-jq-Zjz" kind="show" identifier="showMaster" id="Cwf-Pf-b2f"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TOCCell" textLabel="GXh-qr-rKD" style="IBUITableViewCellStyleDefault" id="Alw-fS-pdH" userLabel="TOCCell" customClass="TOCCell" customModule="thesarvo" customModuleProvider="target">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="TOCCell" textLabel="GXh-qr-rKD" style="IBUITableViewCellStyleDefault" id="Alw-fS-pdH" userLabel="TOCCell" customClass="TOCCell" customModule="thesarvo" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="174" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Alw-fS-pdH" id="OgN-w0-vvp">

@@ -167,6 +167,16 @@ class DetailViewController: UIViewController, UIWebViewDelegate
                     
                 }
                 
+                let imageUrls = guide.getImageUrls() as NSDictionary
+                if let jsonData = try? NSJSONSerialization.dataWithJSONObject(imageUrls, options: NSJSONWritingOptions.PrettyPrinted)
+                {
+                    if let jsonString = String(data: jsonData, encoding: NSUTF8StringEncoding)
+                    {
+                        let imageJs = "\n var guide_imageUrls=\(jsonString);"
+                        js += imageJs
+                    }
+                }
+                
                 var result = webview.stringByEvaluatingJavaScriptFromString(js)
             }
         }

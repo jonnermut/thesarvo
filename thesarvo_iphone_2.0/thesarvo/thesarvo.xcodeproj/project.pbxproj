@@ -29,6 +29,8 @@
 		FCAACE931A55F27300C7A03F /* String+Stuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAACE921A55F27300C7A03F /* String+Stuff.swift */; };
 		FCAB16A31BF6EAA300FABF7B /* DrawerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAB16A21BF6EAA300FABF7B /* DrawerController.swift */; };
 		FCC66E2E1C33994100B9A48D /* todo.txt in Resources */ = {isa = PBXBuildFile; fileRef = FCC66E2D1C33994100B9A48D /* todo.txt */; };
+		FCC66E2F1C363DE600B9A48D /* NSURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795751A553A2400A7C808 /* NSURL.swift */; };
+		FCC66E301C363DF700B9A48D /* String+Stuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAACE921A55F27300C7A03F /* String+Stuff.swift */; };
 		FCF795191A5277B300A7C808 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795181A5277B300A7C808 /* AppDelegate.swift */; };
 		FCF7951B1A5277B300A7C808 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF7951A1A5277B300A7C808 /* MasterViewController.swift */; };
 		FCF7951D1A5277B300A7C808 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF7951C1A5277B300A7C808 /* DetailViewController.swift */; };
@@ -372,10 +374,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCC66E2F1C363DE600B9A48D /* NSURL.swift in Sources */,
 				FCA40F461C2E900C00DFC0B7 /* AEXML+Stuff.swift in Sources */,
 				FCA40F4A1C2E907100DFC0B7 /* GuideDownloader.swift in Sources */,
 				FCA40F471C2E901E00DFC0B7 /* AEXML.swift in Sources */,
 				FCA40F421C2E8F3700DFC0B7 /* main.swift in Sources */,
+				FCC66E301C363DF700B9A48D /* String+Stuff.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

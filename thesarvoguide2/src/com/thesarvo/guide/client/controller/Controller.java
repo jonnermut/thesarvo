@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
@@ -21,6 +22,9 @@ import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Timer;
@@ -80,6 +84,8 @@ public class Controller
 	
 	boolean saving = false;
 	boolean queuedSave = false;
+
+	private JavaScriptObject imageUrls;
 
 	public Controller(EventBus eventBus)
 	{
@@ -404,22 +410,7 @@ public class Controller
 			else
 				ret = "data/" + URL.encodeComponent(enc);
 				*/
-			String filename = "" + getGuideId();
-			if (thumbnail)
-				filename += "-t-";
-			else
-				filename += "-";
-			
-			filename += src.toLowerCase();
-			
-			if (!fromHtml)
-				ret = "../data/" + filename;
-			else
-			{
-				String enc = URL.encodeComponent(filename);
-				enc = enc.replace("+", "%20");
-				ret = "data/" + enc;
-			}
+
 		}
 		return ret;
 	}
@@ -437,6 +428,7 @@ public class Controller
 			
 			// hardcoded path for debugging in the GWT debugger & for mobile app
 			
+			/*
 			if (thumbnail)
 			{
 				ret = "http://www.thesarvo.com/confluence/download/thumbnails/" + getGuideId() + "/" + src;
@@ -448,6 +440,33 @@ public class Controller
 	
 				if (StringUtil.isNotEmpty(width))
 					ret += "?width=" + width;
+			}
+			*/
+			
+			boolean fromDebug = Window.Location.getHost().equals("127.0.0.1:8888");
+			String filename = "" + getGuideId();
+			if (thumbnail)
+				filename += "-t-";
+			else
+				filename += "-";
+			
+			filename += src.toLowerCase();
+			
+			if (fromDebug)
+			{
+				ret = "../data/" + filename;
+			}
+			else
+			{
+				String providedUrl = getImageUrl(filename);
+				if (providedUrl != null)
+				{
+					return providedUrl;
+				}
+				
+				String enc = URL.encodeComponent(filename);
+				enc = enc.replace("+", "%20");
+				ret = "data/" + enc;
 			}
 		}
 		else
@@ -461,8 +480,10 @@ public class Controller
 				ret += "attachments/" + getGuideId() + "/" + src;
 			}
 		}
+		
+		return ret;
 
-		return convertToCached(ret, src, thumbnail, true);
+		//return convertToCached(ret, src, thumbnail, true);
 
 	}
 
@@ -1314,5 +1335,33 @@ public class Controller
 			t.schedule(2000);
 			
 		}
+	}
+
+	public void setImageUrls(JavaScriptObject varImageUrls)
+	{
+		this.imageUrls = varImageUrls;
+		
+	}
+	
+	public JavaScriptObject getImageUrls()
+	{
+		return this.imageUrls;
+	}
+	
+	private String getImageUrl(String filename)
+	{
+		if (imageUrls != null)
+		{
+			JSONValue jv = new JSONObject(imageUrls).get(filename);
+			if (jv != null)
+			{
+				JSONString jss = jv.isString();
+				if (jss != null)
+				{
+					return jss.stringValue();
+				}
+			}
+		}
+		return null;
 	}
 }

@@ -188,67 +188,91 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     
     func setupTOCDatasource()
     {
-        if let guide = guide
+        runInBackground()
         {
-            let filter = self.searchString
-
-            // sectioned by header then climb
-            let d = guide.getHeadingsAndClimbs()
-            d.reuseIdentifier = "TOCCell"
             
-            if let filter = filter
+            if let guide = self.guide
             {
-                if filter.characters.count > 0
+                let filter = self.searchString
+                
+                // sectioned by header then climb
+                let d = guide.getHeadingsAndClimbs()
+                d.reuseIdentifier = "TOCCell"
+                
+                if let filter = filter
                 {
-                    d.rows = d.rows.filter()
+                    if filter.characters.count > 0
                     {
-                        (guideNode: GuideNode) in
-                        (guideNode.searchString ?? "").containsCaseInsensitive(filter)
+                        d.rows = d.rows.filter()
+                            {
+                                (guideNode: GuideNode) in
+                                (guideNode.searchString ?? "").containsCaseInsensitive(filter)
+                        }
                     }
                 }
-            }
-            
-            d.cellConfigurator =
-            {
-                (cell: UITableViewCell!, node: GuideNode) in
-                if let cell = cell as? TOCCell
-                {
-                    cell.node = node
-                    cell.textLabel?.text = node.description
-                    cell.textLabel?.adjustsFontSizeToFitWidth = true
-                    
-                    if (node is TextNode)
+                
+                d.cellConfigurator =
                     {
-                        cell.textLabel?.font = UIFont.boldSystemFontOfSize(14)
-                        cell.indentationLevel = 0
-                        cell.backgroundColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
-                    }
-                    else
-                    {
-                        cell.textLabel?.font = UIFont.systemFontOfSize(13)
-                        cell.indentationLevel = 3
-                        cell.backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
-                    }
-
+                        (cell: UITableViewCell!, node: GuideNode) in
+                        if let cell = cell as? TOCCell
+                        {
+                            cell.node = node
+                            cell.textLabel?.text = node.description
+                            cell.textLabel?.adjustsFontSizeToFitWidth = true
+                            
+                            if let tn = node as? TextNode
+                            {
+                                if tn.clazz == "heading1"
+                                {
+                                    cell.textLabel?.font = UIFont.boldSystemFontOfSize(15)
+                                    cell.indentationLevel = 0
+                                }
+                                else if tn.clazz == "heading2"
+                                {
+                                    cell.textLabel?.font = UIFont.boldSystemFontOfSize(14)
+                                    cell.indentationLevel = 0
+                                }
+                                else
+                                {
+                                    cell.textLabel?.font = UIFont.boldSystemFontOfSize(13)
+                                    cell.indentationLevel = 1
+                                    
+                                }
+                                
+                                cell.backgroundColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
+                            }
+                            else
+                            {
+                                cell.textLabel?.font = UIFont.systemFontOfSize(12)
+                                cell.indentationLevel = 3
+                                cell.backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
+                                
+                            }
+                            
+                        }
                 }
-            }
-            /*
-            if (shouldFilter)
-            {
+                /*
+                if (shouldFilter)
+                {
                 for sect in d.sections
                 {
-                    sect.rows = sect.rows.filter()
-                        {
-                            (guideNode: GuideNode) in
-                            (guideNode.searchString ?? "").containsCaseInsensitive(filter)
-                    }
+                sect.rows = sect.rows.filter()
+                {
+                (guideNode: GuideNode) in
+                (guideNode.searchString ?? "").containsCaseInsensitive(filter)
+                }
+                }
+                }
+                */
+                self.tableView.rowHeight = 32
+                self.mainDataSource = d.tableViewDataSource
+                
+                runOnMain()
+                {
+                    self.tableView.dataSource = self.mainDataSource
+                    self.tableView.reloadData()
                 }
             }
-            */
-            self.tableView.rowHeight = 32
-            self.mainDataSource = d.tableViewDataSource
-            self.tableView.dataSource = mainDataSource
-            self.tableView.reloadData()
         }
 
     }

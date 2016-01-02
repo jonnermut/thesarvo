@@ -1,6 +1,7 @@
 package com.thesarvo.guide.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Window;
@@ -102,6 +103,7 @@ public class Thesarvoguide2 implements EntryPoint
 			controller.setMultiPage(false);
 			controller.setCallOut(getVarGuideCallout());
 			controller.setShowId(getVarShowId());
+			controller.setImageUrls(getVarImageUrls());
 		
 			String xml = getVarGuideXml();
 			
@@ -241,6 +243,12 @@ public class Thesarvoguide2 implements EntryPoint
 	  private native String getVarShowId() /*-{
 	    if ($wnd.guide_showId)
 	    	return $wnd.guide_showId;
+	    return null; 
+	  }-*/;
+	  
+	  private native JavaScriptObject getVarImageUrls() /*-{
+	    if ($wnd.guide_imageUrls)
+	    	return $wnd.guide_imageUrls;
 	    return null; 
 	  }-*/;
 	  

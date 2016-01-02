@@ -202,7 +202,20 @@ class Guide
     
     func loadData() -> NSData?
     {
-        if let url = NSBundle.mainBundle().URLForResource(guideId, withExtension: "xml", subdirectory: "www/data")
+        let downloadedPath = Model.instance.guideDownloader.finalPath("\(guideId).xml")
+        let downloadedUrl = NSURL(fileURLWithPath: downloadedPath)
+        
+        let bundleUrl = NSBundle.mainBundle().URLForResource(guideId, withExtension: "xml", subdirectory: "www/data")
+        
+        if NSFileManager.defaultManager().fileExistsAtPath(downloadedPath)
+        {
+            if bundleUrl==nil || downloadedUrl.fileModificationDate?.timeIntervalSince1970 > bundleUrl?.fileModificationDate?.timeIntervalSince1970
+            {
+                return NSData(contentsOfFile: downloadedPath)
+            }
+        }
+        
+        if let url = bundleUrl
         {
             return NSData(contentsOfURL: url)
         }
@@ -233,7 +246,11 @@ class Guide
         return nil
     }
     
-    
+    func getImageUrls() -> Dictionary<String, String>
+    {
+        let ret = Model.instance.guideDownloader.getUrls(self.guideId)
+        return ret
+    }
     
     func getHeadings() -> [TextNode]
     {

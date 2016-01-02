@@ -81,7 +81,7 @@ extension NSURL
         return docsurl
     }
     
-    func moveTo( destFullUrl: URL )
+    func moveTo( destFullUrl: NSURL )
     {
         let fm = NSFileManager.defaultManager()
         var err : NSError?
@@ -98,7 +98,7 @@ extension NSURL
         // FIXME - return error
     }
     
-    func moveToDir( destinationDir: URL )
+    func moveToDir( destinationDir: NSURL )
     {
         let fm = NSFileManager.defaultManager()
         let destFullUrl = destinationDir.append(self.lastPathComponent!)

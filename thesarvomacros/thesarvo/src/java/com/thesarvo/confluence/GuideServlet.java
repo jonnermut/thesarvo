@@ -91,10 +91,19 @@ public class GuideServlet extends HttpServlet
 		else if (action.equals("image"))
 		{
 			String src = spliturl[2];
+			src = src.replace('+', ' '); // for some reason these don't get decoded. NFI why
 			String width = req.getParameter("width");
 			
 			Page p = Service.getPage(id);
 			Attachment att = p.getAttachmentNamed(src);
+			
+			if (att == null)
+			{
+				System.err.println("Could not find attachment named:" + src);
+				resp.setStatus(404);
+				return;
+			}
+			
 			att = (Attachment) att.getLatestVersion();
 			resp.addHeader("LastModified", "" + att.getLastModificationDate().getTime());
 			

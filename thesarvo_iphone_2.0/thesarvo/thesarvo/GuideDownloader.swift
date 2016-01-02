@@ -102,6 +102,8 @@ class GuideDownloader: NSObject, NSURLSessionDelegate, NSURLSessionDownloadDeleg
     
     var directory: String!
     
+    var directoryUrl: NSURL { return NSURL(fileURLWithPath: directory) }
+    
     var syncing: Bool
     {
         get { return self.completedOps != self.totalOps && self.totalOps > 0 }
@@ -432,5 +434,20 @@ class GuideDownloader: NSObject, NSURLSessionDelegate, NSURLSessionDownloadDeleg
         }
         
         completedOps++
+    }
+    
+    func getUrls(id: String) -> Dictionary<String, String>
+    {
+        var ret = Dictionary<String, String>()
+        for url in directoryUrl.listDirectoryUrls()
+        {
+            let urlstr = url.description
+            let filename = url.lastPathComponent ?? ""
+            if (filename.startsWith("\(id).") || filename.startsWith("\(id)-"))
+            {
+                ret[filename] = urlstr
+            }
+        }
+        return ret
     }
 }
