@@ -109,14 +109,6 @@ class DetailViewController: UIViewController, UIWebViewDelegate
             (sender as! SegueCallback).function(dest)
         }
         
-//        if (segue.identifier == "showPageSearch")
-//        {
-//            if let vc = dest as? PageSearchTableViewController
-//            {
-//                vc.guide = guide
-//                vc.detailViewController = self
-//            }
-//        }
     }
 
     func JSEscape(data: String) -> String

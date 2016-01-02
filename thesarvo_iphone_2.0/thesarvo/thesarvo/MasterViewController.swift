@@ -204,9 +204,9 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                     if filter.characters.count > 0
                     {
                         d.rows = d.rows.filter()
-                            {
-                                (guideNode: GuideNode) in
-                                (guideNode.searchString ?? "").containsCaseInsensitive(filter)
+                        {
+                            (guideNode: GuideNode) in
+                            (guideNode.searchString ?? "").containsCaseInsensitive(filter)
                         }
                     }
                 }
@@ -387,9 +387,15 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                 mtvc.navigationItem.title = "\(t)"
             }
             
-            if (g.getHeadingsAndClimbs().rows.count > 0)
+            runInBackground()
             {
-                self.performSegueWithIdentifier("showMaster", sender: ddcallback)
+                if (g.getHeadingsAndClimbs().rows.count > 0)
+                {
+                    runOnMain()
+                    {
+                        self.performSegueWithIdentifier("showMaster", sender: ddcallback)
+                    }
+                }
             }
         }
         

@@ -16,7 +16,6 @@
 		FC28B36C1A57A82A00C75D50 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B36B1A57A82A00C75D50 /* MapViewController.swift */; };
 		FC28B36E1A57AA4600C75D50 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC28B36D1A57AA4600C75D50 /* CoreLocation.framework */; };
 		FC28B3701A57AA5400C75D50 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC28B36F1A57AA5300C75D50 /* MapKit.framework */; };
-		FC28B3741A57FBC800C75D50 /* PageSearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3731A57FBC800C75D50 /* PageSearchTableViewController.swift */; };
 		FC28B3761A59501D00C75D50 /* SectionedDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3751A59501D00C75D50 /* SectionedDataSource.swift */; };
 		FC99CD001A6A290900C3228C /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC99CCFF1A6A290900C3228C /* Optional.swift */; };
 		FC99CD021A6B852900C3228C /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC99CD011A6B852900C3228C /* ContainerViewController.swift */; };
@@ -79,7 +78,6 @@
 		FC28B36B1A57A82A00C75D50 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		FC28B36D1A57AA4600C75D50 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		FC28B36F1A57AA5300C75D50 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		FC28B3731A57FBC800C75D50 /* PageSearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageSearchTableViewController.swift; sourceTree = "<group>"; };
 		FC28B3751A59501D00C75D50 /* SectionedDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionedDataSource.swift; sourceTree = "<group>"; };
 		FC99CCFF1A6A290900C3228C /* Optional.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
 		FC99CD011A6B852900C3228C /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
@@ -195,7 +193,6 @@
 				FC28B36B1A57A82A00C75D50 /* MapViewController.swift */,
 				FCF7951A1A5277B300A7C808 /* MasterViewController.swift */,
 				FC28B3601A56A8F800C75D50 /* Model */,
-				FC28B3731A57FBC800C75D50 /* PageSearchTableViewController.swift */,
 				FCF795161A5277B300A7C808 /* Supporting Files */,
 				FCF795651A553A2400A7C808 /* Util */,
 				FC99CD011A6B852900C3228C /* ContainerViewController.swift */,
@@ -401,7 +398,6 @@
 				FCA40F491C2E907100DFC0B7 /* GuideDownloader.swift in Sources */,
 				FC28B3681A56A92C00C75D50 /* Guide.swift in Sources */,
 				FCF795191A5277B300A7C808 /* AppDelegate.swift in Sources */,
-				FC28B3741A57FBC800C75D50 /* PageSearchTableViewController.swift in Sources */,
 				FCF795841A553A2400A7C808 /* NSURL.swift in Sources */,
 				FC28B3621A56A8F800C75D50 /* Model.swift in Sources */,
 				FCF795851A553A2400A7C808 /* SWXMLHash.swift in Sources */,
