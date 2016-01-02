@@ -11,11 +11,10 @@ Shouldnt show map unless indexing finished
 Map paths
 Map other shapes ??
 
-Weird width bug - eg lost world, handsome crag
+Weird width bug - eg lost world, handsome crag - CAPE RAOUL
 Constraint problem on progress bar
 
 Big white blank empty state on ipad
-ipad main search shows blank
 
 Big pipes topo has gone missing?
 
@@ -45,4 +44,5 @@ Editing
 
 2.3
 Ticks?
+Comments
 

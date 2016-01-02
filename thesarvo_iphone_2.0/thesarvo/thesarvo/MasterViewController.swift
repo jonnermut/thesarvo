@@ -571,6 +571,8 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                     
                     cell.indentationLevel = 0
                     
+                    cell.backgroundColor = nil
+                    
                     if entry.node != nil
                     {
                         cell.detailTextLabel?.text = entry.guide.name ?? ""
