@@ -34,7 +34,10 @@ class GuideElement : AEXMLElement
             return addChild( ImageNode(name, value: value, attributes: attributes) )
         case "gps":
             return addChild( GpsNode(name, value: value, attributes: attributes) )
+        case "header":
+            return addChild( HeaderNode(name, value: value, attributes: attributes) )
 
+            
         default:
             return addChild( GuideNode(name, value: value, attributes: attributes) )
         }
@@ -91,6 +94,11 @@ class ClimbNode : GuideNode
 class ImageNode : GuideNode
 {
     
+}
+
+class HeaderNode : GuideNode
+{
+    override var description: String { return "Intro" }
 }
 
 class GpsNode : GuideNode
@@ -276,6 +284,10 @@ class Guide
                 else if let climb = node as? ClimbNode
                 {
                     filtered.append(climb)
+                }
+                else if let header = node as? HeaderNode
+                {
+                    filtered.append(header)
                 }
             }
         }

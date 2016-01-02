@@ -212,44 +212,51 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                 }
                 
                 d.cellConfigurator =
+                {
+                    (cell: UITableViewCell!, node: GuideNode) in
+                    if let cell = cell as? TOCCell
                     {
-                        (cell: UITableViewCell!, node: GuideNode) in
-                        if let cell = cell as? TOCCell
+                        cell.node = node
+                        cell.textLabel?.text = node.description
+                        cell.textLabel?.adjustsFontSizeToFitWidth = true
+                        
+                        cell.backgroundColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
+                        
+                        if let tn = node as? TextNode
                         {
-                            cell.node = node
-                            cell.textLabel?.text = node.description
-                            cell.textLabel?.adjustsFontSizeToFitWidth = true
-                            
-                            if let tn = node as? TextNode
+                            if tn.clazz == "heading1"
                             {
-                                if tn.clazz == "heading1"
-                                {
-                                    cell.textLabel?.font = UIFont.boldSystemFontOfSize(15)
-                                    cell.indentationLevel = 0
-                                }
-                                else if tn.clazz == "heading2"
-                                {
-                                    cell.textLabel?.font = UIFont.boldSystemFontOfSize(14)
-                                    cell.indentationLevel = 0
-                                }
-                                else
-                                {
-                                    cell.textLabel?.font = UIFont.boldSystemFontOfSize(13)
-                                    cell.indentationLevel = 1
-                                    
-                                }
-                                
-                                cell.backgroundColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
+                                cell.textLabel?.font = UIFont.boldSystemFontOfSize(15)
+                                cell.indentationLevel = 0
+                            }
+                            else if tn.clazz == "heading2"
+                            {
+                                cell.textLabel?.font = UIFont.boldSystemFontOfSize(14)
+                                cell.indentationLevel = 0
                             }
                             else
                             {
-                                cell.textLabel?.font = UIFont.systemFontOfSize(12)
-                                cell.indentationLevel = 3
-                                cell.backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
+                                cell.textLabel?.font = UIFont.boldSystemFontOfSize(13)
+                                cell.indentationLevel = 1
                                 
                             }
                             
+
                         }
+                        else if let h = node as? HeaderNode
+                        {
+                            cell.textLabel?.font = UIFont.boldSystemFontOfSize(14)
+                            cell.indentationLevel = 0
+                        }
+                        else
+                        {
+                            cell.textLabel?.font = UIFont.systemFontOfSize(12)
+                            cell.indentationLevel = 3
+                            cell.backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
+                            
+                        }
+                        
+                    }
                 }
                 /*
                 if (shouldFilter)
