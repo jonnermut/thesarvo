@@ -110,7 +110,7 @@ class GpsNode : GuideNode
         return self.children.map()
         {
             element in
-            return GPSMapObject(element: element)
+            return GPSMapObject(element: element, gpsNode: self)
         }
     }
 }
@@ -118,6 +118,7 @@ class GpsNode : GuideNode
 class GPSMapObject
 {
     let element: AEXMLElement
+    let gpsNode: GpsNode
     
     var type: String
     {
@@ -144,9 +145,10 @@ class GPSMapObject
         return element.attributes["code"] ?? ""
     }
     
-    init(element: AEXMLElement)
+    init(element: AEXMLElement, gpsNode: GpsNode)
     {
         self.element = element
+        self.gpsNode = gpsNode
     }
     
     func getMKAnnotation() -> MKAnnotation?

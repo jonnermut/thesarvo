@@ -141,6 +141,7 @@ class Model
                                 
                                 if let g = node as? GpsNode
                                 {
+                                    g.indexEntry = IndexEntry(searchString: "GPS", node: g, guide: guide)
                                     self.allGpsNodes.append(g)
                                 }
                             }

@@ -1,14 +1,10 @@
 Version 2.0
 
-LaunchScreen
-Add url to image nodes, and test updates
+Test updates a bit more
 Find and fix busted images and xml
 Redownload resources
 Sync index xml
 
-Maps needs a back button
-Map annotations clickable
-Shouldnt show map unless indexing finished
 Map paths
 
 Weird width bug - eg lost world, handsome crag - CAPE RAOUL

@@ -129,7 +129,13 @@ class MapViewController: UIViewController, MKMapViewDelegate
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl)
     {
-        
+        if let mp = view.annotation as? MapPoint
+        {
+            if let ie = mp.mapObj.gpsNode.indexEntry
+            {
+                MasterViewController.last?.navigateToEntry(ie)
+            }
+        }
     }
 
 

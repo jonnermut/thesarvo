@@ -25,7 +25,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
     
     static var firstEverLoad = true
 
-    public static var last: DetailViewController? = nil
+    static var last: DetailViewController? = nil
     
     
     func isHttp() -> Bool

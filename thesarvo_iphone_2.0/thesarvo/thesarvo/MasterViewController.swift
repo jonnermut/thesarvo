@@ -61,6 +61,8 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     var searchAgain = false
     
     var updateTimer: NSTimer? = nil
+    
+    static var last: MasterViewController? = nil
 
     override func awakeFromNib()
     {
@@ -143,6 +145,8 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     override func viewWillAppear(animated: Bool)
     {
         super.viewWillAppear(animated)
+        
+        MasterViewController.last = self
         
 //        if (data != nil && data?.text != nil)
 //        {
@@ -466,6 +470,11 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                 }
                 self.performSegueWithIdentifier("showMap", sender: callback)
 */
+                if !Model.instance.indexingDone
+                {
+                    return
+                }
+                
                 let mc = self.storyboard?.instantiateViewControllerWithIdentifier("mapController") as! MapViewController
                 AppDelegate.instance().setDetail(mc)
 
@@ -492,6 +501,13 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         
     }
     
+    func navigateToEntry(entry: IndexEntry)
+    {
+        let elementId = entry.node?.elementId
+        navigateToDetail(entry.guide.guideId, title: entry.guide.name, elementId: elementId)
+
+    }
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
     {
         
@@ -501,8 +517,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         {
             if let entry = searchCell.indexEntry
             {
-                let elementId = entry.node?.elementId
-                navigateToDetail(entry.guide.guideId, title: entry.guide.name, elementId: elementId)
+                self.navigateToEntry(entry)
             }
         }
         else if let tocCell = cell as? TOCCell
