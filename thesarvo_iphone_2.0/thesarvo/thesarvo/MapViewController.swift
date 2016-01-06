@@ -18,6 +18,7 @@ class MapViewController: UIViewController, MKMapViewDelegate
     var gpsNodes: [GpsNode]?
     
     var annots: [MKAnnotation] = []
+    var overlays: [MKOverlay] = []
     
     let loc = CLLocationManager()
     
@@ -55,7 +56,14 @@ class MapViewController: UIViewController, MKMapViewDelegate
                 {
                     if let a = gpsObj.getMKAnnotation()
                     {
-                        annots.append(a)
+                        if let o = a as? MKOverlay
+                        {
+                            overlays.append(o)
+                        }
+                        else
+                        {
+                            annots.append(a)
+                        }
                         
                         print("Adding annotation: \(a.title) - \(a.subtitle)")
                         
@@ -69,6 +77,7 @@ class MapViewController: UIViewController, MKMapViewDelegate
         }
         
         self.mapView.addAnnotations(annots)
+        self.mapView.addOverlays(overlays)
 
     }
     
@@ -136,6 +145,18 @@ class MapViewController: UIViewController, MKMapViewDelegate
                 MasterViewController.last?.navigateToEntry(ie)
             }
         }
+    }
+    
+    func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer
+    {
+        if let mkpoly = overlay as? MKPolyline
+        {
+            let renderer = MKPolylineRenderer(polyline: mkpoly)
+            renderer.strokeColor = UIColor.whiteColor()
+            renderer.lineWidth = 5
+            return renderer
+        }
+        return MKPolylineRenderer(overlay: overlay)
     }
 
 

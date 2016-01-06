@@ -165,6 +165,33 @@ class GPSMapObject
             let subtitle = "\(c)\(latitude),\(longitude)"
             return MapPoint(mapObj: self, coordinate: loc, title: title, subtitle: subtitle)
         }
+        else if type == "polyline"
+        {
+            var points: [CLLocationCoordinate2D] = []
+            
+            // parse the format: -42.538533,147.285656 -42.538529,147.285646 -42.538476,147.285542 -42.538422,147.285439
+            if let coordStrs = self.element.value?.componentsSeparatedByString(" ")
+            {
+                for coordStr in coordStrs
+                {
+                    let c2 = coordStr.trimmed()
+                    let latlng = c2.componentsSeparatedByString(",")
+                    if (latlng.count >= 2)
+                    {
+                        let lng = Double(latlng[1])
+                        let lat = Double(latlng[0])
+                        if let lng=lng, lat=lat
+                        {
+                            points.append(CLLocationCoordinate2D(latitude: lat, longitude: lng))
+                        }
+                    }
+                }
+            }
+            
+            return MKPolyline(coordinates: &points, count: points.count)
+            
+        }
+
         
         return nil
     }

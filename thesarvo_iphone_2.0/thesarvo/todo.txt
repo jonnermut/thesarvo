@@ -5,12 +5,8 @@ Find and fix busted images and xml
 Redownload resources
 Sync index xml
 
-Map paths
-
 Weird width bug - eg lost world, handsome crag - CAPE RAOUL
 Constraint problem on progress bar
-
-get title of topo and push that into nav controller title
 
 Jeds GPS table bug
 
@@ -32,7 +28,10 @@ Increase/decrease font size
 
 Climb graph
 header icons need retina versions
-Make map more prominent - tab or button up the top
+Make map in page more prominent - tab or button up the top
+
+get title of topo and push that into nav controller title
+
 
 2.2
 Editing
