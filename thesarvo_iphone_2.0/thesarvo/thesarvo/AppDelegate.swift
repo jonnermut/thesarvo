@@ -159,14 +159,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     }
 
 
-    func setDetail(vc: UIViewController)
+    func setDetail(vc: UIViewController, showNow: Bool = true)
     {
         let nc = drawerController.centerViewController as? UINavigationController
         if let nc = nc
         {
             nc.viewControllers = [vc]
         }
-        hideMasterIfNecessary()
+        if (showNow)
+        {
+            hideMasterIfNecessary()
+        }
     }
 
 }

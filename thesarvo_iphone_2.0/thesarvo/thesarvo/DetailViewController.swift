@@ -22,6 +22,8 @@ class DetailViewController: UIViewController, UIWebViewDelegate
     var viewId: String = ""
     
     var guideLoadad = false
+    
+    static var firstEverLoad = true
 
     public static var last: DetailViewController? = nil
     
@@ -46,7 +48,14 @@ class DetailViewController: UIViewController, UIWebViewDelegate
                 webview.loadRequest(NSURLRequest( URL: url ) )
             }
         }
-        else if let guide = guide
+            
+        if guide == nil && DetailViewController.firstEverLoad
+        {
+            DetailViewController.firstEverLoad = false
+            guide = Model.instance.getGuide("guide.9404494", name: "Introduction")
+        }
+            
+        if let guide = guide
         {
             if let url = NSBundle.mainBundle().URLForResource("index", withExtension: "html", subdirectory: "www")
             {

@@ -10,26 +10,24 @@ Maps needs a back button
 Map annotations clickable
 Shouldnt show map unless indexing finished
 Map paths
-Map other shapes ??
 
 Weird width bug - eg lost world, handsome crag - CAPE RAOUL
 Constraint problem on progress bar
 
-Big white blank empty state on ipad
-
-Big pipes topo has gone missing?
-
-coles bay bouldering borken
-hillwoood climbing - <br> in TOC - image busted
-
 get title of topo and push that into nav controller title
 
-Jeds GPS yable bug
+Jeds GPS table bug
+
+Content:
+Big pipes topo has gone missing?
+coles bay bouldering borken
+hillwoood climbing - <br> in TOC - image busted
 
 2.1
 Remember where you were and reopen when app restarted
 Favourites
 Recents
+Map other shapes ??
 
 In topo mode, touching the route text should highlight the climb and vice versa
 On ipad, allow option to open topo inline rather than new page

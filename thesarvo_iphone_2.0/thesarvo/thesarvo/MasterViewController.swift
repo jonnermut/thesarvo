@@ -86,6 +86,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         if (data == nil)
         {
             data = Model.instance.rootView
+            //navigateToDetail("guide.9404494", title: "Introduction", elementId: nil, showDetail: false)
         }
 
         /* FIXME
@@ -151,6 +152,8 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         if (data == nil)
         {
             data = Model.instance.rootView
+            
+            
         }
 
         
@@ -362,7 +365,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         self.performSegueWithIdentifier("showMaster", sender: callback)
     }
     
-    func navigateToDetail(viewId: String, title: String?, elementId: String? = nil)
+    func navigateToDetail(viewId: String, title: String?, elementId: String? = nil, showDetail: Bool = true)
     {
         var vid = viewId.removePrefixIfPresent("guide.")
         var guide: Guide?
@@ -379,7 +382,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         {
             fcvc.elemendId = el
         }
-        AppDelegate.instance().setDetail(fcvc)
+        AppDelegate.instance().setDetail(fcvc, showNow: showDetail)
         
         //var delay = 0.0
         if let g = guide

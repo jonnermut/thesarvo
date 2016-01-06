@@ -74,6 +74,8 @@ class MapViewController: UIViewController, MKMapViewDelegate
     
     override func viewDidAppear(animated: Bool)
     {
+        setupNavButtons()
+        
         let zoomRect2 = self.mapView.mapRectThatFits(zoomRect)
         self.mapView.setVisibleMapRect(zoomRect2, edgePadding: UIEdgeInsets(top: 20,left: 20,bottom: 20,right: 20), animated: false)
         print("Setting zoom rect to \(zoomRect2)")
@@ -82,6 +84,18 @@ class MapViewController: UIViewController, MKMapViewDelegate
     override func viewWillAppear(animated: Bool)
     {
 
+    }
+    
+    func setupNavButtons()
+    {
+        self.navigationItem.leftItemsSupplementBackButton = true
+        self.navigationItem.leftBarButtonItem =
+            UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("hamburgerToggle") )
+    }
+    
+    dynamic func hamburgerToggle()
+    {
+        AppDelegate.instance().drawerController.toggle()
     }
 
     override func didReceiveMemoryWarning()
