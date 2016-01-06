@@ -49,6 +49,8 @@ class GuideNode : AEXMLElement
     var elementId: String { return attr("id").valueOr("") }
     
     var searchString : String? { return nil }
+    
+    var indexEntry: IndexEntry?
 }
 
 class TextNode : GuideNode

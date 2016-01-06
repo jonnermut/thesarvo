@@ -8,7 +8,7 @@
 
 import UIKit
 
-let PEEK_MARGIN: CGFloat = 32.0
+let PEEK_MARGIN: CGFloat = 44.0
 let ANIMATION_DURATION = 0.15
 
 
@@ -132,12 +132,12 @@ class DrawerController: UIViewController {
         {
             let smallWidth = size.width - PEEK_MARGIN
             
-            let offset = isLeft ? 0 : smallWidth - PEEK_MARGIN
+            let offset = isLeft ? 0 : smallWidth
             
             // for the iPhone
             leftViewController.view.frame = CGRect(x: 0.0 - offset, y: 0.0, width: size.width - PEEK_MARGIN, height: size.height)
             
-            centerViewController.view.frame = CGRect(x: smallWidth - offset, y: 0.0, width: size.width - PEEK_MARGIN, height: size.height)
+            centerViewController.view.frame = CGRect(x: smallWidth - offset, y: 0.0, width: size.width, height: size.height)
         }
         else
         {

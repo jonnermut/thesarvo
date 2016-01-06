@@ -126,7 +126,9 @@ class Model
                             {
                                 if let ss = node.searchString
                                 {
-                                    self.index.append( IndexEntry(searchString: ss, node: node, guide: guide) )
+                                    let indexEntry = IndexEntry(searchString: ss, node: node, guide: guide)
+                                    node.indexEntry = indexEntry
+                                    self.index.append( indexEntry )
                                     
                                     /*
                                     synchronized(self.index)

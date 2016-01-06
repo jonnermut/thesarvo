@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController
+class MapViewController: UIViewController, MKMapViewDelegate
 {
 
     @IBOutlet weak var mapView: MKMapView!
@@ -29,6 +29,8 @@ class MapViewController: UIViewController
         
         loc.requestWhenInUseAuthorization()
 
+        self.mapView.delegate = self
+        
         if let guide = guide
         {
             gpsNodes = guide.guideElement?.childrenWithName("gps") as? [GpsNode]
@@ -88,6 +90,33 @@ class MapViewController: UIViewController
         // Dispose of any resources that can be recreated.
     }
     
+    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView)
+    {
+        if let mkPinView = view as? MKPinAnnotationView
+        {
+            let rightButton = UIButton(frame: CGRect(x: 0,y: 0,width: 60,height: 32))
+            rightButton.setTitle("Open", forState: UIControlState.Normal)
+            rightButton.setTitleColor(UIColor.blueColor(), forState: UIControlState.Normal)
+
+            rightButton.contentVerticalAlignment = UIControlContentVerticalAlignment.Center;
+            rightButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center;
+            
+            if (guide == nil)
+            {
+                mkPinView.rightCalloutAccessoryView = rightButton
+            }
+        }
+    }
+    
+    func mapView(mapView: MKMapView, didDeselectAnnotationView view: MKAnnotationView)
+    {
+        
+    }
+    
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl)
+    {
+        
+    }
 
 
 }
