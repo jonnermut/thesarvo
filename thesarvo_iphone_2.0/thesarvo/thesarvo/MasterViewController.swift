@@ -229,6 +229,9 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                         
                         cell.backgroundColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
                         
+                        cell.selectedBackgroundView = UIView()
+                        cell.selectedBackgroundView?.backgroundColor = UIColor(red: 0, green: 0, blue: 0.5, alpha: 0.8)
+                        
                         if let tn = node as? TextNode
                         {
                             if tn.clazz == "heading1"
@@ -317,6 +320,8 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
             cell.indentationLevel = level;
             cell.indentationWidth = 25;
             cell.backgroundColor = UIColor.clearColor()
+            cell.selectedBackgroundView = UIView()
+            cell.selectedBackgroundView?.backgroundColor = UIColor(red: 0, green: 0, blue: 0.5, alpha: 0.8)
         }
         self.mainDataSource = d.tableViewDataSource
         self.tableView.dataSource = mainDataSource

@@ -5,8 +5,6 @@ Find and fix busted images and xml
 Redownload resources
 Caching of resized images on server?
 
-Cell highlight colors are a bit shit
-
 Content:
 Big pipes topo has gone missing?
 coles bay bouldering borken
