@@ -300,6 +300,12 @@ table.grid > tbody > tr > td
 	
 }
 
+.gpsCell
+{
+	padding: 1px !important;
+}
+
+
 
 .legendClimbs
 {

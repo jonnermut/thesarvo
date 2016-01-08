@@ -32,6 +32,8 @@ import com.thesarvo.guide.client.geo.CoordinateConversion.UTM;
 import com.thesarvo.guide.client.geo.GeoUtil;
 import com.thesarvo.guide.client.model.MapDrawingObject;
 import com.thesarvo.guide.client.util.BrowserUtil;
+import com.thesarvo.guide.client.view.res.GuideStyle;
+import com.thesarvo.guide.client.view.res.Resources;
 import com.thesarvo.guide.client.xml.XPath;
 import com.thesarvo.guide.client.xml.XmlSimpleModel;
 
@@ -270,9 +272,12 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 
 	public static void initTableCols(CellTable<MapDrawingObject> cellTable2, boolean editable, MapColumn.UpdateCallback updateCallback)
 	{
+		GuideStyle s = Resources.INSTANCE.s();
+		
 		Column<MapDrawingObject, String> codeColumn = new MapColumn(editable, CODE, updateCallback);
 		cellTable2.setColumnWidth(codeColumn, 10, Unit.PCT);
 		cellTable2.addColumn(codeColumn, "Code");
+		codeColumn.setCellStyleNames(s.gpsCell());
 
 		Column<MapDrawingObject, String> descColumn = new MapColumn(editable, DESCRIPTION, updateCallback);
 		cellTable2.setColumnWidth(descColumn, 30, Unit.PCT);
@@ -282,6 +287,7 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 			cellTable2.setColumnWidth(descColumn, 20, Unit.PCT);
 			desc = "Desc";
 		}
+		descColumn.setCellStyleNames(s.gpsCell());
 
 		cellTable2.addColumn(descColumn, desc);
 
@@ -308,12 +314,19 @@ public class GpsReadNode extends ReadNode implements GPSConstants
 		Column<MapDrawingObject, String> latColumn = new MapColumn(editable, LATITUDE, updateCallback);
 		cellTable2.setColumnWidth(latColumn, 10, Unit.PCT);
 		cellTable2.addColumn(latColumn, "Lat");
+		latColumn.setCellStyleNames(s.gpsCell());
+		
 
 		Column<MapDrawingObject, String> longColumn = new MapColumn(editable, LONGITUDE, updateCallback);
 		cellTable2.setColumnWidth(longColumn, 10, Unit.PCT);
 		cellTable2.addColumn(longColumn, "Long");
+		longColumn.setCellStyleNames(s.gpsCell());
 
 		cellTable2.setPageSize(1000);
+		
+		cellTable2.setTableLayoutFixed(false);
+		
+		
 	}
 
 	static Cell<String> newStringCell(boolean editable)

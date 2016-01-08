@@ -73,6 +73,8 @@ public interface GuideStyle extends CssResource {
   String guideView();
   
   String image();
+  
+  String gpsCell();
 }
 
 

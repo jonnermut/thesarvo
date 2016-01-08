@@ -3,8 +3,8 @@ Version 2.0
 Test updates a bit more
 Find and fix busted images and xml
 Redownload resources
+Caching of resized images on server?
 
-Jeds GPS table bug
 Cell highlight colors are a bit shit
 
 Content:
