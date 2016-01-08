@@ -3,19 +3,19 @@ Version 2.0
 Test updates a bit more
 Find and fix busted images and xml
 Redownload resources
-Sync index xml
-
-Weird width bug - eg lost world, handsome crag - CAPE RAOUL
-Constraint problem on progress bar
 
 Jeds GPS table bug
+Cell highlight colors are a bit shit
 
 Content:
 Big pipes topo has gone missing?
 coles bay bouldering borken
 hillwoood climbing - <br> in TOC - image busted
+Flinders
+Add west coast, flinders, etc to config.xml
 
 2.1
+Sync index xml
 Remember where you were and reopen when app restarted
 Favourites
 Recents
@@ -31,6 +31,9 @@ header icons need retina versions
 Make map in page more prominent - tab or button up the top
 
 get title of topo and push that into nav controller title
+
+Constraint problem on progress bar
+
 
 
 2.2

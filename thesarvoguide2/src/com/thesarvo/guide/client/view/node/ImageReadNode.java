@@ -98,6 +98,7 @@ public class ImageReadNode extends ReadNode
 			Image image = new Image(url);
 			image.getElement().getStyle().setDisplay(Display.BLOCK);
 			image.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+			image.getElement().getStyle().setProperty("max-width", "100%");
 			
 			link.getElement().appendChild(image.getElement());
 			link.setStyleName("imgBtnLink");
