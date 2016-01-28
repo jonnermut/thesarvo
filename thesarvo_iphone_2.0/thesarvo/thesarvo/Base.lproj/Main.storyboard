@@ -297,11 +297,62 @@
                         <outlet property="progressView" destination="rA4-Hh-S8c" id="NlU-dM-S4l"/>
                         <outlet property="updateLabel" destination="T1j-QY-Srg" id="E21-kD-eXa"/>
                         <outlet property="updateView" destination="Dly-Hb-toH" id="gbf-bl-juS"/>
+                        <segue destination="hTs-UI-Eco" kind="showDetail" identifier="showSettings" id="oSd-An-mlF"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rux-fX-hf1" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="709" y="-630"/>
+        </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="ozR-WI-F2S">
+            <objects>
+                <viewController restorationIdentifier="settingsController" storyboardIdentifier="settingsController" id="hTs-UI-Eco" customClass="SettingsViewController" customModule="thesarvo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ziz-EQ-ldR"/>
+                        <viewControllerLayoutGuide type="bottom" id="9cn-Hj-sn4"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="D9T-6c-aWG">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="bUY-wl-W0q">
+                                <rect key="frame" x="20" y="57" width="280" height="29"/>
+                                <segments>
+                                    <segment title="M"/>
+                                    <segment title="L"/>
+                                    <segment title="XL"/>
+                                    <segment title="XXL"/>
+                                </segments>
+                                <connections>
+                                    <action selector="fontSizeDidChange:" destination="hTs-UI-Eco" eventType="valueChanged" id="jUA-W6-9Ne"/>
+                                </connections>
+                            </segmentedControl>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Font Size" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yvw-EQ-biz">
+                                <rect key="frame" x="20" y="28" width="280" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Yvw-EQ-biz" firstAttribute="trailing" secondItem="D9T-6c-aWG" secondAttribute="trailingMargin" id="0b9-hu-JwJ"/>
+                            <constraint firstItem="Yvw-EQ-biz" firstAttribute="leading" secondItem="D9T-6c-aWG" secondAttribute="leadingMargin" id="YSN-2s-P6h"/>
+                            <constraint firstItem="Yvw-EQ-biz" firstAttribute="top" secondItem="ziz-EQ-ldR" secondAttribute="bottom" constant="8" id="Zdl-49-d3C"/>
+                            <constraint firstItem="bUY-wl-W0q" firstAttribute="top" secondItem="Yvw-EQ-biz" secondAttribute="bottom" constant="8" id="fSb-Qn-dUq"/>
+                            <constraint firstItem="bUY-wl-W0q" firstAttribute="trailing" secondItem="D9T-6c-aWG" secondAttribute="trailingMargin" id="mfy-S3-V2k"/>
+                            <constraint firstItem="bUY-wl-W0q" firstAttribute="leading" secondItem="D9T-6c-aWG" secondAttribute="leadingMargin" id="pE2-M9-XJc"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="fontSize" destination="bUY-wl-W0q" id="BET-F1-hga"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qYr-mC-u7l" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1503" y="-686"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="r7l-gg-dq7">

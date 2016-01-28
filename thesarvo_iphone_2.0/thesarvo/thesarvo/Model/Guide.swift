@@ -75,7 +75,7 @@ class TextNode : GuideNode
         return nil
     }
     
-    override var description: String { return value ?? "" }
+    override var description: String { return value?.stringByReplacingOccurrencesOfString("<br/>", withString: "\n") ?? "" }
 }
 
 class ClimbNode : GuideNode

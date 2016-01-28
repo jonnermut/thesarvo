@@ -30,6 +30,8 @@
 		FCC66E2E1C33994100B9A48D /* todo.txt in Resources */ = {isa = PBXBuildFile; fileRef = FCC66E2D1C33994100B9A48D /* todo.txt */; };
 		FCC66E2F1C363DE600B9A48D /* NSURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795751A553A2400A7C808 /* NSURL.swift */; };
 		FCC66E301C363DF700B9A48D /* String+Stuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAACE921A55F27300C7A03F /* String+Stuff.swift */; };
+		FCC66E341C3F810000B9A48D /* newStuffQuery in Resources */ = {isa = PBXBuildFile; fileRef = FCC66E331C3F810000B9A48D /* newStuffQuery */; };
+		FCC66E361C4266C300B9A48D /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC66E351C4266C300B9A48D /* SettingsViewController.swift */; };
 		FCF795191A5277B300A7C808 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795181A5277B300A7C808 /* AppDelegate.swift */; };
 		FCF7951B1A5277B300A7C808 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF7951A1A5277B300A7C808 /* MasterViewController.swift */; };
 		FCF7951D1A5277B300A7C808 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF7951C1A5277B300A7C808 /* DetailViewController.swift */; };
@@ -88,6 +90,8 @@
 		FCAACE921A55F27300C7A03F /* String+Stuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Stuff.swift"; sourceTree = "<group>"; };
 		FCAB16A21BF6EAA300FABF7B /* DrawerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawerController.swift; sourceTree = "<group>"; };
 		FCC66E2D1C33994100B9A48D /* todo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = todo.txt; sourceTree = "<group>"; };
+		FCC66E331C3F810000B9A48D /* newStuffQuery */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = newStuffQuery; sourceTree = "<group>"; };
+		FCC66E351C4266C300B9A48D /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		FCF795131A5277B300A7C808 /* thesarvo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = thesarvo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCF795171A5277B300A7C808 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FCF795181A5277B300A7C808 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -159,6 +163,7 @@
 		FCF7950A1A5277B300A7C808 = {
 			isa = PBXGroup;
 			children = (
+				FCC66E331C3F810000B9A48D /* newStuffQuery */,
 				FCC66E2D1C33994100B9A48D /* todo.txt */,
 				FC28B36F1A57AA5300C75D50 /* MapKit.framework */,
 				FC28B36D1A57AA4600C75D50 /* CoreLocation.framework */,
@@ -197,6 +202,7 @@
 				FCF795651A553A2400A7C808 /* Util */,
 				FC99CD011A6B852900C3228C /* ContainerViewController.swift */,
 				FCA40F481C2E907100DFC0B7 /* GuideDownloader.swift */,
+				FCC66E351C4266C300B9A48D /* SettingsViewController.swift */,
 			);
 			path = thesarvo;
 			sourceTree = "<group>";
@@ -349,6 +355,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FCAACE911A5559FD00C7A03F /* www in Resources */,
+				FCC66E341C3F810000B9A48D /* newStuffQuery in Resources */,
 				FCF795201A5277B300A7C808 /* Main.storyboard in Resources */,
 				FCF795251A5277B300A7C808 /* LaunchScreen.xib in Resources */,
 				FCF795221A5277B300A7C808 /* Images.xcassets in Resources */,
@@ -399,6 +406,7 @@
 				FC28B3681A56A92C00C75D50 /* Guide.swift in Sources */,
 				FCF795191A5277B300A7C808 /* AppDelegate.swift in Sources */,
 				FCF795841A553A2400A7C808 /* NSURL.swift in Sources */,
+				FCC66E361C4266C300B9A48D /* SettingsViewController.swift in Sources */,
 				FC28B3621A56A8F800C75D50 /* Model.swift in Sources */,
 				FCF795851A553A2400A7C808 /* SWXMLHash.swift in Sources */,
 				FC99CD021A6B852900C3228C /* ContainerViewController.swift in Sources */,
@@ -556,9 +564,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = thesarvo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.thesarvo.guide;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -567,9 +577,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = thesarvo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.thesarvo.guide;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

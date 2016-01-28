@@ -48,20 +48,25 @@ class DetailViewController: UIViewController, UIWebViewDelegate
                 webview.loadRequest(NSURLRequest( URL: url ) )
             }
         }
-            
-        if guide == nil && DetailViewController.firstEverLoad
+        else
         {
-            DetailViewController.firstEverLoad = false
-            guide = Model.instance.getGuide("guide.9404494", name: "Introduction")
-        }
-            
-        if let guide = guide
-        {
-            if let url = NSBundle.mainBundle().URLForResource("index", withExtension: "html", subdirectory: "www")
+            if guide == nil && DetailViewController.firstEverLoad
             {
-                webview.loadRequest(NSURLRequest( URL: url ) )
+                DetailViewController.firstEverLoad = false
+                
+                viewId = NSUserDefaults.standardUserDefaults().stringForKey("lastViewId") ?? "guide.9404494"
+                
+                guide = Model.instance.getGuide(viewId, name: "")
             }
-
+            
+            if let guide = guide
+            {
+                if let url = NSBundle.mainBundle().URLForResource("index", withExtension: "html", subdirectory: "www")
+                {
+                    webview.loadRequest(NSURLRequest( URL: url ) )
+                }
+                
+            }
         }
         
         //AppDelegate.instance().setupSplitViewButtons(self)
@@ -83,6 +88,12 @@ class DetailViewController: UIViewController, UIWebViewDelegate
         setupNavButtons()
         webview?.delegate = self
         DetailViewController.last = self
+
+        if viewId.characters.count > 0
+        {
+            NSUserDefaults.standardUserDefaults().setObject(viewId, forKey: "lastViewId")
+        }
+        
     }
     
     func setupNavButtons()
@@ -179,6 +190,16 @@ class DetailViewController: UIViewController, UIWebViewDelegate
                 }
                 
                 var result = webview.stringByEvaluatingJavaScriptFromString(js)
+                
+                
+                // setup font size
+                let fontSizeIndex = NSUserDefaults.standardUserDefaults().integerForKey("fontSizeIndex")
+                if fontSizeIndex > 0
+                {
+                    let fontsize = 100 + fontSizeIndex * 50
+                    let fontSizeJs = "document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust='\(fontsize)%';"
+                    webview.stringByEvaluatingJavaScriptFromString(fontSizeJs)
+                }
             }
         }
     }

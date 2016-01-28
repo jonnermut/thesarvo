@@ -147,6 +147,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         super.viewWillAppear(animated)
         
         MasterViewController.last = self
+
         
 //        if (data != nil && data?.text != nil)
 //        {
@@ -483,6 +484,11 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                 let mc = self.storyboard?.instantiateViewControllerWithIdentifier("mapController") as! MapViewController
                 AppDelegate.instance().setDetail(mc)
 
+            }
+            else if (viewId == "Settings")
+            {
+                let sc = self.storyboard?.instantiateViewControllerWithIdentifier("settingsController") as! SettingsViewController
+                AppDelegate.instance().setDetail(sc)
             }
             else if (viewId.hasPrefix("guide.") || viewId.hasPrefix("http"))
             {

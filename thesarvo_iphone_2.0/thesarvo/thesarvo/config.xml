@@ -12,6 +12,9 @@
 			<listItem text="Map" viewId="Map" />
 			<listItem text="Weather" viewId="Weather" />
 			<listItem text="thesarvo.com" viewId="http://www.thesarvo.com/confluence/display/thesarvo/Tasmania" />
+            <!--
+            <listItem text="Settings" viewId="Settings" />
+             -->
 		</data>
 	</view>
 
@@ -55,7 +58,10 @@
 
 
 
-			<listItem text="Flinders Island" viewId="guide.140" />
+			<listItem text="Flinders Island"  />
+            <listItem text="Killiecrankie" viewId="guide.333053995" level="2"  />
+            <listItem text="Mt Strzelecki" viewId="guide.333053997" level="2"  />
+            
 			<listItem text="Hillwood" viewId="guide.100" />
 			<listItem text="Lost Falls" viewId="guide.8912950" />
 			<listItem text="Mt Blackwood" viewId="guide.318" />
@@ -192,18 +198,24 @@
 		<data>
 
 			<listItem text="Adamsfield" level="1" viewId="guide.333" />
+            <listItem text="Conical Rocks" level="1" viewId="guide.333053984" />
 			<listItem text="Cradle Mountain - Lake St Clair" level="1"
 				viewId="guide.348" />
 			<listItem text="Federation Peak" level="1" viewId="guide.321" />
 			<listItem text="Frenchmans Cap" level="1" viewId="guide.521" />
+            
+            <listItem text="Marrawah" level="1" viewId="guide.333053986" />
 			<listItem text="Mt Anne" level="1" viewId="guide.81002503" />
 
 			<listItem text="Precipitous Bluff" level="1" viewId="guide.17694722" />
 			<listItem text="Sentinel Range" level="1" viewId="guide.8683549" />
+            <listItem text="The Needles" level="1" viewId="guide.330924175" />
+            <listItem text="The Velvet Underground" level="1" viewId="guide.333053990" />
+            <listItem text="Trial Harbour" level="1" viewId="guide.8912960" />
 			<listItem text="Tullah" level="1" viewId="guide.81985554" />
 			<listItem text="Tyndall Range" level="1" viewId="guide.551" />
 			<listItem text="Walls of Jerusalem" level="1" viewId="guide.81395724" />
-			<listItem text="West Coast Crags" level="1" viewId="guide.8912960" />
+			
 			<listItem text="Western Arthurs" level="1" viewId="guide.12582920" />
 			<listItem text="Other Western Crags" level="1" viewId="guide.13074445" />
 		</data>
@@ -216,6 +228,7 @@
 				<listItem text="Bicheno" level="2" viewId="guide.223" />
 				<listItem text="Coles Bay" level="2" viewId="guide.225" />
 				<listItem text="St Helens" level="2" viewId="guide.239" />
+                <listItem text="Swansea" level="2" viewId="guide.330432595" />
 			
 			<listItem text="North" />
 				<listItem text="Bradys Lookout" level="2" viewId="guide.1966082" />
@@ -224,7 +237,9 @@
 				<listItem text="Hillwood" level="2" viewId="guide.230" />
 				<listItem text="Mersey Bluff" level="2" viewId="guide.214597657" />
 				<listItem text="Sheffield" level="2" viewId="guide.972" />
+                <listItem text="Sisters Beach" level="2" viewId="guide.330433011" />
 				<listItem text="The Gorge" level="2" viewId="guide.241" />
+                <listItem text="West Head" level="2" viewId="guide.330432873" />
 			
 			<listItem text="South East"  />
 				
@@ -251,6 +266,8 @@
 				
 			<listItem text="West"  />
 				<listItem text="Adamsfield" level="2" viewId="guide.222" />
+                <listItem text="Jukes Boulder Field" level="2" viewId="guide.332365869" />
+                
 			
 		</data>
 	</view>

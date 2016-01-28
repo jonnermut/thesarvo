@@ -412,6 +412,7 @@ public class PaletteView extends VerticalPanel implements PhotoTopoEventHandler
 		widthListBox.addItem("800");
 		widthListBox.addItem("900");
 		widthListBox.addItem("1000");
+		widthListBox.addItem("1200");
 		
 		setSelected(widthListBox, image.getWidth());
 		widthListBox.addChangeHandler(new ChangeHandler()

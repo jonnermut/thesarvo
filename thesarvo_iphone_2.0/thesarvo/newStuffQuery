@@ -1,0 +1,105 @@
+mysql> select CONTENTID,PREVVER,TITLE from CONTENT where CONTENTTYPE='PAGE' and CONTENT_STATUS='current' and PREVVER IS NULL order by CONTENTID desc limit 100;
++-----------+---------+-----------------------------------------+
+| CONTENTID | PREVVER | TITLE                                   |
++-----------+---------+-----------------------------------------+
+| 333053997 |    NULL | Mt Strzelecki                           |
+| 333053995 |    NULL | Killiecrankie                           |
+| 333053990 |    NULL | The Velvet Underground                  |
+| 333053986 |    NULL | Marrawah                                |
+| 333053984 |    NULL | Conical Rocks                           |
+| 332365869 |    NULL | Jukes Boulder Field                     |
+| 330924199 |    NULL | Partner for april                       |
+| 330924175 |    NULL | The Needles                             |
+| 330924135 |    NULL | Contentious bolts                       |
+| 330433083 |    NULL | climbing partners Hobart during week    |
+| 330433081 |    NULL | The Rookeries                           |
+| 330433011 |    NULL | Sisters Beach bouldering                |
+| 330432873 |    NULL | West Head bouldering                    |
+| 330432752 |    NULL | Ben Lomond - Northern Escarpment backup |
+| 330432692 |    NULL | Publications                            |
+| 330432615 |    NULL | CCT Member Discount at Mountain Designs |
+| 330432595 |    NULL | Swansea bouldering                      |
+| 329842692 |    NULL | Membership Application                  |
+| 327385389 |    NULL | The Rookeries                           |
+| 326894021 |    NULL | Rysavy Ridge on Mount Roland            |
+| 326205446 |    NULL | Mersey Cliffs Access                    |
+| 325812514 |    NULL | Rebolting                               |
+| 325320706 |    NULL | Apsley Edge                             |
+| 324993089 |    NULL | Meeting Minutes                         |
+| 321126404 |    NULL | Sarex 2013                              |
+| 300220430 |    NULL | Eldon                                   |
+| 290390069 |    NULL | New routes since 2005 with 2 or 3 stars |
+| 290390029 |    NULL | guide query                             |
+| 281313283 |    NULL | Abseil Bolts at Ben Lomond              |
+| 276267033 |    NULL | Pipes Guide To Do                       |
+| 266403855 |    NULL | Tas Classic Wide Cracks                 |
+| 248053768 |    NULL | Mersey Cliffs                           |
+| 247758850 |    NULL | Search and Rescue                       |
+| 230654047 |    NULL | Climbing Map                            |
+| 230654043 |    NULL | Mt Wellington Updates 2007              |
+| 230654042 |    NULL | Mt Wellington Guide Feedback 2007       |
+| 230654041 |    NULL | Mt Wellington Gallery - Bouldering 2007 |
+| 230654040 |    NULL | Mt Wellington Gallery - Sport 2007      |
+| 230654039 |    NULL | Mt Wellington Gallery - Trad 2007       |
+| 230654038 |    NULL | Mt Wellington Gallery - Historic 2007   |
+| 230654037 |    NULL | Mt Wellington Gallery 2007              |
+| 230654036 |    NULL | Articles 2007                           |
+| 230654035 |    NULL | Additional Topos and Maps 2007          |
+| 230654034 |    NULL | Other Crags 2007                        |
+| 230654033 |    NULL | Neika 2007                              |
+| 230654032 |    NULL | Sphinx Rock 2007                        |
+| 230654031 |    NULL | Lost World Area 2007                    |
+| 230654030 |    NULL | Broken Buttress 2007                    |
+| 230654029 |    NULL | University Buttress 2007                |
+| 230654028 |    NULL | Avalanche Couloir 2007                  |
+| 230654027 |    NULL | Bulging Buttress 2007                   |
+| 230654026 |    NULL | Teardrop Gully 2007                     |
+| 230654025 |    NULL | Step Tier 2007                          |
+| 230654024 |    NULL | Great Tier 2007                         |
+| 230654023 |    NULL | Central Buttress 2007                   |
+| 230654022 |    NULL | Flange Buttress 2007                    |
+| 230654021 |    NULL | The Columns 2007                        |
+| 230654020 |    NULL | Rockaway and Amphitheatre 2007          |
+| 230654019 |    NULL | Northern Buttress 2007                  |
+| 230654018 |    NULL | Far North 2007                          |
+| 230654017 |    NULL | The Organ Pipes 2007                    |
+| 230654016 |    NULL | Introduction to the Mountain 2007       |
+| 230654015 |    NULL | Mt Wellington Guide 2007                |
+| 230653984 |    NULL | jons script                             |
+| 229277703 |    NULL | Jeds Copy of Great Tier                 |
+| 229277699 |    NULL | jeds sandpit                            |
+| 226656265 |    NULL | Elderslie                               |
+| 224034827 |    NULL | Table Mountain                          |
+| 221282312 |    NULL | Doctors Rocks bouldering                |
+| 219086853 |    NULL | Constitution                            |
+| 214597657 |    NULL | Mersey Bluff bouldering                 |
+| 209518594 |    NULL | vote                                    |
+| 209190932 |    NULL | Red Rock Point                          |
+| 208076809 |    NULL | Raptor Nesting                          |
+| 208076807 |    NULL | Access Info                             |
+| 201687063 |    NULL | Committee                               |
+| 200900619 |    NULL | Sandfly bouldering                      |
+| 200114199 |    NULL | receipts 2010-2011                      |
+| 199852038 |    NULL | Access                                  |
+| 199327754 |    NULL | .zen..footer                            |
+| 199327753 |    NULL | .zen..                                  |
+| 199327752 |    NULL | .zen                                    |
+| 199327751 |    NULL | .zen..menu                              |
+| 199327750 |    NULL | .zen..                                  |
+| 199327749 |    NULL | .zen                                    |
+| 198836263 |    NULL | testnip                                 |
+| 197820434 |    NULL | hard climbs                             |
+| 194609180 |    NULL | guidetest                               |
+| 194281501 |    NULL | All Weather                             |
+| 193691693 |    NULL | South Coogee                            |
+| 193364054 |    NULL | Petrie's Gully                          |
+| 193364038 |    NULL | Timberchute Walls                       |
+| 193364036 |    NULL | Wolgan Valley                           |
+| 193265670 |    NULL | Pipes Anchors                           |
+| 193265668 |    NULL | Ikara Head                              |
+| 191430672 |    NULL | Finances                                |
+| 190677008 |    NULL | Mirrorball Area                         |
+| 189759538 |    NULL | Issues and Projects                     |
+| 189759524 |    NULL | Objectives                              |
+| 189759507 |    NULL | Pipes Topos Beta                        |
++-----------+---------+-----------------------------------------+
