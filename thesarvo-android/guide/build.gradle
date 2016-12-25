@@ -1,14 +1,15 @@
 apply plugin: 'android'
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '19.1.0'
+    compileSdkVersion 23
+    buildToolsVersion '25.0.2'
+    useLibrary  'org.apache.http.legacy'
 
     defaultConfig {
         minSdkVersion 13
-        targetSdkVersion 19
+        targetSdkVersion 23
         versionCode 9
-        versionName "0.9.6"
+        versionName "1.1.0"
     }
 
     compileOptions {
@@ -17,18 +18,18 @@ android {
     }
     buildTypes {
         release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            //runProguard false
+            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
 }
 
 dependencies {
-    compile 'com.google.guava:guava:16.0'
-    compile 'com.android.support:appcompat-v7:20.0.0'
-    compile 'com.android.support:support-v4:20.0.0'
+    compile 'com.google.guava:guava:18.0'
+    compile 'com.android.support:appcompat-v7:23.0.0'
+    compile 'com.android.support:support-v4:23.0.0'
     compile 'commons-io:commons-io:2.4'
-    compile 'com.google.android.gms:play-services:5.0.89'
+    compile 'com.google.android.gms:play-services:9.0.0'
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
     compile project(':downloader_library')
     compile project(':market_licensing')

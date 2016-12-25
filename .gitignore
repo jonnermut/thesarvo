@@ -26,3 +26,7 @@ svg2pdf/out
 thesarvo_iphone_2.0/www/deferredjs
 thesarvo_iphone_2.0/www/gwt
 *.cache.html
+thesarvo-android/.idea
+thesarvo-android/downloader_library/build
+thesarvo-android/market_licensing/build
+thesarvo-android/zip_file/build
