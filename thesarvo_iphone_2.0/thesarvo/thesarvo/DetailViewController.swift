@@ -43,9 +43,9 @@ class DetailViewController: UIViewController, UIWebViewDelegate
         
         if isHttp()
         {
-            if let url = NSURL( string: viewId)
+            if let url = Foundation.URL( string: viewId)
             {
-                webview.loadRequest(NSURLRequest( URL: url ) )
+                webview.loadRequest(URLRequest( url: url ) )
             }
         }
         else
@@ -54,16 +54,16 @@ class DetailViewController: UIViewController, UIWebViewDelegate
             {
                 DetailViewController.firstEverLoad = false
                 
-                viewId = NSUserDefaults.standardUserDefaults().stringForKey("lastViewId") ?? "guide.9404494"
+                viewId = UserDefaults.standard.string(forKey: "lastViewId") ?? "guide.9404494"
                 
                 guide = Model.instance.getGuide(viewId, name: "")
             }
             
             if let guide = guide
             {
-                if let url = NSBundle.mainBundle().URLForResource("index", withExtension: "html", subdirectory: "www")
+                if let url = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "www")
                 {
-                    webview.loadRequest(NSURLRequest( URL: url ) )
+                    webview.loadRequest(URLRequest( url: url ) )
                 }
                 
             }
@@ -83,7 +83,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
     
     
     
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
         setupNavButtons()
         webview?.delegate = self
@@ -91,7 +91,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
 
         if viewId.characters.count > 0
         {
-            NSUserDefaults.standardUserDefaults().setObject(viewId, forKey: "lastViewId")
+            UserDefaults.standard.set(viewId, forKey: "lastViewId")
         }
         
     }
@@ -100,7 +100,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
     {
         self.navigationItem.leftItemsSupplementBackButton = true
         self.navigationItem.leftBarButtonItem =
-            UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("hamburgerToggle") )
+            UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(DetailViewController.hamburgerToggle) )
     }
     
     dynamic func hamburgerToggle()
@@ -108,7 +108,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
         AppDelegate.instance().drawerController.toggle()
     }
     
-    override func viewWillDisappear(animated: Bool)
+    override func viewWillDisappear(_ animated: Bool)
     {
         webview?.delegate = nil
     }
@@ -120,9 +120,9 @@ class DetailViewController: UIViewController, UIWebViewDelegate
         // Dispose of any resources that can be recreated.
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-        let dest: UIViewController = segue.destinationViewController as UIViewController
+        let dest: UIViewController = segue.destination as UIViewController
         
         if (sender is SegueCallback)
         {
@@ -131,12 +131,12 @@ class DetailViewController: UIViewController, UIWebViewDelegate
         
     }
 
-    func JSEscape(data: String) -> String
+    func JSEscape(_ data: String) -> String
     {
 
-        var d = data.stringByReplacingOccurrencesOfString("\n", withString: "\\n")
-        d = d.stringByReplacingOccurrencesOfString("\r", withString: "\\r")
-        d = d.stringByReplacingOccurrencesOfString("'", withString: "\\'")
+        var d = data.replacingOccurrences(of: "\n", with: "\\n")
+        d = d.replacingOccurrences(of: "\r", with: "\\r")
+        d = d.replacingOccurrences(of: "'", with: "\\'")
         return d
     }
     
@@ -180,32 +180,32 @@ class DetailViewController: UIViewController, UIWebViewDelegate
                 }
                 
                 let imageUrls = guide.getImageUrls() as NSDictionary
-                if let jsonData = try? NSJSONSerialization.dataWithJSONObject(imageUrls, options: NSJSONWritingOptions.PrettyPrinted)
+                if let jsonData = try? JSONSerialization.data(withJSONObject: imageUrls, options: JSONSerialization.WritingOptions.prettyPrinted)
                 {
-                    if let jsonString = String(data: jsonData, encoding: NSUTF8StringEncoding)
+                    if let jsonString = String(data: jsonData, encoding: String.Encoding.utf8)
                     {
                         let imageJs = "\n var guide_imageUrls=\(jsonString);"
                         js += imageJs
                     }
                 }
                 
-                var result = webview.stringByEvaluatingJavaScriptFromString(js)
+                var result = webview.stringByEvaluatingJavaScript(from: js)
                 
                 
                 // setup font size
-                let fontSizeIndex = NSUserDefaults.standardUserDefaults().integerForKey("fontSizeIndex")
+                let fontSizeIndex = UserDefaults.standard.integer(forKey: "fontSizeIndex")
                 if fontSizeIndex > 0
                 {
                     let fontsize = 100 + fontSizeIndex * 50
                     let fontSizeJs = "document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust='\(fontsize)%';"
-                    webview.stringByEvaluatingJavaScriptFromString(fontSizeJs)
+                    webview.stringByEvaluatingJavaScript(from: fontSizeJs)
                 }
             }
         }
     }
 
     // MARK: - UIWebViewDelegate
-    func webViewDidFinishLoad(webView: UIWebView)
+    func webViewDidFinishLoad(_ webView: UIWebView)
     {
         self.loadGuideData()
 
@@ -215,14 +215,14 @@ class DetailViewController: UIViewController, UIWebViewDelegate
 //        }
     }
     
-    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool
     {
-        if let url = request.URL
+        if let url = request.url
         {
             if url.scheme == "ts"
             {
                 let command = url.host
-                let commandData = url.path?.removePrefixIfPresent("/")
+                let commandData = url.path.removePrefixIfPresent("/")
                 
                 if (command == "openImage")
                 {
@@ -241,7 +241,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
                     self.performSegueWithIdentifier("showDetailFromDetail", sender: callback)
 */
                     
-                    var fcvc = self.storyboard?.instantiateViewControllerWithIdentifier("detailViewController") as! DetailViewController
+                    let fcvc = self.storyboard?.instantiateViewController(withIdentifier: "detailViewController") as! DetailViewController
                     //var fcvc = DetailViewController()
                     fcvc.viewId = self.viewId
                     fcvc.guide = self.guide
@@ -260,7 +260,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
                             //fcvc.navigationItem.title = self.navigationItem.title
                         }
                     }
-                    self.performSegueWithIdentifier("showMap", sender: callback)
+                    self.performSegue(withIdentifier: "showMap", sender: callback)
                 }
                 
                 return false
@@ -270,13 +270,13 @@ class DetailViewController: UIViewController, UIWebViewDelegate
         return true
     }
     
-    func webView(webView: UIWebView, didFailLoadWithError error: NSError?)
+    func webView(_ webView: UIWebView, didFailLoadWithError error: Error)
     {
         let alert = UIAlertView(title: "Error", message: "Could not load page", delegate: nil, cancelButtonTitle: "OK")
         alert.show()
     }
     
-    class func getFromVC(uivc: UIViewController) -> DetailViewController?
+    class func getFromVC(_ uivc: UIViewController) -> DetailViewController?
     {
         if let ret = uivc as? DetailViewController
         {
@@ -294,9 +294,9 @@ class DetailViewController: UIViewController, UIWebViewDelegate
         return nil
     }
     
-    func scrollToId(id: String)
+    func scrollToId(_ id: String)
     {
-        webview.stringByEvaluatingJavaScriptFromString("scrollToId('\(id)')")
+        webview.stringByEvaluatingJavaScript(from: "scrollToId('\(id)')")
 
     }
     

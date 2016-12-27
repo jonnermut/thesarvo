@@ -10,7 +10,7 @@ import UIKit
 
 class SettingsViewController: UIViewController
 {
-    let defaults = NSUserDefaults.standardUserDefaults()
+    let defaults = UserDefaults.standard
     
     @IBOutlet weak var fontSize: UISegmentedControl!
     
@@ -19,11 +19,11 @@ class SettingsViewController: UIViewController
         setupNavButtons()
     }
     
-    override func viewDidAppear(animated: Bool)
+    override func viewDidAppear(_ animated: Bool)
     {
 
 
-        fontSize.selectedSegmentIndex = defaults.integerForKey("fontSizeIndex")
+        fontSize.selectedSegmentIndex = defaults.integer(forKey: "fontSizeIndex")
         
     }
     
@@ -32,7 +32,7 @@ class SettingsViewController: UIViewController
     {
         self.navigationItem.leftItemsSupplementBackButton = true
         self.navigationItem.leftBarButtonItem =
-            UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("hamburgerToggle") )
+            UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(SettingsViewController.hamburgerToggle) )
     }
     
     dynamic func hamburgerToggle()
@@ -40,8 +40,8 @@ class SettingsViewController: UIViewController
         AppDelegate.instance().drawerController.toggle()
     }
     
-    @IBAction func fontSizeDidChange(sender: AnyObject)
+    @IBAction func fontSizeDidChange(_ sender: AnyObject)
     {
-        defaults.setInteger(fontSize.selectedSegmentIndex, forKey: "fontSizeIndex")
+        defaults.set(fontSize.selectedSegmentIndex, forKey: "fontSizeIndex")
     }
 }

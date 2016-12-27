@@ -10,33 +10,33 @@ import Foundation
 
 extension String
 {
-    func removePrefixIfPresent(prefix: String) -> String
+    func removePrefixIfPresent(_ prefix: String) -> String
     {
         if (self.hasPrefix(prefix))
         {
-            return self.substringFromIndex( self.startIndex.advancedBy( prefix.characters.count))
+            return self.substring( from: self.characters.index(self.startIndex, offsetBy: prefix.characters.count))
         }
         return self
     }
     
-    func startsWith(prefix: String) -> Bool
+    func startsWith(_ prefix: String) -> Bool
     {
         return hasPrefix(prefix)
     }
     
-    func endsWith(suffix: String) -> Bool
+    func endsWith(_ suffix: String) -> Bool
     {
         return hasSuffix(suffix)
     }
     
-    func contains(other: String) -> Bool
+    func contains(_ other: String) -> Bool
     {
-        return rangeOfString(other) != nil
+        return range(of: other) != nil
     }
     
-    func containsCaseInsensitive(other: String) -> Bool
+    func containsCaseInsensitive(_ other: String) -> Bool
     {
-        return lowercaseString.rangeOfString(other.lowercaseString) != nil
+        return lowercased().range(of: other.lowercased()) != nil
     }
     
     /**
@@ -45,8 +45,8 @@ extension String
     - returns: Stripped string
     */
     func ltrimmed () -> String {
-        if let range = rangeOfCharacterFromSet(NSCharacterSet.whitespaceAndNewlineCharacterSet().invertedSet) {
-            return self[range.startIndex..<endIndex]
+        if let range = rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines.inverted) {
+            return self[range.lowerBound..<endIndex]
         }
         
         return self
@@ -58,8 +58,8 @@ extension String
     - returns: Stripped string
     */
     func rtrimmed () -> String {
-        if let range = rangeOfCharacterFromSet(NSCharacterSet.whitespaceAndNewlineCharacterSet().invertedSet, options: NSStringCompareOptions.BackwardsSearch) {
-            return self[startIndex..<range.endIndex]
+        if let range = rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines.inverted, options: NSString.CompareOptions.backwards) {
+            return self[startIndex..<range.upperBound]
         }
         
         return self
@@ -72,12 +72,12 @@ extension String
     */
     func trimmed () -> String {
         
-        return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+        return self.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
     
-    func appendPathComponent(str:String) -> String
+    func appendPathComponent(_ str:String) -> String
     {
-        return (self as NSString).stringByAppendingPathComponent(str)
+        return (self as NSString).appendingPathComponent(str)
     }
     
     
@@ -90,7 +90,7 @@ public func * (first: String, n: Int) -> String
 {
     var result = String()
     
-    for var i=0;i<n;i++
+    for i in 0 ..< n
     {
         
         result += first

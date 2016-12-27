@@ -14,9 +14,9 @@ let gd = GuideDownloader(directory: "/git/thesarvo/thesarvo_iphone_2.0/thesarvo/
 gd.desktopMode = true
 gd.startSync()
 
-NSThread.sleepForTimeInterval(5.0)
+Thread.sleep(forTimeInterval: 5.0)
 while(gd.syncing)
 {
-    NSThread.sleepForTimeInterval(1.0)
+    Thread.sleep(forTimeInterval: 1.0)
     print(gd.labelText)
 }

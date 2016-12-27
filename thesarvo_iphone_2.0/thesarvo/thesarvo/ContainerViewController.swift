@@ -21,12 +21,12 @@ class ContainerViewController: UIViewController
     override func viewDidLoad()
     {
         
-        let t1 = UITraitCollection(verticalSizeClass:.Regular)
-        let t2 = UITraitCollection(horizontalSizeClass:.Regular)
-        customTraitCollection = UITraitCollection(traitsFromCollections: [t1,t2])
+        let t1 = UITraitCollection(verticalSizeClass:.regular)
+        let t2 = UITraitCollection(horizontalSizeClass:.regular)
+        customTraitCollection = UITraitCollection(traitsFrom: [t1,t2])
     }
 
-    private func forceNewTrait()
+    fileprivate func forceNewTrait()
     {
         if let vc = self.viewController
         {
@@ -40,7 +40,7 @@ class ContainerViewController: UIViewController
         {
             if let oldValue = oldValue
             {
-                oldValue.willMoveToParentViewController(nil)
+                oldValue.willMove(toParentViewController: nil)
                 oldValue.view.removeFromSuperview()
                 oldValue.removeFromParentViewController()
                 self.setOverrideTraitCollection(nil, forChildViewController:oldValue)
@@ -49,21 +49,21 @@ class ContainerViewController: UIViewController
             {
                 self.addChildViewController(viewController)
                 let view = viewController.view
-                self.view.addSubview(view)
-                viewController.didMoveToParentViewController(self)
+                self.view.addSubview(view!)
+                viewController.didMove(toParentViewController: self)
                 forceNewTrait()
             }
         }
     }
     
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator)
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
     {
         print( "viewWillTransitionToSize \(size)")
         
         let device = traitCollection.userInterfaceIdiom
         var portrait: Bool
         {
-            if device == .Phone
+            if device == .phone
             {
                 return size.width > 320
             }
@@ -95,10 +95,10 @@ class ContainerViewController: UIViewController
 //        }
         //customTraitCollection = UITraitCollection(traitsFromCollections: [t1,t2])
         
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator);
+        super.viewWillTransition(to: size, with: coordinator);
     }
     
-    override func shouldAutomaticallyForwardAppearanceMethods() -> Bool
+    override var shouldAutomaticallyForwardAppearanceMethods : Bool
     {
         return true
     }

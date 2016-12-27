@@ -81,7 +81,7 @@ class MapViewController: UIViewController, MKMapViewDelegate
 
     }
     
-    override func viewDidAppear(animated: Bool)
+    override func viewDidAppear(_ animated: Bool)
     {
         setupNavButtons()
         
@@ -90,7 +90,7 @@ class MapViewController: UIViewController, MKMapViewDelegate
         print("Setting zoom rect to \(zoomRect2)")
     }
     
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
 
     }
@@ -99,7 +99,7 @@ class MapViewController: UIViewController, MKMapViewDelegate
     {
         self.navigationItem.leftItemsSupplementBackButton = true
         self.navigationItem.leftBarButtonItem =
-            UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("hamburgerToggle") )
+            UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(MapViewController.hamburgerToggle) )
     }
     
     dynamic func hamburgerToggle()
@@ -113,16 +113,16 @@ class MapViewController: UIViewController, MKMapViewDelegate
         // Dispose of any resources that can be recreated.
     }
     
-    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView)
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView)
     {
         if let mkPinView = view as? MKPinAnnotationView
         {
             let rightButton = UIButton(frame: CGRect(x: 0,y: 0,width: 60,height: 32))
-            rightButton.setTitle("Open", forState: UIControlState.Normal)
-            rightButton.setTitleColor(UIColor.blueColor(), forState: UIControlState.Normal)
+            rightButton.setTitle("Open", for: UIControlState())
+            rightButton.setTitleColor(UIColor.blue, for: UIControlState())
 
-            rightButton.contentVerticalAlignment = UIControlContentVerticalAlignment.Center;
-            rightButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Center;
+            rightButton.contentVerticalAlignment = UIControlContentVerticalAlignment.center;
+            rightButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.center;
             
             if (guide == nil)
             {
@@ -131,12 +131,12 @@ class MapViewController: UIViewController, MKMapViewDelegate
         }
     }
     
-    func mapView(mapView: MKMapView, didDeselectAnnotationView view: MKAnnotationView)
+    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView)
     {
         
     }
     
-    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl)
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl)
     {
         if let mp = view.annotation as? MapPoint
         {
@@ -147,12 +147,12 @@ class MapViewController: UIViewController, MKMapViewDelegate
         }
     }
     
-    func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer
     {
         if let mkpoly = overlay as? MKPolyline
         {
             let renderer = MKPolylineRenderer(polyline: mkpoly)
-            renderer.strokeColor = UIColor.whiteColor()
+            renderer.strokeColor = UIColor.white
             renderer.lineWidth = 5
             return renderer
         }

@@ -8,31 +8,31 @@
 
 import Foundation
 
-typealias URL = NSURL
+typealias URL = Foundation.URL
 
 /// A bunch of extension methods to make file handling sane
-extension NSURL
+extension Foundation.URL
 {
     func fileExists() -> Bool
     {
-        let fm = NSFileManager.defaultManager()
+        let fm = FileManager.default
         
         let path = self.path
         if (path != nil)
         {
-            return fm.fileExistsAtPath(path!)
+            return fm.fileExists(atPath: path)
         }
         return false
     }
     
-    func listDirectoryUrls() -> [NSURL]
+    func listDirectoryUrls() -> [Foundation.URL]
     {
-        let fm = NSFileManager.defaultManager()
-        var ret = Array<NSURL>()
-        let enumerator : NSDirectoryEnumerator = fm.enumeratorAtURL(self, includingPropertiesForKeys: nil, options: [], errorHandler: nil)!
+        let fm = FileManager.default
+        var ret = Array<Foundation.URL>()
+        let enumerator : FileManager.DirectoryEnumerator = fm.enumerator(at: self, includingPropertiesForKeys: nil, options: [], errorHandler: nil)!
         for url in enumerator.allObjects
         {
-            var nsurl = url as! NSURL
+            let nsurl = url as! Foundation.URL
             ret.append( nsurl )
         }
         return ret
@@ -40,26 +40,25 @@ extension NSURL
     
     func listDirectoryFilenames() -> [String]
     {
-        let fm = NSFileManager.defaultManager()
+        let fm = FileManager.default
         var ret = Array<String>()
-        let enumerator : NSDirectoryEnumerator = fm.enumeratorAtURL(self, includingPropertiesForKeys: nil, options: [], errorHandler: nil)!
+        let enumerator : FileManager.DirectoryEnumerator = fm.enumerator(at: self, includingPropertiesForKeys: nil, options: [], errorHandler: nil)!
         for url in enumerator.allObjects
         {
-            var nsurl = url as! NSURL
-            if let filename = nsurl.lastPathComponent
-            {
-                ret.append( filename )
-            }
+            let nsurl = url as! Foundation.URL
+            let filename = nsurl.lastPathComponent
+            ret.append( filename )
+            
         }
         return ret
     }
     
-    func mkdirs() -> NSURL
+    func mkdirs() -> Foundation.URL
     {
-        let fm = NSFileManager.defaultManager()
+        let fm = FileManager.default
         var err : NSError?
         do {
-            try fm.createDirectoryAtURL(self, withIntermediateDirectories: true, attributes: nil)
+            try fm.createDirectory(at: self, withIntermediateDirectories: true, attributes: nil)
         } catch let error as NSError {
             err = error
         }
@@ -67,26 +66,26 @@ extension NSURL
         return self
     }
     
-    func append(pathComponent: String) -> NSURL
+    func append(_ pathComponent: String) -> Foundation.URL
     {
-        return URLByAppendingPathComponent(pathComponent)
+        return appendingPathComponent(pathComponent)
     }
     
-    class func documentDirectory() -> NSURL
+    static func documentDirectory() -> Foundation.URL
     {
-        let fm = NSFileManager.defaultManager()
+        let fm = FileManager.default
         var err : NSError?
-        let docsurl = try! fm.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: true)
+        let docsurl = try! fm.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
         
         return docsurl
     }
     
-    func moveTo( destFullUrl: NSURL )
+    func moveTo( _ destFullUrl: Foundation.URL )
     {
-        let fm = NSFileManager.defaultManager()
+        let fm = FileManager.default
         var err : NSError?
         do {
-            try fm.moveItemAtURL(self, toURL: destFullUrl)
+            try fm.moveItem(at: self, to: destFullUrl)
         } catch let error as NSError {
             err = error
         }
@@ -98,13 +97,13 @@ extension NSURL
         // FIXME - return error
     }
     
-    func moveToDir( destinationDir: NSURL )
+    func moveToDir( _ destinationDir: Foundation.URL )
     {
-        let fm = NSFileManager.defaultManager()
-        let destFullUrl = destinationDir.append(self.lastPathComponent!)
+        let fm = FileManager.default
+        let destFullUrl = destinationDir.append(self.lastPathComponent)
         var err : NSError?
         do {
-            try fm.moveItemAtURL(self, toURL: destFullUrl)
+            try fm.moveItem(at: self, to: destFullUrl)
         } catch let error as NSError {
             err = error
         }
@@ -116,40 +115,40 @@ extension NSURL
         // FIXME - return error
     }
     
-    var fileModificationDate : NSDate?
+    var fileModificationDate : Foundation.Date?
     {
-        let fm = NSFileManager.defaultManager()
+        let fm = FileManager.default
         var err : NSError?
         
-        if let p = self.path
-        {
-            do {
-                let attributes : NSDictionary = try fm.attributesOfItemAtPath(p)
-                let lastMod = attributes.fileModificationDate()
-                return lastMod
-            } catch let error as NSError {
-                err = error
-            }
+        let p = self.path
+        
+        do {
+            let attributes = try fm.attributesOfItem(atPath: p) as NSDictionary
+            let lastMod = attributes.fileModificationDate()
+            return lastMod
+        } catch let error as NSError {
+            err = error
         }
+        
         
         return nil
     }
     
-    var fileCreationDate : NSDate?
+    var fileCreationDate : Foundation.Date?
     {
-        let fm = NSFileManager.defaultManager()
+        let fm = FileManager.default
         var err : NSError?
         
-        if let p = self.path
-        {
-            do {
-                let attributes : NSDictionary = try fm.attributesOfItemAtPath(p)
-                let c = attributes.fileCreationDate()
-                return c
-            } catch let error as NSError {
-                err = error
-            }
+        let p = self.path
+        
+        do {
+            let attributes = try fm.attributesOfItem(atPath: p) as NSDictionary
+            let c = attributes.fileCreationDate()
+            return c
+        } catch let error as NSError {
+            err = error
         }
+        
         
         return nil
     }

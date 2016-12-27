@@ -41,7 +41,6 @@
 		FCF795311A5277B300A7C808 /* thesarvoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795301A5277B300A7C808 /* thesarvoTests.swift */; };
 		FCF795451A5289C900A7C808 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = FCF795441A5289C900A7C808 /* config.xml */; };
 		FCF795821A553A2400A7C808 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795731A553A2400A7C808 /* Util.swift */; };
-		FCF795831A553A2400A7C808 /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795741A553A2400A7C808 /* NSDate.swift */; };
 		FCF795841A553A2400A7C808 /* NSURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795751A553A2400A7C808 /* NSURL.swift */; };
 		FCF795851A553A2400A7C808 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795761A553A2400A7C808 /* SWXMLHash.swift */; };
 		FCF795871A553A8B00A7C808 /* AEXML.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795861A553A8B00A7C808 /* AEXML.swift */; };
@@ -318,13 +317,16 @@
 				TargetAttributes = {
 					FCA40F3E1C2E8F3700DFC0B7 = {
 						CreatedOnToolsVersion = 7.1.1;
+						LastSwiftMigration = 0800;
 					};
 					FCF795121A5277B300A7C808 = {
 						CreatedOnToolsVersion = 6.1;
 						DevelopmentTeam = 8K6T2FHY8E;
+						LastSwiftMigration = 0800;
 					};
 					FCF795291A5277B300A7C808 = {
 						CreatedOnToolsVersion = 6.1;
+						LastSwiftMigration = 0800;
 						TestTargetID = FCF795121A5277B300A7C808;
 					};
 				};
@@ -396,7 +398,6 @@
 				FC99CD001A6A290900C3228C /* Optional.swift in Sources */,
 				FCAACE931A55F27300C7A03F /* String+Stuff.swift in Sources */,
 				FCF795871A553A8B00A7C808 /* AEXML.swift in Sources */,
-				FCF795831A553A2400A7C808 /* NSDate.swift in Sources */,
 				FC28B36C1A57A82A00C75D50 /* MapViewController.swift in Sources */,
 				FCF7951B1A5277B300A7C808 /* MasterViewController.swift in Sources */,
 				FC28B36A1A56A93600C75D50 /* Config.swift in Sources */,
@@ -465,6 +466,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -478,6 +480,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -570,6 +573,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesarvo.guide;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -583,6 +587,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesarvo.guide;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -601,6 +606,7 @@
 				INFOPLIST_FILE = thesarvoTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/thesarvo.app/thesarvo";
 			};
 			name = Debug;
@@ -616,6 +622,7 @@
 				INFOPLIST_FILE = thesarvoTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/thesarvo.app/thesarvo";
 			};
 			name = Release;

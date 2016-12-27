@@ -7,11 +7,31 @@
 //
 
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class SegueCallback
 {
     let function : (UIViewController) -> ()
-    init (_ function: (UIViewController) -> () )
+    init (_ function: @escaping (UIViewController) -> () )
     {
         self.function = function
     }
@@ -28,7 +48,7 @@ class SearchCell: UITableViewCell
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?)
     {
-        super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
+        super.init(style: UITableViewCellStyle.subtitle, reuseIdentifier: reuseIdentifier)
     }
 
     required init?(coder aDecoder: NSCoder)
@@ -60,14 +80,14 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     var searching = false
     var searchAgain = false
     
-    var updateTimer: NSTimer? = nil
+    var updateTimer: Timer? = nil
     
     static var last: MasterViewController? = nil
 
     override func awakeFromNib()
     {
         super.awakeFromNib()
-        if UIDevice.currentDevice().userInterfaceIdiom == .Pad
+        if UIDevice.current.userInterfaceIdiom == .pad
         {
             self.clearsSelectionOnViewWillAppear = false
             self.preferredContentSize = CGSize(width: 320.0, height: 600.0)
@@ -109,8 +129,8 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         //self.searchController.searchBar.delegate = self;
         self.searchController.searchBar.scopeButtonTitles = []
         self.tableView.tableHeaderView = self.searchController.searchBar;
-        self.tableView.tableHeaderView?.opaque = true
-        self.searchController.searchBar.opaque = true
+        self.tableView.tableHeaderView?.isOpaque = true
+        self.searchController.searchBar.isOpaque = true
         self.definesPresentationContext = true;
         self.searchController.searchBar.sizeToFit()
         self.searchController.searchBar.placeholder = "Search for crag, climb, grade, ***"
@@ -126,23 +146,23 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     
     dynamic func updateUpdateView()
     {
-        self.updateView.hidden = false
+        self.updateView.isHidden = false
         let gd = Model.instance.guideDownloader
         
         self.updateLabel.text = gd.labelText
         
         if (gd.syncing)
         {
-            self.progressView.hidden = false
+            self.progressView.isHidden = false
             self.progressView.progress = gd.progress
         }
         else
         {
-            self.progressView.hidden = true
+            self.progressView.isHidden = true
         }
     }
     
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
         
@@ -171,13 +191,13 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         if data?.viewId == "home" && !showingTOC
         {
             updateUpdateView()
-            updateTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("updateUpdateView"), userInfo: nil, repeats: true)
+            updateTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(MasterViewController.updateUpdateView), userInfo: nil, repeats: true)
             
         }
         
     }
     
-    override func viewWillDisappear(animated: Bool)
+    override func viewWillDisappear(_ animated: Bool)
     {
         super.viewWillDisappear(animated)
         if let ut = updateTimer
@@ -237,17 +257,17 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                         {
                             if tn.clazz == "heading1"
                             {
-                                cell.textLabel?.font = UIFont.boldSystemFontOfSize(15)
+                                cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 15)
                                 cell.indentationLevel = 0
                             }
                             else if tn.clazz == "heading2"
                             {
-                                cell.textLabel?.font = UIFont.boldSystemFontOfSize(14)
+                                cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 14)
                                 cell.indentationLevel = 0
                             }
                             else
                             {
-                                cell.textLabel?.font = UIFont.boldSystemFontOfSize(13)
+                                cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 13)
                                 cell.indentationLevel = 1
                                 
                             }
@@ -256,19 +276,19 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                         }
                         else if let h = node as? HeaderNode
                         {
-                            cell.textLabel?.font = UIFont.boldSystemFontOfSize(14)
+                            cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 14)
                             cell.indentationLevel = 0
                         }
                         else
                         {
-                            cell.textLabel?.font = UIFont.systemFontOfSize(12)
+                            cell.textLabel?.font = UIFont.systemFont(ofSize: 12)
                             cell.indentationLevel = 3
                             cell.backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
                             
                         }
                         
                     }
-                }
+                } as! (UITableViewCell?, GuideNode) -> (Void)
                 /*
                 if (shouldFilter)
                 {
@@ -308,21 +328,21 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         {
             cell, li in
 
-            cell.textLabel?.text = li.text
-            cell.accessoryType = li.viewId != nil ? UITableViewCellAccessoryType.DisclosureIndicator : UITableViewCellAccessoryType.None;
-            cell.textLabel?.adjustsFontSizeToFitWidth = true
+            cell?.textLabel?.text = li.text
+            cell?.accessoryType = li.viewId != nil ? UITableViewCellAccessoryType.disclosureIndicator : UITableViewCellAccessoryType.none;
+            cell?.textLabel?.adjustsFontSizeToFitWidth = true
             var level = 0
             if let l = li.level
             {
                 level = l-1
             }
             
-            cell.textLabel?.font = UIFont.systemFontOfSize( CGFloat(18-level*2) );
-            cell.indentationLevel = level;
-            cell.indentationWidth = 25;
-            cell.backgroundColor = UIColor.clearColor()
-            cell.selectedBackgroundView = UIView()
-            cell.selectedBackgroundView?.backgroundColor = UIColor(red: 0, green: 0, blue: 0.5, alpha: 0.8)
+            cell?.textLabel?.font = UIFont.systemFont( ofSize: CGFloat(18-level*2) );
+            cell?.indentationLevel = level;
+            cell?.indentationWidth = 25;
+            cell?.backgroundColor = UIColor.clear
+            cell?.selectedBackgroundView = UIView()
+            cell?.selectedBackgroundView?.backgroundColor = UIColor(red: 0, green: 0, blue: 0.5, alpha: 0.8)
         }
         self.mainDataSource = d.tableViewDataSource
         self.tableView.dataSource = mainDataSource
@@ -332,9 +352,9 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
 
     // MARK: - Segues
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-        let dest: UIViewController = segue.destinationViewController as UIViewController
+        let dest: UIViewController = segue.destination as UIViewController
         
         if (sender is SegueCallback)
         {
@@ -361,21 +381,21 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     }
 
     
-    func segueToDrilldown(viewId: String)
+    func segueToDrilldown(_ viewId: String)
     {
         let callback = SegueCallback
         {
             (vc: UIViewController) in
             let mtvc = vc as! MasterViewController
-            var v = Model.instance.views[viewId]
+            let v = Model.instance.views[viewId]
             mtvc.data = v
             mtvc.navigationItem.title = viewId
         }
         
-        self.performSegueWithIdentifier("showMaster", sender: callback)
+        self.performSegue(withIdentifier: "showMaster", sender: callback)
     }
     
-    func navigateToDetail(viewId: String, title: String?, elementId: String? = nil, showDetail: Bool = true)
+    func navigateToDetail(_ viewId: String, title: String?, elementId: String? = nil, showDetail: Bool = true)
     {
         var vid = viewId.removePrefixIfPresent("guide.")
         var guide: Guide?
@@ -384,7 +404,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
             guide = Guide(guideId: vid)
         }
         
-        var fcvc = self.storyboard?.instantiateViewControllerWithIdentifier("detailViewController") as! DetailViewController
+        let fcvc = self.storyboard?.instantiateViewController(withIdentifier: "detailViewController") as! DetailViewController
         fcvc.guide = guide
         fcvc.viewId = viewId
         fcvc.navigationItem.title = title
@@ -413,7 +433,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                 {
                     runOnMain()
                     {
-                        self.performSegueWithIdentifier("showMaster", sender: ddcallback)
+                        self.performSegue(withIdentifier: "showMaster", sender: ddcallback)
                     }
                 }
             }
@@ -463,7 +483,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
 
     
     
-    func childSelected(selected: ListItem)
+    func childSelected(_ selected: ListItem)
     {
         if let viewId = selected.viewId
         {
@@ -481,13 +501,13 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                     return
                 }
                 
-                let mc = self.storyboard?.instantiateViewControllerWithIdentifier("mapController") as! MapViewController
+                let mc = self.storyboard?.instantiateViewController(withIdentifier: "mapController") as! MapViewController
                 AppDelegate.instance().setDetail(mc)
 
             }
             else if (viewId == "Settings")
             {
-                let sc = self.storyboard?.instantiateViewControllerWithIdentifier("settingsController") as! SettingsViewController
+                let sc = self.storyboard?.instantiateViewController(withIdentifier: "settingsController") as! SettingsViewController
                 AppDelegate.instance().setDetail(sc)
             }
             else if (viewId.hasPrefix("guide.") || viewId.hasPrefix("http"))
@@ -503,7 +523,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         
     }
     
-    override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath)
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath)
     {
         
         // I don't know why exactly, but this hammer seems essential 
@@ -512,17 +532,17 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         
     }
     
-    func navigateToEntry(entry: IndexEntry)
+    func navigateToEntry(_ entry: IndexEntry)
     {
         let elementId = entry.node?.elementId
         navigateToDetail(entry.guide.guideId, title: entry.guide.name, elementId: elementId)
 
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         
-        let cell = tableView.dataSource?.tableView(tableView, cellForRowAtIndexPath: indexPath)
+        let cell = tableView.dataSource?.tableView(tableView, cellForRowAt: indexPath)
         
         if let searchCell = cell as? SearchCell
         {
@@ -544,9 +564,9 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         }
         else
         {
-            if (data?.listItems.count > indexPath.row)
+            if (data?.listItems.count > (indexPath as NSIndexPath).row)
             {
-                if let c = data?.listItems[indexPath.row]
+                if let c = data?.listItems[(indexPath as NSIndexPath).row]
                 {
                     childSelected(c)
                 }
@@ -554,7 +574,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         }
     }
 
-    internal func updateSearchResultsForSearchController(searchController: UISearchController)
+    internal func updateSearchResults(for searchController: UISearchController)
     {
         searchString = searchController.searchBar.text
         updateSearchResults()
@@ -599,17 +619,19 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                 
                 let searchDataSource = SingleSectionDataSource(rows: results)
                 {
-                    (cell: UITableViewCell!, entry: IndexEntry) in
+                    (cell: UITableViewCell?, entry: IndexEntry) in
                     if let c = cell as? SearchCell
                     {
                         c.indexEntry = entry
                     }
                     
+                    guard let cell = cell else { return }
+                    
                     cell.textLabel?.text = entry.searchString.ltrimmed()
                     
-                    cell.accessoryType = .None
+                    cell.accessoryType = .none
                     cell.textLabel?.adjustsFontSizeToFitWidth = true
-                    cell.textLabel?.font = UIFont.boldSystemFontOfSize(14)
+                    cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 14)
                     
                     cell.indentationLevel = 0
                     

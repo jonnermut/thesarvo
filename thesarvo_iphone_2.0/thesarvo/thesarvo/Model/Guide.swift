@@ -8,12 +8,32 @@
 
 import Foundation
 import MapKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class GuideDocument : AEXMLDocument
 {
     
     
-    override func addChild(name name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement
+    override func addChild(name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement
     {
         return addChild( GuideElement(name, value: value, attributes: attributes) )
     }
@@ -22,7 +42,7 @@ class GuideDocument : AEXMLDocument
 
 class GuideElement : AEXMLElement
 {
-    override func  addChild(name name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement
+    override func  addChild(name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement
     {
         switch name
         {
@@ -75,7 +95,7 @@ class TextNode : GuideNode
         return nil
     }
     
-    override var description: String { return value?.stringByReplacingOccurrencesOfString("<br/>", withString: "\n") ?? "" }
+    override var description: String { return value?.replacingOccurrences(of: "<br/>", with: "\n") ?? "" }
 }
 
 class ClimbNode : GuideNode
@@ -170,17 +190,17 @@ class GPSMapObject
             var points: [CLLocationCoordinate2D] = []
             
             // parse the format: -42.538533,147.285656 -42.538529,147.285646 -42.538476,147.285542 -42.538422,147.285439
-            if let coordStrs = self.element.value?.componentsSeparatedByString(" ")
+            if let coordStrs = self.element.value?.components(separatedBy: " ")
             {
                 for coordStr in coordStrs
                 {
                     let c2 = coordStr.trimmed()
-                    let latlng = c2.componentsSeparatedByString(",")
+                    let latlng = c2.components(separatedBy: ",")
                     if (latlng.count >= 2)
                     {
                         let lng = Double(latlng[1])
                         let lat = Double(latlng[0])
-                        if let lng=lng, lat=lat
+                        if let lng=lng, let lat=lat
                         {
                             points.append(CLLocationCoordinate2D(latitude: lat, longitude: lng))
                         }
@@ -197,16 +217,16 @@ class GPSMapObject
     }
 }
 
-public class MapPoint : NSObject, MKAnnotation
+open class MapPoint : NSObject, MKAnnotation
 {
     
     // Center latitude and longitude of the annotation view.
     // The implementation of this property must be KVO compliant.
-    public var coordinate: CLLocationCoordinate2D
+    open var coordinate: CLLocationCoordinate2D
     
     // Title and subtitle for use by selection UI.
-    public var title: String?
-    public var subtitle: String?
+    open var title: String?
+    open var subtitle: String?
     
     var mapObj: GPSMapObject
     
@@ -239,24 +259,24 @@ class Guide
         self.guideId = guideId
     }
     
-    func loadData() -> NSData?
+    func loadData() -> Data?
     {
         let downloadedPath = Model.instance.guideDownloader.finalPath("\(guideId).xml")
-        let downloadedUrl = NSURL(fileURLWithPath: downloadedPath)
+        let downloadedUrl = Foundation.URL(fileURLWithPath: downloadedPath)
         
-        let bundleUrl = NSBundle.mainBundle().URLForResource(guideId, withExtension: "xml", subdirectory: "www/data")
+        let bundleUrl = Bundle.main.url(forResource: guideId, withExtension: "xml", subdirectory: "www/data")
         
-        if NSFileManager.defaultManager().fileExistsAtPath(downloadedPath)
+        if FileManager.default.fileExists(atPath: downloadedPath)
         {
             if bundleUrl==nil || downloadedUrl.fileModificationDate?.timeIntervalSince1970 > bundleUrl?.fileModificationDate?.timeIntervalSince1970
             {
-                return NSData(contentsOfFile: downloadedPath)
+                return (try? Data(contentsOf: Foundation.URL(fileURLWithPath: downloadedPath)))
             }
         }
         
         if let url = bundleUrl
         {
-            return NSData(contentsOfURL: url)
+            return (try? Data(contentsOf: url))
         }
         return nil
     }
@@ -265,7 +285,7 @@ class Guide
     {
         if let d = loadData()
         {
-            return String(data: d, encoding: NSUTF8StringEncoding)
+            return String(data: d, encoding: String.Encoding.utf8)
         }
         return nil
     }
@@ -293,7 +313,7 @@ class Guide
     
     func getHeadings() -> [TextNode]
     {
-        var texts = guideElement?.childrenWithName("text") as! [TextNode]
+        let texts = guideElement?.childrenWithName("text") as! [TextNode]
         return texts.filter( { $0.heading } )
     }
     lazy var headings: [TextNode] = self.getHeadings()

@@ -18,7 +18,7 @@ internal extension Dictionary {
         - parameter dictionaries: Dictionaries to subtract
         - returns: Difference of self and the input dictionaries
     */
-    func difference <V: Equatable> (dictionaries: [Key: V]...) -> [Key: V] {
+    func difference <V: Equatable> (_ dictionaries: [Key: V]...) -> [Key: V] {
 
         var result = [Key: V]()
 
@@ -32,7 +32,7 @@ internal extension Dictionary {
         for dictionary in dictionaries {
             for (key, value) in dictionary {
                 if result.has(key) && result[key] == value {
-                    result.removeValueForKey(key)
+                    result.removeValue(forKey: key)
                 }
             }
         }
@@ -94,8 +94,8 @@ internal extension Dictionary {
         - parameter key: Key to check
         - returns: true if the key exists
     */
-    func has (key: Key) -> Bool {
-        return indexForKey(key) != nil
+    func has (_ key: Key) -> Bool {
+        return index(forKey: key) != nil
     }
 
     /**
@@ -257,7 +257,7 @@ internal extension Dictionary {
 
             // If element has already been added to dictionary, append to it. If not, create one.
             if result.has(groupKey) {
-                result[groupKey]!++
+                result[groupKey]! += 1
             } else {
                 result[groupKey] = 1
             }
@@ -272,7 +272,7 @@ internal extension Dictionary {
         - parameter test: Function to call for each element
         - returns: true if test returns true for all the elements in self
     */
-    func all (test: (Key, Value) -> (Bool)) -> Bool {
+    func all (_ test: (Key, Value) -> (Bool)) -> Bool {
 
         for (key, value) in self {
             if !test(key, value) {
@@ -290,7 +290,7 @@ internal extension Dictionary {
         - parameter test: Function to call for each element
         - returns: true if test returns true for any element of self
     */
-    func any (test: (Key, Value) -> (Bool)) -> Bool {
+    func any (_ test: (Key, Value) -> (Bool)) -> Bool {
 
         for (key, value) in self {
             if test(key, value) {
@@ -309,13 +309,13 @@ internal extension Dictionary {
         - parameter test: Function to call for each element
         - returns: the number of elements meeting the condition
     */
-    func countWhere (test: (Key, Value) -> (Bool)) -> Int {
+    func countWhere (_ test: (Key, Value) -> (Bool)) -> Int {
 
         var result = 0
 
         for (key, value) in self {
             if test(key, value) {
-                result++
+                result += 1
             }
         }
 
@@ -330,7 +330,7 @@ internal extension Dictionary {
         - parameter combine: Function that reduces the dictionary
         - returns: Resulting value
     */
-    func reduce <U> (initial: U, combine: (U, Element) -> U) -> U {
+    func reduce <U> (_ initial: U, combine: (U, Element) -> U) -> U {
         return self.reduce(initial, combine: combine)
     }
 
@@ -340,7 +340,7 @@ internal extension Dictionary {
         - parameter keys: Whitelisted keys
         - returns: Filtered dictionary
     */
-    func pick (keys: [Key]) -> Dictionary {
+    func pick (_ keys: [Key]) -> Dictionary {
         return filter { (key: Key, _) -> Bool in
             return keys.contains(key)
         }
@@ -352,8 +352,8 @@ internal extension Dictionary {
         - parameter keys: Whitelisted keys
         - returns: Filtered dictionary
     */
-    func pick (keys: Key...) -> Dictionary {
-        return pick(unsafeBitCast(keys, [Key].self))
+    func pick (_ keys: Key...) -> Dictionary {
+        return pick(unsafeBitCast(keys, to: [Key].self))
     }
 
     /**
@@ -362,7 +362,7 @@ internal extension Dictionary {
         - parameter keys: Keys to get
         - returns: Dictionary with the given keys
     */
-    func at (keys: Key...) -> Dictionary {
+    func at (_ keys: Key...) -> Dictionary {
         return pick(keys)
     }
 
@@ -374,7 +374,7 @@ internal extension Dictionary {
     */
     mutating func shift () -> (Key, Value)? {
         if let key = keys.first {
-            return (key, removeValueForKey(key)!)
+            return (key, removeValue(forKey: key)!)
         }
         
         return nil

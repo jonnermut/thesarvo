@@ -31,7 +31,7 @@ class DrawerController: UIViewController {
     
     var hasRightDrawer = false
     
-    private var _leftViewController:UIViewController?
+    fileprivate var _leftViewController:UIViewController?
     var leftViewController:UIViewController {
         get{
             if let vc = _leftViewController {
@@ -40,7 +40,7 @@ class DrawerController: UIViewController {
             return UIViewController();
         }
     }
-    private var _centerViewController:UIViewController?
+    fileprivate var _centerViewController:UIViewController?
     var centerViewController:UIViewController {
         get{
             if let vc = _centerViewController {
@@ -49,7 +49,7 @@ class DrawerController: UIViewController {
             return UIViewController();
         }
     }
-    private var _rightViewController:UIViewController?
+    fileprivate var _rightViewController:UIViewController?
     var rightViewController:UIViewController {
         get{
             if let vc = _rightViewController {
@@ -66,7 +66,7 @@ class DrawerController: UIViewController {
             return _openSide;
         }
     }
-    private var _openSide:Int = NVMDrawerOpenLeft
+    fileprivate var _openSide:Int = NVMDrawerOpenLeft
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,7 +83,7 @@ class DrawerController: UIViewController {
         }
         
         // Call configDrawers() and pass the drawerSize variable.
-        drawDrawers(UIScreen.mainScreen().bounds.size)
+        drawDrawers(UIScreen.main.bounds.size)
         
         self.view.addSubview(leftViewController.view)
         self.view.addSubview(centerViewController.view)
@@ -95,8 +95,8 @@ class DrawerController: UIViewController {
         
     }
     
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        coordinator.animateAlongsideTransition({ (UIViewControllerTransitionCoordinatorContext) -> Void in
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: { (UIViewControllerTransitionCoordinatorContext) -> Void in
             // This is for beginning of transition
             self.drawDrawers(size)
             }, completion: { (UIViewControllerTransitionCoordinatorContext) -> Void in
@@ -124,7 +124,7 @@ class DrawerController: UIViewController {
         }
     }
     
-    func set2ViewFrames(size:CGSize)
+    func set2ViewFrames(_ size:CGSize)
     {
         let isLeft = (openSide == DrawerController.NVMDrawerOpenLeft)
         
@@ -149,7 +149,7 @@ class DrawerController: UIViewController {
         }
     }
     
-    func drawDrawers(size:CGSize) {
+    func drawDrawers(_ size:CGSize) {
         // Calculate Center View's Size
         let centerWidth = (size.width/drawerSize) * (drawerSize - 1)
         
@@ -172,13 +172,13 @@ class DrawerController: UIViewController {
         }
         
         // Capture the Swipes
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: Selector("swipeRightAction:"))
-        swipeRight.direction = .Right
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(DrawerController.swipeRightAction(_:)))
+        swipeRight.direction = .right
         centerViewController.view.addGestureRecognizer(swipeRight)
         leftViewController.view.addGestureRecognizer(swipeRight)
         
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: Selector("swipeLeftAction:"))
-        swipeLeft.direction = .Left
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(DrawerController.swipeLeftAction(_:)))
+        swipeLeft.direction = .left
         centerViewController.view.addGestureRecognizer(swipeLeft)
         leftViewController.view.addGestureRecognizer(swipeLeft)
         
@@ -215,7 +215,7 @@ class DrawerController: UIViewController {
     
     func openLeftDrawer() {
         _openSide = DrawerController.NVMDrawerOpenLeft
-        UIView.animateWithDuration(ANIMATION_DURATION, delay: 0, options: UIViewAnimationOptions.CurveEaseIn, animations:
+        UIView.animate(withDuration: ANIMATION_DURATION, delay: 0, options: UIViewAnimationOptions.curveEaseIn, animations:
             { () -> Void in
                 // move views here
                 
@@ -225,7 +225,7 @@ class DrawerController: UIViewController {
                 }
                 else
                 {
-                    self.set2ViewFrames(UIScreen.mainScreen().bounds.size)
+                    self.set2ViewFrames(UIScreen.main.bounds.size)
                 }
                 
                 self.logFrames()
@@ -236,7 +236,7 @@ class DrawerController: UIViewController {
     
     func openRightDrawer() {
         _openSide = DrawerController.NVMDrawerOpenRight
-        UIView.animateWithDuration(ANIMATION_DURATION, delay: 0, options: UIViewAnimationOptions.CurveEaseIn, animations:
+        UIView.animate(withDuration: ANIMATION_DURATION, delay: 0, options: UIViewAnimationOptions.curveEaseIn, animations:
             { () -> Void in
                 // move views here
                 
@@ -251,7 +251,7 @@ class DrawerController: UIViewController {
                 }
                 else
                 {
-                    self.set2ViewFrames(UIScreen.mainScreen().bounds.size)
+                    self.set2ViewFrames(UIScreen.main.bounds.size)
                 }
                 
                 self.logFrames()
@@ -262,27 +262,27 @@ class DrawerController: UIViewController {
     
     // MARK: - Swipe Handling
     
-    func swipeRightAction(rec: UISwipeGestureRecognizer){
+    func swipeRightAction(_ rec: UISwipeGestureRecognizer){
         self.openLeftDrawer()
     }
     
-    func swipeLeftAction(rec:UISwipeGestureRecognizer){
+    func swipeLeftAction(_ rec:UISwipeGestureRecognizer){
         self.openRightDrawer()
     }
     
     // MARK: - Helpers
     
-    func instantiateViewControllers(storyboardID: String) -> UIViewController {
-        if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("\(storyboardID)") as? UIViewController{
+    func instantiateViewControllers(_ storyboardID: String) -> UIViewController {
+        if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "\(storyboardID)") as? UIViewController{
             return viewController;
         }
         
         return UIViewController();
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle
+    override var preferredStatusBarStyle : UIStatusBarStyle
     {
-        return UIStatusBarStyle.LightContent
+        return UIStatusBarStyle.lightContent
     }
     
 

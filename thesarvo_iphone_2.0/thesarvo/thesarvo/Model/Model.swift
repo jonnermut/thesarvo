@@ -20,24 +20,24 @@ class Model
     }
     
     var views: [String: View] = [:]
-    private var index: [IndexEntry] = []
+    fileprivate var index: [IndexEntry] = []
     var indexingDone : Bool = false
     
-    private var guides: [String: Guide] = [:]
+    fileprivate var guides: [String: Guide] = [:]
     
     var allGpsNodes: [GpsNode] = []
     
     let dataDir: String
     let guideDownloader:GuideDownloader
     
-    var lastSyncTry: NSDate?
+    var lastSyncTry: Foundation.Date?
     let syncInterval = 600.0
     
     init()
     {
-        let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         dataDir = documentsPath.appendPathComponent("guideData")
-        try? NSFileManager.defaultManager().createDirectoryAtPath(dataDir, withIntermediateDirectories: true, attributes: nil)
+        try? FileManager.default.createDirectory(atPath: dataDir, withIntermediateDirectories: true, attributes: nil)
         
         guideDownloader = GuideDownloader(directory: dataDir)
 
@@ -52,11 +52,11 @@ class Model
                 return
             }
         }
-        lastSyncTry = NSDate()
+        lastSyncTry = Foundation.Date()
         guideDownloader.startSync()
     }
     
-    func getGuide(guideId: String, name: String?) -> Guide
+    func getGuide(_ guideId: String, name: String?) -> Guide
     {
         // lazy init of Guide objects
         return synchronized(self)
@@ -75,9 +75,9 @@ class Model
     
     func load()
     {
-        let path = NSBundle.mainBundle().pathForResource("config", ofType: "xml")
+        let path = Bundle.main.path(forResource: "config", ofType: "xml")
         var err: NSError?
-        let xmlData = NSData(contentsOfFile: path!)
+        let xmlData = try? Data(contentsOf: Foundation.URL(fileURLWithPath: path!))
         
         if let xmlDoc = try? ConfigDocument(xmlData: xmlData!)
         {
@@ -156,7 +156,7 @@ class Model
         
     }
     
-    func search(searchTerm: String) -> [IndexEntry]
+    func search(_ searchTerm: String) -> [IndexEntry]
     {
         if (!self.indexingDone)
         {

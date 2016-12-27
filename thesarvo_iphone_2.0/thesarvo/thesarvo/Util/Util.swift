@@ -9,15 +9,15 @@
 import Foundation
 import UIKit
 
-func runInBackground(block: dispatch_block_t) {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), block)
+func runInBackground(_ block: @escaping ()->()) {
+    DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background).async(execute: block)
 }
 
-func runOnMain(block: dispatch_block_t) {
-    dispatch_async(dispatch_get_main_queue(), block)
+func runOnMain(_ block: @escaping ()->()) {
+    DispatchQueue.main.async(execute: block)
 }
 
-func synchronized<T>(lockObj: AnyObject!, closure: ()->T) -> T
+func synchronized<T>(_ lockObj: AnyObject!, closure: ()->T) -> T
 {
     objc_sync_enter(lockObj)
     let retVal: T = closure()
@@ -25,32 +25,28 @@ func synchronized<T>(lockObj: AnyObject!, closure: ()->T) -> T
     return retVal
 }
 
-func runAfterDelay(delayInSeconds:Double, closure:()->()) {
-    dispatch_after(
-        dispatch_time(
-            DISPATCH_TIME_NOW,
-            Int64(delayInSeconds * Double(NSEC_PER_SEC))
-        ),
-        dispatch_get_main_queue(), closure)
+func runAfterDelay(_ delayInSeconds:Double, closure:@escaping ()->()) {
+    DispatchQueue.main.asyncAfter(
+        deadline: DispatchTime.now() + Double(Int64(delayInSeconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
 }
 
 func isIOS8OrLater() -> Bool
 {
-    switch UIDevice.currentDevice().systemVersion.compare("8.0.0", options: NSStringCompareOptions.NumericSearch)
+    switch UIDevice.current.systemVersion.compare("8.0.0", options: NSString.CompareOptions.numeric)
     {
-        case .OrderedSame, .OrderedDescending:
+        case .orderedSame, .orderedDescending:
             return true
-        case .OrderedAscending:
+        case .orderedAscending:
             return false
     }
 }
 
 func isIPhone() -> Bool
 {
-    return UIDevice.currentDevice().userInterfaceIdiom == .Phone
+    return UIDevice.current.userInterfaceIdiom == .phone
 }
 
 func isIPad() -> Bool
 {
-    return UIDevice.currentDevice().userInterfaceIdiom == .Pad
+    return UIDevice.current.userInterfaceIdiom == .pad
 }

@@ -10,7 +10,7 @@ import Foundation
 
 class ConfigDocument : AEXMLDocument
 {
-    override func addChild(name name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement
+    override func addChild(name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement
     {
         return addChild( ConfigElement(name, value: value, attributes: attributes) )
     }
@@ -19,7 +19,7 @@ class ConfigDocument : AEXMLDocument
 
 class ConfigElement : AEXMLElement
 {
-    override func addChild(name name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement
+    override func addChild(name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement
     {
         switch name
         {

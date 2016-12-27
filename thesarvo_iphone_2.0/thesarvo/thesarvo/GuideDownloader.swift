@@ -7,13 +7,42 @@
 //
 
 import Foundation
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
 
 class Updates:AEXMLDocument
 {
     
 
     
-    override func addChild(name name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement
+    override func addChild(name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement
     {
         return addChild( UpdatesElement(name, value: value, attributes: attributes) )
     }
@@ -36,9 +65,9 @@ class Updates:AEXMLDocument
         return ret
     }
     
-    func addIfNotPresent(update: Update)
+    func addIfNotPresent(_ update: Update)
     {
-        let existing = updates.indexOf()
+        let existing = updates.index()
         {
             u in
             return u.filename == update.filename
@@ -51,7 +80,7 @@ class Updates:AEXMLDocument
         self.updatesElement?.addChild(update)
     }
     
-    func removeUpdate(update: Update)
+    func removeUpdate(_ update: Update)
     {
         update.removeFromParent()
     }
@@ -59,7 +88,7 @@ class Updates:AEXMLDocument
 
 class UpdatesElement : AEXMLElement
 {
-    override func addChild(name name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement
+    override func addChild(name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement
     {
         return addChild( Update(name, value: value, attributes: attributes) )
     }
@@ -91,7 +120,7 @@ class Update : AEXMLElement
     var lastModified: String? { return attributes["lastModified"] }
 }
 
-class GuideDownloader: NSObject, NSURLSessionDelegate, NSURLSessionDownloadDelegate
+class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
 {
     let BASE_URL = "http://www.thesarvo.com/confluence"
     let SYNC_URL = "http://www.thesarvo.com/confluence/plugins/servlet/guide/sync/"
@@ -102,7 +131,7 @@ class GuideDownloader: NSObject, NSURLSessionDelegate, NSURLSessionDownloadDeleg
     
     var directory: String!
     
-    var directoryUrl: NSURL { return NSURL(fileURLWithPath: directory) }
+    var directoryUrl: Foundation.URL { return Foundation.URL(fileURLWithPath: directory) }
     
     var syncing: Bool
     {
@@ -143,12 +172,12 @@ class GuideDownloader: NSObject, NSURLSessionDelegate, NSURLSessionDownloadDeleg
     var completedOps = 0
     var totalOps = 0
     
-    var queue = NSOperationQueue()
+    var queue = OperationQueue()
     
-    var backgroundsession: NSURLSession!
-    var session: NSURLSession!
+    var backgroundsession: Foundation.URLSession!
+    var session: Foundation.URLSession!
     
-    let fm = NSFileManager.defaultManager()
+    let fm = FileManager.default
     
     var taskToUpdate = Dictionary<Int, Update>()
     
@@ -163,13 +192,13 @@ class GuideDownloader: NSObject, NSURLSessionDelegate, NSURLSessionDownloadDeleg
         queue.maxConcurrentOperationCount = 1
         queue.name = "Sync queue"
         
-        let config = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("com.thesarvo")
+        let config = URLSessionConfiguration.background(withIdentifier: "com.thesarvo")
 
-        backgroundsession = NSURLSession(configuration: config, delegate: self, delegateQueue: queue)
+        backgroundsession = Foundation.URLSession(configuration: config, delegate: self, delegateQueue: queue)
         
         //session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: nil, delegateQueue: queue)
 
-        session = NSURLSession.sharedSession()
+        session = Foundation.URLSession.shared
         
         // check if we have a newer resource updates.xml than our local one
         maybeCopyResourceUpdatesXml()
@@ -180,23 +209,23 @@ class GuideDownloader: NSObject, NSURLSessionDelegate, NSURLSessionDownloadDeleg
     
     func maybeCopyResourceUpdatesXml()
     {
-        if let resourceURL = NSBundle.mainBundle().URLForResource("updates", withExtension: "xml", subdirectory: "www/data")
+        if let resourceURL = Bundle.main.url(forResource: "updates", withExtension: "xml", subdirectory: "www/data")
         {
             let resourceLastMod = resourceURL.fileModificationDate
             
-            let updatesFileUrl = NSURL(fileURLWithPath:updatesFilePath)
+            let updatesFileUrl = Foundation.URL(fileURLWithPath:updatesFilePath)
             
             if !updatesFileUrl.fileExists()
             {
-                try? fm.copyItemAtURL(resourceURL, toURL: updatesFileUrl)
+                try? fm.copyItem(at: resourceURL, to: updatesFileUrl)
             }
             else
             {
                 if resourceLastMod?.timeIntervalSince1970 > updatesFileUrl.fileModificationDate?.timeIntervalSince1970
                 {
                     // resource is newer
-                    try? fm.removeItemAtURL(updatesFileUrl)
-                    try? fm.copyItemAtURL(resourceURL, toURL: updatesFileUrl)
+                    try? fm.removeItem(at: updatesFileUrl)
+                    try? fm.copyItem(at: resourceURL, to: updatesFileUrl)
                 }
             }
             
@@ -213,9 +242,9 @@ class GuideDownloader: NSObject, NSURLSessionDelegate, NSURLSessionDownloadDeleg
         }
         
         let filename = updatesFilePath
-        if fm.fileExistsAtPath(filename)
+        if fm.fileExists(atPath: filename)
         {
-            let data = NSData(contentsOfFile: filename)
+            let data = try? Data(contentsOf: Foundation.URL(fileURLWithPath: filename))
             if let data = data
             {
                 do
@@ -243,7 +272,7 @@ class GuideDownloader: NSObject, NSURLSessionDelegate, NSURLSessionDownloadDeleg
         if let updates = updates
         {
             let xml = updates.xmlString
-            try? xml.writeToFile(filename, atomically: true, encoding: NSUTF8StringEncoding)
+            try? xml.write(toFile: filename, atomically: true, encoding: String.Encoding.utf8)
         }
     }
     
@@ -255,7 +284,7 @@ class GuideDownloader: NSObject, NSURLSessionDelegate, NSURLSessionDownloadDeleg
             return
         }
         
-        queue.addOperationWithBlock()
+        queue.addOperation()
         {
             if let s = self.getUpdates().updatesElement?.maxLastMod
             {
@@ -265,12 +294,12 @@ class GuideDownloader: NSObject, NSURLSessionDelegate, NSURLSessionDownloadDeleg
             self.completedOps = 0
             self.totalOps = 1
             
-            let url = NSURL(string: "\(self.SYNC_URL)\(self.since)" )
-            let request = NSURLRequest( URL: url!)
+            let url = Foundation.URL(string: "\(self.SYNC_URL)\(self.since)" )
+            let request = URLRequest( url: url!)
             
-            let dt = self.session.dataTaskWithRequest(request)
+            let dt = self.session.dataTask(with: request)
             {
-                (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+                (data: Data?, response: URLResponse?, error: Error?) -> Void in
                 
                 if let e = error
                 {
@@ -280,14 +309,15 @@ class GuideDownloader: NSObject, NSURLSessionDelegate, NSURLSessionDownloadDeleg
                 {
                     self.handleSyncData(data)
                 }
-                self.completedOps++
+                self.completedOps += 1
             }
+
             dt.resume()
         }
 
     }
     
-    func handleSyncData(data: NSData)
+    func handleSyncData(_ data: Data)
     {
         let existingUpdates = getUpdates()
         
@@ -331,10 +361,10 @@ class GuideDownloader: NSObject, NSURLSessionDelegate, NSURLSessionDownloadDeleg
                 if let filename = update.filename
                 {
                     var weHaveNewer = false
-                    let attrs = try? fm.attributesOfItemAtPath( finalPath(filename) )
+                    let attrs = try? fm.attributesOfItem( atPath: finalPath(filename) )
                     if let attrs = attrs
                     {
-                        if let lastMod = attrs[NSFileModificationDate] as? NSDate
+                        if let lastMod = attrs[FileAttributeKey.modificationDate] as? Foundation.Date
                         {
                             if lastMod.timeIntervalSince1970 * 1000 >= lastModifiedDouble
                             {
@@ -368,18 +398,18 @@ class GuideDownloader: NSObject, NSURLSessionDelegate, NSURLSessionDownloadDeleg
         saveUpdates()
     }
     
-    func download(update: Update)
+    func download(_ update: Update)
     {
         if let url = update.url
         {
-            let nsurl = NSURL(string: url)
+            let nsurl = Foundation.URL(string: url)
             if let nsurl = nsurl
             {
                 print("Staring download of \(nsurl)")
-                let dt = backgroundsession.downloadTaskWithURL(nsurl)
+                let dt = backgroundsession.downloadTask(with: nsurl)
                 dt.resume()
                 self.taskToUpdate[dt.taskIdentifier] = update
-                totalOps++
+                totalOps += 1
             }
             else
             {
@@ -388,22 +418,22 @@ class GuideDownloader: NSObject, NSURLSessionDelegate, NSURLSessionDownloadDeleg
         }
     }
     
-    func finalPath(filename: String) -> String
+    func finalPath(_ filename: String) -> String
     {
         return "\(directory)/\(filename)"
     }
     
-    func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?)
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?)
     {
         if let error = error
         {
             print("Error downloading \(task) - \(error)")
-            completedOps++
+            completedOps += 1
         }
         
     }
     
-    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL)
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL)
     {
         if let update = taskToUpdate[downloadTask.taskIdentifier]
         {
@@ -414,11 +444,11 @@ class GuideDownloader: NSObject, NSURLSessionDelegate, NSURLSessionDownloadDeleg
                 do
                 {
                     let path = finalPath(filename)
-                    if (fm.fileExistsAtPath(path))
+                    if (fm.fileExists(atPath: path))
                     {
-                        try fm.removeItemAtPath(path)
+                        try fm.removeItem(atPath: path)
                     }
-                    try fm.moveItemAtPath(location.path!, toPath: path )
+                    try fm.moveItem(atPath: location.path, toPath: path )
                     
                     // remove the successful update and save the queue
                     getUpdates().removeUpdate(update)
@@ -433,10 +463,10 @@ class GuideDownloader: NSObject, NSURLSessionDelegate, NSURLSessionDownloadDeleg
 
         }
         
-        completedOps++
+        completedOps += 1
     }
     
-    func getUrls(id: String) -> Dictionary<String, String>
+    func getUrls(_ id: String) -> Dictionary<String, String>
     {
         var ret = Dictionary<String, String>()
         for url in directoryUrl.listDirectoryUrls()

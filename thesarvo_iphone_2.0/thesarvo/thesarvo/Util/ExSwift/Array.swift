@@ -10,7 +10,7 @@ import Foundation
 
 internal extension Array {
     
-    private var indexesInterval: HalfOpenInterval<Int> { return HalfOpenInterval<Int>(0, self.count) }
+    fileprivate var indexesInterval: Range<Int> { return (0 ..< self.count) }
     
 
 
@@ -21,9 +21,9 @@ internal extension Array {
         - parameter item: The item to search for
         - returns: Index of the matched item or nil
     */
-    func indexOf <U: Equatable> (item: U) -> Int? {
+    func indexOf <U: Equatable> (_ item: U) -> Int? {
         if item is Element {
-            return unsafeBitCast(self, [U].self).indexOf(item)
+            return unsafeBitCast(self, to: [U].self).indexOf(item)
         }
 
         return nil
@@ -35,8 +35,8 @@ internal extension Array {
         - parameter condition: A function which returns a boolean if an element satisfies a given condition or not.
         - returns: Index of the first matched item or nil
     */
-    func indexOf (condition: Element -> Bool) -> Int? {
-        for (index, element) in self.enumerate() {
+    func indexOf (_ condition: (Element) -> Bool) -> Int? {
+        for (index, element) in self.enumerated() {
             if condition(element) {
                 return index
             }
@@ -53,10 +53,10 @@ internal extension Array {
         - parameter index:
         - returns: Object at index in self
     */
-    func get (index: Int) -> Element? {
+    func get (_ index: Int) -> Element? {
 
         //  If the index is out of bounds it's assumed relative
-        func relativeIndex (index: Int) -> Int {
+        func relativeIndex (_ index: Int) -> Int {
             var _index = (index % count)
 
             if _index < 0 {

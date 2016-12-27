@@ -24,7 +24,7 @@
 import Foundation
 
 /// Simple XML parser.
-public class SWXMLHash {
+open class SWXMLHash {
     /**
     Method to parse XML passed in as a string.
     
@@ -32,8 +32,8 @@ public class SWXMLHash {
     
     - returns: An XMLIndexer instance that is used to look up elements in the XML
     */
-    class public func parse(xml: String) -> XMLIndexer {
-        return parse((xml as NSString).dataUsingEncoding(NSUTF8StringEncoding)!)
+    class open func parse(_ xml: String) -> XMLIndexer {
+        return parse((xml as NSString).data(using: String.Encoding.utf8.rawValue)!)
     }
     
     /**
@@ -43,14 +43,14 @@ public class SWXMLHash {
     
     - returns: An XMLIndexer instance that is used to look up elements in the XML
     */
-    class public func parse(data: NSData) -> XMLIndexer {
+    class open func parse(_ data: Data) -> XMLIndexer {
         let parser = XMLParser()
         return parser.parse(data)
     }
 }
 
 /// The implementation of NSXMLParserDelegate and where the parsing actually happens.
-class XMLParser : NSObject, NSXMLParserDelegate {
+class XMLParser : NSObject, XMLParserDelegate {
     var parsingElement: String = ""
     
     override init() {
@@ -64,38 +64,38 @@ class XMLParser : NSObject, NSXMLParserDelegate {
     var currentNode: XMLElement
     var parentStack = [XMLElement]()
     
-    func parse(data: NSData) -> XMLIndexer {
+    func parse(_ data: Data) -> XMLIndexer {
         // clear any prior runs of parse... expected that this won't be necessary, but you never know
-        parentStack.removeAll(keepCapacity: false)
+        parentStack.removeAll(keepingCapacity: false)
         root = XMLElement(name: "root")
         
         parentStack.append(root)
         
-        let parser = NSXMLParser(data: data)
+        let parser = Foundation.XMLParser(data: data)
         parser.delegate = self
         parser.parse()
         
         return XMLIndexer(root)
     }
     
-    func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String])
+    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String])
     {
         
         self.parsingElement = elementName
         
-        currentNode = parentStack[parentStack.count - 1].addElement(elementName, withAttributes: attributeDict)
+        currentNode = parentStack[parentStack.count - 1].addElement(elementName, withAttributes: attributeDict as NSDictionary)
         parentStack.append(currentNode)
         
         lastResults = ""
     }
     
-    func parser(parser: NSXMLParser, foundCharacters string: String) {
+    func parser(_ parser: XMLParser, foundCharacters string: String) {
         if parsingElement == currentNode.name {
-            lastResults += string.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+            lastResults += string.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         }
     }
     
-    func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         parsingElement = elementName
         
         if !lastResults.isEmpty {
@@ -107,10 +107,10 @@ class XMLParser : NSObject, NSXMLParserDelegate {
 }
 
 /// Returned from SWXMLHash, allows easy element lookup into XML data.
-public enum XMLIndexer : SequenceType {
+public enum XMLIndexer : Sequence {
     case Element(XMLElement)
-    case List([XMLElement])
-    case Error(NSError)
+    case list([XMLElement])
+    case error(NSError)
     
     /// The underlying XMLElement at the currently indexed level of XML.
     public var element: XMLElement? {
@@ -128,7 +128,7 @@ public enum XMLIndexer : SequenceType {
     public var all: [XMLIndexer] {
         get {
             switch self {
-            case .List(let list):
+            case .list(let list):
                 var xmlList = [XMLIndexer]()
                 for elem in list {
                     xmlList.append(XMLIndexer(elem))
@@ -150,25 +150,25 @@ public enum XMLIndexer : SequenceType {
     
     - returns: instance of XMLIndexer
     */
-    public func withAttr(attr: String, _ value: String) -> XMLIndexer {
+    public func withAttr(_ attr: String, _ value: String) -> XMLIndexer {
         let attrUserInfo = [NSLocalizedDescriptionKey: "XML Attribute Error: Missing attribute [\"\(attr)\"]"]
         let valueUserInfo = [NSLocalizedDescriptionKey: "XML Attribute Error: Missing attribute [\"\(attr)\"] with value [\"\(value)\"]"]
         switch self {
-        case .List(let list):
+        case .list(let list):
             if let elem = list.filter({$0.attributes[attr] == value}).first {
                 return .Element(elem)
             }
-            return .Error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: valueUserInfo))
+            return .error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: valueUserInfo))
         case .Element(let elem):
             if let attr = elem.attributes[attr] {
                 if attr == value {
                     return .Element(elem)
                 }
-                return .Error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: valueUserInfo))
+                return .error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: valueUserInfo))
             }
-            return .Error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: attrUserInfo))
+            return .error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: attrUserInfo))
         default:
-            return .Error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: attrUserInfo))
+            return .error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: attrUserInfo))
         }
     }
     
@@ -184,7 +184,7 @@ public enum XMLIndexer : SequenceType {
         case let value as XMLElement:
             self = .Element(value)
         default:
-            self = .Error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: nil))
+            self = .error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: nil))
         }
     }
     
@@ -205,12 +205,12 @@ public enum XMLIndexer : SequenceType {
                         return .Element(match[0])
                     }
                     else {
-                        return .List(match)
+                        return .list(match)
                     }
                 }
-                return .Error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: userInfo))
+                return .error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: userInfo))
             default:
-                return .Error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: userInfo))
+                return .error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: userInfo))
             }
         }
     }
@@ -226,38 +226,38 @@ public enum XMLIndexer : SequenceType {
         get {
             let userInfo = [NSLocalizedDescriptionKey: "XML Element Error: Incorrect index [\"\(index)\"]"]
             switch self {
-            case .List(let list):
+            case .list(let list):
                 if index <= list.count {
                     return .Element(list[index])
                 }
-                return .Error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: userInfo))
+                return .error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: userInfo))
             case .Element(let elem):
                 if index == 0 {
                     return .Element(elem)
                 }
                 else {
-                    return .Error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: userInfo))
+                    return .error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: userInfo))
                 }
             default:
-                return .Error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: userInfo))
+                return .error(NSError(domain: "SWXMLDomain", code: 1000, userInfo: userInfo))
             }
         }
     }
     
     typealias GeneratorType = XMLIndexer
     
-    public func generate() -> IndexingGenerator<[XMLIndexer]> {
-        return all.generate()
+    public func makeIterator() -> IndexingIterator<[XMLIndexer]> {
+        return all.makeIterator()
     }
 }
 
 /// XMLIndexer extensions
-extension XMLIndexer: BooleanType {
+extension XMLIndexer {
     /// True if a valid XMLIndexer, false if an error type
     public var boolValue: Bool {
         get {
             switch self {
-            case .Error:
+            case .error:
                 return false
             default:
                 return true
@@ -267,13 +267,13 @@ extension XMLIndexer: BooleanType {
 }
 
 /// Models an XML element, including name, text and attributes
-public class XMLElement {
+open class XMLElement {
     /// The name of the element
-    public let name: String
+    open let name: String
     /// The inner text of the element, if it exists
-    public var text: String?
+    open var text: String?
     /// The attributes of the element
-    public var attributes = [String:String]()
+    open var attributes = [String:String]()
     
     var elements = [String:[XMLElement]]()
     
@@ -296,7 +296,7 @@ public class XMLElement {
     
     - returns: The XMLElement that has now been added
     */
-    func addElement(name: String, withAttributes attributes: NSDictionary) -> XMLElement {
+    func addElement(_ name: String, withAttributes attributes: NSDictionary) -> XMLElement {
         let element = XMLElement(name: name)
         
         if var group = elements[name] {

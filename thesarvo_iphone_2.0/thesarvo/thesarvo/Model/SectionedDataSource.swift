@@ -60,13 +60,13 @@ protocol SectionedDataSourceBridge
 {
     func numberOfSections() -> Int
     
-    func numberOfRowsInSection(section: Int) -> Int
+    func numberOfRowsInSection(_ section: Int) -> Int
     
-    func cellForRowAtIndexPath(tableView: UITableView, indexPath: NSIndexPath) -> UITableViewCell
+    func cellForRowAtIndexPath(_ tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     
-    func titleForHeaderInSection(section: Int) -> String?
+    func titleForHeaderInSection(_ section: Int) -> String?
     
-    func titleForFooterInSection(section: Int) -> String?
+    func titleForFooterInSection(_ section: Int) -> String?
 }
 
 /**
@@ -77,7 +77,7 @@ protocol SectionedDataSourceBridge
 class SectionedDataSource<R> : SectionedDataSourceBridge
 {
     typealias RowToString = (R) -> (String)
-    typealias CellConfigurator = (UITableViewCell!, R) -> (Void)
+    typealias CellConfigurator = (UITableViewCell?, R) -> (Void)
     var sections : [Section<R>] = []
     var reuseIdentifier = "Cell"
     
@@ -97,7 +97,7 @@ class SectionedDataSource<R> : SectionedDataSourceBridge
     {
         self.cellConfigurator = {
             cell, row in
-            if let label = cell.textLabel
+            if let label = cell?.textLabel
             {
                 label.text = self.rowToString(row)
             }
@@ -105,7 +105,7 @@ class SectionedDataSource<R> : SectionedDataSourceBridge
 
     }
     
-    init( sections : [Section<R>], cellConfigurator: CellConfigurator)
+    init( sections : [Section<R>], cellConfigurator: @escaping CellConfigurator)
     {
         self.sections = sections
         self.cellConfigurator = cellConfigurator
@@ -113,7 +113,7 @@ class SectionedDataSource<R> : SectionedDataSourceBridge
     
 
 
-    func getRow(row: Int, section : Int = 0) -> R?
+    func getRow(_ row: Int, section : Int = 0) -> R?
     {
         if let section = sections.get(section)
         {
@@ -122,12 +122,12 @@ class SectionedDataSource<R> : SectionedDataSourceBridge
         return nil
     }
     
-    func getRow(indexPath: NSIndexPath) -> R?
+    func getRow(_ indexPath: IndexPath) -> R?
     {
-        return getRow(indexPath.row, section: indexPath.section)
+        return getRow((indexPath as NSIndexPath).row, section: (indexPath as NSIndexPath).section)
     }
     
-    func populateCell(cell: UITableViewCell, row: R)
+    func populateCell(_ cell: UITableViewCell, row: R)
     {
         cellConfigurator(cell, row)
     }
@@ -138,7 +138,7 @@ class SectionedDataSource<R> : SectionedDataSourceBridge
         return sections.count
     }
 
-    func numberOfRowsInSection(section: Int) -> Int
+    func numberOfRowsInSection(_ section: Int) -> Int
     {
         if let s = sections.get(section)
         {
@@ -147,11 +147,11 @@ class SectionedDataSource<R> : SectionedDataSourceBridge
         return 0
     }
     
-    func cellForRowAtIndexPath(tableView: UITableView, indexPath: NSIndexPath) -> UITableViewCell
+    func cellForRowAtIndexPath(_ tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     {
         let row = getRow(indexPath)
         let identifier = reuseIdentifier
-        let cell = tableView.dequeueReusableCellWithIdentifier(identifier, forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as UITableViewCell
         
         if let row = row
         {
@@ -163,7 +163,7 @@ class SectionedDataSource<R> : SectionedDataSourceBridge
     }
     
     
-    func titleForHeaderInSection(section: Int) -> String?
+    func titleForHeaderInSection(_ section: Int) -> String?
     {
         if let s = sections.get(section)
         {
@@ -172,7 +172,7 @@ class SectionedDataSource<R> : SectionedDataSourceBridge
         return ""
     }
     
-    func titleForFooterInSection(section: Int) -> String?
+    func titleForFooterInSection(_ section: Int) -> String?
     {
         if let s = sections.get(section)
         {
@@ -194,27 +194,27 @@ class TableViewDataSource : NSObject, UITableViewDataSource
         self.sectionedDataSource = sectionedDataSource
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return sectionedDataSource.numberOfRowsInSection(section)
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         return sectionedDataSource.cellForRowAtIndexPath(tableView, indexPath: indexPath)
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int
+    func numberOfSections(in tableView: UITableView) -> Int
     {
         return sectionedDataSource.numberOfSections()
     }
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String?
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?
     {
         return sectionedDataSource.titleForHeaderInSection(section)
     }
     
-    func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String?
+    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String?
     {
         return sectionedDataSource.titleForFooterInSection(section)
     }
@@ -238,7 +238,7 @@ class SingleSectionDataSource<R> : SectionedDataSource<R>
         self.rows = rows
     }
     
-    convenience init( rows : [R], cellConfigurator: CellConfigurator)
+    convenience init( rows : [R], cellConfigurator: @escaping CellConfigurator)
     {
         self.init(rows: rows)
         self.cellConfigurator = cellConfigurator
