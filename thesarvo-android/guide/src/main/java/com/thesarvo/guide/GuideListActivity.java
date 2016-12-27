@@ -1006,8 +1006,9 @@ public class GuideListActivity extends FragmentActivity
     private boolean expansionFilesDelivered(int mainVersion)
     {
         String mainFile = Helpers.getExpansionAPKFileName(this, true, mainVersion);
-        Log.d("Checking EXAPK existance", Helpers.generateSaveFileName(this, mainFile));
-        File file = new File(Helpers.generateSaveFileName(this, mainFile));
+        final String filename = Helpers.generateSaveFileName(this, mainFile);
+        Log.d("GuideListActivity", "Checking EXAPK existence at " + filename);
+        File file = new File(filename);
         return file.exists();
         //return Helpers.doesFileExist(this, mainFile, MAIN_EXP_FILE_SIZE, false);
     }
