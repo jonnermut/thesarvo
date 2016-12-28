@@ -28,6 +28,9 @@ import java.io.InputStream;
 
 public class ResourceManager implements IDownloaderClient
 {
+    private final File dataDirectory;
+    private GuideDownloader guideDownloader;
+    GuideListActivity activity;
     private ZipResourceFile resources;
     boolean haveResources;
 
@@ -40,9 +43,12 @@ public class ResourceManager implements IDownloaderClient
     public ResourceManager(GuideListActivity activity)
     {
         this.activity = activity;
+        this.dataDirectory = new File( activity.getFilesDir(), "data");
+        dataDirectory.mkdirs();
+
     }
 
-    GuideListActivity activity;
+
 
     public void startup()
     {
@@ -103,6 +109,7 @@ public class ResourceManager implements IDownloaderClient
             }
         }
 
+        this.guideDownloader = new GuideDownloader(activity, dataDirectory, this );
 
     }
 
@@ -124,9 +131,21 @@ public class ResourceManager implements IDownloaderClient
 
     }
 
+    public InputStream getDataAsset(String file)
+    {
+        return getWWWAsset("www/data/" + file);
+    }
+
     public InputStream getWWWAsset(String file)
     {
         Log.d("GuideListActivity", "getWWWAsset: " + file);
+
+        if (resources == null)
+        {
+            Log.e("GuideListActivity", "Error getting asset, resources was null");
+            return null;
+        }
+
         InputStream stream = null;
         try
         {
