@@ -3,15 +3,12 @@ package com.thesarvo.guide;
 import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Messenger;
 import android.support.v4.app.Fragment;
@@ -28,8 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.vending.expansion.zipfile.APKExpansionSupport;
-import com.android.vending.expansion.zipfile.ZipResourceFile;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
 import com.google.android.vending.expansion.downloader.DownloaderClientMarshaller;
 import com.google.android.vending.expansion.downloader.DownloaderServiceMarshaller;
@@ -38,19 +33,10 @@ import com.google.android.vending.expansion.downloader.IDownloaderClient;
 import com.google.android.vending.expansion.downloader.IDownloaderService;
 import com.google.android.vending.expansion.downloader.IStub;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 
 /**
@@ -71,14 +57,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
  */
 public class GuideListActivity extends FragmentActivity
         implements GuideListFragment.Callbacks,
-        SearchResultsFragment.OnFragmentInteractionListener, IDownloaderClient
+        SearchResultsFragment.OnFragmentInteractionListener
 {
 
     private static final String DB_BUILD = "database build date";
     private static final int TESTER = 10000017;
     private static final String[] SEARCH_PROJECTION = {"VIEW_ID", "ELEMENT_ID"};
-    private static final int EXP_VERSION_NO = 3;
-    private static final long MAIN_EXP_FILE_SIZE = 191635456l;
+
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -97,15 +82,14 @@ public class GuideListActivity extends FragmentActivity
 
     private SearchView searchView;
     private MenuItem searchViewMenuItem;
-    private boolean indexed = false;
-    private boolean mapsIndexed = false;
-
-    private static ZipResourceFile resources;
-    private static boolean haveResources;
+    boolean indexed = false;
+    boolean mapsIndexed = false;
 
     private static boolean launched = false;
 
-    private IStub downloaderStub;
+
+
+    private ResourceManager resourceManager = new ResourceManager(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -114,57 +98,7 @@ public class GuideListActivity extends FragmentActivity
 
         Log.d("Main", "Created " + getIntent().getAction() + " " + getIntent().getCategories());
 
-        //TODO, use this to check for the existance of the file and then mount it as a virtual file system
-        //we want to do this without communicating with the server if possible
-        if(!expansionFilesDelivered(EXP_VERSION_NO))
-        {
-            Intent notifier = new Intent(this, GuideListActivity.class);
-            notifier.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifier,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-
-            int downloading = -10;
-
-            try
-            {
-                downloading = DownloaderClientMarshaller.startDownloadServiceIfRequired(this,
-                        pendingIntent, AssetsDownloader.class);
-            }
-            catch (PackageManager.NameNotFoundException e)
-            {
-                e.printStackTrace();
-            }
-
-            if(downloading != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED)
-            {
-                downloaderStub = DownloaderClientMarshaller.CreateStub(this, AssetsDownloader.class);
-                setContentView(R.layout.downloader_ui);
-                return;
-            }
-
-        }
-        if(!haveResources)
-        {
-            try
-            {
-                resources = APKExpansionSupport.getAPKExpansionZipFile(this, EXP_VERSION_NO, 0);
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-                Toast.makeText(this, "Error opening database!", Toast.LENGTH_LONG).show();
-            }
-
-            if(resources == null)
-            {
-                Toast.makeText(this, "Error opening data", Toast.LENGTH_LONG).show();
-                Log.d("Main", "Error opening data");
-            }
-
-            haveResources = true;
-        }
-
+        resourceManager.startup();
 
         //we always want to update this to the current instance
         //if (instance ==  null)
@@ -349,14 +283,14 @@ public class GuideListActivity extends FragmentActivity
         if(false) //database re-indexing not yet implemented
         {
             //this stops the indexing from starting again on resume of activity
-            searchIndex = new SearchIndex();
+            searchIndex = new SearchIndex(this);
             searchIndex.execute("test");
         }
         else
         {
             searchIndexed();
             //need to create the maps point list since this wasn't done
-            new CreateMapsIndex().execute(null, null);
+            new CreateMapsIndex(this).execute(null, null);
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -602,30 +536,9 @@ public class GuideListActivity extends FragmentActivity
         }
     }
 
-    private IDownloaderService mRemoteService;
 
-    @Override
-    public void onServiceConnected(Messenger m)
-    {
-        mRemoteService = DownloaderServiceMarshaller.CreateProxy(m);
-        mRemoteService.onClientUpdated(downloaderStub.getMessenger());
-    }
 
-    @Override
-    public void onDownloadStateChanged(int newState)
-    {
-        switch (newState)
-        {
-            case IDownloaderClient.STATE_COMPLETED:
-                //restart the activity - won't do this...
-                /*Intent intent = new Intent(this, GuideListActivity.class);
-                intent.setAction(Intent.ACTION_MAIN);
-                startActivity(intent);*/
-                finish();   //simply exit and let them reopen the app
-        }
-    }
 
-    @Override
     public void onDownloadProgress(DownloadProgressInfo progress)
     {
         TextView downloadProgress = (TextView) findViewById(R.id.text_downloaded_amount);
@@ -644,378 +557,18 @@ public class GuideListActivity extends FragmentActivity
 
     @Override
     protected void onResume() {
-        if (null != downloaderStub) {
-            downloaderStub.connect(this);
-        }
+        resourceManager.resume(this);
         super.onResume();
     }
 
     @Override
     protected void onStop() {
-        if (null != downloaderStub) {
-            downloaderStub.disconnect(this);
-        }
+        resourceManager.stop(this);
         super.onStop();
     }
 
-    private class SearchIndex extends AsyncTask<String, Integer, Long>
+    public ResourceManager getResourceManager()
     {
-        final String WWW_PATH = "www/data/";
-
-        protected Long doInBackground(String... files)
-        {
-            //delete the old database first
-            getBaseContext().deleteDatabase(IndexContentProvider.DBNAME);
-
-            //find all XML files
-            String[] allFiles;
-            AssetManager manager = getAssets();
-            Map<String, ViewModel.ViewDef> views = ViewModel.get().getViews();
-            Map<String, ViewModel.ListItem> guideListItems = ViewModel.get().getGuideListItems();
-            Map<String, IndexEntry> index = IndexEntry.getIndex();
-            int key = 1;
-
-            try
-            {
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder  builder = factory.newDocumentBuilder();
-
-                //Index views first
-                for(ViewModel.ViewDef viewDef : views.values())
-                {
-                    IndexEntry entry = new IndexEntry();
-                    entry.viewId = viewDef.getId();
-                    entry.text = viewDef.getName();
-                    entry.key = ++key;
-                    entry.type = IndexEntry.IndexType.MENU_ITEM;
-
-                    index.put(entry.text, entry);
-                    addEntry(entry);
-                }
-
-                //allFiles = manager.list(WWW_PATH);
-
-                List<String> actualFiles = new ArrayList<>();
-
-//                for(String s : allFiles)
-//                {
-//                    if(".xml".equals(s.substring(s.length() - 4)))
-//                    {
-//                        actualFiles.add(WWW_PATH + s);
-//                    }
-//                }
-
-
-                //load all XML files
-                for(ViewModel.ListItem item : guideListItems.values())
-                //for(String s : actualFiles)
-                {
-                    String s = WWW_PATH + item.getViewId().substring(6) +  ".xml";
-                    //NOTE assets are no longer bundeled but this is no longer used.
-                    //I'll keep it here for now for when this code is eventually ported to a separate app
-                    InputStream stream = manager.open(s);
-                    Document dom = builder.parse(stream);
-
-                    Element root = dom.getDocumentElement();
-
-                    //make index entry for view it's self
-                    IndexEntry entry = new IndexEntry();
-                    entry.viewId = item.getViewId();
-                    entry.text = item.getText();
-                    entry.key = ++key;
-                    entry.type = IndexEntry.IndexType.VIEW;
-
-                    index.put(entry.text, entry);
-                    addEntry(entry);
-                    //Log.d("Indexing", "adding " + entry.text);
-
-
-                    //if there's no guide data continue
-                    if(!root.getTagName().equals("guide"))
-                    {
-                        Log.d("Search Index", s + " not a guide");
-                        continue;
-                    }
-
-                    for (Element e : Xml.getElements(dom.getElementsByTagName("climb")))
-                    {
-                        IndexEntry entry1 = new IndexEntry();
-                        entry1.viewId = item.getViewId();
-                        entry1.viewName = item.getText();
-                        entry1.elementID = e.getAttribute("id");
-
-                        String stars = e.getAttribute("stars");
-                        String grade = e.getAttribute("grade");
-                        String name = e.getAttribute("name");
-
-                        String text = String.format("%s %s %s", stars, grade, name);
-                        text = text.trim();
-                        entry1.text = text;
-
-                        entry1.type = IndexEntry.IndexType.CLIMB;
-                        entry1.key = ++key;
-
-                       //Log.d("Indexing", "adding climb " + text);
-                        index.put(text, entry1);
-                        addEntry(entry1);
-
-                    }
-
-                    //do the same for boulder problems because teh Krauss
-                    for(Element e : Xml.getElements(dom.getElementsByTagName("problem")))
-                    {
-                        IndexEntry entry1 = new IndexEntry();
-                        entry1.viewId = item.getViewId();
-                        entry1.viewName = item.getText();
-                        entry1.elementID = e.getAttribute("id");
-
-                        String stars = e.getAttribute("stars");
-                        String grade = e.getAttribute("grade");
-                        String name = e.getAttribute("name");
-
-                        String text = String.format("%s %s %s", stars, grade, name);
-                        text = text.trim();
-                        entry1.text = text;
-
-                        entry1.type = IndexEntry.IndexType.PROBLEM;
-                        entry1.key = ++key;
-
-                        //Log.d("Indexing", "adding boulder " + text);
-                        index.put(text, entry1);
-                        addEntry(entry1);
-                    }
-
-                    for(Element e :Xml.getElements(dom.getElementsByTagName("text")))
-                    {
-                        if(e.getAttribute("class").startsWith("h"))
-                        {
-                            IndexEntry entry1 = new IndexEntry();
-                            entry1.viewId = item.getViewId();
-                            entry1.viewName = item.getText();
-                            entry1.elementID = e.getAttribute("id");
-
-                            String text = e.getTextContent().trim();
-                            entry1.text = text;
-
-                            entry1.type = IndexEntry.IndexType.HEADING;
-                            entry1.key = ++key;
-
-                            //Log.d("Indexing", "adding heading " + text);
-                            index.put(text, entry1);
-                            addEntry(entry1);
-                        }
-                    }
-
-
-                    List<GPSNode> gpsNodes = MapsFragment.getGPSPoints();
-
-                    for (Element e : Xml.getElements(dom.getElementsByTagName("gps")))
-                    {
-                        String id = e.getAttribute("id");
-                        List<Point> points = new ArrayList<>();
-
-                        for(Element ePoint : Xml.getElements(e.getElementsByTagName("point")))
-                        {
-                            Point point = new Point(ePoint);
-                            points.add(point);
-
-                        }
-
-
-                        //Log.d("Indexing", "adding gps node for " + item.getText());
-                        GPSNode gpsnode = new GPSNode(id, points);
-                        gpsNodes.add(gpsnode);
-
-                        addGPSEntry(gpsnode);
-
-
-                        //don't think an entry for the GPS is needed, not sure that that code is doing
-
-                    }
-
-                }
-
-            }
-            catch (Throwable e)
-            {
-                e.printStackTrace();
-                return (long) 0;
-            }
-
-            Log.d("Search Index", "Indexing complete!");
-
-            return (long) 1;
-        }
-
-        /**
-         * helper to add an entry to the main table and the suggestions table
-         */
-        public void addEntry(IndexEntry entry)
-        {
-            //add normal entry and suggestions entry
-            ContentValues values = new ContentValues();
-            //values.put(IndexContentProvider.COL_ID, entry.key);
-            values.put(IndexContentProvider.COL_TEXT, entry.text);
-            values.put(IndexContentProvider.COL_ELEMENT_ID, entry.elementID);
-            values.put(IndexContentProvider.COL_TYPE, entry.type.ordinal());
-            values.put(IndexContentProvider.COL_VIEW_ID, entry.viewId);
-            values.put(IndexContentProvider.COL_VIEW_NAME, entry.viewName);
-
-            //add this one and then use the return to add the next
-            Uri.Builder builder = new Uri.Builder();
-            builder.scheme(ContentResolver.SCHEME_CONTENT);
-            builder.authority(IndexContentProvider.AUTHORITY);
-            builder.path(IndexContentProvider.MAIN_TABLE);
-            Uri uri = builder.build();
-
-            Uri normalUri = getContentResolver().insert(uri, values);
-
-            //create the suggestion entry
-            ContentValues suggestionValues = new ContentValues();
-            suggestionValues.put(SearchManager.SUGGEST_COLUMN_TEXT_1, entry.text);
-            suggestionValues.put(SearchManager.SUGGEST_COLUMN_TEXT_2, entry.viewName);
-            suggestionValues.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, normalUri.getLastPathSegment());
-
-            builder.clearQuery();
-            builder.scheme(ContentResolver.SCHEME_CONTENT);
-            builder.authority(IndexContentProvider.AUTHORITY);
-            builder.path(IndexContentProvider.SUGESTIONS_TABLE);
-            uri = builder.build();
-
-            getContentResolver().insert(uri, suggestionValues);
-        }
-
-        public void addGPSEntry(GPSNode node)
-        {
-            for(Point p : node.getPoints())
-            {
-                ContentValues values = new ContentValues();
-                values.put(IndexContentProvider.COL_GPS_ID, node.getId());
-                values.put(IndexContentProvider.COL_LAT, p.getLatLng().latitude);
-                values.put(IndexContentProvider.COL_LNG, p.getLatLng().longitude);
-                values.put(IndexContentProvider.COL_DESC, p.getDescription());
-                values.put(IndexContentProvider.COL_CODE, p.getCode());
-
-                Uri.Builder builder = new Uri.Builder();
-                builder.authority(IndexContentProvider.AUTHORITY);
-                builder.scheme(ContentResolver.SCHEME_CONTENT);
-                builder.path(IndexContentProvider.MAP_TABLE);
-
-                getContentResolver().insert(builder.build(), values);
-            }
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... progress)
-        {
-
-        }
-
-        @Override
-        protected void onPostExecute(Long result)
-        {
-            indexed = true;
-            mapsIndexed = true;
-            searchIndexed();
-        }
-    }
-
-    private class CreateMapsIndex extends AsyncTask<Void, Void, Void>
-    {
-        @Override
-        protected Void doInBackground(Void... voids)
-        {
-            List<GPSNode> nodes = MapsFragment.getGPSPoints();
-
-            Uri.Builder builder = new Uri.Builder();
-            builder.scheme(ContentResolver.SCHEME_CONTENT);
-            builder.authority(IndexContentProvider.AUTHORITY);
-            builder.path(IndexContentProvider.MAP_TABLE);
-
-            //getting all is inefficient, but we can do this async and we do need all that data
-            Cursor cursor = getContentResolver().query(builder.build(), null, null, null, null);
-
-            if(cursor == null || cursor.getCount() < 1)
-            {
-                Log.d("Creating maps index", "something went wrong getting cursor!");
-                return null;
-            }
-
-            int id = -1;
-            GPSNode current;
-            List<Point> points = new ArrayList<>(); //new will never get used but is needed for compliation
-
-            while(cursor.moveToNext())
-            {
-                String sID = cursor.getString(cursor.getColumnIndex(IndexContentProvider.COL_GPS_ID));
-                int newID = Integer.valueOf(sID);
-
-                //start a new GPS node if necessary, should aways happen on first run
-                if(newID != id)
-                {
-                    points = new ArrayList<>();
-                    current = new GPSNode(sID, points);
-                    nodes.add(current);
-                    id = newID;
-                }
-
-                double lat = cursor.getDouble(cursor.getColumnIndex(IndexContentProvider.COL_LAT));
-                double lng = cursor.getDouble(cursor.getColumnIndex(IndexContentProvider.COL_LNG));
-                String desc = cursor.getString(cursor.getColumnIndex(IndexContentProvider.COL_DESC));
-                String code = cursor.getString(cursor.getColumnIndex(IndexContentProvider.COL_CODE));
-
-                points.add(new Point(new LatLng(lat, lng), desc, code));
-            }
-
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid)
-        {
-            super.onPostExecute(aVoid);
-            mapsIndexed = true;
-            Log.d("Map Index", "Map index data created");
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values)
-        {
-            super.onProgressUpdate(values);
-        }
-    }
-
-    public static InputStream getWWWAsset(String file)
-    {
-        Log.d("GuideListActivity", "getWWWAsset: " + file);
-        InputStream stream = null;
-        try
-        {
-            stream = resources.getInputStream(file);
-        }
-        catch (IOException e)
-        {
-            Log.e("GuideListActivity", "Error getting asset: " + file, e);
-        }
-
-        if (stream == null)
-        {
-            Log.e("GuideListActivity", "Could not find asset, returning null: " + file);
-        }
-
-        return stream;
-    }
-
-    //probably don't need anything this complex at this point
-    //I don't even see the point of this when in step two we can use a lib to verify this anyway
-    private boolean expansionFilesDelivered(int mainVersion)
-    {
-        String mainFile = Helpers.getExpansionAPKFileName(this, true, mainVersion);
-        final String filename = Helpers.generateSaveFileName(this, mainFile);
-        Log.d("GuideListActivity", "Checking EXAPK existence at " + filename);
-        File file = new File(filename);
-        return file.exists();
-        //return Helpers.doesFileExist(this, mainFile, MAIN_EXP_FILE_SIZE, false);
+        return resourceManager;
     }
 }
