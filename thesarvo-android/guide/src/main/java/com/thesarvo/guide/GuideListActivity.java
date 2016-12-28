@@ -77,7 +77,7 @@ public class GuideListActivity extends FragmentActivity
     private static final String DB_BUILD = "database build date";
     private static final int TESTER = 10000017;
     private static final String[] SEARCH_PROJECTION = {"VIEW_ID", "ELEMENT_ID"};
-    private static final int EXP_VERSION_NO = 2;
+    private static final int EXP_VERSION_NO = 3;
     private static final long MAIN_EXP_FILE_SIZE = 191635456l;
 
     /**
@@ -988,6 +988,7 @@ public class GuideListActivity extends FragmentActivity
 
     public static InputStream getWWWAsset(String file)
     {
+        Log.d("GuideListActivity", "getWWWAsset: " + file);
         InputStream stream = null;
         try
         {
@@ -995,7 +996,12 @@ public class GuideListActivity extends FragmentActivity
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            Log.e("GuideListActivity", "Error getting asset: " + file, e);
+        }
+
+        if (stream == null)
+        {
+            Log.e("GuideListActivity", "Could not find asset, returning null: " + file);
         }
 
         return stream;

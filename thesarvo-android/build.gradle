@@ -15,3 +15,16 @@ allprojects {
     }
 
 }
+
+task zipExtension(type:Zip) {
+    from "$projectDir/../thesarvo_iphone_2.0/thesarvo/www"
+    //include "www/**/*" main.2.com.thesarvo.guide.obb
+    into "www"
+    archiveName "main.3.com.thesarvo.guide.obb"
+    destinationDir file("build/extension")
+}
+// /storage/emulated/0/Android/obb/com.thesarvo.guide/main.3.com.thesarvo.guide.obb
+
+task pushExtension(type:Exec) {
+    commandLine '/Users/jon/.android-sdk/platform-tools/adb', 'push', 'build/extension/main.3.com.thesarvo.guide.obb', '/storage/emulated/0/Android/obb/com.thesarvo.guide/'
+}

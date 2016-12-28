@@ -420,7 +420,7 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
     
     func finalPath(_ filename: String) -> String
     {
-        return "\(directory)/\(filename)"
+        return "\(directory!)/\(filename)"
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?)
