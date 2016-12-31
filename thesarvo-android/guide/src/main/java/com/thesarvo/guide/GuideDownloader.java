@@ -4,7 +4,10 @@ package com.thesarvo.guide;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.common.collect.Iterables;
+
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -12,13 +15,17 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -37,6 +44,7 @@ import javax.xml.transform.stream.StreamResult;
 public class GuideDownloader
 {
     private final ResourceManager resourceManager;
+    private List<Update> queuedDownloads;
 
     class Update
     {
@@ -47,9 +55,21 @@ public class GuideDownloader
 
         Element element;
 
-        String url;
-        String filename;
-        String lastModified;
+        public String getUrl()
+        {
+            return element.getAttribute("url");
+        }
+
+        public String getFilename()
+        {
+            return element.getAttribute("filename");
+        }
+
+        public String getLastModified()
+        {
+            return element.getAttribute("lastModified");
+        }
+
     }
 
     class Updates
@@ -136,6 +156,16 @@ public class GuideDownloader
                 Log.e("GuideDownloader","Unexpected error saving updates.xml", e);
             }
         }
+
+        public void addUpdate(Update update)
+        {
+            Element newOne = this.document.createElement("update");
+            newOne.setAttribute("url", update.getUrl());
+            newOne.setAttribute("filename", update.getFilename());
+            newOne.setAttribute("lastModified", update.getLastModified());
+            document.getDocumentElement().appendChild(newOne);
+
+        }
     }
 
     static String BASE_URL = "http://www.thesarvo.com/confluence";
@@ -144,7 +174,6 @@ public class GuideDownloader
     long since = 0;
 
     File directory = null;
-    Context context = null;
 
     int completedOps = 0;
     int totalOps = 0;
@@ -160,9 +189,8 @@ public class GuideDownloader
         return completedOps < totalOps && totalOps > 0;
     }
 
-    public GuideDownloader(Context context, File directory, ResourceManager resourceManager)
+    public GuideDownloader(File directory, ResourceManager resourceManager)
     {
-        this.context = context;
         this.directory = directory;
         this.resourceManager = resourceManager;
 
@@ -185,6 +213,8 @@ public class GuideDownloader
 
             // check if we have a newer resource updates.xml than our local one
             maybeCopyResourceUpdatesXml();
+
+            queue.execute(this::startSync);
         });
 
     }
@@ -214,7 +244,109 @@ public class GuideDownloader
 
     private File getFinalPath(String filename)
     {
-        return new File(directory, filename);
+        return new File(directory, filename).getAbsoluteFile();
+    }
+
+    private void startSync()
+    {
+        if (isSyncing())
+        {
+            Log.d("GuideDownloader", "Already syncing, not starting again");
+            return;
+        }
+
+        try
+        {
+            Long s = this.updates.getMaxLastMod();
+            if (s == null)
+                s = 0L;
+
+            this.completedOps = 0;
+            this.totalOps = 1;
+
+            String surl = SYNC_URL + s.toString();
+            URL url = new URL(surl);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            InputStream in = new BufferedInputStream(conn.getInputStream());
+            Updates newUpdates = new Updates(in);
+            processNewUpdates(newUpdates);
+
+            this.queuedDownloads = this.updates.getUpdates();
+            this.totalOps += this.queuedDownloads.size();
+            queue.execute(this::downloadFirst);
+        }
+        catch (Throwable t)
+        {
+            Log.e("GuideDownloader", "Error getting updates list", t);
+
+        }
+        completedOps++;
+    }
+
+    /**
+     * Attempt to download the head of the queue
+     */
+    private void downloadFirst()
+    {
+        if (queuedDownloads == null || queuedDownloads.isEmpty())
+            return;
+
+        // pop the top of the queue
+        Update u = queuedDownloads.get(0);
+        queuedDownloads.remove(0);
+
+        try
+        {
+            URL url = new URL(u.getUrl());
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            File tempFile = new File( GuideApplication.get().getCacheDir(), UUID.randomUUID().toString() );
+
+            try ( InputStream in = new BufferedInputStream(conn.getInputStream()) )
+            {
+                FileUtils.copyInputStreamToFile(in, tempFile);
+            }
+
+            // atomically move into place
+            File finalPath = getFinalPath(u.getFilename());
+            if (finalPath.exists())
+                finalPath.delete();
+            tempFile.renameTo(finalPath);
+
+            // remove from our list
+            u.element.getParentNode().removeChild(u.element);
+            updates.save();
+        }
+        catch (Throwable t)
+        {
+            Log.e("GuideDownloader", "Error downloading file: " + u.getUrl(), t);
+        }
+        completedOps++;
+
+        if (queuedDownloads.size() > 0)
+        {
+            queue.execute(this::downloadFirst);
+        }
+    }
+
+    private void processNewUpdates(Updates newUpdates)
+    {
+        List<Update> existing = new ArrayList<>(this.updates.getUpdates());
+        for (Update update : newUpdates.getUpdates())
+        {
+            String f = update.getFilename();
+            if (f != null)
+            {
+                if (!Iterables.any( existing, u ->  f.equals(u.getFilename()) ))
+                {
+                    // no match, add it
+                    this.updates.addUpdate(update);
+                }
+            }
+
+        }
+        this.updates.save();
     }
 
 }

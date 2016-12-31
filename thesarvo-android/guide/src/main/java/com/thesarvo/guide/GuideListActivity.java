@@ -87,7 +87,7 @@ public class GuideListActivity extends FragmentActivity
 
     private static boolean launched = false;
 
-    private ResourceManager resourceManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -96,8 +96,6 @@ public class GuideListActivity extends FragmentActivity
 
         Log.d("Main", "Created " + getIntent().getAction() + " " + getIntent().getCategories());
 
-        resourceManager = new ResourceManager(this);
-        resourceManager.startup();
 
         //we always want to update this to the current instance
         //if (instance ==  null)
@@ -556,18 +554,15 @@ public class GuideListActivity extends FragmentActivity
 
     @Override
     protected void onResume() {
-        resourceManager.resume(this);
+        //resourceManager.resume(this);
         super.onResume();
     }
 
     @Override
     protected void onStop() {
-        resourceManager.stop(this);
+        //resourceManager.stop(this);
         super.onStop();
     }
 
-    public ResourceManager getResourceManager()
-    {
-        return resourceManager;
-    }
+
 }

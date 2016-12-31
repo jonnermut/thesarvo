@@ -30,7 +30,7 @@ public class ResourceManager implements IDownloaderClient
 {
     private final File dataDirectory;
     private GuideDownloader guideDownloader;
-    GuideListActivity activity;
+    GuideApplication guideApplication;
     private ZipResourceFile resources;
     boolean haveResources;
 
@@ -40,10 +40,10 @@ public class ResourceManager implements IDownloaderClient
     private static final int EXP_VERSION_NO = 3;
     private static final long MAIN_EXP_FILE_SIZE = 191635456l;
 
-    public ResourceManager(GuideListActivity activity)
+    public ResourceManager(GuideApplication guideApplication)
     {
-        this.activity = activity;
-        this.dataDirectory = new File( activity.getFilesDir(), "data");
+        this.guideApplication = guideApplication;
+        this.dataDirectory = new File( guideApplication.getFilesDir(), "data");
         dataDirectory.mkdirs();
 
     }
@@ -52,7 +52,7 @@ public class ResourceManager implements IDownloaderClient
 
     public void startup()
     {
-        Context context = activity;
+        Context context = guideApplication;
 
 
         //TODO, use this to check for the existance of the file and then mount it as a virtual file system
@@ -80,7 +80,7 @@ public class ResourceManager implements IDownloaderClient
             if (downloading != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED)
             {
                 downloaderStub = DownloaderClientMarshaller.CreateStub(this, AssetsDownloader.class);
-                activity.setContentView(R.layout.downloader_ui);
+                GuideListActivity.get().setContentView(R.layout.downloader_ui);
                 return;
             }
 
@@ -94,12 +94,12 @@ public class ResourceManager implements IDownloaderClient
             catch (IOException e)
             {
                 e.printStackTrace();
-                Toast.makeText(activity, "Error opening database!", Toast.LENGTH_LONG).show();
+                Toast.makeText(guideApplication, "Error opening database!", Toast.LENGTH_LONG).show();
             }
 
             if (resources == null)
             {
-                Toast.makeText(activity, "Error opening data", Toast.LENGTH_LONG).show();
+                Toast.makeText(guideApplication, "Error opening data", Toast.LENGTH_LONG).show();
                 Log.d("Main", "Error opening data");
             }
             else
@@ -109,7 +109,7 @@ public class ResourceManager implements IDownloaderClient
             }
         }
 
-        this.guideDownloader = new GuideDownloader(activity, dataDirectory, this );
+        this.guideDownloader = new GuideDownloader(dataDirectory, this );
 
     }
 
@@ -196,13 +196,14 @@ public class ResourceManager implements IDownloaderClient
                 /*Intent intent = new Intent(this, GuideListActivity.class);
                 intent.setAction(Intent.ACTION_MAIN);
                 startActivity(intent);*/
-                activity.finish();   //simply exit and let them reopen the app
+                //guideApplication.finish();   //simply exit and let them reopen the app
+                GuideListActivity.get().finish();
         }
     }
 
     @Override
     public void onDownloadProgress(DownloadProgressInfo progress)
     {
-        activity.onDownloadProgress(progress);
+        GuideListActivity.get().onDownloadProgress(progress);
     }
 }

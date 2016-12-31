@@ -7,7 +7,8 @@
         android:allowBackup="true"
         android:icon="@drawable/thesarvoapplogo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:name="com.thesarvo.guide.GuideApplication">
         <activity
             android:name=".GuideListActivity"
             android:label="@string/app_name"

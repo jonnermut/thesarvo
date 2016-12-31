@@ -311,7 +311,7 @@ public class GuideDetailFragment extends Fragment
         String ret = null;
         try
         {
-            InputStream is =  GuideListActivity.get().getResourceManager().getWWWAsset("www/data/"+ filename);
+            InputStream is =  GuideApplication.get().getResourceManager().getDataAsset(filename);
             ret = IOUtils.toString(is, Charsets.UTF_8);
         }
         catch (IOException e)
@@ -392,7 +392,7 @@ public class GuideDetailFragment extends Fragment
                     path = path.substring("/android_asset/".length());
                     //Log.d("Intercept response", path);
 
-                    InputStream stream = GuideListActivity.get().getResourceManager().getWWWAsset(path);
+                    InputStream stream = GuideApplication.get().getResourceManager().getWWWAsset(path);
                     String mime = map.getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(url));
 
                     return new WebResourceResponse(mime, "UTF-8", stream);
