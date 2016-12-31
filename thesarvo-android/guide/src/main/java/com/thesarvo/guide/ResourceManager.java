@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Messenger;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -19,6 +20,8 @@ import com.google.android.vending.expansion.downloader.IDownloaderService;
 import com.google.android.vending.expansion.downloader.IStub;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -28,6 +31,7 @@ import java.io.InputStream;
 
 public class ResourceManager implements IDownloaderClient
 {
+    public static final String WWW_DATA = "www/data/";
     private final File dataDirectory;
     private GuideDownloader guideDownloader;
     GuideApplication guideApplication;
@@ -133,7 +137,7 @@ public class ResourceManager implements IDownloaderClient
 
     public InputStream getDataAsset(String file)
     {
-        return getWWWAsset("www/data/" + file);
+        return getWWWAsset(WWW_DATA + file);
     }
 
     public InputStream getWWWAsset(String file)
@@ -144,6 +148,25 @@ public class ResourceManager implements IDownloaderClient
         {
             Log.e("GuideListActivity", "Error getting asset, resources was null");
             return null;
+        }
+
+        long resourcesLastMod = getExpansionFileLastModified();
+
+        // if we have downloaded a newer version, return that in preference to the resources zip
+        if (file.startsWith(WWW_DATA))
+        {
+            File downloaded = new File(dataDirectory, file.substring(WWW_DATA.length()) );
+            if (downloaded.exists() && downloaded.lastModified() > resourcesLastMod)
+            {
+                try
+                {
+                    return new FileInputStream(downloaded);
+                }
+                catch (FileNotFoundException e)
+                {
+                    Log.e("ResourceManager", "Inexplicably the file wasnt there", e);
+                }
+            }
         }
 
         InputStream stream = null;
@@ -168,15 +191,28 @@ public class ResourceManager implements IDownloaderClient
     //I don't even see the point of this when in step two we can use a lib to verify this anyway
     private boolean expansionFilesDelivered(Context context, int mainVersion)
     {
-        String mainFile = Helpers.getExpansionAPKFileName(context, true, mainVersion);
-        final String filename = Helpers.generateSaveFileName(context, mainFile);
-        Log.d("GuideListActivity", "Checking EXAPK existence at " + filename);
-        File file = new File(filename);
+        File file = getExpansionFile(context, mainVersion);
+        Log.d("GuideListActivity", "Checking EXAPK existence at " + file.toString());
         return file.exists();
         //return Helpers.doesFileExist(this, mainFile, MAIN_EXP_FILE_SIZE, false);
     }
 
+    private long getExpansionFileLastModified()
+    {
+        File file = getExpansionFile(guideApplication, EXP_VERSION_NO);
+        if (!file.exists())
+            return 0L;
+        return file.lastModified();
+    }
 
+
+    @NonNull
+    private File getExpansionFile(Context context, int mainVersion)
+    {
+        String mainFile = Helpers.getExpansionAPKFileName(context, true, mainVersion);
+        final String filename = Helpers.generateSaveFileName(context, mainFile);
+        return new File(filename);
+    }
 
 
     @Override

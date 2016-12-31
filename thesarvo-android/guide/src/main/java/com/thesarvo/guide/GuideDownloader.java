@@ -295,24 +295,13 @@ public class GuideDownloader
         // pop the top of the queue
         Update u = queuedDownloads.get(0);
         queuedDownloads.remove(0);
+        File finalPath = getFinalPath(u.getFilename());
+        String surl = u.getUrl();
+
 
         try
         {
-            URL url = new URL(u.getUrl());
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            File tempFile = new File( GuideApplication.get().getCacheDir(), UUID.randomUUID().toString() );
-
-            try ( InputStream in = new BufferedInputStream(conn.getInputStream()) )
-            {
-                FileUtils.copyInputStreamToFile(in, tempFile);
-            }
-
-            // atomically move into place
-            File finalPath = getFinalPath(u.getFilename());
-            if (finalPath.exists())
-                finalPath.delete();
-            tempFile.renameTo(finalPath);
+            downloadUrl(surl, finalPath);
 
             // remove from our list
             u.element.getParentNode().removeChild(u.element);
@@ -328,6 +317,25 @@ public class GuideDownloader
         {
             queue.execute(this::downloadFirst);
         }
+    }
+
+    private void downloadUrl(String surl, File finalPath) throws IOException
+    {
+        URL url = new URL(surl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+        File tempFile = new File( GuideApplication.get().getCacheDir(), UUID.randomUUID().toString() );
+
+        InputStream in = new BufferedInputStream(conn.getInputStream());
+        FileUtils.copyInputStreamToFile(in, tempFile);
+        IOUtils.closeQuietly(in);
+        conn.disconnect();
+
+        // atomically move into place
+
+        if (finalPath.exists())
+            finalPath.delete();
+        tempFile.renameTo(finalPath);
     }
 
     private void processNewUpdates(Updates newUpdates)
