@@ -11,11 +11,13 @@
     <string name="action_search">Search</string>
     <string name="search_hint">Search for a climb, grade or star rating!</string>
     <string name="title_activity_searchable">SearchableActivity</string>
-    <string name="app_label">The Sarvo</string>
-    <string name="search_description">Search suggestions for the sarvo!</string>
+    <string name="app_label">Thesarvo</string>
+    <string name="search_description">Search suggestions for thesarvo!</string>
     <string name="downloading_data">Downloading app data, please wait</string>
     <string name="Downloaded">Downloaded :</string>
     <string name="speed">Speed :</string>
     <string name="time_remaning">Time Remaining</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
 </resources>

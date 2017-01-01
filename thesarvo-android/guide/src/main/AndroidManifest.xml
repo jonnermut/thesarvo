@@ -9,6 +9,19 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         android:name="com.thesarvo.guide.GuideApplication">
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
         <activity
             android:name=".GuideListActivity"
             android:label="@string/app_name"
@@ -33,6 +46,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.thesarvo.guide.GuideListActivity" />
         </activity>
+        -->
 
         <meta-data
             android:name="com.google.android.gms.version"

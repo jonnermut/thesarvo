@@ -84,7 +84,9 @@ public class ResourceManager implements IDownloaderClient
             if (downloading != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED)
             {
                 downloaderStub = DownloaderClientMarshaller.CreateStub(this, AssetsDownloader.class);
-                GuideListActivity.get().setContentView(R.layout.downloader_ui);
+
+                // FIXME
+                //GuideListActivity.get().setContentView(R.layout.downloader_ui);
                 return;
             }
 
