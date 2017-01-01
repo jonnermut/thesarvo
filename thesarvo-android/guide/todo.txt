@@ -1,0 +1,10 @@
+
+General
+=======
+- toolbar missing
+
+Updates
+=======
+- Download display
+- Set maxLastMod
+- Update search index
