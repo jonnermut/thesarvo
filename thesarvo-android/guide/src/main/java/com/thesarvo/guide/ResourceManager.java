@@ -235,13 +235,13 @@ public class ResourceManager implements IDownloaderClient
                 intent.setAction(Intent.ACTION_MAIN);
                 startActivity(intent);*/
                 //guideApplication.finish();   //simply exit and let them reopen the app
-                GuideListActivity.get().finish();
+                MainActivity.get().finish();
         }
     }
 
     @Override
     public void onDownloadProgress(DownloadProgressInfo progress)
     {
-        GuideListActivity.get().onDownloadProgress(progress);
+        MainActivity.get().onDownloadProgress(progress);
     }
 }

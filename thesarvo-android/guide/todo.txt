@@ -1,10 +1,17 @@
 
 General
 =======
-- toolbar missing
+
+UI Rebuild
+==========
+- Back from topo loses map
+- Back button in general bit buggy
+- Re-add search
+- Indents in menu
 
 Updates
 =======
 - Download display
 - Set maxLastMod
 - Update search index
+

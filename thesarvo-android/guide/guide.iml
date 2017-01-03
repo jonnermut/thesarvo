@@ -94,6 +94,8 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.4.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.github.bmelnychuk/atv/1.2.9/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.github.johnkil.print/print/1.2.2/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads-lite/9.0.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/9.0.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics-impl/9.0.0/jars" />
@@ -188,6 +190,7 @@
     <orderEntry type="library" exported="" name="play-services-ads-9.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-appinvite-9.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-location-9.0.0" level="project" />
+    <orderEntry type="library" exported="" name="atv-1.2.9" level="project" />
     <orderEntry type="library" exported="" name="firebase-analytics-impl-9.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-ads-lite-9.0.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-messaging-9.0.0" level="project" />
@@ -206,6 +209,7 @@
     <orderEntry type="library" exported="" name="appcompat-v7-23.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-identity-9.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-auth-base-9.0.0" level="project" />
+    <orderEntry type="library" exported="" name="print-1.2.2" level="project" />
     <orderEntry type="library" exported="" name="play-services-analytics-9.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-basement-9.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-9.0.0" level="project" />

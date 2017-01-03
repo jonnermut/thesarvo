@@ -91,6 +91,17 @@ public class ViewModel
         String viewId;
         int level = 1;
 
+        public boolean isLeaf()
+        {
+            return leaf;
+        }
+
+        public void setLeaf(boolean leaf)
+        {
+            this.leaf = leaf;
+        }
+
+        boolean leaf = true;
 
         public ListItem(Element element)
         {

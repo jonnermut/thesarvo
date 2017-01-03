@@ -25,21 +25,23 @@ import javax.xml.parsers.DocumentBuilderFactory;
 class SearchIndex extends AsyncTask<String, Integer, Long>
 {
     final String WWW_PATH = "www/data/";
-    private GuideListActivity guideListActivity;
+    private GuideApplication guideApplication;
+    private ResourceManager resourceManager;
 
-    public SearchIndex(GuideListActivity guideListActivity)
+    public SearchIndex(GuideApplication guideApplication, ResourceManager resourceManager)
     {
-        this.guideListActivity = guideListActivity;
+        this.guideApplication = guideApplication;
+        this.resourceManager = resourceManager;
     }
 
     protected Long doInBackground(String... files)
     {
         //delete the old database first
-        guideListActivity.getBaseContext().deleteDatabase(IndexContentProvider.DBNAME);
+        //guideListActivity.getBaseContext().deleteDatabase(IndexContentProvider.DBNAME);
 
         //find all XML files
         String[] allFiles;
-        AssetManager manager = guideListActivity.getAssets();
+        AssetManager manager = guideApplication.getAssets();
         Map<String, ViewModel.ViewDef> views = ViewModel.get().getViews();
         Map<String, ViewModel.ListItem> guideListItems = ViewModel.get().getGuideListItems();
         Map<String, IndexEntry> index = IndexEntry.getIndex();

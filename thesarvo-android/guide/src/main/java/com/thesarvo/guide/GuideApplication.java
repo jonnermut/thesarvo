@@ -10,6 +10,7 @@ public class GuideApplication extends Application
     private static GuideApplication instance;
 
     private ResourceManager resourceManager;
+    private SearchIndex searchIndex;
 
     @Override
     public void onCreate()
@@ -19,6 +20,10 @@ public class GuideApplication extends Application
 
         resourceManager = new ResourceManager(this);
         resourceManager.startup();
+        
+        searchIndex = new SearchIndex(this);
+        searchIndex.execute("test");
+        
     }
 
     public static GuideApplication get()
