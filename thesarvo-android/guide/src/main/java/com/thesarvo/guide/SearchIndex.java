@@ -240,7 +240,7 @@ class SearchIndex extends AsyncTask<String, Integer, Long>
         builder.path(IndexContentProvider.MAIN_TABLE);
         Uri uri = builder.build();
 
-        Uri normalUri = guideListActivity.getContentResolver().insert(uri, values);
+        Uri normalUri = guideApplication.getContentResolver().insert(uri, values);
 
         //create the suggestion entry
         ContentValues suggestionValues = new ContentValues();
@@ -254,7 +254,7 @@ class SearchIndex extends AsyncTask<String, Integer, Long>
         builder.path(IndexContentProvider.SUGESTIONS_TABLE);
         uri = builder.build();
 
-        guideListActivity.getContentResolver().insert(uri, suggestionValues);
+        guideApplication.getContentResolver().insert(uri, suggestionValues);
     }
 
     public void addGPSEntry(GPSNode node)
@@ -273,7 +273,7 @@ class SearchIndex extends AsyncTask<String, Integer, Long>
             builder.scheme(ContentResolver.SCHEME_CONTENT);
             builder.path(IndexContentProvider.MAP_TABLE);
 
-            guideListActivity.getContentResolver().insert(builder.build(), values);
+            guideApplication.getContentResolver().insert(builder.build(), values);
         }
     }
 
@@ -286,8 +286,8 @@ class SearchIndex extends AsyncTask<String, Integer, Long>
     @Override
     protected void onPostExecute(Long result)
     {
-        guideListActivity.indexed = true;
-        guideListActivity.mapsIndexed = true;
-        guideListActivity.searchIndexed();
+        guideApplication.indexed = true;
+        guideApplication.mapsIndexed = true;
+        guideApplication.searchIndexed();
     }
 }

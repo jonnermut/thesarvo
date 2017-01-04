@@ -249,9 +249,12 @@ public class GuideListActivity extends FragmentActivity
         showSearchResult(builder.build());
     }
 
+     /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
+
+
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_bar, menu);
@@ -285,7 +288,10 @@ public class GuideListActivity extends FragmentActivity
         }
 
         return super.onCreateOptionsMenu(menu);
+
+
     }
+    */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -33,8 +33,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
-
 {
+    private static final String[] SEARCH_PROJECTION = {"VIEW_ID", "ELEMENT_ID"};
 
     private DrawerLayout drawer;
 
@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        Log.d("MainActivity", "onCreate");
+
         super.onCreate(savedInstanceState);
         instance = this;
 
@@ -70,6 +72,15 @@ public class MainActivity extends AppCompatActivity
         setupNavigation(toolbar);
 
         setupSearch();
+
+        //this on create can get called at other times, we only want to do this set up once
+        final Intent intent = getIntent();
+        Uri uri = intent.getData();
+
+        String id = intent.getStringExtra(GuideDetailFragment.ARG_ITEM_ID);
+        Log.d("MainActivity", "uri=" + uri + " , id=" + id);
+
+        handleIntent(intent);
     }
 
     private void setupNavigation(Toolbar toolbar)
@@ -364,7 +375,7 @@ public class MainActivity extends AppCompatActivity
     {
         Log.d("Search Result", uri.toString());
 
-        /*
+
         //get a cursor representing the entry
         Cursor c = getContentResolver().query(uri, SEARCH_PROJECTION, null, null, null);
         if(c.getCount() < 1)
@@ -387,34 +398,22 @@ public class MainActivity extends AppCompatActivity
 
             Log.d("Search Result", "Selected view " + viewId + " el " + elementID);
 
-            if(mTwoPane && query != null)
-            {
-                Bundle args = new Bundle();
-                args.putString(GuideDetailFragment.ARG_ITEM_ID, viewId);
-                args.putString(GuideDetailFragment.ELEMENT_ID, elementID);
-                GuideDetailFragment fragment = new GuideDetailFragment();
-                fragment.setArguments(args);
 
-                args = new Bundle();
-                args.putString(SearchableActivity.SEARCH_ITEM_QUERY, query);
-                SearchResultsFragment resultsFragment = new SearchResultsFragment();
-                resultsFragment.setArguments(args);
+            showGuideDetail(viewId, null, true, elementID);
 
-                addDoubleFragment(R.id.guide_detail_container, R.id.guide_list,
-                        fragment, resultsFragment, true);
-            }
-            else
-            {
-                showGuideDetail(viewId, null, true, elementID);
-            }
         }
-        */
+
     }
 
     @Override
     protected void onNewIntent(Intent intent)
     {
         setIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent)
+    {
         String action = intent.getAction();
         Uri uri = intent.getData();
 
@@ -423,6 +422,7 @@ public class MainActivity extends AppCompatActivity
 
         if(action.equals(Intent.ACTION_SEARCH))
         {
+            /* TODO - work this out
             String query = searchView.getQuery().toString();
             searchView.setIconified(true);
 
@@ -435,7 +435,7 @@ public class MainActivity extends AppCompatActivity
 
             showFragment(SearchResultsFragment.class, args, true, true);
             searchView.setIconified(true);
-
+            */
         }
         else if (action.equals(Intent.ACTION_VIEW)) //probably shouldn't be something so generic, will need to be changed if ever end up using action view
         {
