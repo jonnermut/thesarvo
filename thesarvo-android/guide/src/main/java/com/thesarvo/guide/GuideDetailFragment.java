@@ -14,6 +14,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.google.common.base.Charsets;
 
@@ -314,9 +315,10 @@ public class GuideDetailFragment extends Fragment
             InputStream is =  GuideApplication.get().getResourceManager().getDataAsset(filename);
             ret = IOUtils.toString(is, Charsets.UTF_8);
         }
-        catch (IOException e)
+        catch (Exception e)
         {
-            e.printStackTrace();
+            Toast.makeText(this.getContext(), "Failed to get guide data", Toast.LENGTH_LONG).show();
+            Log.e("GuideDetailFragment", "Failed to get guide data", e);
             return null;
         }
 
@@ -356,13 +358,13 @@ public class GuideDetailFragment extends Fragment
                     if ("openImage".equals(command))
                     {
                         Log.d("thesarvo", "openImage");
-                        GuideListActivity.get().showGuideDetail(GuideDetailFragment.this.viewId, data, true, null);
+                        MainActivity.get().showGuideDetail(GuideDetailFragment.this.viewId, data, true, null);
                     }
                     else if("map".equals(command))
                     {
                         //map needs to open here as well
                         Log.d("thesarvo", "map");
-                        GuideListActivity.get().showMap(data);
+                        MainActivity.get().showMap(data);
 
                     }
                 }

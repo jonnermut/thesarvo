@@ -84,7 +84,9 @@ public class ResourceManager implements IDownloaderClient
             if (downloading != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED)
             {
                 downloaderStub = DownloaderClientMarshaller.CreateStub(this, AssetsDownloader.class);
-                GuideListActivity.get().setContentView(R.layout.downloader_ui);
+
+                // FIXME
+                //GuideListActivity.get().setContentView(R.layout.downloader_ui);
                 return;
             }
 
@@ -233,13 +235,13 @@ public class ResourceManager implements IDownloaderClient
                 intent.setAction(Intent.ACTION_MAIN);
                 startActivity(intent);*/
                 //guideApplication.finish();   //simply exit and let them reopen the app
-                GuideListActivity.get().finish();
+                MainActivity.get().finish();
         }
     }
 
     @Override
     public void onDownloadProgress(DownloadProgressInfo progress)
     {
-        GuideListActivity.get().onDownloadProgress(progress);
+        MainActivity.get().onDownloadProgress(progress);
     }
 }

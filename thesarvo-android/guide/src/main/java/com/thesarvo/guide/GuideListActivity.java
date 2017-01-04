@@ -71,12 +71,6 @@ public class GuideListActivity extends FragmentActivity
      */
     private boolean mTwoPane;
 
-    private static GuideListActivity instance = null;
-
-    public static GuideListActivity get()
-    {
-        return  instance;
-    }
 
     private static SearchIndex searchIndex = null;
 
@@ -99,7 +93,7 @@ public class GuideListActivity extends FragmentActivity
 
         //we always want to update this to the current instance
         //if (instance ==  null)
-            instance = this;
+        //   instance = this;
 
         //this on create can get called at other times, we only want to do this set up once
         String id = getIntent().getStringExtra(GuideDetailFragment.ARG_ITEM_ID);
@@ -255,9 +249,12 @@ public class GuideListActivity extends FragmentActivity
         showSearchResult(builder.build());
     }
 
+     /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
+
+
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_bar, menu);
@@ -291,7 +288,10 @@ public class GuideListActivity extends FragmentActivity
         }
 
         return super.onCreateOptionsMenu(menu);
+
+
     }
+    */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

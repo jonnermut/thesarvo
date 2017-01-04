@@ -25,21 +25,23 @@ import javax.xml.parsers.DocumentBuilderFactory;
 class SearchIndex extends AsyncTask<String, Integer, Long>
 {
     final String WWW_PATH = "www/data/";
-    private GuideListActivity guideListActivity;
+    private GuideApplication guideApplication;
+    private ResourceManager resourceManager;
 
-    public SearchIndex(GuideListActivity guideListActivity)
+    public SearchIndex(GuideApplication guideApplication, ResourceManager resourceManager)
     {
-        this.guideListActivity = guideListActivity;
+        this.guideApplication = guideApplication;
+        this.resourceManager = resourceManager;
     }
 
     protected Long doInBackground(String... files)
     {
         //delete the old database first
-        guideListActivity.getBaseContext().deleteDatabase(IndexContentProvider.DBNAME);
+        //guideListActivity.getBaseContext().deleteDatabase(IndexContentProvider.DBNAME);
 
         //find all XML files
         String[] allFiles;
-        AssetManager manager = guideListActivity.getAssets();
+        AssetManager manager = guideApplication.getAssets();
         Map<String, ViewModel.ViewDef> views = ViewModel.get().getViews();
         Map<String, ViewModel.ListItem> guideListItems = ViewModel.get().getGuideListItems();
         Map<String, IndexEntry> index = IndexEntry.getIndex();
@@ -238,7 +240,7 @@ class SearchIndex extends AsyncTask<String, Integer, Long>
         builder.path(IndexContentProvider.MAIN_TABLE);
         Uri uri = builder.build();
 
-        Uri normalUri = guideListActivity.getContentResolver().insert(uri, values);
+        Uri normalUri = guideApplication.getContentResolver().insert(uri, values);
 
         //create the suggestion entry
         ContentValues suggestionValues = new ContentValues();
@@ -252,7 +254,7 @@ class SearchIndex extends AsyncTask<String, Integer, Long>
         builder.path(IndexContentProvider.SUGESTIONS_TABLE);
         uri = builder.build();
 
-        guideListActivity.getContentResolver().insert(uri, suggestionValues);
+        guideApplication.getContentResolver().insert(uri, suggestionValues);
     }
 
     public void addGPSEntry(GPSNode node)
@@ -271,7 +273,7 @@ class SearchIndex extends AsyncTask<String, Integer, Long>
             builder.scheme(ContentResolver.SCHEME_CONTENT);
             builder.path(IndexContentProvider.MAP_TABLE);
 
-            guideListActivity.getContentResolver().insert(builder.build(), values);
+            guideApplication.getContentResolver().insert(builder.build(), values);
         }
     }
 
@@ -284,8 +286,8 @@ class SearchIndex extends AsyncTask<String, Integer, Long>
     @Override
     protected void onPostExecute(Long result)
     {
-        guideListActivity.indexed = true;
-        guideListActivity.mapsIndexed = true;
-        guideListActivity.searchIndexed();
+        guideApplication.indexed = true;
+        guideApplication.mapsIndexed = true;
+        guideApplication.searchIndexed();
     }
 }
