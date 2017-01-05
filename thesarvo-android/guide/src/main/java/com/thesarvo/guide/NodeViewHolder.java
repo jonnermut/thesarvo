@@ -33,8 +33,14 @@ public class NodeViewHolder extends TreeNode.BaseNodeViewHolder<ViewModel.ListIt
 
         arrowView = (PrintView) view.findViewById(R.id.icon);
         disclosureView = (PrintView) view.findViewById(R.id.disclosure);
+
+        int level = node.getLevel();
+        int levelToUse = level + value.getLevel() - 2;
+        tvValue.setPadding(64 * levelToUse,0,0,0);
+
         if (value.isLeaf())
         {
+
             arrowView.setVisibility(View.GONE);
 
             if (value.getViewId() != null && value.getViewId().length() > 0)
@@ -43,7 +49,7 @@ public class NodeViewHolder extends TreeNode.BaseNodeViewHolder<ViewModel.ListIt
                 disclosureView.setIconText(context.getResources().getString(R.string.ic_keyboard_arrow_right));
             }
             view.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
-            tvValue.setPadding(64 * value.getLevel(),0,0,0);
+
 
         }
         else

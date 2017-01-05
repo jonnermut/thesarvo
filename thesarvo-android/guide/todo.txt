@@ -1,17 +1,20 @@
 
 General
 =======
+- map is not working
 
 UI Rebuild
 ==========
-- Back from topo loses map
+- Back from topo loses scroll pos
 - Back button in general bit buggy
-- Re-add search
 - Indents in menu
+- start with drawer open
+- spinnr on detail?
 
 Updates
 =======
-- Download display
+- Download display x2
 - Set maxLastMod
 - Update search index
-
+    - Initial build
+    - Incremental update

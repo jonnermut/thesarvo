@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity
         TreeNode root = TreeNode.root();
 
         ViewModel.ViewDef viewDef = ViewModel.get().getRootView();
-        addListItems(root, viewDef);
+        addListItems(root, viewDef, 0);
 
         AndroidTreeView tView = new AndroidTreeView(this, root);
         tView.setDefaultViewHolder(NodeViewHolder.class);
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void addListItems(TreeNode root, ViewModel.ViewDef viewDef)
+    private void addListItems(TreeNode root, ViewModel.ViewDef viewDef, int level)
     {
         for (ViewModel.ListItem lv : viewDef.getListItems())
         {
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity
             if (kidView != null)
             {
                 lv.setLeaf(false);
-                addListItems(n, kidView);
+                addListItems(n, kidView, level++);
             }
         }
     }
