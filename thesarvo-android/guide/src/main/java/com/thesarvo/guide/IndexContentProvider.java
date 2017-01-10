@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -67,14 +68,18 @@ public class IndexContentProvider extends ContentProvider
     @Override
     public boolean onCreate()
     {
+        Context context = getContext();
+
         /*
          * Creates a new helper object. This method always returns quickly.
          * Notice that the database itself isn't created or opened
          * until SQLiteOpenHelper.getWritableDatabase is called
          */
+
         mOpenHelper = new MainDatabaseHelper(
-                getContext(),        // the application context
-                DBNAME              // the name of the database)
+                context,        // the application context
+                DBNAME,              // the name of the database)
+                context.getApplicationInfo().dataDir + "/databases"
         );
 
         matcher.addURI(AUTHORITY, MAIN_TABLE, MAIN_TABLE_I);

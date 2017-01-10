@@ -7,7 +7,6 @@ UI Rebuild
 ==========
 - Back from topo loses scroll pos
 - Back button in general bit buggy
-- Indents in menu
 - start with drawer open
 - spinnr on detail?
 
