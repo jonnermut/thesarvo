@@ -30,12 +30,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 /**
  * Created by jon on 28/12/2016.
  */
-class SearchIndexTask extends AsyncTask<String, Integer, Long>
+class SearchIndexTask implements Runnable
 {
     final String WWW_PATH = "www/data/";
     private GuideApplication guideApplication;
     private ResourceManager resourceManager;
     int key = 1;
+    String viewId = null;
 
     private static Map<String, IndexEntry> index = new HashMap<>();
     Map<String, ViewModel.ViewDef> views = ViewModel.get().getViews();
@@ -48,14 +49,15 @@ class SearchIndexTask extends AsyncTask<String, Integer, Long>
         return index;
     }
 
-    public SearchIndexTask(GuideApplication guideApplication, ResourceManager resourceManager)
+    public SearchIndexTask(GuideApplication guideApplication, ResourceManager resourceManager, String viewId)
     {
         this.guideApplication = guideApplication;
         this.resourceManager = resourceManager;
+        this.viewId = viewId;
     }
 
     @Override
-    protected Long doInBackground(String... files)
+    public void run()
     {
         //delete the old database first
         //guideApplication.getBaseContext().deleteDatabase(IndexContentProvider.DBNAME);
@@ -69,40 +71,31 @@ class SearchIndexTask extends AsyncTask<String, Integer, Long>
         try
         {
 
-
-
-            //Index views first
-            /*
-            for (ViewModel.ViewDef viewDef : views.values())
+            if (viewId == null)
             {
-                IndexEntry entry = new IndexEntry();
-                entry.viewId = viewDef.getId();
-                entry.text = viewDef.getName();
-                entry.key = ++key;
-                entry.type = IndexEntry.IndexType.MENU_ITEM;
 
-                index.put(entry.text, entry);
-                addEntry(entry);
+                //load all XML files
+                for ( String vid : guideListItems.keySet() )
+                {
+                    this.viewId = vid
+                    indexGuideXml(viewId);
+
+                }
             }
-*/
-
-            //load all XML files
-            for (String viewId : guideListItems.keySet())
+            else
             {
                 indexGuideXml(viewId);
-
             }
 
         }
         catch (Throwable e)
         {
             e.printStackTrace();
-            return (long) 0;
+
         }
 
         Log.d("Search Index", "Indexing complete!");
 
-        return (long) 1;
     }
 
     private void indexGuideXml( String viewId) throws SAXException, IOException
@@ -316,6 +309,7 @@ class SearchIndexTask extends AsyncTask<String, Integer, Long>
         }
     }
 
+    /*
     @Override
     protected void onProgressUpdate(Integer... progress)
     {
@@ -329,4 +323,7 @@ class SearchIndexTask extends AsyncTask<String, Integer, Long>
         guideApplication.mapsIndexed = true;
         guideApplication.searchIndexed();
     }
+
+    */
+
 }

@@ -10,9 +10,6 @@ public class GuideApplication extends Application
     private static GuideApplication instance;
 
     ResourceManager resourceManager;
-    SearchIndexTask searchIndexTask = null;
-
-
 
     boolean runningInRoboelectric = false;
 
@@ -41,8 +38,6 @@ public class GuideApplication extends Application
 
         resourceManager = new ResourceManager(this);
         resourceManager.startup();
-        
-        searchIndexTask = new SearchIndexTask(this, resourceManager);
 
         //searchIndexTask.execute("test");
         

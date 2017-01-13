@@ -36,8 +36,8 @@ public class IndexRebuilderTest
         //ActivityController<MainActivity> activity = Robolectric.buildActivity(MainActivity.class);
         //activity.create();
 
-        SearchIndexTask index = app.searchIndexTask;
-        index.doInBackground();
+        SearchIndexTask index = new SearchIndexTask(app, app.resourceManager, null);
+        index.run();
 
         String userDir = System.getProperty("user.dir"); // should be /git/thesarvo/thesarvo-android/guide
         File indexFile = new File(userDir + "/src/main/assets/databases/index");

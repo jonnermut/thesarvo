@@ -306,6 +306,18 @@ public class GuideDownloader
             // remove from our list
             u.element.getParentNode().removeChild(u.element);
             updates.save();
+
+            // queue an index task
+            if (u.getFilename().endsWith(".xml"))
+            {
+                String viewId = "guide." + u.getFilename().replace(".xml", "");
+                SearchIndexTask task = new SearchIndexTask(GuideApplication.get(), resourceManager, viewId);
+                totalOps++;
+                queue.execute( () -> {
+                    task.run();
+                    completedOps++;
+                });
+            }
         }
         catch (Throwable t)
         {
