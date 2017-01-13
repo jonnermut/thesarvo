@@ -4,10 +4,8 @@ package com.thesarvo.guide;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.util.ActivityController;
 
 import java.io.File;
 
@@ -38,7 +36,7 @@ public class IndexRebuilderTest
         //ActivityController<MainActivity> activity = Robolectric.buildActivity(MainActivity.class);
         //activity.create();
 
-        SearchIndex index = app.searchIndex;
+        SearchIndexTask index = app.searchIndexTask;
         index.doInBackground();
 
         String userDir = System.getProperty("user.dir"); // should be /git/thesarvo/thesarvo-android/guide

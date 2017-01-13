@@ -30,7 +30,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 /**
  * Created by jon on 28/12/2016.
  */
-class SearchIndex extends AsyncTask<String, Integer, Long>
+class SearchIndexTask extends AsyncTask<String, Integer, Long>
 {
     final String WWW_PATH = "www/data/";
     private GuideApplication guideApplication;
@@ -48,7 +48,7 @@ class SearchIndex extends AsyncTask<String, Integer, Long>
         return index;
     }
 
-    public SearchIndex(GuideApplication guideApplication, ResourceManager resourceManager)
+    public SearchIndexTask(GuideApplication guideApplication, ResourceManager resourceManager)
     {
         this.guideApplication = guideApplication;
         this.resourceManager = resourceManager;
@@ -161,7 +161,7 @@ class SearchIndex extends AsyncTask<String, Integer, Long>
         catch (Throwable t)
         {
             t.printStackTrace();
-            Log.e("SearchIndex", "Unexpected error indexing " + viewId, t);
+            Log.e("SearchIndexTask", "Unexpected error indexing " + viewId, t);
         }
 
     }

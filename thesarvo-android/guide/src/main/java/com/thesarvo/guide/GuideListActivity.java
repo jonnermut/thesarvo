@@ -1,22 +1,15 @@
 package com.thesarvo.guide;
 
-import android.app.PendingIntent;
-import android.app.SearchManager;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Messenger;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -24,17 +17,9 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.vending.expansion.zipfile.APKExpansionSupport;
 import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
-import com.google.android.vending.expansion.downloader.DownloaderClientMarshaller;
-import com.google.android.vending.expansion.downloader.DownloaderServiceMarshaller;
 import com.google.android.vending.expansion.downloader.Helpers;
-import com.google.android.vending.expansion.downloader.IDownloaderClient;
-import com.google.android.vending.expansion.downloader.IDownloaderService;
-import com.google.android.vending.expansion.downloader.IStub;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,7 +57,7 @@ public class GuideListActivity extends FragmentActivity
     private boolean mTwoPane;
 
 
-    private static SearchIndex searchIndex = null;
+    private static SearchIndexTask searchIndexTask = null;
 
     private SearchView searchView;
     private MenuItem searchViewMenuItem;
@@ -273,12 +258,12 @@ public class GuideListActivity extends FragmentActivity
         searchView.setVisibility(View.INVISIBLE);
         this.searchView = searchView;
 
-        //if(!indexed && isDatabaseDirty(TESTER) && searchIndex == null)
+        //if(!indexed && isDatabaseDirty(TESTER) && searchIndexTask == null)
         if(false) //database re-indexing not yet implemented
         {
             //this stops the indexing from starting again on resume of activity
-            searchIndex = new SearchIndex(this);
-            searchIndex.execute("test");
+            searchIndexTask = new SearchIndexTask(this);
+            searchIndexTask.execute("test");
         }
         else
         {
@@ -320,7 +305,7 @@ public class GuideListActivity extends FragmentActivity
         editor.apply();
 
         indexed = true;
-        searchIndex = null;
+        searchIndexTask = null;
     }
 
     public void showSearchResult(Uri uri)

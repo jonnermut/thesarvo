@@ -1,8 +1,6 @@
 package com.thesarvo.guide;
 
 import android.app.Application;
-import android.view.MenuItem;
-import android.widget.SearchView;
 
 /**
  * Created by jon on 29/12/2016.
@@ -12,7 +10,7 @@ public class GuideApplication extends Application
     private static GuideApplication instance;
 
     ResourceManager resourceManager;
-    SearchIndex searchIndex = null;
+    SearchIndexTask searchIndexTask = null;
 
 
 
@@ -44,9 +42,9 @@ public class GuideApplication extends Application
         resourceManager = new ResourceManager(this);
         resourceManager.startup();
         
-        searchIndex = new SearchIndex(this, resourceManager);
+        searchIndexTask = new SearchIndexTask(this, resourceManager);
 
-        //searchIndex.execute("test");
+        //searchIndexTask.execute("test");
         
     }
 
