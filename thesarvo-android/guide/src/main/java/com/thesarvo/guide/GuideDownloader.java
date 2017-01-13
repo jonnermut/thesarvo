@@ -276,6 +276,7 @@ public class GuideDownloader
 
             this.queuedDownloads = this.updates.getUpdates();
             this.totalOps += this.queuedDownloads.size();
+            updateProgress(null);
             queue.execute(this::downloadFirst);
         }
         catch (Throwable t)
@@ -392,6 +393,7 @@ public class GuideDownloader
             }
 
         }
+        this.updates.setMaxLastMod(newUpdates.getMaxLastMod());
         this.updates.save();
     }
 

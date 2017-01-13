@@ -13,5 +13,5 @@ UI Rebuild
 
 Updates
 =======
-- Set maxLastMod
+- Multiple search entries - more or less, spurline
 
