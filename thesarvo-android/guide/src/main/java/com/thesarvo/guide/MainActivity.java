@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -22,7 +24,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
@@ -40,6 +44,9 @@ public class MainActivity extends AppCompatActivity
 
     private static MainActivity instance = null;
     private SearchView searchView;
+    private Toolbar toolbar;
+    private ProgressBar progressBar;
+    private TextView progressBarText;
 
     public static MainActivity get()
     {
@@ -55,19 +62,11 @@ public class MainActivity extends AppCompatActivity
         instance = this;
 
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBarText = (TextView) findViewById(R.id.progress_bar_text);
 
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
+        setSupportActionBar(toolbar);
 
         setupNavigation(toolbar);
 
@@ -80,7 +79,11 @@ public class MainActivity extends AppCompatActivity
         String id = intent.getStringExtra(GuideDetailFragment.ARG_ITEM_ID);
         Log.d("MainActivity", "uri=" + uri + " , id=" + id);
 
-        handleIntent(intent);
+        boolean handled = handleIntent(intent);
+        if (!handled)
+        {
+            drawer.openDrawer(Gravity.LEFT);
+        }
     }
 
     private void setupNavigation(Toolbar toolbar)
@@ -345,26 +348,24 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-
-
-    public void onDownloadProgress(DownloadProgressInfo progress)
+    public void setProgress(long complete, long total, String text)
     {
-        // TODO
-        /*
-                TextView downloadProgress = (TextView) findViewById(R.id.text_downloaded_amount);
-        downloadProgress.setText(Long.toString(progress.mOverallProgress * 100 / progress.mOverallTotal) + "%");
+        new Handler(Looper.getMainLooper()).post( () -> {
+            if (progressBar != null && progressBarText != null)
+            {
+                progressBar.setMax((int)(total));
+                progressBar.setProgress((int)(complete));
+                progressBarText.setText(text);
 
-        TextView timeRemaining = (TextView) (findViewById(R.id.text_time_remaing));
-        timeRemaining.setText(Helpers.getTimeRemaining(progress.mTimeRemaining));
+                boolean show = total > complete;
+                progressBar.setVisibility( show ? View.VISIBLE : View.GONE );
+                progressBarText.setVisibility( show ? View.VISIBLE : View.GONE );
+            }
+        });
 
-        TextView speed = (TextView) findViewById(R.id.text_speed_amount);
-        speed.setText(Helpers.getSpeedString(progress.mCurrentSpeed));
-
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar3);
-        progressBar.setMax((int)(progress.mOverallTotal >> 8));
-        progressBar.setProgress((int)(progress.mOverallProgress >> 8));
-         */
     }
+
+
 
     public void showSearchResult(Uri uri)
     {
@@ -412,7 +413,7 @@ public class MainActivity extends AppCompatActivity
         handleIntent(intent);
     }
 
-    private void handleIntent(Intent intent)
+    private boolean handleIntent(Intent intent)
     {
         String action = intent.getAction();
         Uri uri = intent.getData();
@@ -436,6 +437,7 @@ public class MainActivity extends AppCompatActivity
             showFragment(SearchResultsFragment.class, args, true, true);
             searchView.setIconified(true);
             */
+            return true;
         }
         else if (action.equals(Intent.ACTION_VIEW)) //probably shouldn't be something so generic, will need to be changed if ever end up using action view
         {
@@ -455,7 +457,10 @@ public class MainActivity extends AppCompatActivity
             //searchView.setIconified(true);
             showSearchResult(uri, query);
             searchView.setIconified(true);
+
+            return true;
         }
+        return false;
     }
 
 }

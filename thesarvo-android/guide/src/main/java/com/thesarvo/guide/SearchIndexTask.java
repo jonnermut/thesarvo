@@ -77,7 +77,7 @@ class SearchIndexTask implements Runnable
                 //load all XML files
                 for ( String vid : guideListItems.keySet() )
                 {
-                    this.viewId = vid
+                    this.viewId = vid;
                     indexGuideXml(viewId);
 
                 }

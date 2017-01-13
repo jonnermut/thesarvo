@@ -178,6 +178,7 @@ public class GuideDownloader
     int completedOps = 0;
     int totalOps = 0;
 
+
     Executor queue = Executors.newSingleThreadExecutor();
 
     //var taskToUpdate = Dictionary<Int, Update>()
@@ -263,6 +264,7 @@ public class GuideDownloader
 
             this.completedOps = 0;
             this.totalOps = 1;
+            updateProgress("Getting updates");
 
             String surl = SYNC_URL + s.toString();
             URL url = new URL(surl);
@@ -281,8 +283,29 @@ public class GuideDownloader
             Log.e("GuideDownloader", "Error getting updates list", t);
 
         }
-        completedOps++;
+        incrementCompleted();
     }
+
+    private void incrementCompleted()
+    {
+        completedOps++;
+        updateProgress(null);
+    }
+
+    private void updateProgress(String text)
+    {
+        if (text == null)
+        {
+            text = "Updating " + (completedOps+1) + " of " + totalOps;
+        }
+
+        final MainActivity mainActivity = MainActivity.get();
+        if (mainActivity != null)
+        {
+            mainActivity.setProgress(completedOps, totalOps, text);
+        }
+    }
+
 
     /**
      * Attempt to download the head of the queue
@@ -312,23 +335,26 @@ public class GuideDownloader
             {
                 String viewId = "guide." + u.getFilename().replace(".xml", "");
                 SearchIndexTask task = new SearchIndexTask(GuideApplication.get(), resourceManager, viewId);
-                totalOps++;
-                queue.execute( () -> {
-                    task.run();
-                    completedOps++;
-                });
+
+                queue.execute( task );
             }
         }
         catch (Throwable t)
         {
             Log.e("GuideDownloader", "Error downloading file: " + u.getUrl(), t);
         }
-        completedOps++;
+        incrementCompleted();
 
         if (queuedDownloads.size() > 0)
         {
             queue.execute(this::downloadFirst);
         }
+    }
+
+    private void incrementTotal()
+    {
+        totalOps++;
+        updateProgress(null);
     }
 
     private void downloadUrl(String surl, File finalPath) throws IOException

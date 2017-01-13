@@ -2,18 +2,16 @@
 General
 =======
 - map is not working
+- remove dead code
 
 UI Rebuild
 ==========
 - Back from topo loses scroll pos
 - Back button in general bit buggy
-- start with drawer open
 - spinnr on detail?
-- search doesnt go to exactly right scroll positionw
+- search doesnt go to exactly right scroll position
 
 Updates
 =======
-- Download display x2
 - Set maxLastMod
-- Update search index
-    - Incremental update
+

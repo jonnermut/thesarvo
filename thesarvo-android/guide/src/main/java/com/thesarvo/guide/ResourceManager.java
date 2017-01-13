@@ -249,18 +249,13 @@ public class ResourceManager implements IDownloaderClient
         switch (newState)
         {
             case IDownloaderClient.STATE_COMPLETED:
-                //restart the activity - won't do this...
-                /*Intent intent = new Intent(this, GuideListActivity.class);
-                intent.setAction(Intent.ACTION_MAIN);
-                startActivity(intent);*/
-                //guideApplication.finish();   //simply exit and let them reopen the app
-                MainActivity.get().finish();
+                MainActivity.get().setProgress(0,0,"Finished");
         }
     }
 
     @Override
     public void onDownloadProgress(DownloadProgressInfo progress)
     {
-        MainActivity.get().onDownloadProgress(progress);
+        MainActivity.get().setProgress(progress.mOverallProgress >> 8, progress.mOverallTotal >> 8, "Downloading Data");
     }
 }

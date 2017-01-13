@@ -22,6 +22,22 @@
         android:id="@+id/left_layout"
         android:background="#E6E6E6"
         >
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/progress_bar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:visibility="gone"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Downloading"
+            android:id="@+id/progress_bar_text"
+            android:gravity="center"
+            android:visibility="gone"
+        />
         <SearchView
             android:id="@+id/search_view"
             android:layout_width="match_parent"
