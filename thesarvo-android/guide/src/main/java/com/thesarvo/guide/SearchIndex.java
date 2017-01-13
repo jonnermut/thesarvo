@@ -8,11 +8,19 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.common.base.Strings;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +35,18 @@ class SearchIndex extends AsyncTask<String, Integer, Long>
     final String WWW_PATH = "www/data/";
     private GuideApplication guideApplication;
     private ResourceManager resourceManager;
+    int key = 1;
+
+    private static Map<String, IndexEntry> index = new HashMap<>();
+    Map<String, ViewModel.ViewDef> views = ViewModel.get().getViews();
+    Map<String, ViewModel.ListItem> guideListItems = ViewModel.get().getGuideListItems();
+
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+    public static Map<String, IndexEntry> getIndex()
+    {
+        return index;
+    }
 
     public SearchIndex(GuideApplication guideApplication, ResourceManager resourceManager)
     {
@@ -34,25 +54,25 @@ class SearchIndex extends AsyncTask<String, Integer, Long>
         this.resourceManager = resourceManager;
     }
 
+    @Override
     protected Long doInBackground(String... files)
     {
         //delete the old database first
-        //guideListActivity.getBaseContext().deleteDatabase(IndexContentProvider.DBNAME);
+        //guideApplication.getBaseContext().deleteDatabase(IndexContentProvider.DBNAME);
 
         //find all XML files
-        String[] allFiles;
-        AssetManager manager = guideApplication.getAssets();
-        Map<String, ViewModel.ViewDef> views = ViewModel.get().getViews();
-        Map<String, ViewModel.ListItem> guideListItems = ViewModel.get().getGuideListItems();
-        Map<String, IndexEntry> index = IndexEntry.getIndex();
-        int key = 1;
+        //String[] allFiles;
+        //AssetManager manager = guideApplication.getAssets();
+
+
 
         try
         {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
+
+
 
             //Index views first
+            /*
             for (ViewModel.ViewDef viewDef : views.values())
             {
                 IndexEntry entry = new IndexEntry();
@@ -64,146 +84,12 @@ class SearchIndex extends AsyncTask<String, Integer, Long>
                 index.put(entry.text, entry);
                 addEntry(entry);
             }
-
-            //allFiles = manager.list(WWW_PATH);
-
-            List<String> actualFiles = new ArrayList<>();
-
-//                for(String s : allFiles)
-//                {
-//                    if(".xml".equals(s.substring(s.length() - 4)))
-//                    {
-//                        actualFiles.add(WWW_PATH + s);
-//                    }
-//                }
-
+*/
 
             //load all XML files
-            for (ViewModel.ListItem item : guideListItems.values())
-            //for(String s : actualFiles)
+            for (String viewId : guideListItems.keySet())
             {
-                String s = WWW_PATH + item.getViewId().substring(6) + ".xml";
-                //NOTE assets are no longer bundeled but this is no longer used.
-                //I'll keep it here for now for when this code is eventually ported to a separate app
-                InputStream stream = manager.open(s);
-                Document dom = builder.parse(stream);
-
-                Element root = dom.getDocumentElement();
-
-                //make index entry for view it's self
-                IndexEntry entry = new IndexEntry();
-                entry.viewId = item.getViewId();
-                entry.text = item.getText();
-                entry.key = ++key;
-                entry.type = IndexEntry.IndexType.VIEW;
-
-                index.put(entry.text, entry);
-                addEntry(entry);
-                //Log.d("Indexing", "adding " + entry.text);
-
-
-                //if there's no guide data continue
-                if (!root.getTagName().equals("guide"))
-                {
-                    Log.d("Search Index", s + " not a guide");
-                    continue;
-                }
-
-                for (Element e : Xml.getElements(dom.getElementsByTagName("climb")))
-                {
-                    IndexEntry entry1 = new IndexEntry();
-                    entry1.viewId = item.getViewId();
-                    entry1.viewName = item.getText();
-                    entry1.elementID = e.getAttribute("id");
-
-                    String stars = e.getAttribute("stars");
-                    String grade = e.getAttribute("grade");
-                    String name = e.getAttribute("name");
-
-                    String text = String.format("%s %s %s", stars, grade, name);
-                    text = text.trim();
-                    entry1.text = text;
-
-                    entry1.type = IndexEntry.IndexType.CLIMB;
-                    entry1.key = ++key;
-
-                    //Log.d("Indexing", "adding climb " + text);
-                    index.put(text, entry1);
-                    addEntry(entry1);
-
-                }
-
-                //do the same for boulder problems because teh Krauss
-                for (Element e : Xml.getElements(dom.getElementsByTagName("problem")))
-                {
-                    IndexEntry entry1 = new IndexEntry();
-                    entry1.viewId = item.getViewId();
-                    entry1.viewName = item.getText();
-                    entry1.elementID = e.getAttribute("id");
-
-                    String stars = e.getAttribute("stars");
-                    String grade = e.getAttribute("grade");
-                    String name = e.getAttribute("name");
-
-                    String text = String.format("%s %s %s", stars, grade, name);
-                    text = text.trim();
-                    entry1.text = text;
-
-                    entry1.type = IndexEntry.IndexType.PROBLEM;
-                    entry1.key = ++key;
-
-                    //Log.d("Indexing", "adding boulder " + text);
-                    index.put(text, entry1);
-                    addEntry(entry1);
-                }
-
-                for (Element e : Xml.getElements(dom.getElementsByTagName("text")))
-                {
-                    if (e.getAttribute("class").startsWith("h"))
-                    {
-                        IndexEntry entry1 = new IndexEntry();
-                        entry1.viewId = item.getViewId();
-                        entry1.viewName = item.getText();
-                        entry1.elementID = e.getAttribute("id");
-
-                        String text = e.getTextContent().trim();
-                        entry1.text = text;
-
-                        entry1.type = IndexEntry.IndexType.HEADING;
-                        entry1.key = ++key;
-
-                        //Log.d("Indexing", "adding heading " + text);
-                        index.put(text, entry1);
-                        addEntry(entry1);
-                    }
-                }
-
-
-                List<GPSNode> gpsNodes = MapsFragment.getGPSPoints();
-
-                for (Element e : Xml.getElements(dom.getElementsByTagName("gps")))
-                {
-                    String id = e.getAttribute("id");
-                    List<Point> points = new ArrayList<>();
-
-                    for (Element ePoint : Xml.getElements(e.getElementsByTagName("point")))
-                    {
-                        Point point = new Point(ePoint);
-                        points.add(point);
-
-                    }
-
-
-                    //Log.d("Indexing", "adding gps node for " + item.getText());
-                    GPSNode gpsnode = new GPSNode(id, points);
-                    gpsNodes.add(gpsnode);
-
-                    addGPSEntry(gpsnode);
-
-
-                    //don't think an entry for the GPS is needed, not sure that that code is doing
-
-                }
+                indexGuideXml(viewId);
 
             }
 
@@ -219,11 +105,164 @@ class SearchIndex extends AsyncTask<String, Integer, Long>
         return (long) 1;
     }
 
+    private void indexGuideXml( String viewId) throws SAXException, IOException
+    {
+        try
+        {
+            DocumentBuilder builder = factory.newDocumentBuilder();
+
+            ViewModel.ListItem item = guideListItems.get(viewId);
+
+            String guideId = viewId.substring(6);
+
+            InputStream stream = resourceManager.getDataAsset(guideId + ".xml");
+
+            Uri.Builder urib = new Uri.Builder();
+            urib.scheme(ContentResolver.SCHEME_CONTENT);
+            urib.authority(IndexContentProvider.AUTHORITY);
+            urib.path(IndexContentProvider.VIEW_PSEUDOTABLE + "/" + viewId);
+            Uri uri = urib.build();
+            guideApplication.getContentResolver().delete(uri, null, null);
+
+            indexListItem(viewId, item);
+
+            // added to straighten out UTF-8 errors
+            Reader reader = new InputStreamReader(stream, "UTF-8");
+            InputSource source = new InputSource(reader);
+
+            Document dom = builder.parse(source);
+            Element root = dom.getDocumentElement();
+            //if there's no guide data continue
+            if (!root.getTagName().equals("guide"))
+            {
+                Log.d("Search Index", guideId + " not a guide");
+                return;
+            }
+
+            for (Element e : Xml.getElements(dom.getElementsByTagName("climb")))
+            {
+                indexClimbElement(viewId, item, e);
+            }
+
+            //do the same for boulder problems because teh Krauss
+            for (Element e : Xml.getElements(dom.getElementsByTagName("problem")))
+            {
+                indexClimbElement(viewId, item, e);
+            }
+
+            for (Element e : Xml.getElements(dom.getElementsByTagName("text")))
+            {
+                indexTextElement(viewId, item, e);
+            }
+
+
+            indexGPSElements(dom);
+        }
+        catch (Throwable t)
+        {
+            t.printStackTrace();
+            Log.e("SearchIndex", "Unexpected error indexing " + viewId, t);
+        }
+
+    }
+
+    private void indexListItem(String viewId, ViewModel.ListItem item)
+    {
+        //make index entry for view it's self
+        IndexEntry entry = new IndexEntry();
+        entry.viewId = viewId;
+        entry.text = item.getText();
+        entry.key = ++key;
+        entry.type = IndexEntry.IndexType.VIEW;
+
+        index.put(entry.text, entry);
+        addEntry(entry);
+        //Log.d("Indexing", "adding " + entry.text);
+    }
+
+    private void indexGPSElements(Document dom)
+    {
+        List<GPSNode> gpsNodes = MapsFragment.getGPSPoints();
+
+        for (Element e : Xml.getElements(dom.getElementsByTagName("gps")))
+        {
+            String id = e.getAttribute("id");
+            List<Point> points = new ArrayList<>();
+
+            for (Element ePoint : Xml.getElements(e.getElementsByTagName("point")))
+            {
+                Point point = new Point(ePoint);
+                points.add(point);
+
+            }
+
+
+            //Log.d("Indexing", "adding gps node for " + item.getText());
+            GPSNode gpsnode = new GPSNode(id, points);
+            gpsNodes.add(gpsnode);
+
+            addGPSEntry(gpsnode);
+
+
+            //don't think an entry for the GPS is needed, not sure that that code is doing
+
+        }
+    }
+
+    private void indexTextElement(String viewId, ViewModel.ListItem item, Element e)
+    {
+        if (e.getAttribute("class").startsWith("h"))
+        {
+            IndexEntry entry1 = new IndexEntry();
+            entry1.viewId = viewId;
+            entry1.viewName = item.getText();
+            entry1.elementID = e.getAttribute("id");
+
+            String text = e.getTextContent().trim();
+            entry1.text = text;
+
+            entry1.type = IndexEntry.IndexType.HEADING;
+            entry1.key = ++key;
+
+            //Log.d("Indexing", "adding heading " + text);
+            index.put(text, entry1);
+            addEntry(entry1);
+        }
+    }
+
+    private void indexClimbElement(String viewId, ViewModel.ListItem item, Element e)
+    {
+        IndexEntry entry1 = new IndexEntry();
+        entry1.viewId = viewId;
+        entry1.viewName = item.getText();
+        entry1.elementID = e.getAttribute("id");
+
+        String stars = e.getAttribute("stars");
+        String grade = e.getAttribute("grade");
+        String name = e.getAttribute("name");
+
+        if (!Strings.isNullOrEmpty(name) || !Strings.isNullOrEmpty(grade))
+        {
+            String text = String.format("%s %s %s", stars, grade, name);
+            text = text.trim();
+            entry1.text = text;
+
+            entry1.type = IndexEntry.IndexType.CLIMB;
+            entry1.key = ++key;
+
+
+            index.put(text, entry1);
+            addEntry(entry1);
+        }
+    }
+
     /**
      * helper to add an entry to the main table and the suggestions table
      */
     public void addEntry(IndexEntry entry)
     {
+        Log.d("Indexing", "adding entry " + entry.text);
+
         //add normal entry and suggestions entry
         ContentValues values = new ContentValues();
         //values.put(IndexContentProvider.COL_ID, entry.key);

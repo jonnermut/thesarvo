@@ -11,8 +11,12 @@ public class GuideApplication extends Application
 {
     private static GuideApplication instance;
 
-    private ResourceManager resourceManager;
-    private SearchIndex searchIndex = null;
+    ResourceManager resourceManager;
+    SearchIndex searchIndex = null;
+
+
+
+    boolean runningInRoboelectric = false;
 
     private static final String DB_BUILD = "database build date";
     private static final int TESTER = 10000017;
@@ -61,5 +65,10 @@ public class GuideApplication extends Application
     public void searchIndexed()
     {
 
+    }
+
+    public boolean isRunningInRoboelectric()
+    {
+        return runningInRoboelectric;
     }
 }

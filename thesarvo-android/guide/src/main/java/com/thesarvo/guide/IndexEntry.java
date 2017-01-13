@@ -29,12 +29,7 @@ public class IndexEntry
     public String text;
     public IndexType type;
 
-    private static Map<String, IndexEntry> index = new HashMap<>();
 
-    public static Map<String, IndexEntry> getIndex()
-    {
-        return index;
-    }
 
     public IndexEntry()
     {

@@ -9,11 +9,11 @@ UI Rebuild
 - Back button in general bit buggy
 - start with drawer open
 - spinnr on detail?
+- search doesnt go to exactly right scroll positionw
 
 Updates
 =======
 - Download display x2
 - Set maxLastMod
 - Update search index
-    - Initial build
     - Incremental update

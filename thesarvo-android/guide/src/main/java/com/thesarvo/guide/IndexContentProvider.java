@@ -39,10 +39,13 @@ public class IndexContentProvider extends ContentProvider
     private static final int SUGGEST_TABLE_SINGLE = 4;
     private static final int SUGGEST_REQUEST = 5;
 
+
     public static final String MAP_TABLE = "maps";
     private static final int MAP_TABLE_I = 6;
     private static final int MAP_TABLE_SINGLE = 7;
 
+    public static final String VIEW_PSEUDOTABLE = "viewId";
+    private static final int VIEW_PSEUDOTABLE_TABLE_I = 8;
 
     public static final String COL_ID = "_id";
     public static final String COL_TEXT = "TEXT";
@@ -90,6 +93,7 @@ public class IndexContentProvider extends ContentProvider
         matcher.addURI(AUTHORITY, MAP_TABLE+SINGLE_ROW, MAP_TABLE_SINGLE);
         matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SUGGEST_REQUEST);
 
+        matcher.addURI(AUTHORITY, VIEW_PSEUDOTABLE + "/*", VIEW_PSEUDOTABLE_TABLE_I);
 
         return true;
     }
@@ -186,6 +190,19 @@ public class IndexContentProvider extends ContentProvider
     @Override
     public int delete(Uri uri, String s, String[] strings)
     {
+        int table = matcher.match(uri);
+        String viewId  = uri.getLastPathSegment();
+        db = mOpenHelper.getWritableDatabase();
+
+        if (table == VIEW_PSEUDOTABLE_TABLE_I)
+        {
+            db.beginTransaction();
+            String d1 = "DELETE FROM " + SUGESTIONS_TABLE + " WHERE " + SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID + " IN ( select cast(_id as text) from " + MAIN_TABLE + " where " + COL_VIEW_ID + " = '" + viewId + "' )";
+            db.execSQL(d1);
+            String d2 = "DELETE FROM " + MAIN_TABLE + " WHERE " + COL_VIEW_ID + " = '" + viewId + "'";
+            db.execSQL(d2);
+            db.endTransaction();
+        }
         return 0;
     }
 

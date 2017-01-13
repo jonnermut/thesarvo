@@ -146,6 +146,25 @@ public class ResourceManager implements IDownloaderClient
     {
         Log.d("GuideListActivity", "getWWWAsset: " + file);
 
+        if (guideApplication.isRunningInRoboelectric())
+        {
+            // try files on disk first
+            String userDir = System.getProperty("user.dir"); // should be /git/thesarvo/thesarvo-android/guide
+            File downloadDir = new File(userDir + "/../../thesarvo_iphone_2.0/thesarvo");
+            if (downloadDir.exists())
+            {
+                File downloadFile = new File(downloadDir, file);
+                try
+                {
+                    return new FileInputStream(downloadFile);
+                }
+                catch (FileNotFoundException e)
+                {
+                    Log.e("ResourceManager", "Expected file in downloads, it wasnt: " + downloadFile, e);
+                }
+            }
+        }
+
         if (resources == null)
         {
             Log.e("GuideListActivity", "Error getting asset, resources was null");

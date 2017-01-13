@@ -22,8 +22,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    def dbLastMod =  new File("$projectDir/assets/databases/index").lastModified().toString()
+    def indexFile = new File("$projectDir/src/main/assets/databases/index")
+    println indexFile.absolutePath
+    def dbLastMod =  indexFile.lastModified().toString() + "L"
 
 
     buildTypes {
@@ -54,4 +55,10 @@ dependencies {
     // https://github.com/bmelnychuk/AndroidTreeView
     compile 'com.github.bmelnychuk:atv:1.2.+'
     compile 'com.github.johnkil.print:print:1.2.2'
+
+
+    // Robolectric
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.hamcrest:hamcrest-library:1.3'
+    testCompile 'org.robolectric:robolectric:3.2.1'
 }
