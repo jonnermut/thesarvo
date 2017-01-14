@@ -59,27 +59,20 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <!--
         <activity
             android:name=".MapsFragment"
             android:label="@string/title_activity_maps"
-            android:parentActivityName=".GuideListActivity" >
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.thesarvo.guide.GuideListActivity" />
+                android:value="com.thesarvo.guide.MainActivity" />
         </activity>
-
+           -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".SearchableActivity"
-            android:label="@string/title_activity_searchable"
-            android:parentActivityName=".GuideListActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.thesarvo.guide.GuideListActivity"/>
-        </activity>
 
         <provider
             android:authorities="com.thesarvo.guide.provider"

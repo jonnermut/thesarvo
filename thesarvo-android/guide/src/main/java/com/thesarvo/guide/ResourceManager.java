@@ -63,8 +63,9 @@ public class ResourceManager implements IDownloaderClient
         //we want to do this without communicating with the server if possible
         if (!expansionFilesDelivered(context, EXP_VERSION_NO))
         {
-            Intent notifier = new Intent(context, GuideListActivity.class);
-            notifier.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            //Intent notifier = new Intent(context, GuideListActivity.class);
+            //notifier.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            Intent notifier = null;
 
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notifier,
                     PendingIntent.FLAG_UPDATE_CURRENT);

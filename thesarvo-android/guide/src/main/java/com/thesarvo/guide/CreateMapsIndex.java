@@ -16,11 +16,11 @@ import java.util.List;
  */
 class CreateMapsIndex extends AsyncTask<Void, Void, Void>
 {
-    private GuideListActivity guideListActivity;
+    private GuideApplication guideApplication;
 
-    public CreateMapsIndex(GuideListActivity guideListActivity)
+    public CreateMapsIndex(GuideApplication guideApplication)
     {
-        this.guideListActivity = guideListActivity;
+        this.guideApplication = guideApplication;
     }
 
     @Override
@@ -34,7 +34,7 @@ class CreateMapsIndex extends AsyncTask<Void, Void, Void>
         builder.path(IndexContentProvider.MAP_TABLE);
 
         //getting all is inefficient, but we can do this async and we do need all that data
-        Cursor cursor = guideListActivity.getContentResolver().query(builder.build(), null, null, null, null);
+        Cursor cursor = guideApplication.getContentResolver().query(builder.build(), null, null, null, null);
 
         if (cursor == null || cursor.getCount() < 1)
         {
@@ -76,7 +76,7 @@ class CreateMapsIndex extends AsyncTask<Void, Void, Void>
     protected void onPostExecute(Void aVoid)
     {
         super.onPostExecute(aVoid);
-        guideListActivity.mapsIndexed = true;
+        guideApplication.mapsIndexed = true;
         Log.d("Map Index", "Map index data created");
     }
 
