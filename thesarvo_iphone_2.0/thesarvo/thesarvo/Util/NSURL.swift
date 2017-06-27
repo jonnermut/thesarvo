@@ -134,6 +134,25 @@ extension Foundation.URL
         return nil
     }
     
+    var fileSize : UInt64?
+    {
+        let fm = FileManager.default
+        var err : NSError?
+        
+        let p = self.path
+        
+        do {
+            let attributes = try fm.attributesOfItem(atPath: p) as NSDictionary
+            let s = attributes.fileSize()
+            return s
+        } catch let error as NSError {
+            err = error
+        }
+        
+        
+        return nil
+    }
+    
     var fileCreationDate : Foundation.Date?
     {
         let fm = FileManager.default

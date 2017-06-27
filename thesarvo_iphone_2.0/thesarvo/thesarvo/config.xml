@@ -61,6 +61,7 @@
 			<listItem text="Flinders Island"  />
             <listItem text="Killiecrankie" viewId="guide.333053995" level="2"  />
             <listItem text="Mt Strzelecki" viewId="guide.333053997" level="2"  />
+            <listItem text="Other Flinders Island Crags" viewId="guide.338264330" level="2"  />
             
 			<listItem text="Hillwood" viewId="guide.100" />
 			<listItem text="Lost Falls" viewId="guide.8912950" />
@@ -123,6 +124,9 @@
 			
 			<listItem text="Apsley Edge" level="1" viewId="guide.325320706" />
 			<listItem text="Bruny Island" level="1" viewId="guide.535" />
+            <listItem text="Cloudy Bay" level="2" viewId="guide.338264207" />
+            
+            
 			<listItem text="Elderslie" level="1" viewId="guide.226656265" />
 			<listItem text="Eldon" level="1" viewId="guide.300220430" />
 			<listItem text="Handsome Crag" level="1" viewId="guide.8683574" />
@@ -130,6 +134,7 @@
 			<listItem text="Kempton Quoin" level="1" viewId="guide.8683579" />
 			<listItem text="Lowdina" level="1" viewId="guide.167" />
 			<listItem text="Mt Wellington" level="1" viewId="Mt Wellington" />
+            <listItem text="Ross Quoin" level="1" viewId="guide.338264089" />
 			<listItem text="South Arm" level="1" />
 			<listItem text="Clifton" level="2" viewId="guide.8683563" />
 			<listItem text="Larks Edge" level="2" viewId="guide.8683580" />
@@ -153,7 +158,7 @@
 			<listItem text="Grasstree Hill" level="1" viewId="guide.8683572" />
 			<listItem text="Gunners Quoin" level="1" viewId="guide.8683573" />
 
-			<listItem text="Mad Monkey Crag" level="1" viewId="guide.8683600" />
+			<listItem text="Mad Monkeys" level="1" viewId="guide.8683600" />
 			<listItem text="Meehan Range" level="1" viewId="guide.18513936" />
 			<listItem text="Monkeys Bum" level="1" viewId="guide.8683603" />
 			<listItem text="North West Bay River" level="1" viewId="guide.11010049" />
@@ -204,6 +209,7 @@
 			<listItem text="Frenchmans Cap" level="1" viewId="guide.521" />
             
             <listItem text="Marrawah" level="1" viewId="guide.333053986" />
+            <listItem text="Mt Murchison" level="1" viewId="guide.338264225" />
 			<listItem text="Mt Anne" level="1" viewId="guide.81002503" />
 
 			<listItem text="Precipitous Bluff" level="1" viewId="guide.17694722" />
@@ -233,6 +239,7 @@
 				<listItem text="Bradys Lookout" level="2" viewId="guide.1966082" />
 				<listItem text="Doctors Rocks" level="2" viewId="guide.221282312" />
 				<listItem text="Flinders Island" level="2" viewId="guide.227" />
+                
 				<listItem text="Hillwood" level="2" viewId="guide.230" />
 				<listItem text="Mersey Bluff" level="2" viewId="guide.214597657" />
 				<listItem text="Sheffield" level="2" viewId="guide.972" />
@@ -245,7 +252,7 @@
 				<listItem text="Bluff River" level="2" viewId="guide.224" />
 				<listItem text="Elderslie" level="2" viewId="guide.226" />
 				<listItem text="Handsome Crag" level="2" viewId="guide.33292290" />
-				
+				<listItem text="Kempton Quoin" level="2" viewId="guide.333054589" />
 				<listItem text="Oatlands" level="2" viewId="guide.234" />
 				<listItem text="Riverside" level="2" viewId="guide.237" />
 				

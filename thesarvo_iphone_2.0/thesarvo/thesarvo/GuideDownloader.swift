@@ -122,6 +122,8 @@ class Update : AEXMLElement
 
 class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
 {
+    let HTML_MARKER = "<html>".data(using: .utf8)!
+    
     let BASE_URL = "http://www.thesarvo.com/confluence"
     let SYNC_URL = "http://www.thesarvo.com/confluence/plugins/servlet/guide/sync/"
     
@@ -405,7 +407,7 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
             let nsurl = Foundation.URL(string: url)
             if let nsurl = nsurl
             {
-                print("Staring download of \(nsurl)")
+                print("Starting download of \(nsurl)")
                 let dt = backgroundsession.downloadTask(with: nsurl)
                 dt.resume()
                 self.taskToUpdate[dt.taskIdentifier] = update
@@ -428,21 +430,88 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
         if let error = error
         {
             print("Error downloading \(task) - \(error)")
-            completedOps += 1
+            
         }
-        
+        completedOps += 1
+    }
+    
+    func checkCorrectGuide(path: String) -> Bool
+    {
+        do
+        {
+            let data = try Data(contentsOf: Foundation.URL(fileURLWithPath: path))
+            
+            let doc = try GuideDocument(xmlData: data)
+            
+            if let ge = doc["guide"] as? GuideElement
+            {
+                return true
+            }
+            
+        }
+        catch
+        {
+            print("Error checking guide: \(error)")
+        }
+        return false
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL)
     {
+        defer {
+            completedOps += 1
+        }
+        
         if let update = taskToUpdate[downloadTask.taskIdentifier]
         {
             if let filename = update.filename
             {
                 print("Finished \(filename) downloading to \(location)")
                 
+                if let resp = downloadTask.response as? HTTPURLResponse
+                {
+                    if resp.statusCode != 200
+                    {
+                        print("Status code for url: \(downloadTask.originalRequest?.url) filename:\(filename) was \(resp.statusCode)")
+                        return;
+                    }
+                }
+                
+                
                 do
                 {
+                    let p = location.path
+                    
+                    if !location.fileExists()
+                    {
+                        return
+                    }
+                    
+                    if let size = location.fileSize
+                    {
+                        if size == 0
+                        {
+                            print("File \(filename) was zero bytes")
+                            return
+                        }
+                    }
+                    
+                    let d = try Data(contentsOf: location)
+                    let ml = min(20, d.count)
+                    //let sub = d[0..<ml]
+                    if let r = d.range(of: HTML_MARKER, in: 0..<ml)
+                    {
+                        print("Found html marker in \(filename) at \(location), ignoring")
+                        return
+                    }
+                    
+                    if p.hasSuffix(".xml") && !checkCorrectGuide( path: p )
+                    {
+                        print("Guide check failed on: \(p)")
+                        return; // try again next time
+                    }
+                    
+                    
                     let path = finalPath(filename)
                     if (fm.fileExists(atPath: path))
                     {
@@ -463,7 +532,7 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
 
         }
         
-        completedOps += 1
+        
     }
     
     func getUrls(_ id: String) -> Dictionary<String, String>

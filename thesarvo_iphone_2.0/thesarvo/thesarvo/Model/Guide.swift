@@ -66,7 +66,7 @@ class GuideElement : AEXMLElement
 
 class GuideNode : AEXMLElement
 {
-    var elementId: String { return attr("id").valueOr("") }
+    var elementId: String { return attr("id") ?? "" }
     
     var searchString : String? { return nil }
     
@@ -100,10 +100,10 @@ class TextNode : GuideNode
 
 class ClimbNode : GuideNode
 {
-    var climbName: String { return attr("name").valueOr("").trimmed() }
-    var stars: String { return attr("stars").valueOr("").trimmed() }
+    var climbName: String { return (attr("name") ?? "").trimmed() }
+    var stars: String { return (attr("stars") ?? "").trimmed() }
     var starsPretty: String { return "★" * stars.trimmed().characters.count }
-    var grade: String { return attr("grade").valueOr("").trimmed() }
+    var grade: String { return (attr("grade") ?? "").trimmed() }
     
     override var searchString : String?
     {
@@ -240,16 +240,20 @@ open class MapPoint : NSObject, MKAnnotation
 }
 
 
-struct IndexEntry
+    
+public struct IndexEntry
 {
     var searchString : String
     var node : GuideNode?
+    
+    #if os(iOS)
     var guide : Guide
+    #endif
 }
 
+#if os(iOS)
 
-
-class Guide
+public class Guide
 {
     let guideId : String
     var name : String?
@@ -377,3 +381,5 @@ class Guide
     
 
 }
+
+#endif

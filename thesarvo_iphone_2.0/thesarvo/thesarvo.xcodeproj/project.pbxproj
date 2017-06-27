@@ -17,6 +17,7 @@
 		FC28B36E1A57AA4600C75D50 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC28B36D1A57AA4600C75D50 /* CoreLocation.framework */; };
 		FC28B3701A57AA5400C75D50 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC28B36F1A57AA5300C75D50 /* MapKit.framework */; };
 		FC28B3761A59501D00C75D50 /* SectionedDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3751A59501D00C75D50 /* SectionedDataSource.swift */; };
+		FC38841D1F010F1800805CA2 /* Guide.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3671A56A92C00C75D50 /* Guide.swift */; };
 		FC99CD001A6A290900C3228C /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC99CCFF1A6A290900C3228C /* Optional.swift */; };
 		FC99CD021A6B852900C3228C /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC99CD011A6B852900C3228C /* ContainerViewController.swift */; };
 		FCA40F421C2E8F3700DFC0B7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA40F411C2E8F3700DFC0B7 /* main.swift */; };
@@ -42,7 +43,6 @@
 		FCF795451A5289C900A7C808 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = FCF795441A5289C900A7C808 /* config.xml */; };
 		FCF795821A553A2400A7C808 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795731A553A2400A7C808 /* Util.swift */; };
 		FCF795841A553A2400A7C808 /* NSURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795751A553A2400A7C808 /* NSURL.swift */; };
-		FCF795851A553A2400A7C808 /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795761A553A2400A7C808 /* SWXMLHash.swift */; };
 		FCF795871A553A8B00A7C808 /* AEXML.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795861A553A8B00A7C808 /* AEXML.swift */; };
 		FCF795891A553BC500A7C808 /* AEXML+Stuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795881A553BC500A7C808 /* AEXML+Stuff.swift */; };
 /* End PBXBuildFile section */
@@ -91,6 +91,7 @@
 		FCC66E2D1C33994100B9A48D /* todo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = todo.txt; sourceTree = "<group>"; };
 		FCC66E331C3F810000B9A48D /* newStuffQuery */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = newStuffQuery; sourceTree = "<group>"; };
 		FCC66E351C4266C300B9A48D /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		FCE080F61F01333300DC3608 /* thesarvo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = thesarvo.entitlements; sourceTree = "<group>"; };
 		FCF795131A5277B300A7C808 /* thesarvo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = thesarvo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCF795171A5277B300A7C808 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FCF795181A5277B300A7C808 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -187,6 +188,7 @@
 		FCF795151A5277B300A7C808 /* thesarvo */ = {
 			isa = PBXGroup;
 			children = (
+				FCE080F61F01333300DC3608 /* thesarvo.entitlements */,
 				FCF795181A5277B300A7C808 /* AppDelegate.swift */,
 				FCAB16A21BF6EAA300FABF7B /* DrawerController.swift */,
 				FCF795441A5289C900A7C808 /* config.xml */,
@@ -321,8 +323,16 @@
 					};
 					FCF795121A5277B300A7C808 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = 8K6T2FHY8E;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.DataProtection = {
+								enabled = 0;
+							};
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					FCF795291A5277B300A7C808 = {
 						CreatedOnToolsVersion = 6.1;
@@ -384,6 +394,7 @@
 				FCA40F461C2E900C00DFC0B7 /* AEXML+Stuff.swift in Sources */,
 				FCA40F4A1C2E907100DFC0B7 /* GuideDownloader.swift in Sources */,
 				FCA40F471C2E901E00DFC0B7 /* AEXML.swift in Sources */,
+				FC38841D1F010F1800805CA2 /* Guide.swift in Sources */,
 				FCA40F421C2E8F3700DFC0B7 /* main.swift in Sources */,
 				FCC66E301C363DF700B9A48D /* String+Stuff.swift in Sources */,
 			);
@@ -409,7 +420,6 @@
 				FCF795841A553A2400A7C808 /* NSURL.swift in Sources */,
 				FCC66E361C4266C300B9A48D /* SettingsViewController.swift in Sources */,
 				FC28B3621A56A8F800C75D50 /* Model.swift in Sources */,
-				FCF795851A553A2400A7C808 /* SWXMLHash.swift in Sources */,
 				FC99CD021A6B852900C3228C /* ContainerViewController.swift in Sources */,
 				FCF795821A553A2400A7C808 /* Util.swift in Sources */,
 				FC28B3661A56A91900C75D50 /* MapPoint.swift in Sources */,
@@ -568,6 +578,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = thesarvo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -582,11 +594,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 8K6T2FHY8E;
 				INFOPLIST_FILE = thesarvo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesarvo.guide;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "3fb60817-ae99-4a68-bb44-2e794107cf1f";
+				PROVISIONING_PROFILE_SPECIFIER = "thesarvo distribution 3";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

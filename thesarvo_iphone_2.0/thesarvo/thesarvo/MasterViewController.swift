@@ -241,7 +241,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                 
                 d.cellConfigurator =
                 {
-                    (cell: UITableViewCell!, node: GuideNode) in
+                    (cell: UITableViewCell?, node: GuideNode) in
                     if let cell = cell as? TOCCell
                     {
                         cell.node = node
@@ -288,7 +288,8 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                         }
                         
                     }
-                } as! (UITableViewCell?, GuideNode) -> (Void)
+                    return;
+                }
                 /*
                 if (shouldFilter)
                 {
