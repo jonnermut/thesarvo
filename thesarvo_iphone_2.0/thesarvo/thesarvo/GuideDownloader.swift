@@ -198,9 +198,11 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
 
         backgroundsession = Foundation.URLSession(configuration: config, delegate: self, delegateQueue: queue)
         
+        
         //session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: nil, delegateQueue: queue)
 
         session = Foundation.URLSession.shared
+        
         
         // check if we have a newer resource updates.xml than our local one
         maybeCopyResourceUpdatesXml()
@@ -311,7 +313,7 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
                 {
                     self.handleSyncData(data)
                 }
-                self.completedOps += 1
+                self.incrementCompletedOps()
             }
 
             dt.resume()
@@ -370,7 +372,7 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
                         {
                             if lastMod.timeIntervalSince1970 * 1000 >= lastModifiedDouble
                             {
-                                weHaveNewer = true
+                                //weHaveNewer = true
                                 
                                 if (self.desktopMode)
                                 {
@@ -409,6 +411,7 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
             {
                 print("Starting download of \(nsurl)")
                 let dt = backgroundsession.downloadTask(with: nsurl)
+                
                 dt.resume()
                 self.taskToUpdate[dt.taskIdentifier] = update
                 totalOps += 1
@@ -425,14 +428,21 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
         return "\(directory!)/\(filename)"
     }
     
+    func incrementCompletedOps()
+    {
+        completedOps+=1
+        print("incrementCompletedOps, now: \(completedOps)")
+    }
+    
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?)
     {
         if let error = error
         {
             print("Error downloading \(task) - \(error)")
+            incrementCompletedOps()
             
         }
-        completedOps += 1
+        
     }
     
     func checkCorrectGuide(path: String) -> Bool
@@ -458,8 +468,11 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL)
     {
+        print("downloadTask didFinishDownloadingTo  \(downloadTask)")
+        
         defer {
-            completedOps += 1
+            
+            incrementCompletedOps()
         }
         
         if let update = taskToUpdate[downloadTask.taskIdentifier]

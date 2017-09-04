@@ -17,6 +17,7 @@
 		FC28B36E1A57AA4600C75D50 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC28B36D1A57AA4600C75D50 /* CoreLocation.framework */; };
 		FC28B3701A57AA5400C75D50 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC28B36F1A57AA5300C75D50 /* MapKit.framework */; };
 		FC28B3761A59501D00C75D50 /* SectionedDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3751A59501D00C75D50 /* SectionedDataSource.swift */; };
+		FC340F231F5D6E820064A101 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = FCF795441A5289C900A7C808 /* config.xml */; };
 		FC38841D1F010F1800805CA2 /* Guide.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3671A56A92C00C75D50 /* Guide.swift */; };
 		FC99CD001A6A290900C3228C /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC99CCFF1A6A290900C3228C /* Optional.swift */; };
 		FC99CD021A6B852900C3228C /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC99CD011A6B852900C3228C /* ContainerViewController.swift */; };
@@ -40,7 +41,6 @@
 		FCF795221A5277B300A7C808 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCF795211A5277B300A7C808 /* Images.xcassets */; };
 		FCF795251A5277B300A7C808 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = FCF795231A5277B300A7C808 /* LaunchScreen.xib */; };
 		FCF795311A5277B300A7C808 /* thesarvoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795301A5277B300A7C808 /* thesarvoTests.swift */; };
-		FCF795451A5289C900A7C808 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = FCF795441A5289C900A7C808 /* config.xml */; };
 		FCF795821A553A2400A7C808 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795731A553A2400A7C808 /* Util.swift */; };
 		FCF795841A553A2400A7C808 /* NSURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795751A553A2400A7C808 /* NSURL.swift */; };
 		FCF795871A553A8B00A7C808 /* AEXML.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF795861A553A8B00A7C808 /* AEXML.swift */; };
@@ -323,8 +323,9 @@
 					};
 					FCF795121A5277B300A7C808 = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = 8K6T2FHY8E;
 						LastSwiftMigration = 0800;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.DataProtection = {
 								enabled = 0;
@@ -367,12 +368,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				FCAACE911A5559FD00C7A03F /* www in Resources */,
+				FC340F231F5D6E820064A101 /* config.xml in Resources */,
 				FCC66E341C3F810000B9A48D /* newStuffQuery in Resources */,
 				FCF795201A5277B300A7C808 /* Main.storyboard in Resources */,
 				FCF795251A5277B300A7C808 /* LaunchScreen.xib in Resources */,
 				FCF795221A5277B300A7C808 /* Images.xcassets in Resources */,
 				FCC66E2E1C33994100B9A48D /* todo.txt in Resources */,
-				FCF795451A5289C900A7C808 /* config.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -579,7 +580,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 8K6T2FHY8E;
 				INFOPLIST_FILE = thesarvo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -594,15 +595,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 8K6T2FHY8E;
 				INFOPLIST_FILE = thesarvo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesarvo.guide;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3fb60817-ae99-4a68-bb44-2e794107cf1f";
-				PROVISIONING_PROFILE_SPECIFIER = "thesarvo distribution 3";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

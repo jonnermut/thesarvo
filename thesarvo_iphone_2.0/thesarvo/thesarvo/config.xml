@@ -135,7 +135,8 @@
 			<listItem text="Lowdina" level="1" viewId="guide.167" />
 			<listItem text="Mt Wellington" level="1" viewId="Mt Wellington" />
             <listItem text="Ross Quoin" level="1" viewId="guide.338264089" />
-			<listItem text="South Arm" level="1" />
+			<listItem text="Sand River" level="1" viewId="guide.338755605" />
+            <listItem text="South Arm" level="1" />
 			<listItem text="Clifton" level="2" viewId="guide.8683563" />
 			<listItem text="Larks Edge" level="2" viewId="guide.8683580" />
 
@@ -262,7 +263,15 @@
 				<listItem text="Gnarly Spider" level="2" viewId="guide.228" />
 				<listItem text="Gordons Hill" level="2" viewId="guide.229" />
 				<listItem text="Hobart Quarries" level="2" viewId="guide.231" />
-				<listItem text="Mt Wellington" level="2" viewId="guide.233" />
+				
+                <listItem text="Mt Wellington" level="2" viewId="guide.341213307" />
+                <listItem text="The Springs" level="3" viewId="guide.341213309" />
+                <listItem text="Big Bend Area" level="3" viewId="guide.341213319" />
+                <listItem text="The Summit" level="3" viewId="guide.341213315" />
+                <listItem text="Other Areas" level="3" viewId="guide.341213317" />
+                
+                
+                
 				<listItem text="Richmond" level="2" viewId="guide.235" />
 				<listItem text="Risdon" level="2" viewId="guide.236" />
 				<listItem text="Rocky Tom" level="2" viewId="guide.238" />
