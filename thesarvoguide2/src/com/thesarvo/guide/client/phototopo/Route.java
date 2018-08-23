@@ -17,11 +17,11 @@ public class Route
 {
 
 	private PhotoTopo phototopo;
-	//private String autoColor;
-	//private String autoColorBorder;
+	// private String autoColor;
+	// private String autoColorBorder;
 	private List<RoutePoint> points = new ArrayList<RoutePoint>();
 	private List<Segment> paths = new ArrayList<Segment>();
-	
+
 	private PathDrawingObject data;
 	private Path curve;
 	private Element glow;
@@ -31,17 +31,15 @@ public class Route
 	 * @param phototopo
 	 *            the topo to add this route to
 	 * @param id
-	 *            - is a unique string identifying the route (eg a primary id in
-	 *            the DB) #param order is a number used for sorting the routes
-	 *            into a natural order (typically 1..x from left to right)
+	 *            - is a unique string identifying the route (eg a primary id in the
+	 *            DB) #param order is a number used for sorting the routes into a
+	 *            natural order (typically 1..x from left to right)
 	 * @property {String} id the unique id of this route
 	 */
 	public Route(PhotoTopo phototopo, String id, PathDrawingObject rd)
 	{
 		this.data = rd;
 		this.setPhototopo(phototopo);
-		
-		
 
 	}
 
@@ -100,8 +98,7 @@ public class Route
 		if (this.getPoints().size() > 1 && offset > 0)
 		{
 			Console.log("Making path");
-			path = new Segment(this.getPoints().get(offset - 1),
-					this.getPoints().get(offset));
+			path = new Segment(this.getPoints().get(offset - 1), this.getPoints().get(offset));
 			// this.paths.splice(offset-1, 0, path);
 
 			if (offset > this.getPaths().size())
@@ -117,7 +114,7 @@ public class Route
 			}
 		}
 
-		//this.getPhototopo().saveData();
+		// this.getPhototopo().saveData();
 		this.getPhototopo().updateHint();
 
 		if (redraw)
@@ -146,7 +143,7 @@ public class Route
 		Integer pos = afterPoint != null ? afterPoint.position + 1 : null;
 		RoutePoint newPoint = this.addPoint(x, y, type, pos, true);
 		newPoint.select();
-		
+
 		saveData();
 
 		return newPoint;
@@ -155,77 +152,81 @@ public class Route
 	public void updateLabel()
 	{
 		Console.log("updateLabel " + this);
-		
+
 		setLabel(data.getLabelText(), data.getLabelClasses());
 	}
-	
+
 	/**
-	 * @private sets the label for this route The label may appear in more than
-	 *          one place if selected if will have a class of "selected" it may
-	 *          also have a class of "start"
+	 * @private sets the label for this route The label may appear in more than one
+	 *          place if selected if will have a class of "selected" it may also
+	 *          have a class of "start"
 	 */
 	void setLabel(String labelText, String labelClasses)
 	{
-		//this.data.setLabelText(labelText);
-		//if (labelClasses != null)
-		//	this.data.setLabelClasses(labelClasses);
+		// this.data.setLabelText(labelText);
+		// if (labelClasses != null)
+		// this.data.setLabelClasses(labelClasses);
 
 		if (labelText != null && this.getPoints().size() > 0)
 		{
 			boolean found = false;
-			this.getPoints().get(0).setLabel("","");
-			
+			this.getPoints().get(0).setLabel("", "");
+
 			for (RoutePoint p : getPoints())
 			{
-				if ("label".equals(p.getType() ) )
+				if ("label".equals(p.getType()))
 				{
 					found = true;
-					p.setLabel("start " + this.data.getLabelClasses(),this.data.getLabelText());
+					p.setLabel("start " + this.data.getLabelClasses(), this.data.getLabelText());
 				}
 			}
-			
+
 			if (!found)
-				this.getPoints().get(0).setLabel("start " + this.data.getLabelClasses(),this.data.getLabelText());
-			
-				
+				this.getPoints().get(0).setLabel("start " + this.data.getLabelClasses(), this.data.getLabelText());
+
 		}
 		// else draw the label somewhere else so notify that it is missing??
 	};
-	
+
 	/**
 	 * @private save the data down to the page to be serialised in some form
 	 * @returns a json strucure with all point data
 	 */
 	void saveData()
 	{
-		
+
 		String svg = updateSvgPath();
-		
+
+	}
+
+	String oneDP(double d)
+	{
+		return Segment.oneDP(d);
 	}
 
 	private String updateSvgPath()
 	{
 		String spoints = "";
 		String svg = "";
-		for (RoutePoint point: points)
+		for (RoutePoint point : points)
 		{
 			if (spoints.length() > 0)
 				spoints += " ";
 			else
 			{
-				svg += "M" + (int)point.x + "," + (int)point.y;
+				svg += "M" + oneDP(point.x) + "," + oneDP(point.y);
 			}
-			spoints += (int)point.x + "," + (int)point.y;
-			
+			spoints += oneDP(point.x) + "," + oneDP(point.y);
+
 			if (point.getType() != null && point.getType() != "none")
 			{
 				spoints += "," + point.getType();
 			}
-			
-			if (point.nextPath !=null)
-			{ 
-				svg += point.nextPath.svg_part; 
-			} 
+
+			if (point.nextPath != null)
+			{
+				svg += point.nextPath.svg_part;
+			}
 		}
 		Console.log("saveData:" + spoints);
 		data.setPoints(spoints);
@@ -233,12 +234,10 @@ public class Route
 		return svg;
 	};
 
-
-
 	/**
-	 * @private select this route, and optionally specifies which point to
-	 *          select within the route if no point specifices selects the last
-	 *          point in the route (if it has any points at all)
+	 * @private select this route, and optionally specifies which point to select
+	 *          within the route if no point specifices selects the last point in
+	 *          the route (if it has any points at all)
 	 */
 	void select(RoutePoint selectedPoint)
 	{
@@ -247,8 +246,7 @@ public class Route
 
 		int c;
 
-		if (getPhototopo().selectedRoute == this
-				&& selectedPoint == getPhototopo().getSelectedPoint())
+		if (getPhototopo().selectedRoute == this && selectedPoint == getPhototopo().getSelectedPoint())
 		{
 			return;
 		}
@@ -260,11 +258,12 @@ public class Route
 
 		getPhototopo().selectedRoute = this;
 
-//		if (this.data.getLabelText() != null && this.getPoints().size() > 0)
-//		{
-//			this.getPoints().get(0).setLabel("selected start " + this.data.getLabelClasses(),
-//					this.data.getLabelText());
-//		}
+		// if (this.data.getLabelText() != null && this.getPoints().size() > 0)
+		// {
+		// this.getPoints().get(0).setLabel("selected start " +
+		// this.data.getLabelClasses(),
+		// this.data.getLabelText());
+		// }
 
 		if (selectedPoint == null)
 		{
@@ -279,7 +278,6 @@ public class Route
 			selectedPoint.select(true);
 		}
 
-
 		if (getPhototopo().isEditable())
 		{
 
@@ -288,13 +286,12 @@ public class Route
 			{
 				if (segment != null && segment.curve != null)
 				{
-					segment.curve.attr(Styles
-							.strokeSelected(getPhototopo().getOptions().thickness));
-					
+					segment.curve.attr(Styles.strokeSelected(getPhototopo().getOptions().thickness));
+
 					segment.point2.circle.attr(Styles.handleSelected());
-					
+
 				}
-	
+
 			}
 			if (getPoints().size() > 0)
 			{
@@ -303,12 +300,10 @@ public class Route
 		}
 		else
 		{
-			this.curve.attr( Styles.strokeSelected(getPhototopo().getOptions().thickness));
+			this.curve.attr(Styles.strokeSelected(getPhototopo().getOptions().thickness));
 		}
 
-
 		getPhototopo().updateHint();
-
 
 	};
 
@@ -322,7 +317,6 @@ public class Route
 		getPhototopo().selectedRoute = null;
 		getPhototopo().setSelectedPoint(null);
 
-
 		if (getPhototopo().isEditable())
 		{
 			for (Segment path : getPaths())
@@ -332,7 +326,7 @@ public class Route
 					path.curve.attr(getRouteCurveAttr());
 				}
 			}
-			
+
 			for (RoutePoint p : getPoints())
 			{
 				p.circle.attr(Styles.handle());
@@ -346,7 +340,6 @@ public class Route
 
 		getPhototopo().updateHint();
 
-
 	};
 
 	/**
@@ -355,37 +348,34 @@ public class Route
 	void redraw()
 	{
 		Console.log("redraw " + this);
-		
+
 		boolean editable = phototopo.isEditable();
-		
+
 		for (Segment path : getPaths())
 		{
 			if (path != null)
 				path.redraw();
 		}
-		
+
 		if (!editable)
 		{
 			String svg = updateSvgPath();
-			
+
 			this.curve = this.phototopo.path(svg);
-			this.curve.attr( getRouteCurveAttr());
-			
-			//this.ghost.attr("path", path);
-			//this.ghost.toBack();
+			this.curve.attr(getRouteCurveAttr());
+
+			// this.ghost.attr("path", path);
+			// this.ghost.toBack();
 			glow = this.curve.glow("black", 6);
 			// glow.toBack();
-			//glow.attr("opacity", 0.5);
-			
+			// glow.attr("opacity", 0.5);
+
 			phototopo.addPathEventHandlers(curve, this);
-			
+
 			boolean arrow = getData().getArrow();
 			applyArrowStyle(this.curve, arrow);
 		}
 
-
-
-		
 		bringLabelAndPointsToFront();
 	}
 
@@ -395,14 +385,14 @@ public class Route
 		{
 			point.bringCircleAndIconToFront();
 		}
-		
+
 		updateLabel();
 	}
 
 	public void onClick(Event e, UIObject source)
 	{
 		getPhototopo().routeClicked(this, e, source);
-		
+
 	}
 
 	public String getId()
@@ -414,10 +404,6 @@ public class Route
 	{
 		this.data.setId(id);
 	}
-
-
-
-
 
 	public List<Segment> getPaths()
 	{
@@ -439,8 +425,6 @@ public class Route
 		this.points = points;
 	}
 
-
-
 	public PhotoTopo getPhototopo()
 	{
 		return phototopo;
@@ -453,25 +437,24 @@ public class Route
 
 	public void remove()
 	{
-		//Window.alert("to do");
-		
+		// Window.alert("to do");
+
 		if (curve != null)
 			curve.remove();
-		
+
 		if (glow != null)
 			glow.remove();
-		
-		for (Segment s: paths)
+
+		for (Segment s : paths)
 		{
-			if (s!=null)
+			if (s != null)
 				s.remove();
 		}
 		for (RoutePoint p : points)
 		{
 			p.removeShapes();
 		}
-		
-		
+
 		if (data != null)
 			data.remove();
 	}
@@ -500,14 +483,14 @@ public class Route
 					String type = "";
 					if (parts.length > 2)
 						type = parts[2];
-	
+
 					this.addPoint(dx, dy, type, null, false);
 				}
 			}
 		}
 
 		updateLabel();
-		
+
 	}
 
 	/**
@@ -519,7 +502,8 @@ public class Route
 	}
 
 	/**
-	 * @param data the data to set
+	 * @param data
+	 *            the data to set
 	 */
 	public void setData(PathDrawingObject data)
 	{
@@ -529,9 +513,9 @@ public class Route
 	public void applyArrowStyle(Shape shape, boolean arrow)
 	{
 		String style = arrow ? "block-wide-long" : "none";
-		shape.attr("arrow-end", style);	
+		shape.attr("arrow-end", style);
 	}
-	
+
 	public JavaScriptObject getRouteCurveAttr()
 	{
 		String lineStyle = this.getData().getLineStyle();
@@ -579,9 +563,7 @@ public class Route
 	 * this.phototopo.options.onmouseout(this); } };
 	 * 
 	 * Route.prototype.onclick = function(point){ if
-	 * (this.phototopo.options.onclick){ this.phototopo.options.onclick(this); }
-	 * };
+	 * (this.phototopo.options.onclick){ this.phototopo.options.onclick(this); } };
 	 */
-
 
 }

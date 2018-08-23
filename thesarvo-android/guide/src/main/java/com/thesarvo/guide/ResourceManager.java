@@ -61,11 +61,16 @@ public class ResourceManager implements IDownloaderClient
 
         //TODO, use this to check for the existance of the file and then mount it as a virtual file system
         //we want to do this without communicating with the server if possible
-        if (!expansionFilesDelivered(context, EXP_VERSION_NO))
+
+        if (guideApplication.isRunningInRoboelectric())
         {
-            //Intent notifier = new Intent(context, GuideListActivity.class);
-            //notifier.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            Intent notifier = null;
+            haveResources = true;
+        }
+        else if (!expansionFilesDelivered(context, EXP_VERSION_NO))
+        {
+            Intent notifier = new Intent(context, MainActivity.class);
+            notifier.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            //Intent notifier = null;
 
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notifier,
                     PendingIntent.FLAG_UPDATE_CURRENT);
@@ -85,7 +90,7 @@ public class ResourceManager implements IDownloaderClient
             if (downloading != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED)
             {
                 downloaderStub = DownloaderClientMarshaller.CreateStub(this, AssetsDownloader.class);
-
+                downloaderStub.connect(context);
                 // FIXME
                 //GuideListActivity.get().setContentView(R.layout.downloader_ui);
                 return;

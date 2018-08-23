@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<view id="home" name="Home" type="MenuList" rootView="true">
+	<view id="home" name="thesarvo" type="MenuList" rootView="true">
 		<data>
 			<listItem text="Introduction" viewId="guide.9404494" />
 			<listItem text="East" viewId="East" />
@@ -12,6 +12,9 @@
 			<listItem text="Map" viewId="Map" />
 			<listItem text="Weather" viewId="Weather" />
 			<listItem text="thesarvo.com" viewId="http://www.thesarvo.com/confluence/display/thesarvo/Tasmania" />
+            <!--
+            <listItem text="Settings" viewId="Settings" />
+             -->
 		</data>
 	</view>
 
@@ -55,7 +58,11 @@
 
 
 
-			<listItem text="Flinders Island" viewId="guide.140" />
+			<listItem text="Flinders Island"  />
+            <listItem text="Killiecrankie" viewId="guide.333053995" level="2"  />
+            <listItem text="Mt Strzelecki" viewId="guide.333053997" level="2"  />
+            <listItem text="Other Flinders Island Crags" viewId="guide.338264330" level="2"  />
+            
 			<listItem text="Hillwood" viewId="guide.100" />
 			<listItem text="Lost Falls" viewId="guide.8912950" />
 			<listItem text="Mt Blackwood" viewId="guide.318" />
@@ -117,6 +124,9 @@
 			
 			<listItem text="Apsley Edge" level="1" viewId="guide.325320706" />
 			<listItem text="Bruny Island" level="1" viewId="guide.535" />
+            <listItem text="Cloudy Bay" level="2" viewId="guide.338264207" />
+            
+            
 			<listItem text="Elderslie" level="1" viewId="guide.226656265" />
 			<listItem text="Eldon" level="1" viewId="guide.300220430" />
 			<listItem text="Handsome Crag" level="1" viewId="guide.8683574" />
@@ -124,7 +134,9 @@
 			<listItem text="Kempton Quoin" level="1" viewId="guide.8683579" />
 			<listItem text="Lowdina" level="1" viewId="guide.167" />
 			<listItem text="Mt Wellington" level="1" viewId="Mt Wellington" />
-			<listItem text="South Arm" level="1" />
+            <listItem text="Ross Quoin" level="1" viewId="guide.338264089" />
+			<listItem text="Sand River" level="1" viewId="guide.338755605" />
+            <listItem text="South Arm" level="1" />
 			<listItem text="Clifton" level="2" viewId="guide.8683563" />
 			<listItem text="Larks Edge" level="2" viewId="guide.8683580" />
 
@@ -147,13 +159,12 @@
 			<listItem text="Grasstree Hill" level="1" viewId="guide.8683572" />
 			<listItem text="Gunners Quoin" level="1" viewId="guide.8683573" />
 
-			<listItem text="Mad Monkey Crag" level="1" viewId="guide.8683600" />
+			<listItem text="Mad Monkeys" level="1" viewId="guide.8683600" />
 			<listItem text="Meehan Range" level="1" viewId="guide.18513936" />
 			<listItem text="Monkeys Bum" level="1" viewId="guide.8683603" />
 			<listItem text="North West Bay River" level="1" viewId="guide.11010049" />
 			<listItem text="Proctors Road Quarry" level="1" viewId="guide.8683614" />
 			<listItem text="Rocky Tom" level="1" viewId="guide.8683621" />
-			<listItem text="Sandfly" level="1" viewId="guide.11010049" />
 			<listItem text="Waterworks Quarry" level="1" viewId="guide.8912916" />
 		</data>
 	</view>
@@ -192,18 +203,25 @@
 		<data>
 
 			<listItem text="Adamsfield" level="1" viewId="guide.333" />
+            <listItem text="Conical Rocks" level="1" viewId="guide.333053984" />
 			<listItem text="Cradle Mountain - Lake St Clair" level="1"
 				viewId="guide.348" />
 			<listItem text="Federation Peak" level="1" viewId="guide.321" />
 			<listItem text="Frenchmans Cap" level="1" viewId="guide.521" />
+            
+            <listItem text="Marrawah" level="1" viewId="guide.333053986" />
+            <listItem text="Mt Murchison" level="1" viewId="guide.338264225" />
 			<listItem text="Mt Anne" level="1" viewId="guide.81002503" />
 
 			<listItem text="Precipitous Bluff" level="1" viewId="guide.17694722" />
 			<listItem text="Sentinel Range" level="1" viewId="guide.8683549" />
+            <listItem text="The Needles" level="1" viewId="guide.330924175" />
+            <listItem text="The Velvet Underground" level="1" viewId="guide.333053990" />
+            <listItem text="Trial Harbour" level="1" viewId="guide.8912960" />
 			<listItem text="Tullah" level="1" viewId="guide.81985554" />
 			<listItem text="Tyndall Range" level="1" viewId="guide.551" />
 			<listItem text="Walls of Jerusalem" level="1" viewId="guide.81395724" />
-			<listItem text="West Coast Crags" level="1" viewId="guide.8912960" />
+			
 			<listItem text="Western Arthurs" level="1" viewId="guide.12582920" />
 			<listItem text="Other Western Crags" level="1" viewId="guide.13074445" />
 		</data>
@@ -216,22 +234,26 @@
 				<listItem text="Bicheno" level="2" viewId="guide.223" />
 				<listItem text="Coles Bay" level="2" viewId="guide.225" />
 				<listItem text="St Helens" level="2" viewId="guide.239" />
+                <listItem text="Swansea" level="2" viewId="guide.330432595" />
 			
 			<listItem text="North" />
 				<listItem text="Bradys Lookout" level="2" viewId="guide.1966082" />
 				<listItem text="Doctors Rocks" level="2" viewId="guide.221282312" />
 				<listItem text="Flinders Island" level="2" viewId="guide.227" />
+                
 				<listItem text="Hillwood" level="2" viewId="guide.230" />
 				<listItem text="Mersey Bluff" level="2" viewId="guide.214597657" />
 				<listItem text="Sheffield" level="2" viewId="guide.972" />
+                <listItem text="Sisters Beach" level="2" viewId="guide.330433011" />
 				<listItem text="The Gorge" level="2" viewId="guide.241" />
+                <listItem text="West Head" level="2" viewId="guide.330432873" />
 			
 			<listItem text="South East"  />
 				
 				<listItem text="Bluff River" level="2" viewId="guide.224" />
 				<listItem text="Elderslie" level="2" viewId="guide.226" />
 				<listItem text="Handsome Crag" level="2" viewId="guide.33292290" />
-				
+				<listItem text="Kempton Quoin" level="2" viewId="guide.333054589" />
 				<listItem text="Oatlands" level="2" viewId="guide.234" />
 				<listItem text="Riverside" level="2" viewId="guide.237" />
 				
@@ -241,7 +263,15 @@
 				<listItem text="Gnarly Spider" level="2" viewId="guide.228" />
 				<listItem text="Gordons Hill" level="2" viewId="guide.229" />
 				<listItem text="Hobart Quarries" level="2" viewId="guide.231" />
-				<listItem text="Mt Wellington" level="2" viewId="guide.233" />
+				
+                <listItem text="Mt Wellington" level="2" viewId="guide.341213307" />
+                <listItem text="The Springs" level="3" viewId="guide.341213309" />
+                <listItem text="Big Bend Area" level="3" viewId="guide.341213319" />
+                <listItem text="The Summit" level="3" viewId="guide.341213315" />
+                <listItem text="Other Areas" level="3" viewId="guide.341213317" />
+                
+                
+                
 				<listItem text="Richmond" level="2" viewId="guide.235" />
 				<listItem text="Risdon" level="2" viewId="guide.236" />
 				<listItem text="Rocky Tom" level="2" viewId="guide.238" />
@@ -251,6 +281,8 @@
 				
 			<listItem text="West"  />
 				<listItem text="Adamsfield" level="2" viewId="guide.222" />
+                <listItem text="Jukes Boulder Field" level="2" viewId="guide.332365869" />
+                
 			
 		</data>
 	</view>
@@ -258,8 +290,6 @@
 	<view id="guide" type="GuideView">
 	</view>
 
-	<view id="map" name="Map" type="com.thesarvo.guide.MapActivity" />
-
-    <metadata guideId="1"/>
+	<view id="map" name="Map" type="com.thesarvo.xphone.client.phonegap.NativeMapView" />
 
 </config>

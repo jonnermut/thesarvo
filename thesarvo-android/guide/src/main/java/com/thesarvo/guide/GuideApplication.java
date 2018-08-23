@@ -1,6 +1,7 @@
 package com.thesarvo.guide;
 
 import android.app.Application;
+import android.os.Build;
 
 /**
  * Created by jon on 29/12/2016.
@@ -11,7 +12,7 @@ public class GuideApplication extends Application
 
     ResourceManager resourceManager;
 
-    boolean runningInRoboelectric = false;
+    public static boolean runningInRoboelectric = false;
 
     private static final String DB_BUILD = "database build date";
     private static final int TESTER = 10000017;
@@ -29,6 +30,7 @@ public class GuideApplication extends Application
 
     boolean indexed = false;
     boolean mapsIndexed = false;
+    IndexManager indexManager;
 
     @Override
     public void onCreate()
@@ -37,10 +39,11 @@ public class GuideApplication extends Application
         instance = this;
 
         resourceManager = new ResourceManager(this);
+        indexManager = new IndexManager(this, resourceManager);
+        indexManager.startup(); // needs to be started before resource manager might start doing updates
         resourceManager.startup();
 
-        //searchIndexTask.execute("test");
-        
+
     }
 
     public static GuideApplication get()
@@ -60,8 +63,14 @@ public class GuideApplication extends Application
 
     }
 
-    public boolean isRunningInRoboelectric()
+//    public boolean isRunningInRoboelectric()
+//    {
+//        return runningInRoboelectric;
+//    }
+
+    public static boolean isRunningInRoboelectric()
     {
-        return runningInRoboelectric;
+        String finger = Build.FINGERPRINT;
+        return "robolectric".equals(finger);
     }
 }

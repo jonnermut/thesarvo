@@ -1,6 +1,7 @@
 package com.thesarvo.guide;
 
 import android.app.SearchManager;
+import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -123,7 +124,8 @@ public class MainActivity extends AppCompatActivity
 
         searchView = (SearchView) findViewById(R.id.search_view);
 
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        SearchableInfo info = searchManager.getSearchableInfo(getComponentName());
+        searchView.setSearchableInfo(info);
 
         //searchView.setEnabled(false);
         //searchView.setClickable(false);

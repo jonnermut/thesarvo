@@ -335,7 +335,7 @@ public class GuideDownloader
             if (u.getFilename().endsWith(".xml"))
             {
                 String viewId = "guide." + u.getFilename().replace(".xml", "");
-                SearchIndexTask task = new SearchIndexTask(GuideApplication.get(), resourceManager, viewId);
+                SearchIndexTask task = new SearchIndexTask(GuideApplication.get(), viewId);
 
                 queue.execute( task );
             }

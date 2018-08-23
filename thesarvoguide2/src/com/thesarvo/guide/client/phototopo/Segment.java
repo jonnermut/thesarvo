@@ -5,11 +5,17 @@ import java.util.List;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.thesarvo.guide.client.raphael.RaphaelJS;
 import com.thesarvo.guide.client.util.StringUtil;
 
 public class Segment
 {
+	static NumberFormat nf = NumberFormat.getFormat(".#");
+	public static String oneDP(double d)
+	{
+		return nf.format(d);
+	}
 
 	//String remove;
 	RoutePoint point1;
@@ -51,13 +57,13 @@ public class Segment
 		PhotoTopoOptions options = phototopo.getOptions();
 		boolean nojs = options.nojs;
 
-		String path = "M" + this.point1.x + " " + this.point1.y + " L"
-				+ this.point2.x + " " + this.point2.y;
+		String path = "M" + oneDP(this.point1.x) + " " + oneDP(this.point1.y) + " L"
+				+ oneDP(this.point2.x) + " " + oneDP(this.point2.y);
 		this.svg_part = path;
 
 		Console.log("Path ctor path:" + path);
 
-		this.pathPart = " L" + this.point2.x + " " + this.point2.y;
+		this.pathPart = " L" + oneDP(this.point2.x) + " " + oneDP(this.point2.y);
 
 
 
@@ -163,11 +169,11 @@ public class Segment
 
 				this.point2 };
 
-		this.svg_part = "C" + points[1].x + "," + points[1].y + " "
-				+ points[2].x + "," + points[2].y + " " + points[3].x + ","
-				+ points[3].y;
+		this.svg_part = "C" + oneDP(points[1].x) + "," + oneDP(points[1].y) + " "
+				+ oneDP(points[2].x) + "," + oneDP(points[2].y) + " " + oneDP(points[3].x) + ","
+				+ oneDP(points[3].y);
 
-		path = "M" + points[0].x + "," + points[0].y + this.svg_part;
+		path = "M" + oneDP(points[0].x) + "," + oneDP(points[0].y) + this.svg_part;
 	}
 
 	double secant(double theta)

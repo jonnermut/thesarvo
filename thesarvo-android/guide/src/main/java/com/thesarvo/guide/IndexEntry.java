@@ -2,15 +2,19 @@ package com.thesarvo.guide;
 
 import android.database.MatrixCursor;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by Karl on 4/09/2014.
  */
-public class IndexEntry
+public class IndexEntry implements Serializable
 {
-    enum IndexType{
+    private final static long serialVersionUID = 1;
+
+    enum IndexType implements Serializable
+    {
         CLIMB,
         PROBLEM,
         HEADING,
@@ -22,18 +26,19 @@ public class IndexEntry
 
     }
 
-    public int key;
+    public String key;
     public String viewId;
     public String viewName;
     public String elementID;
     public String text;
-    public IndexType type;
+    public String subtext="";
+    public String searchText = null;
 
+    public IndexType type;
 
 
     public IndexEntry()
     {
-        key = 0;
         viewId = "";
         viewName = "";
         elementID = "";

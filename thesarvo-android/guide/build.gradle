@@ -22,10 +22,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    def indexFile = new File("$projectDir/src/main/assets/databases/index")
+    def indexFile = new File("$projectDir/src/main/assets/index.ser")
     println indexFile.absolutePath
     def dbLastMod =  indexFile.lastModified().toString() + "L"
-
 
     buildTypes {
         release {

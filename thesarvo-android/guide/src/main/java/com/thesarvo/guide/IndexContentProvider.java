@@ -6,12 +6,18 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
+import android.database.AbstractCursor;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
+
+import java.util.List;
+
+import static com.thesarvo.guide.IndexEntry.INDEX_ENTRY_COLUMNS;
 
 /**
  * Created by Karl on 5/09/2014.
@@ -27,6 +33,8 @@ import android.util.Log;
  */
 public class IndexContentProvider extends ContentProvider
 {
+
+    /*
     private MainDatabaseHelper mOpenHelper;
 
     public static final String DBNAME = "index";
@@ -67,6 +75,8 @@ public class IndexContentProvider extends ContentProvider
 
     //not sure if code is right here
     private static final UriMatcher matcher = new UriMatcher(0);
+*/
+
 
     @Override
     public boolean onCreate()
@@ -79,6 +89,7 @@ public class IndexContentProvider extends ContentProvider
          * until SQLiteOpenHelper.getWritableDatabase is called
          */
 
+        /*
         mOpenHelper = new MainDatabaseHelper(
                 context,        // the application context
                 DBNAME,              // the name of the database)
@@ -94,6 +105,7 @@ public class IndexContentProvider extends ContentProvider
         matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SUGGEST_REQUEST);
 
         matcher.addURI(AUTHORITY, VIEW_PSEUDOTABLE + "/*", VIEW_PSEUDOTABLE_TABLE_I);
+*/
 
         return true;
     }
@@ -105,6 +117,35 @@ public class IndexContentProvider extends ContentProvider
                         String[] selectionArgs,
                         String sortOrder)
     {
+        if (uri.toString().contains("/search_suggest_query/"))
+        {
+            selection = uri.getLastPathSegment().toLowerCase();
+
+            List<IndexEntry> results = GuideApplication.get().indexManager.getIndex().search(selection);
+
+
+            String[] columns = new String[] { "_id", SearchManager.SUGGEST_COLUMN_TEXT_1,  SearchManager.SUGGEST_COLUMN_TEXT_2, SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID };
+
+            //MatrixCursor matrixCursor= new MatrixCursor(columns);
+            //startManagingCursor(matrixCursor);
+            //INDEX_ENTRY_COLUMNS
+            MatrixCursor cursor = new MatrixCursor(columns);
+
+
+            for (IndexEntry ie: results)
+            {
+                Object[] columnValues = new Object[] { ie.key, ie.text, ie.subtext, ie.key };
+                cursor.addRow(columnValues);
+                //matrixCursor.addRow(new Object[]{ie.key, ie.toMatrixCursor(), "...."});
+            }
+
+            return cursor;
+
+        }
+
+
+
+        /*
         db = mOpenHelper.getWritableDatabase();
         SQLiteQueryBuilder qBuilder = new SQLiteQueryBuilder();
 
@@ -153,11 +194,15 @@ public class IndexContentProvider extends ContentProvider
         c.setNotificationUri(getContext().getContentResolver(), uri);
 
         return c;
+        */
+        return null;
     }
+
 
     @Override
     public Uri insert(Uri uri, ContentValues contentValues)
     {
+        /*
         //check which table we're witting to
         int table = matcher.match(uri);
         String tableS = "";
@@ -185,11 +230,14 @@ public class IndexContentProvider extends ContentProvider
         }
 
         return ContentUris.appendId(uri.buildUpon(), result).build();
+        */
+        return null;
     }
 
     @Override
     public int delete(Uri uri, String s, String[] strings)
     {
+        /*
         int table = matcher.match(uri);
         String viewId  = uri.getLastPathSegment();
         db = mOpenHelper.getWritableDatabase();
@@ -203,14 +251,17 @@ public class IndexContentProvider extends ContentProvider
             db.execSQL(d2);
             db.endTransaction();
         }
+        */
         return 0;
     }
+
 
     @Override
     public int update(Uri uri, ContentValues contentValues, String s, String[] strings)
     {
         return 0;
     }
+
 
     @Override
     /**
@@ -222,6 +273,7 @@ public class IndexContentProvider extends ContentProvider
     }
 
 
+    /*
     // A string that defines the SQL statement for creating a table
     private static final String SQL_CREATE_MAIN = "CREATE TABLE " +
             "main" +                       // Table's name
@@ -251,5 +303,7 @@ public class IndexContentProvider extends ContentProvider
             COL_LNG + " REAL, " +
             COL_DESC + " TEXT, " +
             COL_CODE + " TEXT)";
+            */
+
 
 }

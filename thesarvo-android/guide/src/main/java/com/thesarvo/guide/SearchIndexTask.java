@@ -33,26 +33,25 @@ import javax.xml.parsers.DocumentBuilderFactory;
 class SearchIndexTask implements Runnable
 {
     final String WWW_PATH = "www/data/";
+    private final IndexManager indexManager;
     private GuideApplication guideApplication;
     private ResourceManager resourceManager;
     int key = 1;
     String viewId = null;
 
-    private static Map<String, IndexEntry> index = new HashMap<>();
+
     Map<String, ViewModel.ViewDef> views = ViewModel.get().getViews();
     Map<String, ViewModel.ListItem> guideListItems = ViewModel.get().getGuideListItems();
 
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-    public static Map<String, IndexEntry> getIndex()
-    {
-        return index;
-    }
 
-    public SearchIndexTask(GuideApplication guideApplication, ResourceManager resourceManager, String viewId)
+
+    public SearchIndexTask(GuideApplication guideApplication, String viewId)
     {
         this.guideApplication = guideApplication;
-        this.resourceManager = resourceManager;
+        this.resourceManager = guideApplication.resourceManager;
+        this.indexManager = guideApplication.indexManager;
         this.viewId = viewId;
     }
 
@@ -60,8 +59,11 @@ class SearchIndexTask implements Runnable
     public void run()
     {
         //delete the old database first
-        //guideApplication.getBaseContext().deleteDatabase(IndexContentProvider.DBNAME);
+        if (viewId == null)
+        {
+            indexManager.resetIndex();
 
+        }
         //find all XML files
         //String[] allFiles;
         //AssetManager manager = guideApplication.getAssets();
@@ -94,6 +96,7 @@ class SearchIndexTask implements Runnable
 
         }
 
+        indexManager.saveIndex();
         Log.d("Search Index", "Indexing complete!");
 
     }
@@ -110,12 +113,6 @@ class SearchIndexTask implements Runnable
 
             InputStream stream = resourceManager.getDataAsset(guideId + ".xml");
 
-            Uri.Builder urib = new Uri.Builder();
-            urib.scheme(ContentResolver.SCHEME_CONTENT);
-            urib.authority(IndexContentProvider.AUTHORITY);
-            urib.path(IndexContentProvider.VIEW_PSEUDOTABLE + "/" + viewId);
-            Uri uri = urib.build();
-            guideApplication.getContentResolver().delete(uri, null, null);
 
             indexListItem(viewId, item);
 
@@ -161,14 +158,17 @@ class SearchIndexTask implements Runnable
 
     private void indexListItem(String viewId, ViewModel.ListItem item)
     {
+        if (item == null)
+            return;
+
         //make index entry for view it's self
         IndexEntry entry = new IndexEntry();
         entry.viewId = viewId;
         entry.text = item.getText();
-        entry.key = ++key;
+        entry.key = viewId;
         entry.type = IndexEntry.IndexType.VIEW;
 
-        index.put(entry.text, entry);
+
         addEntry(entry);
         //Log.d("Indexing", "adding " + entry.text);
     }
@@ -213,12 +213,13 @@ class SearchIndexTask implements Runnable
 
             String text = e.getTextContent().trim();
             entry1.text = text;
+            entry1.subtext = entry1.viewName;
 
             entry1.type = IndexEntry.IndexType.HEADING;
-            entry1.key = ++key;
+            entry1.key = entry1.viewId + ":" + entry1.elementID;
 
             //Log.d("Indexing", "adding heading " + text);
-            index.put(text, entry1);
+
             addEntry(entry1);
         }
     }
@@ -229,6 +230,7 @@ class SearchIndexTask implements Runnable
         entry1.viewId = viewId;
         entry1.viewName = item.getText();
         entry1.elementID = e.getAttribute("id");
+        entry1.subtext = entry1.viewName;
 
         String stars = e.getAttribute("stars");
         String grade = e.getAttribute("grade");
@@ -241,10 +243,9 @@ class SearchIndexTask implements Runnable
             entry1.text = text;
 
             entry1.type = IndexEntry.IndexType.CLIMB;
-            entry1.key = ++key;
+            entry1.key = entry1.viewId + ":" + entry1.elementID;
 
 
-            index.put(text, entry1);
             addEntry(entry1);
         }
     }
@@ -256,43 +257,14 @@ class SearchIndexTask implements Runnable
     {
         Log.d("Indexing", "adding entry " + entry.text);
 
-        //add normal entry and suggestions entry
-        ContentValues values = new ContentValues();
-        //values.put(IndexContentProvider.COL_ID, entry.key);
-        values.put(IndexContentProvider.COL_TEXT, entry.text);
-        values.put(IndexContentProvider.COL_ELEMENT_ID, entry.elementID);
-        values.put(IndexContentProvider.COL_TYPE, entry.type.ordinal());
-        values.put(IndexContentProvider.COL_VIEW_ID, entry.viewId);
-        values.put(IndexContentProvider.COL_VIEW_NAME, entry.viewName);
-
-        //add this one and then use the return to add the next
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme(ContentResolver.SCHEME_CONTENT);
-        builder.authority(IndexContentProvider.AUTHORITY);
-        builder.path(IndexContentProvider.MAIN_TABLE);
-        Uri uri = builder.build();
-
-        Uri normalUri = guideApplication.getContentResolver().insert(uri, values);
-
-        //create the suggestion entry
-        ContentValues suggestionValues = new ContentValues();
-        suggestionValues.put(SearchManager.SUGGEST_COLUMN_TEXT_1, entry.text);
-        suggestionValues.put(SearchManager.SUGGEST_COLUMN_TEXT_2, entry.viewName);
-        suggestionValues.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, normalUri.getLastPathSegment());
-
-        builder.clearQuery();
-        builder.scheme(ContentResolver.SCHEME_CONTENT);
-        builder.authority(IndexContentProvider.AUTHORITY);
-        builder.path(IndexContentProvider.SUGESTIONS_TABLE);
-        uri = builder.build();
-
-        guideApplication.getContentResolver().insert(uri, suggestionValues);
+        indexManager.getIndex().index(entry);
     }
 
     public void addGPSEntry(GPSNode node)
     {
         for (Point p : node.getPoints())
         {
+            /* FIXME
             ContentValues values = new ContentValues();
             values.put(IndexContentProvider.COL_GPS_ID, node.getId());
             values.put(IndexContentProvider.COL_LAT, p.getLatLng().latitude);
@@ -306,6 +278,7 @@ class SearchIndexTask implements Runnable
             builder.path(IndexContentProvider.MAP_TABLE);
 
             guideApplication.getContentResolver().insert(builder.build(), values);
+            */
         }
     }
 
