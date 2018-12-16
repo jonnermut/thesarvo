@@ -136,6 +136,12 @@
 			<listItem text="Mt Wellington" level="1" viewId="Mt Wellington" />
             <listItem text="Ross Quoin" level="1" viewId="guide.338264089" />
 			<listItem text="Sand River" level="1" viewId="guide.338755605" />
+            <listItem text="The Firewall" level="2" viewId="guide.349798437" />
+            <listItem text="The Colosseum" level="2" viewId="guide.349798439" />
+            <listItem text="Eldorado" level="2" viewId="guide.349798477" />
+            <listItem text="The Panopticon" level="2" viewId="guide.349798441" />
+
+
             <listItem text="South Arm" level="1" />
 			<listItem text="Clifton" level="2" viewId="guide.8683563" />
 			<listItem text="Larks Edge" level="2" viewId="guide.8683580" />

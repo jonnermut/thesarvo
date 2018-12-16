@@ -30,3 +30,5 @@ thesarvo-android/.idea
 thesarvo-android/downloader_library/build
 thesarvo-android/market_licensing/build
 thesarvo-android/zip_file/build
+*.cache.js
+thesarvomacros/thesarvo/classes

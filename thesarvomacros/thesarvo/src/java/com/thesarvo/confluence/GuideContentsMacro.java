@@ -112,8 +112,8 @@ public class GuideContentsMacro extends AbstractHtmlGeneratingMacro
 
 
 
-			int problems = bodyAsString.split("<problem").length -1;
-			int climbs = bodyAsString.split("<climb").length -1;
+			int problems = bodyAsString.split("<problem ").length -1;
+			int climbs = bodyAsString.split("<climb ").length -1;
 
 			if (!noContent  )
 			{
