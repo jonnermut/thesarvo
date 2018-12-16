@@ -32,3 +32,5 @@ thesarvo-android/market_licensing/build
 thesarvo-android/zip_file/build
 *.cache.js
 thesarvomacros/thesarvo/classes
+thesarvoguide2/src/com/thesarvo/guide/client/ApiKeys.java
+

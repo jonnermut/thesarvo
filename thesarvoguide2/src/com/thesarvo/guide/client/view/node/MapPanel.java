@@ -64,6 +64,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.xml.client.Node;
+import com.thesarvo.guide.client.ApiKeys;
 import com.thesarvo.guide.client.geo.CoordinateConversion;
 import com.thesarvo.guide.client.geo.GeoUtil;
 import com.thesarvo.guide.client.model.MapDrawingObject;
@@ -147,7 +148,7 @@ public class MapPanel extends FlowPanel implements GPSConstants
 			}
 		};
 
-		LoadApi.go(onLoad, loadLibraries, sensor);
+		LoadApi.go(onLoad, loadLibraries, sensor, "key=" + ApiKeys.MAPS_API_KEY);
 	}
 
 	/**
