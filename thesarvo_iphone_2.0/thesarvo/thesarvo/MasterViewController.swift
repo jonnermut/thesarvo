@@ -46,9 +46,9 @@ class SearchCell: UITableViewCell
 {
     var indexEntry: IndexEntry?
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?)
     {
-        super.init(style: UITableViewCellStyle.subtitle, reuseIdentifier: reuseIdentifier)
+        super.init(style: UITableViewCell.CellStyle.subtitle, reuseIdentifier: reuseIdentifier)
     }
 
     required init?(coder aDecoder: NSCoder)
@@ -144,7 +144,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         self.tableView.allowsMultipleSelection = false
     }
     
-    dynamic func updateUpdateView()
+    @objc dynamic func updateUpdateView()
     {
         self.updateView.isHidden = false
         let gd = Model.instance.guideDownloader
@@ -330,7 +330,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
             cell, li in
 
             cell?.textLabel?.text = li.text
-            cell?.accessoryType = li.viewId != nil ? UITableViewCellAccessoryType.disclosureIndicator : UITableViewCellAccessoryType.none;
+            cell?.accessoryType = li.viewId != nil ? UITableViewCell.AccessoryType.disclosureIndicator : UITableViewCell.AccessoryType.none;
             cell?.textLabel?.adjustsFontSizeToFitWidth = true
             var level = 0
             if let l = li.level

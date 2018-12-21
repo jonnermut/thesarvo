@@ -30,7 +30,7 @@ class ContainerViewController: UIViewController
     {
         if let vc = self.viewController
         {
-            self.setOverrideTraitCollection(customTraitCollection, forChildViewController:vc)
+            self.setOverrideTraitCollection(customTraitCollection, forChild:vc)
         }
     }
     
@@ -40,17 +40,17 @@ class ContainerViewController: UIViewController
         {
             if let oldValue = oldValue
             {
-                oldValue.willMove(toParentViewController: nil)
+                oldValue.willMove(toParent: nil)
                 oldValue.view.removeFromSuperview()
-                oldValue.removeFromParentViewController()
-                self.setOverrideTraitCollection(nil, forChildViewController:oldValue)
+                oldValue.removeFromParent()
+                self.setOverrideTraitCollection(nil, forChild:oldValue)
             }
             if let viewController = self.viewController
             {
-                self.addChildViewController(viewController)
+                self.addChild(viewController)
                 let view = viewController.view
                 self.view.addSubview(view!)
-                viewController.didMove(toParentViewController: self)
+                viewController.didMove(toParent: self)
                 forceNewTrait()
             }
         }

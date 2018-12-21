@@ -46,7 +46,7 @@ extension String
     */
     func ltrimmed () -> String {
         if let range = rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines.inverted) {
-            return self[range.lowerBound..<endIndex]
+            return String(self[range.lowerBound..<endIndex])
         }
         
         return self
@@ -59,7 +59,7 @@ extension String
     */
     func rtrimmed () -> String {
         if let range = rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines.inverted, options: NSString.CompareOptions.backwards) {
-            return self[startIndex..<range.upperBound]
+            return String(self[startIndex..<range.upperBound])
         }
         
         return self

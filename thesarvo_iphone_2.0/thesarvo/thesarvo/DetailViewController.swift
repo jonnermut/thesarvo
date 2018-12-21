@@ -39,7 +39,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
     {
         webview?.delegate = self
         
-        webview?.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal
+        webview?.scrollView.decelerationRate = UIScrollView.DecelerationRate.normal
         
         if isHttp()
         {
@@ -100,10 +100,10 @@ class DetailViewController: UIViewController, UIWebViewDelegate
     {
         self.navigationItem.leftItemsSupplementBackButton = true
         self.navigationItem.leftBarButtonItem =
-            UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(DetailViewController.hamburgerToggle) )
+            UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(DetailViewController.hamburgerToggle) )
     }
     
-    dynamic func hamburgerToggle()
+    @objc dynamic func hamburgerToggle()
     {
         AppDelegate.instance().drawerController.toggle()
     }
@@ -215,7 +215,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
 //        }
     }
     
-    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool
     {
         if let url = request.url
         {

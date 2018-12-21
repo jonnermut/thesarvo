@@ -22,7 +22,7 @@ class MapViewController: UIViewController, MKMapViewDelegate
     
     let loc = CLLocationManager()
     
-    var zoomRect = MKMapRectNull
+    var zoomRect = MKMapRect.null
     
     override func viewDidLoad()
     {
@@ -67,9 +67,9 @@ class MapViewController: UIViewController, MKMapViewDelegate
                         
                         print("Adding annotation: \(a.title) - \(a.subtitle)")
                         
-                        let annotationPoint = MKMapPointForCoordinate(a.coordinate);
-                        let pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1);
-                        zoomRect = MKMapRectUnion(zoomRect, pointRect);
+                        let annotationPoint = MKMapPoint.init(a.coordinate);
+                        let pointRect = MKMapRect.init(x: annotationPoint.x, y: annotationPoint.y, width: 0.1, height: 0.1);
+                        zoomRect = zoomRect.union(pointRect);
                     }
                     
                 }
@@ -99,10 +99,10 @@ class MapViewController: UIViewController, MKMapViewDelegate
     {
         self.navigationItem.leftItemsSupplementBackButton = true
         self.navigationItem.leftBarButtonItem =
-            UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(MapViewController.hamburgerToggle) )
+            UIBarButtonItem(image: UIImage(named: "hamburger"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(MapViewController.hamburgerToggle) )
     }
     
-    dynamic func hamburgerToggle()
+    @objc dynamic func hamburgerToggle()
     {
         AppDelegate.instance().drawerController.toggle()
     }
@@ -118,11 +118,11 @@ class MapViewController: UIViewController, MKMapViewDelegate
         if let mkPinView = view as? MKPinAnnotationView
         {
             let rightButton = UIButton(frame: CGRect(x: 0,y: 0,width: 60,height: 32))
-            rightButton.setTitle("Open", for: UIControlState())
-            rightButton.setTitleColor(UIColor.blue, for: UIControlState())
+            rightButton.setTitle("Open", for: UIControl.State())
+            rightButton.setTitleColor(UIColor.blue, for: UIControl.State())
 
-            rightButton.contentVerticalAlignment = UIControlContentVerticalAlignment.center;
-            rightButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.center;
+            rightButton.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center;
+            rightButton.contentHorizontalAlignment = UIControl.ContentHorizontalAlignment.center;
             
             if (guide == nil)
             {

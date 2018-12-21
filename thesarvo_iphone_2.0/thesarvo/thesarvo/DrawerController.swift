@@ -215,7 +215,7 @@ class DrawerController: UIViewController {
     
     func openLeftDrawer() {
         _openSide = DrawerController.NVMDrawerOpenLeft
-        UIView.animate(withDuration: ANIMATION_DURATION, delay: 0, options: UIViewAnimationOptions.curveEaseIn, animations:
+        UIView.animate(withDuration: ANIMATION_DURATION, delay: 0, options: UIView.AnimationOptions.curveEaseIn, animations:
             { () -> Void in
                 // move views here
                 
@@ -236,7 +236,7 @@ class DrawerController: UIViewController {
     
     func openRightDrawer() {
         _openSide = DrawerController.NVMDrawerOpenRight
-        UIView.animate(withDuration: ANIMATION_DURATION, delay: 0, options: UIViewAnimationOptions.curveEaseIn, animations:
+        UIView.animate(withDuration: ANIMATION_DURATION, delay: 0, options: UIView.AnimationOptions.curveEaseIn, animations:
             { () -> Void in
                 // move views here
                 
@@ -262,11 +262,11 @@ class DrawerController: UIViewController {
     
     // MARK: - Swipe Handling
     
-    func swipeRightAction(_ rec: UISwipeGestureRecognizer){
+    @objc func swipeRightAction(_ rec: UISwipeGestureRecognizer){
         self.openLeftDrawer()
     }
     
-    func swipeLeftAction(_ rec:UISwipeGestureRecognizer){
+    @objc func swipeLeftAction(_ rec:UISwipeGestureRecognizer){
         self.openRightDrawer()
     }
     

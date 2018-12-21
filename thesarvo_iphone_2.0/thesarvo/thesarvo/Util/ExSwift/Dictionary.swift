@@ -199,6 +199,7 @@ internal extension Dictionary {
         - parameter testFunction: Function called to test each key, value
         - returns: Filtered dictionary
     */
+    /*
     func filter (testFunction test: (Key, Value) -> Bool) -> Dictionary {
 
         var result = Dictionary()
@@ -212,6 +213,7 @@ internal extension Dictionary {
         return result
 
     }
+ */
 
     /**
         Creates a dictionary composed of keys generated from the results of
