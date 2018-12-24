@@ -111,6 +111,14 @@ class UpdatesElement : AEXMLElement
             }
         }
     }
+
+    var indexHash: String?
+    {
+        get
+        {
+            return attr("indexHash")
+        }
+    }
 }
 
 class Update : AEXMLElement
@@ -126,6 +134,7 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
     
     let BASE_URL = "http://www.thesarvo.com/confluence"
     let SYNC_URL = "http://www.thesarvo.com/confluence/plugins/servlet/guide/sync/"
+    let INDEX_URL = "http://www.thesarvo.com/confluence/plugins/servlet/guide/index/1"
     
     var since: Int64 = 0
     
@@ -321,11 +330,42 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
 
     }
     
+    fileprivate func maybeDownloadIndexJson(_ doc: Updates?, _ existingUpdates: Updates) {
+        if let hash = doc?.updatesElement?.indexHash
+        {
+            let existing = existingUpdates.updatesElement?.indexHash
+            if existing == nil || existing != hash
+            {
+                let url = Foundation.URL(string: INDEX_URL )
+                let request = URLRequest( url: url!)
+                let dt = self.session.dataTask(with: request)
+                {
+                    (data: Data?, response: URLResponse?, error: Error?) -> Void in
+
+                    if let e = error
+                    {
+                        print("Unexpected error: \(e)")
+                    }
+                    else if let data = data
+                    {
+                        let path = self.finalPath("index.json")
+                        try? data.write(to: URL(fileURLWithPath: path))
+                    }
+                    self.incrementCompletedOps()
+                }
+                totalOps += 1
+                dt.resume()
+            }
+        }
+    }
+
     func handleSyncData(_ data: Data)
     {
         let existingUpdates = getUpdates()
         
         let doc = try? Updates(xmlData: data)
+
+        maybeDownloadIndexJson(doc, existingUpdates)
         
         // process the new updates
         if let doc = doc

@@ -6,11 +6,15 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -30,6 +34,7 @@ import com.atlassian.confluence.core.SaveContext;
 import com.atlassian.confluence.pages.Attachment;
 import com.atlassian.confluence.pages.Page;
 import com.atlassian.confluence.pages.PageManager;
+import com.google.gson.Gson;
 
 public class Service
 {
@@ -294,11 +299,9 @@ public class Service
 	@SuppressWarnings("unchecked")
 	public static Document getSync(long since) 
 	{
-		long rootId = 414; // thesarvo.com root of all climbing guides
-		
 		PageManager pm = getPageManager();
 		
-		Page root = pm.getPage(rootId);
+		Page root = getRootPage();
 		
 		if (root == null)
 		{
@@ -328,6 +331,10 @@ public class Service
 				maxLastMod = 0; // reset cache
 			}
 		}
+		
+		String indexJson = getIndexJson();
+		String hash = DigestUtils.shaHex(indexJson);
+		updates.addAttribute("indexHash", hash);
 		
 		@SuppressWarnings("unchecked")
 		List<Page> pages = pm.getDescendents(root);
@@ -421,6 +428,55 @@ public class Service
 		return doc;
 		
 	}
+
+	private static Page getRootPage() 
+	{
+		long rootId = 414; // thesarvo.com root of all climbing guides
+		
+		PageManager pm2 = getPageManager();
+		
+		Page root = pm2.getPage(rootId);
+		return root;
+	}
+	
+	static String indexJson;
+	static Long indexJsonUpdated;
+	
+	public static String getIndexJson()
+	{
+		Page root = getRootPage();
+		
+		if (indexJsonUpdated == null || indexJsonUpdated < (System.currentTimeMillis() * 60000) )
+		{	
+			Map<String, Object> index = doPage(root);
+			Gson gson = new Gson();
+			indexJson = gson.toJson(index); 
+			indexJsonUpdated = System.currentTimeMillis();
+		}
+		return indexJson;
+	}
+	
+	private static Map<String, Object> doPage(Page page) 
+	{
+		Map<String, Object> index = new LinkedHashMap<String, Object>();
+		index.put("id", page.getId());
+		index.put("title", page.getTitle());
+		ArrayList<Object> kidArray = new ArrayList<Object>();
+		index.put("children", kidArray);
+		for (Page kid : page.getChildren())
+		{
+			Map<String, Object> kidMap = doPage(kid);
+			kidArray.add(kidMap);
+		}
+		return index;
+	}
+
+	private static void addIndexUpdate(Page root, Element updates)
+	{
+		
+	}
+	
+	
 
 	private static void addUpdate(Element updates, long lastUpdate, String url, String filename) {
 		Element update = DocumentHelper.createElement("update");

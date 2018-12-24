@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -159,6 +160,15 @@ public class GuideServlet extends HttpServlet
 			long since = Long.parseLong(id);
 			Document doc = Service.getSync(since);
 			resp.getWriter().write( doc.asXML() );
+
+		}
+		else if (action.equals("index"))
+		{
+			
+			String index = Service.getIndexJson();
+			String hash = DigestUtils.shaHex(index);
+			resp.setHeader("ETag", hash);
+			resp.getWriter().write( index );
 
 		}
 			
