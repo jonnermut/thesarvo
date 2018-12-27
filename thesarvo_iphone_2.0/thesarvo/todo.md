@@ -1,14 +1,17 @@
 Current
 =======
-- climbs in TOC on/off
-- join children to TOC
-- manual filters for the new index
-- add back in weather etc
+
+- global search broken
+- update 2 different types of searching, unify
+- deselect cells properly
 - check ipad
+- layout of climb in toc cell
 
 Later
 =====
 
+Editing
+- topos in TOC??
 Caching of resized images on server?
 
 Favourites
@@ -22,13 +25,11 @@ Increase/decrease font size
 
 Climb graph
 header icons need retina versions
-Make map in page more prominent - tab or button up the top
 
 get title of topo and push that into nav controller title
 
 Constraint problem on progress bar
 
-Editing
 Ticks?
 Comments
 

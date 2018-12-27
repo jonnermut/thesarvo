@@ -84,6 +84,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     var searchString: String?
     
     var mainDataSource: TableViewDataSource?
+    var sectionedDatasource: SectionedDataSource<Any>? = nil
     
     @IBOutlet var updateView: UIView!
     @IBOutlet var progressView: UIProgressView!
@@ -226,10 +227,10 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         // Dispose of any resources that can be recreated.
     }
     
-    func setupTOCDatasource()
+    func setupDatasource()
     {
         let showClimbsCell = self.tableView.dequeueReusableCell(withIdentifier: "ShowClimbsCell") as? ShowClimbsCell
-
+        showClimbsCell?.climbSwitch.isOn = Model.instance.showClimbsInTOC
 
         runInBackground()
         {
@@ -240,18 +241,19 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
             // sectioned by header then climb
             var tocRows = guide.getHeadingsAndClimbs()
 
-            if let filter = filter
+            let hasClimbs = tocRows.contains(where: { $0 is ClimbNode })
+
+            let hasFilter = filter != nil && filter?.count > 1
+
+            if let filter = filter, hasFilter
             {
-                if filter.count > 0
+                tocRows = tocRows.filter()
                 {
-                    tocRows = tocRows.filter()
-                    {
-                        (guideNode: GuideNode) in
-                        (guideNode.searchString ?? "").containsCaseInsensitive(filter)
-                    }
+                    (guideNode: GuideNode) in
+                    (guideNode.searchString ?? "").containsCaseInsensitive(filter)
                 }
             }
-            if !Model.instance.showClimbsInTOC
+            else if !Model.instance.showClimbsInTOC && hasClimbs
             {
                 tocRows = tocRows.filter
                 {
@@ -259,16 +261,19 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                 }
             }
 
-            let d = SectionedDataSource<Any>()
 
+            let d = SectionedDataSource<Any>()
             let settingsSection = Section<Any>(header: "")
-            if let sc = showClimbsCell
+
+            if hasClimbs && !hasFilter
             {
-                sc.parent = self
-                sc.climbSwitch.isOn = Model.instance.showClimbsInTOC
-                settingsSection.rows.append(sc)
+                if let sc = showClimbsCell
+                {
+                    sc.parent = self
+                    settingsSection.rows.append(sc)
+                }
+                d.sections.append(settingsSection)
             }
-            d.sections.append(settingsSection)
 
             let tocSection = Section<Any>(rows: tocRows)
             tocSection.defaultCellIdentifier = "TOCCell"
@@ -282,83 +287,14 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                 d.sections.append(tocSection)
             }
 
-            d.cellConfigurator =
-            {
-                (cell: UITableViewCell?, val: Any) in
+            d.cellConfigurator = self.configureCell
 
-                if let guide = val as? Guide
-                {
-                    self.configureGuideCell(cell: cell, li: guide)
-                }
-                else if let node = val as? GuideNode
-                {
-                    if let cell = cell as? TOCCell
-                    {
-                        cell.node = node
-                        cell.textLabel?.text = node.description
-                        cell.textLabel?.adjustsFontSizeToFitWidth = true
-
-                        cell.backgroundColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
-
-                        cell.selectedBackgroundView = UIView()
-                        cell.selectedBackgroundView?.backgroundColor = UIColor(red: 0, green: 0, blue: 0.5, alpha: 0.8)
-
-                        if let tn = node as? TextNode
-                        {
-                            if tn.clazz == "heading1"
-                            {
-                                cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-                                cell.indentationLevel = 0
-                            }
-                            else if tn.clazz == "heading2"
-                            {
-                                cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-                                cell.indentationLevel = 0
-                            }
-                            else
-                            {
-                                cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 13)
-                                cell.indentationLevel = 1
-
-                            }
-
-
-                        }
-                        else if node is HeaderNode
-                        {
-                            cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-                            cell.indentationLevel = 0
-                        }
-                        else
-                        {
-                            cell.textLabel?.font = UIFont.systemFont(ofSize: 12)
-                            cell.indentationLevel = 3
-                            cell.backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
-
-                        }
-
-                    }
-                }
-                return;
-            }
-            /*
-            if (shouldFilter)
-            {
-            for sect in d.sections
-            {
-            sect.rows = sect.rows.filter()
-            {
-            (guideNode: GuideNode) in
-            (guideNode.searchString ?? "").containsCaseInsensitive(filter)
-            }
-            }
-            }
-            */
-
-            self.mainDataSource = d.tableViewDataSource
 
             runOnMain()
             {
+                self.mainDataSource = d.tableViewDataSource
+                self.sectionedDatasource = d
+
                 //self.tableView.rowHeight = 32
                 self.tableView.dataSource = self.mainDataSource
                 self.tableView.reloadData()
@@ -368,6 +304,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
 
     }
 
+    /*
     func setupDatasource()
     {
         guard let guide = guide else { return }
@@ -387,11 +324,59 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         self.tableView.dataSource = mainDataSource
         self.tableView.reloadData()
     }
+ */
+    func configureCell(cell: UITableViewCell?, val: Any)
+    {
+        if let guide = val as? Guide
+        {
+            self.configureGuideCell(cell: cell, li: guide)
+        }
+        else if let node = val as? GuideNode
+        {
+            if let cell = cell as? TOCCell
+            {
+                cell.node = node
+                cell.textLabel?.text = node.description
+                cell.textLabel?.adjustsFontSizeToFitWidth = true
+
+                cell.backgroundColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
+
+                cell.selectedBackgroundView = UIView()
+                cell.selectedBackgroundView?.backgroundColor = UIColor(red: 0, green: 0, blue: 0.5, alpha: 0.8)
+
+                if let tn = node as? TextNode
+                {
+                    if tn.clazz == "heading2" || tn.clazz == "heading1"
+                    {
+                        cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+                        cell.indentationLevel = 0
+                    }
+                    else
+                    {
+                        cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 13)
+                        cell.indentationLevel = 1
+
+                    }
+                }
+                else if node is HeaderNode || node is GpsNode
+                {
+                    cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+                    cell.indentationLevel = 0
+                }
+                else
+                {
+                    cell.textLabel?.font = UIFont.systemFont(ofSize: 13)
+                    cell.indentationLevel = 3
+                    cell.backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
+                }
+            }
+        }
+    }
 
     func configureGuideCell(cell: UITableViewCell?, li: Guide)
     {
         cell?.textLabel?.text = li.title
-        cell?.accessoryType = li.viewId != nil ? UITableViewCell.AccessoryType.disclosureIndicator : UITableViewCell.AccessoryType.none;
+        cell?.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator 
         cell?.textLabel?.adjustsFontSizeToFitWidth = true
         let level = (li.level ?? 1) - 1
 
@@ -457,7 +442,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
             //guide = Guide(id: vid)
             guide = Model.instance.getGuide(viewId, name: nil)
         }
-        let hasToc = (guide?.getHeadingsAndClimbs().count > 0) ?? false
+        let hasToc = (guide?.getHeadingsAndClimbs().count > 0)
         
         let fcvc = self.storyboard?.instantiateViewController(withIdentifier: "detailViewController") as! DetailViewController
         fcvc.guide = guide
@@ -538,6 +523,16 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
 
     
     
+    fileprivate func showMap(guide: Guide? = nil)
+    {
+        let mc = self.storyboard?.instantiateViewController(withIdentifier: "mapController") as! MapViewController
+        if let g = guide
+        {
+            mc.guide = g
+        }
+        AppDelegate.instance().setDetail(mc)
+    }
+
     func childSelected(_ selected: Guide)
     {
         if let viewId = selected.viewId
@@ -556,8 +551,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                     return
                 }
                 
-                let mc = self.storyboard?.instantiateViewController(withIdentifier: "mapController") as! MapViewController
-                AppDelegate.instance().setDetail(mc)
+                showMap()
 
             }
             else if (viewId == "Settings")
@@ -570,12 +564,16 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                 navigateToDetail(viewId, title: selected.title)
 
             }
+            else if selected.hasChildren
+            {
+                segueToDrilldown(selected)
+            }
 
         }
         else
         {
             let hasToc = selected.getHeadingsAndClimbs().count > 0
-            let hasGuideContent = selected.hasGuideContent
+            //let hasGuideContent = selected.hasGuideContent
             if selected.hasChildren
             {
                 segueToDrilldown(selected)
@@ -594,7 +592,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         
         // I don't know why exactly, but this hammer seems essential 
         // to clearing the previous selection, which is doing a lot of extra work, but buggered if I can get it to clear otherwise
-        tableView.reloadData()
+        //tableView.reloadData()
         
     }
     
@@ -607,7 +605,10 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
-        
+        guard let guide = guide else { return }
+        guard let ds = sectionedDatasource else { return }
+        let val = ds.getRow(indexPath)
+
         let cell = tableView.dataSource?.tableView(tableView, cellForRowAt: indexPath)
         
         if let searchCell = cell as? SearchCell
@@ -617,24 +618,25 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                 self.navigateToEntry(entry)
             }
         }
-        else if let tocCell = cell as? TOCCell
+        else if let node = val as? GuideNode
         {
-            if let node = tocCell.node
+            if node is GpsNode
             {
-                if let dvc = DetailViewController.last
-                {
-                    dvc.scrollToId(node.elementId)
-                    AppDelegate.instance().hideMasterIfNecessary()
-                }
+                self.showMap(guide: guide)
+            }
+            else if let dvc = AppDelegate.instance().getDetail() as? DetailViewController, dvc.guide === self.guide
+            {
+                dvc.scrollToId(node.elementId)
+                AppDelegate.instance().hideMasterIfNecessary()
+            }
+            else
+            {
+                navigateToDetail("\(guide.id)", title: guide.title, elementId: node.elementId, showDetail: true)
             }
         }
-        else
+        else if let child = val as? Guide
         {
-            if let c = guide?.children.get( indexPath.row)
-            {
-                childSelected(c)
-            }
-
+            childSelected(child)
         }
     }
 
@@ -648,7 +650,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     {
         if self.showingTOC
         {
-            setupTOCDatasource()
+            setupDatasource()
             return
         }
         
@@ -665,10 +667,9 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
             return
         }
         
-        if (searchString == nil || searchString!.characters.count < 2)
+        if (searchString == nil || searchString!.count < 2)
         {
-            self.tableView.dataSource = mainDataSource
-            self.tableView.reloadData()
+            self.setupDatasource()
             return
         }
         

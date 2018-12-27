@@ -8,6 +8,48 @@
 
 import Foundation
 
+public let excludePages: Array<Int64> = [11370498, // Buy and download guides
+13467650, // Hardcopy Guides
+14450710, // Guide Manual
+330433081, // The Rookeries
+1147, //Additional Topos and Maps
+1148, // Articles
+1516, // Mt Wellington Guide Feedback
+2883716, // Mt Wellington Updates
+276267033, // Pipes Guide To Do
+9404496, // GPS
+]
+
+public let weather = [
+    Guide(viewId: "http://m.bom.gov.au/tas/hobart/radar/", title: "Radar"),
+    Guide(viewId: "http://www.bom.gov.au/tas/observations/tasall.shtml", title: "Observations"),
+    Guide(viewId: "http://www.bom.gov.au/fwo/IDG00073.pdf", title: "Synoptic Forecast"),
+    Guide(viewId: "http://satview.bom.gov.au/", title: "Satellite"),
+
+    Guide(viewId: "http://m.bom.gov.au/tas/ben-lomond/", title: "Ben Lomond"),
+    Guide(viewId: "http://m.bom.gov.au/tas/buckland/", title: "Buckland (Sand River)"),
+    Guide(viewId: "http://m.bom.gov.au/tas/burnie/", title: "Burnie"),
+    Guide(viewId: "http://m.bom.gov.au/tas/coles-bay/", title: "Coles Bay (Freycinet)"),
+    Guide(viewId: "http://m.bom.gov.au/tas/cradle-mountain/", title: "Cradle Mountain"),
+    Guide(viewId: "http://m.bom.gov.au/tas/hillwood/", title: "Hillwood"),
+    Guide(viewId: "http://m.bom.gov.au/tas/hobart/", title: "Hobart"),
+    Guide(viewId: "http://m.bom.gov.au/tas/lake-st-clair/", title: "Lake St Clair"),
+    Guide(viewId: "http://m.bom.gov.au/tas/launceston/", title: "Launceston"),
+    Guide(viewId: "http://m.bom.gov.au/tas/kunanyi-mount-wellington/", title: "Mt Wellington Summit"),
+    Guide(viewId: "http://m.bom.gov.au/tas/new-norfolk/", title: "New Norfolk"),
+    Guide(viewId: "http://m.bom.gov.au/tas/oatlands/", title: "Oatlands"),
+    Guide(viewId: "http://m.bom.gov.au/tas/port-arthur/", title: "Port Arthur (Tasman Peninsula)"),
+    Guide(viewId: "http://m.bom.gov.au/tas/strathgordon/", title: "Strathgordon (South West)"),
+]
+
+
+public let extraViews = [
+    Guide(viewId: "Map", title: "Map"),
+    Guide(viewId: "Weather", title: "Weather", children: weather),
+    Guide(viewId: "http://www.thesarvo.com/confluence/display/thesarvo/Tasmania", title: "thesarvo.com"),
+]
+
+
 class Model
 {
     class var instance : Model
@@ -110,6 +152,7 @@ class Model
             print("Could not decode index.json!")
             return
         }
+        rootGuide.children.append(contentsOf: extraViews)
         addToGuides(guide: rootGuide)
         
         runInBackground()
@@ -128,6 +171,21 @@ class Model
     {
         let id = guide.viewId ?? "\(guide.id)"
         guides[id] = guide
+
+        if guide.title.hasSuffix(" bouldering")
+        {
+            guide.title.removeLast(" bouldering".count)
+        }
+        if guide.title == "The Tasmanian Bouldering Guide"
+        {
+            guide.title = "Bouldering"
+        }
+
+        guide.children = guide.children.filter {
+            !excludePages.contains($0.id)
+            && !$0.title.containsCaseInsensitive("Gallery")
+        }
+
         for c in guide.children
         {
             addToGuides(guide: c)
@@ -197,10 +255,6 @@ class Model
     var showClimbsInTOC: Bool
     {
         get {
-            if UserDefaults.standard.object(forKey: "showClimbsInTOC") == nil
-            {
-                return true // default is true, not false
-            }
             return UserDefaults.standard.bool(forKey: "showClimbsInTOC")
         }
         set {

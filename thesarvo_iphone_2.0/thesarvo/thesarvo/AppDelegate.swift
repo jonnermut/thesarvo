@@ -172,5 +172,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         }
     }
 
+    func getDetail() -> UIViewController?
+    {
+        let cvc = drawerController.centerViewController
+        if let uinv = cvc as? UINavigationController
+        {
+            return uinv.topViewController
+        }
+        return cvc
+    }
+
 }
 

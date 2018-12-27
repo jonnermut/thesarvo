@@ -120,11 +120,12 @@ class ImageNode : GuideNode
 
 class HeaderNode : GuideNode
 {
-    override var description: String { return "Intro" }
+    override var description: String { return "Introduction" }
 }
 
 class GpsNode : GuideNode
 {
+    override var description: String { return "Map" }
     var gpsObjects: [GPSMapObject]
     {
         return self.children.map()
@@ -268,6 +269,14 @@ public class Guide: Codable
         self.id = id
     }
 
+    init(viewId: String, title: String, children: Array<Guide> = [])
+    {
+        self.id = -1
+        self.title = title
+        self.viewId = viewId
+        self.children = children
+    }
+
     lazy var data: Data? =
     {
         return self.loadData()
@@ -372,6 +381,10 @@ public class Guide: Codable
                     filtered.append(climb)
                 }
                 else if let header = node as? HeaderNode
+                {
+                    filtered.append(header)
+                }
+                else if let header = node as? GpsNode
                 {
                     filtered.append(header)
                 }
