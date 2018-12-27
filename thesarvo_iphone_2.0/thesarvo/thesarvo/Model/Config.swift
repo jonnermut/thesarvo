@@ -8,6 +8,7 @@
 
 import Foundation
 
+/*
 class ConfigDocument : AEXMLDocument
 {
     override func addChild(name: String, value: String? = nil, attributes: [String : String]? = nil) -> AEXMLElement
@@ -72,4 +73,4 @@ class View : ConfigElement
         return self["data"].childrenWithName("listItem").map( { return $0 as! ListItem } )
     }
 }
-
+*/

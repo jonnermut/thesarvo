@@ -171,7 +171,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
             {
                 let d = JSEscape(data)
                 
-                var js = "var guide_pageid='\(guide.guideId)'; \n  var guide_xml='\(d)'; var guide_callOut=\(callOut) ;"
+                var js = "var guide_pageid='\(guide.id)'; \n  var guide_xml='\(d)'; var guide_callOut=\(callOut) ;"
                 
                 if (elemendId != nil)
                 {

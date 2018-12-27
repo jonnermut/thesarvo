@@ -57,6 +57,19 @@ class SearchCell: UITableViewCell
     }
 }
 
+class ShowClimbsCell: UITableViewCell
+{
+    weak var parent: MasterViewController? = nil
+
+    @IBOutlet weak var climbSwitch: UISwitch!
+
+    @IBAction func switchValueChanged(_ sender: Any)
+    {
+        Model.instance.showClimbsInTOC = climbSwitch.isOn
+        parent?.setupDatasource()
+    }
+}
+
 class MasterViewController: UITableViewController, UISearchResultsUpdating
 {
     var guide: Guide?
@@ -64,7 +77,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     
     var detailViewController: DetailViewController? = nil
     
-    var data : View?
+    //var data : View?
     
     var searchController: UISearchController!
     
@@ -72,11 +85,12 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     
     var mainDataSource: TableViewDataSource?
     
-    @IBOutlet weak var updateView: UIView!
-    @IBOutlet weak var progressView: UIProgressView!
-    @IBOutlet weak var updateLabel: UILabel!
+    @IBOutlet var updateView: UIView!
+    @IBOutlet var progressView: UIProgressView!
+    @IBOutlet var updateLabel: UILabel!
     
-    
+    //@IBOutlet weak var showClimbsCell: ShowClimbsCell?
+
     var searching = false
     var searchAgain = false
     
@@ -105,9 +119,9 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         self.navigationItem.rightBarButtonItem = addButton
         */
         
-        if (data == nil)
+        if (guide == nil)
         {
-            data = Model.instance.rootView
+            guide = Model.instance.rootGuide
             //navigateToDetail("guide.9404494", title: "Introduction", elementId: nil, showDetail: false)
         }
 
@@ -174,11 +188,9 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
 //             self.navigationItem.title = data?.text
 //        }
         
-        if (data == nil)
+        if (guide == nil)
         {
-            data = Model.instance.rootView
-            
-            
+            guide = Model.instance.rootGuide
         }
 
         
@@ -188,7 +200,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         }
         
         
-        if data?.viewId == "home" && !showingTOC
+        if guide === Model.instance.rootGuide && !showingTOC
         {
             updateUpdateView()
             updateTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(MasterViewController.updateUpdateView), userInfo: nil, repeats: true)
@@ -216,43 +228,81 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     
     func setupTOCDatasource()
     {
+        let showClimbsCell = self.tableView.dequeueReusableCell(withIdentifier: "ShowClimbsCell") as? ShowClimbsCell
+
+
         runInBackground()
         {
-            
-            if let guide = self.guide
+            guard let guide = self.guide else { return }
+
+            let filter = self.searchString
+
+            // sectioned by header then climb
+            var tocRows = guide.getHeadingsAndClimbs()
+
+            if let filter = filter
             {
-                let filter = self.searchString
-                
-                // sectioned by header then climb
-                let d = guide.getHeadingsAndClimbs()
-                d.reuseIdentifier = "TOCCell"
-                
-                if let filter = filter
+                if filter.count > 0
                 {
-                    if filter.characters.count > 0
+                    tocRows = tocRows.filter()
                     {
-                        d.rows = d.rows.filter()
-                        {
-                            (guideNode: GuideNode) in
-                            (guideNode.searchString ?? "").containsCaseInsensitive(filter)
-                        }
+                        (guideNode: GuideNode) in
+                        (guideNode.searchString ?? "").containsCaseInsensitive(filter)
                     }
                 }
-                
-                d.cellConfigurator =
+            }
+            if !Model.instance.showClimbsInTOC
+            {
+                tocRows = tocRows.filter
                 {
-                    (cell: UITableViewCell?, node: GuideNode) in
+                    !($0 is ClimbNode)
+                }
+            }
+
+            let d = SectionedDataSource<Any>()
+
+            let settingsSection = Section<Any>(header: "")
+            if let sc = showClimbsCell
+            {
+                sc.parent = self
+                sc.climbSwitch.isOn = Model.instance.showClimbsInTOC
+                settingsSection.rows.append(sc)
+            }
+            d.sections.append(settingsSection)
+
+            let tocSection = Section<Any>(rows: tocRows)
+            tocSection.defaultCellIdentifier = "TOCCell"
+            d.sections.append(tocSection)
+            d.defaultCellIdentifier = "TOCCell"
+
+            if guide.hasChildren
+            {
+                let tocSection = Section<Any>(rows: guide.children)
+                tocSection.defaultCellIdentifier = "Cell"
+                d.sections.append(tocSection)
+            }
+
+            d.cellConfigurator =
+            {
+                (cell: UITableViewCell?, val: Any) in
+
+                if let guide = val as? Guide
+                {
+                    self.configureGuideCell(cell: cell, li: guide)
+                }
+                else if let node = val as? GuideNode
+                {
                     if let cell = cell as? TOCCell
                     {
                         cell.node = node
                         cell.textLabel?.text = node.description
                         cell.textLabel?.adjustsFontSizeToFitWidth = true
-                        
+
                         cell.backgroundColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
-                        
+
                         cell.selectedBackgroundView = UIView()
                         cell.selectedBackgroundView?.backgroundColor = UIColor(red: 0, green: 0, blue: 0.5, alpha: 0.8)
-                        
+
                         if let tn = node as? TextNode
                         {
                             if tn.clazz == "heading1"
@@ -269,12 +319,12 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                             {
                                 cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 13)
                                 cell.indentationLevel = 1
-                                
+
                             }
-                            
+
 
                         }
-                        else if let h = node as? HeaderNode
+                        else if node is HeaderNode
                         {
                             cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 14)
                             cell.indentationLevel = 0
@@ -284,70 +334,73 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                             cell.textLabel?.font = UIFont.systemFont(ofSize: 12)
                             cell.indentationLevel = 3
                             cell.backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
-                            
+
                         }
-                        
+
                     }
-                    return;
                 }
-                /*
-                if (shouldFilter)
-                {
-                for sect in d.sections
-                {
-                sect.rows = sect.rows.filter()
-                {
-                (guideNode: GuideNode) in
-                (guideNode.searchString ?? "").containsCaseInsensitive(filter)
-                }
-                }
-                }
-                */
-                self.tableView.rowHeight = 32
-                self.mainDataSource = d.tableViewDataSource
-                
-                runOnMain()
-                {
-                    self.tableView.dataSource = self.mainDataSource
-                    self.tableView.reloadData()
-                }
+                return;
+            }
+            /*
+            if (shouldFilter)
+            {
+            for sect in d.sections
+            {
+            sect.rows = sect.rows.filter()
+            {
+            (guideNode: GuideNode) in
+            (guideNode.searchString ?? "").containsCaseInsensitive(filter)
+            }
+            }
+            }
+            */
+
+            self.mainDataSource = d.tableViewDataSource
+
+            runOnMain()
+            {
+                //self.tableView.rowHeight = 32
+                self.tableView.dataSource = self.mainDataSource
+                self.tableView.reloadData()
             }
         }
+
 
     }
 
     func setupDatasource()
     {
-        if guide != nil
+        guard let guide = guide else { return }
+
+        if guide.hasGuideContent 
         {
             setupTOCDatasource()
             return
         }
-        
-        let rows = (data?.listItems).valueOr([])
-        let d = SingleSectionDataSource(rows: rows)
-        {
-            cell, li in
 
-            cell?.textLabel?.text = li.text
-            cell?.accessoryType = li.viewId != nil ? UITableViewCell.AccessoryType.disclosureIndicator : UITableViewCell.AccessoryType.none;
-            cell?.textLabel?.adjustsFontSizeToFitWidth = true
-            var level = 0
-            if let l = li.level
-            {
-                level = l-1
-            }
-            
-            cell?.textLabel?.font = UIFont.systemFont( ofSize: CGFloat(18-level*2) );
-            cell?.indentationLevel = level;
-            cell?.indentationWidth = 25;
-            cell?.backgroundColor = UIColor.clear
-            cell?.selectedBackgroundView = UIView()
-            cell?.selectedBackgroundView?.backgroundColor = UIColor(red: 0, green: 0, blue: 0.5, alpha: 0.8)
-        }
+        
+        let rows = guide.children 
+        let d = SingleSectionDataSource(rows: rows)
+        d.cellConfigurator = self.configureGuideCell
+
         self.mainDataSource = d.tableViewDataSource
         self.tableView.dataSource = mainDataSource
         self.tableView.reloadData()
+    }
+
+    func configureGuideCell(cell: UITableViewCell?, li: Guide)
+    {
+        cell?.textLabel?.text = li.title
+        cell?.accessoryType = li.viewId != nil ? UITableViewCell.AccessoryType.disclosureIndicator : UITableViewCell.AccessoryType.none;
+        cell?.textLabel?.adjustsFontSizeToFitWidth = true
+        let level = (li.level ?? 1) - 1
+
+        cell?.textLabel?.font = UIFont.systemFont( ofSize: CGFloat(18-level*2) );
+        cell?.indentationLevel = level;
+        cell?.indentationWidth = 25;
+        cell?.backgroundColor = UIColor.clear
+        cell?.selectedBackgroundView = UIView()
+        cell?.selectedBackgroundView?.backgroundColor = UIColor(red: 0, green: 0, blue: 0.5, alpha: 0.8)
     }
 
 
@@ -382,15 +435,14 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     }
 
     
-    func segueToDrilldown(_ viewId: String)
+    func segueToDrilldown(_ guide: Guide)
     {
         let callback = SegueCallback
         {
             (vc: UIViewController) in
             let mtvc = vc as! MasterViewController
-            let v = Model.instance.views[viewId]
-            mtvc.data = v
-            mtvc.navigationItem.title = viewId
+            mtvc.guide = guide
+            mtvc.navigationItem.title = guide.title
         }
         
         self.performSegue(withIdentifier: "showMaster", sender: callback)
@@ -398,12 +450,14 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     
     func navigateToDetail(_ viewId: String, title: String?, elementId: String? = nil, showDetail: Bool = true)
     {
-        var vid = viewId.removePrefixIfPresent("guide.")
-        var guide: Guide?
-        if (!vid.hasPrefix("http.") && vid.characters.count > 0)
+        let vid = viewId.removePrefixIfPresent("guide.")
+        var guide: Guide? = nil
+        if (!vid.hasPrefix("http.") && vid.count > 0)
         {
-            guide = Guide(guideId: vid)
+            //guide = Guide(id: vid)
+            guide = Model.instance.getGuide(viewId, name: nil)
         }
+        let hasToc = (guide?.getHeadingsAndClimbs().count > 0) ?? false
         
         let fcvc = self.storyboard?.instantiateViewController(withIdentifier: "detailViewController") as! DetailViewController
         fcvc.guide = guide
@@ -430,7 +484,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
             
             runInBackground()
             {
-                if (g.getHeadingsAndClimbs().rows.count > 0)
+                if (hasToc)
                 {
                     runOnMain()
                     {
@@ -484,7 +538,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
 
     
     
-    func childSelected(_ selected: ListItem)
+    func childSelected(_ selected: Guide)
     {
         if let viewId = selected.viewId
         {
@@ -513,12 +567,23 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
             }
             else if (viewId.hasPrefix("guide.") || viewId.hasPrefix("http"))
             {
-                navigateToDetail(viewId, title: selected.text)
+                navigateToDetail(viewId, title: selected.title)
 
+            }
+
+        }
+        else
+        {
+            let hasToc = selected.getHeadingsAndClimbs().count > 0
+            let hasGuideContent = selected.hasGuideContent
+            if selected.hasChildren
+            {
+                segueToDrilldown(selected)
             }
             else
             {
-                segueToDrilldown(viewId)
+                let showNow = !hasToc
+                navigateToDetail("\(selected.id)", title: selected.title, elementId: nil, showDetail: showNow)
             }
         }
         
@@ -536,7 +601,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
     func navigateToEntry(_ entry: IndexEntry)
     {
         let elementId = entry.node?.elementId
-        navigateToDetail(entry.guide.guideId, title: entry.guide.name, elementId: elementId)
+        navigateToDetail("\(entry.guide.id)", title: entry.guide.title, elementId: elementId)
 
     }
     
@@ -565,13 +630,11 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         }
         else
         {
-            if (data?.listItems.count > (indexPath as NSIndexPath).row)
+            if let c = guide?.children.get( indexPath.row)
             {
-                if let c = data?.listItems[(indexPath as NSIndexPath).row]
-                {
-                    childSelected(c)
-                }
+                childSelected(c)
             }
+
         }
     }
 
@@ -640,7 +703,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                     
                     if entry.node != nil
                     {
-                        cell.detailTextLabel?.text = entry.guide.name ?? ""
+                        cell.detailTextLabel?.text = entry.guide.title ?? ""
                     }
                     else
                     {
@@ -648,7 +711,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
                     }
                     
                 }
-                searchDataSource.reuseIdentifier = "SearchCell"
+                searchDataSource.defaultCellIdentifier = "SearchCell"
                 
                 runOnMain()
                 {

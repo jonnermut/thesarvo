@@ -40,7 +40,8 @@ class Section<R>
     var footer: String = ""
     var value: Any?
     var rows: [R] = []
-    
+    var defaultCellIdentifier: String? = nil
+
     init(header: String)
     {
         self.header = header
@@ -50,6 +51,11 @@ class Section<R>
     {
         self.header = header
         self.value = value
+    }
+
+    init(rows: [R])
+    {
+       self.rows = rows
     }
 }
 
@@ -79,7 +85,7 @@ class SectionedDataSource<R> : SectionedDataSourceBridge
     typealias RowToString = (R) -> (String)
     typealias CellConfigurator = (UITableViewCell?, R) -> (Void)
     var sections : [Section<R>] = []
-    var reuseIdentifier = "Cell"
+    var defaultCellIdentifier = "Cell"
     
     var rowToString : RowToString = {
         r in
@@ -146,12 +152,29 @@ class SectionedDataSource<R> : SectionedDataSourceBridge
         }
         return 0
     }
+
+    func cellReuseIdentifier(indexPath: IndexPath) -> String
+    {
+        let identifier = sections.get(indexPath.section)?.defaultCellIdentifier ?? self.defaultCellIdentifier
+
+        return identifier
+    }
     
     func cellForRowAtIndexPath(_ tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     {
         let row = getRow(indexPath)
-        let identifier = reuseIdentifier
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as UITableViewCell
+        let identifier = defaultCellIdentifier
+
+        var cell: UITableViewCell
+        if let r = row as? UITableViewCell
+        {
+            cell = r
+        }
+        else
+        {
+            cell = tableView.dequeueReusableCell(withIdentifier: identifier) ?? UITableViewCell()
+        }
+
         
         if let row = row
         {

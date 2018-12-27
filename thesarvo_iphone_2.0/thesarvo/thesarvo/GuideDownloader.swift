@@ -118,6 +118,10 @@ class UpdatesElement : AEXMLElement
         {
             return attr("indexHash")
         }
+        set
+        {
+            self.attributes["indexHash"] = newValue ?? ""
+        }
     }
 }
 
@@ -330,7 +334,8 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
 
     }
     
-    fileprivate func maybeDownloadIndexJson(_ doc: Updates?, _ existingUpdates: Updates) {
+    fileprivate func maybeDownloadIndexJson(_ doc: Updates?, _ existingUpdates: Updates)
+    {
         if let hash = doc?.updatesElement?.indexHash
         {
             let existing = existingUpdates.updatesElement?.indexHash
@@ -350,6 +355,8 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
                     {
                         let path = self.finalPath("index.json")
                         try? data.write(to: URL(fileURLWithPath: path))
+                        existingUpdates.updatesElement?.indexHash = hash
+                        self.saveUpdates()
                     }
                     self.incrementCompletedOps()
                 }

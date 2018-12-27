@@ -253,23 +253,53 @@ public struct IndexEntry
 
 #if os(iOS)
 
-public class Guide
+public class Guide: Codable
 {
-    let guideId : String
-    var name : String?
+    let id : Int64
+    var title : String = ""
+    var children: Array<Guide> = []
+
+    var viewId: String? = nil
+    var level: Int? = 1
+    var url : String? = nil
     
-    init(guideId: String)
+    init(id: Int64)
     {
-        self.guideId = guideId
+        self.id = id
     }
+
+    lazy var data: Data? =
+    {
+        return self.loadData()
+    }()
     
     func loadData() -> Data?
     {
-        let downloadedPath = Model.instance.guideDownloader.finalPath("\(guideId).xml")
+        return Guide.loadData(name:"\(id)", fileExtension: "xml")
+    }
+
+    public var isGuide: Bool
+    {
+        return viewId == nil
+    }
+
+    public var hasChildren: Bool
+    {
+        return self.children.count > 0
+    }
+
+    public var hasGuideContent: Bool
+    {
+        return self.data != nil
+    }
+
+    public static func loadData(name: String, fileExtension: String) -> Data?
+    {
+        let downloadedPath = Model.instance.guideDownloader.finalPath("\(name).\(fileExtension)")
         let downloadedUrl = Foundation.URL(fileURLWithPath: downloadedPath)
-        
-        let bundleUrl = Bundle.main.url(forResource: guideId, withExtension: "xml", subdirectory: "www/data")
-        
+
+        let bundleUrl = Bundle.main.url(forResource: name, withExtension: fileExtension, subdirectory: "www/data")
+
         if FileManager.default.fileExists(atPath: downloadedPath)
         {
             if bundleUrl==nil || downloadedUrl.fileModificationDate?.timeIntervalSince1970 > bundleUrl?.fileModificationDate?.timeIntervalSince1970
@@ -277,17 +307,18 @@ public class Guide
                 return (try? Data(contentsOf: Foundation.URL(fileURLWithPath: downloadedPath)))
             }
         }
-        
+
         if let url = bundleUrl
         {
             return (try? Data(contentsOf: url))
         }
         return nil
     }
-    
+
+
     func loadDataAsString() -> String?
     {
-        if let d = loadData()
+        if let d = data
         {
             return String(data: d, encoding: String.Encoding.utf8)
         }
@@ -298,7 +329,7 @@ public class Guide
     
     func loadGuideElement() -> GuideElement?
     {
-        if let data = loadData()
+        if let data = self.data
         {
             // parse the guide...
             if let doc = try? GuideDocument(xmlData: data)
@@ -311,7 +342,7 @@ public class Guide
     
     func getImageUrls() -> Dictionary<String, String>
     {
-        let ret = Model.instance.guideDownloader.getUrls(self.guideId)
+        let ret = Model.instance.guideDownloader.getUrls("\(self.id)")
         return ret
     }
     
@@ -322,7 +353,7 @@ public class Guide
     }
     lazy var headings: [TextNode] = self.getHeadings()
     
-    func getHeadingsAndClimbs() -> SingleSectionDataSource<GuideNode>
+    func getHeadingsAndClimbs() -> Array<GuideNode>
     {
         var filtered = Array<GuideNode>()
         if let kids = guideElement?.children
@@ -347,7 +378,7 @@ public class Guide
             }
         }
         
-        return  SingleSectionDataSource(rows: filtered)
+        return filtered
         
         /*
         var current = Section<GuideNode>(header: name.valueOr("") )

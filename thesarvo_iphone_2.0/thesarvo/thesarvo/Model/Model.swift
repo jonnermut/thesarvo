@@ -18,12 +18,10 @@ class Model
         }
         return Static.instance
     }
-    
-    var views: [String: View] = [:]
+
+    var guides: [String: Guide] = [:]
     fileprivate var index: [IndexEntry] = []
     var indexingDone : Bool = false
-    
-    fileprivate var guides: [String: Guide] = [:]
     
     var allGpsNodes: [GpsNode] = []
     
@@ -32,7 +30,9 @@ class Model
     
     var lastSyncTry: Foundation.Date?
     let syncInterval = 600.0
-    
+
+    var rootGuide: Guide!
+
     init()
     {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
@@ -55,26 +55,32 @@ class Model
         lastSyncTry = Foundation.Date()
         guideDownloader.startSync()
     }
-    
-    func getGuide(_ guideId: String, name: String?) -> Guide
+
+
+    func getGuide(_ guideId: String, name: String?) -> Guide?
     {
+        return guides[guideId]
+        //fatalError("FIXME")
+        /*
         // lazy init of Guide objects
         return synchronized(self)
         {
             let g = guideId.removePrefixIfPresent("guide.")
             if !self.guides.has(g)
             {
-                let ret = Guide(guideId: g)
-                ret.name = name
+                let ret = Guide(id: g)
+                ret.title = name ?? ""
                 self.guides[g] = ret
                 return ret
             }
             return self.guides[g]!
         }
+ */
     }
     
     func load()
     {
+        /*
         let path = Bundle.main.path(forResource: "config", ofType: "xml")
         var err: NSError?
         let xmlData = try? Data(contentsOf: Foundation.URL(fileURLWithPath: path!))
@@ -89,6 +95,22 @@ class Model
                 }
             }
         }
+ */
+        guard let indexJson = Guide.loadData(name: "index", fileExtension: "json") else
+        {
+            // bail!
+            print("Could not load index.json!")
+            return
+        }
+
+        let decoder = JSONDecoder()
+        rootGuide = try! decoder.decode(Guide.self, from: indexJson)
+        if rootGuide == nil
+        {
+            print("Could not decode index.json!")
+            return
+        }
+        addToGuides(guide: rootGuide)
         
         runInBackground()
         {
@@ -101,56 +123,58 @@ class Model
             }
         }
     }
-    
-    var rootView : View? { return views["home"] }
 
+    private func addToGuides(guide: Guide)
+    {
+        let id = guide.viewId ?? "\(guide.id)"
+        guides[id] = guide
+        for c in guide.children
+        {
+            addToGuides(guide: c)
+        }
+    }
     
     func createIndex()
     {
         NSLog("Starting indexing")
-        views.each()
+        guides.each()
         {
             (key, value) in
-            for li in value.listItems
+            for guide in value.children
             {
-                if li.isGuide
+
+                self.index.append( IndexEntry(searchString: guide.title, node: nil, guide: guide))
+
+                if let guideElement = guide.guideElement
                 {
-                    let guide = self.getGuide(li.viewId!,name: li.text)
-                    self.index.append( IndexEntry(searchString: guide.name ?? "", node: nil, guide: guide))
-                    
-                    if let guideElement = guide.guideElement
+                    for child in guideElement.children
                     {
-                        for child in guideElement.children
+                        if let node = child as? GuideNode
                         {
-                            if let node = child as? GuideNode
+                            if let ss = node.searchString
                             {
-                                if let ss = node.searchString
+                                let indexEntry = IndexEntry(searchString: ss, node: node, guide: guide)
+                                node.indexEntry = indexEntry
+                                self.index.append( indexEntry )
+
+                                /*
+                                synchronized(self.index)
                                 {
-                                    let indexEntry = IndexEntry(searchString: ss, node: node, guide: guide)
-                                    node.indexEntry = indexEntry
-                                    self.index.append( indexEntry )
-                                    
-                                    /*
-                                    synchronized(self.index)
-                                    {
-                                        //self.index[ss] = node
-                                        index.add
-                                    }
+                                    //self.index[ss] = node
+                                    index.add
+                                }
 */
-                                }
-                                
-                                if let g = node as? GpsNode
-                                {
-                                    g.indexEntry = IndexEntry(searchString: "GPS", node: g, guide: guide)
-                                    self.allGpsNodes.append(g)
-                                }
+                            }
+
+                            if let g = node as? GpsNode
+                            {
+                                g.indexEntry = IndexEntry(searchString: "GPS", node: g, guide: guide)
+                                self.allGpsNodes.append(g)
                             }
                         }
                     }
-                    
                 }
             }
-            
         }
         NSLog("Finished indexing")
         
@@ -167,6 +191,20 @@ class Model
         {
             indexEntry in
             return indexEntry.searchString.containsCaseInsensitive(searchTerm)
+        }
+    }
+
+    var showClimbsInTOC: Bool
+    {
+        get {
+            if UserDefaults.standard.object(forKey: "showClimbsInTOC") == nil
+            {
+                return true // default is true, not false
+            }
+            return UserDefaults.standard.bool(forKey: "showClimbsInTOC")
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "showClimbsInTOC")
         }
     }
 };

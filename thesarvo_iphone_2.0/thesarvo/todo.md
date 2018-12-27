@@ -1,11 +1,16 @@
-Version 2.0
+Current
+=======
+- climbs in TOC on/off
+- join children to TOC
+- manual filters for the new index
+- add back in weather etc
+- check ipad
+
+Later
+=====
 
 Caching of resized images on server?
 
-Content:
-
-Version 2.1
-Sync index xml
 Favourites
 Recents
 Map other shapes ??
@@ -23,12 +28,9 @@ get title of topo and push that into nav controller title
 
 Constraint problem on progress bar
 
-
-
-2.2
 Editing
-
-2.3
 Ticks?
 Comments
+
+
 
