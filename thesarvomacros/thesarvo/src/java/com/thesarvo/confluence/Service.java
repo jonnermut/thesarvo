@@ -68,8 +68,21 @@ public class Service
 //		return doc;
 //	}
 	
+	public static boolean hasGuide(Page p)
+	{
+		if (p == null)
+			return false;
+		
+		String content = p.getBodyAsString();
+		return content != null && content.indexOf("<guide") >= 0;
+		
+	}
+	
 	public static String getGuideString(Page p)
 	{
+		if (p == null)
+			return null;
+		
 		String content = p.getBodyAsString();
 		if (content != null && content.indexOf("<guide") >= 0)
 		{
@@ -90,11 +103,14 @@ public class Service
 			else
 			{
 				start = content.indexOf("<guide");
-				int end = content.indexOf("</guide>", start);
-				if (end >= 0)
+				if (start >= 0)
 				{
-					String xml = content.substring(start, end + 8);
-					return xml;
+					int end = content.indexOf("</guide>", start);
+					if (end >= 0)
+					{
+						String xml = content.substring(start, end + 8);
+						return xml;
+					}
 				}
 			}
 		}
@@ -348,6 +364,11 @@ public class Service
 			
 			if (lastUpdate > since)
 			{
+				if (!hasGuide(page))
+				{
+					continue;
+				}
+				
 				String url = BASE_URL + "plugins/servlet/guide/xml/" + page.getId();
 				String idStr = "" + page.getId();
 				String filename = idStr + ".xml";
@@ -461,9 +482,11 @@ public class Service
 		Map<String, Object> index = new LinkedHashMap<String, Object>();
 		index.put("id", page.getId());
 		index.put("title", page.getTitle());
+		String url = "http://www.thesarvo.com/confluence" + page.getUrlPath();
+		index.put("url", url);
 		ArrayList<Object> kidArray = new ArrayList<Object>();
 		index.put("children", kidArray);
-		for (Page kid : page.getChildren())
+		for (Page kid : page.getSortedChildren())
 		{
 			Map<String, Object> kidMap = doPage(kid);
 			kidArray.add(kidMap);

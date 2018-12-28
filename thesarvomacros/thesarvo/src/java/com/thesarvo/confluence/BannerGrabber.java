@@ -44,10 +44,10 @@ public class BannerGrabber extends Thread
 	
 	private static void getImage() throws IOException, MalformedURLException
 	{
-		BufferedImage img = javax.imageio.ImageIO.read( new URL("http://www.rosebay.tased.edu.au/webcam/large.jpg") );
+		BufferedImage img = javax.imageio.ImageIO.read( new URL("https://rosebayhigh.education.tas.edu.au/wp-content/uploads/webcampic-large.jpg") );
 
 		//BufferedImage subimage = img.getSubimage(0, 170, 1600, 128);
-		BufferedImage subimage = img.getSubimage(0, 320, 1600, 128);
+		BufferedImage subimage = img.getSubimage(0, 520, 1600, 128);
 		
 		long sample = 0;
 		int samples = 0;

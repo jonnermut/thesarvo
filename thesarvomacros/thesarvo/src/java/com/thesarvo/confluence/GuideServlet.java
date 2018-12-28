@@ -189,7 +189,10 @@ public class GuideServlet extends HttpServlet
 			if (!includeSurrounding)
 			{
 				String xml = Service.getGuideString(p);
-				resp.getWriter().write(xml);
+				if (xml != null)
+				{
+					resp.getWriter().write(xml);
+				}
 			}
 			else
 			{

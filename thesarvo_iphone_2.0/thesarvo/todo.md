@@ -1,11 +1,10 @@
 Current
 =======
 
-- global search broken
-- update 2 different types of searching, unify
-- deselect cells properly
-- check ipad
 - layout of climb in toc cell
+- reload after restart throws errors for non guide pages
+- rebuild full path after restart
+- banner grabber broken
 
 Later
 =====

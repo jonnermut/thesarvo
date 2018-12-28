@@ -70,18 +70,20 @@ class ShowClimbsCell: UITableViewCell
     }
 }
 
-class MasterViewController: UITableViewController, UISearchResultsUpdating
+class MasterViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate
 {
     var guide: Guide?
-    var showingTOC: Bool { return self.guide != nil }
+    //var showingTOC: Bool { return self.guide != nil }
     
     var detailViewController: DetailViewController? = nil
     
     //var data : View?
     
     var searchController: UISearchController!
+    var searchBar: UISearchBar!
     
     var searchString: String?
+    var searchScope: Int? = nil
     
     var mainDataSource: TableViewDataSource?
     var sectionedDatasource: SectionedDataSource<Any>? = nil
@@ -136,27 +138,37 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         
         //self.tableView.registerClass(SearchCell.self, forCellReuseIdentifier: "SearchCell")
         //self.tableView.registerClass(TOCCell.self, forCellReuseIdentifier: "TOCCell")
-        
+    
+        self.setupSearchBar()
+
+        self.tableView.allowsMultipleSelection = false
+    }
+
+    func setupSearchBar()
+    {
         searchController = UISearchController(searchResultsController: nil)
-        self.searchController.searchResultsUpdater = self;
-        self.searchController.dimsBackgroundDuringPresentation = false;
-        //self.searchController.searchBar.scopeButtonTitles = @[NSLocalizedString(@"ScopeButtonCountry",@"Country"),NSLocalizedString(@"ScopeButtonCapital",@"Capital")];
-        //self.searchController.searchBar.delegate = self;
-        self.searchController.searchBar.scopeButtonTitles = []
+        searchBar = searchController.searchBar
+        searchController.searchResultsUpdater = self;
+        searchBar.delegate = self
+        searchController.dimsBackgroundDuringPresentation = false;
+
+        searchBar.placeholder = "Search for crag, climb, grade, ***"
+        var titles: [String] = []
+        let content = guide?.hasGuideContent ?? false
+        if content
+        {
+            titles = ["This page", "All"]
+            searchBar.placeholder = "Search"
+        }
+        searchBar.scopeButtonTitles = titles
+        searchBar.isOpaque = true
+        searchBar.sizeToFit()
+
+        searchBar.backgroundColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
+
+        self.definesPresentationContext = true;
         self.tableView.tableHeaderView = self.searchController.searchBar;
         self.tableView.tableHeaderView?.isOpaque = true
-        self.searchController.searchBar.isOpaque = true
-        self.definesPresentationContext = true;
-        self.searchController.searchBar.sizeToFit()
-        self.searchController.searchBar.placeholder = "Search for crag, climb, grade, ***"
-        if showingTOC
-        {
-            self.searchController.searchBar.placeholder = "Search within page"
-        }
-        self.searchController.searchBar.backgroundColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
-    
-    
-        self.tableView.allowsMultipleSelection = false
     }
     
     @objc dynamic func updateUpdateView()
@@ -201,7 +213,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         }
         
         
-        if guide === Model.instance.rootGuide && !showingTOC
+        if guide === Model.instance.rootGuide
         {
             updateUpdateView()
             updateTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(MasterViewController.updateUpdateView), userInfo: nil, repeats: true)
@@ -640,15 +652,26 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating
         }
     }
 
-    internal func updateSearchResults(for searchController: UISearchController)
+    public func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int)
+    {
+        updateSearchResults(for: searchController)
+    }
+
+    public func updateSearchResults(for searchController: UISearchController)
     {
         searchString = searchController.searchBar.text
+        searchScope = searchController.searchBar.selectedScopeButtonIndex
         updateSearchResults()
+    }
+
+    var searchThisPageOnly: Bool
+    {
+        return guide?.hasGuideContent ?? false && searchScope == 0
     }
 
     func updateSearchResults()
     {
-        if self.showingTOC
+        if searchThisPageOnly
         {
             setupDatasource()
             return

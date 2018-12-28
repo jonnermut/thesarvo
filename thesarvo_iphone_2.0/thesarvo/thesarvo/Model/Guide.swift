@@ -299,7 +299,7 @@ public class Guide: Codable
 
     public var hasGuideContent: Bool
     {
-        return self.data != nil
+        return self.data != nil && self.data!.count > 0
     }
 
     public static func loadData(name: String, fileExtension: String) -> Data?
