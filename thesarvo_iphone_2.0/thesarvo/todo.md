@@ -1,10 +1,23 @@
-Current
+Whats New
+=========
+
+* Content update
+* Improved guide table of contents: 
+- allows climbs to be shown or hidden
+- shows sub pages as well as page content
+- search in page or all 
+- shows Map in table of contents if there is one in the guide
+* On a app restart the entire path to the last guide shown is shown
+* Sync thesarvo index so that new and split guides automatically show up
+* Improve weather links to use mobile BOM site
+
+
+TODO Current
 =======
 
 - layout of climb in toc cell
-- reload after restart throws errors for non guide pages
-- rebuild full path after restart
 - banner grabber broken
+- split up BBQ crag
 
 Later
 =====

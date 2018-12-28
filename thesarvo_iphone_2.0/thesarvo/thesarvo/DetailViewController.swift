@@ -53,8 +53,16 @@ class DetailViewController: UIViewController, UIWebViewDelegate
             if guide == nil && DetailViewController.firstEverLoad
             {
                 DetailViewController.firstEverLoad = false
-                
-                viewId = UserDefaults.standard.string(forKey: "lastViewId") ?? "guide.9404494"
+
+                if let lastViewId = UserDefaults.standard.string(forKey: "lastViewId"), Int64(lastViewId
+                    ) != nil
+                {
+                    viewId = lastViewId
+                }
+                else
+                {
+                    viewId = "9404494"
+                }
                 
                 guide = Model.instance.getGuide(viewId, name: "")
             }
@@ -89,7 +97,7 @@ class DetailViewController: UIViewController, UIWebViewDelegate
         webview?.delegate = self
         DetailViewController.last = self
 
-        if viewId.characters.count > 0
+        if viewId.count > 0
         {
             UserDefaults.standard.set(viewId, forKey: "lastViewId")
         }

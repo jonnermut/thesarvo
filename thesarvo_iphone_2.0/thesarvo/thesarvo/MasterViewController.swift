@@ -138,7 +138,11 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, UISe
         
         //self.tableView.registerClass(SearchCell.self, forCellReuseIdentifier: "SearchCell")
         //self.tableView.registerClass(TOCCell.self, forCellReuseIdentifier: "TOCCell")
-    
+
+        if let t = guide?.title
+        {
+            self.navigationItem.title = t
+        }
         self.setupSearchBar()
 
         self.tableView.allowsMultipleSelection = false
@@ -195,6 +199,8 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, UISe
         
         MasterViewController.last = self
 
+
+
         
 //        if (data != nil && data?.text != nil)
 //        {
@@ -218,6 +224,11 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, UISe
             updateUpdateView()
             updateTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(MasterViewController.updateUpdateView), userInfo: nil, repeats: true)
             
+        }
+        else
+        {
+            Model.instance.lastPath = self.navigationController?.viewControllers
+                .compactMap { ($0 as? MasterViewController)?.guide?.viewIdOrId }
         }
         
     }

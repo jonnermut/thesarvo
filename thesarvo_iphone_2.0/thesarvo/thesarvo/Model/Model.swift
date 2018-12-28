@@ -261,4 +261,14 @@ class Model
             UserDefaults.standard.set(newValue, forKey: "showClimbsInTOC")
         }
     }
+
+    var lastPath: Array<String>?
+    {
+        get {
+            return UserDefaults.standard.array(forKey: "lastPath") as? Array<String>
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "lastPath")
+        }
+    }
 };

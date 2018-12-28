@@ -21,6 +21,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     var drawerController: DrawerController!
 
 
+    fileprivate func reloadPath()
+    {
+        if let lvc = self.drawerController.leftViewController as? UINavigationController
+        {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let lastPath = Model.instance.lastPath, lastPath.count > 1
+            {
+                var vcs: [UIViewController] = []
+                for id in lastPath
+                {
+                    if let g = Model.instance.getGuide(id, name: nil)
+                    {
+                        if let vc = storyboard.instantiateViewController(withIdentifier: "MasterViewController") as? MasterViewController
+                        {
+                            vc.guide = g
+                            vcs.append(vc)
+                        }
+                    }
+                }
+                if vcs.count > 0
+                {
+                    lvc.viewControllers = vcs
+                }
+            }
+        }
+    }
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool
     {
         // Override point for customization after application launch.
@@ -77,7 +104,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         
         // main init of the model
         Model.instance.load()
-        
+
+        runOnMain {
+            self.reloadPath()
+        }
         return true
     }
     

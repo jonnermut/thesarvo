@@ -263,6 +263,11 @@ public class Guide: Codable
     var viewId: String? = nil
     var level: Int? = 1
     var url : String? = nil
+
+    var viewIdOrId: String
+    {
+        return viewId ?? "\(id)"
+    }
     
     init(id: Int64)
     {
