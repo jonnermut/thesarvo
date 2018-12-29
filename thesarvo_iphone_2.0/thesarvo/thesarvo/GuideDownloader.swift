@@ -357,6 +357,12 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
                         try? data.write(to: URL(fileURLWithPath: path))
                         existingUpdates.updatesElement?.indexHash = hash
                         self.saveUpdates()
+
+                        #if os(iOS)
+                        runOnMain {
+                            Model.instance.load()
+                        }
+                        #endif
                     }
                     self.incrementCompletedOps()
                 }

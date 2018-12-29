@@ -33,4 +33,10 @@ thesarvo-android/zip_file/build
 *.cache.js
 thesarvomacros/thesarvo/classes
 thesarvoguide2/src/com/thesarvo/guide/client/ApiKeys.java
+*.ser
+*.jks
+myp12file.p12
+dist_cert_2017-06.p12
+copyToProd.sh
 
+thesarvoguide2/war/thesarvoguide2
