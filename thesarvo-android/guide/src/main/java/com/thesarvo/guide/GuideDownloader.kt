@@ -40,7 +40,8 @@ import javax.xml.transform.stream.StreamResult
  * Created by jon on 28/12/2016.
  */
 
-class GuideDownloader(directory: File, private val resourceManager: ResourceManager) {
+class GuideDownloader(directory: File, private val resourceManager: ResourceManager)
+{
     private var queuedDownloads: MutableList<Update>? = null
 
     internal var since: Long = 0
@@ -63,7 +64,8 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
     internal val updatesFilePath: File
         get() = getFinalPath("updates.xml")
 
-    internal inner class Update(var element: Element) {
+    internal inner class Update(var element: Element)
+    {
 
         val url: String
             get() = element.getAttribute("url")
@@ -76,14 +78,19 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
 
     }
 
-    internal inner class Updates(`is`: InputStream?) {
-        var document: Document
+    internal inner class Updates(`is`: InputStream?)
+    {
+        lateinit var document: Document
 
         private val documentBuilder: DocumentBuilder?
-            get() {
-                try {
+            get()
+            {
+                try
+                {
                     return DocumentBuilderFactory.newInstance().newDocumentBuilder()
-                } catch (e: ParserConfigurationException) {
+                }
+                catch (e: ParserConfigurationException)
+                {
                     e.printStackTrace()
                 }
 
@@ -92,34 +99,45 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
 
 
         var maxLastMod: Long?
-            get() {
+            get()
+            {
                 val `val` = document.documentElement.getAttribute("maxLastMod")
-                return if (`val` != null && `val`.length > 0) {
+                return if (`val` != null && `val`.length > 0)
+                {
                     java.lang.Long.parseLong(`val`)
-                } else null
+                }
+                else null
             }
             set(lastMod) = document.documentElement.setAttribute("maxLastMod", lastMod!!.toString())
 
         val updates: MutableList<Update>
-            get() {
+            get()
+            {
                 val nl = document.documentElement.getElementsByTagName("update")
                 val ret = ArrayList<Update>(nl.length)
 
-                for (i in 0 until nl.length) {
+                for (i in 0 until nl.length)
+                {
                     val n = nl.item(i)
-                    if (n is Element) {
+                    if (n is Element)
+                    {
                         ret.add(Update(n))
                     }
                 }
                 return ret
             }
 
-        init {
-            if (`is` != null) {
-                try {
+        init
+        {
+            if (`is` != null)
+            {
+                try
+                {
                     document = documentBuilder!!.parse(`is`)
 
-                } catch (e: Exception) {
+                }
+                catch (e: Exception)
+                {
                     e.printStackTrace()
                 }
 
@@ -133,21 +151,26 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
             }
         }
 
-        fun save() {
+        fun save()
+        {
             val file = this@GuideDownloader.updatesFilePath
 
-            try {
+            try
+            {
                 val transformer = TransformerFactory.newInstance().newTransformer()
                 val result = StreamResult(file)
                 val source = DOMSource(document)
                 transformer.transform(source, result)
-            } catch (e: Exception) {
+            }
+            catch (e: Exception)
+            {
                 Log.e("GuideDownloader", "Unexpected error saving updates.xml", e)
             }
 
         }
 
-        fun addUpdate(update: Update) {
+        fun addUpdate(update: Update)
+        {
             val newOne = this.document.createElement("update")
             newOne.setAttribute("url", update.url)
             newOne.setAttribute("filename", update.filename)
@@ -157,17 +180,22 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
         }
     }
 
-    init {
+    init
+    {
         this.directory = directory
 
         queue.execute {
             // load the existing file
 
             val updateFile = updatesFilePath
-            if (updateFile.exists()) {
-                try {
+            if (updateFile.exists())
+            {
+                try
+                {
                     this.updates = Updates(FileInputStream(updateFile))
-                } catch (e: FileNotFoundException) {
+                }
+                catch (e: FileNotFoundException)
+                {
                     e.printStackTrace()
                 }
 
@@ -181,13 +209,17 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
 
     }
 
-    private fun maybeCopyResourceUpdatesXml() {
+    private fun maybeCopyResourceUpdatesXml()
+    {
         val resourceUpdatesXml = resourceManager.getDataAsset("updates.xml")
-        if (resourceUpdatesXml != null) {
+        if (resourceUpdatesXml != null)
+        {
             val resourceUpdates = Updates(resourceUpdatesXml)
             val lastMod = resourceUpdates.maxLastMod
-            if (lastMod != null) {
-                if (updates.maxLastMod == null || updates.maxLastMod < lastMod) {
+            if (lastMod != null)
+            {
+                if (updates.maxLastMod == null || updates.maxLastMod!! < lastMod)
+                {
                     updates.maxLastMod = lastMod
                     updates.save()
                 }
@@ -195,17 +227,21 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
         }
     }
 
-    private fun getFinalPath(filename: String?): File {
+    private fun getFinalPath(filename: String?): File
+    {
         return File(directory, filename!!).absoluteFile
     }
 
-    private fun startSync() {
-        if (isSyncing) {
+    private fun startSync()
+    {
+        if (isSyncing)
+        {
             Log.d("GuideDownloader", "Already syncing, not starting again")
             return
         }
 
-        try {
+        try
+        {
             var s = this.updates.maxLastMod
             if (s == null)
                 s = 0L
@@ -226,7 +262,9 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
             this.totalOps += this.queuedDownloads!!.size
             updateProgress(null)
             queue.execute { this.downloadFirst() }
-        } catch (t: Throwable) {
+        }
+        catch (t: Throwable)
+        {
             Log.e("GuideDownloader", "Error getting updates list", t)
 
         }
@@ -234,14 +272,17 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
         incrementCompleted()
     }
 
-    private fun incrementCompleted() {
+    private fun incrementCompleted()
+    {
         completedOps++
         updateProgress(null)
     }
 
-    private fun updateProgress(text: String?) {
+    private fun updateProgress(text: String?)
+    {
         var text = text
-        if (text == null) {
+        if (text == null)
+        {
             text = "Updating " + (completedOps + 1) + " of " + totalOps
         }
 
@@ -253,7 +294,8 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
     /**
      * Attempt to download the head of the queue
      */
-    private fun downloadFirst() {
+    private fun downloadFirst()
+    {
         if (queuedDownloads == null || queuedDownloads!!.isEmpty())
             return
 
@@ -264,7 +306,8 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
         val surl = u.url
 
 
-        try {
+        try
+        {
             downloadUrl(surl, finalPath)
 
             // remove from our list
@@ -272,30 +315,36 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
             updates.save()
 
             // queue an index task
-            if (u.filename!!.endsWith(".xml")) {
+            if (u.filename!!.endsWith(".xml"))
+            {
                 val viewId = "guide." + u.filename!!.replace(".xml", "")
                 val task = SearchIndexTask(GuideApplication.get()!!, viewId)
 
                 queue.execute(task)
             }
-        } catch (t: Throwable) {
+        }
+        catch (t: Throwable)
+        {
             Log.e("GuideDownloader", "Error downloading file: " + u.url, t)
         }
 
         incrementCompleted()
 
-        if (queuedDownloads!!.size > 0) {
+        if (queuedDownloads!!.size > 0)
+        {
             queue.execute { this.downloadFirst() }
         }
     }
 
-    private fun incrementTotal() {
+    private fun incrementTotal()
+    {
         totalOps++
         updateProgress(null)
     }
 
     @Throws(IOException::class)
-    private fun downloadUrl(surl: String, finalPath: File) {
+    private fun downloadUrl(surl: String, finalPath: File)
+    {
         val url = URL(surl)
         val conn = url.openConnection() as HttpURLConnection
 
@@ -313,12 +362,16 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
         tempFile.renameTo(finalPath)
     }
 
-    private fun processNewUpdates(newUpdates: Updates) {
+    private fun processNewUpdates(newUpdates: Updates)
+    {
         val existing = ArrayList(this.updates.updates)
-        for (update in newUpdates.updates) {
+        for (update in newUpdates.updates)
+        {
             val f = update.filename
-            if (f != null) {
-                if (!Iterables.any(existing) { u -> f == u.filename }) {
+            if (f != null)
+            {
+                if (!Iterables.any(existing) { u -> f == u?.filename })
+                {
                     // no match, add it
                     this.updates.addUpdate(update)
                 }
@@ -329,7 +382,8 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
         this.updates.save()
     }
 
-    companion object {
+    companion object
+    {
 
         internal var BASE_URL = "http://www.thesarvo.com/confluence"
         internal var SYNC_URL = "$BASE_URL/plugins/servlet/guide/sync/"

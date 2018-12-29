@@ -227,7 +227,8 @@ public class LicenseChecker implements ServiceConnection {
                     // Make sure it hasn't already timed out.
                     if (mChecksInProgress.contains(mValidator)) {
                         clearTimeout();
-                        mValidator.verify(mPublicKey, responseCode, signedData, signature);
+                        if (signedData != null)
+                            mValidator.verify(mPublicKey, responseCode, signedData, signature);
                         finishCheck(mValidator);
                     }
                     if (DEBUG_LICENSE_ERROR) {

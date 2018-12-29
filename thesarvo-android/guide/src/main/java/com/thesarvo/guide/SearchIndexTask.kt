@@ -28,7 +28,8 @@ import javax.xml.parsers.DocumentBuilderFactory
 /**
  * Created by jon on 28/12/2016.
  */
-internal class SearchIndexTask(private val guideApplication: GuideApplication, viewId: String) : Runnable {
+internal class SearchIndexTask(private val guideApplication: GuideApplication, viewId: String) : Runnable
+{
     val WWW_PATH = "www/data/"
     private val indexManager: IndexManager
     private val resourceManager: ResourceManager
@@ -42,15 +43,18 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
     var factory = DocumentBuilderFactory.newInstance()
 
 
-    init {
+    init
+    {
         this.resourceManager = guideApplication.resourceManager
         this.indexManager = guideApplication.indexManager
         this.viewId = viewId
     }
 
-    override fun run() {
+    override fun run()
+    {
         //delete the old database first
-        if (viewId == null) {
+        if (viewId == null)
+        {
             indexManager.resetIndex()
 
         }
@@ -59,21 +63,28 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
         //AssetManager manager = guideApplication.getAssets();
 
 
-        try {
+        try
+        {
 
-            if (viewId == null) {
+            if (viewId == null)
+            {
 
                 //load all XML files
-                for (vid in guideListItems.keys) {
+                for (vid in guideListItems.keys)
+                {
                     this.viewId = vid
                     indexGuideXml(viewId)
 
                 }
-            } else {
+            }
+            else
+            {
                 indexGuideXml(viewId)
             }
 
-        } catch (e: Throwable) {
+        }
+        catch (e: Throwable)
+        {
             e.printStackTrace()
 
         }
@@ -84,8 +95,10 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
     }
 
     @Throws(SAXException::class, IOException::class)
-    private fun indexGuideXml(viewId: String?) {
-        try {
+    private fun indexGuideXml(viewId: String?)
+    {
+        try
+        {
             val builder = factory.newDocumentBuilder()
 
             val item = guideListItems[viewId]
@@ -109,34 +122,41 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
             val dom = builder.parse(source)
             val root = dom.documentElement
             //if there's no guide data continue
-            if (root.tagName != "guide") {
+            if (root.tagName != "guide")
+            {
                 Log.d("Search Index", "$guideId not a guide")
                 return
             }
 
-            for (e in Xml.getElements(dom.getElementsByTagName("climb"))) {
+            for (e in Xml.getElements(dom.getElementsByTagName("climb")))
+            {
                 indexClimbElement(viewId, item, e)
             }
 
             //do the same for boulder problems because teh Krauss
-            for (e in Xml.getElements(dom.getElementsByTagName("problem"))) {
+            for (e in Xml.getElements(dom.getElementsByTagName("problem")))
+            {
                 indexClimbElement(viewId, item, e)
             }
 
-            for (e in Xml.getElements(dom.getElementsByTagName("text"))) {
+            for (e in Xml.getElements(dom.getElementsByTagName("text")))
+            {
                 indexTextElement(viewId, item, e)
             }
 
 
             indexGPSElements(dom)
-        } catch (t: Throwable) {
+        }
+        catch (t: Throwable)
+        {
             t.printStackTrace()
             Log.e("SearchIndexTask", "Unexpected error indexing " + viewId!!, t)
         }
 
     }
 
-    private fun indexListItem(viewId: String, item: ViewModel.ListItem?) {
+    private fun indexListItem(viewId: String, item: ViewModel.ListItem?)
+    {
         if (item == null)
             return
 
@@ -152,14 +172,17 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
         //Log.d("Indexing", "adding " + entry.text);
     }
 
-    private fun indexGPSElements(dom: Document) {
+    private fun indexGPSElements(dom: Document)
+    {
         var gpsNodes = MapsFragment.gpsPoints
 
-        for (e in Xml.getElements(dom.getElementsByTagName("gps"))) {
+        for (e in Xml.getElements(dom.getElementsByTagName("gps")))
+        {
             val id = e.getAttribute("id")
             val points = ArrayList<Point>()
 
-            for (ePoint in Xml.getElements(e.getElementsByTagName("point"))) {
+            for (ePoint in Xml.getElements(e.getElementsByTagName("point")))
+            {
                 val point = Point(ePoint)
                 points.add(point)
 
@@ -178,8 +201,10 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
         }
     }
 
-    private fun indexTextElement(viewId: String, item: ViewModel.ListItem, e: Element) {
-        if (e.getAttribute("class").startsWith("h")) {
+    private fun indexTextElement(viewId: String, item: ViewModel.ListItem, e: Element)
+    {
+        if (e.getAttribute("class").startsWith("h"))
+        {
             val entry1 = IndexEntry()
             entry1.viewId = viewId
             entry1.viewName = item.text
@@ -198,7 +223,8 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
         }
     }
 
-    private fun indexClimbElement(viewId: String, item: ViewModel.ListItem, e: Element) {
+    private fun indexClimbElement(viewId: String, item: ViewModel.ListItem, e: Element)
+    {
         val entry1 = IndexEntry()
         entry1.viewId = viewId
         entry1.viewName = item.text
@@ -209,7 +235,8 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
         val grade = e.getAttribute("grade")
         val name = e.getAttribute("name")
 
-        if (!Strings.isNullOrEmpty(name) || !Strings.isNullOrEmpty(grade)) {
+        if (!Strings.isNullOrEmpty(name) || !Strings.isNullOrEmpty(grade))
+        {
             var text = String.format("%s %s %s", stars, grade, name)
             text = text.trim { it <= ' ' }
             entry1.text = text
@@ -225,14 +252,17 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
     /**
      * helper to add an entry to the main table and the suggestions table
      */
-    fun addEntry(entry: IndexEntry) {
+    fun addEntry(entry: IndexEntry)
+    {
         Log.d("Indexing", "adding entry " + entry.text)
 
         indexManager.index!!.index(entry)
     }
 
-    fun addGPSEntry(node: GPSNode) {
-        for (p in node.points) {
+    fun addGPSEntry(node: GPSNode)
+    {
+        for (p in node.points)
+        {
             /* FIXME
             ContentValues values = new ContentValues();
             values.put(IndexContentProvider.COL_GPS_ID, node.getId());

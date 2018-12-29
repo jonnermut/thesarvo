@@ -13,7 +13,8 @@ import javax.xml.parsers.DocumentBuilderFactory
 /**
  * Created by jon on 25/01/14.
  */
-class ViewModel @JvmOverloads constructor(inputStream: InputStream = ViewModel::class.java.getResourceAsStream("/config.xml")) {
+class ViewModel @JvmOverloads constructor(inputStream: InputStream = ViewModel::class.java.getResourceAsStream("/config.xml"))
+{
 
 
     internal var views: MutableMap<String, ViewDef> = LinkedHashMap()
@@ -21,7 +22,8 @@ class ViewModel @JvmOverloads constructor(inputStream: InputStream = ViewModel::
     var rootView: ViewDef? = null
         internal set
 
-    inner class ViewDef(element: Element) {
+    inner class ViewDef(element: Element)
+    {
 
 
         var id: String
@@ -35,26 +37,31 @@ class ViewModel @JvmOverloads constructor(inputStream: InputStream = ViewModel::
         internal var listItems: MutableList<ListItem> = ArrayList()
 
 
-        init {
+        init
+        {
             this.id = element.getAttribute("id")
             this.type = element.getAttribute("type")
             this.name = element.getAttribute("name")
             this.isRootView = "true" == element.getAttribute("rootView")
 
             val data = Xml.getFirstElementByName(element, "data")
-            if (data != null) {
-                for (el in Xml.getElementsByName(data, "listItem")) {
+            if (data != null)
+            {
+                for (el in Xml.getElementsByName(data, "listItem"))
+                {
                     listItems.add(ListItem(el))
                 }
             }
 
         }
 
-        fun getListItems(): List<ListItem> {
+        fun getListItems(): List<ListItem>
+        {
             return listItems
         }
 
-        override fun toString(): String {
+        override fun toString(): String
+        {
             return "ViewDef{" +
                     "id='" + id + '\''.toString() +
                     ", type='" + type + '\''.toString() +
@@ -64,7 +71,8 @@ class ViewModel @JvmOverloads constructor(inputStream: InputStream = ViewModel::
     }
 
 
-    inner class ListItem(element: Element) {
+    inner class ListItem(element: Element)
+    {
 
 
         var text: String
@@ -76,7 +84,8 @@ class ViewModel @JvmOverloads constructor(inputStream: InputStream = ViewModel::
 
         var isLeaf = true
 
-        init {
+        init
+        {
             text = element.getAttribute("text")
             viewId = element.getAttribute("viewId")
 
@@ -86,7 +95,8 @@ class ViewModel @JvmOverloads constructor(inputStream: InputStream = ViewModel::
 
         }
 
-        override fun toString(): String {
+        override fun toString(): String
+        {
             var ret = ""
             for (i in 1 until level)
                 ret += "    "
@@ -97,17 +107,20 @@ class ViewModel @JvmOverloads constructor(inputStream: InputStream = ViewModel::
         }
     }
 
-    init {
+    init
+    {
 
 
-        try {
+        try
+        {
             val factory = DocumentBuilderFactory.newInstance()
 
             val builder = factory.newDocumentBuilder()
             val dom = builder.parse(inputStream)
             val root = dom.documentElement
 
-            for (element in Xml.getElementsByName(root, "view")) {
+            for (element in Xml.getElementsByName(root, "view"))
+            {
                 val v = ViewDef(element)
                 views[v.id] = v
 
@@ -115,34 +128,42 @@ class ViewModel @JvmOverloads constructor(inputStream: InputStream = ViewModel::
                     rootView = v
             }
 
-            for (element1 in Xml.getElements(dom.getElementsByTagName("listItem"))) {
+            for (element1 in Xml.getElements(dom.getElementsByTagName("listItem")))
+            {
                 val l = ListItem(element1)
 
-                if (l.viewId.startsWith("guide.")) {
+                if (l.viewId.startsWith("guide."))
+                {
                     guideListItems[l.viewId] = l
                 }
             }
 
 
-        } catch (t: Throwable) {
+        }
+        catch (t: Throwable)
+        {
             t.printStackTrace()
         }
 
     }
 
-    fun getViews(): Map<String, ViewDef> {
+    fun getViews(): Map<String, ViewDef>
+    {
         return views
     }
 
-    fun getGuideListItems(): Map<String, ListItem> {
+    fun getGuideListItems(): Map<String, ListItem>
+    {
         return guideListItems
     }
 
-    companion object {
+    companion object
+    {
 
         private val instance = ViewModel()
 
-        fun get(): ViewModel {
+        fun get(): ViewModel
+        {
             return instance
         }
     }

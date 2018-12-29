@@ -36,7 +36,8 @@ import com.unnamed.b.atv.view.AndroidTreeView
 
 import java.util.HashMap
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity()
+{
 
     private var drawer: DrawerLayout? = null
     private var searchView: SearchView? = null
@@ -44,7 +45,8 @@ class MainActivity : AppCompatActivity() {
     private var progressBar: ProgressBar? = null
     private var progressBarText: TextView? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         Log.d("MainActivity", "onCreate")
 
         super.onCreate(savedInstanceState)
@@ -69,12 +71,14 @@ class MainActivity : AppCompatActivity() {
         Log.d("MainActivity", "uri=$uri , id=$id")
 
         val handled = handleIntent(intent)
-        if (!handled) {
+        if (!handled)
+        {
             drawer!!.openDrawer(Gravity.LEFT)
         }
     }
 
-    private fun setupNavigation(toolbar: Toolbar?) {
+    private fun setupNavigation(toolbar: Toolbar?)
+    {
         drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         val toggle = ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -95,14 +99,16 @@ class MainActivity : AppCompatActivity() {
         tView.setDefaultViewHolder(NodeViewHolder::class.java)
         tView.setDefaultAnimation(true)
         tView.setDefaultNodeClickListener { node, value ->
-            if (value is ViewModel.ListItem) {
+            if (value is ViewModel.ListItem)
+            {
                 onItemSelected(value)
             }
         }
         leftLayout.addView(tView.view)
     }
 
-    private fun setupSearch() {
+    private fun setupSearch()
+    {
         //start with the search bar disabled
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
@@ -118,21 +124,25 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun addListItems(root: TreeNode, viewDef: ViewModel.ViewDef, level: Int) {
+    private fun addListItems(root: TreeNode, viewDef: ViewModel.ViewDef, level: Int)
+    {
         var level = level
-        for (lv in viewDef.getListItems()) {
+        for (lv in viewDef.getListItems())
+        {
             val n = TreeNode(lv)
             root.addChild(n)
 
             val kidView = ViewModel.get().getViews()[lv.viewId]
-            if (kidView != null) {
+            if (kidView != null)
+            {
                 lv.isLeaf = false
                 addListItems(n, kidView, level++)
             }
         }
     }
 
-    fun onItemSelected(item: ViewModel.ListItem) {
+    fun onItemSelected(item: ViewModel.ListItem)
+    {
         if (!item.isLeaf)
             return
 
@@ -143,10 +153,13 @@ class MainActivity : AppCompatActivity() {
 
         drawer!!.closeDrawer(Gravity.LEFT)
 
-        if (id.startsWith("http") || id.startsWith("guide.")) {
+        if (id.startsWith("http") || id.startsWith("guide."))
+        {
             showGuideDetail(id, null, false, null)
 
-        } else if (id.startsWith("Map")) {
+        }
+        else if (id.startsWith("Map"))
+        {
             //start the map activity
             /* TODO
             if(mapsIndexed)
@@ -161,7 +174,9 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Maps not ready yet!", Toast.LENGTH_SHORT).show();
             }
             */
-        } else {
+        }
+        else
+        {
             //showGuideDetail(id, null, true, null);
             val args = HashMap<String, String>()
             args[GuideDetailFragment.ARG_ITEM_ID] = id
@@ -182,7 +197,8 @@ class MainActivity : AppCompatActivity() {
      * @param history
      * @param elementId
      */
-    fun showGuideDetail(id: String?, singleNodeData: String?, history: Boolean, elementId: String?) {
+    fun showGuideDetail(id: String?, singleNodeData: String?, history: Boolean, elementId: String?)
+    {
         val args = HashMap<String, String>()
         if (id != null)
             args[GuideDetailFragment.ARG_ITEM_ID] = id
@@ -196,7 +212,8 @@ class MainActivity : AppCompatActivity() {
         showFragment(GuideDetailFragment::class.java, args, history, false)
     }
 
-    fun showMap(singleNodeData: String?) {
+    fun showMap(singleNodeData: String?)
+    {
         val args = HashMap<String, String>()
         if (singleNodeData != null)
             args[GuideDetailFragment.SINGLE_NODE_DATA] = singleNodeData
@@ -207,20 +224,26 @@ class MainActivity : AppCompatActivity() {
         showFragment(MapsFragment::class.java, args, true, false)
     }
 
-    fun showFragment(fragmentClass: Class<*>, args: Map<String, String>?, includeInHistory: Boolean, leftPane: Boolean) {
+    fun showFragment(fragmentClass: Class<*>, args: Map<String, String>?, includeInHistory: Boolean, leftPane: Boolean)
+    {
         val arguments = Bundle()
 
-        if (args != null) {
-            for (key in args.keys) {
+        if (args != null)
+        {
+            for (key in args.keys)
+            {
                 arguments.putString(key, args[key])
             }
         }
 
         var fragment: Fragment? = null
 
-        try {
+        try
+        {
             fragment = fragmentClass.newInstance() as Fragment
-        } catch (e: Exception) {
+        }
+        catch (e: Exception)
+        {
             e.printStackTrace()
         }
 
@@ -244,7 +267,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun addFragment(fragmentId: Int, newFragment: android.support.v4.app.Fragment, history: Boolean) {
+    fun addFragment(fragmentId: Int, newFragment: android.support.v4.app.Fragment, history: Boolean)
+    {
         // Add the fragment to the activity, pushing this transaction
         // on to the back stack.
         val ft = supportFragmentManager.beginTransaction()
@@ -261,7 +285,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun addDoubleFragment(fragId1: Int, fragId2: Int, frag1: android.support.v4.app.Fragment,
-                          frag2: android.support.v4.app.Fragment, history: Boolean) {
+                          frag2: android.support.v4.app.Fragment, history: Boolean)
+    {
         val ft = supportFragmentManager.beginTransaction()
         //getFragmentManager().beginTransaction();
         ft.replace(fragId1, frag1)
@@ -277,37 +302,47 @@ class MainActivity : AppCompatActivity() {
         Log.d("Add Fragment", "Double Added")
     }
 
-    override fun onBackPressed() {
+    override fun onBackPressed()
+    {
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (drawer.isDrawerOpen(GravityCompat.START))
+        {
             drawer.closeDrawer(GravityCompat.START)
-        } else {
+        }
+        else
+        {
             super.onBackPressed()
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
 
 
-        return if (id == R.id.action_settings) {
+        return if (id == R.id.action_settings)
+        {
             true
-        } else super.onOptionsItemSelected(item)
+        }
+        else super.onOptionsItemSelected(item)
 
     }
 
-    fun setProgress(complete: Long, total: Long, text: String) {
+    fun setProgress(complete: Long, total: Long, text: String)
+    {
         Handler(Looper.getMainLooper()).post {
-            if (progressBar != null && progressBarText != null) {
+            if (progressBar != null && progressBarText != null)
+            {
                 progressBar!!.max = total.toInt()
                 progressBar!!.progress = complete.toInt()
                 progressBarText!!.text = text
@@ -321,17 +356,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     @JvmOverloads
-    fun showSearchResult(uri: Uri, query: String? = null) {
+    fun showSearchResult(uri: Uri, query: String? = null)
+    {
         Log.d("Search Result", uri.toString())
 
 
         //get a cursor representing the entry
         val c = contentResolver.query(uri, SEARCH_PROJECTION, null, null, null)
-        if (c!!.count < 1) {
+        if (c!!.count < 1)
+        {
             Log.d("Search Result", "Error, entry not found!")
-        } else if (c.count > 1) {
+        }
+        else if (c.count > 1)
+        {
             Log.d("Search Result", "Error, multiple found! found!")
-        } else {
+        }
+        else
+        {
             val v = c.getColumnIndex(SEARCH_PROJECTION[0])
             val e = c.getColumnIndex(SEARCH_PROJECTION[1])
 
@@ -349,19 +390,22 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onNewIntent(intent: Intent) {
+    override fun onNewIntent(intent: Intent)
+    {
         setIntent(intent)
         handleIntent(intent)
     }
 
-    private fun handleIntent(intent: Intent): Boolean {
+    private fun handleIntent(intent: Intent): Boolean
+    {
         val action = intent.action
         val uri = intent.data
 
 
         Log.d("New Intent", "New intent " + action!!)
 
-        if (action == Intent.ACTION_SEARCH) {
+        if (action == Intent.ACTION_SEARCH)
+        {
             /* TODO - work this out
             String query = searchView.getQuery().toString();
             searchView.setIconified(true);
@@ -377,7 +421,8 @@ class MainActivity : AppCompatActivity() {
             searchView.setIconified(true);
             */
             return true
-        } else if (action == Intent.ACTION_VIEW)
+        }
+        else if (action == Intent.ACTION_VIEW)
         //probably shouldn't be something so generic, will need to be changed if ever end up using action view
         {
             Log.d("Quick Search Back", uri!!.toString())
@@ -402,12 +447,14 @@ class MainActivity : AppCompatActivity() {
         return false
     }
 
-    companion object {
+    companion object
+    {
         private val SEARCH_PROJECTION = arrayOf("VIEW_ID", "ELEMENT_ID")
 
         private var instance: MainActivity? = null
 
-        fun get(): MainActivity? {
+        fun get(): MainActivity?
+        {
             return instance
         }
     }

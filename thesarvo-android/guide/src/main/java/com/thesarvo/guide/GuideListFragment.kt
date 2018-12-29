@@ -23,7 +23,8 @@ import android.widget.ListView
  * Mandatory empty constructor for the fragment manager to instantiate the
  * fragment (e.g. upon screen orientation changes).
  */
-class GuideListFragment : ListFragment() {
+class GuideListFragment : ListFragment()
+{
 
     private var activateOnItemClickLater: Boolean = false
 
@@ -41,14 +42,18 @@ class GuideListFragment : ListFragment() {
      */
     private var mActivatedPosition = ListView.INVALID_POSITION
 
-    fun getViewDef(): ViewModel.ViewDef {
+    fun getViewDef(): ViewModel.ViewDef
+    {
         if (viewDef == null)
+        {
             viewDef = ViewModel.get().rootView
+        }
 
-        return viewDef
+        return viewDef!!
     }
 
-    fun setViewDef(vd: ViewModel.ViewDef) {
+    fun setViewDef(vd: ViewModel.ViewDef)
+    {
         viewDef = vd
     }
 
@@ -57,17 +62,20 @@ class GuideListFragment : ListFragment() {
      * implement. This mechanism allows activities to be notified of item
      * selections.
      */
-    interface Callbacks {
+    interface Callbacks
+    {
         /**
          * Callback for when an item has been selected.
          */
         fun onItemSelected(id: String)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
 
-        if (arguments != null && arguments!!.containsKey(GuideDetailFragment.ARG_ITEM_ID)) {
+        if (arguments != null && arguments!!.containsKey(GuideDetailFragment.ARG_ITEM_ID))
+        {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
@@ -93,11 +101,13 @@ class GuideListFragment : ListFragment() {
         setActivateOnItemClick(true)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+    {
         super.onViewCreated(view, savedInstanceState)
 
         // Restore the previously serialized activated item position.
-        if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION))
+        {
             setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION))
         }
 
@@ -107,25 +117,29 @@ class GuideListFragment : ListFragment() {
             setActivateOnItemClick(true)
     }
 
-    override fun onAttach(activity: Activity?) {
+    override fun onAttach(activity: Activity?)
+    {
         super.onAttach(activity)
 
         // Activities containing this fragment must implement its callbacks.
-        if (activity !is Callbacks) {
+        if (activity !is Callbacks)
+        {
             throw IllegalStateException("Activity must implement fragment's callbacks.")
         }
 
         mCallbacks = activity
     }
 
-    override fun onDetach() {
+    override fun onDetach()
+    {
         super.onDetach()
 
         // Reset the active callbacks interface to the dummy implementation.
         mCallbacks = sDummyCallbacks
     }
 
-    override fun onListItemClick(listView: ListView?, view: View?, position: Int, id: Long) {
+    override fun onListItemClick(listView: ListView?, view: View?, position: Int, id: Long)
+    {
         super.onListItemClick(listView, view, position, id)
 
         // Notify the active callbacks interface (the activity, if the
@@ -133,9 +147,11 @@ class GuideListFragment : ListFragment() {
         mCallbacks.onItemSelected(this.viewDef!!.getListItems()[position].viewId)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
+    override fun onSaveInstanceState(outState: Bundle)
+    {
         super.onSaveInstanceState(outState)
-        if (mActivatedPosition != ListView.INVALID_POSITION) {
+        if (mActivatedPosition != ListView.INVALID_POSITION)
+        {
             // Serialize and persist the activated item position.
             outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition)
         }
@@ -145,14 +161,17 @@ class GuideListFragment : ListFragment() {
      * Turns on activate-on-click mode. When this mode is on, list items will be
      * given the 'activated' state when touched.
      */
-    fun setActivateOnItemClick(activateOnItemClick: Boolean) {
+    fun setActivateOnItemClick(activateOnItemClick: Boolean)
+    {
         // When setting CHOICE_MODE_SINGLE, ListView will automatically
         // give items the 'activated' state when touched.
         if (!isVisible)
         //wait till it's visible is it's not to avoid illegal state exception
         {
             activateOnItemClickLater = true
-        } else {
+        }
+        else
+        {
             listView.choiceMode = if (activateOnItemClick)
                 ListView.CHOICE_MODE_SINGLE
             else
@@ -160,17 +179,22 @@ class GuideListFragment : ListFragment() {
         }
     }
 
-    private fun setActivatedPosition(position: Int) {
-        if (position == ListView.INVALID_POSITION) {
+    private fun setActivatedPosition(position: Int)
+    {
+        if (position == ListView.INVALID_POSITION)
+        {
             listView.setItemChecked(mActivatedPosition, false)
-        } else {
+        }
+        else
+        {
             listView.setItemChecked(position, true)
         }
 
         mActivatedPosition = position
     }
 
-    companion object {
+    companion object
+    {
 
         /**
          * The serialization (saved instance state) Bundle key representing the
@@ -182,8 +206,11 @@ class GuideListFragment : ListFragment() {
          * A dummy implementation of the [Callbacks] interface that does
          * nothing. Used only when this fragment is not attached to an activity.
          */
-        private val sDummyCallbacks: Callbacks = object : Callbacks {
-            override fun onItemSelected(id: String) {}
+        private val sDummyCallbacks: Callbacks = object : Callbacks
+        {
+            override fun onItemSelected(id: String)
+            {
+            }
         }
     }
 }

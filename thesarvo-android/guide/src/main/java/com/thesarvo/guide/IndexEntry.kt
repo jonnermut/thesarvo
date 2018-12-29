@@ -8,7 +8,8 @@ import java.util.HashMap
 /**
  * Created by Karl on 4/09/2014.
  */
-class IndexEntry : Serializable {
+class IndexEntry : Serializable
+{
 
     var key: String? = null
     var viewId: String
@@ -20,7 +21,8 @@ class IndexEntry : Serializable {
 
     var type: IndexType
 
-    enum class IndexType : Serializable {
+    enum class IndexType : Serializable
+    {
         CLIMB,
         PROBLEM,
         HEADING,
@@ -32,7 +34,8 @@ class IndexEntry : Serializable {
 
     }
 
-    init {
+    init
+    {
         viewId = ""
         viewName = ""
         elementID = ""
@@ -40,7 +43,8 @@ class IndexEntry : Serializable {
         type = IndexType.INDEX_TYPE_INVALID
     }
 
-    override fun toString(): String {
+    override fun toString(): String
+    {
         return "IndexEntry{" +
                 "viewId='" + viewId + '\''.toString() +
                 ", viewName='" + viewName + '\''.toString() +
@@ -49,7 +53,8 @@ class IndexEntry : Serializable {
                 '}'.toString()
     }
 
-    fun toMatrixCursor(): MatrixCursor {
+    fun toMatrixCursor(): MatrixCursor
+    {
         val cursor = MatrixCursor(INDEX_ENTRY_COLUMNS)
 
         val columnValues = arrayOf(Integer.valueOf(key), viewId, viewName, elementID, text, type)
@@ -58,7 +63,8 @@ class IndexEntry : Serializable {
         return cursor
     }
 
-    companion object {
+    companion object
+    {
         private const val serialVersionUID: Long = 1
 
         val INDEX_ENTRY_COLUMNS = arrayOf("_ID", "viewId", "viewName", "elementID", "text", "type")

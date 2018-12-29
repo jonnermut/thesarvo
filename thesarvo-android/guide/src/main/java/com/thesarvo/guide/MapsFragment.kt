@@ -14,12 +14,14 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 import java.util.ArrayList
 
-class MapsFragment : Fragment() {
+class MapsFragment : Fragment()
+{
 
     private var mMap: GoogleMap? = null // Might be null if Google Play services APK is not available.
     private var singleNodeData: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
 
         //setContentView(R.layout.activity_maps);
@@ -28,20 +30,26 @@ class MapsFragment : Fragment() {
         //getActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        if (arguments!!.containsKey(GuideDetailFragment.SINGLE_NODE_DATA)) {
+        if (arguments!!.containsKey(GuideDetailFragment.SINGLE_NODE_DATA))
+        {
             singleNodeData = arguments!!.getString(GuideDetailFragment.SINGLE_NODE_DATA)
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        if (rootView != null) {
+                              savedInstanceState: Bundle?): View?
+    {
+        if (rootView != null)
+        {
             val parent = rootView!!.parent as ViewGroup
             parent?.removeView(rootView)
         }
-        try {
+        try
+        {
             rootView = inflater.inflate(R.layout.activity_maps, container, false)
-        } catch (e: InflateException) {
+        }
+        catch (e: InflateException)
+        {
             //Map is already created, do nothing
         }
 
@@ -50,9 +58,11 @@ class MapsFragment : Fragment() {
         return rootView
     }
 
-    override fun onDestroyView() {
+    override fun onDestroyView()
+    {
         super.onDestroyView()
-        if (mMap != null) {
+        if (mMap != null)
+        {
             /*getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.map))
                     .commit();*/
             //rootView.setVisibility(View.GONE);
@@ -60,7 +70,8 @@ class MapsFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
+    override fun onResume()
+    {
         super.onResume()
         setUpMapIfNeeded()
     }
@@ -82,14 +93,17 @@ class MapsFragment : Fragment() {
      * stopped or paused), [.onCreate] may not be called again so we should call this
      * method in [.onResume] to guarantee that it will be called.
      */
-    private fun setUpMapIfNeeded() {
+    private fun setUpMapIfNeeded()
+    {
         // Do a null check to confirm that we have not already instantiated the map.
-        if (mMap == null) {
+        if (mMap == null)
+        {
             // Try to obtain the map from the SupportMapFragment.
 
             val mapFragment = fragmentManager!!.findFragmentById(R.id.map) as SupportMapFragment
 
-            if (mapFragment != null) {
+            if (mapFragment != null)
+            {
                 /* FIXME getMap doesnt work
                 mMap = mapFragment.getMap();
                 // Check if we were successful in obtaining the map.
@@ -109,29 +123,37 @@ class MapsFragment : Fragment() {
      *
      * This should only be called once and when we are sure that [.mMap] is not null.
      */
-    private fun setUpMap() {
+    private fun setUpMap()
+    {
 
         if (mMap == null)
             return
 
-        try {
+        try
+        {
             mMap!!.isMyLocationEnabled = true
-        } catch (ex: SecurityException) {
+        }
+        catch (ex: SecurityException)
+        {
             Log.e("thesarvo", "Security Exception", ex)
         }
 
 
         val gpsPoints = gpsPoints
 
-        if (singleNodeData != null) {
+        if (singleNodeData != null)
+        {
 
         }
 
-        for (gpsNode in gpsPoints) {
-            for (point in gpsNode.points) {
+        for (gpsNode in gpsPoints)
+        {
+            for (point in gpsNode.points)
+            {
                 if (point != null
                         && point.isValid
-                        && point.latLng != null) {
+                        && point.latLng != null)
+                {
                     mMap!!.addMarker(MarkerOptions()
                             .position(point.latLng)
                             .title("" + point.description)
@@ -142,7 +164,8 @@ class MapsFragment : Fragment() {
         }
     }
 
-    companion object {
+    companion object
+    {
         private var rootView: View? = null
 
         val gpsPoints: List<GPSNode> = ArrayList()

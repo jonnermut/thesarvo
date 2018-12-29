@@ -10,11 +10,16 @@ import com.google.android.vending.expansion.downloader.DownloaderClientMarshalle
 /**
  * Created by Karl on 11/09/2014.
  */
-class AssetAlarmReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        try {
+class AssetAlarmReceiver : BroadcastReceiver()
+{
+    override fun onReceive(context: Context, intent: Intent)
+    {
+        try
+        {
             DownloaderClientMarshaller.startDownloadServiceIfRequired(context, intent, AssetsDownloader::class.java)
-        } catch (e: PackageManager.NameNotFoundException) {
+        }
+        catch (e: PackageManager.NameNotFoundException)
+        {
             e.printStackTrace()
         }
 

@@ -6,7 +6,8 @@ import android.os.Build
 /**
  * Created by jon on 29/12/2016.
  */
-class GuideApplication : Application() {
+class GuideApplication : Application()
+{
 
     lateinit var resourceManager: ResourceManager
 
@@ -22,7 +23,8 @@ class GuideApplication : Application() {
     internal var mapsIndexed = false
     internal lateinit var indexManager: IndexManager
 
-    override fun onCreate() {
+    override fun onCreate()
+    {
         super.onCreate()
         instance = this
 
@@ -35,11 +37,13 @@ class GuideApplication : Application() {
     }
 
     // callback from search index
-    fun searchIndexed() {
+    fun searchIndexed()
+    {
 
     }
 
-    companion object {
+    companion object
+    {
         private var instance: GuideApplication? = null
 
         var runningInRoboelectric = false
@@ -48,7 +52,8 @@ class GuideApplication : Application() {
         private val TESTER = 10000017
         private val SEARCH_PROJECTION = arrayOf("VIEW_ID", "ELEMENT_ID")
 
-        fun get(): GuideApplication? {
+        fun get(): GuideApplication?
+        {
             return instance
         }
 
@@ -58,7 +63,8 @@ class GuideApplication : Application() {
         //    }
 
         val isRunningInRoboelectric: Boolean
-            get() {
+            get()
+            {
                 val finger = Build.FINGERPRINT
                 return "robolectric" == finger
             }

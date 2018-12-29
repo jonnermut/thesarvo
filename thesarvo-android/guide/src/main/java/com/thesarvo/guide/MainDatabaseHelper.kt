@@ -16,21 +16,27 @@ internal class MainDatabaseHelper/*
      * Instantiates an open helper for the provider's SQLite data repository
      * Do not do database creation and upgrade here.
      */
-(context: Context, dbName: String, storageDirectory: String) : SQLiteAssetHelper(context, dbName, storageDirectory, null, 1) {
+(context: Context, dbName: String, storageDirectory: String) : SQLiteAssetHelper(context, dbName, storageDirectory, null, 1)
+{
 
-    init {
+    init
+    {
 
-        try {
+        try
+        {
             // in our world, where we provide a fully formed and up to date DB in the assets file,
             // if we have a newer file in out assets than on disk, then blow away the file on disk
             // this will get recreated by the super class
 
             val onDiskfile = File("$storageDirectory/$dbName")
 
-            if (onDiskfile.exists() && onDiskfile.lastModified() < BuildConfig.DB_ASSET_LASTMOD) {
+            if (onDiskfile.exists() && onDiskfile.lastModified() < BuildConfig.DB_ASSET_LASTMOD)
+            {
                 onDiskfile.delete()
             }
-        } catch (t: Throwable) {
+        }
+        catch (t: Throwable)
+        {
             Log.e("MainDatabaseHelper", "Error deleting old DB", t)
         }
 
@@ -49,7 +55,8 @@ internal class MainDatabaseHelper/*
         Log.d("Table Helper", "Tables created");
     }*/
 
-    override fun onUpgrade(sqLiteDatabase: SQLiteDatabase, i: Int, i2: Int) {
+    override fun onUpgrade(sqLiteDatabase: SQLiteDatabase, i: Int, i2: Int)
+    {
 
     }
 

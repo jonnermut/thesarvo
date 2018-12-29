@@ -10,16 +10,19 @@ import java.util.concurrent.ConcurrentMap
  * Created by jon on 5/9/17.
  */
 
-class Index : Serializable {
+class Index : Serializable
+{
 
     //public long assetLastMod;
 
     private val indexEntries = ConcurrentHashMap<String, IndexEntry>()
 
 
-    fun index(entry: IndexEntry) {
+    fun index(entry: IndexEntry)
+    {
 
-        if (entry.searchText == null) {
+        if (entry.searchText == null)
+        {
             var t: String? = entry.text
             if (t == null)
                 t = entry.viewName
@@ -28,7 +31,8 @@ class Index : Serializable {
         }
         val key = entry.key
 
-        if (key != null) {
+        if (key != null)
+        {
 
 
             synchronized(this) {
@@ -38,19 +42,24 @@ class Index : Serializable {
 
     }
 
-    fun search(selection: String?): List<IndexEntry> {
+    fun search(selection: String?): List<IndexEntry>
+    {
         val ret = ArrayList<IndexEntry>()
 
-        if (selection == null || selection.length < 2) {
+        if (selection == null || selection.length < 2)
+        {
             return ret
         }
 
         synchronized(this) {
-            for ((key, ie) in indexEntries) {
+            for ((key, ie) in indexEntries)
+            {
                 val searchText = ie.searchText
-                if (searchText != null && searchText.contains(selection)) {
+                if (searchText != null && searchText.contains(selection))
+                {
                     ret.add(ie)
-                    if (ret.size > 50) {
+                    if (ret.size > 50)
+                    {
                         return ret
                     }
                 }
@@ -59,7 +68,8 @@ class Index : Serializable {
         return ret
     }
 
-    companion object {
+    companion object
+    {
         private const val serialVersionUID: Long = 1
     }
 }

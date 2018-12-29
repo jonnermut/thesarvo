@@ -16,7 +16,8 @@ import java.io.ObjectOutputStream
 /**
  * Created by jon on 28/12/2016.
  */
-internal class IndexManager(private val guideApplication: GuideApplication, private val resourceManager: ResourceManager) {
+internal class IndexManager(private val guideApplication: GuideApplication, private val resourceManager: ResourceManager)
+{
 
     private val indexDir: File
     private val indexTimestamp: File
@@ -25,7 +26,8 @@ internal class IndexManager(private val guideApplication: GuideApplication, priv
     var index: Index? = null
 
 
-    init {
+    init
+    {
         this.indexDir = File(guideApplication.filesDir, "index")
         indexDir.mkdirs()
         this.indexFile = File(indexDir, "index.ser")
@@ -33,72 +35,96 @@ internal class IndexManager(private val guideApplication: GuideApplication, priv
 
     }
 
-    fun startup() {
+    fun startup()
+    {
 
         loadIndex()
     }
 
 
-    private fun loadIndex() {
+    private fun loadIndex()
+    {
         val assetLastMod = BuildConfig.DB_ASSET_LASTMOD
         var copyFromAsset = true
 
-        if (indexFile.exists() && indexTimestamp.exists()) {
-            try {
+        if (indexFile.exists() && indexTimestamp.exists())
+        {
+            try
+            {
                 val timestamp = FileUtils.readFileToString(indexTimestamp)
                 val ts = java.lang.Long.parseLong(timestamp)
                 copyFromAsset = assetLastMod > ts
 
-            } catch (e: Exception) {
+            }
+            catch (e: Exception)
+            {
                 e.printStackTrace()
             }
 
         }
 
-        if (copyFromAsset) {
+        if (copyFromAsset)
+        {
             var `is`: InputStream? = null
-            try {
+            try
+            {
                 `is` = guideApplication.assets.open("index.ser")
                 IOUtils.copy(`is`!!, FileOutputStream(indexFile))
                 IOUtils.closeQuietly(`is`)
 
                 FileUtils.writeStringToFile(indexTimestamp, "" + assetLastMod)
-            } catch (e: IOException) {
+            }
+            catch (e: IOException)
+            {
                 e.printStackTrace()
             }
 
         }
 
         synchronized(this) {
-            if (indexFile.exists()) {
+            if (indexFile.exists())
+            {
                 var ois: ObjectInputStream? = null
-                try {
+                try
+                {
                     ois = ObjectInputStream(FileInputStream(indexFile))
                     this.index = ois.readObject() as Index
 
-                } catch (e: Exception) {
+                }
+                catch (e: Exception)
+                {
                     e.printStackTrace()
-                } finally {
+                }
+                finally
+                {
                     IOUtils.closeQuietly(ois)
                 }
-            } else {
+            }
+            else
+            {
                 Log.w("thesarvo", "Index file did not exist at $indexFile")
             }
         }
     }
 
-    fun saveIndex() {
+    fun saveIndex()
+    {
         var fos: FileOutputStream? = null
         var out: ObjectOutputStream? = null
         synchronized(this) {
-            try {
+            try
+            {
                 fos = FileOutputStream(indexFile)
                 out = ObjectOutputStream(fos)
                 out!!.writeObject(index)
 
-            } catch (e: Exception) {
+            }
+            catch (e: Exception)
+            {
                 e.printStackTrace()
-            } finally {
+            }
+            finally
+            {
                 IOUtils.closeQuietly(out)
                 IOUtils.closeQuietly(fos)
             }
@@ -106,7 +132,8 @@ internal class IndexManager(private val guideApplication: GuideApplication, priv
         }
     }
 
-    fun resetIndex() {
+    fun resetIndex()
+    {
         synchronized(this) {
             index = Index()
         }
