@@ -2,6 +2,7 @@ package com.thesarvo.guide;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,12 +107,14 @@ public class MapsFragment extends Fragment
 
             if (mapFragment != null)
             {
+                /* FIXME getMap doesnt work
                 mMap = mapFragment.getMap();
                 // Check if we were successful in obtaining the map.
                 if (mMap != null)
                 {
                     setUpMap();
                 }
+                */
             }
         }
     }
@@ -128,7 +131,15 @@ public class MapsFragment extends Fragment
         if (mMap == null)
             return;
 
-        mMap.setMyLocationEnabled(true);
+        try
+        {
+            mMap.setMyLocationEnabled(true);
+        }
+        catch (SecurityException ex)
+        {
+            Log.e("thesarvo", "Security Exception", ex);
+        }
+
 
         List<GPSNode> gpsPoints = getGPSPoints();
 

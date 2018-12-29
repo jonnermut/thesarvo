@@ -21,6 +21,8 @@ allprojects {
     }
 }
 
+
+
 task zipExtension(type:Zip) {
     from "$projectDir/../thesarvo_iphone_2.0/thesarvo/www"
     //include "www/**/*" main.2.com.thesarvo.guide.obb
