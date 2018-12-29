@@ -1,45 +1,39 @@
-package com.thesarvo.guide;
+package com.thesarvo.guide
 
-import android.content.Context;
-import android.content.res.AssetFileDescriptor;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+import android.content.Context
+import android.content.res.AssetFileDescriptor
+import android.database.sqlite.SQLiteDatabase
+import android.util.Log
 
-import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
+import com.readystatesoftware.sqliteasset.SQLiteAssetHelper
 
-import java.io.File;
+import java.io.File
 
 /**
  * Helper class that actually creates and manages the provider's underlying data repository.
  */
-final class MainDatabaseHelper extends SQLiteAssetHelper
-{
-
-    /*
+internal class MainDatabaseHelper/*
      * Instantiates an open helper for the provider's SQLite data repository
      * Do not do database creation and upgrade here.
      */
-    MainDatabaseHelper(Context context, String dbName, String storageDirectory)
-    {
-        super(context, dbName, storageDirectory, null, 1);
+(context: Context, dbName: String, storageDirectory: String) : SQLiteAssetHelper(context, dbName, storageDirectory, null, 1) {
 
-        try
-        {
+    init {
+
+        try {
             // in our world, where we provide a fully formed and up to date DB in the assets file,
             // if we have a newer file in out assets than on disk, then blow away the file on disk
             // this will get recreated by the super class
 
-            File onDiskfile = new File (storageDirectory + "/" + dbName);
+            val onDiskfile = File("$storageDirectory/$dbName")
 
-            if (onDiskfile.exists() && onDiskfile.lastModified() < BuildConfig.DB_ASSET_LASTMOD)
-            {
-                onDiskfile.delete();
+            if (onDiskfile.exists() && onDiskfile.lastModified() < BuildConfig.DB_ASSET_LASTMOD) {
+                onDiskfile.delete()
             }
+        } catch (t: Throwable) {
+            Log.e("MainDatabaseHelper", "Error deleting old DB", t)
         }
-        catch (Throwable t)
-        {
-            Log.e("MainDatabaseHelper", "Error deleting old DB", t);
-        }
+
     }
 
     /*
@@ -55,9 +49,7 @@ final class MainDatabaseHelper extends SQLiteAssetHelper
         Log.d("Table Helper", "Tables created");
     }*/
 
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2)
-    {
+    override fun onUpgrade(sqLiteDatabase: SQLiteDatabase, i: Int, i2: Int) {
 
     }
 

@@ -1,23 +1,21 @@
-package com.thesarvo.guide;
+package com.thesarvo.guide
 
-import android.app.SearchManager;
-import android.content.ContentProvider;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.UriMatcher;
-import android.database.AbstractCursor;
-import android.database.Cursor;
-import android.database.MatrixCursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
-import android.net.Uri;
-import android.provider.BaseColumns;
-import android.util.Log;
+import android.app.SearchManager
+import android.content.ContentProvider
+import android.content.ContentUris
+import android.content.ContentValues
+import android.content.Context
+import android.content.UriMatcher
+import android.database.AbstractCursor
+import android.database.Cursor
+import android.database.MatrixCursor
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteQueryBuilder
+import android.net.Uri
+import android.provider.BaseColumns
+import android.util.Log
 
-import java.util.List;
-
-import static com.thesarvo.guide.IndexEntry.INDEX_ENTRY_COLUMNS;
+import com.thesarvo.guide.IndexEntry.INDEX_ENTRY_COLUMNS
 
 /**
  * Created by Karl on 5/09/2014.
@@ -31,8 +29,7 @@ import static com.thesarvo.guide.IndexEntry.INDEX_ENTRY_COLUMNS;
  *
  * TODO needs to be a way to re-index in app via options etc
  */
-public class IndexContentProvider extends ContentProvider
-{
+class IndexContentProvider : ContentProvider() {
 
     /*
     private MainDatabaseHelper mOpenHelper;
@@ -78,18 +75,16 @@ public class IndexContentProvider extends ContentProvider
 */
 
 
-    @Override
-    public boolean onCreate()
-    {
-        Context context = getContext();
+    override fun onCreate(): Boolean {
+        val context = context
 
-        /*
+/*
          * Creates a new helper object. This method always returns quickly.
          * Notice that the database itself isn't created or opened
          * until SQLiteOpenHelper.getWritableDatabase is called
          */
 
-        /*
+/*
         mOpenHelper = new MainDatabaseHelper(
                 context,        // the application context
                 DBNAME,              // the name of the database)
@@ -107,45 +102,44 @@ public class IndexContentProvider extends ContentProvider
         matcher.addURI(AUTHORITY, VIEW_PSEUDOTABLE + "/*", VIEW_PSEUDOTABLE_TABLE_I);
 */
 
-        return true;
-    }
+        return true
+}
 
-    @Override
-    public Cursor query(Uri uri,
-                        String[] projection,
-                        String selection,
-                        String[] selectionArgs,
-                        String sortOrder)
-    {
-        if (uri.toString().contains("/search_suggest_query/"))
-        {
-            selection = uri.getLastPathSegment().toLowerCase();
+public override fun query(uri:Uri,
+projection:Array<String>?,
+selection:String?,
+selectionArgs:Array<String>?,
+sortOrder:String?):Cursor? {
+var selection = selection
+if (uri.toString().contains("/search_suggest_query/"))
+{
+selection = uri.getLastPathSegment()!!.toLowerCase()
 
-            List<IndexEntry> results = GuideApplication.get().indexManager.getIndex().search(selection);
+val results = GuideApplication.get()!!.indexManager.index!!.search(selection)
 
 
-            String[] columns = new String[] { "_id", SearchManager.SUGGEST_COLUMN_TEXT_1,  SearchManager.SUGGEST_COLUMN_TEXT_2, SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID };
+val columns = arrayOf<String>("_id", SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID)
 
-            //MatrixCursor matrixCursor= new MatrixCursor(columns);
+ //MatrixCursor matrixCursor= new MatrixCursor(columns);
             //startManagingCursor(matrixCursor);
             //INDEX_ENTRY_COLUMNS
-            MatrixCursor cursor = new MatrixCursor(columns);
+            val cursor = MatrixCursor(columns)
 
 
-            for (IndexEntry ie: results)
-            {
-                Object[] columnValues = new Object[] { ie.key, ie.text, ie.subtext, ie.key };
-                cursor.addRow(columnValues);
-                //matrixCursor.addRow(new Object[]{ie.key, ie.toMatrixCursor(), "...."});
+for (ie in results)
+{
+val columnValues = arrayOf<Any>(ie.key, ie.text, ie.subtext, ie.key)
+cursor.addRow(columnValues)
+ //matrixCursor.addRow(new Object[]{ie.key, ie.toMatrixCursor(), "...."});
             }
 
-            return cursor;
+return cursor
 
-        }
+}
 
 
 
-        /*
+ /*
         db = mOpenHelper.getWritableDatabase();
         SQLiteQueryBuilder qBuilder = new SQLiteQueryBuilder();
 
@@ -195,14 +189,12 @@ public class IndexContentProvider extends ContentProvider
 
         return c;
         */
-        return null;
-    }
+        return null
+}
 
 
-    @Override
-    public Uri insert(Uri uri, ContentValues contentValues)
-    {
-        /*
+public override fun insert(uri:Uri, contentValues:ContentValues?):Uri? {
+ /*
         //check which table we're witting to
         int table = matcher.match(uri);
         String tableS = "";
@@ -231,13 +223,11 @@ public class IndexContentProvider extends ContentProvider
 
         return ContentUris.appendId(uri.buildUpon(), result).build();
         */
-        return null;
-    }
+        return null
+}
 
-    @Override
-    public int delete(Uri uri, String s, String[] strings)
-    {
-        /*
+public override fun delete(uri:Uri, s:String?, strings:Array<String>?):Int {
+ /*
         int table = matcher.match(uri);
         String viewId  = uri.getLastPathSegment();
         db = mOpenHelper.getWritableDatabase();
@@ -252,28 +242,23 @@ public class IndexContentProvider extends ContentProvider
             db.endTransaction();
         }
         */
-        return 0;
-    }
+        return 0
+}
 
 
-    @Override
-    public int update(Uri uri, ContentValues contentValues, String s, String[] strings)
-    {
-        return 0;
-    }
+public override fun update(uri:Uri, contentValues:ContentValues?, s:String?, strings:Array<String>?):Int {
+return 0
+}
 
 
-    @Override
-    /**
-     * Since this won't be used by external apps we don't need this
-     */
-    public String getType(Uri uri)
-    {
-        return null;
-    }
+public override/**
+ * Since this won't be used by external apps we don't need this
+ */ fun getType(uri:Uri):String? {
+return null
+}
 
 
-    /*
+ /*
     // A string that defines the SQL statement for creating a table
     private static final String SQL_CREATE_MAIN = "CREATE TABLE " +
             "main" +                       // Table's name
