@@ -89,6 +89,11 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
             val builder = factory.newDocumentBuilder()
 
             val item = guideListItems[viewId]
+            if (item == null)
+            {
+                return
+            }
+
 
             val guideId = viewId!!.substring(6)
 
@@ -148,7 +153,7 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
     }
 
     private fun indexGPSElements(dom: Document) {
-        val gpsNodes = MapsFragment.gpsPoints
+        var gpsNodes = MapsFragment.gpsPoints
 
         for (e in Xml.getElements(dom.getElementsByTagName("gps"))) {
             val id = e.getAttribute("id")
@@ -163,7 +168,7 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
 
             //Log.d("Indexing", "adding gps node for " + item.getText());
             val gpsnode = GPSNode(id, points)
-            gpsNodes.add(gpsnode)
+            gpsNodes += gpsnode
 
             addGPSEntry(gpsnode)
 

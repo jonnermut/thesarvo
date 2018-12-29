@@ -20,7 +20,7 @@ class IndexEntry : Serializable {
 
     var type: IndexType
 
-    internal enum class IndexType : Serializable {
+    enum class IndexType : Serializable {
         CLIMB,
         PROBLEM,
         HEADING,

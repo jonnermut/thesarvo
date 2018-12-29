@@ -79,7 +79,7 @@ class GuideListFragment : ListFragment() {
 
 
         // TODO: replace with a real list adapter.
-        val adapter = ArrayAdapter<ListItem>(
+        val adapter = ArrayAdapter<ViewModel.ListItem>(
                 activity!!,
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,

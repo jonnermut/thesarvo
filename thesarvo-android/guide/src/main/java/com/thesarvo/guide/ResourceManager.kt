@@ -127,7 +127,7 @@ class ResourceManager(internal var guideApplication: GuideApplication) : IDownlo
     fun getWWWAsset(file: String): InputStream? {
         Log.d("GuideListActivity", "getWWWAsset: $file")
 
-        if (guideApplication.isRunningInRoboelectric) {
+        if (GuideApplication.isRunningInRoboelectric) {
             // try files on disk first
             val userDir = System.getProperty("user.dir") // should be /git/thesarvo/thesarvo-android/guide
             val downloadDir = File("$userDir/../../thesarvo_iphone_2.0/thesarvo")

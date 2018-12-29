@@ -118,15 +118,19 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
             if (`is` != null) {
                 try {
                     document = documentBuilder!!.parse(`is`)
-                    return
+
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
 
             }
-            // create default empty
-            document = documentBuilder!!.newDocument()
-            document.appendChild(document.createElement("updates"))
+            else
+            {
+                // create default empty
+
+                document = documentBuilder!!.newDocument()
+                document.appendChild(document.createElement("updates"))
+            }
         }
 
         fun save() {

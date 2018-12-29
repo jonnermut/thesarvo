@@ -8,8 +8,7 @@ import android.os.Build
  */
 class GuideApplication : Application() {
 
-    var resourceManager: ResourceManager
-        internal set
+    lateinit var resourceManager: ResourceManager
 
 
     /**
@@ -21,7 +20,7 @@ class GuideApplication : Application() {
 
     internal var indexed = false
     internal var mapsIndexed = false
-    internal var indexManager: IndexManager
+    internal lateinit var indexManager: IndexManager
 
     override fun onCreate() {
         super.onCreate()
