@@ -1,14 +1,14 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '28.0.3'
     //useLibrary  'org.apache.http.legacy'
 
     defaultConfig {
        // applicationId "com.android.vending.expansion.zipfile"
-        minSdkVersion 13
-        targetSdkVersion 15
+        minSdkVersion 15
+        targetSdkVersion 27
     }
 
     buildTypes {
