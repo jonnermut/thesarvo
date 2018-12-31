@@ -11,9 +11,6 @@ thesarvo_iphone_1.3/www/data
 thesarvo_iphone_1.3/www/thesarvoguide2
 thesarvo-android/build
 thesarvo_iphone_1.3/old_data
-thesarvo_android/guide/src/main/assets/www/*
-thesarvo_android/guide/src/main/assets/www
-thesarvo_android/guide/src/main/assets
 thesarvo_android/guide/src/release/res/values/google_maps_api.xml #don't want to make API key public
 thesarvo_iphone_2.0/thesarvo/www/data
 thesarvo_iphone_2.0/thesarvo/www/thesarvoguide2
@@ -40,3 +37,4 @@ dist_cert_2017-06.p12
 copyToProd.sh
 
 thesarvoguide2/war/thesarvoguide2
+thesarvo-android/guide/src/main/assets/www/thesarvoguide2

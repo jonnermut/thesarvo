@@ -1,12 +1,13 @@
-Whats New
-=========
+Whats New v2.4
+==============
 
 * Content update
 * Improved guide table of contents: 
-- allows climbs to be shown or hidden
-- shows sub pages as well as page content
-- search in page or all 
-- shows Map in table of contents if there is one in the guide
+    - TOC stays open when you first open a guide - allowing you to quickly go to the section you want
+    - allows climbs to be shown or hidden
+    - shows sub pages as well as page content
+    - search in page or all 
+    - shows Map in TOC if there is one in the guide
 * On a app restart the entire path to the last guide shown is shown
 * Sync thesarvo index so that new and split guides automatically show up
 * Improve weather links to use mobile BOM site

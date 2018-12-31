@@ -1,6 +1,7 @@
 package com.thesarvo.guide
 
 import android.annotation.TargetApi
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,13 +9,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.JavascriptInterface
-import android.webkit.MimeTypeMap
-import android.webkit.WebResourceResponse
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import android.widget.Toast
+import com.fasterxml.jackson.databind.ObjectMapper
 
 import com.google.common.base.Charsets
 
@@ -104,54 +101,57 @@ class GuideDetailFragment : Fragment()
 
             webview.loadUrl(url)
 
-            if (viewId.startsWith("guide."))
-            {
-                var guideData: String?
-
-                if (singleNodeData != null)
-                    guideData = singleNodeData
-                else
-                    guideData = getGuideData(viewId)
-
-                if (guideData != null)
-                {
-
-                    if (guideData.indexOf("<guide") < 0)
-                        guideData = "<guide>$guideData</guide>"
-
-                    guideData = guideData.replace("\n", "\\n")
-                    guideData = guideData.replace("\r", "\\r")
-                    guideData = guideData.replace("'", "\\'")
-
-                    val sb = StringBuilder()
-                    sb.append("var guide_pageid='").append(getGuideId(viewId)).append("';\n")
-                    sb.append("var guide_xml='").append(guideData).append("';\n")
-
-                    if (singleNodeData != null)
-                    {
-                        sb.append("var guide_callOut=true;\n")
-
-                    }
-
-                    if (elementId != null)
-                    {
-                        sb.append(" var guide_showId='")
-                        sb.append(elementId)
-                        sb.append("'; \n")
 
 
-                    }
-
-
-                    //sb.append("var guide_callout='").append(guideData).append("';\n");
-                    val js = sb.toString()
-                    //webview.evaluateJavascript(js, null);
-                    webview.loadUrl("javascript:$js")
-                }
-            }
         }
 
         return rootView
+    }
+
+    private fun getGuideDataJson(): String
+    {
+        val viewId = this.viewId
+        val map = HashMap<String, Object>()
+
+        // Show the dummy content as text in a TextView.
+        if (viewId != null)
+        {
+            var guideData: String?
+
+            if (singleNodeData != null)
+                guideData = singleNodeData
+            else
+                guideData = getGuideData(viewId)
+
+            if (guideData != null)
+            {
+
+                if (guideData.indexOf("<guide") < 0)
+                    guideData = "<guide>$guideData</guide>"
+
+                //guideData = guideData.replace("\n", "\\n")
+                //guideData = guideData.replace("\r", "\\r")
+                //guideData = guideData.replace("'", "\\'")
+
+                map["guide_pageid"] = getGuideId(viewId) as Object
+                map["guide_xml"] = guideData as Object
+
+                if (singleNodeData != null)
+                {
+                    map["guide_callOut"] = true as Object
+
+                }
+
+                if (elementId != null)
+                {
+                    map["guide_showId"] = elementId as Object
+
+                }
+            }
+        }
+        val om = ObjectMapper()
+        val ret = om.writeValueAsString(map)
+        return ret
     }
 
     private fun setupWebView(webview: WebView)
@@ -170,13 +170,16 @@ class GuideDetailFragment : Fragment()
         //    Level16Apis.enableUniversalAccess(settings)
 
 
-        //Level19Apis.setWebContentsDebuggingEnabled(webview)
+        WebView.setWebContentsDebuggingEnabled(true)
 
         webview.webViewClient = WVClient()
 
+        webview.webChromeClient = MyWebChromeClient()
+
+
         // FIXME
-        //js = JSInterface()
-        //webview.addJavascriptInterface(js, "thesarvoApp") // TODO
+        js = JSInterface()
+        webview.addJavascriptInterface(js, "thesarvoApp") // TODO
     }
 
     /*
@@ -220,9 +223,9 @@ class GuideDetailFragment : Fragment()
     public inner class JSInterface
     {
         @JavascriptInterface
-        fun hello(): String
+        public fun hello(): String
         {
-            return "hello world"
+            return getGuideDataJson()
         }
 
     }
@@ -321,9 +324,31 @@ class GuideDetailFragment : Fragment()
         return id
     }
 
+    inner class MyWebChromeClient: android.webkit.WebChromeClient()
+    {
+        override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean
+        {
+            Log.i("thesavo", consoleMessage?.message())
+            return super.onConsoleMessage(consoleMessage)
+        }
+
+    }
+
+
     inner class WVClient : WebViewClient()
     {
         internal var map = MimeTypeMap.getSingleton()
+
+        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?)
+        {
+            super.onPageStarted(view, url, favicon)
+        }
+
+        override fun onPageFinished(view: WebView?, url: String?)
+        {
+            super.onPageFinished(view, url)
+
+        }
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean
         {
