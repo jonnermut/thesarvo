@@ -1,26 +1,42 @@
 package com.thesarvo.guide
 
-import org.w3c.dom.Document
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.w3c.dom.Element
 
 import java.io.InputStream
 import java.util.ArrayList
 import java.util.LinkedHashMap
 
-import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
 
 /**
  * Created by jon on 25/01/14.
  */
-class ViewModel @JvmOverloads constructor(inputStream: InputStream = ViewModel::class.java.getResourceAsStream("/config.xml"))
+class Model
 {
 
+    val excludePages: List<Long> = listOf(
+            11370498, // Buy and download guides
+            13467650, // Hardcopy Guides
+            14450710, // Guide Manual
+            330433081, // The Rookeries
+            1147, //Additional Topos and Maps
+            1148, // Articles
+            1516, // Mt Wellington Guide Feedback
+            2883716, // Mt Wellington Updates
+            276267033, // Pipes Guide To Do
+            9404496 // GPS
 
-    internal var views: MutableMap<String, ViewDef> = LinkedHashMap()
-    internal var guideListItems: MutableMap<String, ListItem> = LinkedHashMap()
-    var rootView: ViewDef? = null
-        internal set
+    // MAKE SURE YOU UPDATE THE SAME LIST in Model.swift !!!
+    )
+
+    var guides: MutableMap<String, Guide> = LinkedHashMap()
+
+    //internal var guideListItems: MutableMap<String, ListItem> = LinkedHashMap()
+    //var rootView: ViewDef? = null
+    //    internal set
+
+    lateinit var rootGuide: Guide
 
     inner class ViewDef(element: Element)
     {
@@ -107,62 +123,66 @@ class ViewModel @JvmOverloads constructor(inputStream: InputStream = ViewModel::
         }
     }
 
+    fun startup()
+    {
+
+        val om = ObjectMapper()
+        val stream = ResourceManager.get().getDataAsset("index.json")
+        rootGuide = om.readValue(stream, Guide::class.java)
+
+        val extraStream = ResourceManager.get().getWWWAsset("www/index-extra.json")
+        val extras = om.readValue(extraStream, Guide::class.java)
+        rootGuide.children.addAll(extras.children)
+
+
+        process(rootGuide)
+    }
+
+    fun process(guide: Guide)
+    {
+        guides[guide.viewIdOrId] = guide
+
+        if (guide.title.endsWith(" bouldering"))
+        {
+            guide.title = guide.title.removeSuffix(" bouldering")
+        }
+        if (guide.title == "The Tasmanian Bouldering Guide")
+        {
+            guide.title = "Bouldering"
+        }
+
+        guide.children = ArrayList<Guide>(
+                guide.children.filter {
+                    !excludePages.contains(it.id)
+                    && !it.title.toLowerCase().contains("gallery")
+            })
+
+
+        for (c in guide.children)
+        {
+            process(c)
+        }
+    }
+
+
     init
     {
 
 
-        try
-        {
-            val factory = DocumentBuilderFactory.newInstance()
-
-            val builder = factory.newDocumentBuilder()
-            val dom = builder.parse(inputStream)
-            val root = dom.documentElement
-
-            for (element in Xml.getElementsByName(root, "view"))
-            {
-                val v = ViewDef(element)
-                views[v.id] = v
-
-                if (v.isRootView)
-                    rootView = v
-            }
-
-            for (element1 in Xml.getElements(dom.getElementsByTagName("listItem")))
-            {
-                val l = ListItem(element1)
-
-                if (l.viewId.startsWith("guide."))
-                {
-                    guideListItems[l.viewId] = l
-                }
-            }
-
-
-        }
-        catch (t: Throwable)
-        {
-            t.printStackTrace()
-        }
-
     }
 
-    fun getViews(): Map<String, ViewDef>
+    fun getGuide(id: String): Guide?
     {
-        return views
+        return guides.get(id)
     }
 
-    fun getGuideListItems(): Map<String, ListItem>
-    {
-        return guideListItems
-    }
 
     companion object
     {
 
-        private val instance = ViewModel()
+        private val instance = Model()
 
-        fun get(): ViewModel
+        fun get(): Model
         {
             return instance
         }

@@ -259,5 +259,11 @@ class ResourceManager(internal var guideApplication: GuideApplication) : IDownlo
 
         private val EXP_VERSION_NO = 3
         private val MAIN_EXP_FILE_SIZE = 191635456L
+
+        public fun get(): ResourceManager
+        {
+            return GuideApplication.get().resourceManager
+        }
+
     }
 }

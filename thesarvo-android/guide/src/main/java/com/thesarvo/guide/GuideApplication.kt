@@ -33,6 +33,7 @@ class GuideApplication : Application()
         indexManager.startup() // needs to be started before resource manager might start doing updates
         resourceManager.startup()
 
+        Model.get().startup()
 
     }
 
@@ -52,9 +53,9 @@ class GuideApplication : Application()
         private val TESTER = 10000017
         private val SEARCH_PROJECTION = arrayOf("VIEW_ID", "ELEMENT_ID")
 
-        fun get(): GuideApplication?
+        fun get(): GuideApplication
         {
-            return instance
+            return instance!!
         }
 
         //    public boolean isRunningInRoboelectric()

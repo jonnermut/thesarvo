@@ -1,0 +1,29 @@
+{
+    "id":-1,
+    "title":"Extra Stuff",
+    "url":"http://www.thesarvo.com/confluence/display/thesarvo/Climbing+Guides",
+    "children": [
+        {"id":-1,"title":"Map","viewId":"Map","level":1,"children":[]},
+        {"id":-1,"title":"Weather","viewId":"Weather","level":1,"children":
+        [   {"id":-1,"title":"Radar","viewId":"http:\/\/m.bom.gov.au\/tas\/hobart\/radar\/","level":1,"children":[]},
+            {"id":-1,"title":"Observations","viewId":"http:\/\/www.bom.gov.au\/tas\/observations\/tasall.shtml","level":1,"children":[]},
+            {"id":-1,"title":"Synoptic Forecast","viewId":"http:\/\/www.bom.gov.au\/fwo\/IDG00073.pdf","level":1,"children":[]},
+            {"id":-1,"title":"Satellite","viewId":"http:\/\/satview.bom.gov.au\/","level":1,"children":[]},
+            {"id":-1,"title":"Ben Lomond","viewId":"http:\/\/m.bom.gov.au\/tas\/ben-lomond\/","level":1,"children":[]},
+            {"id":-1,"title":"Buckland (Sand River)","viewId":"http:\/\/m.bom.gov.au\/tas\/buckland\/","level":1,"children":[]},
+            {"id":-1,"title":"Burnie","viewId":"http:\/\/m.bom.gov.au\/tas\/burnie\/","level":1,"children":[]},
+            {"id":-1,"title":"Coles Bay (Freycinet)","viewId":"http:\/\/m.bom.gov.au\/tas\/coles-bay\/","level":1,"children":[]},
+            {"id":-1,"title":"Cradle Mountain","viewId":"http:\/\/m.bom.gov.au\/tas\/cradle-mountain\/","level":1,"children":[]},
+            {"id":-1,"title":"Hillwood","viewId":"http:\/\/m.bom.gov.au\/tas\/hillwood\/","level":1,"children":[]},
+            {"id":-1,"title":"Hobart","viewId":"http:\/\/m.bom.gov.au\/tas\/hobart\/","level":1,"children":[]},
+            {"id":-1,"title":"Lake St Clair","viewId":"http:\/\/m.bom.gov.au\/tas\/lake-st-clair\/","level":1,"children":[]},
+            {"id":-1,"title":"Launceston","viewId":"http:\/\/m.bom.gov.au\/tas\/launceston\/","level":1,"children":[]},
+            {"id":-1,"title":"Mt Wellington Summit","viewId":"http:\/\/m.bom.gov.au\/tas\/kunanyi-mount-wellington\/","level":1,"children":[]},
+            {"id":-1,"title":"New Norfolk","viewId":"http:\/\/m.bom.gov.au\/tas\/new-norfolk\/","level":1,"children":[]},
+            {"id":-1,"title":"Oatlands","viewId":"http:\/\/m.bom.gov.au\/tas\/oatlands\/","level":1,"children":[]},
+            {"id":-1,"title":"Port Arthur (Tasman Peninsula)","viewId":"http:\/\/m.bom.gov.au\/tas\/port-arthur\/","level":1,"children":[]},
+            {"id":-1,"title":"Strathgordon (South West)","viewId":"http:\/\/m.bom.gov.au\/tas\/strathgordon\/","level":1,"children":[]}
+        ]},
+        {"id":-1,"title":"thesarvo.com","viewId":"http:\/\/www.thesarvo.com\/confluence\/display\/thesarvo\/Tasmania","level":1,"children":[]}
+    ]
+}

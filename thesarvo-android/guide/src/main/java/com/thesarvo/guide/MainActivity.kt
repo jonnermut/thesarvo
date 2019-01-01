@@ -1,17 +1,12 @@
 package com.thesarvo.guide
 
 import android.app.SearchManager
-import android.app.SearchableInfo
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
@@ -28,9 +23,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.TextView
-import android.widget.Toast
 
-import com.google.android.vending.expansion.downloader.DownloadProgressInfo
 import com.unnamed.b.atv.model.TreeNode
 import com.unnamed.b.atv.view.AndroidTreeView
 
@@ -92,14 +85,14 @@ class MainActivity : AppCompatActivity()
 
         val root = TreeNode.root()
 
-        val viewDef = ViewModel.get().rootView
+        val viewDef = Model.get().rootGuide
         addListItems(root, viewDef!!, 0)
 
         val tView = AndroidTreeView(this, root)
         tView.setDefaultViewHolder(NodeViewHolder::class.java)
         tView.setDefaultAnimation(true)
         tView.setDefaultNodeClickListener { node, value ->
-            if (value is ViewModel.ListItem)
+            if (value is Guide)
             {
                 onItemSelected(value)
             }
@@ -124,36 +117,35 @@ class MainActivity : AppCompatActivity()
 
     }
 
-    private fun addListItems(root: TreeNode, viewDef: ViewModel.ViewDef, level: Int)
+    private fun addListItems(root: TreeNode, guide: Guide, level: Int)
     {
         var level = level
-        for (lv in viewDef.getListItems())
+        for (kid in guide.children)
         {
-            val n = TreeNode(lv)
+            val n = TreeNode(kid)
             root.addChild(n)
 
-            val kidView = ViewModel.get().getViews()[lv.viewId]
-            if (kidView != null)
-            {
-                lv.isLeaf = false
-                addListItems(n, kidView, level++)
-            }
+            addListItems(n, kid, level++)
+
         }
     }
 
-    fun onItemSelected(item: ViewModel.ListItem)
+    fun onItemSelected(item: Guide)
     {
-        if (!item.isLeaf)
-            return
+        //if (!item.isLeaf)
+        //    return
 
-        val id = item.viewId
+        val id = item.viewIdOrId
 
         if (id == null || id.length == 0)
             return
 
-        drawer!!.closeDrawer(Gravity.LEFT)
+        if (!item.hasChildren)
+        {
+            drawer!!.closeDrawer(Gravity.LEFT)
+        }
 
-        if (id.startsWith("http") || id.startsWith("guide."))
+        if (id.startsWith("http") || item.hasGuideContent)
         {
             showGuideDetail(id, null, false, null)
 
@@ -175,15 +167,16 @@ class MainActivity : AppCompatActivity()
             }
             */
         }
-        else
-        {
-            //showGuideDetail(id, null, true, null);
-            val args = HashMap<String, String>()
-            args[GuideDetailFragment.ARG_ITEM_ID] = id
-            showFragment(GuideListFragment::class.java, args, true, true)
 
-
-        }
+//        else
+//        {
+//            //showGuideDetail(id, null, true, null);
+//            val args = HashMap<String, String>()
+//            args[GuideDetailFragment.ARG_ITEM_ID] = id
+//            showFragment(GuideListFragment::class.java, args, true, true)
+//
+//
+//        }
 
 
     }

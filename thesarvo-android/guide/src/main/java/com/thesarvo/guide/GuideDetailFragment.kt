@@ -45,6 +45,7 @@ class GuideDetailFragment : Fragment()
     private var singleNodeData: String? = null
     private var js: JSInterface? = null
     private var elementId: String? = null
+    var guide: Guide? = null
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -56,8 +57,10 @@ class GuideDetailFragment : Fragment()
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
             val itemId = arguments!!.getString(ARG_ITEM_ID)
-            //mItem = ViewModel.get().getViews().get(itemId);
+            //mItem = Model.get().getViews().get(itemId);
             viewId = itemId
+
+            guide = Model.get().getGuide(itemId)
         }
 
         if (arguments!!.containsKey(ELEMENT_ID))
@@ -93,15 +96,13 @@ class GuideDetailFragment : Fragment()
                 url = viewId
 
             }
-            else if (viewId.startsWith("guide."))
+            else
             {
                 url = "file:///android_asset/www/index.html"
                 //url = GuideListActivity.getAssetPath("www.index.html");
             }
 
             webview.loadUrl(url)
-
-
 
         }
 
@@ -111,7 +112,7 @@ class GuideDetailFragment : Fragment()
     private fun getGuideDataJson(): String
     {
         val viewId = this.viewId
-        val map = HashMap<String, Object>()
+        val map = HashMap<String, Any>()
 
         // Show the dummy content as text in a TextView.
         if (viewId != null)
@@ -121,7 +122,7 @@ class GuideDetailFragment : Fragment()
             if (singleNodeData != null)
                 guideData = singleNodeData
             else
-                guideData = getGuideData(viewId)
+                guideData = getGuideData()
 
             if (guideData != null)
             {
@@ -133,18 +134,18 @@ class GuideDetailFragment : Fragment()
                 //guideData = guideData.replace("\r", "\\r")
                 //guideData = guideData.replace("'", "\\'")
 
-                map["guide_pageid"] = getGuideId(viewId) as Object
-                map["guide_xml"] = guideData as Object
+                map["guide_pageid"] = getGuideId(viewId)
+                map["guide_xml"] = guideData
 
                 if (singleNodeData != null)
                 {
-                    map["guide_callOut"] = true as Object
+                    map["guide_callOut"] = true
 
                 }
 
                 if (elementId != null)
                 {
-                    map["guide_showId"] = elementId as Object
+                    map["guide_showId"] = elementId as Any
 
                 }
             }
@@ -282,38 +283,9 @@ class GuideDetailFragment : Fragment()
     }
 
 
-    fun getGuideData(guideId: String): String?
+    fun getGuideData(): String?
     {
-        //String prefix = "file:///android_asset/www/data/http-3A-2F-2Fwww.thesarvo.com-2Fconfluence-2Fplugins-2Fservlet-2Fguide-2Fxml-2F";
-
-        //String prefix = "www/data/http-3A-2F-2Fwww.thesarvo.com-2Fconfluence-2Fplugins-2Fservlet-2Fguide-2Fxml-2F";
-        val urlPrefix = "http://www.thesarvo.com/confluence/plugins/servlet/guide/xml/"
-
-
-        val id = getGuideId(guideId)
-
-        /*
-        String url = urlPrefix + id;
-        String filename = convertToCachedFilename(url);
-
-        //File file = new File("www/data/"+ filename);
-        */
-        val filename = "$id.xml"
-
-        var ret: String? = null
-        try
-        {
-            val `is` = GuideApplication.get()!!.resourceManager.getDataAsset(filename)
-            ret = IOUtils.toString(`is`!!, Charsets.UTF_8)
-        }
-        catch (e: Exception)
-        {
-            Toast.makeText(this.context, "Failed to get guide data", Toast.LENGTH_LONG).show()
-            Log.e("GuideDetailFragment", "Failed to get guide data", e)
-            return null
-        }
-
-        return ret
+        return this.guide?.data
     }
 
     private fun getGuideId(guideId: String): String

@@ -8,7 +8,8 @@
 
 import Foundation
 
-public let excludePages: Array<Int64> = [11370498, // Buy and download guides
+public let excludePages: Array<Int64> = [
+11370498, // Buy and download guides
 13467650, // Hardcopy Guides
 14450710, // Guide Manual
 330433081, // The Rookeries
@@ -18,6 +19,8 @@ public let excludePages: Array<Int64> = [11370498, // Buy and download guides
 2883716, // Mt Wellington Updates
 276267033, // Pipes Guide To Do
 9404496, // GPS
+
+    // MAKE SURE YOU UPDATE THE SAME LIST in Model.kt !!!
 ]
 
 public let weather = [
@@ -153,6 +156,18 @@ class Model
             return
         }
         rootGuide.children.append(contentsOf: extraViews)
+
+        /*
+        let encoder = JSONEncoder()
+        if let d = try? encoder.encode(extraViews)
+        {
+            if let s = String(data: d, encoding: .utf8)
+            {
+                print(s)
+            }
+        }
+        */
+
         addToGuides(guide: rootGuide)
         
         runInBackground()

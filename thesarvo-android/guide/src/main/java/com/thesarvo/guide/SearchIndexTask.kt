@@ -1,11 +1,5 @@
 package com.thesarvo.guide
 
-import android.app.SearchManager
-import android.content.ContentResolver
-import android.content.ContentValues
-import android.content.res.AssetManager
-import android.net.Uri
-import android.os.AsyncTask
 import android.util.Log
 
 import com.google.common.base.Strings
@@ -16,13 +10,9 @@ import org.xml.sax.InputSource
 import org.xml.sax.SAXException
 
 import java.io.IOException
-import java.io.InputStream
 import java.io.InputStreamReader
-import java.io.Reader
 import java.util.ArrayList
-import java.util.HashMap
 
-import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
 
 /**
@@ -36,9 +26,9 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
     var key = 1
     var viewId: String? = null
 
-
-    var views: Map<String, ViewModel.ViewDef> = ViewModel.get().getViews()
-    var guideListItems: Map<String, ViewModel.ListItem> = ViewModel.get().getGuideListItems()
+// FIXME
+    //var views: Map<String, Model.ViewDef> = Model.get().getViews()
+    //var guideListItems: Map<String, Model.ListItem> = Model.get().getGuideListItems()
 
     var factory = DocumentBuilderFactory.newInstance()
 
@@ -70,16 +60,20 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
             {
 
                 //load all XML files
+
+                /* FIXME
+
                 for (vid in guideListItems.keys)
                 {
                     this.viewId = vid
                     indexGuideXml(viewId)
 
                 }
+                */
             }
             else
             {
-                indexGuideXml(viewId)
+                indexGuideXml(viewId!!)
             }
 
         }
@@ -95,20 +89,20 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
     }
 
     @Throws(SAXException::class, IOException::class)
-    private fun indexGuideXml(viewId: String?)
+    private fun indexGuideXml(viewId: String)
     {
         try
         {
             val builder = factory.newDocumentBuilder()
 
-            val item = guideListItems[viewId]
+            val item = Model.get().getGuide(viewId)
             if (item == null)
             {
                 return
             }
 
 
-            val guideId = viewId!!.substring(6)
+            val guideId = viewId.substring(6)
 
             val stream = resourceManager.getDataAsset("$guideId.xml")
 
@@ -155,7 +149,7 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
 
     }
 
-    private fun indexListItem(viewId: String, item: ViewModel.ListItem?)
+    private fun indexListItem(viewId: String, item: Guide?)
     {
         if (item == null)
             return
@@ -163,7 +157,7 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
         //make index entry for view it's self
         val entry = IndexEntry()
         entry.viewId = viewId
-        entry.text = item.text
+        entry.text = item.title
         entry.key = viewId
         entry.type = IndexEntry.IndexType.VIEW
 
@@ -201,13 +195,13 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
         }
     }
 
-    private fun indexTextElement(viewId: String, item: ViewModel.ListItem, e: Element)
+    private fun indexTextElement(viewId: String, item: Guide, e: Element)
     {
         if (e.getAttribute("class").startsWith("h"))
         {
             val entry1 = IndexEntry()
             entry1.viewId = viewId
-            entry1.viewName = item.text
+            entry1.viewName = item.title
             entry1.elementID = e.getAttribute("id")
 
             val text = e.textContent.trim { it <= ' ' }
@@ -223,11 +217,11 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
         }
     }
 
-    private fun indexClimbElement(viewId: String, item: ViewModel.ListItem, e: Element)
+    private fun indexClimbElement(viewId: String, item: Guide, e: Element)
     {
         val entry1 = IndexEntry()
         entry1.viewId = viewId
-        entry1.viewName = item.text
+        entry1.viewName = item.title
         entry1.elementID = e.getAttribute("id")
         entry1.subtext = entry1.viewName
 
