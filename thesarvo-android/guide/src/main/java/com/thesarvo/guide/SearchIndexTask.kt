@@ -18,9 +18,9 @@ import javax.xml.parsers.DocumentBuilderFactory
 /**
  * Created by jon on 28/12/2016.
  */
-internal class SearchIndexTask(private val guideApplication: GuideApplication, viewId: String) : Runnable
+internal class SearchIndexTask(private val guideApplication: GuideApplication, viewId: String?) : Runnable
 {
-    val WWW_PATH = "www/data/"
+
     private val indexManager: IndexManager
     private val resourceManager: ResourceManager
     var key = 1
@@ -61,15 +61,11 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
 
                 //load all XML files
 
-                /* FIXME
-
-                for (vid in guideListItems.keys)
+                for (vid in Model.get().guides.keys)
                 {
                     this.viewId = vid
-                    indexGuideXml(viewId)
-
+                    indexGuideXml(vid)
                 }
-                */
             }
             else
             {
@@ -101,13 +97,14 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
                 return
             }
 
-
-            val guideId = viewId.substring(6)
-
-            val stream = resourceManager.getDataAsset("$guideId.xml")
-
+            val stream = resourceManager.getDataAsset("$viewId.xml")
 
             indexListItem(viewId, item)
+
+            if (stream == null || stream.available() == 0)
+            {
+                return;
+            }
 
             // added to straighten out UTF-8 errors
             val reader = InputStreamReader(stream!!, "UTF-8")
@@ -118,7 +115,7 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
             //if there's no guide data continue
             if (root.tagName != "guide")
             {
-                Log.d("Search Index", "$guideId not a guide")
+                Log.d("Search Index", "$viewId not a guide")
                 return
             }
 

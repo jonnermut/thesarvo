@@ -20,8 +20,9 @@ import org.junit.Assert.assertTrue
  * Created by jon on 10/01/2017.
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class, sdk = intArrayOf(21))
-class IndexRebuilderTest {
+//@Config(constants = BuildConfig::class, sdk = [27])
+public class IndexRebuilder
+{
 
 
     private var app: GuideApplication? = null
@@ -29,13 +30,18 @@ class IndexRebuilderTest {
     @Before
     fun before() {
         app = GuideApplication.get()
-        app!!.runningInRoboelectric = true
+        GuideApplication.runningInRoboelectric = true
     }
 
 
+    /**
+     * This 'test' rebuilds the index.ser file which is the cached search index.
+     * It runs as a robo-electric test, for convenience and speed.
+     */
     @Test
     @Throws(IOException::class)
-    fun testIndexAssetRebuild() {
+    public fun testIndexAssetRebuild()
+    {
 
         //ActivityController<MainActivity> activity = Robolectric.buildActivity(MainActivity.class);
         //activity.create();
