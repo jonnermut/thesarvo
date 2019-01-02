@@ -73,12 +73,12 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key" />
 
-<!--
+
         <provider
             android:authorities="com.thesarvo.guide.provider"
             android:name="com.thesarvo.guide.IndexContentProvider"
             android:exported="false"/>
--->
+
         <service android:name=".AssetsDownloader"/>
         <receiver android:name=".AssetAlarmReceiver"/>
 

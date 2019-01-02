@@ -110,6 +110,8 @@ class MainActivity : AppCompatActivity()
         val info = searchManager.getSearchableInfo(componentName)
         searchView!!.setSearchableInfo(info)
 
+        searchView?.setIconifiedByDefault(false)
+
         //searchView.setEnabled(false);
         //searchView.setClickable(false);
         //searchView.setVisibility(View.INVISIBLE);
@@ -353,7 +355,25 @@ class MainActivity : AppCompatActivity()
     {
         Log.d("Search Result", uri.toString())
 
+        val key = uri.lastPathSegment
+        if (key != null)
+        {
+            val split = key.split(":")
 
+
+            val viewId = split[0]
+            var elementID: String? = null
+            if (split.size > 1)
+                elementID = split[1]
+
+            Log.d("Search Result", "Selected view $viewId el $elementID")
+
+
+            showGuideDetail(viewId, null, true, elementID)
+
+        }
+
+        /*
         //get a cursor representing the entry
         val c = contentResolver.query(uri, SEARCH_PROJECTION, null, null, null)
         if (c!!.count < 1)
@@ -380,6 +400,7 @@ class MainActivity : AppCompatActivity()
             showGuideDetail(viewId, null, true, elementID)
 
         }
+        */
 
     }
 

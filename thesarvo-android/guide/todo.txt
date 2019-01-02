@@ -1,8 +1,9 @@
 
 General
 =======
-- map is not working
+- map is not working. Check api key??
 - remove dead code
+- get search working again
 
 UI Rebuild
 ==========
