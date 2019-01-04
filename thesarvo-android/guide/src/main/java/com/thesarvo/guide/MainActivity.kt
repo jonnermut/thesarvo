@@ -7,13 +7,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentTransaction
-import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import android.util.Log
 import android.view.Gravity
 import android.view.Menu
@@ -29,7 +29,7 @@ import java.util.HashMap
 class MainActivity : AppCompatActivity()
 {
 
-    private var drawer: DrawerLayout? = null
+    private var drawer: androidx.drawerlayout.widget.DrawerLayout? = null
     private var searchView: SearchView? = null
     private var toolbar: Toolbar? = null
     private var progressBar: ProgressBar? = null
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity()
 
     private fun setupNavigation(toolbar: Toolbar?)
     {
-        drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
+        drawer = findViewById<View>(R.id.drawer_layout) as androidx.drawerlayout.widget.DrawerLayout
         val toggle = ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer!!.addDrawerListener(toggle)
@@ -231,11 +231,11 @@ class MainActivity : AppCompatActivity()
             }
         }
 
-        var fragment: Fragment? = null
+        var fragment: androidx.fragment.app.Fragment? = null
 
         try
         {
-            fragment = fragmentClass.newInstance() as Fragment
+            fragment = fragmentClass.newInstance() as androidx.fragment.app.Fragment
         }
         catch (e: Exception)
         {
@@ -262,14 +262,14 @@ class MainActivity : AppCompatActivity()
     }
 
 
-    fun addFragment(fragmentId: Int, newFragment: android.support.v4.app.Fragment, history: Boolean)
+    fun addFragment(fragmentId: Int, newFragment: androidx.fragment.app.Fragment, history: Boolean)
     {
         // Add the fragment to the activity, pushing this transaction
         // on to the back stack.
         val ft = supportFragmentManager.beginTransaction()
         //getFragmentManager().beginTransaction();
         ft.replace(fragmentId, newFragment)
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        ft.setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE)
 
         if (history)
             ft.addToBackStack(null)
@@ -279,15 +279,15 @@ class MainActivity : AppCompatActivity()
         Log.d("Add Fragment", "Added")
     }
 
-    fun addDoubleFragment(fragId1: Int, fragId2: Int, frag1: android.support.v4.app.Fragment,
-                          frag2: android.support.v4.app.Fragment, history: Boolean)
+    fun addDoubleFragment(fragId1: Int, fragId2: Int, frag1: androidx.fragment.app.Fragment,
+                          frag2: androidx.fragment.app.Fragment, history: Boolean)
     {
         val ft = supportFragmentManager.beginTransaction()
         //getFragmentManager().beginTransaction();
         ft.replace(fragId1, frag1)
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        ft.setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE)
         ft.replace(fragId2, frag2)
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        ft.setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE)
 
         if (history)
             ft.addToBackStack(null)
@@ -299,7 +299,7 @@ class MainActivity : AppCompatActivity()
 
     override fun onBackPressed()
     {
-        val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
+        val drawer = findViewById<View>(R.id.drawer_layout) as androidx.drawerlayout.widget.DrawerLayout
         if (drawer.isDrawerOpen(GravityCompat.START))
         {
             drawer.closeDrawer(GravityCompat.START)

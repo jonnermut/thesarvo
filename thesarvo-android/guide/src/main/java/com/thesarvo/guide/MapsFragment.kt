@@ -1,7 +1,7 @@
 package com.thesarvo.guide
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.util.Log
 import android.view.InflateException
 import android.view.LayoutInflater
@@ -14,7 +14,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 import java.util.ArrayList
 
-class MapsFragment : Fragment()
+class MapsFragment : androidx.fragment.app.Fragment()
 {
 
     private var mMap: GoogleMap? = null // Might be null if Google Play services APK is not available.
