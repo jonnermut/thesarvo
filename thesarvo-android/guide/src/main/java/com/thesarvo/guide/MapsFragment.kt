@@ -1,5 +1,6 @@
 package com.thesarvo.guide
 
+import android.Manifest
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.util.Log
@@ -11,9 +12,12 @@ import android.view.ViewGroup
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MarkerOptions
+import permissions.dispatcher.NeedsPermission
+import permissions.dispatcher.RuntimePermissions
 
 import java.util.ArrayList
 
+@RuntimePermissions
 class MapsFragment : androidx.fragment.app.Fragment()
 {
 
@@ -127,6 +131,28 @@ class MapsFragment : androidx.fragment.app.Fragment()
         }
     }
 
+    @NeedsPermission(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+    fun enableLocation()
+    {
+        val map = mMap ?: return
+
+        try
+        {
+            map.isMyLocationEnabled = true
+        }
+        catch (ex: SecurityException)
+        {
+            Log.e("thesarvo", "Security Exception", ex)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        // NOTE: delegate the permission handling to generated function
+        onRequestPermissionsResult(requestCode, grantResults)
+    }
+
+
     /**
      * This is where we can add markers or lines, add listeners or move the camera. In this case, we
      * just add a marker near Africa.
@@ -140,15 +166,7 @@ class MapsFragment : androidx.fragment.app.Fragment()
         if (map == null)
             return
 
-        try
-        {
-            map.isMyLocationEnabled = true
-        }
-        catch (ex: SecurityException)
-        {
-            Log.e("thesarvo", "Security Exception", ex)
-        }
-
+        enableLocationWithPermissionCheck()
 
         var gpsPoints = GuideApplication.get().indexManager.index?.gpsPoints
         if (gpsPoints != null)

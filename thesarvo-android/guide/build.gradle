@@ -4,6 +4,7 @@ plugins {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 
 android {
@@ -55,7 +56,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
     implementation 'com.google.android.material:material:1.1.0-alpha02'
     implementation 'commons-io:commons-io:2.6'
-    implementation 'com.google.android.gms:play-services:12.0.1'
+    //implementation 'com.google.android.gms:play-services:12.0.1'
+    implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
     implementation project(':downloader_library')
     implementation project(':market_licensing')
@@ -70,6 +72,9 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.8'
 
+    // https://permissions-dispatcher.github.io
+    implementation "org.permissionsdispatcher:permissionsdispatcher:4.3.0"
+    kapt "org.permissionsdispatcher:permissionsdispatcher-processor:4.3.0"
 
     // Robolectric
     testImplementation 'junit:junit:4.12'
