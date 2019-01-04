@@ -42,7 +42,6 @@ public class IndexRebuilder
     @Throws(IOException::class)
     public fun testIndexAssetRebuild()
     {
-
         //ActivityController<MainActivity> activity = Robolectric.buildActivity(MainActivity.class);
         //activity.create();
         //File newIndexFile = new File(app.getApplicationInfo().dataDir + "/databases/index");
@@ -54,12 +53,15 @@ public class IndexRebuilder
         //File indexFile = new File(userDir + "/src/main/assets/databases/index");
         val serFile = File("$userDir/src/main/assets/index.ser")
 
+        val newIndex = app!!.indexManager.index
+        System.out.println("Index: There are ${newIndex?.indexEntries?.size} entries")
+        System.out.println("Index: There are ${newIndex?.gpsPoints?.size} gps points")
         val newIndexFile = app!!.indexManager.indexFile
         if (newIndexFile.exists()) {
             serFile.delete()
+            System.out.println("Index: moving index to ${serFile}")
             newIndexFile.renameTo(serFile)
         }
-
 
         /*
         Map<String, IndexEntry> map = index.getIndex();

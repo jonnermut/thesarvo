@@ -41,7 +41,7 @@ class MapsFragment : Fragment()
     {
         if (rootView != null)
         {
-            val parent = rootView!!.parent as ViewGroup
+            val parent = rootView?.parent as? ViewGroup
             parent?.removeView(rootView)
         }
         try
@@ -100,10 +100,21 @@ class MapsFragment : Fragment()
         {
             // Try to obtain the map from the SupportMapFragment.
 
-            val mapFragment = fragmentManager!!.findFragmentById(R.id.map) as SupportMapFragment
+            val mapFragment = getChildFragmentManager().findFragmentById(R.id.map) as? SupportMapFragment
 
             if (mapFragment != null)
             {
+                mapFragment.getMapAsync {
+
+                    synchronized(this)
+                    {
+                        if (mMap == null)
+                        {
+                            mMap = it
+                            setUpMap()
+                        }
+                    }
+                }
                 /* FIXME getMap doesnt work
                 mMap = mapFragment.getMap();
                 // Check if we were successful in obtaining the map.
@@ -125,13 +136,13 @@ class MapsFragment : Fragment()
      */
     private fun setUpMap()
     {
-
-        if (mMap == null)
+        val map = mMap
+        if (map == null)
             return
 
         try
         {
-            mMap!!.isMyLocationEnabled = true
+            map.isMyLocationEnabled = true
         }
         catch (ex: SecurityException)
         {
@@ -139,28 +150,31 @@ class MapsFragment : Fragment()
         }
 
 
-        val gpsPoints = gpsPoints
-
-        if (singleNodeData != null)
+        var gpsPoints = GuideApplication.get().indexManager.index?.gpsPoints
+        if (gpsPoints != null)
         {
 
-        }
-
-        for (gpsNode in gpsPoints)
-        {
-            for (point in gpsNode.points)
+            if (singleNodeData != null)
             {
-                if (point != null
-                        && point.isValid
-                        && point.latLng != null)
-                {
-                    mMap!!.addMarker(MarkerOptions()
-                            .position(point.latLng)
-                            .title("" + point.description)
-                            .snippet(point.latLng.toString()))
-                }
+
             }
 
+            for (gpsNode in gpsPoints)
+            {
+                for (point in gpsNode.points)
+                {
+                    if (point != null
+                            && point.isValid
+                            && point.latLng != null)
+                    {
+                        map.addMarker(MarkerOptions()
+                                .position(point.latLng)
+                                .title("" + point.description)
+                                .snippet(point.latLng.toString()))
+                    }
+                }
+
+            }
         }
     }
 
@@ -168,7 +182,6 @@ class MapsFragment : Fragment()
     {
         private var rootView: View? = null
 
-        val gpsPoints: List<GPSNode> = ArrayList()
     }
 
 

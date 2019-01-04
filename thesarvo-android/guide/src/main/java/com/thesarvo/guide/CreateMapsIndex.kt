@@ -60,12 +60,12 @@
 //                id = newID;
 //            }
 //
-//            double lat = cursor.getDouble(cursor.getColumnIndex(IndexContentProvider.COL_LAT));
+//            double latitude = cursor.getDouble(cursor.getColumnIndex(IndexContentProvider.COL_LAT));
 //            double lng = cursor.getDouble(cursor.getColumnIndex(IndexContentProvider.COL_LNG));
 //            String desc = cursor.getString(cursor.getColumnIndex(IndexContentProvider.COL_DESC));
 //            String code = cursor.getString(cursor.getColumnIndex(IndexContentProvider.COL_CODE));
 //
-//            points.add(new Point(new LatLng(lat, lng), desc, code));
+//            points.add(new Point(new LatLng(latitude, lng), desc, code));
 //        }
 //
 //

@@ -19,10 +19,7 @@ import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.SearchView
-import android.widget.TextView
+import android.widget.*
 
 import com.unnamed.b.atv.model.TreeNode
 import com.unnamed.b.atv.view.AndroidTreeView
@@ -155,8 +152,10 @@ class MainActivity : AppCompatActivity()
         else if (id.startsWith("Map"))
         {
             //start the map activity
-            /* TODO
-            if(mapsIndexed)
+
+            showMap(null);
+            /*
+            if (mapsIndexed)
             {
                 //Intent intent = new Intent(this, MapsFragment.class);
                 //startActivity(intent);
@@ -168,6 +167,7 @@ class MainActivity : AppCompatActivity()
                 Toast.makeText(this, "Maps not ready yet!", Toast.LENGTH_SHORT).show();
             }
             */
+
         }
 
 //        else

@@ -37,3 +37,7 @@ task zipExtension(type:Zip) {
 task pushExtension(type:Exec) {
     commandLine '/Users/jon/.android-sdk/platform-tools/adb', 'push', 'build/extension/main.3.com.thesarvo.guide.obb', '/storage/emulated/0/Android/obb/com.thesarvo.guide/'
 }
+
+task rebuildIndex(dependsOn: 'guide:test') {
+    // really just a reminder here that we need to do this before release
+}

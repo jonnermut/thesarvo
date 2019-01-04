@@ -15,8 +15,9 @@ class Index : Serializable
 
     //public long assetLastMod;
 
-    private val indexEntries = ConcurrentHashMap<String, IndexEntry>()
+    val indexEntries = ConcurrentHashMap<String, IndexEntry>()
 
+    val gpsPoints: MutableList<GPSNode> = ArrayList()
 
     fun index(entry: IndexEntry)
     {

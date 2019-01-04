@@ -99,12 +99,12 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
 
             val stream = resourceManager.getDataAsset("$viewId.xml")
 
-            indexListItem(viewId, item)
-
             if (stream == null || stream.available() == 0)
             {
                 return;
             }
+
+            indexListItem(viewId, item)
 
             // added to straighten out UTF-8 errors
             val reader = InputStreamReader(stream!!, "UTF-8")
@@ -165,7 +165,9 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
 
     private fun indexGPSElements(dom: Document)
     {
-        var gpsNodes = MapsFragment.gpsPoints
+        var gpsNodes = indexManager?.index?.gpsPoints
+        if (gpsNodes == null)
+            return
 
         for (e in Xml.getElements(dom.getElementsByTagName("gps")))
         {
@@ -182,7 +184,7 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
 
             //Log.d("Indexing", "adding gps node for " + item.getText());
             val gpsnode = GPSNode(id, points)
-            gpsNodes += gpsnode
+            indexManager.index?.gpsPoints?.add(gpsnode)
 
             addGPSEntry(gpsnode)
 
@@ -252,6 +254,7 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
 
     fun addGPSEntry(node: GPSNode)
     {
+
         for (p in node.points)
         {
             /* FIXME

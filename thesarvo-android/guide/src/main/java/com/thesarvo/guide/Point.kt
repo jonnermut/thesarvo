@@ -3,24 +3,32 @@ package com.thesarvo.guide
 import com.google.android.gms.maps.model.LatLng
 
 import org.w3c.dom.Element
+import java.io.Serializable
 
 /**
  * Created by Karl on 4/09/2014.
  */
-class Point
+class Point : Serializable
 {
     var isValid: Boolean = false
         private set
-    var latLng: LatLng
-        internal set
+    val latLng: LatLng
+        get() = LatLng(latitude, longitude)
     var description: String
         internal set
     var code: String
         internal set
 
+    var longitude = 0.0
+        private set
+    var latitude = 0.0
+        private set
+
     constructor(latLng: LatLng, description: String, code: String)
     {
-        this.latLng = latLng
+        this.latitude = latLng.latitude
+        this.longitude = latLng.longitude
+
         this.description = description
         this.code = code
 
@@ -36,7 +44,6 @@ class Point
     {
         description = ""
         code = ""
-        latLng = LatLng(0.0, 0.0)
     }
 
     constructor(ePoint: Element)
@@ -46,13 +53,12 @@ class Point
         description = ePoint.getAttribute("description")
         code = ePoint.getAttribute("code")
 
-        var lon = 0.0
-        var lat = 0.0
+
 
         try
         {
-            lon = java.lang.Double.valueOf(longitude)!!
-            lat = java.lang.Double.valueOf(latitude)!!
+            this.longitude = java.lang.Double.valueOf(longitude)!!
+            this.latitude = java.lang.Double.valueOf(latitude)!!
             isValid = true
         }
         catch (ex: NumberFormatException)
@@ -61,8 +67,11 @@ class Point
 
         }
 
-        latLng = LatLng(lat, lon)
     }
 
 
+    companion object
+    {
+        private const val serialVersionUID: Long = 1
+    }
 }
