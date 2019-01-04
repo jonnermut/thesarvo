@@ -136,7 +136,7 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
             }
 
 
-            indexGPSElements(dom)
+            indexGPSElements(viewId, dom)
         }
         catch (t: Throwable)
         {
@@ -163,7 +163,7 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
         //Log.d("Indexing", "adding " + entry.text);
     }
 
-    private fun indexGPSElements(dom: Document)
+    private fun indexGPSElements(viewId: String, dom: Document)
     {
         var gpsNodes = indexManager?.index?.gpsPoints
         if (gpsNodes == null)
@@ -183,7 +183,7 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
 
 
             //Log.d("Indexing", "adding gps node for " + item.getText());
-            val gpsnode = GPSNode(id, points)
+            val gpsnode = GPSNode(viewId, id, points)
             indexManager.index?.gpsPoints?.add(gpsnode)
 
             addGPSEntry(gpsnode)

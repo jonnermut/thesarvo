@@ -348,7 +348,7 @@ class GuideDetailFragment : androidx.fragment.app.Fragment()
                     {
                         //map needs to open here as well
                         Log.d("thesarvo", "map")
-                        MainActivity.get()!!.showMap(data)
+                        MainActivity.get()!!.showMap(data, viewId)
 
                     }
                 }

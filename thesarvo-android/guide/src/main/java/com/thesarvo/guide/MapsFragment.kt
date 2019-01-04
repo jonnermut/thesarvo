@@ -11,11 +11,19 @@ import android.view.ViewGroup
 
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 
 import java.util.ArrayList
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.CameraUpdate
+
+
+
+
 
 @RuntimePermissions
 class MapsFragment : androidx.fragment.app.Fragment()
@@ -23,6 +31,7 @@ class MapsFragment : androidx.fragment.app.Fragment()
 
     private var mMap: GoogleMap? = null // Might be null if Google Play services APK is not available.
     private var singleNodeData: String? = null
+    private var viewId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -37,6 +46,10 @@ class MapsFragment : androidx.fragment.app.Fragment()
         if (arguments!!.containsKey(GuideDetailFragment.SINGLE_NODE_DATA))
         {
             singleNodeData = arguments!!.getString(GuideDetailFragment.SINGLE_NODE_DATA)
+        }
+        if (arguments!!.containsKey(GuideDetailFragment.ARG_ITEM_ID))
+        {
+            viewId = arguments!!.getString(GuideDetailFragment.ARG_ITEM_ID)
         }
     }
 
@@ -166,33 +179,52 @@ class MapsFragment : androidx.fragment.app.Fragment()
         if (map == null)
             return
 
+        val viewId = this.viewId
+
         enableLocationWithPermissionCheck()
 
         var gpsPoints = GuideApplication.get().indexManager.index?.gpsPoints
-        if (gpsPoints != null)
+        if (gpsPoints != null )
         {
 
-            if (singleNodeData != null)
+            if (viewId != null)
             {
-
+                gpsPoints = ArrayList<GPSNode>(gpsPoints.filter { it.viewId == viewId })
             }
 
+            val builder = LatLngBounds.Builder()
+            val points = ArrayList<LatLng>()
             for (gpsNode in gpsPoints)
             {
                 for (point in gpsNode.points)
                 {
-                    if (point != null
-                            && point.isValid
-                            && point.latLng != null)
+                    if (point.isValid)
                     {
+                        val latlng = point.latLng
                         map.addMarker(MarkerOptions()
-                                .position(point.latLng)
+                                .position(latlng)
                                 .title("" + point.description)
                                 .snippet(point.latLng.toString()))
+
+                        builder.include(latlng)
+                        points.add(latlng)
                     }
                 }
 
             }
+            val bounds = builder.build()
+            if (points.size > 1)
+            {
+                val padding = 4 // offset from edges of the map in pixels
+                val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+                map.moveCamera(cu)
+            }
+            else if (points.size == 1)
+            {
+                val cu = CameraUpdateFactory.newLatLngZoom(points[0], 12F)
+                map.moveCamera(cu)
+            }
+
         }
     }
 

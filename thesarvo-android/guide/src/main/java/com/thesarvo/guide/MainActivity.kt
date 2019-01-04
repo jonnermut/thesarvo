@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity()
         {
             //start the map activity
 
-            showMap(null);
+            showMap(null, null);
             /*
             if (mapsIndexed)
             {
@@ -207,11 +207,14 @@ class MainActivity : AppCompatActivity()
         showFragment(GuideDetailFragment::class.java, args, history, false)
     }
 
-    fun showMap(singleNodeData: String?)
+    fun showMap(singleNodeData: String?, viewId: String?)
     {
         val args = HashMap<String, String>()
-        if (singleNodeData != null)
+        if (singleNodeData != null && viewId != null)
+        {
             args[GuideDetailFragment.SINGLE_NODE_DATA] = singleNodeData
+            args[GuideDetailFragment.ARG_ITEM_ID] = viewId
+        }
 
         //instead of just creating a new one see if one exists
         //        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.map);

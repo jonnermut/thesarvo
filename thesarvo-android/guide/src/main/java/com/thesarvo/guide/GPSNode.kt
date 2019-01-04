@@ -5,12 +5,13 @@ import java.io.Serializable
 /**
  * Created by Karl on 4/09/2014.
  */
-class GPSNode(id: String, point: List<Point>): Serializable
+class GPSNode(viewId: String, id: String, point: List<Point>): Serializable
 {
-
+    var viewId: String
 
     var id: String
         internal set
+
     var points: List<Point>
         internal set
 
@@ -19,10 +20,11 @@ class GPSNode(id: String, point: List<Point>): Serializable
     {
         this.id = id
         this.points = point
+        this.viewId = viewId
     }
 
     companion object
     {
-        private const val serialVersionUID: Long = 1
+        private const val serialVersionUID: Long = 2
     }
 }
