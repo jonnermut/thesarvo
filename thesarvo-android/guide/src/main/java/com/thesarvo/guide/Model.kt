@@ -1,13 +1,7 @@
 package com.thesarvo.guide
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.w3c.dom.Element
-
-import java.io.InputStream
-import java.util.ArrayList
-import java.util.LinkedHashMap
-
-import javax.xml.parsers.DocumentBuilderFactory
+import java.util.*
 
 /**
  * Created by jon on 25/01/14.
@@ -32,96 +26,8 @@ class Model
 
     var guides: MutableMap<String, Guide> = LinkedHashMap()
 
-    //internal var guideListItems: MutableMap<String, ListItem> = LinkedHashMap()
-    //var rootView: ViewDef? = null
-    //    internal set
-
     lateinit var rootGuide: Guide
 
-    inner class ViewDef(element: Element)
-    {
-
-
-        var id: String
-            internal set
-        var type: String
-            internal set
-        var name: String
-            internal set
-        var isRootView = false
-            internal set
-        internal var listItems: MutableList<ListItem> = ArrayList()
-
-
-        init
-        {
-            this.id = element.getAttribute("id")
-            this.type = element.getAttribute("type")
-            this.name = element.getAttribute("name")
-            this.isRootView = "true" == element.getAttribute("rootView")
-
-            val data = Xml.getFirstElementByName(element, "data")
-            if (data != null)
-            {
-                for (el in Xml.getElementsByName(data, "listItem"))
-                {
-                    listItems.add(ListItem(el))
-                }
-            }
-
-        }
-
-        fun getListItems(): List<ListItem>
-        {
-            return listItems
-        }
-
-        override fun toString(): String
-        {
-            return "ViewDef{" +
-                    "id='" + id + '\''.toString() +
-                    ", type='" + type + '\''.toString() +
-                    ", name='" + name + '\''.toString() +
-                    '}'.toString()
-        }
-    }
-
-
-    inner class ListItem(element: Element)
-    {
-
-
-        var text: String
-            internal set
-        var viewId: String
-            internal set
-        var level = 1
-            internal set
-
-        var isLeaf = true
-
-        init
-        {
-            text = element.getAttribute("text")
-            viewId = element.getAttribute("viewId")
-
-            val lev = element.getAttribute("level")
-            if (lev != null && lev.length > 0)
-                level = Integer.parseInt(lev)
-
-        }
-
-        override fun toString(): String
-        {
-            var ret = ""
-            for (i in 1 until level)
-                ret += "    "
-
-            ret += text
-
-            return ret
-        }
-    }
 
     fun startup()
     {
@@ -167,8 +73,6 @@ class Model
 
     init
     {
-
-
     }
 
     fun getGuide(id: String): Guide?
@@ -179,7 +83,6 @@ class Model
 
     companion object
     {
-
         private val instance = Model()
 
         fun get(): Model

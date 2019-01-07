@@ -57,16 +57,14 @@ class Point : Serializable
 
         try
         {
-            this.longitude = java.lang.Double.valueOf(longitude)!!
-            this.latitude = java.lang.Double.valueOf(latitude)!!
+            this.longitude = java.lang.Double.valueOf(longitude)
+            this.latitude = java.lang.Double.valueOf(latitude)
             isValid = true
         }
         catch (ex: NumberFormatException)
         {
             ex.printStackTrace()
-
         }
-
     }
 
 

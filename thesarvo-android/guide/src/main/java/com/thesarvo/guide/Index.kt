@@ -1,10 +1,8 @@
 package com.thesarvo.guide
 
 import java.io.Serializable
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
 
 /**
  * Created by jon on 5/9/17.

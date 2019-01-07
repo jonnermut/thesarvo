@@ -1,37 +1,21 @@
 package com.thesarvo.guide
 
 
-import android.content.Context
 import android.util.Log
-
 import com.google.common.collect.Iterables
-
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.w3c.dom.Document
 import org.w3c.dom.Element
-import org.w3c.dom.Node
-import org.w3c.dom.NodeList
-import org.w3c.dom.ls.DOMImplementationLS
-import org.w3c.dom.ls.LSSerializer
-
-import java.io.BufferedInputStream
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.io.InputStream
+import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.ArrayList
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
-
 import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.parsers.ParserConfigurationException
-import javax.xml.transform.Transformer
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
@@ -53,8 +37,6 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
 
 
     internal var queue: Executor = Executors.newSingleThreadExecutor()
-
-    //var taskToUpdate = Dictionary<Int, Update>()
 
     internal var updates = Updates(null)
 
@@ -296,12 +278,13 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
      */
     private fun downloadFirst()
     {
-        if (queuedDownloads == null || queuedDownloads!!.isEmpty())
+        val queuedDownloads = this.queuedDownloads
+        if (queuedDownloads == null || queuedDownloads.isEmpty())
             return
 
         // pop the top of the queue
-        val u = queuedDownloads!![0]
-        queuedDownloads!!.removeAt(0)
+        val u = queuedDownloads[0]
+        queuedDownloads.removeAt(0)
         val finalPath = getFinalPath(u.filename)
         val surl = u.url
 
@@ -315,10 +298,10 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
             updates.save()
 
             // queue an index task
-            if (u.filename!!.endsWith(".xml"))
+            if (u.filename?.endsWith(".xml") == true)
             {
                 val viewId = "guide." + u.filename!!.replace(".xml", "")
-                val task = SearchIndexTask(GuideApplication.get()!!, viewId)
+                val task = SearchIndexTask(GuideApplication.get(), viewId)
 
                 queue.execute(task)
             }
@@ -330,7 +313,7 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
 
         incrementCompleted()
 
-        if (queuedDownloads!!.size > 0)
+        if (queuedDownloads.size > 0)
         {
             queue.execute { this.downloadFirst() }
         }
@@ -348,7 +331,7 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
         val url = URL(surl)
         val conn = url.openConnection() as HttpURLConnection
 
-        val tempFile = File(GuideApplication.get()!!.cacheDir, UUID.randomUUID().toString())
+        val tempFile = File(GuideApplication.get().cacheDir, UUID.randomUUID().toString())
 
         val `in` = BufferedInputStream(conn.inputStream)
         FileUtils.copyInputStreamToFile(`in`, tempFile)

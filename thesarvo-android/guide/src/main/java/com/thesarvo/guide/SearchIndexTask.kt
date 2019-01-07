@@ -1,18 +1,14 @@
 package com.thesarvo.guide
 
 import android.util.Log
-
 import com.google.common.base.Strings
-
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.xml.sax.InputSource
 import org.xml.sax.SAXException
-
 import java.io.IOException
 import java.io.InputStreamReader
-import java.util.ArrayList
-
+import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
 
 /**
@@ -25,10 +21,6 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
     private val resourceManager: ResourceManager
     var key = 1
     var viewId: String? = null
-
-// FIXME
-    //var views: Map<String, Model.ViewDef> = Model.get().getViews()
-    //var guideListItems: Map<String, Model.ListItem> = Model.get().getGuideListItems()
 
     var factory = DocumentBuilderFactory.newInstance()
 
@@ -91,11 +83,7 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
         {
             val builder = factory.newDocumentBuilder()
 
-            val item = Model.get().getGuide(viewId)
-            if (item == null)
-            {
-                return
-            }
+            val item = Model.get().getGuide(viewId) ?: return
 
             val stream = resourceManager.getDataAsset("$viewId.xml")
 
@@ -107,7 +95,7 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
             indexListItem(viewId, item)
 
             // added to straighten out UTF-8 errors
-            val reader = InputStreamReader(stream!!, "UTF-8")
+            val reader = InputStreamReader(stream, "UTF-8")
             val source = InputSource(reader)
 
             val dom = builder.parse(source)
@@ -141,7 +129,7 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
         catch (t: Throwable)
         {
             t.printStackTrace()
-            Log.e("SearchIndexTask", "Unexpected error indexing " + viewId!!, t)
+            Log.e("SearchIndexTask", "Unexpected error indexing $viewId", t)
         }
 
     }
@@ -165,10 +153,6 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
 
     private fun indexGPSElements(viewId: String, dom: Document)
     {
-        var gpsNodes = indexManager?.index?.gpsPoints
-        if (gpsNodes == null)
-            return
-
         for (e in Xml.getElements(dom.getElementsByTagName("gps")))
         {
             val id = e.getAttribute("id")
@@ -178,9 +162,7 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
             {
                 val point = Point(ePoint)
                 points.add(point)
-
             }
-
 
             //Log.d("Indexing", "adding gps node for " + item.getText());
             val gpsnode = GPSNode(viewId, id, points)
@@ -249,7 +231,7 @@ internal class SearchIndexTask(private val guideApplication: GuideApplication, v
     {
         Log.d("Indexing", "adding entry " + entry.text)
 
-        indexManager.index!!.index(entry)
+        indexManager.index?.index(entry)
     }
 
     fun addGPSEntry(node: GPSNode)

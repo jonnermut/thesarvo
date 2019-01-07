@@ -36,13 +36,13 @@ class NodeViewHolder(context: Context) : TreeNode.BaseNodeViewHolder<Guide>(cont
         if (!value.hasChildren)
         {
 
-            arrowView!!.visibility = View.GONE
+            arrowView?.visibility = View.GONE
 
 
-            if (viewId != null && viewId.length > 0)
+            if (viewId.isNotEmpty())
             {
-                disclosureView!!.visibility = View.VISIBLE
-                disclosureView!!.iconText = context.resources.getString(R.string.ic_keyboard_arrow_right)
+                disclosureView?.visibility = View.VISIBLE
+                disclosureView?.iconText = context.resources.getString(R.string.ic_keyboard_arrow_right)
             }
             view.setBackgroundColor(context.resources.getColor(R.color.colorPrimary))
 
@@ -50,7 +50,7 @@ class NodeViewHolder(context: Context) : TreeNode.BaseNodeViewHolder<Guide>(cont
         }
         else
         {
-            arrowView!!.iconText = context.resources.getString(R.string.ic_keyboard_arrow_right)
+            arrowView?.iconText = context.resources.getString(R.string.ic_keyboard_arrow_right)
             //arrowView.setIconText(context.getResources().getString(value.icon));
             view.setBackgroundColor(context.resources.getColor(R.color.colorPrimaryDark))
         }
@@ -60,19 +60,7 @@ class NodeViewHolder(context: Context) : TreeNode.BaseNodeViewHolder<Guide>(cont
 
     override fun toggle(active: Boolean)
     {
-        arrowView!!.iconText = context.resources.getString(if (active) R.string.ic_keyboard_arrow_down else R.string.ic_keyboard_arrow_right)
+        arrowView?.iconText = context.resources.getString(if (active) R.string.ic_keyboard_arrow_down else R.string.ic_keyboard_arrow_right)
     }
 
-    /*
-    @Override
-    public int getContainerStyle() {
-        return R.style.TreeNodeStyleCustom;
-    }
-
-    @Override
-    public void toggleSelectionMode(boolean editModeEnabled) {
-        nodeSelector.setVisibility(editModeEnabled ? View.VISIBLE : View.GONE);
-        nodeSelector.setChecked(mNode.isSelected());
-    }
-    */
 }

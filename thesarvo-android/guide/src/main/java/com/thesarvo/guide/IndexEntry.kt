@@ -1,9 +1,7 @@
 package com.thesarvo.guide
 
 import android.database.MatrixCursor
-
 import java.io.Serializable
-import java.util.HashMap
 
 /**
  * Created by Karl on 4/09/2014.

@@ -1,24 +1,14 @@
 package com.thesarvo.guide
 
-import android.annotation.TargetApi
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
-import android.widget.Toast
 import com.fasterxml.jackson.databind.ObjectMapper
-
-import com.google.common.base.Charsets
-
-import org.apache.commons.io.IOUtils
-
-import java.io.IOException
-import java.io.InputStream
 import java.io.UnsupportedEncodingException
 import java.math.BigInteger
 import java.net.URI
@@ -51,24 +41,27 @@ class GuideDetailFragment : androidx.fragment.app.Fragment()
     {
         super.onCreate(savedInstanceState)
 
-        if (arguments!!.containsKey(ARG_ITEM_ID))
+        val args = arguments ?: return
+
+        if (args.containsKey(ARG_ITEM_ID))
         {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            val itemId = arguments!!.getString(ARG_ITEM_ID)
+            val itemId = args.getString(ARG_ITEM_ID)
             //mItem = Model.get().getViews().get(itemId);
             viewId = itemId
 
-            guide = Model.get().getGuide(itemId)
+            if (itemId != null)
+                guide = Model.get().getGuide(itemId)
         }
 
-        if (arguments!!.containsKey(ELEMENT_ID))
+        if (args.containsKey(ELEMENT_ID))
         {
-            elementId = arguments!!.getString(ELEMENT_ID)
+            elementId = args.getString(ELEMENT_ID)
         }
 
-        if (arguments!!.containsKey(SINGLE_NODE_DATA))
+        if (args.containsKey(SINGLE_NODE_DATA))
         {
             singleNodeData = arguments!!.getString(SINGLE_NODE_DATA)
         }
@@ -90,7 +83,7 @@ class GuideDetailFragment : androidx.fragment.app.Fragment()
             //((TextView) rootView.findViewById(R.id.guide_detail)).setText(viewId);
 
 
-            var url = ""
+            var url: String
             if (viewId.startsWith("http"))
             {
                 url = viewId
@@ -130,10 +123,6 @@ class GuideDetailFragment : androidx.fragment.app.Fragment()
                 if (guideData.indexOf("<guide") < 0)
                     guideData = "<guide>$guideData</guide>"
 
-                //guideData = guideData.replace("\n", "\\n")
-                //guideData = guideData.replace("\r", "\\r")
-                //guideData = guideData.replace("'", "\\'")
-
                 map["guide_pageid"] = getGuideId(viewId)
                 map["guide_xml"] = guideData
 
@@ -167,14 +156,10 @@ class GuideDetailFragment : androidx.fragment.app.Fragment()
         settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
         settings.allowFileAccessFromFileURLs = true
 
-        //if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
-        //    Level16Apis.enableUniversalAccess(settings)
-
 
         WebView.setWebContentsDebuggingEnabled(true)
 
         webview.webViewClient = WVClient()
-
         webview.webChromeClient = MyWebChromeClient()
 
 
@@ -183,48 +168,15 @@ class GuideDetailFragment : androidx.fragment.app.Fragment()
         webview.addJavascriptInterface(js, "thesarvoApp") // TODO
     }
 
-    /*
-    // Wrapping these functions in their own class prevents warnings in adb like:
-    // VFY: unable to resolve virtual method 285: Landroid/webkit/WebSettings;.setAllowUniversalAccessFromFileURLs
-    @TargetApi(16)
-    private object Level16Apis
-    {
-        internal fun enableUniversalAccess(settings: WebSettings)
-        {
-            settings.allowUniversalAccessFromFileURLs = true
-        }
-    }
-    */
-
-    /*
-    @TargetApi(19)
-    private object Level19Apis
-    {
-        internal fun setWebContentsDebuggingEnabled(webview: WebView)
-        {
-            try
-            {
-                webview.setWebContentsDebuggingEnabled(true)
-            }
-            catch (t: Throwable)
-            {
-                t.printStackTrace()
-            }
-
-        }
-    }
-    */
-
-
     private fun getWebView(rootView: View): WebView
     {
         return rootView.findViewById<View>(R.id.guide_detail) as WebView
     }
 
-    public inner class JSInterface
+    inner class JSInterface
     {
         @JavascriptInterface
-        public fun hello(): String
+        fun hello(): String
         {
             return getGuideDataJson()
         }
@@ -233,9 +185,6 @@ class GuideDetailFragment : androidx.fragment.app.Fragment()
 
     fun convertToCachedFilename(url: String): String
     {
-        val ret = url
-
-
         var path = url
         if (path.lastIndexOf('/') > 0)
             path = path.substring(path.lastIndexOf('/'))
@@ -262,7 +211,7 @@ class GuideDetailFragment : androidx.fragment.app.Fragment()
         }
         catch (e: UnsupportedEncodingException)
         {
-            // TODO Auto-generated catch block
+
             e.printStackTrace()
             return BigInteger.ZERO
         }
@@ -310,17 +259,6 @@ class GuideDetailFragment : androidx.fragment.app.Fragment()
     inner class WVClient : WebViewClient()
     {
         internal var map = MimeTypeMap.getSingleton()
-
-        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?)
-        {
-            super.onPageStarted(view, url, favicon)
-        }
-
-        override fun onPageFinished(view: WebView?, url: String?)
-        {
-            super.onPageFinished(view, url)
-
-        }
 
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean
         {
@@ -377,7 +315,7 @@ class GuideDetailFragment : androidx.fragment.app.Fragment()
                     path = path!!.substring("/android_asset/".length)
                     //Log.d("Intercept response", path);
 
-                    val stream = GuideApplication.get()!!.resourceManager.getWWWAsset(path)
+                    val stream = GuideApplication.get().resourceManager.getWWWAsset(path)
                     val mime = map.getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(url))
 
                     return WebResourceResponse(mime, "UTF-8", stream)

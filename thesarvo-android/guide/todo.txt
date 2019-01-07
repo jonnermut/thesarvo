@@ -1,9 +1,11 @@
 
 General
 =======
-- map is not working. Check api key??
 - remove dead code
-- get search working again
+- go through all the kt warnings
+- search result to Guide without content -> error
+
+- final download and index rebuild
 
 UI Rebuild
 ==========
@@ -14,5 +16,7 @@ UI Rebuild
 
 Updates
 =======
+- check download/update is still working
+- sync of index.json
 - Multiple search entries - more or less, spurline
 

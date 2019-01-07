@@ -7,22 +7,10 @@ import android.content.pm.PackageManager
 import android.os.Messenger
 import android.util.Log
 import android.widget.Toast
-
 import com.android.vending.expansion.zipfile.APKExpansionSupport
 import com.android.vending.expansion.zipfile.ZipResourceFile
-import com.google.android.vending.expansion.downloader.DownloadProgressInfo
-import com.google.android.vending.expansion.downloader.DownloaderClientMarshaller
-import com.google.android.vending.expansion.downloader.DownloaderServiceMarshaller
-import com.google.android.vending.expansion.downloader.Helpers
-import com.google.android.vending.expansion.downloader.IDownloaderClient
-import com.google.android.vending.expansion.downloader.IDownloaderService
-import com.google.android.vending.expansion.downloader.IStub
-
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.io.InputStream
+import com.google.android.vending.expansion.downloader.*
+import java.io.*
 
 /**
  * Created by jon on 28/12/2016.
@@ -105,7 +93,7 @@ class ResourceManager(internal var guideApplication: GuideApplication) : IDownlo
             catch (e: IOException)
             {
                 e.printStackTrace()
-                Toast.makeText(guideApplication, "Error opening database!", Toast.LENGTH_LONG).show()
+                Toast.makeText(guideApplication, "Error opening extension file!", Toast.LENGTH_LONG).show()
             }
 
             if (resources == null)
@@ -250,7 +238,7 @@ class ResourceManager(internal var guideApplication: GuideApplication) : IDownlo
 
     override fun onDownloadProgress(progress: DownloadProgressInfo)
     {
-        MainActivity.get()!!.setProgress(progress.mOverallProgress shr 8, progress.mOverallTotal shr 8, "Downloading Data")
+        MainActivity.get()?.setProgress(progress.mOverallProgress shr 8, progress.mOverallTotal shr 8, "Downloading Data")
     }
 
     companion object
@@ -260,7 +248,7 @@ class ResourceManager(internal var guideApplication: GuideApplication) : IDownlo
         private val EXP_VERSION_NO = 3
         private val MAIN_EXP_FILE_SIZE = 191635456L
 
-        public fun get(): ResourceManager
+        fun get(): ResourceManager
         {
             return GuideApplication.get().resourceManager
         }

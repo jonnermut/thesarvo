@@ -2,7 +2,7 @@ package com.thesarvo.guide
 
 import org.apache.commons.io.IOUtils
 
-public class Guide
+class Guide
 {
     companion object {
 
@@ -34,7 +34,7 @@ public class Guide
         this.children = children
     }
 
-    public val hasChildren: Boolean
+    val hasChildren: Boolean
         get() = this.children.isNotEmpty()
 
 

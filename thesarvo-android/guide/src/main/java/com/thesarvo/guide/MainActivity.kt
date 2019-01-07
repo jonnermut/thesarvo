@@ -7,24 +7,22 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import android.util.Log
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
-
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.SearchView
+import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
 import com.unnamed.b.atv.model.TreeNode
 import com.unnamed.b.atv.view.AndroidTreeView
-
-import java.util.HashMap
+import java.util.*
 
 class MainActivity : AppCompatActivity()
 {
@@ -83,12 +81,12 @@ class MainActivity : AppCompatActivity()
         val root = TreeNode.root()
 
         val viewDef = Model.get().rootGuide
-        addListItems(root, viewDef!!, 0)
+        addListItems(root, viewDef, 0)
 
         val tView = AndroidTreeView(this, root)
         tView.setDefaultViewHolder(NodeViewHolder::class.java)
         tView.setDefaultAnimation(true)
-        tView.setDefaultNodeClickListener { node, value ->
+        tView.setDefaultNodeClickListener { _, value ->
             if (value is Guide)
             {
                 onItemSelected(value)
@@ -105,9 +103,9 @@ class MainActivity : AppCompatActivity()
         searchView = findViewById<View>(R.id.search_view) as SearchView
 
         val info = searchManager.getSearchableInfo(componentName)
-        searchView!!.setSearchableInfo(info)
+        searchView?.setSearchableInfo(info)
 
-        searchView?.setIconifiedByDefault(false)
+        searchView?.setIconifiedByDefault(true)
 
         //searchView.setEnabled(false);
         //searchView.setClickable(false);
@@ -118,13 +116,12 @@ class MainActivity : AppCompatActivity()
 
     private fun addListItems(root: TreeNode, guide: Guide, level: Int)
     {
-        var level = level
         for (kid in guide.children)
         {
             val n = TreeNode(kid)
             root.addChild(n)
 
-            addListItems(n, kid, level++)
+            addListItems(n, kid, level+1)
 
         }
     }
@@ -136,12 +133,12 @@ class MainActivity : AppCompatActivity()
 
         val id = item.viewIdOrId
 
-        if (id == null || id.length == 0)
+        if (id.isEmpty())
             return
 
         if (!item.hasChildren)
         {
-            drawer!!.closeDrawer(Gravity.LEFT)
+            drawer?.closeDrawer(Gravity.LEFT)
         }
 
         if (id.startsWith("http") || item.hasGuideContent)
@@ -154,33 +151,7 @@ class MainActivity : AppCompatActivity()
             //start the map activity
 
             showMap(null, null);
-            /*
-            if (mapsIndexed)
-            {
-                //Intent intent = new Intent(this, MapsFragment.class);
-                //startActivity(intent);
-
-                showMap(null);
-            }
-            else
-            {
-                Toast.makeText(this, "Maps not ready yet!", Toast.LENGTH_SHORT).show();
-            }
-            */
-
         }
-
-//        else
-//        {
-//            //showGuideDetail(id, null, true, null);
-//            val args = HashMap<String, String>()
-//            args[GuideDetailFragment.ARG_ITEM_ID] = id
-//            showFragment(GuideListFragment::class.java, args, true, true)
-//
-//
-//        }
-
-
     }
 
 
@@ -245,7 +216,7 @@ class MainActivity : AppCompatActivity()
             e.printStackTrace()
         }
 
-        fragment!!.arguments = arguments
+        fragment?.arguments = arguments
 
 
         // In two-pane mode, show the detail view in this activity by
@@ -260,7 +231,9 @@ class MainActivity : AppCompatActivity()
          * {
          * container = R.id.guide_list;
          * } */
-        addFragment(container, fragment, includeInHistory)
+
+        if (fragment != null)
+            addFragment(container, fragment, includeInHistory)
 
     }
 
@@ -354,7 +327,7 @@ class MainActivity : AppCompatActivity()
     }
 
     @JvmOverloads
-    fun showSearchResult(uri: Uri, query: String? = null)
+    fun showSearchResult(uri: Uri)
     {
         Log.d("Search Result", uri.toString())
 
@@ -375,36 +348,6 @@ class MainActivity : AppCompatActivity()
             showGuideDetail(viewId, null, true, elementID)
 
         }
-
-        /*
-        //get a cursor representing the entry
-        val c = contentResolver.query(uri, SEARCH_PROJECTION, null, null, null)
-        if (c!!.count < 1)
-        {
-            Log.d("Search Result", "Error, entry not found!")
-        }
-        else if (c.count > 1)
-        {
-            Log.d("Search Result", "Error, multiple found! found!")
-        }
-        else
-        {
-            val v = c.getColumnIndex(SEARCH_PROJECTION[0])
-            val e = c.getColumnIndex(SEARCH_PROJECTION[1])
-
-            //Log.d("Quick Search Back", "Looking at col " + v + " and " + e + " of " + c.getColumnCount());
-            c.moveToFirst()
-            val viewId = c.getString(v)
-            val elementID = c.getString(e)
-
-            Log.d("Search Result", "Selected view $viewId el $elementID")
-
-
-            showGuideDetail(viewId, null, true, elementID)
-
-        }
-        */
-
     }
 
     override fun onNewIntent(intent: Intent)
@@ -423,7 +366,7 @@ class MainActivity : AppCompatActivity()
 
         if (action == Intent.ACTION_SEARCH)
         {
-            /* TODO - work this out
+            /* TODO - work this out - do we ever get it? Maybe pressing enter?
             String query = searchView.getQuery().toString();
             searchView.setIconified(true);
 
@@ -439,25 +382,17 @@ class MainActivity : AppCompatActivity()
             */
             return true
         }
-        else if (action == Intent.ACTION_VIEW)
+        else if (action == Intent.ACTION_VIEW && uri != null)
         //probably shouldn't be something so generic, will need to be changed if ever end up using action view
         {
-            Log.d("Quick Search Back", uri!!.toString())
+            Log.d("Quick Search Back", uri?.toString())
 
-            //get the query and display it on the side if in two pane mode
-            //if(mTwoPane)
-            // {
-            val query = searchView!!.query.toString()
-            //Map<String, String> args = new HashMap<String, String>();
-            //args.put(SearchableActivity.SEARCH_ITEM_QUERY, query);
-            searchView!!.isIconified = true //need to do this before the fragement transaction
+            val query = searchView?.query.toString()
 
-            //showFragment(SearchResultsFragment.class, args, true, true);
-            //}
+            searchView?.isIconified = true //need to do this before the fragement transaction
 
-            //searchView.setIconified(true);
-            showSearchResult(uri, query)
-            searchView!!.isIconified = true
+            showSearchResult(uri)
+            searchView?.isIconified = true
 
             return true
         }
@@ -466,7 +401,6 @@ class MainActivity : AppCompatActivity()
 
     companion object
     {
-        private val SEARCH_PROJECTION = arrayOf("VIEW_ID", "ELEMENT_ID")
 
         private var instance: MainActivity? = null
 

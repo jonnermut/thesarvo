@@ -1,17 +1,9 @@
 package com.thesarvo.guide
 
 import android.util.Log
-
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
-
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.ObjectInputStream
-import java.io.ObjectOutputStream
+import java.io.*
 
 /**
  * Created by jon on 28/12/2016.
@@ -51,7 +43,7 @@ internal class IndexManager(private val guideApplication: GuideApplication, priv
         {
             try
             {
-                val timestamp = FileUtils.readFileToString(indexTimestamp)
+                val timestamp = FileUtils.readFileToString(indexTimestamp, Charsets.UTF_8)
                 val ts = java.lang.Long.parseLong(timestamp)
                 copyFromAsset = assetLastMod > ts
 
@@ -65,14 +57,15 @@ internal class IndexManager(private val guideApplication: GuideApplication, priv
 
         if (copyFromAsset)
         {
-            var `is`: InputStream? = null
+
             try
             {
-                `is` = guideApplication.assets.open("index.ser")
-                IOUtils.copy(`is`!!, FileOutputStream(indexFile))
-                IOUtils.closeQuietly(`is`)
+                val stream = guideApplication.assets.open("index.ser")
+                stream.use {
+                    IOUtils.copy(stream, FileOutputStream(indexFile))
+                }
 
-                FileUtils.writeStringToFile(indexTimestamp, "" + assetLastMod)
+                FileUtils.writeStringToFile(indexTimestamp, "" + assetLastMod, Charsets.UTF_8)
             }
             catch (e: IOException)
             {
