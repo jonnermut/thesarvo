@@ -454,5 +454,6 @@
     <string name="ic_whatshot">&#xe1ae;</string>
     <string name="ic_wifi_tethering">&#xe1af;</string>
     <string name="ic_work">&#xe1b0;</string>
+    <string name="downloading">Checking for updates</string>
 
 </resources>

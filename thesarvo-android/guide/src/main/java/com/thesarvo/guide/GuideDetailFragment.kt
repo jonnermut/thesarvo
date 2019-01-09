@@ -37,6 +37,8 @@ class GuideDetailFragment : androidx.fragment.app.Fragment()
     private var elementId: String? = null
     var guide: Guide? = null
 
+    var setupDone = false
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -67,13 +69,20 @@ class GuideDetailFragment : androidx.fragment.app.Fragment()
         }
     }
 
+    private var rootView: View? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View?
     {
+        if (rootView != null)
+            return rootView;
+
+        super.onCreateView(inflater, container, savedInstanceState)
+
+        rootView = inflater.inflate(R.layout.fragment_guide_detail, container, false)
+        val webview = getWebView(rootView!!)
 
 
-        val rootView = inflater.inflate(R.layout.fragment_guide_detail, container, false)
-        val webview = getWebView(rootView)
         setupWebView(webview)
         val viewId = this.viewId
 
@@ -99,6 +108,7 @@ class GuideDetailFragment : androidx.fragment.app.Fragment()
 
         }
 
+        setupDone = true
         return rootView
     }
 

@@ -314,13 +314,13 @@ class MainActivity : AppCompatActivity()
         Handler(Looper.getMainLooper()).post {
             if (progressBar != null && progressBarText != null)
             {
-                progressBar!!.max = total.toInt()
-                progressBar!!.progress = complete.toInt()
-                progressBarText!!.text = text
+                progressBar?.max = total.toInt()
+                progressBar?.progress = complete.toInt()
+                progressBarText?.text = text
 
                 val show = total > complete
-                progressBar!!.visibility = if (show) View.VISIBLE else View.GONE
-                progressBarText!!.visibility = if (show) View.VISIBLE else View.GONE
+                progressBar?.visibility = if (show) View.VISIBLE else View.GONE
+                progressBarText?.visibility = if (show) View.VISIBLE else View.GONE
             }
         }
 

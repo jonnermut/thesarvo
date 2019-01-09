@@ -60,7 +60,7 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
 
     }
 
-    internal inner class Updates(`is`: InputStream?)
+    internal inner class Updates(`stream`: InputStream?)
     {
         lateinit var document: Document
 
@@ -92,6 +92,14 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
             }
             set(lastMod) = document.documentElement.setAttribute("maxLastMod", lastMod!!.toString())
 
+        var indexHash: String?
+            get()
+            {
+                return document.documentElement.getAttribute("indexHash")
+            }
+            set(newVal) = document.documentElement.setAttribute("indexHash", newVal)
+
+
         val updates: MutableList<Update>
             get()
             {
@@ -111,17 +119,23 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
 
         init
         {
-            if (`is` != null)
+            if (`stream` != null)
             {
                 try
                 {
-                    document = documentBuilder!!.parse(`is`)
+                    document = documentBuilder!!.parse(`stream`)
+
 
                 }
                 catch (e: Exception)
                 {
                     e.printStackTrace()
                 }
+                finally
+                {
+                    IOUtils.closeQuietly(stream)
+                }
+
 
             }
             else
@@ -224,24 +238,12 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
 
         try
         {
-            var s = this.updates.maxLastMod
-            if (s == null)
-                s = 0L
+
 
             this.completedOps = 0
             this.totalOps = 1
-            updateProgress("Getting updates")
+            getUpdatesList()
 
-            val surl = SYNC_URL + s.toString()
-            val url = URL(surl)
-
-            val conn = url.openConnection() as HttpURLConnection
-            val `in` = BufferedInputStream(conn.inputStream)
-            val newUpdates = Updates(`in`)
-            processNewUpdates(newUpdates)
-
-            this.queuedDownloads = this.updates.updates
-            this.totalOps += this.queuedDownloads!!.size
             updateProgress(null)
             queue.execute { this.downloadFirst() }
         }
@@ -254,6 +256,28 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
         incrementCompleted()
     }
 
+    private fun getUpdatesList()
+    {
+        updateProgress("Getting updates")
+
+        var s = this.updates.maxLastMod
+        if (s == null)
+            s = 0L
+
+        val surl = SYNC_URL + s.toString()
+        val url = URL(surl)
+
+        val conn = url.openConnection() as HttpURLConnection
+        val `in` = BufferedInputStream(conn.inputStream)
+        val newUpdates = Updates(`in`)
+        processNewUpdates(newUpdates)
+
+        this.queuedDownloads = this.updates.updates
+        this.totalOps += this.queuedDownloads?.size ?: 0
+    }
+
+
+
     private fun incrementCompleted()
     {
         completedOps++
@@ -262,14 +286,14 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
 
     private fun updateProgress(text: String?)
     {
-        var text = text
-        if (text == null)
+        var txt = text
+        if (txt == null)
         {
-            text = "Updating " + (completedOps + 1) + " of " + totalOps
+            txt = """Updated ${completedOps} of $totalOps"""
         }
 
         val mainActivity = MainActivity.get()
-        mainActivity?.setProgress(completedOps.toLong(), totalOps.toLong(), text)
+        mainActivity?.setProgress(completedOps.toLong(), totalOps.toLong(), txt)
     }
 
 
@@ -329,13 +353,15 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
     private fun downloadUrl(surl: String, finalPath: File)
     {
         val url = URL(surl)
+
         val conn = url.openConnection() as HttpURLConnection
 
         val tempFile = File(GuideApplication.get().cacheDir, UUID.randomUUID().toString())
 
-        val `in` = BufferedInputStream(conn.inputStream)
-        FileUtils.copyInputStreamToFile(`in`, tempFile)
-        IOUtils.closeQuietly(`in`)
+        val stream = BufferedInputStream(conn.inputStream)
+        stream.use {
+            FileUtils.copyInputStreamToFile(stream, tempFile)
+        }
         conn.disconnect()
 
         // atomically move into place
@@ -363,6 +389,38 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
         }
         this.updates.maxLastMod = newUpdates.maxLastMod
         this.updates.save()
+
+        maybeDownloadIndexJson(newUpdates)
+    }
+
+    private fun maybeDownloadIndexJson(newUpdates: Updates)
+    {
+        val newHash = newUpdates.indexHash
+        val existingHash = updates.indexHash
+        if (newHash != null
+                && newHash.isNotEmpty()
+                && existingHash != newHash)
+        {
+            incrementTotal()
+
+            val finalPath = getFinalPath("index.json")
+
+            try
+            {
+                downloadUrl(INDEX_URL, finalPath)
+                updates.indexHash = newHash
+                updates.save()
+            }
+            catch (t: Throwable)
+            {
+                Log.e("GuideDownloader", "Error downloading index file", t)
+            }
+            finally
+            {
+                incrementCompleted()
+            }
+        }
+
     }
 
     companion object
@@ -370,6 +428,7 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
 
         internal var BASE_URL = "http://www.thesarvo.com/confluence"
         internal var SYNC_URL = "$BASE_URL/plugins/servlet/guide/sync/"
+        internal var INDEX_URL = "$BASE_URL/plugins/servlet/guide/index/1"
     }
 
 }
