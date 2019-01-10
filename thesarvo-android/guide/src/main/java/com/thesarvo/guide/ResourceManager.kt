@@ -245,7 +245,7 @@ class ResourceManager(internal var guideApplication: GuideApplication) : IDownlo
     {
         val WWW_DATA = "www/data/"
 
-        private val EXP_VERSION_NO = 3
+        private val EXP_VERSION_NO = BuildConfig.VERSION_CODE
         private val MAIN_EXP_FILE_SIZE = 191635456L
 
         fun get(): ResourceManager

@@ -1,22 +1,28 @@
 
 General
 =======
-- remove dead code
-- go through all the kt warnings
-- search result to Guide without content -> error
 
-- final download and index rebuild
-
-UI Rebuild
-==========
-- Back from topo loses scroll pos
-- Back button in general bit buggy
-- spinnr on detail?
-- search doesnt go to exactly right scroll position
+- Back button in general bit buggy?
+- search doesnt go to exactly right scroll position?
+// FIXME?
+//GuideListActivity.get().setContentView(R.layout.downloader_ui);
 
 Updates
 =======
-- check download/update is still working
-- sync of index.json
 - Multiple search entries - more or less, spurline
 
+Next
+====
+- Equivalent of the iOS TOC
+
+To Do a Release
+===============
+# Update VERSION_NAME & VERSION_CODE in build.gradle
+# Add passwords into signingConfigs / release
+# Make sure the 2 google_maps_api.xml files have the API key in them
+# Run GuideDownloader in the XCode project
+# ./gradlew zipExtension pushExtension
+# ./gradlew rebuildIndex
+# Check it in emulator
+# ./gradlew assembleRelease
+# Remember to upload both APK and OBB at the same time - hit the (+) button

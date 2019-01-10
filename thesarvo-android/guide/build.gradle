@@ -17,8 +17,8 @@ android {
         minSdkVersion minVersion
         targetSdkVersion sdkVersion
         multiDexEnabled true
-        versionCode 9
-        versionName "1.2.0"
+        versionCode VERSION_CODE
+        versionName VERSION_NAME
     }
 
     compileOptions {
@@ -29,11 +29,21 @@ android {
     println indexFile.absolutePath
     def dbLastMod =  indexFile.lastModified().toString() + "L"
 
+    signingConfigs {
+        release {
+            storeFile file("../android.jks")
+            storePassword "*******"
+            keyAlias "androidkey"
+            keyPassword "*******"
+        }
+    }
+
     buildTypes {
         release {
             //runProguard false
             //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             buildConfigField "long", "DB_ASSET_LASTMOD", dbLastMod
+            signingConfig signingConfigs.release
         }
         debug {
             buildConfigField "long", "DB_ASSET_LASTMOD", dbLastMod
@@ -45,7 +55,12 @@ android {
             includeAndroidResources = true
         }
     }
+
+
+
 }
+
+
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
