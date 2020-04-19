@@ -14,7 +14,7 @@ extension String
     {
         if (self.hasPrefix(prefix))
         {
-            return self.substring( from: self.characters.index(self.startIndex, offsetBy: prefix.characters.count))
+            return self.substring( from: self.index(self.startIndex, offsetBy: prefix.count))
         }
         return self
     }

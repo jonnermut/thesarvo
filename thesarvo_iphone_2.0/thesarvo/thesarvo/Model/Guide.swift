@@ -102,7 +102,7 @@ class ClimbNode : GuideNode
 {
     var climbName: String { return (attr("name") ?? "").trimmed() }
     var stars: String { return (attr("stars") ?? "").trimmed() }
-    var starsPretty: String { return "★" * stars.trimmed().characters.count }
+    var starsPretty: String { return "★" * stars.trimmed().count }
     var grade: String { return (attr("grade") ?? "").trimmed() }
     
     override var searchString : String?
@@ -179,7 +179,7 @@ class GPSMapObject
             let loc = CLLocationCoordinate2DMake(latitude, longitude)
             let title = "\(description)"
             var c = code
-            if c.characters.count != 0
+            if c.count != 0
             {
                 c = c + ": "
             }
