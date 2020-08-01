@@ -288,59 +288,74 @@ public class MapPanel extends FlowPanel implements GPSConstants
 
 		
 		Console.log("updateAllPoints: " + drawingObjects);
-
-		removeOverlays();
-		
-		bounds = null;
-
-		if (map!=null && drawingObjects != null && drawingObjects.size() > 0)
+		try
 		{
 
-
-
-			for (MapDrawingObject n : drawingObjects)
+			removeOverlays();
+			
+			bounds = null;
+	
+			if (map!=null && drawingObjects != null && drawingObjects.size() > 0)
 			{
-				
-
-				LatLng latlng = updateDrawingObject(n);
-				
-				if (latlng != null)
+	
+	
+	
+				for (MapDrawingObject n : drawingObjects)
 				{
-
-					if (bounds == null)
-						bounds = LatLngBounds.newInstance(latlng, latlng);
-					else
-						bounds.extend(latlng);
+					try
+					{
+	
+						LatLng latlng = updateDrawingObject(n);
+						
+						if (latlng != null)
+						{
+		
+							if (bounds == null)
+								bounds = LatLngBounds.newInstance(latlng, latlng);
+							else
+								bounds.extend(latlng);
+						}
+					}
+					catch(Exception e)
+					{
+						Console.log("Error in updating point: " + e.getMessage());
+					}
 				}
+				
+	
+	
 			}
+	
+	//		if (bounds == null && map != null)
+	//		{
+	//			LatLng sw = LatLng.newInstance(-43.66, 144.613  );
+	//			LatLng ne = LatLng.newInstance(-39.54, 148.62 );
+	//			bounds = LatLngBounds.newInstance(sw, ne);
+	//		}
 			
 
-
+			
+			if (bounds != null && map != null)
+			{
+				map.setCenter(bounds.getCenter());
+	
+				map.fitBounds(bounds);
+				
+				if (map.getZoom() > 15)
+					map.setZoom(15);
+			}
+	//		else if (map != null)
+	//		{
+	//			LatLng sw = LatLng.newInstance(-43.66, 144.613  );
+	//			map.setCenter(sw);
+	//			map.setZoom(12);
+	//		}
 		}
-
-//		if (bounds == null && map != null)
-//		{
-//			LatLng sw = LatLng.newInstance(-43.66, 144.613  );
-//			LatLng ne = LatLng.newInstance(-39.54, 148.62 );
-//			bounds = LatLngBounds.newInstance(sw, ne);
-//		}
-		
-		
-		if (bounds != null && map != null)
+		catch(Exception e)
 		{
-			map.setCenter(bounds.getCenter());
-
-			map.fitBounds(bounds);
-			
-			if (map.getZoom() > 15)
-				map.setZoom(15);
+			Console.log("Error in updateAllPoints: " + e.getMessage());
 		}
-//		else if (map != null)
-//		{
-//			LatLng sw = LatLng.newInstance(-43.66, 144.613  );
-//			map.setCenter(sw);
-//			map.setZoom(12);
-//		}
+		
 	}
 
 	public LatLng updateDrawingObject(MapDrawingObject n)
