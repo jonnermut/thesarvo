@@ -10,11 +10,11 @@ import Foundation
 
 print("Hello, World!")
 
-let gd = GuideDownloader(directory: "/git/thesarvo/thesarvo_iphone_2.0/thesarvo/www/data")
+let gd = GuideDownloader(directory: "/Users/jon/git/thesarvo/thesarvo_iphone_2.0/thesarvo/www/data")
 gd.desktopMode = true
 gd.startSync()
 
-Thread.sleep(forTimeInterval: 5.0)
+Thread.sleep(forTimeInterval: 15.0)
 while(gd.syncing)
 {
     Thread.sleep(forTimeInterval: 1.0)

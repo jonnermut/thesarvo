@@ -5,8 +5,8 @@ buildscript {
     ext.sdkVersion=28
     ext.minVersion=21
 
-    ext.VERSION_CODE=122
-    ext.VERSION_NAME="1.2.2"
+    ext.VERSION_CODE=130
+    ext.VERSION_NAME="1.3.0"
 
     repositories {
         jcenter()
