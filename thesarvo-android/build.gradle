@@ -5,8 +5,8 @@ buildscript {
     ext.sdkVersion=28
     ext.minVersion=21
 
-    ext.VERSION_CODE=130
-    ext.VERSION_NAME="1.3.0"
+    ext.VERSION_CODE=131
+    ext.VERSION_NAME="1.3.1"
 
     repositories {
         jcenter()
@@ -46,7 +46,8 @@ task zipExtension(type:Zip) {
 // /storage/emulated/0/Android/obb/com.thesarvo.guide/main.3.com.thesarvo.guide.obb
 
 task pushExtension(type:Exec) {
-    commandLine '/Users/jon/.android-sdk/platform-tools/adb', 'push', "build/extension/main.${VERSION_CODE}.com.thesarvo.guide.obb", '/storage/emulated/0/Android/obb/com.thesarvo.guide/'
+    //commandLine '/Users/jon/Library/Android/sdk/platform-tools/adb', 'push', "build/extension/main.${VERSION_CODE}.com.thesarvo.guide.obb", '/storage/emulated/0/Android/obb/com.thesarvo.guide/'
+    commandLine '/Users/jon/Library/Android/sdk/platform-tools/adb', 'push', "build/extension/main.${VERSION_CODE}.com.thesarvo.guide.obb", '/sdcard/'
 }
 
 task rebuildIndex(dependsOn: 'guide:test') {

@@ -22,6 +22,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import com.unnamed.b.atv.model.TreeNode
 import com.unnamed.b.atv.view.AndroidTreeView
+import java.io.File
 import java.util.*
 
 class MainActivity : AppCompatActivity()
@@ -36,6 +37,19 @@ class MainActivity : AppCompatActivity()
     override fun onCreate(savedInstanceState: Bundle?)
     {
         Log.d("MainActivity", "onCreate")
+
+        val oDir: File? = obbDir
+
+        if (null == oDir)
+        {
+            // Storage is not available
+            Log.e("MainActivity", "obbDir was null")
+        }
+        else if (!oDir.exists() && !oDir.mkdir())
+        {
+            Log.e("MainActivity", "Could not create obbDir")
+        }
+        Log.w("MainActivity", "obbDir=$oDir")
 
         super.onCreate(savedInstanceState)
         instance = this

@@ -218,6 +218,8 @@ class ResourceManager(internal var guideApplication: GuideApplication) : IDownlo
     {
         val mainFile = Helpers.getExpansionAPKFileName(context, true, mainVersion)
         val filename = Helpers.generateSaveFileName(context, mainFile)
+
+        //val filename = "/sdcard/"  + mainFile
         return File(filename)
     }
 
