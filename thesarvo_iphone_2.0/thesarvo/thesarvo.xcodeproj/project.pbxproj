@@ -18,7 +18,7 @@
 		FC28B3701A57AA5400C75D50 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC28B36F1A57AA5300C75D50 /* MapKit.framework */; };
 		FC28B3761A59501D00C75D50 /* SectionedDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3751A59501D00C75D50 /* SectionedDataSource.swift */; };
 		FC340F231F5D6E820064A101 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = FCF795441A5289C900A7C808 /* config.xml */; };
-		FC38841D1F010F1800805CA2 /* Guide.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3671A56A92C00C75D50 /* Guide.swift */; };
+		FC52A62A2586C4E000F39967 /* Guide.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC28B3671A56A92C00C75D50 /* Guide.swift */; };
 		FC99CD001A6A290900C3228C /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC99CCFF1A6A290900C3228C /* Optional.swift */; };
 		FC99CD021A6B852900C3228C /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC99CD011A6B852900C3228C /* ContainerViewController.swift */; };
 		FCA40F421C2E8F3700DFC0B7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA40F411C2E8F3700DFC0B7 /* main.swift */; };
@@ -394,9 +394,9 @@
 				FCA40F461C2E900C00DFC0B7 /* AEXML+Stuff.swift in Sources */,
 				FCA40F4A1C2E907100DFC0B7 /* GuideDownloader.swift in Sources */,
 				FCA40F471C2E901E00DFC0B7 /* AEXML.swift in Sources */,
-				FC38841D1F010F1800805CA2 /* Guide.swift in Sources */,
 				FCA40F421C2E8F3700DFC0B7 /* main.swift in Sources */,
 				FCC66E301C363DF700B9A48D /* String+Stuff.swift in Sources */,
+				FC52A62A2586C4E000F39967 /* Guide.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
