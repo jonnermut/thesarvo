@@ -43,7 +43,7 @@
 
 	<target name="build" description="Compile a plugin library" depends="checklibrary">
 		<mkdir dir="${library}/classes"/>
-		<javac destdir="${library}/classes"  debug="${debug}" deprecation="false" optimize="false" failonerror="true" target="1.6" >
+		<javac destdir="${library}/classes"  debug="${debug}" deprecation="false" optimize="false" failonerror="true" target="1.6" source="1.6" >
 			<src path="${library}/src/java"/>
 			<classpath refid="all-libs"/>
 		</javac>

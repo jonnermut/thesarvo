@@ -19,6 +19,7 @@ import org.dom4j.Node;
 
 import com.atlassian.confluence.pages.Page;
 
+/// http://www.thesarvo.com/confluence/plugins/servlet/ts.kml?pageId=414&recursive=true
 public class KmlServlet extends HttpServlet
 {
 
@@ -39,7 +40,7 @@ public class KmlServlet extends HttpServlet
 		
 		System.out.println(d.asXML());
 		
-		System.out.println( getData(null) );
+		System.out.println( getData(null, false) );
 	}
 	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
@@ -51,10 +52,11 @@ public class KmlServlet extends HttpServlet
 			String pageId = req.getParameter("pageId");
 			
 			String recursive = req.getParameter("recursive");
+			boolean rec = recursive != null && recursive.equals("true");
 			
-			String data = getData(pageId);
+			String data = getData(pageId, rec);
 			
-			logger.warn("KmlServlet data=" +  data );
+			//logger.warn("KmlServlet data=" +  data );
 			resp.setContentType("application/vnd.google-earth.kml+xml");
 			resp.getWriter().write(data);
 		}
@@ -66,7 +68,7 @@ public class KmlServlet extends HttpServlet
 		
 	}
 
-	private static String getData(String pageId) throws DocumentException
+	private static String getData(String pageId, boolean recursive) throws DocumentException
 	{
 		Document doc = getBaseXml();
 		
@@ -84,7 +86,7 @@ public class KmlServlet extends HttpServlet
 			
 			List<Point> points = new ArrayList<Point> (); 
 				
-			getGpsPoints(points, p, true, doc);
+			getGpsPoints(points, p, recursive, doc);
 										
 			for (Point point : points)
 			{
@@ -143,7 +145,12 @@ public class KmlServlet extends HttpServlet
 		Element document = getDocumentEl(doc);
 		
 		Element placemark = document.addElement("Placemark");
-		placemark.addElement("name").setText( point.getCode());
+		//String code = point.getCode();
+		String code = point.getDescription();
+		if (code == null)
+			code = "";
+
+		placemark.addElement("name").setText( code );
 		
 		String desc = point.getDescription();
 		if (point.getUrl() !=null)
@@ -192,16 +199,34 @@ public class KmlServlet extends HttpServlet
 	
 
 	private static void getPointListFromNodes(List<Node> nl,
-			List<Point> points, Page page)
+			List<Point> points, Page page, boolean recursive)
 	{
 		String url = "http://www.thesarvo.com/confluence" + page.getUrlPath();
 
+		String title = page.getTitle();
 		for (Node n: nl)
 		{
 			Point p = new Point(n);
 
 			p.setUrl(url);
 			p.setUrlName(page.getTitle());
+
+			if (recursive)
+			{
+				String desc = p.getDescription();
+				if (desc == null)
+					desc = "";
+				if (!desc.startsWith(title))
+				{
+					desc = title + " - " + desc;
+				}
+				String code = p.getCode();
+				if (code == null)
+					code = "";
+				code += " " + desc;
+				p.setCode( code );
+				p.setDescription(desc);
+			}
 
 			points.add(p);
 		}
@@ -218,13 +243,13 @@ public class KmlServlet extends HttpServlet
 			if (doc!=null)
 			{
 			
-				List<Node> nl = doc.selectNodes("//point");
+				List<Node> nl = doc.selectNodes("/guide/gps/point");
 				
 				//NodeList nl = xmlData.findNodes("//point");
 				
-				getPointListFromNodes(nl, points, p);
+				getPointListFromNodes(nl, points, p, recursive);
 				
-				
+				/*
 				Element gps = (Element) doc.selectSingleNode("//gps");
 				if (gps!=null)
 				{
@@ -234,8 +259,10 @@ public class KmlServlet extends HttpServlet
 						handleKml(output, kml);
 					}
 				}
+				*/
 			}
 			
+			if (recursive) 
 			{
 				for (Page child : (List<Page>) p.getChildren())
 				{
