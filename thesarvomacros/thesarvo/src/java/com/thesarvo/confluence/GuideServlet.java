@@ -242,7 +242,7 @@ public class GuideServlet extends HttpServlet
 		for (Element el : (List<Element>) d2.getRootElement().elements())
 		{
 			if (i >= doc.getRootElement().elements().size())
-				doc.getRootElement().elements().add(el.clone());
+				doc.getRootElement().elements().add((Element) el.clone());
 			else
 				doc.getRootElement().elements().add(i, el);
 			i++;

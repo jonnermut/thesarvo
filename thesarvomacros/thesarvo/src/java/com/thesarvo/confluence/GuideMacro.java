@@ -30,7 +30,7 @@ import com.atlassian.renderer.v2.macro.MacroException;
 import com.atlassian.renderer.v2.macro.ResourceAware;
 import com.atlassian.renderer.v2.macro.basic.InlineHtmlMacro;
 import com.atlassian.user.User;
-import com.opensymphony.webwork.ServletActionContext;
+//import com.opensymphony.webwork.ServletActionContext;
 
 /**
  *
@@ -91,6 +91,7 @@ public class GuideMacro extends InlineHtmlMacro implements ResourceAware, com.at
 
         	User user = AuthenticatedUserThreadLocal.getUser();
 
+        	/*
         	// check if any request parameters came in to complete or uncomplete tasks
         	final HttpServletRequest request = ServletActionContext.getRequest();
         	String action = null;
@@ -143,6 +144,7 @@ public class GuideMacro extends InlineHtmlMacro implements ResourceAware, com.at
 	        }
 	        else
 	        {
+	        */
 	        	
 	        	StringBuilder out = new StringBuilder();
 	        	out.append("<script  >\n /*<![CDATA[*//*---->*/ \n");
@@ -162,10 +164,10 @@ public class GuideMacro extends InlineHtmlMacro implements ResourceAware, com.at
 	        	
 	        	//HttpServletRequest request = ServletActionContext.getRequest();
 	        	String contextPath = "/confluence";
-	        	if (request != null)
-	        	{
-	        		contextPath = request.getContextPath();
-	        	}
+	        	//if (request != null)
+	        	//{
+	        	//	contextPath = request.getContextPath();
+	        	//}
         		out.append("var guide_servletUrl='");
         		String path = contextPath + "/plugins/servlet/";
         		out.append(path);
@@ -186,7 +188,7 @@ public class GuideMacro extends InlineHtmlMacro implements ResourceAware, com.at
 	        	out.append("<div id='guidediv' ></div>\n");
 	        	
 	        	return out.toString();
-	        }
+	        //}
         	
 
         }
