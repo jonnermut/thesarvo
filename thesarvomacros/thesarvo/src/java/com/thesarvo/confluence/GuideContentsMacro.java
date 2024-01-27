@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.radeox.macro.parameter.MacroParameter;
 
 import com.atlassian.confluence.core.ContentEntityObject;
@@ -14,7 +15,7 @@ import com.atlassian.confluence.pages.Page;
 import com.atlassian.confluence.pages.PageManager;
 import com.atlassian.confluence.renderer.radeox.macros.AbstractHtmlGeneratingMacro;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
-import com.opensymphony.webwork.ServletActionContext;
+//import com.opensymphony.webwork.ServletActionContext;
 
 
 
@@ -25,7 +26,10 @@ import com.opensymphony.webwork.ServletActionContext;
 public class GuideContentsMacro extends AbstractHtmlGeneratingMacro
 {
 
-
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = Logger.getLogger(GuideContentsMacro.class);
 
     ContentPropertyManager contentPropertyManager;
 	private PageManager pageManager;
@@ -57,16 +61,11 @@ public class GuideContentsMacro extends AbstractHtmlGeneratingMacro
 
         	ret.append("<br/>");
 
-		    // check if any request parameters came in to complete or uncomplete tasks
-		    final HttpServletRequest request = ServletActionContext.getRequest();
-
-		    //contentObject.toPageContext().
-
         	return ret.toString();
         }
         catch (Exception e)
         {
-            log.error("Error while trying to display Guide!", e);
+            logger.error("Error while trying to display Guide!", e);
             throw new IOException(e.getMessage());
         }
     }

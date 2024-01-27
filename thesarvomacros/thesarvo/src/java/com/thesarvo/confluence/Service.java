@@ -238,14 +238,14 @@ public class Service
 				//p.setContent(newContent);
 				
 				
-				SaveContext sc = new DefaultSaveContext();
+				SaveContext sc = DefaultSaveContext.DEFAULT; // new DefaultSaveContext();
 				
 
 		
 				logger.debug("saving now");
 				boolean minor = c.get(Calendar.DAY_OF_YEAR) == new GregorianCalendar()
 						.get(Calendar.DAY_OF_YEAR) && user!=null && user.equals(p.getLastModifierName());
-				sc.setMinorEdit(minor);
+				sc.setSuppressNotifications(minor);
 				
 				if (minor)
 				{
@@ -396,7 +396,7 @@ public class Service
 								guidexml = getGuideXml(page);
 								if (guidexml != null)
 								{
-									imageNodes = guidexml.selectNodes("//image");
+									imageNodes = (List<Element>) (Object) guidexml.selectNodes("//image");
 								}
 							}
 							
