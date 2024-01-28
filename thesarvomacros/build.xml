@@ -63,6 +63,8 @@
 			-->
 			<zipfileset src="${plugins.lib.dir}/chart-plugin-1.8.jar" />
 			<zipfileset src="${plugins.lib.dir}/iText-2.0.7.jar" />
+			<zipfileset src="${plugins.lib.dir}/jcommon-1.0.0.jar" />
+			<zipfileset src="${plugins.lib.dir}/jfreechart-1.0.0.jar" />
 
 		</jar>
 
