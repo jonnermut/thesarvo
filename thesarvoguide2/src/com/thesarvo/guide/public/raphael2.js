@@ -8112,6 +8112,6 @@
     // SVG and VML are appended just before the EXPOSE line
     // Even with AMD, Raphael should be defined globally
     oldRaphael.was ? (g.win.Raphael = R) : (Raphael = R);
-
+	window.Raphael2 = R;
     return R;
 }));
