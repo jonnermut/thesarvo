@@ -130,6 +130,7 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
                 catch (e: Exception)
                 {
                     e.printStackTrace()
+                    throw e;
                 }
                 finally
                 {
@@ -250,7 +251,7 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
         catch (t: Throwable)
         {
             Log.e("GuideDownloader", "Error getting updates list", t)
-
+            updateProgress("Error getting update list");
         }
 
         incrementCompleted()
@@ -426,7 +427,7 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
     companion object
     {
 
-        internal var BASE_URL = "http://www.thesarvo.com/confluence"
+        internal var BASE_URL = "https://www.thesarvo.com/confluence"
         internal var SYNC_URL = "$BASE_URL/plugins/servlet/guide/sync/"
         internal var INDEX_URL = "$BASE_URL/plugins/servlet/guide/index/1"
     }
