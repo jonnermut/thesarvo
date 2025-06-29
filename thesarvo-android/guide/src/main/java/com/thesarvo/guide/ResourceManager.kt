@@ -60,7 +60,7 @@ class ResourceManager(internal var guideApplication: GuideApplication) : IDownlo
             //Intent notifier = null;
 
             val pendingIntent = PendingIntent.getActivity(context, 0, notifier,
-                    PendingIntent.FLAG_UPDATE_CURRENT)
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
             var downloading = -10
 

@@ -60,7 +60,7 @@ class Model
         guide.children = ArrayList<Guide>(
                 guide.children.filter {
                     !excludePages.contains(it.id)
-                    && !it.title.toLowerCase().contains("gallery")
+                    && !it.title.lowercase().contains("gallery")
             })
 
 

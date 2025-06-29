@@ -2,14 +2,12 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion sdkVersion
-    buildToolsVersion '28.0.3'
     useLibrary  'org.apache.http.legacy'
-
     defaultConfig {
-        //applicationId "com.android.vending.expansion.downloader"
-        minSdkVersion minVersion
-        targetSdkVersion sdkVersion
+        minSdk 33
+        targetSdk 35
     }
+
 
     buildTypes {
         release {
@@ -18,7 +16,8 @@ android {
         }
     }
 
-    lintOptions {
+    namespace 'com.android.vending.expansion.downloader'
+    lint {
         abortOnError false
     }
 

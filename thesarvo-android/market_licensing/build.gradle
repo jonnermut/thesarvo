@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion sdkVersion
-    buildToolsVersion '28.0.3'
     useLibrary  'org.apache.http.legacy'
 
     defaultConfig {
@@ -17,4 +16,5 @@ android {
             //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    namespace 'com.google.android.vending.licensing'
 }

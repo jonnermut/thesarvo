@@ -26,7 +26,7 @@ class Index : Serializable
             if (t == null)
                 t = entry.viewName
             if (t != null)
-                entry.searchText = t.toLowerCase().trim { it <= ' ' }
+                entry.searchText = t.lowercase(Locale.getDefault()).trim { it <= ' ' }
         }
         val key = entry.key
 
