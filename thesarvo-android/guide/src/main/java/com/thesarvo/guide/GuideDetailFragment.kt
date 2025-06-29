@@ -13,6 +13,7 @@ import java.io.UnsupportedEncodingException
 import java.math.BigInteger
 import java.net.URI
 import java.net.URISyntaxException
+import java.util.Locale
 
 /**
  * A fragment representing a single Guide detail screen.
@@ -174,7 +175,8 @@ class GuideDetailFragment : androidx.fragment.app.Fragment()
 
 
         // FIXME
-        js = JSInterface()
+        val js = JSInterface()
+        this.js = js
         webview.addJavascriptInterface(js, "thesarvoApp") // TODO
     }
 
@@ -183,10 +185,10 @@ class GuideDetailFragment : androidx.fragment.app.Fragment()
         return rootView.findViewById<View>(R.id.guide_detail) as WebView
     }
 
-    inner class JSInterface
+    public inner class JSInterface
     {
         @JavascriptInterface
-        fun hello(): String
+        public fun hello(): String
         {
             return getGuideDataJson()
         }
@@ -210,7 +212,7 @@ class GuideDetailFragment : androidx.fragment.app.Fragment()
 
 
 
-        return "" + fnv1a_64(url) + ext.toLowerCase()
+        return "" + fnv1a_64(url) + ext.lowercase(Locale.getDefault())
     }
 
     fun fnv1a_64(data: String): BigInteger
@@ -259,7 +261,7 @@ class GuideDetailFragment : androidx.fragment.app.Fragment()
     {
         override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean
         {
-            Log.i("thesavo", consoleMessage?.message())
+            consoleMessage?.message()?.let { Log.i("thesavo", it) }
             return super.onConsoleMessage(consoleMessage)
         }
 

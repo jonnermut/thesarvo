@@ -399,7 +399,7 @@ class MainActivity : AppCompatActivity()
         else if (action == Intent.ACTION_VIEW && uri != null)
         //probably shouldn't be something so generic, will need to be changed if ever end up using action view
         {
-            Log.d("Quick Search Back", uri?.toString())
+            Log.d("Quick Search Back", uri.toString())
 
             val query = searchView?.query.toString()
 

@@ -6,6 +6,7 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
+import java.util.Locale
 
 //import com.thesarvo.guide.IndexEntry.INDEX_ENTRY_COLUMNS
 
@@ -40,7 +41,7 @@ class IndexContentProvider : ContentProvider()
         var selection = selection
         if (uri.toString().contains("/search_suggest_query/"))
         {
-            selection = uri.getLastPathSegment()!!.toLowerCase()
+            selection = uri.getLastPathSegment()!!.lowercase(Locale.getDefault())
 
             val results = GuideApplication.get().indexManager.index?.search(selection)
             val columns = arrayOf<String>("_id", SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID)
