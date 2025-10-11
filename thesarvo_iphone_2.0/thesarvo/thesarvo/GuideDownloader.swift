@@ -136,9 +136,9 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
 {
     let HTML_MARKER = "<html>".data(using: .utf8)!
     
-    let BASE_URL = "http://www.thesarvo.com/confluence"
-    let SYNC_URL = "http://www.thesarvo.com/confluence/plugins/servlet/guide/sync/"
-    let INDEX_URL = "http://www.thesarvo.com/confluence/plugins/servlet/guide/index/1"
+    let BASE_URL = "https://www.thesarvo.com/confluence"
+    let SYNC_URL = "https://www.thesarvo.com/confluence/plugins/servlet/guide/sync/"
+    let INDEX_URL = "https://www.thesarvo.com/confluence/plugins/servlet/guide/index/1"
     
     var since: Int64 = 0
     
@@ -457,8 +457,14 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
     
     func download(_ update: Update)
     {
-        if let url = update.url
+        if var url = update.url
         {
+            if #available(macOS 13.0, *) {
+                url = url.replacing("http://www.thesarvo.com", with: "https://www.thesarvo.com")
+            } else {
+                // Fallback on earlier versions
+            }
+            
             let nsurl = Foundation.URL(string: url)
             if let nsurl = nsurl
             {

@@ -4,9 +4,10 @@ buildscript {
     ext.kotlin_version = '2.2.0'
     ext.sdkVersion=35
     ext.minVersion=33
+    ext.javaTargetCompatibility = 21
 
-    ext.VERSION_CODE=140
-    ext.VERSION_NAME="1.4.0"
+    ext.VERSION_CODE=142
+    ext.VERSION_NAME="1.4.2"
 
     repositories {
         mavenCentral()
@@ -41,22 +42,22 @@ buildscript {
 //}
 
 
-//FIXME currently broken gradle syntax
-//task zipExtension(type:Zip) {
-//    from "$projectDir/../thesarvo_iphone_2.0/thesarvo/www"
-//    //include "www/**/*" main.2.com.thesarvo.guide.obb
-//    into "www"
-//    archiveName "main.${VERSION_CODE}.com.thesarvo.guide.obb"
-//    destinationDir file("build/extension")
-//}
+tasks.register('zipExtension', Zip) {
+    from "$projectDir/../thesarvo_iphone_2.0/thesarvo/www"
+    //include "www/**/*" main.2.com.thesarvo.guide.obb
+    into "www"
+    archiveFileName.set "main.${VERSION_CODE}.com.thesarvo.guide.obb"
+    destinationDirectory.set(file("build/extension"))
+}
 
 // /storage/emulated/0/Android/obb/com.thesarvo.guide/main.3.com.thesarvo.guide.obb
 
-task pushExtension(type:Exec) {
-    //commandLine '/Users/jon/Library/Android/sdk/platform-tools/adb', 'push', "build/extension/main.${VERSION_CODE}.com.thesarvo.guide.obb", '/storage/emulated/0/Android/obb/com.thesarvo.guide/'
-    commandLine '/Users/jon/Library/Android/sdk/platform-tools/adb', 'push', "build/extension/main.${VERSION_CODE}.com.thesarvo.guide.obb", '/sdcard/'
+tasks.register('pushExtension', Exec) {
+    commandLine '/Users/jon/Library/Android/sdk/platform-tools/adb', 'push', "build/extension/main.${VERSION_CODE}.com.thesarvo.guide.obb", '/storage/emulated/0/Android/obb/com.thesarvo.guide/'
+    //commandLine '/Users/jon/Library/Android/sdk/platform-tools/adb', 'push', "build/extension/main.${VERSION_CODE}.com.thesarvo.guide.obb", '/sdcard/'
 }
 
-task rebuildIndex(dependsOn: 'guide:test') {
+tasks.register('rebuildIndex') {
+    dependsOn 'guide:test'
     // really just a reminder here that we need to do this before release
 }

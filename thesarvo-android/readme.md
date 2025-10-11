@@ -1,8 +1,15 @@
 Doing an android release:
 
-./gradlew assembleRelease
+Update VERSION_CODE / VERSION_NAME etc in build.gradle
 Run guide downloader in XCode project
-Run test: IndexRebuilder/testIndexAssetRebuild
+Make new obb
 ./gradlew zipExtension
-Upload APK to play store
+Push obb to emulator
+./gradlew pushExtension
+
+Make APK
+./gradlew assembleRelease
+
+
+Upload APK (from guide/build/outputs/apk/release) to play store
 Hit plus button on APK and add extension file

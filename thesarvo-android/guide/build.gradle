@@ -22,8 +22,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility 21
-        targetCompatibility 21
+        sourceCompatibility javaTargetCompatibility
+        targetCompatibility javaTargetCompatibility
     }
     def indexFile = new File("$projectDir/src/main/assets/index.ser")
     println indexFile.absolutePath
