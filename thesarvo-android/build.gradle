@@ -6,8 +6,8 @@ buildscript {
     ext.minVersion=33
     ext.javaTargetCompatibility = 21
 
-    ext.VERSION_CODE=142
-    ext.VERSION_NAME="1.4.2"
+    ext.VERSION_CODE=143
+    ext.VERSION_NAME="1.4.3"
 
     repositories {
         mavenCentral()

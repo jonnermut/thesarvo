@@ -459,11 +459,7 @@ class GuideDownloader: NSObject, URLSessionDelegate, URLSessionDownloadDelegate
     {
         if var url = update.url
         {
-            if #available(macOS 13.0, *) {
-                url = url.replacing("http://www.thesarvo.com", with: "https://www.thesarvo.com")
-            } else {
-                // Fallback on earlier versions
-            }
+            url = url.replacingOccurrences(of: "http://www.thesarvo.com", with: "https://www.thesarvo.com")
             
             let nsurl = Foundation.URL(string: url)
             if let nsurl = nsurl
