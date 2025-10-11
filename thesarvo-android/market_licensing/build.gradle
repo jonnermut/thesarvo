@@ -9,6 +9,10 @@ android {
         minSdkVersion minVersion
         targetSdkVersion sdkVersion
     }
+    compileOptions {
+        sourceCompatibility javaTargetCompatibility
+        targetCompatibility javaTargetCompatibility
+    }
 
     buildTypes {
         release {

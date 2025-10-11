@@ -209,7 +209,8 @@ class ResourceManager(internal var guideApplication: GuideApplication) : IDownlo
     {
         val file = getExpansionFile(context, mainVersion)
         Log.d("GuideListActivity", "Checking EXAPK existence at " + file.toString())
-        return file.exists()
+        val exists = file.exists()
+        return exists
         //return Helpers.doesFileExist(this, mainFile, MAIN_EXP_FILE_SIZE, false);
     }
 
