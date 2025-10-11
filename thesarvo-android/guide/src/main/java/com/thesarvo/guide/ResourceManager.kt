@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.android.vending.expansion.zipfile.APKExpansionSupport
 import com.android.vending.expansion.zipfile.ZipResourceFile
 import com.google.android.vending.expansion.downloader.*
+import com.thesarvo.guide.GuideDownloader.Companion.checkGuideXml
 import java.io.*
 
 /**
@@ -171,11 +172,19 @@ class ResourceManager(internal var guideApplication: GuideApplication) : IDownlo
         if (file.startsWith(WWW_DATA))
         {
             val downloaded = File(dataDirectory, file.substring(WWW_DATA.length))
-            if (downloaded.exists() && downloaded.lastModified() > resourcesLastMod)
+            if (downloaded.exists()
+                && downloaded.lastModified() > resourcesLastMod
+                && downloaded.length() > 0)
             {
                 try
                 {
-                    return FileInputStream(downloaded)
+                    val filename = downloaded.name
+                    val isGuideXml = filename.endsWith(".xml") && filename.substringBeforeLast(".xml").toIntOrNull() != null
+
+                    if (!isGuideXml || checkGuideXml(downloaded))
+                    {
+                        return FileInputStream(downloaded)
+                    }
                 }
                 catch (e: FileNotFoundException)
                 {

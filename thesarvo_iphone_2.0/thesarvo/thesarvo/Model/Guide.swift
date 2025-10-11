@@ -318,7 +318,14 @@ public class Guide: Codable
         {
             if bundleUrl==nil || downloadedUrl.fileModificationDate?.timeIntervalSince1970 > bundleUrl?.fileModificationDate?.timeIntervalSince1970
             {
-                return (try? Data(contentsOf: Foundation.URL(fileURLWithPath: downloadedPath)))
+                var isGuideXml = fileExtension == "xml" && name.allSatisfy { $0.isNumber }
+                
+                if (!isGuideXml ||
+                    Model.instance.guideDownloader.checkCorrectGuide(path: downloadedPath))
+                {
+                    
+                    return (try? Data(contentsOf: Foundation.URL(fileURLWithPath: downloadedPath)))
+                }
             }
         }
 

@@ -7,6 +7,7 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.w3c.dom.Document
 import org.w3c.dom.Element
+import org.xml.sax.InputSource
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
@@ -26,6 +27,8 @@ import javax.xml.transform.stream.StreamResult
 
 class GuideDownloader(directory: File, private val resourceManager: ResourceManager)
 {
+    var factory = DocumentBuilderFactory.newInstance()
+
     private var queuedDownloads: MutableList<Update>? = null
 
     internal var since: Long = 0
@@ -353,17 +356,43 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
     @Throws(IOException::class)
     private fun downloadUrl(surl: String, finalPath: File)
     {
-        val url = URL(surl)
-
+        val replacedUrl = surl.replace("http://www.thesarvo.com", "https://www.thesarvo.com")
+        val url = URL(replacedUrl)
         val conn = url.openConnection() as HttpURLConnection
+        conn.connect()
+        val responseCode = conn.responseCode
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            conn.disconnect()
+            throw IOException("Download failed with response code $responseCode for $replacedUrl")
+        }
 
         val tempFile = File(GuideApplication.get().cacheDir, UUID.randomUUID().toString())
 
-        val stream = BufferedInputStream(conn.inputStream)
-        stream.use {
-            FileUtils.copyInputStreamToFile(stream, tempFile)
+        try {
+            val stream = BufferedInputStream(conn.inputStream)
+            stream.use {
+                FileUtils.copyInputStreamToFile(stream, tempFile)
+            }
+        } finally {
+            conn.disconnect()
         }
-        conn.disconnect()
+
+        if (!tempFile.exists() || tempFile.length() == 0L)
+        {
+            throw IOException("Downloaded file was empty")
+        }
+
+        val filename = finalPath.name
+        val isGuideXml = filename.endsWith(".xml") && filename.substringBeforeLast(".xml").toIntOrNull() != null
+
+        if (isGuideXml)
+        {
+            // check that the download looks like valid xml before using is
+            if (!checkGuideXml(tempFile))
+            {
+               throw IOException("Downloaded file was not valid XML");
+            }
+        }
 
         // atomically move into place
 
@@ -430,6 +459,34 @@ class GuideDownloader(directory: File, private val resourceManager: ResourceMana
         internal var BASE_URL = "https://www.thesarvo.com/confluence"
         internal var SYNC_URL = "$BASE_URL/plugins/servlet/guide/sync/"
         internal var INDEX_URL = "$BASE_URL/plugins/servlet/guide/index/1"
+
+        fun checkGuideXml(tempFile: File): Boolean
+        {
+            val stream = FileInputStream(tempFile)
+            try
+            {
+                val reader = InputStreamReader(stream, "UTF-8")
+                val source = InputSource(reader)
+                val factory = DocumentBuilderFactory.newInstance()
+                val builder = factory.newDocumentBuilder()
+                val dom = builder.parse(source)
+                val root = dom.documentElement
+                //if there's no guide data continue
+                if (root.tagName == "guide")
+                {
+                    return true;
+                }
+            }
+            catch (e: Exception)
+            {
+                Log.e("GuideDownloader", "Guide xml failed to parse", e)
+            }
+            finally
+            {
+                stream.close()
+            }
+            return false;
+        }
     }
 
 }
