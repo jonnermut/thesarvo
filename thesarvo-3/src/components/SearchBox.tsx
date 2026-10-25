@@ -1,13 +1,14 @@
 import { useMatch, useNavigate } from '@tanstack/react-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { GUIDE_PREFIX } from '#/guide/content/paths'
+import { GUIDE_PREFIX, STATIC_SITE } from '#/guide/content/paths'
 import { useRecent } from '#/guide/recent'
 import { loadSearchIndex } from '#/guide/search/load'
 import { NothingFound, SearchResults, useResultKeys, useSearch } from '#/guide/search/SearchResults'
 import type { Target } from '#/guide/search/SearchResults'
 import { RecentGuides } from './RecentGuides'
 
-const SEARCH_URL = `${GUIDE_PREFIX}/search`
+// The form posts here before the page is live, so on S3 it must be the folder (see router.tsx).
+const SEARCH_URL = `${GUIDE_PREFIX}/search${STATIC_SITE ? '/' : ''}`
 
 const isEditable = (el: EventTarget | null) => el instanceof HTMLElement && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName))
 
@@ -93,7 +94,7 @@ export function SearchBox() {
         onSubmit={(e) => {
           e.preventDefault()
           close()
-          void navigate({ to: SEARCH_URL, search: { q: query.trim() } })
+          void navigate({ to: `${GUIDE_PREFIX}/search`, search: { q: query.trim() } })
         }}
       >
         <div className={sheet ? 'flex items-center gap-2 border-b border-line p-3' : ''}>
