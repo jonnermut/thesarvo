@@ -1,5 +1,5 @@
 import type { Climb } from '#/guide/model/types'
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { Lines, splitLines } from './text'
 import { Stars } from './Stars'
 
@@ -7,15 +7,39 @@ import { Stars } from './Stars'
 export const ROW = 'flex flex-wrap items-baseline gap-x-4 gap-y-0.5 sm:grid sm:grid-cols-[2rem_13rem_3.5rem_3rem_2.5rem_1fr] sm:gap-x-3'
 const INDENT = 'sm:ml-[2.75rem]'
 
-/** One climb: blue number, bold name, length and grade, then description and credits (as on the live guide). */
-export function ClimbBlock({ climb, highlighted }: { climb: Climb; highlighted?: boolean }) {
+/**
+ * One climb: blue number, bold name, length and grade, then description and credits (as on the live
+ * guide). With an anchor, the number links to the climb and copies that link where the browser allows.
+ */
+export function ClimbBlock({ climb, highlighted, anchor }: { climb: Climb; highlighted?: boolean; anchor?: string }) {
+  const [copied, setCopied] = useState(false)
+  const copy = () =>
+    navigator.clipboard?.writeText(`${location.origin}${location.pathname}#${anchor}`).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    }, () => {})
   return (
     <article
       className={`rounded px-2 py-1.5 text-[13px] leading-snug transition-colors ${highlighted ? 'bg-amber/20' : ''}`}
     >
       <div className={ROW}>
-        <span className="w-7 text-right font-bold tabular-nums text-[#0000a0] sm:w-auto">{climb.number}</span>
-        <h3 className="min-w-[8rem] flex-1 text-[13px] font-bold sm:flex-none">{climb.name || <span className="text-muted">Unnamed</span>}</h3>
+        <span className="w-7 text-right font-bold tabular-nums text-[#0000a0] sm:w-auto">
+          {anchor ? (
+            <a href={`#${anchor}`} onClick={copy} title="Link to this climb" className="hover:underline">
+              {climb.number || '#'}
+            </a>
+          ) : (
+            climb.number
+          )}
+        </span>
+        <h3 className="min-w-[8rem] flex-1 text-[13px] font-bold sm:flex-none">
+          {climb.name || <span className="text-muted">Unnamed</span>}
+          {copied && (
+            <span role="status" className="ml-2 text-[11px] font-normal text-forest">
+              Link copied
+            </span>
+          )}
+        </h3>
         <span className="text-[#0000a0]">
           <Stars stars={climb.stars} />
         </span>

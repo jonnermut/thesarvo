@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ancestorIds, findByPath, guideUrl } from '#/guide/content/paths'
 import { fetchTree } from '#/guide/server'
 import type { IndexNode } from '#/guide/content/types'
+import { RecentGuides } from './RecentGuides'
 
 function Chevron({ open }: { open: boolean }) {
   return (
@@ -147,6 +148,7 @@ export function SideNav({ local }: { local: IndexNode }) {
           placeholder="Find a crag…"
           className="w-full rounded-md border border-line bg-white px-3 py-1.5 text-sm placeholder:text-muted focus:border-link focus:outline-none"
         />
+        {!query && <RecentGuides current={currentPath} className="mt-3" />}
       </div>
       <div ref={scroller} className="min-h-0 flex-1 overflow-y-auto px-2 pb-4">
         {query ? (

@@ -39,7 +39,9 @@ body {
   scroll-margin-top: 4.5rem;
   border-radius: 0.25rem;
 }
-.anchor:target {
+/* `.arrived` is set by GuideView for links followed inside the app, which set no :target. */
+.anchor:target,
+.anchor.arrived {
   animation: arrived 2.4s ease-out;
 }
 @keyframes arrived {

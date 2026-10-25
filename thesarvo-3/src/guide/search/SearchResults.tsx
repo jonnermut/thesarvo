@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { useEffect, useMemo, useState } from 'react'
 import { guideUrl } from '#/guide/content/paths'
 import { loadSearchIndex } from './load'
-import { search } from './match'
+import { search, suggest } from './match'
 import type { Group, Hit, SearchIndex } from './match'
 
 /** A place a result opens. */
@@ -27,8 +27,30 @@ export function useSearch(query: string, guideId?: string, limit?: number) {
       live = false
     }
   }, [wanted, index])
-  const result = useMemo(() => (index && wanted ? search(index, query, guideId, limit) : undefined), [index, wanted, query, guideId, limit])
+  const result = useMemo(() => {
+    if (!index || !wanted) return undefined
+    const found = search(index, query, guideId, limit)
+    return { ...found, suggestion: found.total ? undefined : suggest(index, query, guideId) }
+  }, [index, wanted, query, guideId, limit])
   return { result, loading: wanted && !index && !failed, failed }
+}
+
+/** "Nothing found", with a corrected query to try when there is one. */
+export function NothingFound({ suggestion, onTry, className = '' }: { suggestion?: string; onTry: (query: string) => void; className?: string }) {
+  return (
+    <p className={`text-sm text-muted ${className}`}>
+      Nothing found.
+      {suggestion && (
+        <>
+          {' '}Did you mean{' '}
+          <button type="button" onClick={() => onTry(suggestion)} className="font-medium text-link hover:underline">
+            {suggestion}
+          </button>
+          ?
+        </>
+      )}
+    </p>
+  )
 }
 
 /**

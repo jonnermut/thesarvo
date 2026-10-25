@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { IndexNode } from '#/guide/content/types'
 import type { GuideNode } from '#/guide/model/types'
-import { buildSearchIndex, normalise, parseQuery, search } from './match'
+import { buildSearchIndex, normalise, parseQuery, search, similarity, suggest } from './match'
 import { guideShard, mergeShards } from './shard'
 import type { Shard } from './shard'
 
@@ -67,6 +67,26 @@ describe('search', () => {
 
   it('finds nothing for an empty query', () => {
     expect(search(index, '  ').total).toBe(0)
+  })
+})
+
+describe('suggest', () => {
+  it('scores letter pairs in common', () => {
+    expect(similarity('arete', 'arete')).toBe(1)
+    expect(similarity('lowdena', 'lowdina')).toBeCloseTo(0.67, 2)
+    expect(similarity('abc', 'xyz')).toBe(0)
+  })
+
+  it('swaps misspelt words for the closest that finds something, keeping the rest', () => {
+    expect(suggest(index, 'lowdena')).toBe('lowdina')
+    expect(suggest(index, 'arette ** lowdina')).toBe('arete ** lowdina')
+    expect(suggest(index, 'organ pipez')).toBe('organ pipes')
+  })
+
+  it('offers nothing when no word is close or the fix still finds nothing', () => {
+    expect(suggest(index, 'zzyzx')).toBeUndefined()
+    expect(suggest(index, 'arete')).toBeUndefined()
+    expect(suggest(index, 'organ pipez', '2')).toBeUndefined()
   })
 })
 

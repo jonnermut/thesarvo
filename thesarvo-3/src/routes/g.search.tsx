@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { SearchResults, useResultKeys, useSearch } from '#/guide/search/SearchResults'
+import { NothingFound, SearchResults, useResultKeys, useSearch } from '#/guide/search/SearchResults'
 import type { Target } from '#/guide/search/SearchResults'
 import { fetchPage } from '#/guide/server'
 
@@ -27,6 +27,10 @@ function SearchPage() {
   const list = useRef<HTMLDivElement>(null)
   const go = (target: Target) => void navigate({ to: target.to, hash: target.hash })
   const { active, onKeyDown } = useResultKeys(result?.groups, go, useCallback(() => list.current, []))
+  const update = (value: string) => {
+    setQuery(value)
+    void navigate({ to: '/g/search', search: value.trim() ? { q: value } : {}, replace: true })
+  }
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6">
@@ -40,10 +44,7 @@ function SearchPage() {
           aria-label="Search climbs and crags"
           placeholder="A climb, crag or heading; ** for stars, 20-23 for grades, sport, trad, boulder"
           value={query ?? ''}
-          onChange={(e) => {
-            setQuery(e.target.value)
-            void navigate({ to: '/g/search', search: e.target.value.trim() ? { q: e.target.value } : {}, replace: true })
-          }}
+          onChange={(e) => update(e.target.value)}
           onKeyDown={onKeyDown}
           className="w-full rounded-md border border-line px-3 py-2 text-base outline-none focus:border-link"
         />
@@ -51,9 +52,10 @@ function SearchPage() {
       <div ref={list} className="mt-4">
         {loading && <p className="text-sm text-muted">Loading…</p>}
         {failed && <p className="text-sm text-muted">Search is not available right now.</p>}
-        {result && (
+        {result?.total === 0 && <NothingFound suggestion={result.suggestion} onTry={update} />}
+        {!!result?.total && (
           <p className="mb-2 text-sm text-muted">
-            {result.total === 0 ? 'Nothing found.' : result.total > LIMIT ? `The best ${LIMIT} of ${result.total.toLocaleString()} results` : `${result.total.toLocaleString()} results`}
+            {result.total > LIMIT ? `The best ${LIMIT} of ${result.total.toLocaleString()} results` : result.total === 1 ? '1 result' : `${result.total.toLocaleString()} results`}
           </p>
         )}
         {result && <SearchResults groups={result.groups} active={active} />}

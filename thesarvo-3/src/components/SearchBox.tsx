@@ -1,9 +1,11 @@
 import { useMatch, useNavigate } from '@tanstack/react-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { GUIDE_PREFIX } from '#/guide/content/paths'
+import { useRecent } from '#/guide/recent'
 import { loadSearchIndex } from '#/guide/search/load'
-import { SearchResults, useResultKeys, useSearch } from '#/guide/search/SearchResults'
+import { NothingFound, SearchResults, useResultKeys, useSearch } from '#/guide/search/SearchResults'
 import type { Target } from '#/guide/search/SearchResults'
+import { RecentGuides } from './RecentGuides'
 
 const SEARCH_URL = `${GUIDE_PREFIX}/search`
 
@@ -25,6 +27,7 @@ export function SearchBox() {
   const input = useRef<HTMLInputElement>(null)
   const panel = useRef<HTMLDivElement>(null)
 
+  const recent = useRecent()
   const match = useMatch({ from: '/g/$', shouldThrow: false })
   const guide = match?.loaderData?.guide ? match.loaderData.node : undefined
   const { result, loading, failed } = useSearch(query, scope === 'guide' ? guide?.id : undefined)
@@ -66,7 +69,8 @@ export function SearchBox() {
     if (sheet) input.current?.focus()
   }, [sheet])
 
-  const showing = (open || sheet) && query.trim() !== ''
+  const searching = query.trim() !== ''
+  const showing = (open || sheet) && (searching || recent.length > 0)
   return (
     <>
       <a
@@ -137,7 +141,8 @@ export function SearchBox() {
                 : 'absolute top-full right-0 mt-2 max-h-[70vh] w-[min(32rem,calc(100vw-2rem))] overflow-y-auto rounded-md border border-line bg-card text-ink shadow-lg'
             }
           >
-            {guide && (
+            {!searching && <RecentGuides onPick={close} className="px-3 py-3" />}
+            {searching && guide && (
               <div className="flex gap-1 border-b border-line px-3 py-2 text-[13px]">
                 {(['all', 'guide'] as const).map((s) => (
                   <button
@@ -156,7 +161,16 @@ export function SearchBox() {
             )}
             {loading && <p className="px-3 py-3 text-sm text-muted">Loading…</p>}
             {failed && <p className="px-3 py-3 text-sm text-muted">Search is not available right now.</p>}
-            {result && result.groups.length === 0 && <p className="px-3 py-3 text-sm text-muted">Nothing found.</p>}
+            {result && result.groups.length === 0 && (
+              <NothingFound
+                suggestion={result.suggestion}
+                onTry={(q) => {
+                  setQuery(q)
+                  input.current?.focus()
+                }}
+                className="px-3 py-3"
+              />
+            )}
             {result && result.groups.length > 0 && (
               <>
                 <SearchResults groups={result.groups} active={active} onPick={close} />

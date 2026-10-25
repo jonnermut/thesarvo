@@ -1,9 +1,11 @@
-import { ClientOnly, createFileRoute, notFound } from '@tanstack/react-router'
-import { lazy, Suspense } from 'react'
+import { ClientOnly, createFileRoute, notFound, useLocation } from '@tanstack/react-router'
+import { lazy, Suspense, useEffect } from 'react'
 import { Breadcrumbs } from '#/components/Breadcrumbs'
 import { fetchGuide, fetchPage, fetchPageBody } from '#/guide/server'
 import { ContentsView } from '#/guide/view/ContentsView'
+import { addRecent } from '#/guide/recent'
 import { GuideView } from '#/guide/view/GuideView'
+import { PrevNext } from '#/guide/view/PrevNext'
 
 // The editor is its own chunk: readers never download it.
 const Editor = lazy(() => import('#/guide/edit/Editor'))
@@ -29,6 +31,10 @@ export const Route = createFileRoute('/g/$')({
 function GuidePage() {
   const { node, trail, guide, body } = Route.useLoaderData()
   const { edit } = Route.useSearch()
+  const hash = useLocation({ select: (l) => l.hash })
+  useEffect(() => {
+    if (guide) addRecent({ path: node.path, title: node.title })
+  }, [guide, node.path, node.title])
   if (guide && edit)
     return (
       <ClientOnly fallback={<p className="p-8 text-muted">Loading editor…</p>}>
@@ -42,7 +48,8 @@ function GuidePage() {
     return (
       <>
         <Breadcrumbs trail={trail} current={node} width="max-w-6xl px-4 sm:px-6" />
-        <GuideView guide={guide} />
+        <GuideView guide={guide} hash={hash} />
+        <PrevNext id={node.id} />
         {node.children.length > 0 && (
           <div className="mx-auto max-w-6xl px-4 pb-10 sm:px-6">
             <div className="max-w-4xl">

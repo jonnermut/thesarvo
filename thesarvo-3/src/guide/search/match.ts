@@ -163,3 +163,50 @@ export function search(index: SearchIndex, input: string, guideId?: string, limi
   }
   return { groups: [...groups.values()], total: hits.length }
 }
+
+const bigrams = (w: string) => {
+  const grams = new Set<string>()
+  for (let i = 0; i < w.length - 1; i++) grams.add(w.slice(i, i + 2))
+  return grams
+}
+
+/** Dice similarity of two words' letter pairs: 1 for the same pairs, 0 for none shared. */
+export function similarity(a: string, b: string): number {
+  const x = bigrams(a)
+  const y = bigrams(b)
+  if (!x.size || !y.size) return a === b ? 1 : 0
+  let shared = 0
+  for (const g of x) if (y.has(g)) shared++
+  return (2 * shared) / (x.size + y.size)
+}
+
+const vocabularies = new WeakMap<SearchIndex, string[]>()
+const vocabulary = (index: SearchIndex) => {
+  let words = vocabularies.get(index)
+  if (!words) vocabularies.set(index, (words = [...new Set(index.flatMap((i) => i.norm.split(' ')).filter((w) => w.length > 2))]))
+  return words
+}
+
+/**
+ * For a query that finds nothing, the same query with each word found nowhere swapped for the
+ * closest word in the index ("lowdena" → "lowdina"), when that finds something.
+ */
+export function suggest(index: SearchIndex, input: string, guideId?: string): string | undefined {
+  const words = vocabulary(index)
+  let changed = false
+  const tokens = input.trim().split(/\s+/).map((token) => {
+    const w = normalise(token)
+    if (w.length < 3 || /^[*★\d-]+$|^v\d+$/i.test(token) || words.includes(w)) return token
+    let best = ''
+    let bestScore = 0.5
+    for (const candidate of words) {
+      const s = similarity(w, candidate)
+      if (s > bestScore) [best, bestScore] = [candidate, s]
+    }
+    if (!best) return token
+    changed = true
+    return best
+  })
+  const fixed = tokens.join(' ')
+  return changed && search(index, fixed, guideId, 1).total > 0 ? fixed : undefined
+}

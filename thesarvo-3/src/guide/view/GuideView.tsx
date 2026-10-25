@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { Climb, Guide, GuideNode } from '#/guide/model/types'
 import { ClimbBlock } from './ClimbBlock'
 import { nodeAnchors } from './contents'
@@ -10,8 +10,8 @@ import { TextBlock } from './TextBlock'
 import { routeStats } from './routeStats'
 import { TopoFigure } from './TopoFigure'
 
-/** Read-only guide: renders every node in order. */
-export function GuideView({ guide }: { guide: Guide }) {
+/** Read-only guide: renders every node in order. `hash` is the location's, which flashes the block it names. */
+export function GuideView({ guide, hash }: { guide: Guide; hash?: string }) {
   // Hovering a route, legend row or climb highlights the other two.
   const [active, setActive] = useState<string | null>(null)
   const climbs = useMemo(
@@ -22,13 +22,22 @@ export function GuideView({ guide }: { guide: Guide }) {
   const stats = useMemo(() => routeStats([...climbs.values()]), [climbs])
   const anchors = useMemo(() => nodeAnchors(guide.nodes), [guide])
 
-  const render = (node: GuideNode) => {
+  // `:target` flashes a linked block on a full load; links followed inside the app set no target, so flash it here.
+  useEffect(() => {
+    const el = hash ? document.getElementById(hash) : null
+    if (!el) return
+    el.classList.remove('arrived')
+    void el.offsetWidth
+    el.classList.add('arrived')
+  }, [hash])
+
+  const render = (node: GuideNode, anchor: string | undefined) => {
     switch (node.type) {
       case 'header':
         return <HeaderBlock header={node} stats={stats} />
       case 'climb':
       case 'problem':
-        return <ClimbBlock climb={node} highlighted={active === node.id} />
+        return <ClimbBlock climb={node} highlighted={active === node.id} anchor={anchor} />
       case 'text':
         return <TextBlock block={node} />
       case 'image':
@@ -55,7 +64,7 @@ export function GuideView({ guide }: { guide: Guide }) {
               onPointerEnter={climb ? () => setActive(node.id) : undefined}
               onPointerLeave={climb ? () => setActive(null) : undefined}
             >
-              {render(node)}
+              {render(node, anchors[i])}
             </div>
           )
         })}
