@@ -1,7 +1,7 @@
 import type { TextBlock as TextBlockModel } from '#/guide/model/types'
 import { Lines } from './text'
 
-const BODY = 'text-[13px] leading-snug sm:text-justify'
+const BODY = 'text-[13px] leading-snug break-words sm:text-justify'
 
 /** Turns bare URLs (class "html" blocks) into links. */
 function Linkified({ text }: { text: string }) {
