@@ -4,7 +4,7 @@ import { addPath, insertPointAfter, movePoint, removePoint, setPointKind, toggle
 
 const empty: ImageTopo = {
   type: 'image', id: '1', src: 'a.jpg', width: 100, height: 100, noPrint: false, printLayout: '',
-  legendTitle: '', legendFooter: '', legendX: 0, legendY: 0, legend: [], paths: [], rects: [], otherShapes: [], other: {},
+  legendTitle: '', legendFooter: '', legendX: 0, legendY: 0, legend: [], paths: [], rects: [], otherShapes: [],
 }
 const pt = (x: number, y: number) => ({ x, y, kind: '' })
 

@@ -25,7 +25,7 @@ function pick<K extends string>(source: Record<string, string>, keys: readonly K
   const other: Other = {}
   for (const key of keys) known[key] = key === 'src' ? (source[key] ?? '') : (source[key] ?? '').trim()
   for (const [k, v] of Object.entries(source)) if (!keys.includes(k as K)) other[k] = v
-  return { known, other }
+  return { known, other: Object.keys(other).length ? other : undefined }
 }
 
 const num = (s: string) => Number.parseFloat(s) || 0
@@ -136,7 +136,7 @@ function gpsFromXml(el: RawElement): Gps {
       const { known, other } = pick(l.attrs, GPS_LINE_KEYS)
       return { ...known, shape: l.tag as GpsShape, path: l.text.trim(), other }
     })
-  return { type: 'gps', id: el.attrs.id ?? '', points, lines, other: {} }
+  return { type: 'gps', id: el.attrs.id ?? '', points, lines }
 }
 
 function nodeFromXml(el: RawElement): GuideNode {

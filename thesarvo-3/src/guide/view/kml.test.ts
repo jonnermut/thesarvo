@@ -6,10 +6,10 @@ const gps: Gps = {
   type: 'gps',
   id: '1',
   other: {},
-  points: [{ pid: '0', code: 'A', description: 'Car & park', zone: '', easting: '', northing: '', latitude: '-42.1', longitude: '147.2', height: '', other: {} }],
+  points: [{ pid: '0', code: 'A', description: 'Car & park', zone: '', easting: '', northing: '', latitude: '-42.1', longitude: '147.2', height: '' }],
   lines: [
-    { shape: 'polyline', pid: '1', description: 'Track', path: '-42.1,147.1 -42.2,147.2', other: {} },
-    { shape: 'rectangle', pid: '2', description: 'Box', path: '-42.1,147.1 -42.2,147.2', other: {} },
+    { shape: 'polyline', pid: '1', description: 'Track', path: '-42.1,147.1 -42.2,147.2' },
+    { shape: 'rectangle', pid: '2', description: 'Box', path: '-42.1,147.1 -42.2,147.2' },
   ],
 }
 

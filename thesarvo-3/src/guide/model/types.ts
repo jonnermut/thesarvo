@@ -14,7 +14,7 @@ export type Guide = {
   id: string
   guideStars: string
   nodes: GuideNode[]
-  other: Other
+  other?: Other
 }
 
 export type GuideNode = Header | Climb | TextBlock | ImageTopo | Gps | UnknownNode
@@ -33,7 +33,7 @@ export type Header = {
   intro: string
   history: string
   autonumber: string
-  other: Other
+  other?: Other
 }
 
 /** A boulder problem is a climb with `type: 'problem'`. */
@@ -49,7 +49,7 @@ export type Climb = {
   stars: string
   fa: string
   text: string
-  other: Other
+  other?: Other
 }
 
 export type TextBlock = {
@@ -58,7 +58,7 @@ export type TextBlock = {
   /** e.g. "text", "heading2", "heading3". */
   cls: string
   text: string
-  other: Other
+  other?: Other
 }
 
 export type Point = { x: number; y: number; kind: string }
@@ -75,7 +75,7 @@ export type RoutePath = {
   lineStyle: LineStyle
   labelText: string
   arrow: boolean
-  other: Other
+  other?: Other
 }
 
 export type RectStyle =
@@ -94,7 +94,7 @@ export type TopoRect = {
   style: RectStyle
   arrowDirection: string
   text: string
-  other: Other
+  other?: Other
 }
 
 export type ImageTopo = {
@@ -115,7 +115,7 @@ export type ImageTopo = {
   rects: TopoRect[]
   /** Drawing elements we don't render yet (polyline, polygon...). */
   otherShapes: RawElement[]
-  other: Other
+  other?: Other
 }
 
 export type GpsPoint = {
@@ -128,7 +128,7 @@ export type GpsPoint = {
   latitude: string
   longitude: string
   height: string
-  other: Other
+  other?: Other
 }
 
 export type GpsShape = 'polyline' | 'polygon' | 'rectangle'
@@ -137,8 +137,8 @@ export type GpsShape = 'polyline' | 'polygon' | 'rectangle'
  * A track (polyline), area (polygon) or box (rectangle, two opposite corners) on the map.
  * `path` is the raw "lat,lon lat,lon ..." text.
  */
-export type GpsLine = { shape: GpsShape; pid: string; description: string; path: string; other: Other }
+export type GpsLine = { shape: GpsShape; pid: string; description: string; path: string; other?: Other }
 
-export type Gps = { type: 'gps'; id: string; points: GpsPoint[]; lines: GpsLine[]; other: Other }
+export type Gps = { type: 'gps'; id: string; points: GpsPoint[]; lines: GpsLine[]; other?: Other }
 
 export type UnknownNode = { type: 'unknown'; raw: RawElement }

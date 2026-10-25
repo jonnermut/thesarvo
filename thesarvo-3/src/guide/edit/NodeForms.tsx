@@ -98,7 +98,7 @@ const pointAt = (pid: string, lat: number, lon: number): GpsPoint => {
 const SHAPE_NAMES = { polyline: 'Track', polygon: 'Area', rectangle: 'Box' } as const
 
 const emptyPoint = (pid: string): GpsPoint => ({
-  pid, code: '', description: '', zone: '55G', easting: '', northing: '', latitude: '', longitude: '', height: '', other: {},
+  pid, code: '', description: '', zone: '55G', easting: '', northing: '', latitude: '', longitude: '', height: '',
 })
 
 export function GpsForm({ node, onChange }: { node: Gps; onChange: Change<Gps> }) {
@@ -137,7 +137,7 @@ export function GpsForm({ node, onChange }: { node: Gps; onChange: Change<Gps> }
               if (i >= 0) setCoord(i, { latitude: lat.toFixed(5), longitude: lon.toFixed(5) })
             },
             onAddLine: (shape, path) =>
-              onChange({ lines: [...node.lines, { shape, pid: nextPid, description: SHAPE_NAMES[shape], path, other: {} }] }),
+              onChange({ lines: [...node.lines, { shape, pid: nextPid, description: SHAPE_NAMES[shape], path }] }),
             onMoveLine: (i, path) => setLine(i, { path }),
           }}
         />

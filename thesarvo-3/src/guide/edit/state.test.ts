@@ -2,11 +2,11 @@ import { describe, expect, it } from 'vitest'
 import type { Climb, Guide, TextBlock } from '#/guide/model/types'
 import { editorReducer, initEditor, nextId } from './state'
 
-const text = (id: string, t = ''): TextBlock => ({ type: 'text', id, cls: 'text', text: t, other: {} })
+const text = (id: string, t = ''): TextBlock => ({ type: 'text', id, cls: 'text', text: t })
 const climb = (id: string): Climb => ({
-  type: 'climb', id, name: '', number: '', grade: '', extra: '', length: '', stars: '', fa: '', text: '', other: {},
+  type: 'climb', id, name: '', number: '', grade: '', extra: '', length: '', stars: '', fa: '', text: '',
 })
-const guide = (...nodes: Guide['nodes']): Guide => ({ id: '1', guideStars: '', nodes, other: {} })
+const guide = (...nodes: Guide['nodes']): Guide => ({ id: '1', guideStars: '', nodes })
 const ids = (g: Guide) => g.nodes.map((n) => (n.type === 'unknown' ? '' : n.id))
 
 describe('editorReducer', () => {
@@ -50,7 +50,7 @@ describe('editorReducer', () => {
 })
 
 describe('autonumber', () => {
-  const header = { type: 'header', id: 'h', autonumber: 'true', other: {} } as unknown as Guide['nodes'][number]
+  const header = { type: 'header', id: 'h', autonumber: 'true' } as unknown as Guide['nodes'][number]
 
   it('renumbers climbs in order when the header asks for it', () => {
     let s = initEditor(guide(header, climb('a'), text('t'), climb('b')))

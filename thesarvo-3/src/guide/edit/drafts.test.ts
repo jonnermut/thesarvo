@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import type { Guide } from '#/guide/model/types'
 import { fingerprint, localStore } from './drafts'
 
-const guide: Guide = { id: '7', guideStars: '', nodes: [], other: {} }
+const guide: Guide = { id: '7', guideStars: '', nodes: [] }
 
 beforeEach(() => localStorage.clear())
 

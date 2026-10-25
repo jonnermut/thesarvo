@@ -11,7 +11,7 @@ const mapPath = (topo: ImageTopo, id: string, fn: (p: RoutePath) => RoutePath): 
 })
 
 export function addPath(topo: ImageTopo, id: string, points: Point[], linkedTo = ''): ImageTopo {
-  const path: RoutePath = { id, points, d: pathData(points), linkedTo, lineStyle: 'solid', labelText: '', arrow: false, other: {} }
+  const path: RoutePath = { id, points, d: pathData(points), linkedTo, lineStyle: 'solid', labelText: '', arrow: false }
   return { ...topo, paths: [...topo.paths, path] }
 }
 
@@ -45,7 +45,7 @@ export const removePath = (topo: ImageTopo, id: string): ImageTopo => ({ ...topo
 export const updatePath = (topo: ImageTopo, id: string, patch: Partial<RoutePath>) => mapPath(topo, id, (p) => ({ ...p, ...patch }))
 
 export function addRect(topo: ImageTopo, id: string, at: { x: number; y: number }, style: RectStyle = 'black_text_on_solid_yellow'): ImageTopo {
-  const rect: TopoRect = { id, x: at.x, y: at.y, width: 80, height: 36, style, arrowDirection: '', text: 'Label', other: {} }
+  const rect: TopoRect = { id, x: at.x, y: at.y, width: 80, height: 36, style, arrowDirection: '', text: 'Label' }
   return { ...topo, rects: [...topo.rects, rect] }
 }
 
