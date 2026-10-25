@@ -19,6 +19,7 @@
   "dependencies": {
     "@tanstack/react-router": "1.170.46",
     "@tanstack/react-start": "1.169.4",
+    "d3-shape": "^3.2.0",
     "fast-xml-parser": "^5.11.2",
     "leaflet": "^1.9.4",
     "nitro": "3.0.260610-beta",
@@ -31,6 +32,7 @@
     "@tanstack/router-cli": "^1.132.0",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
+    "@types/d3-shape": "^3.2.0",
     "@types/leaflet": "^1.9.22",
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.0",
