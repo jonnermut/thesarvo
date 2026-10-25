@@ -24,6 +24,8 @@ export function Route({ path, climb, active, onActive, scale = 1 }: { path: Rout
   const last = path.points.at(-1)
   // A point of kind "label" says where the number goes; otherwise it sits on the first point.
   const at = path.points.find((p) => p.kind === 'label') ?? first
+  const prev = path.points.findLast((p) => last && (p.x !== last.x || p.y !== last.y))
+  const endMarker = last?.kind === 'belay' || last?.kind.startsWith('lower')
   const dimmed = active !== null && active !== path.linkedTo
   const label = numberLabel(climb)
   const d = path.d || pathData(path.points)
@@ -46,7 +48,17 @@ export function Route({ path, climb, active, onActive, scale = 1 }: { path: Rout
         strokeDasharray={DASH[path.lineStyle]}
         vectorEffect="non-scaling-stroke"
       />
-      {(last?.kind === 'belay' || last?.kind === 'lower') && <circle cx={last.x} cy={last.y} r={7 * scale} fill={MARKER_NAVY} stroke="#fff" strokeWidth={2} />}
+      {path.arrow && !endMarker && last && prev && (
+        <polygon
+          points="-6,-6 6,0 -6,6"
+          fill={ROUTE_COLOUR}
+          stroke="#000"
+          strokeOpacity={0.35}
+          strokeWidth={1}
+          transform={`translate(${last.x} ${last.y}) rotate(${(Math.atan2(last.y - prev.y, last.x - prev.x) * 180) / Math.PI}) scale(${scale})`}
+        />
+      )}
+      {last && endMarker && <EndMarker kind={last.kind} x={last.x} y={last.y} scale={scale} />}
       {at && label && (
         <>
           <circle cx={at.x} cy={at.y} r={11 * scale} fill={climb && isSport(climb.extra) ? SPORT_RED : '#000'} />
@@ -56,6 +68,24 @@ export function Route({ path, climb, active, onActive, scale = 1 }: { path: Rout
         </>
       )}
     </g>
+  )
+}
+
+/** Belay dot, or the legacy "lower off" pin (a ring on a stem with a down arrow), tilted for lower-left/right. */
+const LOWER_PIN = 'M4,20h12l-16,20l-16,-20h12v-12.55c-8.239,-2.7,-14,-9.76,-14,-18.179c0,-9.94,8.05,-17.99,18,-17.99c9.939,0,18,8.05,18,18.57c0,8.88,-6.419,16.25,-14.859,17.73v12.55z'
+const LOWER_TILT: Record<string, number> = { lower: 0, 'lower-left': 30, 'lower-right': -30 }
+
+function EndMarker({ kind, x, y, scale }: { kind: string; x: number; y: number; scale: number }) {
+  if (kind === 'belay') return <circle cx={x} cy={y} r={7 * scale} fill={MARKER_NAVY} stroke="#fff" strokeWidth={2} />
+  return (
+    <path
+      d={LOWER_PIN}
+      fill={MARKER_NAVY}
+      stroke="#fff"
+      strokeWidth={2 / 0.4}
+      strokeLinejoin="round"
+      transform={`translate(${x} ${y}) rotate(${LOWER_TILT[kind] ?? 0}) scale(${0.4 * scale}) translate(0 -5.65)`}
+    />
   )
 }
 

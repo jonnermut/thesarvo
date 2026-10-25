@@ -19,7 +19,7 @@ type Props = {
 }
 
 const LINE_STYLES = [['solid', 'Solid'], ['dashed', 'Dashed'], ['dotted', 'Dotted']] as const
-const END_MARKERS = [['', 'None'], ['belay', 'Belay'], ['lower', 'Lower-off']] as const
+const END_MARKERS = [['', 'None'], ['belay', 'Belay'], ['lower', 'Lower-off'], ['lower-left', 'Lower-off left'], ['lower-right', 'Lower-off right']] as const
 const ARROWS = [['', 'None'], ['north', 'North'], ['south', 'South'], ['east', 'East'], ['west', 'West']] as const
 const RECT_OPTIONS = (Object.keys(RECT_STYLES) as RectStyle[]).map((s) => [s, s.replace(/_/g, ' ')] as const)
 
