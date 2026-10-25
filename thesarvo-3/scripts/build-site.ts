@@ -6,11 +6,14 @@
  * Pages are rendered at build time; the browser loads the same data as plain files from /g-data.
  */
 import { spawnSync } from 'node:child_process'
+import { createHash } from 'node:crypto'
 import { mkdir, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { flatten } from '../src/guide/content/paths'
 import { JsonContentSource } from '../src/guide/content/json'
 import { buildManifest } from '../src/guide/content/manifest'
+import { guideShard } from '../src/guide/search/shard'
+import type { Pack } from '../src/guide/search/shard'
 
 const args = process.argv.slice(2)
 const option = (name: string, fallback: string) => {
@@ -27,14 +30,23 @@ await rm(data, { recursive: true, force: true })
 await mkdir(path.join(data, 'guide'), { recursive: true })
 await mkdir(path.join(data, 'images'), { recursive: true })
 await mkdir(path.join(data, 'page'), { recursive: true })
-// The tree and stats every page refreshes itself from after loading.
-await writeFile(path.join(data, 'manifest.json'), JSON.stringify(await buildManifest(index, (id) => source.getGuide(id))))
+await mkdir(path.join(data, 'search'), { recursive: true })
 let guides = 0
+const pack: Pack = []
 for (const node of flatten(index).filter((n) => n.isGuide)) {
-  await writeFile(path.join(data, 'guide', `${node.id}.json`), JSON.stringify(await source.getGuide(node.id)))
+  const guide = await source.getGuide(node.id)
+  await writeFile(path.join(data, 'guide', `${node.id}.json`), JSON.stringify(guide))
   await writeFile(path.join(data, 'images', `${node.id}.json`), JSON.stringify(await source.listImages(node.id)))
+  if (guide) pack.push(guideShard(guide))
   guides++
 }
+// Search data is named by its content, so browsers keep it until it changes.
+const packJson = JSON.stringify(pack)
+const packFile = `pack.${createHash('sha256').update(packJson).digest('hex').slice(0, 10)}.json`
+await writeFile(path.join(data, 'search', packFile), packJson)
+// The tree and stats every page refreshes itself from after loading.
+const manifest = { ...(await buildManifest(index, (id) => source.getGuide(id))), search: { pack: packFile, shards: {}, removed: [] } }
+await writeFile(path.join(data, 'manifest.json'), JSON.stringify(manifest))
 for (const node of flatten(index).filter((n) => !n.isGuide)) {
   await writeFile(path.join(data, 'page', `${node.id}.json`), JSON.stringify(await source.getPageBody(node.id)))
 }

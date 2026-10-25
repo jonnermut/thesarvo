@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as GIndexRouteImport } from './routes/g.index'
 import { Route as GSplatRouteImport } from './routes/g.$'
 import { Route as GContentRouteImport } from './routes/g.content'
+import { Route as GSearchRouteImport } from './routes/g.search'
 import { Route as GUploadRouteImport } from './routes/g.upload'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +36,11 @@ const GContentRoute = GContentRouteImport.update({
   path: '/g/content',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GSearchRoute = GSearchRouteImport.update({
+  id: '/g/search',
+  path: '/g/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GUploadRoute = GUploadRouteImport.update({
   id: '/g/upload',
   path: '/g/upload',
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/g/$': typeof GSplatRoute
   '/g/content': typeof GContentRoute
+  '/g/search': typeof GSearchRoute
   '/g/upload': typeof GUploadRoute
   '/g/': typeof GIndexRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/g/$': typeof GSplatRoute
   '/g/content': typeof GContentRoute
+  '/g/search': typeof GSearchRoute
   '/g/upload': typeof GUploadRoute
   '/g': typeof GIndexRoute
 }
@@ -60,21 +68,24 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/g/$': typeof GSplatRoute
   '/g/content': typeof GContentRoute
+  '/g/search': typeof GSearchRoute
   '/g/upload': typeof GUploadRoute
   '/g/': typeof GIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/g/$' | '/g/content' | '/g/upload' | '/g/'
+  fullPaths: '/' | '/g/$' | '/g/content' | '/g/search' | '/g/upload' | '/g/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/g/$' | '/g/content' | '/g/upload' | '/g'
-  id: '__root__' | '/' | '/g/$' | '/g/content' | '/g/upload' | '/g/'
+  to: '/' | '/g/$' | '/g/content' | '/g/search' | '/g/upload' | '/g'
+  id:
+    '__root__' | '/' | '/g/$' | '/g/content' | '/g/search' | '/g/upload' | '/g/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   GSplatRoute: typeof GSplatRoute
   GContentRoute: typeof GContentRoute
+  GSearchRoute: typeof GSearchRoute
   GUploadRoute: typeof GUploadRoute
   GIndexRoute: typeof GIndexRoute
 }
@@ -109,6 +120,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GContentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/g/search': {
+      id: '/g/search'
+      path: '/g/search'
+      fullPath: '/g/search'
+      preLoaderRoute: typeof GSearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/g/upload': {
       id: '/g/upload'
       path: '/g/upload'
@@ -123,6 +141,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   GSplatRoute: GSplatRoute,
   GContentRoute: GContentRoute,
+  GSearchRoute: GSearchRoute,
   GUploadRoute: GUploadRoute,
   GIndexRoute: GIndexRoute,
 }

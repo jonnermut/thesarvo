@@ -4,6 +4,8 @@ import { resolvePageBody } from './content/pageLinks'
 import type { Manifest, PageInfo } from './content/manifest'
 import { STATIC_SITE, GUIDE_PREFIX } from './content/paths'
 import type { ContentSource, IndexNode } from './content/types'
+import { mergeShards } from './search/shard'
+import type { Pack, Shard } from './search/shard'
 import type { Guide } from './model/types'
 
 const serverManifest = createServerFn({ method: 'GET' }).handler(async () => (await import('./content/siteManifest')).siteManifest())
@@ -15,6 +17,8 @@ const serverGuide = createServerFn({ method: 'GET' })
 const serverPageBody = createServerFn({ method: 'GET' })
   .validator((id: string) => id)
   .handler(async ({ data: id }) => (await import('./content')).getContentSource().getPageBody(id))
+
+const serverSearchShards = createServerFn({ method: 'GET' }).handler(async () => (await import('./search/allShards')).allShards())
 
 const serverImageNames = createServerFn({ method: 'GET' })
   .validator((id: string) => id)
@@ -68,6 +72,18 @@ export const fetchGuide = ({ data: id }: { data: string }): Promise<Guide | null
 export async function fetchPageBody(id: string): Promise<string | null> {
   const body = await (STATIC_SITE ? staticData(`page/${id}.json`, (s) => s.getPageBody(id)) : serverPageBody({ data: id }))
   return body && resolvePageBody(body, await fetchTree(), id)
+}
+
+/** Every guide's search entries. The static site reads the pack and overrides its manifest lists, all cached for good. */
+export async function fetchSearchShards(): Promise<Shard[]> {
+  if (!STATIC_SITE) return serverSearchShards()
+  const { search } = await fetchManifest()
+  if (!search) return []
+  const [pack, overrides] = await Promise.all([
+    getJson<Pack>(`search/${search.pack}`),
+    Promise.all(Object.values(search.shards).map((file) => getJson<Shard>(`search/${file}`))),
+  ])
+  return mergeShards(pack, overrides, search.removed)
 }
 
 export const fetchImageNames = ({ data: id }: { data: string }): Promise<string[]> =>

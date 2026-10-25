@@ -1,4 +1,5 @@
 import type { Climb, Guide } from '#/guide/model/types'
+import type { SearchFiles } from '#/guide/search/shard'
 import { nodeAnchors } from '#/guide/view/contents'
 import { routeStats } from '#/guide/view/routeStats'
 import { findByPath, flatten } from './paths'
@@ -30,9 +31,10 @@ export type ManifestNode = { id: string; parent: string | null; title: string; p
 
 /**
  * The whole site in one small file, fetched fresh after hydration, so the tree and counts stay
- * current without rebuilding every page. Nodes are flat, parents before children.
+ * current without rebuilding every page. Nodes are flat, parents before children. The static site
+ * also lists its search files here.
  */
-export type Manifest = { version: 1; nodes: ManifestNode[] }
+export type Manifest = { version: 1; nodes: ManifestNode[]; search?: SearchFiles }
 
 /** What a page needs to render on its own: itself, the way up, and a tree trimmed to its surroundings. */
 export type PageInfo = { node: IndexNode; trail: IndexNode[]; tree: IndexNode }

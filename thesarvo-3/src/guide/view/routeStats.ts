@@ -16,7 +16,7 @@ export type RouteStats = {
 export const isSport = (extra: string) => extra.includes('Þ') || /\d+B/.test(extra)
 
 /** Mirrors the legacy GraphServlet: keeps the first number of grades like "17/18", "M5", "VE" or "A2". */
-function gradeNumber(grade: string): number | null {
+export function gradeNumber(grade: string): number | null {
   const first = (grade.split('/')[0] ?? '')
     .replace(/[?MAV]/g, ' ')
     .replace(/E/g, '0')

@@ -42,7 +42,7 @@ function devContentFiles(): Plugin {
 // For the static site (`npm run build-site`) every page of the content repo is rendered.
 const staticSite = process.env.VITE_STATIC_SITE === '1'
 const prerenderPaths = staticSite
-  ? [GUIDE_PREFIX, ...flatten(await staticSource().getIndex()).filter((n) => n.path).map(guideUrl)]
+  ? [GUIDE_PREFIX, `${GUIDE_PREFIX}/search`, ...flatten(await staticSource().getIndex()).filter((n) => n.path).map(guideUrl)]
   : (process.env.PRERENDER_PATHS ?? '').split(',').filter(Boolean)
 
 export default defineConfig({

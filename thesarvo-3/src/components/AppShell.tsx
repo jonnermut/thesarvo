@@ -1,6 +1,7 @@
 import { Link, useMatch, useMatches } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import type { IndexNode } from '#/guide/content/types'
+import { SearchBox } from './SearchBox'
 import { SideNav } from './SideNav'
 
 const STORAGE_KEY = 'thesarvo.sidebar'
@@ -28,7 +29,7 @@ function EditLink() {
       to="/g/$"
       params={{ _splat: match.params._splat }}
       search={editing ? {} : { edit: true }}
-      className="ml-auto rounded-md border border-white/40 px-3 py-1.5 text-sm font-medium text-white hover:bg-white/10"
+      className="rounded-md border border-white/40 px-3 py-1.5 text-sm font-medium text-white hover:bg-white/10"
     >
       {editing ? (
         'View'
@@ -93,7 +94,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </svg>
         </button>
         <Logo />
-        <EditLink />
+        <div className="ml-auto flex items-center gap-2">
+          <SearchBox />
+          <EditLink />
+        </div>
       </header>
 
       <div className="flex flex-1">
