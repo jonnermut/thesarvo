@@ -32,12 +32,18 @@ export function ancestorIds(root: IndexNode, path: string): string[] {
   return walk(root, []) ?? []
 }
 
+/** Set when the site is built as static files: images then come from object storage, saving is off. */
+export const STATIC_SITE = import.meta.env?.VITE_STATIC_SITE === '1'
+const IMAGE_BASE = (import.meta.env?.VITE_IMAGE_BASE as string | undefined)?.replace(/\/$/, '')
+
 /**
- * Image URL as served by the content route. Files are stored lower-case as
- * `<id>-<name>`, thumbnails as `<id>-t-<name>`.
+ * Image URL. In development files are served by the content route, stored lower-case as
+ * `<id>-<name>` (thumbnails `<id>-t-<name>`); in the static site they are `images/<id>/<name>`.
  */
 export const imageUrl = (guideId: string, name: string, thumb = false) =>
-  `${GUIDE_PREFIX}/content?f=${encodeURIComponent(`${guideId}-${thumb ? 't-' : ''}${name}`.toLowerCase())}`
+  IMAGE_BASE
+    ? `${IMAGE_BASE}/${guideId}/${encodeURIComponent(name)}`
+    : `${GUIDE_PREFIX}/content?f=${encodeURIComponent(`${guideId}-${thumb ? 't-' : ''}${name}`.toLowerCase())}`
 
 export const MAX_IMAGE_BYTES = 25 * 1024 * 1024
 

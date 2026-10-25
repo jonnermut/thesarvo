@@ -58,7 +58,7 @@ function NavItem({ node, currentPath, expanded, toggle, depth }: {
 /** Expandable site tree with a title filter. Ancestors of the current page start open. */
 export function SideNav({ root }: { root: IndexNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
-  const currentPath = decodeURIComponent(pathname).replace(/^\/g\/?/, '')
+  const currentPath = decodeURIComponent(pathname).replace(/^\/g\/?/, '').replace(/\/$/, '')
   const [expanded, setExpanded] = useState(() => new Set(ancestorIds(root, currentPath)))
   const [query, setQuery] = useState('')
 

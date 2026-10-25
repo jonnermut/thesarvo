@@ -7,6 +7,7 @@ import { GuideView } from '#/guide/view/GuideView'
 import { guideTitle } from '#/guide/view/kml'
 import { HeaderBlock } from '#/guide/view/HeaderBlock'
 import { TextBlock } from '#/guide/view/TextBlock'
+import { STATIC_SITE } from '#/guide/content/paths'
 import { ImagePicker } from './ImagePicker'
 import { Button, DeleteButton } from './fields'
 import { fingerprint, localStore } from './drafts'
@@ -125,6 +126,12 @@ export default function Editor({ guide }: { guide: Guide }) {
           </Button>
         </div>
       </div>
+
+      {STATIC_SITE && (
+        <p className="mb-4 rounded-lg border border-line bg-card p-3 text-sm text-muted">
+          Beta: you can try every editing tool, but changes are only kept as a draft in this browser. Nothing is published.
+        </p>
+      )}
 
       {pendingDraft && (
         <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-amber bg-amber/10 p-3 text-sm">

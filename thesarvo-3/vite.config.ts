@@ -6,6 +6,8 @@ import tailwindcss from '@tailwindcss/vite'
 import viteReact from '@vitejs/plugin-react'
 import { nitro } from 'nitro/vite'
 import { DEFAULT_CONTENT_DIR } from './src/guide/content/defaultDir'
+import { staticSource } from './src/guide/content/staticSource'
+import { flatten, guideUrl, GUIDE_PREFIX } from './src/guide/content/paths'
 
 /**
  * Dev only: serve `/g/content?f=<file>` straight from the content folder.
@@ -37,19 +39,21 @@ function devContentFiles(): Plugin {
 
 // Guides are rendered on demand; only the paths listed here become static HTML at build time.
 // e.g. PRERENDER_PATHS="/g,/g/tasmania" npm run build
-const prerenderPaths = (process.env.PRERENDER_PATHS ?? '')
-  .split(',')
-  .filter(Boolean)
+// For the static site (`npm run build-site`) every page of the content repo is rendered.
+const staticSite = process.env.VITE_STATIC_SITE === '1'
+const prerenderPaths = staticSite
+  ? [GUIDE_PREFIX, ...flatten(await staticSource().getIndex()).filter((n) => n.path).map(guideUrl)]
+  : (process.env.PRERENDER_PATHS ?? '').split(',').filter(Boolean)
 
 export default defineConfig({
   resolve: { tsconfigPaths: true },
   plugins: [
     devContentFiles(),
-    nitro(),
+    ...(staticSite ? [] : [nitro()]),
     tanstackStart(
       prerenderPaths.length
         ? {
-            prerender: { enabled: true, crawlLinks: false },
+            prerender: { enabled: true, crawlLinks: false, autoSubfolderIndex: true },
             pages: prerenderPaths.map((path) => ({ path })),
           }
         : {},

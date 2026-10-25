@@ -4,7 +4,7 @@ import { guideFromXml } from '#/guide/convert/xml'
 import { slugify, uploadName } from './paths'
 import type { ContentSource, IndexNode } from './types'
 
-type RawIndexNode = { id: number; title: string; children: RawIndexNode[] }
+export type RawIndexNode = { id: number; title: string; children: RawIndexNode[] }
 
 /**
  * Reads the folder written by the old downloader tools: `index.json`, one
@@ -76,7 +76,7 @@ export class DiskContentSource implements ContentSource {
   }
 }
 
-function toNode(raw: RawIndexNode, parentPath: string, guideFiles: Set<string>): IndexNode {
+export function toNode(raw: RawIndexNode, parentPath: string, guideFiles: Set<string>): IndexNode {
   const id = String(raw.id)
   const seen = new Set<string>()
   const children = raw.children.map((child) => {
