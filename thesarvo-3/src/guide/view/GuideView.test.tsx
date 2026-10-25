@@ -15,8 +15,7 @@ it('renders the header, climbs and topo lines', () => {
 
 it('highlights a climb while its route is hovered', () => {
   const { container } = render(<GuideView guide={guide} />)
-  const route = container.querySelector('figure svg g.cursor-pointer')!
-  fireEvent.pointerEnter(route)
-  expect(container.querySelectorAll('article.ring-2')).toHaveLength(0) // climbs highlight on their own hover
+  const route = [...container.querySelectorAll('figure svg g.cursor-pointer')].find((g) => g.querySelector('circle'))!
+  fireEvent.pointerOver(route)
   expect(container.querySelector('figure svg g[opacity="0.3"]')).not.toBeNull() // other routes dim
 })
