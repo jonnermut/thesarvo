@@ -1,0 +1,19 @@
+thesarvo-3/docs/plan-navigation.md
+  s_e20d0a1ebc47aa::t_1e17671aa15869 3,187-193
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "103c6579c2f75bff0fc5b533321cd7031b744a6f",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
