@@ -1,0 +1,19 @@
+thesarvo-3/docs/live-site-differences.md
+  s_e20d0a1ebc47aa::t_7236f70aae5e57 1-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6157cc488d8b7ff00ad9fd0ab3e675a1238b88cd",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "unknown"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
