@@ -1,0 +1,14 @@
+thesarvo_iphone_2.0/thesarvo/thesarvo.xcodeproj/project.pbxproj
+  h_233cae3e2ec4a1 586,605
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "820bad43b52fc8afb5debde258d2dfd17ff8e74d",
+  "prompts": {},
+  "humans": {
+    "h_233cae3e2ec4a1": {
+      "author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
