@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import { pathData } from '#/guide/model/geometry'
 import { imageUrl } from '#/guide/content/paths'
 import type { Climb, ImageTopo, RoutePath, TopoRect } from '#/guide/model/types'
@@ -15,7 +16,7 @@ type Props = {
 
 const numberLabel = (c?: Climb) => c?.number.replace(/\.$/, '') ?? ''
 
-export function Route({ path, climb, active, onActive }: { path: RoutePath; climb?: Climb; active: string | null; onActive: Props['onActive'] }) {
+export function Route({ path, climb, active, onActive, scale = 1 }: { path: RoutePath; climb?: Climb; active: string | null; onActive: Props['onActive']; scale?: number }) {
   const first = path.points[0]
   const last = path.points.at(-1)
   const dimmed = active !== null && active !== path.linkedTo
@@ -40,11 +41,11 @@ export function Route({ path, climb, active, onActive }: { path: RoutePath; clim
         strokeDasharray={DASH[path.lineStyle]}
         vectorEffect="non-scaling-stroke"
       />
-      {(last?.kind === 'belay' || last?.kind === 'lower') && <circle cx={last.x} cy={last.y} r={7} fill={MARKER_NAVY} stroke="#fff" strokeWidth={2} />}
+      {(last?.kind === 'belay' || last?.kind === 'lower') && <circle cx={last.x} cy={last.y} r={7 * scale} fill={MARKER_NAVY} stroke="#fff" strokeWidth={2} />}
       {first && label && (
         <>
-          <circle cx={first.x} cy={first.y} r={11} fill="#000" />
-          <text x={first.x} y={first.y} textAnchor="middle" dominantBaseline="central" fontSize={label.length > 2 ? 9 : 11} fontWeight={700} fill="#fff">
+          <circle cx={first.x} cy={first.y} r={11 * scale} fill="#000" />
+          <text x={first.x} y={first.y} textAnchor="middle" dominantBaseline="central" fontSize={(label.length > 2 ? 9 : 11) * scale} fontWeight={700} fill="#fff">
             {label}
           </text>
         </>
@@ -99,8 +100,21 @@ export function Callout({ rect }: { rect: TopoRect }) {
 
 /** A photo with the route lines and callouts drawn over it as SVG. */
 export function Topo({ guideId, topo, climbs, active, onActive }: Props) {
+  // Markers are sized in photo pixels, so on a phone they would shrink to specks: grow them to stay legible.
+  const box = useRef<HTMLDivElement>(null)
+  const [scale, setScale] = useState(1)
+  useEffect(() => {
+    const node = box.current
+    if (!node) return
+    const update = () => setScale(Math.min(2.2, Math.max(1, 8 / ((11 * node.clientWidth) / topo.width))))
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [topo.width])
+
   return (
-    <div className="relative overflow-hidden bg-black/5">
+    <div ref={box} className="relative overflow-hidden bg-black/5">
       <img
         src={imageUrl(guideId, topo.src)}
         alt={topo.legendTitle || topo.src}
@@ -111,7 +125,7 @@ export function Topo({ guideId, topo, climbs, active, onActive }: Props) {
       />
       <svg viewBox={`0 0 ${topo.width} ${topo.height}`} className="absolute inset-0 size-full" role="img" aria-label="Route lines">
         {topo.paths.map((path) => (
-          <Route key={path.id} path={path} climb={climbs.get(path.linkedTo)} active={active} onActive={onActive} />
+          <Route key={path.id} path={path} climb={climbs.get(path.linkedTo)} active={active} onActive={onActive} scale={scale} />
         ))}
         {topo.rects.map((rect) => (
           <Callout key={rect.id} rect={rect} />
