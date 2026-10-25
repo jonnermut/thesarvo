@@ -40,7 +40,7 @@ const fromEditable = (s: string) => s.replace(/\r?\n/g, '<br/>')
 export function AreaField({ label, value, onChange, rows = 4, className }: { label: string; value: string; onChange: (v: string) => void; rows?: number; className?: string }) {
   return (
     <Field label={label} className={className}>
-      {(id) => <textarea id={id} rows={rows} className={INPUT} value={toEditable(value)} onChange={(e) => onChange(fromEditable(e.target.value))} />}
+      {(id) => <textarea id={id} rows={Math.ceil(rows * 1.5)} className={`${INPUT} resize-y`} value={toEditable(value)} onChange={(e) => onChange(fromEditable(e.target.value))} />}
     </Field>
   )
 }
