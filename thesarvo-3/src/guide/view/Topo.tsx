@@ -28,7 +28,7 @@ function Route({ path, climb, active, onActive }: { path: RoutePath; climb?: Cli
     >
       {/* Wide invisible stroke makes thin lines easy to hover. */}
       <path d={path.d} fill="none" stroke="transparent" strokeWidth={16} vectorEffect="non-scaling-stroke" />
-      <path d={path.d} fill="none" stroke="#000" strokeOpacity={0.55} strokeWidth={active === path.linkedTo ? 7 : 5} strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+      <path d={path.d} fill="none" stroke="#000" strokeOpacity={0.55} strokeWidth={active === path.linkedTo ? 7 : 5} strokeLinecap="round" strokeDasharray={DASH[path.lineStyle]} vectorEffect="non-scaling-stroke" />
       <path
         d={path.d}
         fill="none"
