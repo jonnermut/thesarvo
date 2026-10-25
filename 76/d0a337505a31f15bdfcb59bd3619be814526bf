@@ -1,0 +1,60 @@
+thesarvo-3/src/components/RecentGuides.tsx
+  s_e20d0a1ebc47aa::t_21a7ab98cf8b19 1-23
+thesarvo-3/src/guide/search/match.ts
+  s_e20d0a1ebc47aa::t_043eeda50ba9cf 166-212
+thesarvo-3/docs/plan-navigation.md
+  s_e20d0a1ebc47aa::t_63f1726fea31f5 3,204-211
+  s_e20d0a1ebc47aa::t_8eb61600b7d8eb 212
+thesarvo-3/src/styles.css
+  s_e20d0a1ebc47aa::t_9f5be4a41c3a0a 42-44
+thesarvo-3/src/guide/view/PrevNext.tsx
+  s_e20d0a1ebc47aa::t_62bac911ad3dc7 3,7-16,18,23-29,40-41,46,50
+  s_e20d0a1ebc47aa::t_0c79380c3d164e 49
+  s_e20d0a1ebc47aa::t_1fa0341f1bcf9f 1-2,4-6,17,19-22,30-39,42-45,47-48,51-54
+thesarvo-3/src/components/SearchBox.tsx
+  s_e20d0a1ebc47aa::t_87f94b3dc8995e 4,8,30,72-73,144-145
+  s_e20d0a1ebc47aa::t_2cff4831d41c34 6,164-173
+thesarvo-3/src/guide/view/GuideView.tsx
+  s_e20d0a1ebc47aa::t_9f5be4a41c3a0a 1
+  s_e20d0a1ebc47aa::t_b1c35f94950e92 25-26,28-31,33
+  s_e20d0a1ebc47aa::t_e628a3406fc864 13-14,27,32
+  s_e20d0a1ebc47aa::t_42bc0600a06ac9 34,40,67
+thesarvo-3/src/guide/view/ClimbBlock.tsx
+  s_e20d0a1ebc47aa::t_42bc0600a06ac9 2,10-20,26-42
+thesarvo-3/src/components/SideNav.tsx
+  s_e20d0a1ebc47aa::t_87f94b3dc8995e 6,151
+thesarvo-3/src/guide/search/match.test.ts
+  s_e20d0a1ebc47aa::t_043eeda50ba9cf 4,73-90
+  s_e20d0a1ebc47aa::t_b81cdbf1a9fdd0 91-92
+thesarvo-3/src/routes/g.$.tsx
+  s_e20d0a1ebc47aa::t_0c79380c3d164e 2,6,8,35-37,52
+  s_e20d0a1ebc47aa::t_4bcdc0b50bf439 34
+  s_e20d0a1ebc47aa::t_e628a3406fc864 1,51
+thesarvo-3/src/guide/search/SearchResults.tsx
+  s_e20d0a1ebc47aa::t_2cff4831d41c34 30-34,38-53
+  s_e20d0a1ebc47aa::t_cd74fa2f91d0eb 5
+  s_e20d0a1ebc47aa::t_4051acd6d51a38 54-55
+thesarvo-3/src/routes/g.search.tsx
+  s_e20d0a1ebc47aa::t_1e69d4d6852911 58
+  s_e20d0a1ebc47aa::t_2cff4831d41c34 3,30-33,47,55-56
+thesarvo-3/src/guide/recent.ts
+  s_e20d0a1ebc47aa::t_c6eb888d360315 1-39
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_5b2847a7c47a40 47-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "76d0a337505a31f15bdfcb59bd3619be814526bf",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
