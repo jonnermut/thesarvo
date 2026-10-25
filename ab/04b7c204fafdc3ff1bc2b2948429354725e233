@@ -1,0 +1,47 @@
+thesarvo-3/src/components/SideNav.tsx
+  s_e20d0a1ebc47aa::t_279ebc2f1d364b 25,32,41,85,93,98
+thesarvo-3/src/guide/view/TextBlock.tsx
+  s_e20d0a1ebc47aa::t_6d09e818b6d95f 8,10,12,16
+thesarvo-3/src/components/AppShell.tsx
+  s_e20d0a1ebc47aa::t_279ebc2f1d364b 15-16,67,79
+thesarvo-3/src/routes/g.$.tsx
+  s_e20d0a1ebc47aa::t_6d09e818b6d95f 25,29
+thesarvo-3/src/guide/view/Stars.tsx
+  s_e20d0a1ebc47aa::t_9e175338ad2cdf 6
+thesarvo-3/src/guide/view/HeaderBlock.tsx
+  s_e20d0a1ebc47aa::t_6d09e818b6d95f 20-22,24-26,30,32-35
+thesarvo-3/src/guide/view/ClimbBlock.tsx
+  s_e20d0a1ebc47aa::t_9e175338ad2cdf 18
+  s_e20d0a1ebc47aa::t_6d09e818b6d95f 5,10,12-13,15-17,19-21,23-28
+  s_e20d0a1ebc47aa::t_8d00c75fba9e00 30
+thesarvo-3/src/guide/view/GuideView.tsx
+  s_e20d0a1ebc47aa::t_6d09e818b6d95f 19
+thesarvo-3/src/guide/view/GpsBlock.tsx
+  s_e20d0a1ebc47aa::t_6d09e818b6d95f 13-14,18,30-31,44
+thesarvo-3/src/guide/view/Topo.tsx
+  s_e20d0a1ebc47aa::t_6d09e818b6d95f 4,33,38,43,46-47,84,103
+thesarvo-3/src/guide/view/topoStyles.ts
+  s_e20d0a1ebc47aa::t_6d09e818b6d95f 3-5
+thesarvo-3/src/routes/index.tsx
+  s_e20d0a1ebc47aa::t_6d09e818b6d95f 12,14,23,25
+thesarvo-3/src/styles.css
+  s_e20d0a1ebc47aa::t_279ebc2f1d364b 4-6,8-12,14-16,22
+thesarvo-3/src/guide/view/TopoFigure.tsx
+  s_e20d0a1ebc47aa::t_6d09e818b6d95f 2,13-16,20-36,38-59,62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ab04b7c204fafdc3ff1bc2b2948429354725e233",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
