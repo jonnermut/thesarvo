@@ -1,0 +1,21 @@
+thesarvo-3/scripts/sync-attachments-to-s3.sh
+  s_e20d0a1ebc47aa::t_c142838a8854dd 1-34
+thesarvo-3/docs/plan-backend.md
+  s_e20d0a1ebc47aa::t_0d57e3c04b232d 111-123
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "619b08a34aaaaa015eb64cf2d0bc797492aaa190",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
