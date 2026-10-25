@@ -22,17 +22,20 @@ export function HeaderForm({ node, onChange }: { node: Header; onChange: Change<
 
 const STARS = [['', 'None'], ['*', '★'], ['**', '★★'], ['***', '★★★']] as const
 
+/** Mirrors ClimbBlock: number, name, stars, length, grade and extra on one row, then description, then first ascent. */
 export function ClimbForm({ node, onChange }: { node: Climb; onChange: Change<Climb> }) {
   return (
-    <div className="grid gap-3 sm:grid-cols-6">
-      <TextField label="Number" value={node.number} onChange={(number) => onChange({ number })} />
-      <TextField label="Name" value={node.name} onChange={(name) => onChange({ name })} className="sm:col-span-3" />
-      <TextField label="Grade" value={node.grade} onChange={(grade) => onChange({ grade })} />
-      <SelectField label="Stars" value={node.stars} options={STARS} onChange={(stars) => onChange({ stars })} />
-      <TextField label="Length" value={node.length} onChange={(length) => onChange({ length })} className="sm:col-span-2" />
-      <TextField label="Extra" value={node.extra} onChange={(extra) => onChange({ extra })} className="sm:col-span-2" />
-      <TextField label="First ascent" value={node.fa} onChange={(fa) => onChange({ fa })} className="sm:col-span-2" />
-      <AreaField label="Description" value={node.text} onChange={(text) => onChange({ text })} className="sm:col-span-6" />
+    <div className="grid gap-3">
+      <div className="grid grid-cols-3 gap-3 sm:grid-cols-[4rem_1fr_6rem_5rem_5rem_1fr]">
+        <TextField label="No." value={node.number} onChange={(number) => onChange({ number })} />
+        <TextField label="Name" value={node.name} onChange={(name) => onChange({ name })} className="col-span-2 sm:col-span-1" />
+        <SelectField label="Stars" value={node.stars} options={STARS} onChange={(stars) => onChange({ stars })} />
+        <TextField label="Length" value={node.length} onChange={(length) => onChange({ length })} />
+        <TextField label="Grade" value={node.grade} onChange={(grade) => onChange({ grade })} />
+        <TextField label="Extra" value={node.extra} onChange={(extra) => onChange({ extra })} className="col-span-3 sm:col-span-1" />
+      </div>
+      <AreaField label="Description" value={node.text} onChange={(text) => onChange({ text })} />
+      <TextField label="First ascent" value={node.fa} onChange={(fa) => onChange({ fa })} />
     </div>
   )
 }

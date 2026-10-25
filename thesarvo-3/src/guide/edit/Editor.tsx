@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
-import { guideToXml } from '#/guide/convert/xml'
 import { routeStats } from '#/guide/view/routeStats'
 import type { Climb, Guide, GuideNode } from '#/guide/model/types'
 import { ClimbBlock } from '#/guide/view/ClimbBlock'
@@ -18,18 +17,6 @@ import { TopoEditor } from './TopoEditor'
 import { TopoFigure } from '#/guide/view/TopoFigure'
 
 const SAVE_DELAY_MS = 400
-
-function download(name: string, content: string) {
-  const url = URL.createObjectURL(
-    new Blob([content], { type: 'application/xml' }),
-  )
-  const a = Object.assign(document.createElement('a'), {
-    href: url,
-    download: name,
-  })
-  a.click()
-  URL.revokeObjectURL(url)
-}
 
 /** Loads an image just to learn its size, which topos need up front. */
 const measure = (src: string) =>
@@ -124,11 +111,6 @@ export default function Editor({ guide }: { guide: Guide }) {
         <div className="ml-auto flex gap-2">
           <Button onClick={() => setPreview((p) => !p)}>
             {preview ? 'Back to editing' : 'Preview'}
-          </Button>
-          <Button
-            onClick={() => download(`${guide.id}.xml`, guideToXml(present))}
-          >
-            Download XML
           </Button>
           <Button
             variant="danger"

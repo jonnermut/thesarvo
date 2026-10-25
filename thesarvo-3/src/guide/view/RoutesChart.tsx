@@ -17,7 +17,7 @@ export function RoutesChart({ stats }: { stats: RouteStats }) {
 
   return (
     <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${stats.total} routes by grade`} className="w-full max-w-72 text-[11px]">
-      <text x={W / 2} y={18} textAnchor="middle" fontSize={16} fontWeight={700} fontFamily="Georgia, serif">
+      <text x={W / 2} y={18} textAnchor="middle" fontSize={16} fontWeight={700} fontFamily="Helvetica, Tahoma, Arial, sans-serif">
         {stats.total} Routes
       </text>
       {ticks.map((t) => (
