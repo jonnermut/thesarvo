@@ -18,11 +18,11 @@ import type {
 import { buildXml, parseXml } from './raw'
 
 /** Reads known attributes (trimmed, "" when missing) and returns the rest as `other`. */
-function pick<K extends string>(attrs: Record<string, string>, keys: readonly K[]) {
+function pick<K extends string>(source: Record<string, string>, keys: readonly K[]) {
   const known = {} as Record<K, string>
   const other: Other = {}
-  for (const key of keys) known[key] = (attrs[key] ?? '').trim()
-  for (const [k, v] of Object.entries(attrs)) if (!keys.includes(k as K)) other[k] = v
+  for (const key of keys) known[key] = (source[key] ?? '').trim()
+  for (const [k, v] of Object.entries(source)) if (!keys.includes(k as K)) other[k] = v
   return { known, other }
 }
 

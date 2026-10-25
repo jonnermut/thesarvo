@@ -13,23 +13,23 @@ describe('topo ops', () => {
 
   it('creates a route with generated path data', () => {
     expect(topo.paths[0]).toMatchObject({ id: 'p1', linkedTo: 'c1', lineStyle: 'solid' })
-    expect(topo.paths[0]!.d).toMatch(/^M0,0C/)
+    expect(topo.paths[0].d).toMatch(/^M0,0C/)
   })
 
   it('moving a point regenerates the path data', () => {
     const moved = movePoint(topo, 'p1', 1, { x: 50, y: 50 })
-    expect(moved.paths[0]!.points[1]).toMatchObject({ x: 50, y: 50 })
-    expect(moved.paths[0]!.d).not.toBe(topo.paths[0]!.d)
+    expect(moved.paths[0].points[1]).toMatchObject({ x: 50, y: 50 })
+    expect(moved.paths[0].d).not.toBe(topo.paths[0].d)
   })
 
   it('inserts a point halfway to the next one', () => {
-    expect(insertPointAfter(topo, 'p1', 0).paths[0]!.points[1]).toMatchObject({ x: 5, y: 5 })
+    expect(insertPointAfter(topo, 'p1', 0).paths[0].points[1]).toMatchObject({ x: 5, y: 5 })
   })
 
   it('drops a route when fewer than two points would remain', () => {
     const two = addPath(empty, 'p2', [pt(0, 0), pt(1, 1)])
     expect(removePoint(two, 'p2', 0).paths).toHaveLength(0)
-    expect(removePoint(topo, 'p1', 1).paths[0]!.points).toHaveLength(2)
+    expect(removePoint(topo, 'p1', 1).paths[0].points).toHaveLength(2)
   })
 
   it('toggles legend entries in tick order', () => {

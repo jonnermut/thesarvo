@@ -11,6 +11,9 @@ export default [
       'sort-imports': 'off',
       '@typescript-eslint/array-type': 'off',
       '@typescript-eslint/require-await': 'off',
+      // Indexed access isn't typed as possibly-undefined, so this rule misfires on defensive checks.
+      '@typescript-eslint/no-unnecessary-condition': 'off',
+      '@typescript-eslint/naming-convention': 'off',
       'pnpm/json-enforce-catalog': 'off',
     },
   },

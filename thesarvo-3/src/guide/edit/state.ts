@@ -52,7 +52,7 @@ export function editorReducer(state: EditorState, action: Action): EditorState {
       const to = from + action.by
       if (from < 0 || to < 0 || to >= present.nodes.length) return state
       const nodes = present.nodes.slice()
-      ;[nodes[from], nodes[to]] = [nodes[to]!, nodes[from]!]
+      ;[nodes[from], nodes[to]] = [nodes[to], nodes[from]]
       return push(state, withNodes(nodes), null)
     }
     case 'replace':

@@ -12,9 +12,9 @@ export type Draft = {
  * implementation (publish = commit to the content repo) behind the same shape.
  */
 export interface GuideStore {
-  loadDraft(guideId: string): Draft | null
-  saveDraft(guideId: string, guide: Guide, base: string): void
-  clearDraft(guideId: string): void
+  loadDraft: (guideId: string) => Draft | null
+  saveDraft: (guideId: string, guide: Guide, base: string) => void
+  clearDraft: (guideId: string) => void
 }
 
 const key = (guideId: string) => `thesarvo.draft.${guideId}`

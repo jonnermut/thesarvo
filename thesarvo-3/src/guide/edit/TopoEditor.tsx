@@ -91,7 +91,7 @@ export function TopoEditor({ guideId, topo, climbs, newId, onChange }: Props) {
   const startDrag = (e: React.PointerEvent, onMove: (p: { x: number; y: number }) => (t: ImageTopo) => ImageTopo) => {
     e.stopPropagation()
     const key = `drag-${(gesture.current += 1)}`
-    const target = e.currentTarget as Element
+    const target = e.currentTarget
     target.setPointerCapture(e.pointerId)
     const move = (ev: PointerEvent) => onChange(onMove(toImage(ev)), key)
     const up = () => {

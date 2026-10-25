@@ -8,8 +8,9 @@ import { HeaderBlock } from '#/guide/view/HeaderBlock'
 import { TextBlock } from '#/guide/view/TextBlock'
 import { fetchImageNames } from '#/guide/server'
 import { Button, SelectField } from './fields'
-import { fingerprint, localStore, type Draft } from './drafts'
-import { newNode, newTopo, NEW_NODE_LABELS, type NewNodeKind } from './newNodes'
+import { fingerprint, localStore  } from './drafts'
+import type {Draft} from './drafts';
+import { newNode, newTopo, NEW_NODE_LABELS  } from './newNodes'
 import { ClimbForm, GpsForm, HeaderForm, TextForm } from './NodeForms'
 import { editorReducer, initEditor, nextId, nodeId } from './state'
 import { TopoEditor } from './TopoEditor'
@@ -193,7 +194,7 @@ function AddNode({ guide, onAdd }: { guide: Guide; onAdd: (node: GuideNode) => v
     <div className="flex flex-wrap items-center gap-2 rounded-xl border border-dashed border-line p-3">
       <span className="text-sm font-medium text-muted">Add</span>
       {NEW_NODE_LABELS.map(([kind, label]) => (
-        <Button key={kind} onClick={() => onAdd(newNode(kind as NewNodeKind, nextId(guide)))}>{label}</Button>
+        <Button key={kind} onClick={() => onAdd(newNode(kind, nextId(guide)))}>{label}</Button>
       ))}
       <Button onClick={async () => setImages(await fetchImageNames({ data: guide.id }))}>Topo image…</Button>
       {images && (
