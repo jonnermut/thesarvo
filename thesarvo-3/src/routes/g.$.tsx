@@ -1,6 +1,7 @@
 import { ClientOnly, Link, createFileRoute, notFound } from '@tanstack/react-router'
 import { lazy, Suspense } from 'react'
-import { findByPath, guideUrl } from '#/guide/content/paths'
+import { Breadcrumbs } from '#/components/Breadcrumbs'
+import { ancestors, findByPath, guideUrl } from '#/guide/content/paths'
 import { fetchGuide } from '#/guide/server'
 import { GuideView } from '#/guide/view/GuideView'
 
@@ -13,17 +14,24 @@ export const Route = createFileRoute('/g/$')({
     search.edit === true || search.edit === 'true' || search.edit === '' ? { edit: true } : {},
   loader: async ({ params, parentMatchPromise }) => {
     const index = (await parentMatchPromise).loaderData!
-    const node = findByPath(index, decodeURIComponent(params._splat ?? ''))
+    const path = decodeURIComponent(params._splat ?? '').replace(/\/$/, '')
+    const node = findByPath(index, path)
     if (!node) throw notFound()
-    return { node, guide: node.isGuide ? await fetchGuide({ data: node.id }) : null }
+    return {
+      node,
+      trail: ancestors(index, path),
+      guide: node.isGuide ? await fetchGuide({ data: node.id }) : null,
+    }
   },
-  head: ({ loaderData }) => ({ meta: [{ title: `${loaderData?.node.title ?? 'Guide'} · thesarvo` }] }),
+  head: ({ loaderData }) => ({
+    meta: [{ title: `${loaderData?.node.title ?? 'Guide'} · thesarvo` }],
+  }),
   component: GuidePage,
   notFoundComponent: () => <p className="p-8">Page not found.</p>,
 })
 
 function GuidePage() {
-  const { node, guide } = Route.useLoaderData()
+  const { node, trail, guide } = Route.useLoaderData()
   const { edit } = Route.useSearch()
   if (guide && edit)
     return (
@@ -33,20 +41,30 @@ function GuidePage() {
         </Suspense>
       </ClientOnly>
     )
-  if (guide) return <GuideView guide={guide} />
+  const crumbs = <Breadcrumbs trail={trail} current={node} />
+  if (guide)
+    return (
+      <>
+        {crumbs}
+        <GuideView guide={guide} />
+      </>
+    )
   // A plain page or region: list what is beneath it.
   return (
-    <div className="mx-auto max-w-3xl px-6 py-10">
-      <h1 className="text-[28px] font-bold text-navy">{node.title}</h1>
-      <ul className="mt-6 grid gap-2 sm:grid-cols-2">
-        {node.children.map((c) => (
-          <li key={c.id}>
-            <Link to={guideUrl(c)} className="block border border-line bg-card px-4 py-3 text-navy hover:bg-paper">
-              {c.title}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      {crumbs}
+      <div className="mx-auto max-w-3xl px-6 py-6">
+        <h1 className="text-[28px] font-bold text-navy">{node.title}</h1>
+        <ul className="mt-6 grid gap-2 sm:grid-cols-2">
+          {node.children.map((c) => (
+            <li key={c.id}>
+              <Link to={guideUrl(c)} className="block border border-line bg-card px-4 py-3 text-navy hover:bg-paper">
+                {c.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
   )
 }

@@ -1,7 +1,7 @@
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { guideFromXml } from '#/guide/convert/xml'
-import { slugify, uploadName } from './paths'
+import { isHiddenPage, navTitle, slugify, uploadName } from './paths'
 import type { ContentSource, IndexNode } from './types'
 
 export type RawIndexNode = { id: number; title: string; children: RawIndexNode[] }
@@ -79,12 +79,13 @@ export class DiskContentSource implements ContentSource {
 export function toNode(raw: RawIndexNode, parentPath: string, guideFiles: Set<string>): IndexNode {
   const id = String(raw.id)
   const seen = new Set<string>()
-  const children = raw.children.map((child) => {
+  const children = raw.children.filter((child) => !isHiddenPage(child.title)).map((child) => {
     // Sibling titles can collide after slugifying; the id keeps them distinct.
     let slug = slugify(child.title) || String(child.id)
     if (seen.has(slug)) slug = `${slug}-${child.id}`
     seen.add(slug)
     return toNode(child, parentPath ? `${parentPath}/${slug}` : slug, guideFiles)
   })
-  return { id, title: raw.title, path: parentPath, isGuide: guideFiles.has(`${id}.xml`), children }
+  // Slugs use the original title so URLs stay put; only the shown title is tidied.
+  return { id, title: navTitle(raw.title), path: parentPath, isGuide: guideFiles.has(`${id}.xml`), children }
 }

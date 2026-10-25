@@ -2,7 +2,7 @@ import { mkdtemp, readFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { DiskContentSource } from './disk'
+import { DiskContentSource, toNode } from './disk'
 import { ancestorIds, findByPath, flatten, imageUrl, uploadName } from './paths'
 
 const source = new DiskContentSource('fixtures')
@@ -33,6 +33,19 @@ describe('DiskContentSource', () => {
 
   it('does not read files outside the folder', async () => {
     expect(await source.readFile('../package.json')).toBeNull()
+  })
+
+  it('tidies titles for the nav and hides galleries', () => {
+    const raw = { id: 1, title: 'Root', children: [
+      { id: 2, title: 'The Tasmanian Bouldering Guide', children: [{ id: 3, title: 'Mt Wellington bouldering', children: [] }] },
+      { id: 4, title: 'Lowdina Gallery', children: [] },
+    ] }
+    const root = toNode(raw, '', new Set())
+    expect(flatten(root).map((n) => [n.title, n.path])).toEqual([
+      ['Root', ''],
+      ['Bouldering', 'the-tasmanian-bouldering-guide'],
+      ['Mt Wellington', 'the-tasmanian-bouldering-guide/mt-wellington-bouldering'],
+    ])
   })
 
   it('lists ancestors for sidebar expansion', async () => {

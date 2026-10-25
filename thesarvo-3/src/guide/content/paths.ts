@@ -10,7 +10,14 @@ export const slugify = (title: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
 
-export const guideUrl = (node: Pick<IndexNode, 'path'>) => `${GUIDE_PREFIX}/${node.path}`
+/** Title as shown in navigation, tidied as the apps do. */
+export const navTitle = (title: string) =>
+  title === 'The Tasmanian Bouldering Guide' ? 'Bouldering' : title.replace(/ bouldering$/i, '')
+
+/** Gallery pages are left out of the site for now; they will move into the guides. */
+export const isHiddenPage = (title: string) => /gallery/i.test(title)
+
+export const guideUrl =(node: Pick<IndexNode, 'path'>) => `${GUIDE_PREFIX}/${node.path}`
 
 /** Depth-first list of every node, parents before children. */
 export function flatten(node: IndexNode): IndexNode[] {
@@ -19,18 +26,21 @@ export function flatten(node: IndexNode): IndexNode[] {
 
 export const findByPath = (root: IndexNode, path: string) => flatten(root).find((n) => n.path === path)
 
-/** Ids from the root down to the node with `path`, used to expand the sidebar. */
-export function ancestorIds(root: IndexNode, path: string): string[] {
-  const walk = (n: IndexNode, trail: string[]): string[] | null => {
+/** Nodes from the root down to (not including) the node with `path`; empty if there is none. */
+export function ancestors(root: IndexNode, path: string): IndexNode[] {
+  const walk = (n: IndexNode, trail: IndexNode[]): IndexNode[] | null => {
     if (n.path === path) return trail
     for (const child of n.children) {
-      const found = walk(child, [...trail, n.id])
+      const found = walk(child, [...trail, n])
       if (found) return found
     }
     return null
   }
   return walk(root, []) ?? []
 }
+
+/** Ids from the root down to the node with `path`, used to expand the sidebar. */
+export const ancestorIds = (root: IndexNode, path: string) => ancestors(root, path).map((n) => n.id)
 
 /** Set when the site is built as static files: images then come from object storage, saving is off. */
 export const STATIC_SITE = import.meta.env?.VITE_STATIC_SITE === '1'
