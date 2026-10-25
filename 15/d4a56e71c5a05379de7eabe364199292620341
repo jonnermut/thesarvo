@@ -1,0 +1,29 @@
+thesarvo-3/src/guide/edit/topoOps.test.ts
+  s_e20d0a1ebc47aa::t_1042a5cd5521d2 3,40-43
+  s_e20d0a1ebc47aa::t_5807ca1d6316cb 44
+thesarvo-3/src/guide/edit/fields.tsx
+  s_e20d0a1ebc47aa::t_e1526309c18d97 96-104
+thesarvo-3/src/guide/edit/topoOps.ts
+  s_e20d0a1ebc47aa::t_e1526309c18d97 68-71
+thesarvo-3/src/guide/edit/TopoEditor.tsx
+  s_e20d0a1ebc47aa::t_1042a5cd5521d2 6
+  s_e20d0a1ebc47aa::t_e1526309c18d97 23-27,237,243-252,273-278
+thesarvo-3/docs/live-site-differences.md
+  s_e20d0a1ebc47aa::t_a138357d4937df 52-53
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "15d4a56e71c5a05379de7eabe364199292620341",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
