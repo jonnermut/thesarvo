@@ -125,24 +125,32 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: P
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2">
-        {TOOLS.map(([id, label]) => (
+        {/* While a drawing mode is active the other tools hide, leaving only the way out. */}
+        {TOOLS.filter(([id]) => tool === 'select' || id === 'select').map(([id, label]) => (
           <Button key={id} variant={tool === id ? 'primary' : 'plain'} onClick={() => { setTool(id); setDrawing([]) }}>
             {label}
           </Button>
         ))}
-        {drawing.length > 0 && (
+        {tool === 'route' && (
           <>
             <Button variant="primary" disabled={drawing.length < 2} onClick={finishRoute}>Finish route</Button>
-            <Button onClick={() => setDrawing([])}>Cancel</Button>
+            {drawing.length > 0 && <Button onClick={() => setDrawing([])}>Clear points</Button>}
           </>
         )}
-        <span className="text-xs text-muted">
-          {tool === 'route' ? 'Click to place points, Enter to finish.' : tool === 'rect' ? 'Click the photo to place a label.' : 'Drag handles to move. Delete removes the selection.'}
-        </span>
+        {tool === 'select' ? (
+          <span className="text-xs text-muted">Drag handles to move. Delete removes the selection.</span>
+        ) : (
+          <span className="flex items-center gap-2 rounded-md bg-amber/15 px-2 py-1 text-xs font-medium text-ink">
+            <span className="size-2 animate-pulse rounded-full bg-amber" aria-hidden />
+            {tool === 'route'
+              ? 'Drawing a route: click the photo to add points. Enter finishes, Esc stops.'
+              : 'Adding a label: click the photo to place it. Esc cancels.'}
+          </span>
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_20rem]">
-        <div className="relative overflow-hidden rounded-lg bg-black/5 shadow-md">
+        <div className={`relative overflow-hidden rounded-lg bg-black/5 shadow-md ${tool === 'select' ? '' : 'ring-2 ring-amber'}`}>
           <img src={imageUrl(guideId, topo.src)} alt="" width={topo.width} height={topo.height} className="block h-auto w-full select-none" draggable={false} />
           <svg
             ref={svgRef}
