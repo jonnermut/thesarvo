@@ -1,4 +1,4 @@
-import { useId } from 'react'
+import { useEffect, useId, useState } from 'react'
 
 const INPUT =
   'w-full rounded-md border border-line bg-white px-2.5 py-1.5 text-sm focus:border-amber focus:outline-none focus:ring-2 focus:ring-amber/30'
@@ -91,6 +91,37 @@ export function Button({
     >
       {children}
     </button>
+  )
+}
+
+/** A delete that needs a second click, so a slip costs nothing. Reverts after a few seconds. */
+export function DeleteButton({ label = 'Delete', className = '', onConfirm }: { label?: string; className?: string; onConfirm: () => void }) {
+  const [asking, setAsking] = useState(false)
+  useEffect(() => {
+    if (!asking) return
+    const timer = setTimeout(() => setAsking(false), 4000)
+    return () => clearTimeout(timer)
+  }, [asking])
+  if (!asking)
+    return (
+      <Button variant="danger" className={className} onClick={() => setAsking(true)}>
+        {label}
+      </Button>
+    )
+  return (
+    <span className={`flex gap-1 ${className}`}>
+      <Button
+        variant="primary"
+        className="bg-red-700! hover:bg-red-800!"
+        onClick={() => {
+          setAsking(false)
+          onConfirm()
+        }}
+      >
+        {label} for sure
+      </Button>
+      <Button onClick={() => setAsking(false)}>Keep</Button>
+    </span>
   )
 }
 

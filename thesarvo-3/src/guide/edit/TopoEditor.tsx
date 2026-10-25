@@ -4,7 +4,7 @@ import { imageUrl } from '#/guide/content/paths'
 import type { Climb, ImageTopo, LineStyle, Point, RectStyle } from '#/guide/model/types'
 import { Callout, Route } from '#/guide/view/Topo'
 import { RECT_STYLES } from '#/guide/view/topoStyles'
-import { AreaField, Button, CheckField, NumberField, SelectField, TextField } from './fields'
+import { AreaField, Button, CheckField, DeleteButton, NumberField, SelectField, TextField } from './fields'
 import * as ops from './topoOps'
 
 type Tool = 'select' | 'route' | 'rect'
@@ -262,7 +262,7 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: P
                 >
                   {pointIndex !== null && selectedPath.points[pointIndex]?.kind === 'label' ? 'Number not here' : 'Number here'}
                 </Button>
-                <Button variant="danger" onClick={removeSelected}>{pointIndex === null ? 'Delete route' : 'Delete point'}</Button>
+                <DeleteButton label={pointIndex === null ? 'Delete route' : 'Delete point'} onConfirm={removeSelected} />
               </div>
             </>
           ) : selectedRect ? (
@@ -275,7 +275,7 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: P
                 <NumberField label="Width" value={selectedRect.width} onChange={(width) => onChange((t) => ops.updateRect(t, selectedRect.id, { width }), `w-${selectedRect.id}`)} />
                 <NumberField label="Height" value={selectedRect.height} onChange={(height) => onChange((t) => ops.updateRect(t, selectedRect.id, { height }), `h-${selectedRect.id}`)} />
               </div>
-              <Button variant="danger" onClick={removeSelected}>Delete label</Button>
+              <DeleteButton label="Delete label" onConfirm={removeSelected} />
             </>
           ) : (
             <>

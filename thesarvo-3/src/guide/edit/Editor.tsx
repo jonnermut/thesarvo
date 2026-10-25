@@ -8,7 +8,7 @@ import { guideTitle } from '#/guide/view/kml'
 import { HeaderBlock } from '#/guide/view/HeaderBlock'
 import { TextBlock } from '#/guide/view/TextBlock'
 import { ImagePicker } from './ImagePicker'
-import { Button } from './fields'
+import { Button, DeleteButton } from './fields'
 import { fingerprint, localStore } from './drafts'
 import type { Draft } from './drafts'
 import { newNode, newTopo, NEW_NODE_LABELS } from './newNodes'
@@ -189,7 +189,7 @@ export default function Editor({ guide }: { guide: Guide }) {
                       >
                         {open ? 'Done' : 'Edit'}
                       </Button>
-                      <DeleteButton onConfirm={() => dispatch({ type: 'delete', id })} />
+                      <DeleteButton className="ml-3" onConfirm={() => dispatch({ type: 'delete', id })} />
                     </span>
                   </div>
                   {open ? (
@@ -216,30 +216,6 @@ export default function Editor({ guide }: { guide: Guide }) {
         </div>
       )}
     </div>
-  )
-}
-
-/** Delete sits apart from the other controls and needs a second click, so a slip costs nothing. */
-function DeleteButton({ onConfirm }: { onConfirm: () => void }) {
-  const [asking, setAsking] = useState(false)
-  useEffect(() => {
-    if (!asking) return
-    const timer = setTimeout(() => setAsking(false), 4000)
-    return () => clearTimeout(timer)
-  }, [asking])
-  if (!asking)
-    return (
-      <Button variant="danger" className="ml-3" onClick={() => setAsking(true)}>
-        Delete
-      </Button>
-    )
-  return (
-    <span className="ml-3 flex gap-1">
-      <Button variant="primary" className="bg-red-700! hover:bg-red-800!" onClick={onConfirm}>
-        Delete for sure
-      </Button>
-      <Button onClick={() => setAsking(false)}>Keep</Button>
-    </span>
   )
 }
 
