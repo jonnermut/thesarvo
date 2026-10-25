@@ -1,0 +1,53 @@
+<guide>
+  <header id="51" access="Brady’s is 20km north of Launceston on the West Tamar Highway. From the parking area head up the path and hop the fence just right of the overlook. The Tourist Trap boulder is straight down the hill 50m. The lower boulder field can be accessed skirting right down the slope (which can be severely overgrown with thistle in late season)." name="Bradys Lookout" intro="Apart from the Gorge, Brady’s lookout has probably the largest amount of worthwhile bouldering around the Launceston area. The dolerite boulder field is easily accessed, and the rock quality is moderately good with a few really nice lines thrown in. The most obvious drawbacks to climbing are the less than spectacular talus landings beneath most of the problems and the perpetual re-growth of moss and lichen on holds. Still, there is a bit of potential for the brave, and plenty of lines to be had to anyone with a few pads and a wire brush." acknowledgement="By Mark Polinski" rock="Dolerite blocks" walk="2 min"/>
+  <image id="12" height="264" width="1000" src="Boulderfield overview.jpg"/>
+  <text class="heading3" id="14">Tourist Boulder</text>
+  <image id="15" height="450" width="600" src="Tourist Boulder.jpg"/>
+  <problem id="16" name="Tourist Trap" extra="(Stand)" grade="V6" number="1" stars="**">The obvious line straight up over the bulge past a small heuco. Nice compression climbing with a couple big moves at the end in a great position.</problem>
+  <problem id="17" name="Look at Me" grade="V3" number="2">Start right hand on the corner just under the roof and left hand in a high small pocket. Climb straight up to top. Heading out left to finish makes it quite a bit easier.</problem>
+  <problem id="18" name="" grade="V0" number="3">Climb straight up the middle of the boulder. Probably the best for getting off the top of the boulder as well once you’ve made it there.</problem>
+  <problem id="19" name="Dead Battery" extra="(SDS)" grade="V2" number="4">Start left hand on arête and right in a small right-facing corner. Climb straight up, mindful of the consequences of falling off to your left</problem>
+  <text class="heading3" id="20">Hard Times Boulder</text>
+  <text class="text" id="59">The second boulder you reach after Tourist Trap if descending from the lookout, located immediately above Circus Boulder.</text>
+  <problem id="22" name="Hard Times" fa="" extra="(SDS)" grade="V8" number="" stars="***" length="">Excellent thuggy compression problem. Start left hand on small undercling in middle of face, righthand low on the right side. Slap up though sidepulls to a tricky move mid height, followed by more compression to the top. Best climbed in the afternoon when the problem comes into shade.</problem>
+  <text class="heading3" id="23">Circus Boulder</text>
+  <image id="24" height="460" width="600" src="Circus boulder 1.jpg"/>
+  <problem id="25" name="Main Event" extra="(Stand)" grade="V6/7" number="1" stars="**">Probably the best line at Brady’s. Unfortunate the landing isn’t better. Start on two small staggered crimps at head height under the bulge and climb straight up the protruding block feature. Excellent and committing.</problem>
+  <problem id="26" name="Sideshow" grade="V8/9" number="2">Climb the Main Event to the lip of the first bulge and move right to mantle up onto the slabby corner (harder than it looks).</problem>
+  <problem id="27" name="Watering Elephants" extra="(Highball)" grade="V9" number="3">Physically more like V8 climbing, but given the seriousness of the landing you might as well give yourself the 9 points. Start on the obvious right-facing sidepull about 1m right of the corner and climb straight up using the left corner and crimps with some right hand sidepulls. Blowing the crux likely will lands you in the hole full of brambles. If that happens, at least know you weren’t the first.</problem>
+  <problem id="28" name="Watering Zebras" grade="V5" number="4" stars="*">Start as for Watering Elephants but angle left around the corner just below the small roof and exits up the easier ground of Zebra.</problem>
+  <problem id="30" name="Zebra" grade="V2" number="5" stars="*">Climbs the tall face just left of the corner. The first moves are the hardest.</problem>
+  <problem id="4" name="Postcard" extra="(SDS)" grade="V2" number="6" stars="*" new="false">Start on the break and continue up the southern face.</problem>
+  <problem id="5" name="Open project" extra="(SDS)" grade="V10ish" number="2." stars="" new="false">Start on some good hold in a notch below the slab and make some big pulls traversing rightwards to finish up Postcard</problem>
+  <text class="text" id="60">This boulder is within 20 metres of Circus Boulder, in a depression of sorts and towards the Tamar.</text>
+  <image id="61" height="719" src="Brady&apos;s prow project.jpg"/>
+  <problem id="62" name="Rising slopey traverse project" fa="" extra="(SDS)" grade="V7+?" number="1" stars="**" length="">Sit start with slopey lip and small edge. Move left with difficulty and top out through more difficult slopers to gain incut edges over the lip. Will likely be hard when it goes but a quality line with a good landing. Brushed up early 2018 and ready to go.</problem>
+  <text class="heading3" id="47">Two Step Boulder</text>
+  <image id="48" height="400" width="300" src="2 step.png"/>
+  <problem id="49" name="Two Step" extra="(SDS)" grade="V2">Start matched on a faint rail feature with a left heel-hook and move up sidepulls to the top</problem>
+  <text class="heading3" id="31">Three's a Crowd Boulder</text>
+  <image id="32" height="800" width="600" src="Crowd boulder.jpg"/>
+  <problem id="33" name="One for the Money" extra="(Stand)" grade="V3" number="1" stars="**">Start on a flat horizontal rail at head height and make a few balancy moves rightwards toward the Arete to a committing move to the lip.</problem>
+  <problem id="34" name="Three&apos;s a Crowd" extra="(SDS)" grade="V10" number="2" stars="*">Start low in the hole on two crimps and head rightwards on relatively easy ground to a powerful finale on small crimps to the lip.</problem>
+  <problem id="35" name="Open project" grade="V12ish" number="3" stars="**">Start on the same holds as Three's a crowd but move left and then up via powerful lockoffs and tension to join TaC again at it's crux. Small holds, but quality movement and a nice line</problem>
+  <text class="heading3" id="39">Satellite boulder #1</text>
+  <image id="36" height="375" width="500" src="Satellite 1.jpg"/>
+  <problem id="37" name="Drop Top" extra="(SDS)" grade="V6" number="1">Start LH sidepulling a small crack and right hand on a undercling/sidepull block. Make one big move to the lip and topout</problem>
+  <problem id="38" name="Yardwork" extra="(SDS)" grade="V9" number="2">Start right hand at the bottom of the same crack feature to start the previous problem and left hand on a good hold at the bottom of the bulge. Make an off-balance move to gain a small sharp crimp and then 2 more hard tension moves to the top</problem>
+  <text class="heading3" id="40">Satellite boulder #2</text>
+  <image id="41" height="666" width="500" src="Satellite 2.jpg"/>
+  <problem id="42" name="Mars" grade="V2" number="1" stars="*">Start on a good crimp rail and move straight up and over on good holds</problem>
+  <problem id="43" name="Pluto" grade="V9" number="2">Somewhat of an eliminate. Start as for Mars but move rightwards off a small crimp (avoiding the obvious jug to the left used for Mars) and slap out to the right side to top out</problem>
+  <text class="heading3" id="44">Undertow Boulder</text>
+  <problem id="45" name="Undertow" grade="V6" number="1" stars="*">Start down in the little cave with a good right hand and poor lefthand sloper. Move up and right through some good hold to a dynamic move to finish.</problem>
+  <problem id="46" name="Undertow right" grade="V6" number="2">Start matched on an undercling on the pedistal to the right of the small cave. Make one move into Undertow and finish as per that problem. Starting a few moves further right on some horrible small sidepulls is a project in the V12 range.</problem>
+  <text class="heading3" id="50">Pyramid boulder</text>
+  <text class="text" id="7" new="false">Five metres below Postcard is a large Pyramidal boulder with a clean vertical face.</text>
+  <problem id="8" name="" extra="" grade="V0" number="" stars="" new="false">Head for the topout jug halfway along the down hill side.</problem>
+  <problem id="9" name="Snapshot" extra="(Stand)" grade="V3" number="" stars="" new="false">Start in the middle of the face on the horizontal break and head to the left of the pyramid peak.</problem>
+  <problem id="10" name="" extra="(Stand)" grade="V0" number="" stars="" new="false">Start 3 m to the right of Snapshot and head for the top.</problem>
+  <text class="heading3" id="54">Old Brady Boulder</text>
+  <problem id="55" name="Old Bradys Fun Climb" fa="" extra="(SDS)" grade="V4" number="" stars="" length="">Up the nice line of crimps towards the bottom of the area.</problem>
+  <text class="heading3" id="56">Berry Picking Boulder</text>
+  <problem id="57" name="Berry Picking" fa="" extra="(Stand)" grade="V0" number="" stars="" length="">A great looking line in an awesome position. The small pillar perched in the middle of the area. Easy to see if coming from the bottom up. Could use more cleaning - bit mossy.</problem>
+</guide>

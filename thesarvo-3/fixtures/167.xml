@@ -1,0 +1,988 @@
+<guide version="2" pagesize="500" guidestars="*"> 
+  <parsererror xmlns="http://www.w3.org/1999/xhtml" style="margin: 1em; padding: 0px 1em; border: 2px solid rgb(204, 119, 119); border-image: none; color: black; display: block; white-space: pre; background-color: rgb(255, 221, 221);">  
+    <h3>This page contains the following errors:</h3>  
+    <div style="font-family: monospace; font-size: 12px;">error on line 3 at column 1: Extra content at the end of the document</div>  
+    <h3>Below is a rendering of the page up to the first error.</h3> 
+  </parsererror>  
+  <header id="1" walk="25 min steep uphill" sun="Morning &amp; midday sun" rock="Dolerite" name="Lowdina" intro="IMPORTANT: &lt;br/&gt;- You need to be back at your car before dark (landowner request)&lt;br/&gt;- Clean and disinfect your footwear before climbing here (farm biosecurity).&lt;br/&gt;&lt;br/&gt;Only a short drive from Hobart, Lowdina is an excellent winter trad crag in the South. The rock quality is very good, and the crag provides a wide-selection of interesting routes, each with their own unique flavour. Though the cliff only makes minor first impressions, its hidden gems will become gleamingly obvious as you explore it. Summer climbing here is unpleasant, as it's usually too hot and the grass seeds through these months are very annoying. Routes are listed in the guide from climbers left to right." history="In the beginning..&lt;br/&gt;Michael McHugh first noticed the cliff from the Trans Tasman passenger train window traveling between Devonport and Hobart. Not long after, McHugh with Peter Jackson visited the cliff and in 1968 with Bob McMahon, John Moore and Mendelt Tillema put up the first routes. Jackson also published the first guide in the early 1970s with about 30 routes containing his signature sketches. The original guide can be viewed at Libraries Tasmania - Archives History Room in Hobart.&lt;br/&gt;&lt;br/&gt;Rock-stars, run-outs and burn-outs..&lt;br/&gt;Between the late eighties and early nineties, new route activity at Lowdina was intense. Most of the harder routes done during this period were by Evan Peacock, Garn Cooper and Al Adams. Martin Stone published a new guide in the mid-eighties but it soon became outdated. Evan Peacock and Colin Reed published a third guide in 1992 that formed the basis of the crag info later published in Craglets. In the mid-nineties interest in Lowdina waned for various reasons including the need to complete an indemnity form prior to visitation. During the 00s and 10s sporadic visitation meant a significant number of routes retreated under a liberal coating of Lowdina’s infamous lichen.&lt;br/&gt;&lt;br/&gt;The future..&lt;br/&gt;Lowdina’s relative obscurity was set to change. During winter 2021, the crag sparked the interest of Christoph Speer, Hamish Jackson and Martin Brown, signifying the start of a modern revival.  Recognising the value of the cliff for winter trad-climbing, work began on serious route cleaning, installation of lower-offs and replacement of the old carrot bolts, giving the crag a much needed face-lift. The guide has also been re-written, with the addition of topos to assist in route navigation, as well as revised route descriptions and some upgrades. During this period there has been significant new route activity spearheaded by Speer, Jackson, Brown and Broome." guide.type="header" guide.page="0" guide.id="0" guide.action="submit" acknowledgement="Originally published in Craglets by Evan Peacock. Guide update and crag revival undertaken by Christoph Speer, Hamish Jackson and Martin Brown, with help from friends and the CCT." access="Special provisions are required to visit this cliff, and ongoing access is reliant on the climbing community doing the right thing.  The cliff lies on private land, and the owners, N and R Bevan are very friendly people that are happy for people to climb here, as long as the following process in adhered to:&lt;br/&gt;&lt;br/&gt;1. Clean, wash and disinfect your shoes thoroughly prior to coming (essential for farm biosecurity).&lt;br/&gt;2. Contact the Bevans at least the day prior to your trip (text preferred - 0418 604 286 or 6260 4286). Include in the text who is coming, in what car(s) and a time you will arrive.&lt;br/&gt;3. Sign onto the indemnity-form / register at the stile before you enter the property. You need to do this each time you visit.&lt;br/&gt;4. Leave a nice box of chocolates if you visit frequently - and make sure you're off the cliff and back at your car before dark.&lt;br/&gt;5. keep an eye out for signs of peregrine falcons, especially in nesting season (Aug to Jan). In 2019-2023 the birds nested elsewhere, but this could change. &lt;br/&gt;See here for detailed info: http://www.thesarvo.com/confluence/display/cctpublic/Raptor+Nesting  &lt;br/&gt;&lt;br/&gt;Access to the cliff is located from the end of Lowdina Road in Campania (about 4.2km North of the town centre). A convenient parking area is located at the end of the road just after the old house at the railway-line turning circle.&lt;br/&gt;&lt;br/&gt;Walk to the LHS of the old house above the railway-line to locate a wooden stile. Sign-in, then cross the fence here and start walking towards the cliff, keeping just left of the fence-line. Pass an old gate (close behind you) and head-up over a short hill, cross the field passing some stacked boulders and look for some orange tape on a fence at the base of the hill - this is where the track begins. Follow the rough track up the steep hill to arrive at the Bismark Buttress. Make your way along the base of the cliff-line to move between buttresses." camping="There is basic camping at Colebrook Park near the Craigbourne dam (10 mins NW of Lowdina), and Campania Flour Mill Campground 10 mins SE of Lowdina. &lt;br/&gt;&lt;br/&gt;Please DO NOT camp on the Lowdina property itself." autonumber="true"/>  
+  <text id="428" class="heading2">Crag Steward</text>  
+  <text id="429" class="text">Rock climbers please contact the Cliff Steward (lowdina@climbersclubtas.org.au) if you have any queries or concerns regarding social or environmental impacts of rock climbing at this crag. Do not email regarding general travel, seasonal advice, or lost property - this is not the Steward’s role. If you have important safety information to communicate (e.g. risks due to recent and large rock falls) please also consider updates on thesarvo forum, facebook group and/or online guidebooks as appropriate. Please copy in cct@climbersclubtas.org.au if you feel you have a high level concern which may imminently impact the crag or climbing community.&lt;br/&gt;&lt;br/&gt;Non-climbers, other users, land managers: please also contact cct@climbersclubtas.org.au if you have important climbing related queries at this location.</text>  
+  <text id="352" class="heading2">Gear and Grades</text>  
+  <text id="353" class="text">A single rack of wires and a double rack of cams from BD #0.3 to #3 will suffice for most climbs, with bigger gear being useful at times. Micro-wires (RPs) and micro-cams are essential for many of the face climbs here (a double-rack is ideal). A 60m single-rope is the go here, although double ropes (or single folded over) may keep you safer on a couple of bolder routes (e.g. Little Squeaky Feet).&lt;br/&gt;&lt;br/&gt;Try any of the following recommended routes if time is short and you want the best - general consensus is that grading at Lowdina is stiff and old-school. &lt;br/&gt;- A ~ symbol indicates the need for RPs / micro-cams. &lt;br/&gt;- A + symbol means very approachable and well protected.&lt;br/&gt;&lt;br/&gt; &lt;12 - Papillon+, Tormentil+, Greenknowe&lt;br/&gt; 13 - The Ants Pants+, Casuarina Crack+, Sweetie&lt;br/&gt; 14 - Things to Do While Waiting for the Apocalypse, Strawberries+&lt;br/&gt; 15 - Canary, Bismark+&lt;br/&gt; 16 - Chocolate+, Ulysses, Hood&lt;br/&gt; 17 - Hooter~, Subvert the Dominant Paradigm, Virag, Snoober~, Ferio+, Ungar+, Chook Fever+, Psoriasis&lt;br/&gt; 18 - The Danger Hog Shuffle, Wolftone+, Anzac Day, Felix+, Daytime Delinquents, Mother Earth+, Mick Goes to Moonah~, Time Warp~, Electric Exercise Bike~, Boys in Bikinis&lt;br/&gt; 19 - Yoda~, Something Scurrilous+, Don't Jolt That Bolt~&lt;br/&gt; 20 - Liars and Losers~, Illegal Move, Gecko~, Authoritarian Ultranationalism+&lt;br/&gt; 21 - Brittle Little Mothers~, Balbatross, Rogering the Rock+, Bulging Biceps~, Maggot on a Brick+, Caged+, Ukiyo-e+, Scaredy Cat~&lt;br/&gt; 22 - Drury Line, Acerb, Plasticine Thylacine, Punks and Lepers~, Picnic in the Front Room~, Ashlars Edge+&lt;br/&gt; 23 - Albatross, Lumbar Cruncher+, Little Squeaky Feet~&lt;br/&gt; 24 - Lumber Cruncher Direct+, Bonsai+, Radical Centrist+&lt;br/&gt; 25 - Onklunk&lt;br/&gt; 26 - Wailing Wall+&lt;br/&gt;&lt;br/&gt;The gate keepers for technical, thin-gear face climbs:&lt;br/&gt;1. Hooter (17)&lt;br/&gt;2. Mick Goes to Moonah (18)&lt;br/&gt;3. Yoda (19)&lt;br/&gt;4. Liars and Losers (20)&lt;br/&gt;5. Brittle Little Mothers (21)&lt;br/&gt;6. Punks and Lepers (22)&lt;br/&gt;7. Little Squeaky Feet (23)</text>  
+  <text id="349" class="heading2">Bolts</text>  
+  <text id="350" class="text">Most of the old carrot bolts have now been removed and replaced with stainless steel fixed hangars or glue-ins. There are still a couple floating about yet to be replaced (noted in the descriptions). Any remaining carrots and mild steel FH's should be treated with much caution, they are likely 30+ years old now. Some old pitons are also still in-situ (mostly in good condition) - back these up where possible. As always, you should inspect all fixed gear before use - you are in charge of your safety.</text>  
+  <text id="357" class="heading2">Quality</text>  
+  <text id="358" class="text">Most of the popular routes have now been repeated and cleaned since the cliffs revival in 2021. Many of the routes here likely hadn't had a repeat ascent for close to 30 years - and as such, some routes have gained or lost stars depending on various factors. As such, the star ratings you see in this guide will be pretty accurate to the current quality of the route.&lt;br/&gt;&lt;br/&gt;*** - Classic.&lt;br/&gt;** - Highly recommended.&lt;br/&gt;* - A good route that's worth doing.</text>  
+  <text id="354" class="heading2">Ethics</text>  
+  <text id="355" class="text">Much time, effort and money has gone into rejuvenating this crag for winter trad-climbing options close to Hobart. Please respect the land-owners wishes regarding access, remember that you are on private land and act accordingly. Please top-rope anchors through your own gear to avoid premature wear.&lt;br/&gt;&lt;br/&gt;The ethic at this crag is traditional, and it is expected that natural protection should be used where-ever reasonable placements exist (including #1RP placements!). Some routes here will test your ability to place small gear and climb with confidence above it. Whilst mixed routes are common, the crag is not suited to fully bolted routes. To improve the climbing experience, some climbs have had their old bolts re-positioned, and in certain circumstances bolts have been added with permission of the FA following wider consultation.</text>  
+  <text id="423" class="heading2">Environment</text>  
+  <text id="424" class="text">Peregrine Falcon's almost certainly nest around the cliff and have done so for many years, although the location of their current nest site in 2020-2022 era is unclear, with occasional sightings of birds only (not distress signals). In 2022 sightings have been reported in the far northern reaches of the crag. Previous nesting sites reportedly include one behind Bismark Buttress and one atop Virag Buttress. Please be on the look out and report sightings to the CCT peregrine stewards. If you start hearing a lot of squawking and/or start getting swooped, please climb elsewhere on the cliff to avoid disturbing the birds during their nesting season (usually between July - December).&lt;br/&gt;&lt;br/&gt;Please stick to the marked track as much as possible - even when it's wet and muddy. Track braiding can become a real problem and work is undertaken regularly to minimise our impact. Please help to keep existing tracks free of sticks and debris and please avoid creating new ones.</text>  
+  <gps id="193"> 
+    <point pid="2" description="Westfield" latitude="-42.63225" longitude="147.42777" easting="535074" northing="5279933" zone="55G"/>  
+    <point pid="3" description="Lowdina Road Parking" latitude="-42.63147" longitude="147.42409" easting="534772" northing="5280021" zone="55G"/>  
+    <point pid="4" description="Spook Fright" latitude="-42.63108" longitude="147.41427" easting="533967" northing="5280068" zone="55G"/>  
+    <point pid="5" description="Topless Buttress" latitude="-42.62957" longitude="147.41383" easting="533932" northing="5280236" zone="55G"/>  
+    <point pid="6" description="Bismark Buttress" latitude="-42.63428" longitude="147.41648" easting="534147" northing="5279712" zone="55G"/>  
+    <point pid="7" description="Greenknowe / Papillon Buttress" latitude="-42.63313" longitude="147.41619" easting="534124" northing="5279840" zone="55G"/>  
+    <point pid="8" description="Vulpecula Buttress" latitude="-42.63777" longitude="147.41703" easting="534190" northing="5279324" zone="55G"/>  
+    <point pid="9" description="Tormentil Buttress" latitude="-42.63663" longitude="147.41663" easting="534158" northing="5279451" zone="55G"/>  
+    <point pid="10" description="Scarnhorst Buttress" latitude="-42.63840" longitude="147.41746" easting="534225" northing="5279254" zone="55G"/>  
+    <point pid="11" description="Stung Buttress" latitude="-42.63501" longitude="147.41586" easting="534096" northing="5279631" zone="55G"/>  
+    <point pid="12" description="Ferio Buttress" latitude="-42.63587" longitude="147.41629" easting="534130" northing="5279535" zone="55G"/>  
+    <point pid="13" description="Chocolate / Albatross Area" latitude="-42.63380" longitude="147.41593" easting="534102" northing="5279765" zone="55G"/>  
+    <point pid="14" description="Rudge Area" latitude="-42.63301" longitude="147.41579" easting="534091" northing="5279853" zone="55G"/>  
+    <point pid="15" description="Start of Pink/Green Taped Track" latitude="-42.63384" longitude="147.42004" easting="534439" northing="5279759" zone="55G"/>  
+    <point pid="16" description="Mick Goes to Moonah Buttress" latitude="-42.63720" longitude="147.41656" easting="534152" northing="5279388" zone="55G"/>  
+    <point pid="17" description="Zundapp Alcove" latitude="-42.63529" longitude="147.41616" easting="534120" northing="5279600" zone="55G"/>  
+    <point pid="18" description="Delinquents Area" latitude="-42.63623" longitude="147.41631" easting="534132" northing="5279495" zone="55G"/>  
+    <point pid="19" description="Anzac Day Buttress" latitude="-42.63733" longitude="147.41678" easting="534170" northing="5279373" zone="55G"/>  
+    <point pid="20" description="Twilight Zone" latitude="-42.63463" longitude="147.41579" easting="534090" northing="5279673" zone="55G"/>  
+    <point pid="21" description="Virag Buttress" latitude="-42.63413" longitude="147.41621" easting="534125" northing="5279729" zone="55G"/>  
+    <point pid="22" description="Wailing Wall" latitude="-42.63172" longitude="147.41525" easting="534047" northing="5279997" zone="55G"/>  
+    <point pid="23" description="Cryptic Clue Buttress" latitude="-42.63554" longitude="147.41612" easting="534117" northing="5279572" zone="55G"/>  
+    <polyline pid="24" description="Orange-taped track">-42.63298,147.415847 -42.632996,147.41596 -42.633015,147.416083 -42.633063,147.416212 -42.633122,147.416282 -42.633201,147.416303 -42.633284,147.416282 -42.633363,147.416218 -42.633441,147.416105 -42.633569,147.416066 -42.633648,147.416001 -42.633774,147.415969 -42.633821,147.415974 -42.633881,147.41598 -42.633963,147.415974 -42.633995,147.416001 -42.634019,147.416108 -42.634054,147.416237 -42.634086,147.416275 -42.634133,147.416366 -42.63418,147.416532 -42.63422,147.416559 -42.634259,147.416559 -42.634323,147.416564 -42.634378,147.416538 -42.634433,147.416511 -42.634527,147.416521 -42.634588,147.416507 -42.634699,147.416491 -42.634797,147.416453 -42.634888,147.416453 -42.634983,147.416469 -42.635074,147.416475 -42.635176,147.416512 -42.635279,147.416512 -42.635425,147.416539 -42.635567,147.416598 -42.635634,147.416619 -42.635713,147.416641 -42.635792,147.416635 -42.635895,147.416624 -42.635968,147.416592 -42.636017,147.416544 -42.636081,147.416544 -42.636175,147.416563 -42.636236,147.416582 -42.636312,147.416593 -42.636396,147.416647 -42.636455,147.416681 -42.636524,147.416727 -42.636607,147.41685 -42.636694,147.416925 -42.636776,147.416963 -42.636875,147.416995 -42.636942,147.417006 -42.637009,147.417011 -42.637092,147.416952 -42.637191,147.416909 -42.637246,147.416882 -42.637305,147.416866 -42.637341,147.416855 -42.637408,147.41685 -42.637467,147.41685 -42.63753,147.416877 -42.637562,147.416952 -42.637593,147.417016 -42.637656,147.417124</polyline>  
+    <polyline pid="25" description="Pink-taped track">-42.634173,147.41657 -42.634146,147.416817 -42.634142,147.416935 -42.634114,147.417112 -42.634039,147.417246 -42.633972,147.417396 -42.633905,147.417627 -42.633834,147.417799 -42.63379,147.418078 -42.633783,147.418544 -42.63379,147.418684 -42.633798,147.418772 -42.633838,147.41885 -42.633948,147.419022 -42.634011,147.4191 -42.634106,147.419253 -42.634189,147.419408 -42.634252,147.419553 -42.634252,147.419773 -42.634177,147.419907 -42.633992,147.419993 -42.633858,147.420057</polyline>  
+    <polyline pid="28" description="Path through the paddocks">-42.631503,147.424114 -42.632734,147.424565 -42.632742,147.424372 -42.632529,147.422709 -42.632631,147.422376 -42.632734,147.422129 -42.632758,147.421968 -42.633192,147.420574 -42.633366,147.420316 -42.633531,147.420219 -42.633744,147.420177 -42.633847,147.420059</polyline>  
+    <point pid="29" description="Old house" latitude="-42.63234" longitude="147.42409" easting="534772" northing="5279924" zone="55G"/>  
+    <point pid="30" description="Spazzattack Buttress" latitude="-42.63445" longitude="147.41626" easting="534129" northing="5279693" zone="55G"/>  
+    <polyline pid="31" description="Track to Perchance to Dream / Stung">-42.634379,147.416532 -42.634399,147.416427 -42.634407,147.416365 -42.63445,147.416328 -42.634492,147.416285 -42.634531,147.416247 -42.634553,147.416194 -42.634608,147.416105 -42.634673,147.416041 -42.634715,147.416003 -42.634741,147.415943 -42.6348,147.415938 -42.634889,147.415985 -42.634952,147.416014 -42.635048,147.416035 -42.63511,147.416057 -42.635177,147.416078 -42.635206,147.416116 -42.635142,147.416191 -42.635104,147.416279 -42.635079,147.416369 -42.635074,147.416475</polyline>  
+    <polyline pid="32" description="Track to Ferio">-42.635675,147.416629 -42.63572,147.4166 -42.635807,147.416538 -42.63584,147.416492 -42.635848,147.416444 -42.635854,147.416334</polyline>  
+    <polyline pid="33" description="Track to Casuarina Crack / Mick Goes to Moonah">-42.636127,147.416554 -42.636166,147.416481 -42.636198,147.416395 -42.636291,147.416379 -42.636373,147.416385 -42.636472,147.416368 -42.636545,147.416417 -42.636624,147.416484 -42.636673,147.416505 -42.636723,147.416524 -42.636786,147.416532 -42.636843,147.416508 -42.63691,147.416481 -42.636955,147.416513 -42.637003,147.416537 -42.637072,147.41654 -42.637111,147.416559 -42.637196,147.416596 -42.637212,147.416669 -42.637194,147.416752 -42.637176,147.416841 -42.637123,147.416934</polyline>  
+    <point pid="34" description="Casuarina Crack" latitude="-42.63688" longitude="147.41648" easting="534145" northing="5279423" zone="55G"/>  
+    <polyline pid="35" description="Track">-42.632512,147.422559 -42.632133,147.419534 -42.631321,147.418493 -42.63136,147.417238 -42.631076,147.415521</polyline> 
+  </gps>  
+  <image id="356" src="Lowdina overview.jpg" height="825" width="1200"> 
+    <drawing> 
+      <rect id="22001" x="180" y="115" width="59" height="36" style="black_text_on_solid_yellow" text="Vulpecula&lt;br/&gt;Buttress" arrowDirection="south"/>  
+      <rect id="68740" x="96" y="121" width="68" height="36" style="black_text_on_solid_yellow" text="Scarnhorst &lt;br/&gt;Buttress" arrowDirection="south"/>  
+      <rect id="3027" x="259" y="86" width="79" height="65" style="black_text_on_solid_yellow" text="Anzac Day &amp; &lt;br/&gt;Mick Goes &lt;br/&gt;to Moonah &lt;br/&gt;Buttress" arrowDirection="south"/>  
+      <rect id="46148" x="352" y="110" width="58" height="36" style="black_text_on_solid_yellow" text="Tormentil&lt;br/&gt;Buttress" arrowDirection="south"/>  
+      <rect id="79253" x="414" y="99" width="70" height="36" style="black_text_on_solid_yellow" text="Delinquents&lt;br/&gt;Area" arrowDirection="south"/>  
+      <rect id="13255" x="487" y="96" width="51" height="36" style="black_text_on_solid_yellow" text="Ferio&lt;br/&gt;Buttress" arrowDirection="south"/>  
+      <rect id="83849" x="568" y="76" width="67" height="50" style="black_text_on_solid_yellow" text="Zundapp &amp;&lt;br/&gt;Time Warp&lt;br/&gt;Buttress" arrowDirection="south"/>  
+      <rect id="50202" x="1009" y="91" width="47" height="36" style="black_text_on_solid_yellow" text="Wailing&lt;br/&gt;Wall" arrowDirection="south"/>  
+      <rect id="89590" x="656" y="93" width="115" height="36" style="black_text_on_solid_yellow" text="Spazattack, Bismark&lt;br/&gt;&amp; Virag Buttresses" arrowDirection="south"/>  
+      <rect id="51459" x="777" y="78" width="63" height="50" style="black_text_on_solid_yellow" text="Yoda &amp; &lt;br/&gt;Albatross&lt;br/&gt;Buttresses" arrowDirection="south"/>  
+      <rect id="18045" x="865" y="73" width="119" height="50" style="black_text_on_solid_yellow" text="Greenknowe, Biceps,&lt;br/&gt;Papillon &amp; Rudge&lt;br/&gt;Buttresses" arrowDirection="south"/>  
+      <rect id="2310" x="161" y="240" width="69" height="22" style="white_text_on_solid_black" text="Scree-slope"/>  
+      <path id="30356" points="635.0,789.0, 647.0,767.0, 791.0,679.0, 922.0,600.0, 1039.0,502.0, 1088.0,450.0, 1134.0,422.0, 1014.0,394.0, 981.0,367.0, 961.0,360.0, 731.0,364.0, 678.0,356.0, 650.0,342.0, 652.0,308.0, 697.0,274.0, 665.0,265.0, 662.0,244.0, 706.0,231.0, 689.0,219.0, 709.0,206.0," d="M635.0,789.0C639.8,780.2 638.8,772.8 647.0,767.0C655.2,761.2 738.7,710.8 791.0,679.0C843.3,647.2 872.3,635.5 922.0,600.0C971.7,564.5 1017.8,521.2 1039.0,502.0C1060.2,482.8 1071.5,463.9 1088.0,450.0C1104.5,436.1 1151.2,435.0 1134.0,422.0C1116.8,409.0 1030.0,399.8 1014.0,394.0C998.0,388.2 988.1,371.6 981.0,367.0C973.9,362.4 969.5,360.1 961.0,360.0C952.5,359.9 752.4,364.3 731.0,364.0C709.6,363.7 690.1,359.3 678.0,356.0C665.9,352.7 656.0,353.0 650.0,342.0C644.0,331.0 644.3,319.2 652.0,308.0C659.7,296.8 693.2,286.7 697.0,274.0C700.8,261.3 671.4,270.5 665.0,265.0C658.6,259.5 655.5,249.4 662.0,244.0C668.5,238.6 699.9,236.7 706.0,231.0C712.1,225.3 688.0,227.3 689.0,219.0C690.0,210.7 711.5,211.2 709.0,206.0" lineStyle="dotted" labelText="" arrow="false"/>  
+      <path id="41993" points="1023.0,178.0, 958.0,182.0, 934.0,177.0, 914.0,185.0, 895.0,205.0, 872.0,197.0, 841.0,183.0, 811.0,183.0, 785.0,188.0, 758.0,185.0, 742.0,192.0, 726.0,208.0, 709.0,206.0, 696.0,200.0, 697.0,200.0, 667.0,200.0, 640.0,202.0, 613.0,205.0, 581.0,206.0, 543.0,205.0, 518.0,192.0, 485.0,193.0, 460.0,199.0, 438.0,197.0, 412.0,202.0, 388.0,212.0, 360.0,208.0, 337.0,211.0, 314.0,213.0, 286.0,211.0, 262.0,212.0, 236.0,209.0, 211.0,218.0, 175.0,219.0, 132.0,213.0," d="M1023.0,178.0C998.1,170.4 967.8,182.1 958.0,182.0C948.2,181.9 942.6,176.4 934.0,177.0C925.4,177.6 921.0,180.0 914.0,185.0C907.0,190.0 904.4,202.3 895.0,205.0C885.6,207.7 881.0,200.7 872.0,197.0C863.0,193.3 852.7,185.7 841.0,183.0C829.3,180.3 821.5,182.1 811.0,183.0C800.5,183.9 795.6,187.6 785.0,188.0C774.4,188.4 765.0,184.4 758.0,185.0C751.0,185.6 748.0,188.6 742.0,192.0C736.0,195.4 732.0,204.6 726.0,208.0C720.0,211.4 711.5,211.2 709.0,206.0C706.5,200.8 696.4,200.2 696.0,200.0C695.6,199.8 697.4,200.2 697.0,200.0C696.6,199.8 677.8,199.6 667.0,200.0C656.2,200.4 650.8,201.0 640.0,202.0C629.2,203.0 623.8,204.3 613.0,205.0C602.2,205.7 590.7,202.8 581.0,206.0C571.3,209.2 554.0,207.4 543.0,205.0C532.0,202.6 529.0,194.3 518.0,192.0C507.0,189.7 495.2,191.8 485.0,193.0C474.8,194.2 468.8,198.3 460.0,199.0C451.2,199.7 446.8,196.4 438.0,197.0C429.2,197.6 422.0,199.0 412.0,202.0C402.0,205.0 398.3,210.8 388.0,212.0C377.7,213.2 369.3,208.2 360.0,208.0C350.7,207.8 346.2,210.0 337.0,211.0C327.8,212.0 318.0,214.9 314.0,213.0C310.0,211.1 295.6,211.2 286.0,211.0C276.4,210.8 271.6,212.4 262.0,212.0C252.4,211.6 246.4,207.8 236.0,209.0C225.6,210.2 221.5,216.3 211.0,218.0C200.5,219.7 189.4,219.9 175.0,219.0C160.6,218.1 149.2,215.4 132.0,213.0" lineStyle="dotted" labelText=""/>  
+      <rect id="40520" x="586" y="797" width="71" height="22" style="black_text_on_solid_white" text="Taped track"/>  
+      <path id="6086" points="697.0,200.0, 666.0,168.0, 626.0,174.0, 586.0,181.0, 581.0,206.0," d="M697.0,200.0C696.6,199.8 681.2,173.6 666.0,168.0C650.8,162.4 642.0,171.4 626.0,174.0C610.0,176.6 594.3,175.1 586.0,181.0C577.7,186.9 590.7,202.8 581.0,206.0" lineStyle="dotted"/>  
+      <path id="91173" points="313.0,212.0, 304.0,201.0, 305.0,190.0," d="M313.0,212.0C309.0,210.1 308.0,202.9 304.0,201.0C300.0,199.1 301.3,192.4 305.0,190.0" lineStyle="dotted"/>  
+      <path id="74797" points="305.0,190.0, 331.0,184.0, 354.0,186.0, 371.0,180.0, 392.0,181.0, 405.0,189.0, 427.0,198.0," d="M305.0,190.0C308.7,187.6 321.8,184.8 331.0,184.0C340.2,183.2 346.8,186.7 354.0,186.0C361.2,185.3 363.9,180.9 371.0,180.0C378.1,179.1 386.1,179.4 392.0,181.0C397.9,182.6 399.5,186.3 405.0,189.0C410.5,191.7 418.2,194.4 427.0,198.0" lineStyle="dotted"/>  
+      <path id="99786" points="1196.0,364.0, 1192.0,300.0, 1100.0,209.0, 1033.0,165.0," d="M1196.0,364.0C1194.4,338.4 1205.5,321.8 1192.0,300.0C1178.5,278.2 1124.4,229.8 1100.0,209.0C1075.6,188.2 1057.9,172.6 1033.0,165.0" lineStyle="dotted"/> 
+    </drawing> 
+  </image>  
+  <text class="heading3" id="157">Scharnhorst Buttress</text>  
+  <text class="text" id="3">Rarely visited, Scharnhorst Buttress is at the far left hand end of the crag immediately before the the hillside turns to the south and into a gully. Beyond the gully the cliff-line peters out. Approaching from the right, the buttress is about 80m left of a narrow scree slope.</text>  
+  <climb id="4" name="Scharnhorst" fa="Karl Prinz, Kevin Kiernan, Mary McWhirther, Feb 1975." stars="" number="1." length="15m" grade="12" extra="">Scharnhorst is the furthest left hand climb on the crag. The route climbs a groove, that continues up a contoured crack through a small roof. It roughly finishes up the nose of the buttress. Avoid the loose slabs on the left near the top.</climb>  
+  <climb id="5" name="Blackheads and Beauty Spots" fa="Al Adams, Evan Peacock, Tim Olding, Aug 1988." stars="" number="2." length="15m" grade="16" extra="">Start in the alcove 6m right of Scharnhorst, off the top of the pillar. Step across and up to the ledge below the flake. Go up the right hand crack, then move left and up past the right hand edge of the flake, finishing up the crack. RPs and microcams useful.</climb>  
+  <climb id="6" name="Drugs on Sunday" fa="Al Adams, Evan Peacock, Aug 1988." stars="" number="3." length="12m" grade="16" extra="">Start 8m right of Scharnhorst on the ledge below the brushed slab. Step up for the slope above, continue up to the next sloping ledge, then up the flake to the top. RPs and microcams useful.</climb>  
+  <climb id="7" name="Better Get A Bucket" fa="Evan Peacock, Steve Ford, Nov 1991." stars="" number="4." length="18m" grade="24" extra="">Extremely bold face climbing with a technical finish. Start immediately left of The Spastic Acrobat on the left hand side of the arête. Climb to the horizontal at 3m (and place gear!) then launch for the bolt (hoping your belayer jumps downhill if you fall off clipping). Finish through the small roof on the left. RPs and microcams useful.</climb>  
+  <climb id="8" name="The Spastic Acrobat" fa="Al Adams, Evan Peacock, Aug 1988." stars="" number="5." length="15m" grade="20" extra="">About 20m right of Scharnhorst; or 50m left and 30m downhill from Punks and Lepers. Look for a smooth, grey face split by a horizontal break near the top. Start just right of the obvious crack, and go straight up the face on RPs to a small ledge. Continue up on small holds and layaways (more RPs) to the horizontal, then crank through to the finger crack (lichenous) and the top.</climb>  
+  <climb id="9" name="Seagull" fa="Mary McWhirther, Kevin Kiernan, Karl Prinz, Feb 1975." stars="" number="6." length="15m" grade="10" extra="">An isolated pinnacle lies between Vulpecula and Scharnhorst buttresses. Climb the crack that forms a sweeping s-curve up the right hand side of the buttress.</climb>  
+  <text class="heading3" id="158">Vulpecula / Punks and Lepers Buttress</text>  
+  <text id="198" class="text">Some heady test-pieces and a nice hand crack. The following buttresses are located about 20m left of the narrow scree slope. There is a lower-off on the Punks and Lepers buttress.</text>  
+  <image id="341" src="vp3.jpg" height="575" width="800" legend="true" legendTitle="Vulpecula / Punks and Lepers Buttress"> 
+    <drawing> 
+      <path id="36900" points="151.0,556.0, 150.0,556.0, 161.0,418.0, 181.0,355.0, 190.0,310.0, 196.0,258.0, 209.0,206.0, 216.0,150.0,belay" d="M151.0,556.0C151.0,555.6 150.0,556.4 150.0,556.0C150.0,555.6 157.0,444.1 161.0,418.0C165.0,391.9 176.2,372.7 181.0,355.0C185.8,337.3 187.2,328.1 190.0,310.0C192.8,291.9 192.2,278.6 196.0,258.0C199.8,237.4 205.1,227.1 209.0,206.0C212.9,184.9 213.2,172.4 216.0,150.0" linkedTo="10"/>  
+      <path id="30111" points="435.0,451.0, 425.0,357.0, 425.0,265.0, 420.0,223.0, 411.0,166.0, 412.0,120.0, 402.0,73.0, 395.0,38.0,lower" d="M435.0,451.0C431.0,413.4 427.0,393.7 425.0,357.0C423.0,320.3 425.6,281.9 425.0,265.0C424.4,248.1 422.4,239.8 420.0,223.0C417.6,206.2 412.4,184.3 411.0,166.0C409.6,147.7 413.8,138.3 412.0,120.0C410.2,101.7 404.9,87.0 402.0,73.0C399.1,59.0 398.8,51.1 395.0,38.0" linkedTo="11"/>  
+      <path id="99488" points="480.0,450.0, 472.0,317.0, 472.0,221.0, 463.0,165.0, 437.0,120.0, 431.0,78.0, 395.0,38.0," d="M480.0,450.0C476.8,396.8 473.3,355.4 472.0,317.0C470.7,278.6 473.3,243.6 472.0,221.0C470.7,198.4 469.8,184.6 463.0,165.0C456.2,145.4 442.9,135.9 437.0,120.0C431.1,104.1 438.7,93.1 431.0,78.0C423.3,62.9 398.8,51.1 395.0,38.0" linkedTo="290"/>  
+      <path id="81086" points="339.0,463.0, 339.0,406.0, 346.0,361.0, 344.0,321.0, 346.0,271.0, 344.0,226.0, 350.0,193.0, 357.0,149.0, 365.0,112.0, 374.0,86.0, 383.0,70.0, 395.0,38.0," d="M339.0,463.0C339.0,440.2 337.8,424.2 339.0,406.0C340.2,387.8 345.1,377.0 346.0,361.0C346.9,345.0 344.0,337.0 344.0,321.0C344.0,305.0 346.0,289.0 346.0,271.0C346.0,253.0 340.8,239.0 344.0,226.0C347.2,213.0 347.8,206.2 350.0,193.0C352.2,179.8 354.2,163.9 357.0,149.0C359.8,134.1 362.1,122.6 365.0,112.0C367.9,101.4 371.1,92.7 374.0,86.0C376.9,79.3 380.1,76.7 383.0,70.0C385.9,63.3 398.8,51.1 395.0,38.0" linkedTo="342"/>  
+      <path id="671" points="289.0,473.0, 283.0,355.0, 306.0,327.0, 317.0,275.0, 344.0,225.0," d="M289.0,473.0C286.6,425.8 281.3,369.4 283.0,355.0C284.7,340.6 300.3,340.3 306.0,327.0C311.7,313.7 309.6,294.9 317.0,275.0C324.4,255.1 340.8,238.0 344.0,225.0" linkedTo="343"/>  
+      <path id="32087" points="620.0,451.0, 612.0,339.0, 610.0,302.0, 606.0,211.0, 598.0,174.0, 580.0,143.0,belay" d="M620.0,451.0C616.8,406.2 612.0,339.0 612.0,339.0C612.0,339.0 610.7,316.8 610.0,302.0C609.3,287.2 607.4,226.1 606.0,211.0C604.6,195.9 603.1,187.4 598.0,174.0C592.9,160.6 591.5,151.6 580.0,143.0" linkedTo="344"/>  
+      <path id="87850" points="612.0,339.0, 612.0,339.0, 623.0,318.0, 648.0,307.0, 662.0,284.0, 656.0,223.0, 651.0,197.0, 623.0,157.0, 581.0,143.0," d="M612.0,339.0C612.0,339.0 612.0,339.0 612.0,339.0C612.0,339.0 615.9,324.3 623.0,318.0C630.1,311.7 639.9,314.1 648.0,307.0C656.1,299.9 661.0,294.7 662.0,284.0C663.0,273.3 657.3,233.5 656.0,223.0C654.7,212.5 655.7,206.5 651.0,197.0C646.3,187.5 637.0,167.8 623.0,157.0C609.0,146.2 592.5,151.6 581.0,143.0" linkedTo="345"/>  
+      <path id="54382" points="772.0,355.0, 741.0,316.0, 715.0,295.0, 698.0,275.0, 682.0,206.0, 650.0,136.0," d="M772.0,355.0C759.6,339.4 750.2,325.7 741.0,316.0C731.8,306.3 722.6,302.2 715.0,295.0C707.4,287.8 701.7,284.8 698.0,275.0C694.3,265.2 691.2,232.8 682.0,206.0C672.8,179.2 662.8,164.0 650.0,136.0" linkedTo="389"/>  
+      <path id="48621" points="51.0,553.0, 76.0,435.0, 109.0,363.0, 119.0,310.0, 105.0,295.0, 119.0,253.0,belay" d="M51.0,553.0C61.0,505.8 66.8,465.3 76.0,435.0C85.2,404.7 102.0,383.4 109.0,363.0C116.0,342.6 119.3,318.2 119.0,310.0C118.7,301.8 105.3,303.2 105.0,295.0C104.7,286.8 113.4,269.8 119.0,253.0" linkedTo="414"/>  
+      <rect id="9578" x="556" y="521" width="185" height="22" style="black_text_on_solid_white" text="To Mick Goes to Moonah Buttress" arrowDirection="east"/> 
+    </drawing>  
+    <legend> 
+      <climb>414</climb>  
+      <climb>10</climb>  
+      <climb>343</climb>  
+      <climb>342</climb>  
+      <climb>11</climb>  
+      <climb>290</climb>  
+      <climb>344</climb>  
+      <climb>345</climb>  
+      <climb>389</climb> 
+    </legend> 
+  </image>  
+  <climb id="412" stars="*" extra="" number="7." name="Finger Lichen Super Crew" length="18m" grade="18" fa="Jeroen Jansen, Lawrence Wonhas, August 2022">On the South side of the Vulpecula Buttress is a nice looking crack-line starting from a large flake and ending in a headwall. Climb the crack, through the headwall (crux) and up to the top. Scramble off the back.</climb>  
+  <climb id="413" stars="" extra="" number="8." name="Towards the A Horizen" length="18m" grade="13" fa="Lawrence Wonhas, Jeroen Jansen, August 2022">Takes the off-width crack just to the right of FLSC.</climb>  
+  <climb id="414" stars="" extra="" number="9." name="Lord Cornflake" length="18m" grade="16" fa="Jeroen Jansen, Lawrence Wonhas, August 2022">Starts below the big roof, taking the line to the right of this, up the wall on the right (careful of loose flakes) and then leftwards to the top (belay as for FLSC).</climb>  
+  <climb id="10" name="Vulpecula" guide.type="climb" guide.page="0" guide.id="9" guide.action="submit" fa="Kevin Kiernan, Karl Prinz, Mary McWhirther,Feb 1975." stars="" number="10." length="30m" grade="11" extra="">From the base of the buttress, climb the nose past loose flakes to a broad ledge. Scramble on up the blocky ledges, then finish up the obvious slab on the left hand side.</climb>  
+  <climb id="343" stars="" extra="" number="11." name="Conjunctivitis" length="24m" grade="16" fa="Henry Garratt, Nov 2021">A short masochistic variant to Psoriasis. Take the off-width crack about 3 m left of the start of Psoriasis, trending right into the hand crack when this ends. Move right after this finishes and continue up Psoriasis to the DBB. Take a big cam.</climb>  
+  <climb id="342" stars="*" extra="" number="12." name="Psoriasis" length="22m" grade="17" fa="Christoph Speer, Mark Passier, Henry Garratt, Nov 2021">The crack-line left of Punks and Lepers provides the easiest worthwhile route to the top of the buttress. Climb the short groove to a small ledge, then jam steeply through the bottomless crack to a stance below some keyed-in blocks. Avoid these by trending right onto the exposed face and follow the crack system above to lower-off as for P&amp;L.</climb>  
+  <climb id="11" name="Punks and Lepers" fa="Al Adams, Evan Peacock, Nov 1988." stars="**" number="13." length="22m" grade="22" extra="">Not for the inexperienced. In fact this is not the route for people of a nervous disposition, the accident-prone, the unlucky, the uninsured, those who are easily disheartened or those with loved ones. It is however, one of the more outstanding and challenging examples of the classic Lowdina face climbing style. Climb to the break, then up the face past the cracks to the top. RP placements appear 3.5m above the horizontal break, one set of RPs #2-5 are essential, with doubles of size 2 and 3 serving well. With nesting of RPs at the crux, and an attentive belayer while the nest of RPs goes in, the climb can be on-sighted fairly 'safely' (despite appearances).</climb>  
+  <climb id="290" stars="*" extra="" number="14." name="Scaredy Cat" length="22m" grade="21" fa="Martin Brown, Hamish Jackson, Aug 2021">The crack-line right of Punks and Lepers is a fine companion-route that will also have you questioning your life choices. Climb easily up the lower crack to the top of the pedestal; then climb up the thin continuation crack. Finish up the short corner above to the lower-off on P &amp; L. Small cams and RPs provide adequate protection at the crux - brass offsets are handy but not essential.</climb>  
+  <climb id="344" stars="" extra="" number="15." name="Nerve Block" length="10m" grade="14" fa="Fraser L-R, Sammi Dos, Nov 2021">Take the hand crack past the block (it's in there) and follow it past a tricky move to a bollard belay. Walk-off down rocky gully behind the route.</climb>  
+  <climb id="345" stars="" extra="" number="16." name="Pocket Rocket" length="12m" grade="15" fa="Sammi Dos, Fraser L-R , Nov 2021">Start-up the hand-crack to the block, traverse right and then follow the thin crack and face with all the confidence of RPs and microcams, to a bollard belay out left at the top.</climb>  
+  <climb id="389" stars="" extra="" number="17." name="Dysmorphia" length="9m" grade="16" fa="Presumed to be Dave James and Tim Whelan. June 2021">To the right of and uphill from Nerve Block. Up slab from tiny gully then moving left to gain crack. Better than it looks...</climb>  
+  <text class="heading3" id="159">Anzac Day Buttress</text>  
+  <text id="199" class="text">Worth visiting for Anzac Day alone. The Anzac Day Buttresses are the two distinct buttresses located just before you hit the rock-scree slope if approaching from the right. There is a lower-off at the top of Anzac Day.</text>  
+  <image id="371" src="Anzac Day.jpg" height="600" width="800" legend="true" legendTitle="Anzac Day Buttress" legendx="16" legendy="14"> 
+    <drawing> 
+      <path id="52235" points="614.0,473.0, 606.0,374.0, 609.0,308.0, 585.0,237.0, 530.0,239.0, 521.0,179.0, 540.0,130.0, 526.0,97.0, 507.0,78.0, 509.0,42.0,lower" d="M614.0,473.0C610.8,433.4 606.8,400.4 606.0,374.0C605.2,347.6 613.0,334.1 609.0,308.0C605.0,281.9 601.6,251.5 585.0,237.0C568.4,222.5 546.3,253.8 530.0,239.0C513.7,224.2 518.6,199.9 521.0,179.0C523.4,158.1 539.1,144.3 540.0,130.0C540.9,115.7 531.8,106.1 526.0,97.0C520.2,87.9 510.2,88.3 507.0,78.0C503.8,67.7 508.2,56.4 509.0,42.0" linkedTo="420"/>  
+      <path id="93993" points="729.0,471.0, 689.0,335.0, 665.0,292.0, 626.0,228.0, 601.0,169.0, 581.0,110.0, 573.0,75.0, 555.0,51.0, 510.0,42.0," d="M729.0,471.0C713.0,416.6 695.6,353.5 689.0,335.0C682.4,316.5 675.0,309.0 665.0,292.0C655.0,275.0 637.8,250.7 626.0,228.0C614.2,205.3 609.9,192.3 601.0,169.0C592.1,145.7 585.1,123.8 581.0,110.0C576.9,96.2 577.8,86.0 573.0,75.0C568.2,64.0 565.6,56.6 555.0,51.0C544.4,45.4 528.0,45.6 510.0,42.0" linkedTo="15"/>  
+      <path id="80731" points="134.0,554.0, 175.0,425.0, 222.0,307.0, 210.0,267.0, 242.0,235.0, 259.0,211.0, 273.0,178.0,belay" d="M134.0,554.0C150.4,502.4 157.9,472.9 175.0,425.0C192.1,377.1 218.4,323.3 222.0,307.0C225.6,290.7 205.5,283.1 210.0,267.0C214.5,250.9 234.3,243.9 242.0,235.0C249.7,226.1 253.4,221.3 259.0,211.0C264.6,200.7 272.4,192.3 273.0,178.0" linkedTo="12"/>  
+      <path id="86048" points="208.0,549.0, 246.0,411.0, 283.0,249.0, 285.0,218.0, 274.0,179.0," d="M208.0,549.0C223.2,493.8 232.1,466.5 246.0,411.0C259.9,355.5 280.5,261.2 283.0,249.0C285.5,236.8 286.6,230.3 285.0,218.0C283.4,205.7 273.4,193.3 274.0,179.0" linkedTo="13"/>  
+      <rect id="46623" x="652" y="65" width="121" height="36" style="black_text_on_solid_white" text="Mick Goes to Moonah&lt;br/&gt;Buttress" arrowDirection="south"/>  
+      <path id="4515" points="500.0,192.0, 483.0,174.0, 479.0,141.0, 484.0,80.0, 508.0,41.0," d="M500.0,192.0C493.2,184.8 486.8,183.2 483.0,174.0C479.2,164.8 478.9,154.3 479.0,141.0C479.1,127.7 478.9,97.6 484.0,80.0C489.1,62.4 498.4,56.6 508.0,41.0" linkedTo="396"/>  
+      <rect id="26562" x="61" y="165" width="119" height="36" style="black_text_on_solid_white" text="To Punks and Lepers&lt;br/&gt;Buttress" arrowDirection="south_west"/>  
+      <path id="39300" points="516.0,474.0, 503.0,312.0, 521.0,179.0," d="M516.0,474.0C510.8,409.2 502.1,365.7 503.0,312.0C503.9,258.3 518.6,199.9 521.0,179.0" linkedTo="420"/> 
+    </drawing>  
+    <legend> 
+      <climb>12</climb>  
+      <climb>13</climb>  
+      <climb>396</climb>  
+      <climb>420</climb>  
+      <climb>15</climb> 
+    </legend> 
+  </image>  
+  <climb id="12" name="Torque Arm" fa="Dave Humphries, John Buttery, Jul 1984." stars="" number="18." length="15m" grade="16" extra="">This route climbs the wall which forms the left hand side of the Ape chimney. Gain the corner-groove just off the ground and climb up it, passing right of the small roof. Cross left into the groove and climb this until able to move right into the crack and to the top.</climb>  
+  <climb id="13" name="Ape" fa="Chris Viney, Brendan Moore, Apr 1972." stars="" number="19." length="20m" grade="10" extra="">Located 7m left of Anzac Day on a small buttress topped by a prominent 4m flake. Climb the narrow flaring chimney immediately to its left.</climb>  
+  <climb id="399" stars="" extra="" number="20." name="Dia De Los Muertos" length="20m" grade="16" fa="Jeroen Jansen, Vanessa Tonet, Aug 2022">Climb the gaping, cheese-grater off-width left of Tongerlongeter Day. Big gear is useful but not necessary.</climb>  
+  <climb id="396" stars="" extra="" number="21." name="Tongerlongeter Day" length="20m" grade="19" fa="Jeroen Jansen, Jai Friend, August 2022">A serious undertaking. Named after an Indigenous war hero in the Frontier Wars. As for Anzac day to the second roof, then go left through this to navigate loose blocks above, finishing up the wall to lower-off.</climb>  
+  <climb id="420" stars="**" extra="" number="22." name="Anzac Day" length="20m" grade="18" fa="Dave Humphries, John Buttery, Jul 1984 (original).  Christoph Speer, Mark Passier, Rachel Chong, July 2022 (variant start).">Has seen off more campaigns than Gallipoli. There are two starts: &lt;br/&gt;1. Layback the left arete (bold - original start).&lt;br/&gt;2. Follow the crack on the right, then traverse left under the first roof (variant - good protection). &lt;br/&gt;&lt;br/&gt;Continue up the crack to pass the second roof on the right, then climb the thought-provoking wall above to a lower-off.</climb>  
+  <climb id="15" name="Lejand" guide.type="climb" guide.page="0" guide.id="14" guide.action="submit" fa="Jeremy Rackham, Anna Hasan, Apr 1992." stars="" number="23." length="12m" grade="15" extra="">We are all striving to be one, aren't we? Start below the roof 2m right of Anzac Day and climb the arête and crack above to a large ledge. Move left to regain the arête, then up the right hand side of the wall to the top and DBB. Careful of loose rock.</climb>  
+  <text id="244" class="heading3">Mick Goes to Moonah, Boys in Bikinis &amp; Casuarina Crack Area</text>  
+  <text id="233" class="text">A range of nice routes. The next set of climbs are located in a small amphitheatre above the Anzac Day Buttress to climbers right. Head up the short gully from the track, just before you get to the Anzac Day Buttresses. There are lower-offs on each buttress for easy descent.</text>  
+  <image id="265" src="chook feve.jpg" height="933" width="700" legend="true" legendTitle="Mick Goes to Moonah Buttress"> 
+    <drawing> 
+      <path id="82034" points="101.0,749.0, 100.0,749.0, 179.0,576.0, 213.0,470.0, 260.0,381.0, 300.0,309.0, 320.0,248.0, 356.0,184.0,lower" d="M101.0,749.0C101.2,748.6 99.8,749.4 100.0,749.0C100.2,748.6 162.3,617.3 179.0,576.0C195.7,534.7 197.6,507.2 213.0,470.0C228.4,432.8 244.3,410.0 260.0,381.0C275.7,352.0 289.4,332.4 300.0,309.0C310.6,285.6 309.5,271.4 320.0,248.0C330.5,224.6 355.8,201.9 356.0,184.0" linkedTo="16"/>  
+      <path id="7191" points="332.0,759.0, 343.0,613.0, 367.0,507.0, 391.0,451.0, 414.0,353.0, 441.0,301.0, 437.0,235.0, 393.0,211.0, 358.0,183.0," d="M332.0,759.0C336.4,700.6 337.0,656.1 343.0,613.0C349.0,569.9 360.1,530.4 367.0,507.0C373.9,483.6 383.9,474.3 391.0,451.0C398.1,427.7 406.6,375.2 414.0,353.0C421.4,330.8 436.5,324.0 441.0,301.0C445.5,278.0 446.4,252.7 437.0,235.0C427.6,217.3 408.0,220.9 393.0,211.0C378.0,201.1 357.8,200.9 358.0,183.0" linkedTo="17"/>  
+      <path id="2785" points="658.0,523.0, 621.0,350.0, 603.0,298.0, 564.0,279.0, 551.0,219.0,belay" d="M658.0,523.0C643.2,453.8 626.2,371.4 621.0,350.0C615.8,328.6 613.9,311.5 603.0,298.0C592.1,284.5 573.5,293.5 564.0,279.0C554.5,264.5 556.2,243.0 551.0,219.0" linkedTo="18"/>  
+      <rect id="42522" x="519" y="82" width="130" height="22" style="black_text_on_solid_white" text="Boys in Bikinis Buttress" arrowDirection="east"/> 
+    </drawing>  
+    <legend> 
+      <climb/>  
+      <climb>16</climb>  
+      <climb>17</climb>  
+      <climb>18</climb> 
+    </legend> 
+  </image>  
+  <climb id="16" name="Mick Goes to Moonah" fa="Dave Humphries, John Buttery, Jul 1984." stars="**" number="24." length="15m" grade="18" extra="">An engaging lead up the groove and seams on the nose of the buttress. RPs, small wires and micro-cams provide plenty of good protection despite the initial appearances. Lower-off.</climb>  
+  <climb id="17" name="Chook Fever" fa="Dave Humphries, John Buttery, Jul 1984." stars="*" number="25." length="15m" grade="17" extra="">Follows the well-protected clean crack-line. Leaders thrashing about through the various bulges provides an amusing spectacle for onlookers. Jam thoughtfully to surmount the initial bulge, then continue up the line to battle the fist crack to a ledge. Traverse left and up around the arete to the lower-off.</climb>  
+  <climb id="18" name="Miss Right Body" guide.type="climb" guide.page="0" guide.id="17" guide.action="submit" fa="Al Adams, Garn Cooper, Nic Deka, May 1986." stars="" number="26." length="20m" grade="16" extra="">Worth a sneaky look. Starts 3m right of Chook Fever at the slab. Up the face into the crack-line, finishing up the wide crack. Trad belay and walk-off.</climb>  
+  <image id="372" src="Boys in Bikinis.jpg" height="933" width="700" legend="true" legendTitle="Boys in Bikinis Buttress"> 
+    <drawing> 
+      <path id="30034" points="204.0,900.0, 252.0,598.0, 291.0,460.0, 341.0,362.0, 368.0,247.0, 376.0,162.0, 408.0,101.0,lower" d="M204.0,900.0C223.2,779.2 240.9,654.3 252.0,598.0C263.1,541.7 275.5,501.2 291.0,460.0C306.5,418.8 326.0,403.4 341.0,362.0C356.0,320.6 362.1,280.6 368.0,247.0C373.9,213.4 368.7,188.6 376.0,162.0C383.3,135.4 395.2,125.4 408.0,101.0" linkedTo="19"/>  
+      <path id="74446" points="465.0,849.0, 438.0,567.0, 434.0,369.0, 448.0,231.0, 447.0,143.0, 409.0,102.0," d="M465.0,849.0C454.2,736.2 443.1,646.1 438.0,567.0C432.9,487.9 432.3,424.5 434.0,369.0C435.7,313.5 446.0,266.1 448.0,231.0C450.0,195.9 453.5,164.4 447.0,143.0C440.5,121.6 425.3,117.4 409.0,102.0" linkedTo="20"/>  
+      <path id="2438" points="532.0,799.0, 514.0,526.0, 511.0,374.0, 507.0,246.0, 493.0,187.0, 462.0,146.0, 410.0,102.0," d="M532.0,799.0C524.8,689.8 517.0,586.7 514.0,526.0C511.0,465.3 512.3,425.2 511.0,374.0C509.7,322.8 509.3,270.1 507.0,246.0C504.7,221.9 501.4,205.7 493.0,187.0C484.6,168.3 476.4,160.7 462.0,146.0C447.6,131.3 426.3,117.4 410.0,102.0" linkedTo="21"/>  
+      <rect id="64424" x="74" y="246" width="168" height="22" style="black_text_on_solid_white" text="Mick Goes to Moonah Buttress" arrowDirection="south_west"/>  
+      <rect id="14400" x="509" y="885" width="109" height="22" style="black_text_on_solid_white" text="To Casuarina Crack" arrowDirection="east"/> 
+    </drawing>  
+    <legend> 
+      <climb>19</climb>  
+      <climb>20</climb>  
+      <climb>21</climb> 
+    </legend> 
+  </image>  
+  <climb id="19" name="Boys in Bikinis" guide.type="climb" guide.page="0" guide.id="18" guide.action="submit" fa="Al Adams, Evan Peacock, Jun 1988.  Fixed pin replaced with bolt in 2022 with FA's permission." stars="*" number="27." length="15m" grade="18" extra="Mixed">Start in the corner left of the roof and bridge your way up until you can layback the flakes and clip the bolt. Move right with difficulty to enter the crack-line on the face of the buttress (crux), then continue up the nose of the buttress with a character-building finish. Lower-off.</climb>  
+  <climb id="20" name="What Bunny Likes Best" fa="Evan Peacock, Steve Ford, May 1992." stars="" number="28." length="15m" grade="22" extra="Mixed">The face between Boys in Bikinis and Jot Jot Splat. Climb up past an ancient FH and several wires (crack needs a brush) to the lower-off. Somewhat contrived trying to stay out of Jot Jot Splat.</climb>  
+  <climb id="21" name="Jot Jot Splat" fa="Evan Peacock, May 1990." stars="" number="29." length="15m" grade="15" extra="">Not bad. The corner crack which widens from hands through to off-width at the top. Jam and bridge your way to the top. Lower-off.</climb>  
+  <image id="267" src="casuarinacrack1.jpg" height="800" width="600" legend="true" legendTitle="Casuarina Crack"> 
+    <drawing> 
+      <path id="95028" points="311.0,646.0, 310.0,646.0, 321.0,315.0, 314.0,131.0, 327.0,111.0,belay" d="M311.0,646.0C311.0,645.6 310.0,646.4 310.0,646.0C310.0,645.6 320.4,388.7 321.0,315.0C321.6,241.3 313.7,140.5 314.0,131.0C314.3,121.5 330.4,119.9 327.0,111.0" linkedTo="246"/>  
+      <path id="49968" points="591.0,447.0,label 525.0,386.0, 456.0,321.0, 428.0,198.0, 349.0,170.0, 316.0,133.0, 328.0,110.0,belay" d="M591.0,447.0C564.6,422.6 551.3,410.5 525.0,386.0C498.7,361.5 470.7,356.0 456.0,321.0C441.3,286.0 433.4,212.8 428.0,198.0C422.6,183.2 366.2,180.0 349.0,170.0C331.8,160.0 319.4,142.8 316.0,133.0C312.6,123.2 331.4,118.9 328.0,110.0" linkedTo="406"/>  
+      <rect id="48001" x="93" y="734" width="185" height="22" style="black_text_on_solid_white" text="To Mick Goes to Moonah Buttress" arrowDirection="west"/>  
+      <rect id="99577" x="391" y="735" width="121" height="22" style="black_text_on_solid_white" text="To Tormentil Buttress" arrowDirection="east"/>  
+      <path id="587" points="522.0,769.0,label 506.0,624.0, 523.0,464.0, 458.0,322.0, 429.0,198.0, 452.0,166.0, 421.0,128.0, 374.0,124.0, 328.0,111.0," d="M522.0,769.0C515.6,711.0 505.8,682.4 506.0,624.0C506.2,565.6 532.8,525.7 523.0,464.0C513.2,402.3 472.7,357.0 458.0,322.0C443.3,287.0 434.4,212.8 429.0,198.0C423.6,183.2 453.8,181.7 452.0,166.0C450.2,150.3 437.6,136.9 421.0,128.0C404.4,119.1 392.6,127.4 374.0,124.0C355.4,120.6 331.4,119.9 328.0,111.0" linkedTo="427"/> 
+    </drawing>  
+    <legend> 
+      <climb>246</climb>  
+      <climb>406</climb>  
+      <climb>427</climb> 
+    </legend> 
+  </image>  
+  <climb id="246" stars="*" extra="" number="30." name="Casuarina Crack" length="20m" grade="13" fa="Christoph Speer, Martin Brown, July 2021">Located between Jot Jot Splat and the top of the Tormentil Buttress on the same contour, is an obvious hand crack to the right of a large She-oak tree. Follow the well-protected crack and rap-off trees at top (take a sling). Alternatively, you can walk down the 'pleasure gully' to the left.</climb>  
+  <climb id="427" stars="*" extra="" number="31." name="Demon Child" length="20m" grade="19" fa="T. Fulton, D. Morley. Nov 2023">Climb the slab directly into the dihedral. Turn the roof and continue up the arete. Trend leftwards following detached blocks to a RP seam. Ascend this up to the tree.</climb>  
+  <climb id="406" stars="" extra="" number="32." name="Cruxy Demons" length="20m" grade="17" fa="T. Fulton, P. Higgins, D. Morley, B. Fulton. Aug 2022">Something to do while waiting for your turn on Casuarina Crack. Climb the gully to the right of the face. Step left and up into the steep corner (RP's helpful here). Up to the rooflet and then squirm to the left using your belly where you can (make sure you extend your pro before traversing!). Up Casuarina Crack to finish.</climb>  
+  <text class="heading3" id="160">Finn Buttress</text>  
+  <text id="202" class="text">Finn is located on a separate buttress of its own about 25m left of Tormentil Buttress. The buttress has a series of blocky towers as prominent features.</text>  
+  <climb id="22" name="Finn" fa="Robert McMahon, Peter Jackson, Chris Viney, 1969." stars="" length="25m" grade="8" extra="" number="33.">From the block at the base of buttress, follow the weakness straight up the nose which steepens at the top. About as loose as it looks!</climb>  
+  <text id="201" class="heading3">Tormentil Buttress</text>  
+  <text id="203" class="text">A couple of good routes, Tormentil is well worth doing if you're climbing at easier grades. Tormentil Buttress is located in a small amphitheatre downhill and just past the Delinquents area. There are lower-offs at the top of Tormentil and Tim's Excuses. From above Tormentil you can take a short track to climbers left to get to Casuarina Crack and the base of Mick goes to Moonah Buttress.</text>  
+  <image id="236" src="Tormentil.jpg" height="600" width="800" legend="true" legendTitle="Tormentil Buttress"> 
+    <drawing> 
+      <path id="44809" points="17.0,392.0, 48.0,337.0, 68.0,302.0, 95.0,269.0, 142.0,209.0, 174.0,192.0, 204.0,174.0, 234.0,169.0, 271.0,148.0,lower" d="M17.0,392.0C29.4,370.0 40.1,351.0 48.0,337.0C55.9,323.0 58.8,315.3 68.0,302.0C77.2,288.7 84.4,282.3 95.0,269.0C105.6,255.7 131.6,219.1 142.0,209.0C152.4,198.9 161.8,198.9 174.0,192.0C186.2,185.1 192.6,178.4 204.0,174.0C215.4,169.6 222.7,173.4 234.0,169.0C245.3,164.6 262.1,156.3 271.0,148.0" linkedTo="23" lineStyle="dotted"/>  
+      <path id="20542" points="557.0,538.0, 560.0,351.0, 577.0,287.0, 596.0,241.0, 597.0,205.0, 588.0,117.0,belay" d="M557.0,538.0C558.2,463.2 557.9,377.4 560.0,351.0C562.1,324.6 570.8,305.9 577.0,287.0C583.2,268.1 592.6,255.0 596.0,241.0C599.4,227.0 597.9,219.4 597.0,205.0C596.1,190.6 591.6,152.2 588.0,117.0" linkedTo="28"/>  
+      <path id="21157" points="777.0,480.0, 754.0,329.0, 731.0,249.0, 700.0,197.0, 668.0,171.0, 641.0,91.0,belay" d="M777.0,480.0C767.8,419.6 760.5,361.7 754.0,329.0C747.5,296.3 740.2,271.4 731.0,249.0C721.8,226.6 710.4,209.8 700.0,197.0C689.6,184.2 676.0,185.4 668.0,171.0C660.0,156.6 651.8,123.0 641.0,91.0" linkedTo="29"/>  
+      <path id="45888" points="277.0,470.0, 296.0,379.0, 320.0,308.0, 341.0,260.0, 368.0,202.0,lower" d="M277.0,470.0C284.6,433.6 288.3,408.0 296.0,379.0C303.7,350.0 312.6,327.6 320.0,308.0C327.4,288.4 332.4,279.1 341.0,260.0C349.6,240.9 361.5,211.3 368.0,202.0" linkedTo="27"/>  
+      <path id="46238" points="239.0,470.0, 269.0,382.0, 293.0,313.0, 318.0,255.0, 342.0,217.0, 366.0,202.0," d="M239.0,470.0C251.0,434.8 259.5,409.6 269.0,382.0C278.5,354.4 283.9,336.6 293.0,313.0C302.1,289.4 309.8,271.0 318.0,255.0C326.2,239.0 334.4,225.4 342.0,217.0C349.6,208.6 359.5,211.3 366.0,202.0" linkedTo="26"/>  
+      <path id="77763" points="72.0,533.0, 105.0,453.0, 137.0,389.0, 172.0,342.0, 199.0,306.0, 231.0,241.0, 250.0,199.0, 259.0,176.0, 273.0,149.0," d="M72.0,533.0C85.2,501.0 93.2,479.1 105.0,453.0C116.8,426.9 124.9,409.1 137.0,389.0C149.1,368.9 161.2,356.4 172.0,342.0C182.8,327.6 189.9,321.5 199.0,306.0C208.1,290.5 223.1,257.6 231.0,241.0C238.9,224.4 246.1,208.1 250.0,199.0C253.9,189.9 254.9,185.0 259.0,176.0C263.1,167.0 264.1,157.3 273.0,149.0" linkedTo="24"/>  
+      <path id="5367" points="160.0,460.0, 251.0,293.0, 288.0,219.0, 322.0,192.0,belay" d="M160.0,460.0C196.4,393.2 235.5,322.2 251.0,293.0C266.5,263.8 278.0,233.2 288.0,219.0C298.0,204.8 308.4,202.8 322.0,192.0" linkedTo="25" lineStyle="dotted"/>  
+      <rect id="54303" x="608" y="29" width="133" height="22" style="black_text_on_solid_white" text="To Delinquents Buttress" arrowDirection="east"/>  
+      <rect id="99871" x="402" y="29" width="184" height="22" style="black_text_on_solid_white" text="To Mick Goes to Moonah Buttress" arrowDirection="south_west"/> 
+    </drawing>  
+    <legend> 
+      <climb>23</climb>  
+      <climb>24</climb>  
+      <climb>25</climb>  
+      <climb>26</climb>  
+      <climb>27</climb>  
+      <climb>28</climb>  
+      <climb>29</climb> 
+    </legend> 
+  </image>  
+  <climb id="23" name="Bumbly" fa="Peter Jackson, Lyle Closs, May 1971." stars="" number="34." length="25m" grade="10" extra="">Go left around the base of the buttress and uphill to where an obvious ledge leads back right towards the nose. Follow the ledge then climb the crack to the ledge above Cromlech. Finish up the broken crack above, or via the nose on the left. Take double ropes or fold your single in half.</climb>  
+  <climb id="24" name="Tim's Excuses" fa="Evan Peacock, Colin Reed, Sep 1991." stars="*" number="35." length="25m" grade="19" extra="">Takes the thin line just left of the chimney (Cromlech). Surmount the lego at the base and follow the thin, well-protected crack to the top and lower-off. The crux moves are a little contrived and start above a ledge (though they can be appropriately protected).</climb>  
+  <climb id="25" name="Cromlech" fa="Robert McMahon, Peter Jackson, Chris Viney, 1969." length="18m" grade="13" extra="" number="36." stars="">The chimney a few metres to the left of Tormentil. Climb the chimney which is loose at first and awkward in spots (sounds delightful).</climb>  
+  <climb id="26" name="Tormentil" guide.type="climb" guide.page="0" guide.id="25" guide.action="submit" fa="Peter Jackson, Robert McMahon, Chris Viney, 1969." stars="*" number="37." length="15m" grade="10" extra="">Quite good - one of the original routes here. Climb the smooth curving right-facing corner crack, located just to the right of the base of the buttress. Despite looks you don't need off-width gear.</climb>  
+  <climb id="27" name="Humber" fa="Evan Peacock, Colin Reed, Sep 1991." stars="" number="38." length="15m" grade="15" extra="">Climb the face 1m right of Tormentil. The key runner placement requires some thought but is bomber.</climb>  
+  <climb id="28" name="Garage Sale" fa="Evan Peacock, Colin Reed, Sep 1991." stars="" number="39." length="12m" grade="17" extra="">Start about 15m right of Humber on a slab, just past a roof-capped mini-buttress. Climb the left hand of the two lines, finishing up the hand crack.</climb>  
+  <climb id="29" name="Little Black Balls" fa="Colin Reed, Evan Peacock, Sep 1991." stars="" number="40." length="12m" grade="11" extra="">Seldom climbed. Takes the line just right of Garage Sale up the face.</climb>  
+  <text class="heading3" id="161">Delinquents Area</text>  
+  <text id="277" class="text">A nice area with a range of absorbing routes. Find this area by spotting two very prominent, large buttresses located just uphill as you come past the Oisin buttress from the right. Lower-offs are on each buttress for descent.</text>  
+  <image id="327" src="R Rock App.jpg" height="800" width="600" legend="true" legendTitle="Delinquents Buttress"> 
+    <drawing> 
+      <path id="84048" points="367.0,568.0, 327.0,364.0, 267.0,272.0, 315.0,209.0, 315.0,151.0,lower" d="M367.0,568.0C351.0,486.4 341.1,405.6 327.0,364.0C312.9,322.4 269.4,303.6 267.0,272.0C264.6,240.4 306.4,230.6 315.0,209.0C323.6,187.4 303.7,167.0 315.0,151.0" linkedTo="33"/>  
+      <path id="87149" points="92.0,615.0, 176.0,490.0, 215.0,334.0, 165.0,272.0, 210.0,207.0, 267.0,160.0, 315.0,150.0," d="M92.0,615.0C125.6,565.0 151.8,545.2 176.0,490.0C200.2,434.8 216.6,365.8 215.0,334.0C213.4,302.2 166.2,303.6 165.0,272.0C163.8,240.4 190.1,228.8 210.0,207.0C229.9,185.2 249.8,169.4 267.0,160.0C284.2,150.6 303.7,166.0 315.0,150.0" linkedTo="32"/>  
+      <rect id="21515" x="54" y="648" width="121" height="22" style="black_text_on_solid_white" text="To Tormentil Buttress" arrowDirection="south_west"/>  
+      <rect id="31829" x="346" y="652" width="187" height="22" style="black_text_on_solid_white" text="To Something Scurrillous Buttress" arrowDirection="south_east"/>  
+      <path id="9989" points="67.0,435.0, 66.0,467.0," d="M67.0,435.0C66.6,447.8 66.4,454.2 66.0,467.0" arrow="true" linkedTo="30"/>  
+      <path id="35186" points="" d=""/> 
+    </drawing>  
+    <legend> 
+      <climb>30</climb>  
+      <climb>32</climb>  
+      <climb>33</climb> 
+    </legend> 
+  </image>  
+  <climb id="30" name="Maggot On A Brick" fa="Garn Cooper, Richard Bottomley, Lucas Bottomley, Anna Hasan, May 1991. Re-bolted 2023" stars="*" number="41." length="13m" grade="21" extra="Mixed">Good moves the whole way. The short slab about 30m left and up from Daytime Delinquents, behind the distinctive Naughty Bottom Burp Buttress. Starting from the left arete, climb the slab trending right and up past two bolts, finishing up the layaways on the right past some good wires and finger sized cams. Stick-clip the first bolt.</climb>  
+  <climb id="31" name="The Naughty Bottom Burp" fa="Evan Peacock, Colin Reed, Roger Parkyn, Jun 1990." stars="" number="42." length="14m" grade="20" extra="">The small separate buttress about 15m left of the Delinquents Buttress has a clean face line and chockstone filled chimney on the R at a sag bush. Climb up to the ledge on the LH side and a #2RP, then continue back R to the horizontal break. Climb up the sloping ledge and a knifeblade runner, then up to the top, trying not to rain loose blocks onto your belayer.</climb>  
+  <climb id="32" name="Rogering the Rock" fa="Roger Parkyn, Al Adams, Evan Peacock, Jun 1990. Re-bolted 2023" stars="**" number="43." length="18m" grade="20" extra="Mixed">The result of some rather vigorous cleaning techniques... Start left of Daytime Delinquents at the base of a slab. Climb the slab to a stance at the orange wall. Perplexing moves past the bolt, then crank left through the roof to a large ledge before finishing up the face right of the arete to the lower-off.</climb>  
+  <climb id="33" name="Daytime Delinquents" guide.type="climb" guide.page="0" guide.id="32" guide.action="submit" fa="Al Adams, Garn Cooper, Pete Steane, Dec 1984." stars="*" number="44." length="16m" grade="17" extra="">Absorbing climbing through the roof. Follow the corner system to the roof being mindful of the hollow sounding flake, then break-out left to a stance at the arete. Up past the roof trending right, and into a straightforward crack to a lower-off.</climb>  
+  <image id="328" src="Squeaky App.jpg" height="800" width="600" legend="true" legendTitle="Squeaky Feet Wall"> 
+    <drawing> 
+      <path id="16961" points="296.0,688.0, 295.0,688.0, 277.0,486.0, 259.0,378.0, 222.0,257.0, 191.0,43.0,lower" d="M296.0,688.0C296.0,687.6 295.0,688.4 295.0,688.0C295.0,687.6 282.1,529.5 277.0,486.0C271.9,442.5 269.2,420.6 259.0,378.0C248.8,335.4 232.1,306.6 222.0,257.0C211.9,207.4 203.4,128.6 191.0,43.0" linkedTo="34"/>  
+      <path id="33569" points="473.0,748.0, 440.0,611.0, 432.0,509.0, 418.0,445.0, 413.0,386.0, 403.0,339.0, 378.0,247.0, 357.0,198.0,lower-right" d="M473.0,748.0C459.8,693.2 446.9,651.3 440.0,611.0C433.1,570.7 435.4,535.0 432.0,509.0C428.6,483.0 421.6,468.4 418.0,445.0C414.4,421.6 415.7,405.0 413.0,386.0C410.3,367.0 407.7,357.6 403.0,339.0C398.3,320.4 384.6,267.3 378.0,247.0C371.4,226.7 365.4,217.6 357.0,198.0" linkedTo="35" lineStyle="dotted"/> 
+    </drawing>  
+    <legend> 
+      <climb>34</climb>  
+      <climb>35</climb> 
+    </legend> 
+  </image>  
+  <image id="329" src="Scurrilous App.jpg" height="800" width="600" legend="true" legendTitle="Something Scurrilous Buttress"> 
+    <drawing> 
+      <path id="69362" points="50.0,745.0, 89.0,619.0, 170.0,408.0, 223.0,322.0, 240.0,244.0, 239.0,177.0, 276.0,157.0, 270.0,124.0,lower" d="M50.0,745.0C65.6,694.6 71.3,668.7 89.0,619.0C106.7,569.3 153.4,444.8 170.0,408.0C186.6,371.2 210.5,351.4 223.0,322.0C235.5,292.6 237.1,270.6 240.0,244.0C242.9,217.4 232.6,192.5 239.0,177.0C245.4,161.5 269.2,168.6 276.0,157.0C282.8,145.4 272.4,137.2 270.0,124.0" linkedTo="35"/>  
+      <path id="74139" points="433.0,731.0, 404.0,579.0, 382.0,425.0, 361.0,350.0, 347.0,297.0, 358.0,265.0, 351.0,234.0, 325.0,174.0, 269.0,122.0," d="M433.0,731.0C421.4,670.2 414.2,640.1 404.0,579.0C393.8,517.9 387.7,455.6 382.0,425.0C376.3,394.4 366.8,371.2 361.0,350.0C355.2,328.8 347.5,310.5 347.0,297.0C346.5,283.5 357.2,277.7 358.0,265.0C358.8,252.3 355.3,246.0 351.0,234.0C346.7,222.0 340.5,195.1 325.0,174.0C309.5,152.9 291.4,142.8 269.0,122.0" linkedTo="36"/>  
+      <rect id="87012" x="52" y="134" width="117" height="22" style="black_text_on_solid_white" text="Delinquents Buttress" arrowDirection="south_west"/>  
+      <rect id="47282" x="455" y="683" width="98" height="22" style="black_text_on_solid_white" text="To Oisin Buttress" arrowDirection="south_east"/> 
+    </drawing>  
+    <legend> 
+      <climb>35</climb>  
+      <climb>36</climb> 
+    </legend> 
+  </image>  
+  <climb id="34" name="Little Squeaky Feet" fa="Evan Peacock, Steve Ford, Al Adams, Colin Reed, Dec 1991." stars="**" number="45." length="18m" grade="23" extra="">This is one of the more serious leads at Lowdina and is rarely repeated. Follow the thin seam up the overhanging wall, past the infamous #1 Camalot placement and a couple more 'interesting' pieces to a lower-off. RPs are essential and small offsets cams are useful. A good line that is marred by a step left into the gully/crack that is all too tempting during the desperate crux section at half height.&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;</climb>  
+  <climb id="35" name="Something Scurrilous" guide.type="climb" guide.page="0" guide.id="34" guide.action="submit" fa="Al Adams, Garn Cooper, Jun 1990. Re-bolted 2022" stars="**" number="46." length="25m" grade="19" extra="Mixed">A diverse outing. Follow the crack system up the face to a delicate stance below a bolt. Pass this into the hand-crack above (crux), then hand traverse out right around the magic wedged block to an awkward mantle to gain the thin crack system above on the left. Follow this to the top and lower-off.</climb>  
+  <climb id="36" name="Mega Smegma" fa="Al Adams, Evan Peacock, Roger Parkyn, Jun 1990." stars="" number="47." length="25m" grade="16" extra="">This route isn't the only thing requiring cleaning. Start at the weakness 3m right of Something Scurrilous. Climb the line to the bulge and pull through it on layaways. Continue up the tight handcrack to where it veers right. Continue up using a layaway edge and move L out into the chimney. Step around the arete and clip the DBB to lower-off.</climb>  
+  <climb id="37" name="Genetic Junk Yard" fa="Al Adams, Evan Peacock, Steve Ford, Colin Reed, Dec 1991." stars="" number="48." length="25m" grade="16" extra="">Start on the downhill prow of the Catoblepas buttress, on a brushed slab. Climb easily up the slab to the roof, through this (RP runner) and continue easily.</climb>  
+  <climb id="38" name="Catoblepas" guide.type="climb" guide.page="0" guide.id="37" guide.action="submit" fa="Garn Cooper, Al Adams, Simon Stubbs, Oct 1988." stars="" number="49." length="20m" grade="14" extra="">About 10m L of Oisin is another large buttress. The line starts in a widish crack on the RH side of the buttress, then trends L onto the eastward facing side. Continue straight up with the crux at the top.</climb>  
+  <text class="heading3" id="162">Oisin and Alekhines Defence Buttress</text>  
+  <text id="314" class="text">The large buttress with an obvious wide crack (Oisin) running through the nose. The buttress can be accessed easily from where the orange-taped track splits off to the Ferio Buttress.</text>  
+  <image id="330" src="Oisin App.jpg" height="800" width="600" legend="true" legendTitle="Oisin Buttress"> 
+    <drawing> 
+      <path id="14628" points="373.0,768.0, 372.0,768.0, 331.0,423.0, 298.0,362.0, 274.0,274.0, 258.0,191.0, 264.0,83.0,belay" d="M373.0,768.0C373.0,767.6 372.0,768.4 372.0,768.0C372.0,767.6 336.0,450.3 331.0,423.0C326.0,395.7 307.9,387.9 298.0,362.0C288.1,336.1 281.7,306.9 274.0,274.0C266.3,241.1 259.8,224.8 258.0,191.0C256.2,157.2 261.6,126.2 264.0,83.0" linkedTo="39"/>  
+      <path id="62525" points="587.0,558.0, 589.0,558.0, 546.0,470.0, 512.0,403.0, 475.0,340.0, 453.0,301.0, 382.0,201.0, 371.0,168.0, 291.0,78.0,belay" d="M587.0,558.0C587.8,558.0 589.3,558.7 589.0,558.0C588.7,557.3 559.4,496.9 546.0,470.0C532.6,443.1 526.0,428.6 512.0,403.0C498.0,377.4 484.0,355.5 475.0,340.0C466.0,324.5 463.0,315.9 453.0,301.0C443.0,286.1 389.3,212.8 382.0,201.0C374.7,189.2 379.3,179.2 371.0,168.0C362.7,156.8 323.0,114.0 291.0,78.0" linkedTo="40"/>  
+      <rect id="99470" x="427" y="188" width="106" height="50" style="black_text_on_solid_white" text="Ferio &amp; &lt;br/&gt;Alekhines Defence&lt;br/&gt;Buttress" arrowDirection="south"/>  
+      <rect id="10644" x="71" y="747" width="184" height="22" style="black_text_on_solid_white" text="To Something Scurrilous Buttress" arrowDirection="west"/>  
+      <rect id="55636" x="214" y="8" width="106" height="50" style="black_text_on_solid_white" text="Scramble off back&lt;br/&gt;to anchor on &lt;br/&gt;Alekhines Defence" arrowDirection="south_east"/> 
+    </drawing>  
+    <legend> 
+      <climb>39</climb>  
+      <climb>40</climb> 
+    </legend> 
+  </image>  
+  <climb id="39" name="Oisin" guide.type="climb" guide.page="0" guide.id="38" guide.action="submit" fa="Robert McMahon, Peter Jackson, Chris Viney, 1969." stars="" number="50." length="20m" grade="11" extra="">The flakes on the right should be treated with care, as should the possum! Climbs the wide crack (#5 handy) on the big buttress, starting from the elevated rock platform which you gain from the Ferio area. Scramble off the back and rap-down using Alekhines Defence anchors.</climb>  
+  <climb id="40" name="Mulliners Code" guide.type="climb" guide.page="0" guide.id="39" guide.action="submit" fa="Peter Jackson, Bob deCesare, Jan 1981." stars="" number="51." length="20m" grade="16" extra="">A major disappointment once you have done the flake. Climb the crack up the LHS of a flake 3m R of Oisin (of dubious attachment). Either continue up the dirty gully above, or move L and climb the RH edge of the delicately stacked flakes just R of Oison.</climb>  
+  <image id="331" src="Alehkines App.jpg" height="525" width="700" legend="true" legendTitle="Alekhines Defence" legendx="12" legendy="35"> 
+    <drawing> 
+      <path id="28547" points="69.0,503.0, 68.0,503.0, 125.0,328.0, 127.0,232.0, 170.0,148.0, 250.0,80.0, 285.0,70.0, 308.0,28.0,belay" d="M69.0,503.0C69.1,502.6 67.9,503.4 68.0,503.0C68.1,502.6 116.8,365.5 125.0,328.0C133.2,290.5 117.8,268.6 127.0,232.0C136.2,195.4 146.3,177.3 170.0,148.0C193.7,118.7 238.0,88.2 250.0,80.0C262.0,71.8 274.2,79.7 285.0,70.0C295.8,60.3 298.8,44.8 308.0,28.0" linkedTo="42"/>  
+      <path id="59600" points="263.0,478.0, 331.0,284.0, 391.0,209.0, 414.0,151.0, 400.0,35.0,lower" d="M263.0,478.0C290.2,400.4 314.5,318.7 331.0,284.0C347.5,249.3 377.8,230.2 391.0,209.0C404.2,187.8 418.7,175.5 414.0,151.0C409.3,126.5 405.6,81.4 400.0,35.0" linkedTo="43"/>  
+      <path id="12896" points="584.0,465.0, 556.0,274.0, 474.0,201.0, 415.0,152.0, 400.0,36.0," d="M584.0,465.0C572.8,388.6 572.9,314.5 556.0,274.0C539.1,233.5 497.2,221.1 474.0,201.0C450.8,180.9 419.7,176.5 415.0,152.0C410.3,127.5 397.4,51.3 400.0,36.0" linkedTo="44"/>  
+      <rect id="85848" x="109" y="4" width="81" height="22" style="black_text_on_solid_white" text="Oisin Buttress" arrowDirection="south_east"/>  
+      <path id="67460" points="312.0,27.0, 351.0,35.0, 360.0,49.0, 397.0,37.0," d="M312.0,27.0C327.6,30.2 344.9,32.2 351.0,35.0C357.1,37.8 353.3,48.7 360.0,49.0C366.7,49.3 394.4,52.3 397.0,37.0" lineStyle="dashed"/> 
+    </drawing>  
+    <legend> 
+      <climb>42</climb>  
+      <climb>43</climb>  
+      <climb>44</climb> 
+    </legend> 
+  </image>  
+  <climb id="41" name="Maelstrom" fa="Evan Peacock, Aug 1988." stars="" number="52." length="20m" grade="18" extra="">The slightly overhanging problem just R of Mulliner's Code. Climb up into the small sentry box until the line joins the aforementioned then continue up that line.</climb>  
+  <climb id="42" name="Ploughman's Launch" fa="Evan Peacock, Sep 1989." stars="" number="53." length="20m" grade="18" extra="">The line just L of the Alekhine's Defence buttress. Climb the arête carefully on large holds to the horizontal break at 4m where runners appear. Continue up Mulliner's Code.</climb>  
+  <climb id="43" name="Gecko" fa="Adrian Herington, Doug Bruce, 1985." stars="" number="54." length="12m" grade="20" extra="">The direct start and finish to Alekhines Defence. The unprotected start requires strong fingers and a good head - most will want the first good wire pre-clipped. Excellent small wires and cams start from about 5m up.</climb>  
+  <climb id="44" name="Alekhines Defence" fa="Garn Cooper, Al Adams, Oct 1984." stars="*" number="55." length="12m" grade="19" extra="">Great climbing with a bold start. Start up the slab on the right hand side and climb through the overlap (Shallow RPs - poorly protected). Continue up the face trending diagonally left to gain the crack where good gear begins and follow this to finish. RPs, small wires and finger sized cams are the go.&lt;br/&gt;&lt;br/&gt;The original finish went up the groove on the left, but the described route above is better.</climb>  
+  <text id="243" class="heading3">Ferio Buttress</text>  
+  <text id="278" class="text">For this area, take the uphill track as you pass Directissimo Man instead of following the orange-taped track down the hill. Lower-offs have been installed for convenient descent from the routes. Some of the routes tend to have Casuarina leaves fall into them if they haven't been climbed in recently - please give them a quick clean if you're on-route!</text>  
+  <image id="332" src="Ferio LHS App.jpg" height="800" width="600" legend="true" legendTitle="Ferio Buttress LHS"> 
+    <drawing> 
+      <path id="37503" points="127.0,455.0, 178.0,303.0, 145.0,252.0, 180.0,177.0,lower" d="M127.0,455.0C147.4,394.2 175.9,327.2 178.0,303.0C180.1,278.8 144.6,276.3 145.0,252.0C145.4,227.7 166.0,207.0 180.0,177.0" linkedTo="45"/>  
+      <path id="12120" points="204.0,528.0, 218.0,441.0, 220.0,320.0, 239.0,250.0, 242.0,194.0, 243.0,163.0, 263.0,137.0,belay" d="M204.0,528.0C209.6,493.2 215.3,476.1 218.0,441.0C220.7,405.9 216.8,348.8 220.0,320.0C223.2,291.2 235.1,272.1 239.0,250.0C242.9,227.9 241.4,206.4 242.0,194.0C242.6,181.6 238.7,174.6 243.0,163.0C247.3,151.4 255.0,147.4 263.0,137.0" linkedTo="46"/>  
+      <path id="70746" points="575.0,532.0, 400.0,301.0, 316.0,221.0, 312.0,181.0, 305.0,153.0, 264.0,137.0,lower" d="M575.0,532.0C505.0,439.6 429.7,336.7 400.0,301.0C370.3,265.3 325.5,234.0 316.0,221.0C306.5,208.0 313.8,192.4 312.0,181.0C310.2,169.6 313.5,160.8 305.0,153.0C296.5,145.2 280.4,143.4 264.0,137.0" linkedTo="47"/>  
+      <path id="22608" points="588.0,333.0, 524.0,298.0, 434.0,211.0, 402.0,191.0," d="M588.0,333.0C562.4,319.0 546.9,316.1 524.0,298.0C501.1,279.9 445.3,221.0 434.0,211.0C422.7,201.0 414.8,199.0 402.0,191.0" linkedTo="49" arrow="true"/>  
+      <path id="36511" points="" d=""/> 
+    </drawing>  
+    <legend> 
+      <climb/>  
+      <climb>45</climb>  
+      <climb>46</climb>  
+      <climb>47</climb>  
+      <climb>49</climb> 
+    </legend> 
+  </image>  
+  <climb id="335" stars="" extra="4Þ" number="56." name="Unknown route" length="20m" grade="?" fa="Unkown project / FA (Not described in original EP guide)">The undescribed, unnamed and unknown route up the overhanging wall to the left of Electric Exercise Bike.</climb>  
+  <climb id="45" name="Electric Exercise Bike" fa="Al Adams, Garn Cooper, Oct 1984." stars="*" number="57." length="18m" grade="18" extra="">Classy. Climb the groove/layaway to the left of the narrow chimney until you can trend left onto the slab. A couple of peculiar RPs protect the next moves until reaching a stance below the thin crack (good RPs and micro-cams available here). Climb this, with a hard move to obtain the jug which is covered in she-oak needles. Saunter on up the easy crack above to the top and lower-off.</climb>  
+  <climb id="46" name="Liars and Losers" fa="Al Adams, Garn Cooper, Evan Peacock, Colin Reed, May 1990.  Re-bolted (1st bolt added with FA permission) in 2022." stars="**" number="58." length="20m" grade="20" extra="Mixed">Continually entertaining climbing up the face and left arête. Head up the arete and through a bulge past two bolts to a stance. Arrange some snazzy RP placements and a 0-cam in the horizontal break then move up to the salvation of another bolt. Continue up the face/arête past some cam placements around the left of the arete to the lower-off. RPs and a single rack of cams from BD #0.2 - #0.5 essential.</climb>  
+  <climb id="47" name="Bicycles Don't Fly" fa="Al Adams, Garn Cooper, Pete Steane, Aug 1985." stars="*" number="59." length="20m" grade="16" extra="">Want a bet? A contrived variant to the Ants Pants, but picks the best climbing. As for the Ants Pants, but trend left through a bulge (good wire) and follow the face before going back into the crack. Despite appearances, protection is very good.</climb>  
+  <climb id="48" name="The Ants Pants" fa="Bob Bull, John Moore, Apr 1971." stars="" number="60." length="20m" grade="12" extra="">Recently cleaned and with the possum evicted, this is quite a pleasant lead for the grade. Follow the crack up the face of the buttress, stepping left at the top to clip the chains.</climb>  
+  <climb id="49" name="Don't Jolt That Bolt" fa="Al Adams, Garn Cooper, Sep 1985.  Re-bolted (1st bolt added with FA permission) in 2022." stars="*" number="61." length="20m" grade="18" extra="Mixed">Add a grade if you're short. Carefully climb the RHS arete to the first bolt and head up past the small overlap to a stance at the second bolt. Continue straight-up the face with some choice moves (crux) to an obscure small wire behind the flake/jug. Either continue up the face on RP3's in the seam to the right or step left here and continue to the anchor.</climb>  
+  <image id="229" src="IMG20210530153026.jpg" height="600" width="800" legend="true" legendTitle="Ferio Buttress RHS"> 
+    <drawing> 
+      <path id="36029" points="231.0,551.0, 230.0,551.0, 331.0,300.0, 383.0,193.0, 404.0,122.0, 409.0,72.0,lower" d="M231.0,551.0C231.1,550.6 229.9,551.4 230.0,551.0C230.1,550.6 312.3,343.8 331.0,300.0C349.7,256.2 371.8,220.4 383.0,193.0C394.2,165.6 399.8,141.7 404.0,122.0C408.2,102.3 407.0,92.0 409.0,72.0" linkedTo="50"/>  
+      <path id="73887" points="11.0,328.0, 50.0,287.0, 109.0,226.0, 147.0,187.0, 193.0,155.0," d="M11.0,328.0C26.6,311.6 34.3,303.3 50.0,287.0C65.7,270.7 93.8,241.6 109.0,226.0C124.2,210.4 130.4,201.1 147.0,187.0C163.6,172.9 177.6,166.7 193.0,155.0" linkedTo="49"/>  
+      <path id="80907" points="583.0,528.0, 559.0,399.0, 547.0,197.0, 484.0,153.0, 492.0,71.0," d="M583.0,528.0C573.4,476.4 564.7,451.2 559.0,399.0C553.3,346.8 556.0,226.4 547.0,197.0C538.0,167.6 496.3,181.2 484.0,153.0C471.7,124.8 513.5,95.2 492.0,71.0" linkedTo="52"/>  
+      <path id="868" points="194.0,155.0, 231.0,124.0, 246.0,102.0,lower-left" d="M194.0,155.0C209.4,143.3 223.5,131.6 231.0,124.0C238.5,116.4 240.0,110.8 246.0,102.0" lineStyle="dashed"/>  
+      <path id="88335" points="" d=""/>  
+      <path id="18658" points="492.0,71.0, 411.0,71.0," d="M492.0,71.0C470.5,46.8 443.4,71.0 411.0,71.0" lineStyle="dashed"/> 
+    </drawing>  
+    <legend> 
+      <climb/>  
+      <climb>49</climb>  
+      <climb>50</climb>  
+      <climb>52</climb> 
+    </legend> 
+  </image>  
+  <climb id="50" name="Ferio" guide.type="climb" guide.page="0" guide.id="49" guide.action="submit" fa="Peter Jackson, Michael McHugh, Di Batten, Jan 1971." stars="**" number="62." length="14m" grade="17" extra="">Would be classic if it was longer! Starting at the base of the corner, layback and jam up the corner to the DBB lower-off.</climb>  
+  <climb id="51" name="Tall Dudes" guide.type="climb" guide.page="0" guide.id="50" guide.action="submit" fa="Al Adams, Evan Peacock, Jun 1988." stars="" number="63." length="14m" grade="21" extra="">Originally started through the groove until a key hold was pulled-off. Start up Ferio to the thin ledge on the right wall at 4m. Purchase some life insurance, then boldly head-out right and climb the arete. The first couple RP placements from the ledge are placed blind in the seam to the right - abseil inspection is recommended. RPs from #1 to #5 essential.</climb>  
+  <climb id="52" name="Picnic in the Front Room" fa="Evan Peacock, Colin Reed, Steve Ford, Steve Carter, Jan 1990." stars="*" number="64." length="14m" grade="22" extra="">An unassuming route, but every move is gold. Follows the fused seam around the arete from Ferio. Layback the seam until it ends, then step left into Tall Dudes and finish up this - step left to lower-off as for Ferio. RPs from #1 to #5 and very small micro-cams are essential. Abseil inspection and double ropes (single folded in half) is recommended.</climb>  
+  <text id="288" class="heading3">Directissimo Man, Cryptic Clue and Mr Queasy Area</text>  
+  <text id="289" class="text">The next routes are located between the Ferio Buttress and the Zundapp Alcove in an amphitheatre of rock. The track runs straight past the base of Directissimo Man.</text>  
+  <image id="325" src="Direct Man App.jpg" height="800" width="600" legend="true" legendTitle="Directissimo Man Buttress" legendx="8" legendy="6"> 
+    <drawing> 
+      <path id="93758" points="350.0,737.0, 349.0,737.0, 361.0,476.0, 392.0,352.0, 344.0,230.0, 328.0,116.0,belay" d="M350.0,737.0C350.0,736.6 349.0,737.4 349.0,737.0C349.0,736.6 355.3,526.8 361.0,476.0C366.7,425.2 395.5,403.0 392.0,352.0C388.5,301.0 356.1,274.4 344.0,230.0C331.9,185.6 334.4,161.6 328.0,116.0" linkedTo="53"/>  
+      <rect id="39754" x="416" y="115" width="118" height="22" style="black_text_on_solid_white" text="Cryptic Clue Buttress" arrowDirection="south_east"/>  
+      <rect id="78021" x="160" y="148" width="81" height="22" style="black_text_on_solid_white" text="Ferio Buttress" arrowDirection="south"/>  
+      <path id="78761" points="523.0,708.0, 470.0,495.0, 440.0,409.0, 411.0,339.0, 370.0,243.0, 350.0,170.0,belay" d="M523.0,708.0C501.8,622.8 479.7,530.1 470.0,495.0C460.3,459.9 450.7,437.3 440.0,409.0C429.3,380.7 422.8,366.9 411.0,339.0C399.2,311.1 380.3,271.5 370.0,243.0C359.7,214.5 358.0,199.2 350.0,170.0" lineStyle="dotted" linkedTo="374"/>  
+      <rect id="18443" x="94" y="80" width="59" height="50" style="black_text_on_solid_white" text="Alekhines&lt;br/&gt;Defence&lt;br/&gt;Buttress" arrowDirection="south_west"/>  
+      <rect id="72779" x="56" y="755" width="184" height="22" style="black_text_on_solid_white" text="To Something Scurrilous Buttress" arrowDirection="west"/>  
+      <rect id="95369" x="426" y="761" width="114" height="22" style="black_text_on_solid_white" text="To Bismark Buttress" arrowDirection="east"/> 
+    </drawing>  
+    <legend> 
+      <climb>53</climb>  
+      <climb>374</climb> 
+    </legend> 
+  </image>  
+  <climb id="53" name="Directissimo Man" fa="Al Adams, Jul 1984." stars="" number="65." length="8m" grade="12" extra="">Climbs the nose of the buttress which you come across just before the Ferio Buttress. From the base of the flat rock platform, climb the obvious crack and face holds to the top. Walk-off.</climb>  
+  <climb id="374" stars="" extra="" number="66." name="Directissimo Girls" length="8m" grade="9" fa="Bonnie MacAdam, Vanessa Tonet, May 2022">Reading the guide to find the route optional. Climb the loose and mossy chimney to the right of the buttress. Delightful.</climb>  
+  <image id="333" src="Cryptic Clue App.jpg" height="800" width="600" legend="true" legendTitle="Cryptic Clue Buttress"> 
+    <drawing> 
+      <path id="68526" points="126.0,607.0, 125.0,607.0, 151.0,441.0, 190.0,266.0, 225.0,177.0, 294.0,133.0, 344.0,54.0,belay" d="M126.0,607.0C125.6,607.0 124.9,607.4 125.0,607.0C125.1,606.6 138.4,507.0 151.0,441.0C163.6,375.0 179.7,302.8 190.0,266.0C200.3,229.2 204.8,202.8 225.0,177.0C245.2,151.2 271.2,156.5 294.0,133.0C316.8,109.5 324.0,85.6 344.0,54.0" linkedTo="55"/>  
+      <path id="38835" points="562.0,729.0, 553.0,459.0, 518.0,363.0, 394.0,259.0, 374.0,181.0, 386.0,53.0,belay" d="M562.0,729.0C558.4,621.0 557.9,499.6 553.0,459.0C548.1,418.4 543.4,395.0 518.0,363.0C492.6,331.0 414.0,284.3 394.0,259.0C374.0,233.7 375.2,213.2 374.0,181.0C372.8,148.8 381.2,104.2 386.0,53.0" linkedTo="56"/> 
+    </drawing>  
+    <legend> 
+      <climb>54</climb>  
+      <climb>55</climb>  
+      <climb>56</climb> 
+    </legend> 
+  </image>  
+  <problem id="54" name="Fadel" fa="Colleen McCullough, Noel Ferrier, Jun 1990." stars="" number="67." grade="V1" extra="">The boulder problem immediately L of Cryptic Clue (past the chimney).</problem>  
+  <climb id="55" name="Cryptic Clue" fa="Al Adams, Evan Peacock, Oct 1988." stars="" number="68." length="10m" grade="22" extra="Mixed">Another utterly contrived test piece. Uphill in the gully L of Mr Queasy is a blank looking wall broken by a horizontal at about 7m. Climb the face on the LH side of the wall using a bolt and a pin for protection (still there in Oct 2021) - but the LH arête is out of bounds! There are two loose blocks at the top, though they are keyed in.</climb>  
+  <climb id="56" name="Anagram" fa="Evan Peacock, Al Adams, Oct 1988." stars="" number="69." length="10m" grade="21" extra="">The face to the right of Cryptic Clue. Start on the RH edge, on face moves. Mantle up onto some slopes, stand, place RPs, then follow the incipient crack to the horizontal break. Finish straight up on good face holds.</climb>  
+  <climb id="60" name="Konked Out" fa="Al Adams, Evan Peacock, Jul 1988." stars="" number="70." length="12m" grade="16" extra="">At the beginning of the notch is a prominent slab on the uphill side. Climb the slab to the ledge, then up the groove and through the bulge on the R.</climb>  
+  <climb id="57" name="Ode to a Robotic Arm" fa="Evan Peacock, Colin Reed, Jun 1990." stars="" number="71." length="15m" grade="19M1" extra="Mixed">Across the small gully right of Anagram is a brushed face with a thin crackline starting at half height. Climb the easy crack to a ledge and a #2RP aid move (or if you have a robotic arm climb it free via a desperately wide pinching layaway - awaiting a FFA). Clip the BR from a small edge, then continue up to a horizontal break and easy ground once the crack is attained.</climb>  
+  <image id="415" src="Mr Quesy App.jpg" height="667" width="500" legend="true" legendTitle="Mr Queasy Buttress"> 
+    <drawing> 
+      <path id="50236" points="332.0,605.0, 218.0,182.0, 251.0,139.0, 255.0,59.0,belay" d="M332.0,605.0C286.4,435.8 221.7,203.4 218.0,182.0C214.3,160.6 244.8,159.8 251.0,139.0C257.2,118.2 261.0,90.5 255.0,59.0" linkedTo="59"/>  
+      <path id="37318" points="482.0,467.0, 374.0,282.0, 322.0,210.0, 291.0,146.0, 255.0,58.0," d="M482.0,467.0C438.8,393.0 392.8,312.2 374.0,282.0C355.2,251.8 336.8,234.3 322.0,210.0C307.2,185.7 302.5,172.0 291.0,146.0C279.5,120.0 261.0,89.5 255.0,58.0" linkedTo="403"/>  
+      <path id="72130" points="485.0,414.0, 353.0,189.0, 297.0,83.0,belay" d="M485.0,414.0C432.2,324.0 376.7,230.7 353.0,189.0C329.3,147.3 319.4,125.4 297.0,83.0" linkedTo="404" lineStyle="dotted"/>  
+      <rect id="23495" x="82" y="256" width="108" height="22" style="black_text_on_solid_white" text="To Zundapp Alcove" arrowDirection="north_west"/> 
+    </drawing>  
+    <legend> 
+      <climb>59</climb>  
+      <climb>403</climb>  
+      <climb>404</climb> 
+    </legend> 
+  </image>  
+  <climb id="58" name="Toes and Thumbs" fa="Greg Aimer, Chrissy Freestone, 1991." length="12m" grade="13" extra="" number="72." stars="">Left of Mr Queasy. Follow the corner/crack system to the ledge and tree.&lt;br/&gt;&lt;br/&gt;Editors Note 2021: Needs a brush</climb>  
+  <climb id="59" name="Mr Queasy" fa="Al Adams, Evan Peacock, Simon Stubbs, Bruce Newman, Sep 1988." stars="" number="73." length="12m" grade="18" extra="">Go down the notch mentioned in Konked Out for 5m and on the L is a short handcrack. Belay at the eucalypt and climb the crack to the horizontal break. Surmount the bulge above for a slightly queasy experience, then reach through to a large ledge.</climb>  
+  <climb id="403" stars="" extra="" number="74." name="Our People Are Nuts" length="12m" grade="18" fa="Jeroen Janson, Lawrence Wonhas, August 2022 (may have had an earlier ascent)">The face to the right of Mr Queasy. Mantle onto the ledge then follow the easy crack until a wedged block. Continue up the finger crack (crux) to the horizontal and then up the bulge to the top</climb>  
+  <climb id="404" stars="" extra="" number="75." name="The Friends We Need / Entheogen" length="15m" grade="16" fa="Jeroen Janson, Lawrence Wonhas, August 2022 (Dave James and Shirley Zeng were beaten to the FA by a week, but added the direct start underneath the boulder at the base)">The big off-width right of 'Our People Are Nuts'. Start at the boulder beneath the base, through the gap, then up the off-width. Bring big cams (#5 and #6) for the upper section.</climb>  
+  <text id="286" class="heading3">Zundapp &amp; Time Warp Buttress</text>  
+  <text id="287" class="text">The large amphitheatre of buttresses above the wattle grove host a range of routes. Located left of Bismark Buttress above the wattle forest. There is a lower-off above Jesus Trousers / Time Warp.</text>  
+  <image id="285" src="Zundapp area.jpg" height="600" width="800" legend="true" legendTitle="Zundapp Buttress"> 
+    <drawing> 
+      <path id="34128" points="257.0,393.0, 256.0,393.0, 249.0,237.0, 250.0,178.0, 250.0,121.0, 253.0,90.0, 258.0,57.0, 251.0,27.0,belay" d="M257.0,393.0C257.0,392.6 256.0,393.4 256.0,393.0C256.0,392.6 249.7,260.6 249.0,237.0C248.3,213.4 249.8,200.8 250.0,178.0C250.2,155.2 249.6,133.5 250.0,121.0C250.4,108.5 251.5,102.4 253.0,90.0C254.5,77.6 258.4,69.3 258.0,57.0C257.6,44.7 253.8,39.0 251.0,27.0" linkedTo="61"/>  
+      <path id="15301" points="735.0,482.0, 697.0,422.0, 650.0,348.0, 623.0,300.0, 600.0,279.0, 589.0,253.0,belay" d="M735.0,482.0C719.8,458.0 712.2,446.0 697.0,422.0C681.8,398.0 661.4,366.8 650.0,348.0C638.6,329.2 630.3,310.1 623.0,300.0C615.7,289.9 606.6,288.1 600.0,279.0C593.4,269.9 593.4,263.4 589.0,253.0" linkedTo="64"/>  
+      <path id="14467" points="368.0,161.0, 370.0,137.0, 365.0,105.0, 356.0,79.0, 352.0,60.0, 338.0,42.0,belay" d="M368.0,161.0C368.8,151.4 370.5,146.6 370.0,137.0C369.5,127.4 367.6,115.7 365.0,105.0C362.4,94.3 358.2,86.5 356.0,79.0C353.8,71.5 355.4,67.0 352.0,60.0C348.6,53.0 343.6,49.2 338.0,42.0" lineStyle="dotted" linkedTo="63"/>  
+      <rect id="12297" x="476" y="147" width="112" height="22" style="white_text_on_solid_black" text="Time Warp Buttress" arrowDirection="south"/>  
+      <rect id="97150" x="614" y="175" width="78" height="22" style="white_text_on_solid_black" text="Twilight Zone" arrowDirection="south"/>  
+      <rect id="70767" x="679" y="209" width="81" height="36" style="white_text_on_solid_black" text="To Spazattack&lt;br/&gt;Buttress" arrowDirection="south_east"/>  
+      <path id="64972" points="582.0,560.0, 532.0,435.0," d="M582.0,560.0C562.0,510.0 552.0,485.0 532.0,435.0" arrow="true" linkedTo="62"/>  
+      <path id="9114" points="625.0,559.0, 569.0,432.0," d="M625.0,559.0C602.6,508.2 591.4,482.8 569.0,432.0" arrow="true" linkedTo="395"/> 
+    </drawing>  
+    <legend> 
+      <climb/>  
+      <climb>61</climb>  
+      <climb>62</climb>  
+      <climb>395</climb>  
+      <climb>63</climb>  
+      <climb>64</climb> 
+    </legend> 
+  </image>  
+  <climb id="61" name="Zundapp" fa="Evan Peacock, Al Adams, Jul 1988." stars="" number="76." length="20m" grade="18" extra="">Up the brushed face with incipient cracks, then continue through the bulge (RPs) and the slab above. Finish up past a small roof / corner to the top of the buttress.</climb>  
+  <climb id="62" name="Sundy Mockry" fa="Evan Peacock, May 1990." stars="" number="77." length="12m" grade="13" extra="">The lichenous finger crack about 5m R of Zundapp.</climb>  
+  <climb id="395" stars="" extra="" number="78." name="Two Tired" length="12m" grade="13" fa="Liam Mangan-Smith, Neale Smith, July 2022">Finger crack 3m right of "Sunday Mockry". Head up until crack widens (Large cam handy). Either continue up to point where where it is possible to blindly step L into groove or enter groove from lowest point.</climb>  
+  <climb id="63" name="Paunch" fa="Peter Jackson, Mendelt Tillema, Feb 1971." stars="" number="79." length="10m" grade="12" extra="">Climb the smooth orange crack through the bulges up the RH side of the buttress.</climb>  
+  <climb id="64" name="No Corruption" fa="Russ Hinze, Terry Lewis, 1975 - 1998." stars="" number="80." length="12m" grade="13" extra="">Found below Fat and Married on an isolated buttress, this route has caused quite a few new leaders to come unstuck on its tricky jams. The route takes the obvious crack up the center. Belay on top and walk-off to the right.</climb>  
+  <image id="426" src="IMG_4827.jpg" height="600" width="800" legend="true" legendTitle="Time Warp Buttress" legendx="9" legendy="7"> 
+    <drawing> 
+      <path id="35251" points="465.0,472.0, 464.0,472.0, 462.0,343.0, 475.0,215.0, 472.0,137.0, 488.0,92.0,lower" d="M465.0,472.0C465.0,471.6 464.0,472.4 464.0,472.0C464.0,471.6 459.8,394.4 462.0,343.0C464.2,291.6 473.5,246.2 475.0,215.0C476.5,183.8 470.0,156.0 472.0,137.0C474.0,118.0 487.6,105.2 488.0,92.0" linkedTo="68"/>  
+      <path id="69608" points="532.0,468.0, 548.0,287.0, 578.0,191.0, 549.0,138.0, 504.0,122.0, 490.0,92.0," d="M532.0,468.0C538.4,395.6 541.4,326.7 548.0,287.0C554.6,247.3 577.8,215.2 578.0,191.0C578.2,166.8 563.0,151.0 549.0,138.0C535.0,125.0 514.4,130.1 504.0,122.0C493.6,113.9 489.6,105.2 490.0,92.0" linkedTo="69"/>  
+      <path id="23195" points="445.0,469.0, 441.0,344.0, 409.0,270.0, 407.0,183.0,belay" d="M445.0,469.0C443.4,419.0 446.7,375.7 441.0,344.0C435.3,312.3 415.7,301.6 409.0,270.0C402.3,238.4 392.8,214.8 407.0,183.0" linkedTo="67"/>  
+      <path id="95354" points="235.0,468.0, 318.0,283.0, 404.0,182.0," d="M235.0,468.0C268.2,394.0 291.0,328.7 318.0,283.0C345.0,237.3 389.8,213.8 404.0,182.0" linkedTo="66"/>  
+      <path id="27958" points="78.0,422.0, 140.0,359.0, 212.0,256.0, 311.0,185.0,belay" d="M78.0,422.0C102.8,396.8 117.8,386.5 140.0,359.0C162.2,331.5 177.8,290.8 212.0,256.0C246.2,221.2 271.4,213.4 311.0,185.0" linkedTo="65"/> 
+    </drawing>  
+    <legend> 
+      <climb>65</climb>  
+      <climb>66</climb>  
+      <climb>67</climb>  
+      <climb>68</climb>  
+      <climb>69</climb> 
+    </legend> 
+  </image>  
+  <climb id="65" name="Fat and Married" fa="Evan Peacock, Tim Olding, Aug 1988." stars="" number="81." length="15m" grade="18" extra="">Climbs the small rounded buttress above No Corruption. Climb the arête using layaways on the RHS then cross left and continue up the face and seams to the top. Rap-off tree.</climb>  
+  <climb id="66" name="Get Out Oscar" fa="Evan Peacock, Colin Reed, Tim Albion, Oct 1990." stars="" number="82." length="12m" grade="17" extra="">Starts just right of the chimney. A couple of unprotected but easy moves lead to a crack and bomber RP protection. Continue straight up into the bushes.</climb>  
+  <climb id="67" name="Stung" fa="Chris Dawson, Mary McWhirther, Sep 1974." stars="" number="83." length="15m" grade="10" extra="">Climbs the short crack to the left of the flake on Jesus Trousers. Bush-bash walk-off or rap-off tree.</climb>  
+  <climb id="68" name="Jesus Trousers" fa="Phil Steane, Pete Steane, Noel Ward, Doug Fife, Oct 1982." stars="" number="84." length="12m" grade="16" extra="">Nice jamming and bridging up the obvious corner-groove. Take care with the large flake. Step right to lower off.</climb>  
+  <climb id="69" name="Time Warp" fa="Pete Steane, Doug Fife, Noel Ward, Oct 1982. Direct start: Nat Duhig, Mike Edwards, Nov 1986." stars="*" number="85." length="12m" grade="18" extra="">Quintessential Lowdina face climbing. Start from the bottom of the buttress and trend right or step onto the face from the RHS of the arete in the gully. Follow the left-trending thin crack up the buttress using layaways, face-holds, and wishful thinking. RPs, small wires and micro-cams are the go. Lower-off.</climb>  
+  <text id="294" class="heading3">The Twilight Zone</text>  
+  <text id="295" class="text">Taking the track further uphill from the Spazattack Buttress will take you to the Twilight Zone. These are a series of short buttresses ending at a gully (Perchance to Dream Buttress). Further to the left from here is the Zundapp and Time Warp Buttress.</text>  
+  <image id="315" src="Perchance.jpg" height="666" width="600" legend="true" legendTitle="Perchance to Dream Buttress"> 
+    <drawing> 
+      <path id="26595" points="186.0,534.0, 185.0,534.0, 181.0,394.0, 171.0,332.0, 156.0,180.0, 152.0,156.0, 141.0,114.0,lower" d="M186.0,534.0C185.6,534.0 185.0,534.4 185.0,534.0C185.0,533.6 182.7,419.1 181.0,394.0C179.3,368.9 173.9,357.0 171.0,332.0C168.1,307.0 157.0,189.7 156.0,180.0C155.0,170.3 154.2,165.5 152.0,156.0C149.8,146.5 145.4,130.8 141.0,114.0" linkedTo="307"/>  
+      <path id="48359" points="536.0,645.0, 475.0,495.0, 429.0,382.0, 426.0,334.0, 433.0,273.0, 436.0,234.0, 406.0,181.0, 375.0,136.0, 332.0,92.0, 289.0,80.0,belay" d="M536.0,645.0C511.6,585.0 493.4,540.2 475.0,495.0C456.6,449.8 434.6,400.4 429.0,382.0C423.4,363.6 425.3,353.2 426.0,334.0C426.7,314.8 431.4,288.6 433.0,273.0C434.6,257.4 440.4,249.0 436.0,234.0C431.6,219.0 417.6,199.6 406.0,181.0C394.4,162.4 389.0,152.8 375.0,136.0C361.0,119.2 347.0,101.7 332.0,92.0C317.0,82.3 306.2,84.8 289.0,80.0" linkedTo="70"/> 
+    </drawing>  
+    <legend> 
+      <climb>307</climb>  
+      <climb>70</climb> 
+    </legend> 
+  </image>  
+  <climb id="346" stars="" extra="" number="86." name="Six shooter" length="10m" grade="17" fa="Henry Garratt, Mark Passier, Christoph Speer, Nov 2021">Just left of Nightmare at 10,000 mm is a gaping off-width. Climb this to the top and tree belay. Take some BD sixes and some finger-sized cams.</climb>  
+  <climb id="307" stars="" extra="" number="87." name="Nightmare at 10,000 mm" length="10m" grade="16" fa="Christoph Speer, Henry Garratt, August 2021">Climb the obvious clean corner crack to the left of Perchance to Dream. Lower-off.</climb>  
+  <climb id="70" name="Perchance to Dream" fa="Garn Cooper, Al Adams, Pete Steane, Dec 1984." stars="*" number="88." length="20m" grade="18" extra="">Seldom done because of the location, but reportedly one of Garn's best FAs. Starts up an unlikely looking face and poised above is a block attached to a gently overhanging arête. Mount this as elegantly as possible and continue up the crack above. Walk-off to climbers left down the gully. A little dirty currently.</climb>  
+  <image id="416" src="Contortionist.jpg" height="667" width="500" legend="true" legendTitle="The Contortionist Buttress"> 
+    <drawing> 
+      <path id="20675" points="228.0,538.0, 227.0,538.0, 208.0,328.0, 197.0,237.0, 247.0,207.0,lower" d="M228.0,538.0C227.6,538.0 227.0,538.4 227.0,538.0C227.0,537.6 211.6,364.5 208.0,328.0C204.4,291.5 189.8,259.2 197.0,237.0C204.2,214.8 227.0,219.0 247.0,207.0" linkedTo="400"/>  
+      <path id="44176" points="419.0,529.0, 347.0,331.0, 310.0,268.0, 292.0,235.0, 252.0,208.0," d="M419.0,529.0C390.2,449.8 358.3,358.0 347.0,331.0C335.7,304.0 317.5,281.0 310.0,268.0C302.5,255.0 302.5,245.8 292.0,235.0C281.5,224.2 268.0,218.8 252.0,208.0" linkedTo="401"/>  
+      <rect id="97175" x="50" y="515" width="132" height="36" style="black_text_on_solid_white" text="To Perchance to Dream&lt;br/&gt;Buttress" arrowDirection="north_west"/>  
+      <rect id="41702" x="70" y="565" width="103" height="36" style="black_text_on_solid_white" text="To Dancing Shoes&lt;br/&gt;Buttress" arrowDirection="south_east"/> 
+    </drawing>  
+    <legend> 
+      <climb>400</climb>  
+      <climb>401</climb> 
+    </legend> 
+  </image>  
+  <climb id="400" stars="" extra="" number="89." name="The Contortionist" length="8m" grade="18" fa="Christoph Speer, Jai Friend, August 2022">The short, thin finger-crack in a groove. Weird but interesting moves. Step right to lower-off.</climb>  
+  <climb id="401" stars="" extra="" number="90." name="The Bearded Lady" length="8m" grade="14" fa="Christoph Speer, Jai Friend, August 2022">The short hand crack 2 m right of The Contortionist to DBB lower-off. Worth doing if you're already here - or just bored with life itself.</climb>  
+  <image id="417" src="Dancing Shoes.jpg" height="667" width="500" legend="true" legendTitle="Dancing Shoes Buttress"> 
+    <drawing> 
+      <path id="5190" points="243.0,639.0, 252.0,409.0, 308.0,289.0, 308.0,121.0, 273.0,84.0,lower" d="M243.0,639.0C246.6,547.0 242.3,461.1 252.0,409.0C261.7,356.9 297.9,341.0 308.0,289.0C318.1,237.0 311.4,141.1 308.0,121.0C304.6,100.9 287.0,98.8 273.0,84.0" linkedTo="402"/>  
+      <rect id="31411" x="19" y="80" width="76" height="36" style="black_text_on_solid_white" text="Contortionist&lt;br/&gt;Buttress" arrowDirection="south"/> 
+    </drawing>  
+    <legend> 
+      <climb>402</climb> 
+    </legend> 
+  </image>  
+  <climb id="402" stars="" extra="Mixed" number="91." name="Dancing Shoes" length="10m" grade="13" fa="Christoph Speer, Jai Friend, August 2022">The slab above Morning Sun, past a #4 cam, single bolt and RPs and micro-cams in the fused seam. Lower-off. A good introductory route to RP and micro-cam placements before tackling the more challenging routes here in this style.</climb>  
+  <text class="heading3" id="164">Spazattack and Bismark Buttress (LHS)</text>  
+  <text id="269" class="text">Located immediately uphill and left of Bismark Buttress. There are a number of lower-offs above the climbs that can be used to descend.</text>  
+  <image id="394" src="IMG_2497 (1).jpg" height="800" width="600" legend="true" legendTitle="Spazattack Buttress LHS"> 
+    <drawing> 
+      <path id="96473" points="31.0,727.0, 30.0,727.0, 94.0,435.0, 123.0,328.0, 129.0,244.0, 149.0,198.0, 159.0,163.0, 191.0,156.0, 198.0,130.0, 226.0,135.0,lower" d="M31.0,727.0C31.1,726.6 29.9,727.4 30.0,727.0C30.1,726.6 83.9,478.2 94.0,435.0C104.1,391.8 116.9,361.1 123.0,328.0C129.1,294.9 125.1,263.7 129.0,244.0C132.9,224.3 143.9,211.7 149.0,198.0C154.1,184.3 149.7,172.3 159.0,163.0C168.3,153.7 182.8,163.0 191.0,156.0C199.2,149.0 188.8,135.5 198.0,130.0C207.2,124.5 219.1,140.7 226.0,135.0" linkedTo="391"/>  
+      <path id="10943" points="322.0,599.0, 290.0,449.0, 282.0,379.0, 257.0,294.0, 246.0,232.0, 242.0,207.0, 247.0,192.0, 236.0,155.0, 226.0,135.0," d="M322.0,599.0C309.2,539.0 295.0,476.7 290.0,449.0C285.0,421.3 287.9,406.6 282.0,379.0C276.1,351.4 263.0,318.5 257.0,294.0C251.0,269.5 247.7,242.0 246.0,232.0C244.3,222.0 241.8,213.3 242.0,207.0C242.2,200.7 247.7,198.3 247.0,192.0C246.3,185.7 239.1,163.4 236.0,155.0C232.9,146.6 219.1,140.7 226.0,135.0" linkedTo="392"/>  
+      <path id="66227" points="415.0,599.0, 417.0,505.0, 460.0,407.0, 395.0,276.0, 351.0,170.0, 326.0,98.0,lower" d="M415.0,599.0C415.8,561.4 408.4,541.6 417.0,505.0C425.6,468.4 464.1,449.6 460.0,407.0C455.9,364.4 414.2,317.7 395.0,276.0C375.8,234.3 362.0,198.4 351.0,170.0C340.0,141.6 336.0,126.8 326.0,98.0" linkedTo="393"/>  
+      <path id="52966" points="595.0,159.0, 522.0,95.0, 476.0,68.0,lower-right" d="M595.0,159.0C565.8,133.4 538.9,108.0 522.0,95.0C505.1,82.0 494.4,78.8 476.0,68.0" arrow="false" linkedTo="71"/>  
+      <path id="73811" points="" d=""/> 
+    </drawing>  
+    <legend> 
+      <climb>391</climb>  
+      <climb>392</climb>  
+      <climb>393</climb>  
+      <climb>71</climb> 
+    </legend> 
+  </image>  
+  <climb id="391" stars="*" extra="" number="92." name="Morning Sun" length="20m" grade="17" fa="Jeroen Jansen, Christoph Speer, July 2022">The furthest line left. Follow the delightful easy crack until you are forced to step right at the top below the thin finger crack. Thoughtful moves follow this to the top of the buttress (crux). Step right to lower-off. Very small cams and wires protect the crux.</climb>  
+  <climb id="392" stars="*" extra="" number="93." name="Things to do While Waiting for the Apocalypse" length="20m" grade="14" fa="Christoph Speer, Jeroen Jansen, July 2022">Consistent and well-protected (use a small wire for the start). Follow the crack-line, with the crux at the top.</climb>  
+  <climb id="393" stars="*" extra="" number="94." name="Mother Earth" length="17m" grade="18" fa="Christoph Speer, Jeroen Jansen, July 2022">Tricky crack climbing. Follow the tricky left leaning hand-crack to the chockstones (keyed-in), mount these into the tomb and head to the top and lower-off. Take a BD #4 - no bigger gear needed.</climb>  
+  <image id="340" src="Bismark LHS.jpg" height="564" width="900" legend="true" legendTitle="Spazattack and Bismark Buttress LHS" legendx="713" legendy="15"> 
+    <drawing> 
+      <path id="65806" points="63.0,351.0, 70.0,310.0, 82.0,286.0, 107.0,265.0, 141.0,240.0, 142.0,198.0, 131.0,162.0, 134.0,132.0, 148.0,115.0, 159.0,101.0,lower" d="M63.0,351.0C65.8,334.6 67.0,320.3 70.0,310.0C73.0,299.7 75.2,294.3 82.0,286.0C88.8,277.7 96.7,273.0 107.0,265.0C117.3,257.0 136.3,253.2 141.0,240.0C145.7,226.8 143.9,212.9 142.0,198.0C140.1,183.1 132.5,174.0 131.0,162.0C129.5,150.0 131.0,140.3 134.0,132.0C137.0,123.7 143.5,120.5 148.0,115.0C152.5,109.5 154.6,106.6 159.0,101.0" linkedTo="71"/>  
+      <path id="97269" points="109.0,391.0, 137.0,333.0, 142.0,301.0, 140.0,275.0, 141.0,240.0," d="M109.0,391.0C120.2,367.8 132.5,345.2 137.0,333.0C141.5,320.8 141.5,311.4 142.0,301.0C142.5,290.6 140.2,285.4 140.0,275.0C139.8,264.6 136.3,253.2 141.0,240.0" linkedTo="72"/>  
+      <path id="89763" points="274.0,451.0, 264.0,381.0, 240.0,332.0, 230.0,250.0, 243.0,221.0, 223.0,179.0, 227.0,111.0,lower" d="M274.0,451.0C270.0,423.0 270.0,402.0 264.0,381.0C258.0,360.0 245.5,353.1 240.0,332.0C234.5,310.9 229.7,262.7 230.0,250.0C230.3,237.3 244.2,233.7 243.0,221.0C241.8,208.3 225.7,197.4 223.0,179.0C220.3,160.6 225.4,138.2 227.0,111.0" linkedTo="73"/>  
+      <path id="55557" points="298.0,429.0, 287.0,377.0, 284.0,308.0, 289.0,265.0, 302.0,251.0, 307.0,213.0, 317.0,191.0, 307.0,155.0, 287.0,133.0,belay" d="M298.0,429.0C293.6,408.2 289.4,398.1 287.0,377.0C284.6,355.9 283.7,325.3 284.0,308.0C284.3,290.7 286.7,272.3 289.0,265.0C291.3,257.7 299.5,258.2 302.0,251.0C304.5,243.8 304.7,222.4 307.0,213.0C309.3,203.6 317.0,200.7 317.0,191.0C317.0,181.3 312.5,165.6 307.0,155.0C301.5,144.4 295.0,141.8 287.0,133.0" linkedTo="74"/>  
+      <path id="72659" points="449.0,457.0, 429.0,394.0, 404.0,371.0, 376.0,345.0, 361.0,311.0, 358.0,280.0, 347.0,251.0, 345.0,211.0, 339.0,178.0, 334.0,155.0, 327.0,130.0,lower" d="M449.0,457.0C441.0,431.8 434.3,406.5 429.0,394.0C423.7,381.5 414.0,380.2 404.0,371.0C394.0,361.8 384.7,357.1 376.0,345.0C367.3,332.9 364.3,323.0 361.0,311.0C357.7,299.0 360.8,292.1 358.0,280.0C355.2,267.9 349.3,263.2 347.0,251.0C344.7,238.8 346.5,224.3 345.0,211.0C343.5,197.7 340.8,187.2 339.0,178.0C337.2,168.8 336.3,164.1 334.0,155.0C331.7,145.9 334.0,137.0 327.0,130.0" linkedTo="75"/>  
+      <path id="94070" points="875.0,477.0, 846.0,402.0, 751.0,345.0, 702.0,319.0, 670.0,241.0, 648.0,202.0, 622.0,190.0, 601.0,170.0, 578.0,158.0, 571.0,140.0, 560.0,116.0,belay" d="M875.0,477.0C863.4,447.0 868.0,425.4 846.0,402.0C824.0,378.6 770.2,356.1 751.0,345.0C731.8,333.9 715.6,336.5 702.0,319.0C688.4,301.5 677.5,257.3 670.0,241.0C662.5,224.7 655.9,210.3 648.0,202.0C640.1,193.7 631.5,196.4 622.0,190.0C612.5,183.6 609.4,176.1 601.0,170.0C592.6,163.9 583.5,163.5 578.0,158.0C572.5,152.5 573.4,147.4 571.0,140.0C568.6,132.6 564.4,125.6 560.0,116.0" linkedTo="80"/>  
+      <path id="28808" points="515.0,459.0, 487.0,365.0, 458.0,303.0, 420.0,216.0, 409.0,198.0, 401.0,165.0,belay" d="M515.0,459.0C503.8,421.4 496.4,390.7 487.0,365.0C477.6,339.3 469.2,328.0 458.0,303.0C446.8,278.0 423.6,223.6 420.0,216.0C416.4,208.4 411.9,205.9 409.0,198.0C406.1,190.1 404.2,178.2 401.0,165.0" linkedTo="78"/>  
+      <path id="6064" points="640.0,382.0, 621.0,332.0, 607.0,288.0, 583.0,259.0, 567.0,215.0, 566.0,188.0, 572.0,160.0, 570.0,140.0," d="M640.0,382.0C632.4,362.0 627.1,349.4 621.0,332.0C614.9,314.6 614.0,301.4 607.0,288.0C600.0,274.6 590.2,272.2 583.0,259.0C575.8,245.8 569.5,225.5 567.0,215.0C564.5,204.5 565.0,198.8 566.0,188.0C567.0,177.2 571.3,168.0 572.0,160.0C572.7,152.0 572.4,147.4 570.0,140.0" linkedTo="79"/>  
+      <path id="68645" points="465.0,473.0, 438.0,390.0, 421.0,349.0, 419.0,321.0, 404.0,280.0, 391.0,250.0, 385.0,211.0, 372.0,165.0, 351.0,135.0, 327.0,129.0," d="M465.0,473.0C454.2,439.8 443.3,402.5 438.0,390.0C432.7,377.5 424.0,359.8 421.0,349.0C418.0,338.2 421.7,331.9 419.0,321.0C416.3,310.1 408.8,292.2 404.0,280.0C399.2,267.8 394.5,262.6 391.0,250.0C387.5,237.4 388.4,226.4 385.0,211.0C381.6,195.6 378.0,178.4 372.0,165.0C366.0,151.6 358.7,141.2 351.0,135.0C343.3,128.8 334.0,136.0 327.0,129.0" linkedTo="76"/>  
+      <path id="45450" points="" d=""/>  
+      <path id="57485" points="37.0,341.0, 50.0,261.0, 55.0,234.0, 65.0,191.0, 73.0,151.0, 84.0,112.0,lower-left" d="M37.0,341.0C42.2,309.0 48.2,271.8 50.0,261.0C51.8,250.2 52.7,244.7 55.0,234.0C57.3,223.3 61.5,206.9 65.0,191.0C68.5,175.1 69.2,166.8 73.0,151.0C76.8,135.2 79.6,127.6 84.0,112.0" linkedTo="393"/>  
+      <path id="63069" points="20.0,313.0, 34.0,229.0, 42.0,196.0, 55.0,159.0, 63.0,127.0, 59.0,108.0,lower" d="M20.0,313.0C25.6,279.4 31.5,242.3 34.0,229.0C36.5,215.7 38.1,209.0 42.0,196.0C45.9,183.0 51.2,171.6 55.0,159.0C58.8,146.4 62.4,134.7 63.0,127.0C63.6,119.3 60.6,115.6 59.0,108.0" linkedTo="392"/>  
+      <path id="41872" points=".0,257.0, 13.0,156.0, 27.0,140.0, 33.0,109.0, 59.0,106.0," d="M.0,257.0C5.2,216.6 11.1,164.3 13.0,156.0C14.9,147.7 23.7,147.8 27.0,140.0C30.3,132.2 25.8,116.6 33.0,109.0C40.2,101.4 48.6,107.2 59.0,106.0" linkedTo="391"/> 
+    </drawing>  
+    <legend> 
+      <climb/>  
+      <climb>391</climb>  
+      <climb>392</climb>  
+      <climb>393</climb>  
+      <climb>71</climb>  
+      <climb>72</climb>  
+      <climb>73</climb>  
+      <climb>74</climb>  
+      <climb>75</climb>  
+      <climb>76</climb>  
+      <climb>78</climb>  
+      <climb>79</climb>  
+      <climb>80</climb> 
+    </legend> 
+  </image>  
+  <climb id="71" name="Spazattack" fa="Garn Cooper, Pete Steane, Oct 1984." stars="*" number="95." length="20m" grade="18" extra="">Good climbing with poor protection, requiring leaders to be confident at the grade. Start on the far LHS of the buttress and climb the face / flake, trending right to the horizontal break at 6m. Commit to the bulge and seam-line above the ledge, aiming for the horizontal break above for some small cams. Continue up the face and LHS arete above with RPs and micro-cams for protection to a lower-off.</climb>  
+  <climb id="72" name="Spazattack Direct" fa="Top Rope: Evan Peacock, Justin Kennedy, Oct 1985. FFA: Evan Peacock, Colin Reed, Jun 1990.  Re-bolted in 2022." stars="*" number="96." length="20m" grade="23" extra="Mixed">The direct start to Spazattack, which takes the difficult right trending thin crack/layback to meet the original route at the ledge. Bold moves above the bolt to reach the RP placement before the ledge.</climb>  
+  <climb id="73" name="Drury Line" fa="Evan Peacock, Steve Ford, Feb 1992.  Re-bolted / retro-bolted in 2022 with FA permission." stars="**" number="97." length="22m" grade="22" extra="Mixed">Excellent technical climbing on great rock, this route was once a hefty and scary sandbag that was given the original grade of 20. The route is still challenging at 22, and is now well-protected with the addition of the first 4 bolts(!).&lt;br/&gt;&lt;br/&gt;Climb the face to the horizontal break (finger sized cams) and a stance above. Tackle the boulder problem, trending right into a stance below the first roof. Clip the last bolt with a long draw and hand traverse left around the roof to access the groove crack above at a tenuous stance. Small wires and micro-cams lead through this to a lower-off.</climb>  
+  <climb id="74" name="Being A Pirate" fa="Evan Peacock, Sep 1992." stars="" number="98." length="20m" grade="26" extra="Mixed">Good rock, but the upper bolted line ventures very close to R chimney. The overhanging arête 3m R of Drury Line. A desperate technical slab, followed by a strenuous journey up the arête around the roof. 4 FH's (some bolts rusted - inspect before clipping).</climb>  
+  <climb id="75" name="Hooter" fa="Peter Jackson, Noel Ward, Doug Bruce, 1984." stars="**" number="99." length="23m" grade="17" extra="">A grade test-piece that provides a few heart-in-mouth moments, well before you've even reached the crux.&lt;br/&gt;&lt;br/&gt;Climb onto the face of the buttress from the RHS, arrange your gear, then follow the exciting rising traverse left across a thin flake into a stance below a piton (back it up). Continue straight-up the face and thin crack with the reassurance of micro-cams. Mantle easily and keep following the line, finishing up the short wall above to a lower-off.</climb>  
+  <climb id="76" name="Grasshopper Island" fa="Evan Peacock, Tim Albion, Colin Reed, 1992." stars="" number="100." length="23m" grade="15" extra="">Companion line to Hooter. Start as for Hooter, but continue up the arete instead of traversing out left. Weave between the thin crack on the right, and the crack left of the arete to find the gear placements. RP's or a large cam come in handy between the first and second rooflet.</climb>  
+  <climb id="77" name="Wetcheck" fa="John Moore, Peter Jackson, Aug 1970." stars="" number="101." length="20m" grade="13" extra="">The straight wide crack just right of Grasshopper Island. Minimal jamming required.</climb>  
+  <climb id="78" name="Mrs Malaprop" fa="Evan Peacock, Al Adams, Grant Rowbottom, Aug 1992." stars="" number="102." length="15m" grade="17" extra="">The lichenous slab / face in the alcove just right of Wetcheck. Nice moves, but the runners are all dubious (small wires).</climb>  
+  <climb id="79" name="V8 Donk" fa="Evan Peacock, Steve Ford, Feb 1992." stars="" number="103." length="25m" grade="18" extra="Mixed">Start immediately left of Hood on a ledge about 10m up. Gain the ledge from the left and climb to the horizontal break. Crux to the small ledge, then follow the #1 RP crack, before a mantle to easier ground. One carrot bolt (looks OK) and 1 FH (rusted - inspect before clipping).&lt;br/&gt;&lt;br/&gt;Editors Note 2022: Route needs a clean before becoming approachable.</climb>  
+  <text class="heading3" id="165">Bismark Buttress (Centre)</text>  
+  <text id="240" class="text">The first part of the cliff you'll come to if you followed the pink-taped track. There's a suite of routes on this buttress and a lower-off at the top of Bismark. The initial 10m of easy (and lichenous) rock can be avoided by walking in to the base of the climbs via the RHS past Illegal Move (facing the cliff).</text>  
+  <image id="227" src="IMG20210328181515.jpg" height="675" width="900" legend="true" legendTitle="Bismark Buttress"> 
+    <drawing> 
+      <rect id="37922" x="634" y="173" width="83" height="22" style="black_text_on_solid_yellow" text="Virag Buttress" arrowDirection="south"/>  
+      <path id="68783" points="561.0,371.0, 554.0,342.0, 542.0,322.0, 556.0,160.0, 548.0,107.0,lower" d="M561.0,371.0C558.2,359.4 557.4,350.7 554.0,342.0C550.6,333.3 541.9,331.3 542.0,322.0C542.1,312.7 555.5,178.1 556.0,160.0C556.5,141.9 551.2,128.2 548.0,107.0" linkedTo="82"/>  
+      <path id="21000" points="358.0,388.0, 358.0,281.0, 359.0,241.0, 361.0,201.0,belay" d="M358.0,388.0C355.9,372.6 357.9,297.0 358.0,281.0C358.1,265.0 358.4,257.0 359.0,241.0C359.6,225.0 360.2,217.0 361.0,201.0" linkedTo="77" lineStyle="dotted"/>  
+      <rect id="73340" x="171" y="144" width="112" height="22" style="black_text_on_solid_yellow" text="Spazattack Buttress" arrowDirection="south"/>  
+      <rect id="25043" x="464" y="19" width="97" height="22" style="black_text_on_solid_yellow" text="Bismark Buttress" arrowDirection="south"/>  
+      <path id="91835" points="540.0,362.0, 521.0,301.0, 524.0,193.0, 555.0,160.0," d="M540.0,362.0C532.4,337.6 523.4,326.4 521.0,301.0C518.6,275.6 519.8,210.6 524.0,193.0C528.2,175.4 554.5,178.1 555.0,160.0" linkedTo="81"/>  
+      <path id="83743" points="518.0,368.0, 514.0,323.0, 459.0,289.0, 473.0,202.0, 435.0,174.0, 446.0,124.0,belay" d="M518.0,368.0C516.4,350.0 524.8,337.5 514.0,323.0C503.2,308.5 467.3,313.5 459.0,289.0C450.7,264.5 476.9,220.5 473.0,202.0C469.1,183.5 441.2,191.8 435.0,174.0C428.8,156.2 441.6,144.0 446.0,124.0" linkedTo="80" arrow="false"/>  
+      <path id="7775" points="358.0,388.0, 339.0,354.0, 318.0,323.0, 311.0,252.0, 320.0,188.0,lower" d="M358.0,388.0C355.9,372.6 346.8,366.8 339.0,354.0C331.2,341.2 322.0,337.4 318.0,323.0C314.0,308.6 310.6,277.8 311.0,252.0C311.4,226.2 316.4,213.6 320.0,188.0" lineStyle="dotted" linkedTo="75"/>  
+      <path id="74212" points="600.0,360.0, 587.0,329.0, 582.0,253.0, 555.0,160.0," d="M600.0,360.0C594.8,347.6 589.2,342.3 587.0,329.0C584.8,315.7 587.7,282.9 582.0,253.0C576.3,223.1 554.5,178.1 555.0,160.0" linkedTo="83"/>  
+      <path id="13236" points="" d=""/>  
+      <rect id="78404" x="314" y="524" width="104" height="22" style="black_text_on_solid_white" text="To LHS Buttresses" arrowDirection="west"/>  
+      <rect id="66174" x="323" y="470" width="94" height="50" style="black_text_on_solid_white" text="To Spazattack &amp;&lt;br/&gt;Twilight Zone&lt;br/&gt;Buttresses" arrowDirection="north_west"/>  
+      <rect id="44838" x="609" y="606" width="172" height="22" style="black_text_on_solid_white" text="To Virag &amp; and RHS Buttresses" arrowDirection="north_east"/> 
+    </drawing>  
+    <legend> 
+      <climb/>  
+      <climb>75</climb>  
+      <climb>77</climb>  
+      <climb>80</climb>  
+      <climb>81</climb>  
+      <climb>82</climb>  
+      <climb>83</climb> 
+    </legend> 
+  </image>  
+  <climb id="80" name="Hood" fa="Michael McHugh, Robert McMahon, 1968." stars="*" number="104." length="30m" grade="16" extra="">The first route climbed at Lowdina. Add a star if you like old school adventures. Start as for Bismark for 2m, then hand jam left onto the nose following the horizontal line to the base of the wide crack. Go up the chimney / wide crack system until it ends at the massive roofs. Step out left here and follow the system up to belay on top. Walk-off down the back.</climb>  
+  <climb id="81" name="Subvert the Dominant Paradigm" fa="Garn Cooper, Pete Steane, 1986." stars="**" number="105." length="20m" grade="16" extra="">Good exposed climbing. Start as for Hood to establish yourself in the crack-line just to the left of Bismark. Follow this straight-up until you reach the big roof, then make some cool moves out right using the massive flake to finish up the Bismark chimney to the lower-off.</climb>  
+  <climb id="82" name="Bismark" fa="Michael McHugh, Peter Jackson, 1968." stars="*" number="106." length="20m" grade="15" extra="">The grunty looking wide crack in the prow of the Buttress is actually quite benevolent. Up the crack in the prow to the bulge and through it using small holds on the right. Continue past the small rooves and bridge the chimney to the top. DBB Lower-off.</climb>  
+  <text id="370" class="heading3">Bismark Buttress (RHS)</text>  
+  <image id="373" src="Bismark RHS.jpg" height="556" width="800" legend="true" legendTitle="Bismark Buttress RHS" legendx="633" legendy="10"> 
+    <drawing> 
+      <path id="62068" points="57.0,266.0, 97.0,194.0, 164.0,129.0, 191.0,106.0, 239.0,64.0, 258.0,49.0, 306.0,25.0,lower-left" d="M57.0,266.0C73.0,237.2 76.7,220.0 97.0,194.0C117.3,168.0 153.6,138.7 164.0,129.0C174.4,119.3 180.3,115.3 191.0,106.0C201.7,96.7 231.6,70.3 239.0,64.0C246.4,57.7 249.6,53.9 258.0,49.0C266.4,44.1 286.8,34.6 306.0,25.0" linkedTo="83"/>  
+      <path id="73267" points="285.0,446.0, 338.0,284.0, 312.0,194.0, 350.0,140.0, 371.0,76.0,lower" d="M285.0,446.0C306.2,381.2 334.0,321.3 338.0,284.0C342.0,246.7 309.8,220.3 312.0,194.0C314.2,167.7 338.2,163.6 350.0,140.0C361.8,116.4 362.6,101.6 371.0,76.0" linkedTo="84"/>  
+      <path id="25934" points="470.0,539.0, 462.0,325.0, 431.0,205.0, 452.0,141.0, 456.0,90.0,belay" d="M470.0,539.0C466.8,453.4 467.7,374.2 462.0,325.0C456.3,275.8 432.5,231.9 431.0,205.0C429.5,178.1 447.7,161.0 452.0,141.0C456.3,121.0 454.4,110.4 456.0,90.0" linkedTo="86"/>  
+      <path id="21845" points="786.0,334.0, 636.0,142.0, 598.0,86.0, 563.0,42.0,belay" d="M786.0,334.0C726.0,257.2 652.4,163.6 636.0,142.0C619.6,120.4 611.3,104.2 598.0,86.0C584.7,67.8 577.0,59.6 563.0,42.0" linkedTo="87"/>  
+      <rect id="83426" x="415" y="31" width="81" height="22" style="black_text_on_solid_white" text="Walk-off right" arrowDirection="east"/> 
+    </drawing>  
+    <legend> 
+      <climb/>  
+      <climb>83</climb>  
+      <climb>84</climb>  
+      <climb>86</climb>  
+      <climb>87</climb> 
+    </legend> 
+  </image>  
+  <climb id="83" name="Doug's Rat Roxanne" fa="Evan Peacock, Steve Ford, Jun 1991.  Re-bolted / Retro-bolted (with FA permission) in 2022." stars="" number="107." length="20m" grade="22" extra="Mixed">Nice but short-lived climbing on the LHS arete and face. Starting from the top of the boulder, difficulties past the 3 bolts to a ledge. Finish up the easy corner and chimney as for Bismark and lower-off. Take a single rack of cams (BD# 0.3 - 2) for gear above the bolts.</climb>  
+  <climb id="84" name="Felix" fa="Evan Peacock, Steve Ford, Grant Rowbottom, Aug 1992. Re-bolted / Retro-bolted (with FA permission) in 2023" stars="**" number="108." length="15m" grade="18" extra="Mixed">Great steep climbing that is both well-protected and unlikely at the grade. Into the gully, then step-out left and follow the arete, face and intermittent cracks to a final step left at the top to lower-off. Take small/medium wires and cams from BD #0.2 - #3 to supplement the bolts. Don't clip the old FH.</climb>  
+  <climb id="85" name="Motorcycle Mama" fa="Evan Peacock, May 1990." stars="" number="109." length="12m" grade="12" extra="">A typical example of the Lowdina scene in the 90s and most likely a sandbag. Start up in the gully above Felix and follow the obvious crack (careful of loose rock at the top). Walk-off right.</climb>  
+  <climb id="86" name="Illegal Move" fa="Garn Cooper, Al Adams, Sep 1985. Re-bolted in 2022" stars="*" number="110." length="15m" grade="19" extra="Mixed">Technical climbing. Pre-clipping the high bolt from the LHS first is a good idea. From the base of the buttress, boulder up the face to a stance on a narrow ledge. More bouldery moves past the bolt lead into a short finger crack and an easier finish. Trad belay and simple walk-off to the right. Take small wires and a single rack of cams from BD #0.3 - #2.</climb>  
+  <climb id="87" name="Otto Sausages" fa="Evan Peacock, Grant Rowbottom, Steve Ford, Aug 1992." stars="" number="111." length="12m" grade="18" extra="">This climb has been forever changed since a huge section of the buttress has detached itself - the route is no longer the same as described below (Ed. - June 2025)&lt;br/&gt;&lt;br/&gt;Once a nice climb on RP's, now covered in lichen. Climb the thin crack to a horizontal break - careful of the hanging block on the left. Easy walk-off to the right down the gully.</climb>  
+  <text id="369" class="heading3">Bonsai Buttress</text>  
+  <text id="421" class="text">Located up the gully left of the Virag Buttress and above Illegal Move, where a clean orange/gray face stands at the head of the gully. Lower-off at the top.</text>  
+  <image id="266" src="bonsai1.jpg" height="800" width="600" legend="true" legendTitle="Bonsai Buttress"> 
+    <drawing> 
+      <path id="90170" points="223.0,524.0, 284.0,275.0, 381.0,192.0, 338.0,95.0,lower" d="M223.0,524.0C247.4,424.4 262.1,321.1 284.0,275.0C305.9,228.9 368.8,232.7 381.0,192.0C393.2,151.3 355.2,133.8 338.0,95.0" linkedTo="88"/>  
+      <path id="51744" points="" d="" linkedTo="88"/>  
+      <path id="49951" points="192.0,490.0, 257.0,266.0, 284.0,126.0, 335.0,95.0," d="M192.0,490.0C218.0,400.4 243.0,321.3 257.0,266.0C271.0,210.7 274.1,147.7 284.0,126.0C293.9,104.3 314.6,107.4 335.0,95.0" linkedTo="296"/>  
+      <path id="64239" points="" d=""/> 
+    </drawing>  
+    <legend> 
+      <climb>296</climb>  
+      <climb>88</climb> 
+    </legend> 
+  </image>  
+  <climb id="296" stars="*" extra="3Þ" number="112." name="Ukiyo-e" length="8m" grade="21" fa="H Jackson and M Brown July 2021">Start at bottom left of the Bonsai wall. Up the centre of the wall, using left arete as needed, then finish up left arete to the crux at the top.</climb>  
+  <climb id="88" name="Bonsai" fa="Marcel Jackson, Peter Jackson, Apr 1990 (2 additional bolts added with permission of FA in 2021)." stars="*" number="113." length="8m" grade="24" extra="3Þ">Originally a bold start, 2 additional bolts were added to save some ankles. From the bottom L of the face, climb up the line of face holds past a RP#3 to an unusual crux move on the upper arete (choose either a desperate dyno or cryptic static move). Lower-off. A variant start exists on the RHS of the arete - place a small cam in seam and move up to join the original line at the second bolt.</climb>  
+  <text class="heading3" id="166">Virag Buttress</text>  
+  <text id="238" class="text">A popular buttress. Located just uphill and to the right of Bismark. A lower-off is located at the top of Virag for descent from the climbs.</text>  
+  <image id="360" src="Virag new.jpg" height="933" width="700" legend="true" legendTitle="Virag Buttress" legendx="17" legendy="11"> 
+    <drawing> 
+      <path id="46894" points="37.0,736.0, 36.0,736.0, 127.0,560.0, 174.0,457.0, 208.0,378.0, 241.0,314.0, 262.0,261.0, 271.0,227.0, 287.0,188.0, 303.0,138.0, 334.0,105.0, 356.0,78.0, 365.0,63.0,belay" d="M37.0,736.0C37.2,735.6 35.8,736.4 36.0,736.0C36.2,735.6 106.9,600.6 127.0,560.0C147.1,519.4 160.0,488.4 174.0,457.0C188.0,425.6 195.8,404.1 208.0,378.0C220.2,351.9 231.4,334.7 241.0,314.0C250.6,293.3 257.4,274.3 262.0,261.0C266.6,247.7 266.4,240.3 271.0,227.0C275.6,213.7 281.3,203.9 287.0,188.0C292.7,172.1 294.1,153.8 303.0,138.0C311.9,122.2 324.8,115.4 334.0,105.0C343.2,94.6 351.8,83.6 356.0,78.0C360.2,72.4 361.4,69.0 365.0,63.0" linkedTo="90"/>  
+      <path id="96165" points="316.0,823.0, 343.0,580.0, 376.0,465.0, 402.0,267.0, 424.0,214.0, 445.0,101.0, 450.0,76.0, 465.0,65.0,lower" d="M316.0,823.0C326.8,725.8 335.1,627.2 343.0,580.0C350.9,532.8 367.1,512.0 376.0,465.0C384.9,418.0 397.7,289.5 402.0,267.0C406.3,244.5 418.2,236.2 424.0,214.0C429.8,191.8 443.1,111.0 445.0,101.0C446.9,91.0 444.6,81.2 450.0,76.0C455.4,70.8 459.6,70.2 465.0,65.0" linkedTo="92"/>  
+      <path id="40743" points="146.0,857.0, 270.0,478.0, 323.0,348.0, 351.0,232.0, 355.0,197.0, 372.0,132.0, 395.0,94.0, 411.0,75.0, 463.0,62.0," d="M146.0,857.0C195.6,705.4 251.6,531.0 270.0,478.0C288.4,425.0 308.1,393.3 323.0,348.0C337.9,302.7 348.1,245.8 351.0,232.0C353.9,218.2 352.1,210.8 355.0,197.0C357.9,183.2 365.6,148.6 372.0,132.0C378.4,115.4 389.4,102.2 395.0,94.0C400.6,85.8 402.0,79.2 411.0,75.0C420.0,70.8 457.6,67.2 463.0,62.0" linkedTo="91"/>  
+      <path id="41643" points="395.0,828.0, 438.0,695.0, 473.0,612.0, 479.0,504.0, 472.0,438.0, 497.0,356.0, 559.0,271.0, 557.0,210.0, 540.0,130.0, 522.0,84.0, 466.0,63.0," d="M395.0,828.0C412.2,774.8 425.8,728.9 438.0,695.0C450.2,661.1 465.4,647.2 473.0,612.0C480.6,576.8 479.2,530.5 479.0,504.0C478.8,477.5 468.8,464.4 472.0,438.0C475.2,411.6 481.2,386.4 497.0,356.0C512.8,325.6 549.7,293.6 559.0,271.0C568.3,248.4 560.3,234.2 557.0,210.0C553.7,185.8 545.3,149.0 540.0,130.0C534.7,111.0 536.6,97.3 522.0,84.0C507.4,70.7 460.6,68.2 466.0,63.0" linkedTo="93"/>  
+      <rect id="13435" x="159" y="141" width="90" height="22" style="black_text_on_solid_white" text="Bonsai Buttress" arrowDirection="south_west"/>  
+      <path id="54733" points="366.0,63.0, 408.0,67.0, 466.0,62.0," d="M366.0,63.0C382.8,64.6 391.1,67.2 408.0,67.0C424.9,66.8 460.6,67.2 466.0,62.0" lineStyle="dashed"/>  
+      <rect id="74722" x="464" y="888" width="179" height="22" style="black_text_on_solid_white" text="To The Gully &amp; Sweetie Buttress" arrowDirection="east"/> 
+    </drawing>  
+    <legend> 
+      <climb>90</climb>  
+      <climb>91</climb>  
+      <climb>92</climb>  
+      <climb>93</climb> 
+    </legend> 
+  </image>  
+  <climb id="89" name="Squawk" fa="Evan Peacock, Al Adams, Oct 1988." stars="" number="114." length="23m" grade="17" extra="">Named for the falcons who nested near here in the late 80's. Start immediately left around the corner from Ungar. Follow the thin fused crack (dust-off your RPs) through the series of ledges - face climb, mantle, face climb, mantle... finishing up the wide crack. Poor protection.</climb>  
+  <climb id="90" name="Ungar" fa="John Moore, Peter Jackson, Sep 1970." stars="*" number="115." length="25m" grade="17" extra="">Tape-up. Starting just left of Plastacine Thylacine is a nice looking crack. Jam the fist to hand size crack through a series of bulges, each one a little more difficult than the last. Climb the short wall or chimney above when the crack ends on the ledge and make your way to the DBB above Virag.</climb>  
+  <climb id="91" name="Plastacine Thylacine" fa="Evan Peacock, Colin Reed, Steve Ford, May 1990. Re-bolted / Retro-bolted in 2021 (with FA permission)." stars="**" number="116." length="25m" grade="22" extra="Mixed">Originally a bold lead with two carrot bolts and some RP placements that were unusually difficult to place on lead - now more approachable since some extra bolts have been added with permission from the FA. Start on the platform 3m L and downhill from Virag, at the base of the bulging face/arete. Climb boldly up the seam in the bulge to the first bolt, then continue up the arete using holds on the R wall (crux) to the horizontal break (0.3 Camelot). Weave up the upper face past a small wire and 3 more bolts, before exiting R to the easy wide crack which is followed into Virag.&lt;br/&gt;&lt;br/&gt;Gear: a few draws, one long draw, small wires or RPs, plus a few cams between 0.3 and 2.</climb>  
+  <climb id="92" name="Virag" fa="Michael McHugh, Peter Jackson, Jan 1971." stars="**" number="117." length="25m" grade="17" extra="">An old-school classic. Climb the initial corner past the wonky spike and bridge out through the roof. Haul yourself up into the wide crack (big cam useful) and up this to reach the salvation of a face hold on the left-hand edge. Follow the hand-crack and either finish left around the corner or go direct up the wall (better) to finish at the DBB lower-off.</climb>  
+  <climb id="93" name="Wolfetone" fa="Robert McMahon, Peter Jackson, Nov 1969." stars="**" number="118." length="25m" grade="18" extra="">Originally an aid-route, this thin layback corner still regularly spits-out aspiring leaders - fortunately the gear is bomber. Climb the right trending crack to a tricky exit and stance below the corner. Layback the difficult thin corner to a stance, then continue up the fist crack to the top. Either finish through the chimney at the top or climb the wall to the anchor direct. Lower-off.</climb>  
+  <climb id="96" name="Mr Whimpy" fa="Noel Ward, Peter Jackson, Jul 1984." stars="" number="119." length="12m" grade="16" extra="">From Wolfetone, move along to the second small buttress just R. Climb straight up the front of the buttress on flakes to the ledge on the R edge. Clip the fixed peg, then move back L onto the face of the summit block and up to finish.</climb>  
+  <climb id="94" name="A Salted Battery" fa=" Evan Peacock, Grant Rowbottom, Sep 1992." stars="" number="120." length="8m" grade="25" extra="2Þ">The very steep face route on the back of Wolfetone. Start L of Baby Animals and climb up past 2 FH (stick clip the first). Good fun! No lower-off. Best to continue up the Wolftone chimney and belay at the Virag anchor.</climb>  
+  <text id="275" class="heading3">The Gully</text>  
+  <text id="276" class="text">The Gully uphill and to the right of Virag Buttress.</text>  
+  <image id="361" src="Fruitless new.jpg" height="980" width="600" legend="true" legendTitle="Fruitless Buttress" legendx="20" legendy="17"> 
+    <drawing> 
+      <path id="20228" points="89.0,871.0, 164.0,651.0, 242.0,496.0, 262.0,436.0, 286.0,402.0, 331.0,362.0, 355.0,284.0, 379.0,259.0,belay" d="M89.0,871.0C119.0,783.0 137.8,715.3 164.0,651.0C190.2,586.7 231.5,519.0 242.0,496.0C252.5,473.0 254.9,451.1 262.0,436.0C269.1,420.9 274.6,414.2 286.0,402.0C297.4,389.8 318.8,382.8 331.0,362.0C343.2,341.2 349.1,296.6 355.0,284.0C360.9,271.4 369.4,269.0 379.0,259.0" linkedTo="97"/>  
+      <path id="46742" points="487.0,242.0, 494.0,149.0, 504.0,85.0,belay" d="M487.0,242.0C489.8,204.8 491.2,174.8 494.0,149.0C496.8,123.2 500.0,110.6 504.0,85.0" linkedTo="98"/>  
+      <rect id="15214" x="424" y="910" width="113" height="22" style="black_text_on_solid_white" text="To Sweetie Buttress" arrowDirection="south_east"/> 
+    </drawing>  
+    <legend> 
+      <climb>97</climb>  
+      <climb>98</climb> 
+    </legend> 
+  </image>  
+  <climb id="95" name="Baby Animals" fa="Lucas Bottomley, Richard Bottomley, Anna Hasan, Apr 1991." length="8m" grade="16" extra="" number="121." stars="">From Fruitless contour around L for about 20m to some largish boulders and a small face cleaned by rockfall. Climb the crack (small wires), with an interesting crux for short runts.</climb>  
+  <climb id="97" name="Fruitless" fa="Garn Cooper, Pete Steane, Sep 1984." stars="" number="122." length="12m" grade="18" extra="">Climb the face of the buttress for 6 m to the ledge below the small roof, move L around it, then back R to the crack and the top. A little mossy at present but still approachable.</climb>  
+  <climb id="98" name="Bumper Crop" fa="Garn Cooper, Pete Steane, Sep 1984." length="8m" grade="12" extra="" number="123." stars="">Climbs the short orange corner crack at the top of Fruitless. Good for those learning to jam.</climb>  
+  <climb id="99" name="Old Man's Hands" fa="Stuart Scott, Adrian Herington, 1981." length="6m" grade="9" extra="" number="124." stars="">The small, dirty handcrack past a bulge about 10 m R and up the gully from Fruitless. Start on the LH side of the gully just before a huge boulder.</climb>  
+  <climb id="100" name="Good O's From Heaven" fa="Evan Peacock, Mar 1990." length="10m" grade="25" extra="Mixed (carrots)" number="125." stars="">The face immediately L and around the corner from Surprise Surprise and protected with a carrot bolt.&lt;br/&gt;&lt;br/&gt;Editors Note 2021: Currently overgrown and hidden by a tree at the base of the route</climb>  
+  <climb id="101" name="Surprise, Surprise" fa="Evan Peacock, Colin Reed, Nov 1989." length="10m" grade="22" extra="Mixed (carrots)" number="126." stars="">Harder than it looks. Uphill and L of Sweetie and behind that buttress is a brushed slab protected by three carrot bolts. The climb is directly opposite Old Mans Hands, across the gully. Climb easily to the first bolt, then move up R to a small scoop. After the second bolt move up to another bolt then the top. Walk-off.&lt;br/&gt;&lt;br/&gt;Editors Note 2021: In need of a brush.</climb>  
+  <text class="heading3" id="167">Sweetie Buttress</text>  
+  <text id="273" class="text">The tall buttress located just right of The Gully as you head along the track. Lower-off at top.</text>  
+  <image id="425" src="IMG_4622.jpg" height="800" width="600" legend="true" legendTitle="Sweetie Buttress"> 
+    <drawing> 
+      <path id="54517" points="56.0,564.0, 150.0,363.0, 183.0,270.0, 228.0,215.0, 315.0,136.0, 313.0,87.0,lower" d="M56.0,564.0C93.6,483.6 134.3,399.2 150.0,363.0C165.7,326.8 169.7,295.1 183.0,270.0C196.3,244.9 208.1,235.3 228.0,215.0C247.9,194.7 308.8,154.6 315.0,136.0C321.2,117.4 313.8,106.6 313.0,87.0" linkedTo="102"/>  
+      <path id="10893" points="104.0,631.0, 211.0,342.0, 333.0,212.0, 316.0,137.0," d="M104.0,631.0C146.8,515.4 176.8,404.6 211.0,342.0C245.2,279.4 319.0,239.4 333.0,212.0C347.0,184.6 309.8,155.6 316.0,137.0" linkedTo="103"/>  
+      <path id="57194" points="569.0,643.0, 451.0,332.0, 386.0,163.0, 326.0,119.0, 314.0,92.0," d="M569.0,643.0C521.8,518.6 476.8,399.7 451.0,332.0C425.2,264.3 401.1,188.7 386.0,163.0C370.9,137.3 334.4,127.3 326.0,119.0C317.6,110.7 318.8,102.8 314.0,92.0" linkedTo="104"/>  
+      <rect id="75480" x="72" y="724" width="71" height="22" style="black_text_on_solid_white" text="To the Gully" arrowDirection="west"/>  
+      <rect id="15914" x="454" y="743" width="96" height="22" style="black_text_on_solid_white" text="To Yoda Buttress" arrowDirection="east"/> 
+    </drawing>  
+    <legend> 
+      <climb>102</climb>  
+      <climb>103</climb>  
+      <climb>104</climb> 
+    </legend> 
+  </image>  
+  <climb id="102" name="Acerb" fa="Evan Peacock, Colin Reed, Nov 1989. Re-bolted in 2022." stars="**" number="127." length="20m" grade="22" extra="Mixed">A highly memorable route which is airy and exciting - reach over and clip the first bolt from the gully before starting. Climb the face and left arete past two bolts into a stance at the base of the sloping roof (crux). Arrange your gear (small cams useful), then launch out right on underclings and finish up Sweetie to the lower-off.</climb>  
+  <climb id="103" name="Onklunk" fa="Evan Peacock, Colin Reed, May 1990." stars="**" number="128." length="20m" grade="25" extra="Mixed (carrots)">Carrot bolts to be replaced soon. Start up the thin flake and head out right to clip the first bolt on the lip of the roof. Technical moves lead out right to a stance and the second bolt. Trend back left and climb up on side-pulls and a tiny foothold (crux) to join Acerb. Finish up this and lower-off.</climb>  
+  <climb id="104" name="Sweetie" fa="Peter Jackson, Mendelt Tillema, Mar 1971." stars="*" number="129." length="20m" grade="12" extra="">The blackberry bush has returned after a mammoth cleaning effort in 2022 - awaits a gardener to return. Up the wide crack to a ledge, climb the face then hand traverse left, finishing up the crack to a lower-off.</climb>  
+  <text id="241" class="heading3">Yoda Buttress</text>  
+  <text id="242" class="text">The next buttress right from Sweetie in a recess. There is a lower-off above Chocolate and Brittle Little Mothers.</text>  
+  <image id="363" src="Chocolate new.jpg" height="933" width="700" legend="true" legendTitle="Yoda Buttress"> 
+    <drawing> 
+      <path id="71509" points="418.0,782.0, 388.0,639.0, 376.0,554.0, 362.0,424.0, 358.0,394.0, 361.0,359.0, 349.0,301.0, 329.0,210.0, 339.0,188.0,lower" d="M418.0,782.0C406.0,724.8 394.2,672.8 388.0,639.0C381.8,605.2 380.1,588.1 376.0,554.0C371.9,519.9 363.4,436.0 362.0,424.0C360.6,412.0 358.2,406.1 358.0,394.0C357.8,381.9 362.4,373.0 361.0,359.0C359.6,345.0 354.0,324.2 349.0,301.0C344.0,277.8 328.1,219.6 329.0,210.0C329.9,200.4 331.8,194.4 339.0,188.0" linkedTo="108"/>  
+      <path id="24399" points="393.0,788.0, 379.0,674.0, 364.0,646.0, 280.0,610.0, 260.0,553.0, 264.0,492.0, 279.0,441.0, 285.0,354.0, 285.0,310.0, 297.0,269.0, 304.0,241.0, 328.0,211.0," d="M393.0,788.0C387.4,742.4 381.5,686.4 379.0,674.0C376.5,661.6 374.7,652.9 364.0,646.0C353.3,639.1 298.0,626.1 280.0,610.0C262.0,593.9 263.2,576.9 260.0,553.0C256.8,529.1 260.4,513.0 264.0,492.0C267.6,471.0 275.8,462.0 279.0,441.0C282.2,420.0 284.2,371.6 285.0,354.0C285.8,336.4 282.6,326.9 285.0,310.0C287.4,293.1 293.9,280.1 297.0,269.0C300.1,257.9 298.6,251.2 304.0,241.0C309.4,230.8 327.1,220.6 328.0,211.0" linkedTo="106"/>  
+      <path id="21662" points="109.0,784.0, 137.0,623.0, 156.0,523.0, 171.0,447.0, 177.0,384.0, 186.0,292.0, 215.0,251.0, 243.0,205.0, 310.0,202.0, 338.0,190.0," d="M109.0,784.0C120.2,719.6 129.8,663.1 137.0,623.0C144.2,582.9 150.1,553.4 156.0,523.0C161.9,492.6 167.2,472.0 171.0,447.0C174.8,422.0 174.6,409.2 177.0,384.0C179.4,358.8 180.5,311.3 186.0,292.0C191.5,272.7 204.0,267.8 215.0,251.0C226.0,234.2 223.9,214.9 243.0,205.0C262.1,195.1 298.0,203.9 310.0,202.0C322.0,200.1 330.8,196.4 338.0,190.0" linkedTo="247"/>  
+      <path id="73351" points="" d=""/>  
+      <path id="13313" points="683.0,837.0, 637.0,604.0, 475.0,506.0, 497.0,362.0, 466.0,192.0, 507.0,159.0,lower" d="M683.0,837.0C664.6,743.8 677.3,668.1 637.0,604.0C596.7,539.9 504.2,556.4 475.0,506.0C445.8,455.6 498.7,420.2 497.0,362.0C495.3,303.8 465.0,213.0 466.0,192.0C467.0,171.0 490.6,172.2 507.0,159.0" linkedTo="109"/>  
+      <rect id="23721" x="53" y="887" width="112" height="22" style="black_text_on_solid_white" text="To Sweetie Buttress" arrowDirection="west"/>  
+      <rect id="22540" x="534" y="893" width="119" height="22" style="black_text_on_solid_white" text="To Albatross Buttress" arrowDirection="east"/> 
+    </drawing>  
+    <legend> 
+      <climb>247</climb>  
+      <climb>106</climb>  
+      <climb>108</climb>  
+      <climb>109</climb> 
+    </legend> 
+  </image>  
+  <problem id="105" name="Nappy Rush" fa=" Evan Peacock, May 1990." stars="" number="130." grade="V1" extra="" length="">A hard little boulder problem (top-rope recommended) (Editors note: seriously?) with a poor landing. Start on the overhanging mini-buttress just L of Yoda.</problem>  
+  <climb id="247" stars="*" extra="" number="131." name="Strawberries" length="20m" grade="14" fa="Christoph Speer, Martin Brown, July 2021">The clean crack-line left of Yoda. Bridge the chimney and jam the crack to a small ledge on the left, then move right onto the arete and up into the fist crack. Finish by hand-traversing right just below the huge block to the lower-off above Chocolate.</climb>  
+  <climb id="347" stars="" extra="" number="132." name="Dessert and a Movie" length="20m" grade="19" fa="Christoph Speer, Jan 2022">Climb the first part of Strawberries until you can undercling and side-pull out right using the flake. Finish up Yoda.</climb>  
+  <climb id="106" name="Yoda" fa="Peter Jackson, Dec 1980." stars="***" length="20m" grade="19" extra="" number="133.">Brilliant, sustained climbing up the thin line in the middle of the face. Start up Chocolate and undercling the flake out left to gain the line. Follow this to the top past numerous RPs, micro-cams and some more reassuring pieces. Lower-off.&lt;br/&gt;&lt;br/&gt;A historical note from Al: 'In 1982, I hit the ground from 6m on Yoda after ripping two poor RP placements. Instead of blaming my lack of skill in placing solid RPs, I blamed the poor protection offered by the route. It wasn't until 1984, after direct-aiding off RPs in Yosemite that I plucked-up the courage to attempt the route again. And.. you guessed it, the pro on Yoda turned out way better than adequate..'&lt;br/&gt;&lt;br/&gt;</climb>  
+  <climb id="107" name="Yoda Direct Start" fa="Evan Peacock, May 1990." length="20m" grade="23" extra="" number="134." stars="">A technical little start - unprotected, but not such a bad landing. Follow the slab 2m L of Chocolate until it joins the layaway above the undercling (and runners!).</climb>  
+  <climb id="108" name="Chocolate" fa="Peter Jackson, Dec 1980." stars="**" length="20m" grade="16" extra="" number="135.">Sweet hand-jamming. The obvious hand-crack through a troublesome bulge, just right of Yoda. Lower-off.</climb>  
+  <climb id="109" name="Brittle Little Mothers" fa="Evan Peacock, Roy Langman, Al Adams, Dec 1989.  Re-bolted in 2022." stars="**" length="16m" grade="21" extra="Mixed" number="136.">Reminiscent of the UK gritstone style. Up the easy face/crack for 5m to the roof and trend out left to the arete and clip the bolt above. Crimp through this on the arete (crux) and continue delicately up the face past a good RP3 to the horizontal break. Continue up through the interesting open groove past another good RP3 and medium sized cam, then finish up the face to the lower-off. Protection is adequate despite appearances.</climb>  
+  <text class="heading3" id="168">Albatross Buttress</text>  
+  <text id="268" class="text">Located just to the right of the Yoda Buttress is an impressive and intimidating buttress split by a soaring crack (Albatross). There is a lower-off on top of the buttress. Further right, the track drops down towards Greenknowe past some lichenous buttresses.</text>  
+  <image id="364" src="Albatross new.jpg" height="933" width="700" legend="true" legendTitle="Albatross Buttress" legendx="12" legendy="10"> 
+    <drawing> 
+      <path id="30068" points="554.0,855.0, 482.0,558.0, 477.0,439.0, 540.0,380.0, 505.0,309.0, 464.0,273.0, 428.0,217.0, 371.0,166.0, 330.0,118.0, 331.0,74.0, 342.0,43.0,lower" d="M554.0,855.0C525.2,736.2 490.7,604.8 482.0,558.0C473.3,511.2 466.3,471.8 477.0,439.0C487.7,406.2 533.3,411.0 540.0,380.0C546.7,349.0 517.6,326.8 505.0,309.0C492.4,291.2 478.0,289.7 464.0,273.0C450.0,256.3 445.5,237.1 428.0,217.0C410.5,196.9 388.8,183.9 371.0,166.0C353.2,148.1 331.0,135.6 330.0,118.0C329.0,100.4 328.9,87.0 331.0,74.0C333.1,61.0 342.5,49.2 342.0,43.0" linkedTo="112"/>  
+      <path id="54967" points="241.0,618.0, 234.0,515.0, 230.0,436.0, 217.0,363.0, 209.0,314.0, 186.0,291.0, 186.0,239.0, 202.0,216.0, 211.0,186.0,lower" d="M241.0,618.0C238.2,576.8 235.9,546.6 234.0,515.0C232.1,483.4 233.3,465.5 230.0,436.0C226.7,406.5 220.4,382.6 217.0,363.0C213.6,343.4 214.1,326.0 209.0,314.0C203.9,302.0 189.8,303.4 186.0,291.0C182.2,278.6 183.7,250.0 186.0,239.0C188.3,228.0 197.2,226.1 202.0,216.0C206.8,205.9 207.4,198.0 211.0,186.0" linkedTo="110"/>  
+      <path id="8497" points="583.0,371.0, 636.0,339.0, 593.0,269.0, 520.0,211.0, 500.0,150.0, 438.0,120.0, 372.0,91.0, 357.0,50.0, 343.0,43.0," d="M583.0,371.0C604.2,358.2 633.6,363.6 636.0,339.0C638.4,314.4 615.1,293.3 593.0,269.0C570.9,244.7 535.8,231.2 520.0,211.0C504.2,190.8 517.2,169.1 500.0,150.0C482.8,130.9 463.0,131.5 438.0,120.0C413.0,108.5 385.2,102.4 372.0,91.0C358.8,79.6 360.2,55.4 357.0,50.0C353.8,44.6 343.5,49.2 343.0,43.0" labelText="140" linkedTo="405"/>  
+      <rect id="99472" x="56" y="881" width="98" height="22" style="black_text_on_solid_white" text="To Yoda Buttress" arrowDirection="west"/>  
+      <rect id="23222" x="514" y="883" width="138" height="22" style="black_text_on_solid_white" text="To Greenknowe Buttress" arrowDirection="east"/>  
+      <path id="70735" points="439.0,867.0, 416.0,723.0, 380.0,564.0, 404.0,465.0, 374.0,394.0, 327.0,321.0, 304.0,268.0, 301.0,201.0, 331.0,119.0," d="M439.0,867.0C429.8,809.4 427.1,780.3 416.0,723.0C404.9,665.7 381.9,604.7 380.0,564.0C378.1,523.3 405.1,495.8 404.0,465.0C402.9,434.2 388.5,421.2 374.0,394.0C359.5,366.8 338.2,341.2 327.0,321.0C315.8,300.8 308.9,290.6 304.0,268.0C299.1,245.4 296.2,227.4 301.0,201.0C305.8,174.6 332.0,136.6 331.0,119.0" linkedTo="422"/>  
+      <path id="41349" points="337.0,511.0, 326.0,447.0," d="M337.0,511.0C332.6,485.4 330.4,472.6 326.0,447.0" arrow="true" linkedTo="111"/> 
+    </drawing>  
+    <legend> 
+      <climb>110</climb>  
+      <climb>111</climb>  
+      <climb>422</climb>  
+      <climb>112</climb>  
+      <climb>405</climb> 
+    </legend> 
+  </image>  
+  <climb id="110" name="Ulysses" fa="Mendelt Tilema, Peter Jackson, Mar 1971." length="25m" grade="16" extra="" number="137." stars="*">The scene of some epic cleaning efforts in 2021 to restore this route. Uphill in the gully to the left of Albatross is a corner crack. Follow the fist crack to a cleaned ledge, then layback and jam the corner crack above. Finish up the exciting bottomless chimney (taking care of any loose rock at the back) to a lower-off.</climb>  
+  <climb id="111" name="Miasma" fa="Garn Cooper, Pete Steane, Dave Gardner, 1982." stars="" length="25m" grade="15" extra="" number="138.">Adventurous - beware the poisonous vapours! The deep chimney just R of Ulysses.</climb>  
+  <climb id="422" stars="*" extra="" number="139." name="Balbatross" length="30m" grade="21" fa="Fraser L-R, Christoph Speer, Anne Knox, Samson Stensletten, July 2023">The line left of Albatross that looks 3 grades harder (and may be at least 1!). Up the corner to a stance below the bulging roof. Arrange your gear, then commit to a strenuous layback sequence to a stance in a shallow chimney. Interesting moves through this to the finger crack. Finish by traversing right into Albatross to finish up the hand crack.</climb>  
+  <climb id="112" name="Albatross" fa="Ian Lewis, 1974. (the first record of this ascent appears in the Jan 1975 edition of Mountain #41, where it is graded 21)." stars="***" length="30m" grade="23" extra="" number="140.">The best route at the crag and a historically significant line. The route follows the intimidating, overhanging, slick corner-line. Layback the flakes direct (dubious attachment) or traverse in from the left. Move right, and then delicately mantle to the small ledge and smooth wall. Haul yourself up past the spike and into a stance at the base of the bottomless crack. Follow this with difficulty to the top. Lower-off.&lt;br/&gt;&lt;br/&gt;In retrospect this climb was Australia’s first grade 23 - although it was graded 21 after the FA in 1975. The first climb actually given the grade of 23 was Henry Barber’s ascent of Insomnia at Frog Buttress in 1975 (now down graded to 22). For over 40 years it was falsely reported that Lewis used a point of aid for rest on Albatross’s 1974 first ascent. In interviews for Gerry Narkowicz’s book on the history of Tasmanian climbing in 2018, Lewis and his belayer Lyle Closs, categorically state that the route was done free. Barber who was originally credited with the first free ascent of Albatross the following year, ironically fell off the route, the only climb that he was reported to have fallen off during his visit to Australia. The climb was subsequently upgraded to 23 and is universally considered rather hard at this grade. So, it seems that at the time of Lewis' ascent it was the hardest piece of climbing done in Australia by quite a margin, but the grade was under-estimated by Lewis at the time - as was typical of his harder routes.</climb>  
+  <climb id="405" stars="" extra="" number="141." name="Defender of the Phish" length="30m" grade="23" fa="Martin Brown, August 2022">The face and slab on the front of the buttress to the right of Albatross has been climbed on top-rope. A decision was made not to bolt this due to its proximity to Albatross. Still worthwhile having a play though if you're at the anchor. Run the rope over the front of the buttress, and climb Albatross until at the base of the crack. Step right and up from here and follow the tricky face and delicate slab/groove above, finishing through the short crack to the anchor.</climb>  
+  <text id="367" class="heading3">Yeti Flakes, Unfinished Symphony &amp; Fingers and Thumbs Buttresses</text>  
+  <text id="368" class="text">The series of buttresses on the same contour and to the right of Albatross don't provide much value currently. They are all extremely lichenous and the quality ratings and grades given in the original guide aren't providing much inspiration for a mammoth cleaning effort to resurrect them...</text>  
+  <climb id="113" name="A Ginger Cat Ate Rebecca" fa="Evan Peacock, Steve Ford, Grant Rowbottom, Aug 1992." length="20m" grade="16" extra="" number="142." stars="">Start about 15m up the gully R of the Albatross buttress. Climb up to the horizontal break below the roof, then launch up the face (small RP's).</climb>  
+  <climb id="114" name="Yeti Flakes" fa="Gerry Narkowicz, Pete Steane, 1981." length="25m" grade="17" extra="" number="143." stars="">Start two sub-buttress R of Albatross on the same contour. Face climb up the thin flake on the LH side of the buttress.</climb>  
+  <climb id="375" stars="" extra="" number="144." name="Feral Non-Immigrants" length="20m" grade="17" fa="Jeroen Jansen, Cyril Scomparin, May 2022">On the right side of the gully between Yeti Flakes and Unfinished Symphony is a crack. Scramble up the gully and jam to the top.</climb>  
+  <climb id="115" name="Unfinished Symphony" fa="Chris Dawson, Mary McWhirther, Sep 1974." length="8m" grade="11" extra="" number="145.">Start on the front of the next buttress right of Yeti Flakes, a few metres R of a large recess. Climb up the crack to the ledge. Follow any of the variety of lines up (bounded on the R by a small square-cut pillar).</climb>  
+  <climb id="116" name="Fingers and Thumbs" fa="Phil Robinson, Chris Rathbone, Jul 1976." stars="" number="146." length="15m" grade="13" extra="">Thoughtful footwork required to negotiate an undercling. Start at the thin crack splitting the front of the next small buttress R of Unfinished Symphony, behind a big sheoak. Climb the crack past the undercling flake, to the break. Straight up the face of the buttress to top.&lt;br/&gt;&lt;br/&gt;Editors Note 2022: Originally a * route. But needs a brush to restore it.</climb>  
+  <climb id="117" name="Team Pursuit" fa="Doug Bruce and Team, 1985." stars="" number="147." length="15m" grade="16" extra="">Short and sweet... Seems rather changed now from the original description. Start from the gully about 6m R of Fingers &amp; Thumbs. Traverse L and diagonally up on sizeable footholds and around arête to join the thin crack line at a suspect flake, 1m R of F&amp;T. Thinly protected. Continue up past the flake to horizontal. Follow wide crack to top. An alternative variant is to climb F &amp; T for 3m and then traverse R for a metre to the bottom of the thin crack line Follow this to the top past the suspect flake and wide crack, as for the original route (17).&lt;br/&gt;&lt;br/&gt;Editors Note 2022: Originally a * route. But needs a brush to restore it.</climb>  
+  <climb id="118" name="Team Pursuit Direct" fa="Evan Peacock, Apr 1990." length="15m" grade="20" extra="" number="148.">The direct start.</climb>  
+  <problem id="119" name="If This Pavement Should Stray Or Rome, Smack It In The Bum, I Love Debra" fa="Garn Cooper, 1986." stars="" number="149." grade="V1" extra="">The boulder problem up the detached pinnacle on the RH side of the gully R of Fingers and Thumbs.</problem>  
+  <text class="heading3" id="169">Greenknowe Buttress</text>  
+  <text id="272" class="text">This buttress is located directly below Bulging Biceps Buttress and about 80m to climbers right and downhill from the Albatross Buttress. There is a lower-off for Caged and Greenknowe.</text>  
+  <image id="381" legendTitle="Greenknowe LHS" src="greenknowe LHS.jpg" height="500" legend="true"> 
+    <drawing> 
+      <path id="64516" points="222.0,498.0, 224.0,498.0, 247.0,286.0, 162.0,180.0, 221.0,62.0, 306.0,46.0," d="M222.0,498.0C222.1,497.2 223.9,498.8 224.0,498.0C224.1,497.2 257.4,339.3 247.0,286.0C236.6,232.7 168.1,232.4 162.0,180.0C155.9,127.6 195.7,85.6 221.0,62.0C246.3,38.4 272.0,52.4 306.0,46.0" linkedTo="120" arrow="true"/>  
+      <path id="64198" points="320.0,470.0, 319.0,132.0, 341.0,31.0," d="M320.0,470.0C319.6,334.8 317.0,173.3 319.0,132.0C321.0,90.7 332.2,71.4 341.0,31.0" linkedTo="121" arrow="true"/>  
+      <path id="82196" points="" d="" linkedTo="123" lineStyle="solid"/>  
+      <path id="91983" points="" d=""/>  
+      <path id="37765" points="" d=""/>  
+      <path id="5778" points="683.0,474.0, 627.0,344.0, 620.0,283.0, 599.0,249.0, 561.0,193.0," d="M683.0,474.0C660.6,422.0 634.7,367.3 627.0,344.0C619.3,320.7 624.5,298.3 620.0,283.0C615.5,267.7 607.8,262.4 599.0,249.0C590.2,235.6 576.2,215.4 561.0,193.0" linkedTo="123"/>  
+      <path id="29687" points="" d=""/>  
+      <path id="47809" points="392.0,344.0, 383.0,239.0, 404.0,163.0, 404.0,103.0," d="M392.0,344.0C388.4,302.0 380.9,270.5 383.0,239.0C385.1,207.5 400.3,186.7 404.0,163.0C407.7,139.3 404.0,127.0 404.0,103.0" linkedTo="382"/>  
+      <rect id="10215" x="49" y="459" width="120" height="22" style="black_text_on_solid_white" text="To Albatross Buttress" arrowDirection="north_west"/>  
+      <rect id="99400" x="459" y="41" width="121" height="22" style="black_text_on_solid_yellow" text="Greenknowe Buttress" arrowDirection="south"/>  
+      <rect id="7636" x="570" y="102" width="96" height="22" style="black_text_on_solid_yellow" text="Papillon Buttress" arrowDirection="south"/> 
+    </drawing>  
+    <legend> 
+      <climb/>  
+      <climb>120</climb>  
+      <climb>121</climb>  
+      <climb>382</climb>  
+      <climb>123</climb> 
+    </legend> 
+  </image>  
+  <climb id="120" name="Hooning the Block" fa="Garn Cooper, David Loone, 1985." stars="" number="150." length="15m" grade="13" extra="">From Fingers and Thumbs go downhill to a prominent buttress/pillar lower than the rest. This route climbs the arête 10m L of Greenknowe. Start up the face R of the arête, then move onto the arête at the horizontal, finishing straight up. Poorly protected.</climb>  
+  <climb id="121" name="York Street" fa="Dave Gardner, Ross Adams, 1986." length="15m" grade="15" extra="" number="151." stars="">The line just R of Hooning the Block. Finish up Hooning the Block. Poorly protected.</climb>  
+  <climb id="382" stars="" extra="" number="152." name="Discalculia" length="15m" grade="13-17" fa="Dave James and Xinyu Zheng July 2122">The crack 10m right of the of the large leaning pillar and 18.5m left of Greenknowe. Rock seems ok, coould be an error of judgement...</climb>  
+  <image id="292" src="greenknowe3.jpeg.jpg" height="1016" width="800" legend="true" legendTitle="Greenknowe Buttress"> 
+    <drawing> 
+      <path id="80577" points="224.0,856.0, 348.0,465.0, 371.0,312.0, 408.0,202.0, 406.0,138.0, 424.0,102.0,lower" d="M224.0,856.0C273.6,699.6 331.9,524.7 348.0,465.0C364.1,405.3 360.7,357.3 371.0,312.0C381.3,266.7 402.9,227.1 408.0,202.0C413.1,176.9 408.7,153.9 406.0,138.0C403.3,122.1 409.1,108.2 424.0,102.0" linkedTo="123"/>  
+      <path id="3469" points="32.0,375.0, 150.0,262.0, 237.0,216.0, 286.0,180.0, 335.0,110.0, 423.0,102.0," d="M32.0,375.0C79.2,329.8 118.9,286.1 150.0,262.0C181.1,237.9 216.2,228.6 237.0,216.0C257.8,203.4 269.5,197.9 286.0,180.0C302.5,162.1 305.3,126.9 335.0,110.0C364.7,93.1 408.1,108.2 423.0,102.0" linkedTo="122"/>  
+      <path id="95686" points="533.0,545.0, 478.0,270.0, 448.0,191.0, 406.0,139.0," d="M533.0,545.0C511.0,435.0 485.9,302.9 478.0,270.0C470.1,237.1 460.9,214.4 448.0,191.0C435.1,167.6 408.7,154.9 406.0,139.0" linkedTo="124"/>  
+      <path id="57350" points="618.0,459.0, 589.0,371.0, 607.0,303.0, 588.0,231.0, 604.0,179.0, 545.0,143.0,lower" d="M618.0,459.0C606.4,423.8 591.0,399.1 589.0,371.0C587.0,342.9 607.2,331.1 607.0,303.0C606.8,274.9 588.5,252.8 588.0,231.0C587.5,209.2 613.6,198.6 604.0,179.0C594.4,159.4 568.6,157.4 545.0,143.0" linkedTo="125"/>  
+      <rect id="65934" x="60" y="962" width="120" height="22" style="black_text_on_solid_white" text="To Albatross Buttress" arrowDirection="west"/>  
+      <rect id="21154" x="594" y="958" width="113" height="22" style="black_text_on_solid_white" text="To Papillon Buttress" arrowDirection="north_east"/> 
+    </drawing>  
+    <legend> 
+      <climb>122</climb>  
+      <climb>123</climb>  
+      <climb>124</climb>  
+      <climb>125</climb>  
+      <climb>126</climb> 
+    </legend> 
+  </image>  
+  <climb id="122" name="Sheening With the Dovens" fa="Garn Cooper, Noel Ward, Sep 1984." stars="" number="153." length="25m" grade="18" extra="">The arête a few metres L of Greenknowe. Nice climbing but lichenous and poorly protected. The start was originally protected by slinging a branch on the now dead tree.</climb>  
+  <climb id="123" name="Greenknowe" fa="Peter Jackson, Mendelt Tillemma, Nov 1969." stars="*" length="18m" grade="12" extra="" number="154.">Adventurous climbing for the grade. Climb the smooth chimney, trending right to the nose of the buttress past the first roof. Up to the second roof and around it on the left. Continue up the short wall above to the DBB lower-off.</climb>  
+  <climb id="124" name="Queasonaire" fa="Evan Peacock, Mar 1989." stars="" length="15m" grade="18" extra="" number="155.">Climb the face 1m R of Greenknowe, with protection at 4m (and after the crux!), to join the aforementioned at its roof.</climb>  
+  <climb id="125" name="Caged" fa="Marcel Jackson, Peter Jackson, Oct 1989. Retro-bolted in 2021 with FA permission." stars="*" length="18m" grade="21" extra="Mixed" number="156.">Balancy climbing that's worth a few moments. Originally started direct through the scoop with only a single piton for protection. Now you just need to follow the bolts through the bulge to a lower-off. A small cam in the seam to the left protects the start.</climb>  
+  <climb id="126" name="Shirvan" fa="Peter Jackson, Noel Ward, 1984." stars="" length="10m" grade="14" extra="" number="157.">From the middle of the buttress just R of Greenknowe move up on big holds to the ledge on the RH edge. Step L for protection behind a suspect flake, then finish directly up the middle.</climb>  
+  <text class="heading3" id="192">Biceps Buttress</text>  
+  <text class="text" id="194">The Biceps Buttress is situated directly above the Greenknowe Buttress and just to the left of the Papillon Buttress. There is a lower-off above Bulging Biceps/Triceps. Grade 4 downclimb off the back of the buttress for descent from Joyride and Juvenile Hall.</text>  
+  <image id="196" src="Biceps Buttress.jpg" height="871" width="600" legend="true" legendTitle="Biceps Buttress" legendx="17" legendy="15"> 
+    <drawing> 
+      <rect id="88374" x="507" y="1228" width="111" height="22" style="black_text_on_solid_white" text="To Papillon Buttress" arrowDirection="south_east"/>  
+      <rect id="95912" x="355" y="1228" width="136" height="22" style="black_text_on_solid_white" text="To Greenknowe Buttress" arrowDirection="south_west"/>  
+      <rect id="1323" x="273" y="6" width="141" height="65" style="black_text_on_solid_white" text="Traverse to anchor above&lt;br/&gt; Bulging Biceps or &lt;br/&gt;Grade 4 down-climb off &lt;br/&gt;the back of the buttress" arrowDirection="south"/>  
+      <path id="81351" points="52.0,807.0, 51.0,807.0, 87.0,597.0, 116.0,542.0, 140.0,468.0, 165.0,411.0, 177.0,275.0, 214.0,146.0, 248.0,97.0,belay" d="M52.0,807.0C52.1,806.6 50.9,807.4 51.0,807.0C51.1,806.6 81.1,621.2 87.0,597.0C92.9,572.8 106.5,565.0 116.0,542.0C125.5,519.0 131.3,491.3 140.0,468.0C148.7,444.7 160.3,435.5 165.0,411.0C169.7,386.5 167.2,327.8 177.0,275.0C186.8,222.2 205.2,168.2 214.0,146.0C222.8,123.8 229.0,111.4 248.0,97.0" linkedTo="128"/>  
+      <path id="73389" points="161.0,799.0, 185.0,714.0," d="M161.0,799.0C170.6,765.0 175.4,748.0 185.0,714.0" arrow="true" linkedTo="383"/>  
+      <path id="37451" points="508.0,792.0, 485.0,658.0, 497.0,538.0, 530.0,437.0, 529.0,309.0, 502.0,206.0, 496.0,91.0,lower" d="M508.0,792.0C498.8,738.4 487.1,706.2 485.0,658.0C482.9,609.8 488.5,579.6 497.0,538.0C505.5,496.4 524.1,479.1 530.0,437.0C535.9,394.9 534.1,351.3 529.0,309.0C523.9,266.7 508.4,248.1 502.0,206.0C495.6,163.9 498.4,137.0 496.0,91.0" linkedTo="271"/>  
+      <path id="41862" points="17.0,644.0, 46.0,554.0, 61.0,438.0, 103.0,337.0, 178.0,126.0, 248.0,96.0," d="M17.0,644.0C28.6,608.0 38.1,591.0 46.0,554.0C53.9,517.0 49.9,480.3 61.0,438.0C72.1,395.7 87.6,378.0 103.0,337.0C118.4,296.0 162.3,152.1 178.0,126.0C193.7,99.9 229.0,110.4 248.0,96.0" lineStyle="dotted" linkedTo="127"/> 
+    </drawing>  
+    <legend> 
+      <climb>127</climb>  
+      <climb>128</climb>  
+      <climb>383</climb>  
+      <climb>271</climb>  
+      <climb>129</climb> 
+    </legend> 
+  </image>  
+  <climb id="127" name="Joyride" fa="Al Adams, Simon Stubbs, Paul Taylor, Nov 1987." stars="" number="158." length="12m" grade="15" extra="">Trickier than it looks. At the left hand end of Biceps Buttress a leaning gum tree sits in front of a slabby arete. Start behind tree and mount the small bulge, then continue up the face to the top. The challenge is to find the RP placements and not use the tree.</climb>  
+  <climb id="128" name="Juvenile Hall" fa="Al Adams, Garn Cooper, 1987." stars="" number="159." length="12m" grade="13" extra="">The scene of more possum magic. Follow the sinuous hand-crack and finish up the easy chimney to belay on top of the buttress. Grade 4 down-climb off the back or traverse (stay roped-up) to the anchor above Bulging Biceps for descent.</climb>  
+  <climb id="383" stars="" extra="" number="160." name="Mature Anteroom" length="12m" grade="10" fa="Dave James, Tim Whelan, June 2022">Cracks and chimney just right of Juvenile Hall. Good for the grade and doable without mature sized cams.</climb>  
+  <climb id="271" stars="*" extra="Mixed" number="161." name="Bulging Biceps" length="16m" grade="21" fa="Al Adams, Simon Stubbs, Nov 1987 (Bulging Biceps - 18). Hamish Jackson, Gordon Broome, July 2021 (Bulging Triceps - extended start). Re-bolted in 2023.">Load-up on creatine. Originally starting off the block in the gully, an extended start was added in 2021 and is now the way to do the route. Climb into the sentry box and escape this moving up and right past three bolts, avoiding the temptation to step onto the block (yes its a little contrived). Follow the thin crack (good RPs) above the last bolt, then continue more easily to the top and lower-off.&lt;br/&gt;&lt;br/&gt;</climb>  
+  <text id="270" class="heading3">Papillon Buttress</text>  
+  <text class="text" id="195">Papillon Buttress is at the same level and immediately right of Bulging Biceps Buttress. The flat area in front from where the topo image is taken, is Lunchspot Ledge. There is a lower-off to service Blue Turtles, Snoober and Papillon. Easy walk-off right for Canary.</text>  
+  <image id="197" src="Papillon Buttress.jpg" height="933" legendTitle="Papillon Buttress" legend="true" width="700"> 
+    <drawing> 
+      <path id="86409" points="332.0,729.0, 266.0,604.0, 242.0,469.0, 236.0,378.0, 224.0,337.0, 194.0,284.0, 207.0,231.0, 240.0,195.0, 251.0,158.0, 240.0,96.0,lower" d="M332.0,729.0C305.6,679.0 283.9,655.8 266.0,604.0C248.1,552.2 246.8,505.2 242.0,469.0C237.2,432.8 238.3,394.9 236.0,378.0C233.7,361.1 231.0,352.6 224.0,337.0C217.0,321.4 197.5,305.6 194.0,284.0C190.5,262.4 198.0,248.4 207.0,231.0C216.0,213.6 232.0,208.2 240.0,195.0C248.0,181.8 251.0,173.4 251.0,158.0C251.0,142.6 244.4,120.8 240.0,96.0" linkedTo="132"/>  
+      <path id="79932" points="493.0,735.0, 410.0,388.0, 374.0,320.0, 345.0,189.0, 305.0,133.0, 246.0,96.0," d="M493.0,735.0C459.8,596.2 418.5,417.6 410.0,388.0C401.5,358.4 383.6,349.3 374.0,320.0C364.4,290.7 354.5,214.8 345.0,189.0C335.5,163.2 325.1,151.8 305.0,133.0C284.9,114.2 269.6,110.8 246.0,96.0" linkedTo="133"/>  
+      <path id="27849" points="585.0,715.0, 513.0,480.0, 504.0,411.0, 447.0,281.0, 411.0,203.0, 386.0,172.0, 345.0,152.0,belay" d="M585.0,715.0C556.2,621.0 520.2,506.9 513.0,480.0C505.8,453.1 512.8,437.4 504.0,411.0C495.2,384.6 461.0,312.4 447.0,281.0C433.0,249.6 418.8,216.9 411.0,203.0C403.2,189.1 398.6,181.7 386.0,172.0C373.4,162.3 361.4,160.0 345.0,152.0" linkedTo="135"/>  
+      <path id="29012" points="11.0,845.0, 21.0,570.0, 57.0,392.0, 70.0,316.0, 113.0,177.0, 178.0,120.0, 228.0,95.0," d="M11.0,845.0C15.0,735.0 13.7,642.3 21.0,570.0C28.3,497.7 51.2,422.3 57.0,392.0C62.8,361.7 62.2,345.8 70.0,316.0C77.8,286.2 96.3,207.3 113.0,177.0C129.7,146.7 159.8,133.0 178.0,120.0C196.2,107.0 208.0,105.0 228.0,95.0" linkedTo="131"/>  
+      <rect id="98590" x="193" y="895" width="106" height="22" style="black_text_on_solid_white" text="To Biceps Buttress" arrowDirection="west"/>  
+      <rect id="54799" x="325" y="895" width="164" height="22" style="black_text_on_solid_white" text="To Lumbar Cruncher Buttress" arrowDirection="north_east"/>  
+      <rect id="87574" x="330" y="113" width="81" height="22" style="black_text_on_solid_white" text="Walk-off right" arrowDirection="none"/> 
+    </drawing>  
+    <legend> 
+      <climb>131</climb>  
+      <climb>132</climb>  
+      <climb>133</climb>  
+      <climb>135</climb> 
+    </legend> 
+  </image>  
+  <climb id="130" name="Rocket Fuel" fa="Al Adams, Pete Steane, Jul 1984." stars="" number="162." length="15m" grade="15" extra="">Above Lunchspot Ledge is a dead gum tree standing in front of the buttress. The start of Rocket Fuel is located 5m left of the dead gum at a leftward facing flake. Climb the flake to a ledge with a large block on it, then follow the multiple crack system above to the top.</climb>  
+  <climb id="131" name="Blue Turtles" fa="Al Adams, Martin Rose, Sep 1987." stars="" number="163." length="15m" grade="16" extra="">Needs taking to with a brush!. Climb the line that starts 1.5m right of Rocket Fuel. The flake down low is loose.</climb>  
+  <climb id="132" name="Snoober" fa="Peter Jackson, Bob deCesare, Jan 1981." stars="**" number="164." length="17m" grade="17" extra="">The naughty thin line up the face of the buttress, which continues through the bulge and up the face / cracks above. Protection is decent, but you'll need to work hard to place the small gear (RPs / micro-cams) in the thin crack. Lower-off at top.</climb>  
+  <climb id="376" stars="" extra="" number="165." name="Stella Goes Trad Climbing" length="15m" grade="15" fa="Jeroen Jansen, Stella Lawless, May 2022">Contrived. Climb Papillon to the ledge, then climb the arete without using the corner.</climb>  
+  <climb id="133" name="Papillon" fa="Peter Jackson, Bob Bull, May 1971." stars="**" number="166." length="15m" grade="11" extra="">A good first lead. Papillon is the obvious hand crack just left of the dead gum. Jam to a small ledge and up the corner to belay on top, being mindful of some suspect blocks at the top of the corner (avoided by stepping left). Lower off as for Snoober or belay on top and walk off.</climb>  
+  <climb id="135" name="Canary" fa="Lyle Closs, Ian Lewis, Jul 1972." stars="*" number="167." length="15m" grade="15" extra="">Hidden behind the native cherry is a nice route worthy of your time. Start 2m right of Papillon and climb up the face and into the thin finger crack. Continue following the line to a fist-width crack. Surmount this and top out next to Papillon and Snoober. Belay on top and walk-off easily to the right.</climb>  
+  <climb id="136" name="Bird on a Wire" fa="Steve Hamilton, Hamish Jackson, Sep 1991." stars="" number="168." length="12m" grade="18" extra="">Start just right of Canary as the buttress turns uphill. Follow the system of thin cracks straight up to the previous climbs overhang.</climb>  
+  <climb id="137" name="Sein Zum Tode" fa="Marcel Jackson (with TR inspection) and Rob Williams 1994?." stars="" number="169." length="12m" grade="20" extra="">Climbs the enticing face right of Bird on a Wire. The crux is the first moves although the upper section is a little balancy. The main piece of protection is to be found at the first horizontal.</climb>  
+  <climb id="138" name="Fist" fa="Lyle Closs, Ian Lewis, Jul 1972." length="7m" grade="13" extra="" number="170." stars="">Jam the fist crack in the gully around the back of the Papillon buttress. Finishes at the same spot as Canary.</climb>  
+  <climb id="139" name="The Prave" fa="Garn Cooper, 1987." length="10m" grade="10" extra="" number="171." stars="">The line up the front of the buttress directly below Papillion Buttress that finishes on Lunchspot Ledge.</climb>  
+  <climb id="190" name="Middled Aged Crisis" fa="Dave Drake, Geoff Wayatt, 1979." length="8m" grade="16" stars="" extra="" number="172.">Worth a few moments. The short crack on the small buttress immediately above Papillon Buttress. Walk-off left.</climb>  
+  <climb id="140" name="Heidelberg Direct" fa="Peter Steane (Top Roped), Feb 1984." length="20m" grade="17" extra="" stars="" number="173.">A clean layback corner leading to an offwidth and the scene of a serious accident. Found 7m right of Middle Aged Crisis and immediately uphill of Fist. Climb the line avoiding the worst of the tragedy by traversing from the top of the shaky block around the nose and up on small holds. Continue straight up. Protection is difficult to arrange.</climb>  
+  <text class="heading3" id="172">Lumbar Cruncher &amp; The Danger Hog Shuffle Buttresses</text>  
+  <text id="251" class="text">Found above and to the right of the Papillion Buttress. A number of fantastic climbs on excellent quality and interesting rock. Lower-offs exist at the top of each buttress. Further past the Danger Hog Shuffle, the cliff-line starts to peter out until you come to the Wailing Wall.</text>  
+  <image id="253" src="Lumbar 2 Rudge.jpg" height="600" width="800" legendTitle="Lumbar Cruncher Area" legend="true"> 
+    <drawing> 
+      <path id="95815" points="526.0,357.0, 496.0,272.0, 511.0,217.0, 491.0,191.0, 474.0,169.0, 482.0,141.0, 510.0,105.0,lower" d="M526.0,357.0C514.0,323.0 498.4,294.7 496.0,272.0C493.6,249.3 515.7,229.2 511.0,217.0C506.3,204.8 497.8,199.8 491.0,191.0C484.2,182.2 476.0,179.9 474.0,169.0C472.0,158.1 476.3,151.2 482.0,141.0C487.7,130.8 518.9,120.9 510.0,105.0" linkedTo="143"/>  
+      <path id="82295" points="267.0,486.0, 320.0,374.0, 332.0,289.0, 360.0,239.0, 400.0,192.0, 417.0,144.0,lower" d="M267.0,486.0C288.2,441.2 309.2,406.6 320.0,374.0C330.8,341.4 325.5,311.0 332.0,289.0C338.5,267.0 346.8,257.8 360.0,239.0C373.2,220.2 389.5,209.5 400.0,192.0C410.5,174.5 401.0,154.8 417.0,144.0" linkedTo="264" lineStyle="solid"/>  
+      <path id="24506" points="16.0,427.0, 235.0,230.0, 219.0,110.0, 281.0,129.0, 284.0,112.0, 302.0,97.0," d="M16.0,427.0C103.6,348.2 208.9,270.8 235.0,230.0C261.1,189.2 208.2,133.6 219.0,110.0C229.8,86.4 274.1,128.8 281.0,129.0C287.9,129.2 280.2,117.8 284.0,112.0C287.8,106.2 294.8,103.0 302.0,97.0" linkedTo="141"/>  
+      <path id="48573" points="759.0,184.0, 664.0,135.0, 597.0,116.0, 558.0,104.0, 510.0,104.0," d="M759.0,184.0C721.0,164.4 689.7,145.8 664.0,135.0C638.3,124.2 612.7,120.6 597.0,116.0C581.3,111.4 574.2,106.2 558.0,104.0C541.8,101.8 518.9,119.9 510.0,104.0" linkedTo="173" lineStyle="dotted"/>  
+      <path id="1927" points="7.0,145.0, 195.0,102.0, 292.0,151.0, 334.0,133.0, 367.0,140.0, 415.0,144.0," d="M7.0,145.0C82.2,127.8 151.5,101.1 195.0,102.0C238.5,102.9 274.2,147.0 292.0,151.0C309.8,155.0 320.6,135.0 334.0,133.0C347.4,131.0 353.6,138.2 367.0,140.0C380.4,141.8 399.0,154.8 415.0,144.0" linkedTo="263"/>  
+      <path id="77475" points="657.0,301.0, 592.0,250.0, 546.0,237.0, 512.0,217.0," d="M657.0,301.0C631.0,280.6 608.6,259.6 592.0,250.0C575.4,240.4 560.6,243.0 546.0,237.0C531.4,231.0 516.7,229.2 512.0,217.0" linkedTo="143"/>  
+      <rect id="46397" x="67" y="527" width="113" height="22" style="black_text_on_solid_white" text="To Papillon Buttress" arrowDirection="south_west"/>  
+      <rect id="58187" x="650" y="536" width="89" height="22" style="black_text_on_solid_white" text="To Wailing Wall" arrowDirection="east"/> 
+    </drawing>  
+    <legend> 
+      <climb/>  
+      <climb>141</climb>  
+      <climb>263</climb>  
+      <climb>264</climb>  
+      <climb>143</climb>  
+      <climb>173</climb> 
+    </legend> 
+  </image>  
+  <climb id="141" name="Expiry" fa="Asahel Bush, Phil Robinson, Jun 1975." length="20m" grade="18" extra="" stars="" number="174.">Start about 20m right of Heidelberg Direct on the left hand side of the second of the two prominent recesses, and opposite Rudge. Climb up the crack for 4m, then traverse left around the awkward bulge and up to the ledge. Surmount the offwidth - the chockstone here in the photo is reportedly now missing and makes this section the crux - then climb the large curving flake at the top - careful of rockfall.</climb>  
+  <climb id="263" stars="*" extra="Mixed" number="175." name="Lithium low down" length="25m" grade="18" fa="Gordon Broome, Hamish Jackson July 2021">Starts 1m left of Expiry, and crosses this climb at half height. Climb the intermittent cracks on the front of the buttres until the ledge at the start of the off-width on Expiry. Clip bolt high and right, climb face (tricky), or off width for 2m to horizontal break, then make exciting traverse right to arete (crux). Follows cracks on arete to top.</climb>  
+  <climb id="142" name="Lumbar Cruncher" fa="Marcel Jackson, Peter Jackson, Mar 1990.  Retro-bolted (with FA permission) in 2021 - two knifeblade pitons were used on the FA to protect the crux." stars="**" number="176." length="23m" grade="23" extra="Mixed">The original route. As for LCD, but move left and pull-through onto the arête on the jugs at the overhang. Traverse back right to finish up the overhanging crack and exit jugs on the prow.</climb>  
+  <climb id="264" stars="**" extra="Mixed" number="177." name="Lumbar Cruncher Direct" length="23m" grade="24" fa="Hamish Jackson, Gordon Broome, July 2021">Steep, technical and varied. The route tackles the gorgeous, steep orange wall left of the recess. The direct version improves the original as it continues up the steep line and is not escapable. Climb the smooth wall, then continue up the thin crack to the overhang. Pull-up past a bolt and move slightly R to the upper sentry box (crux). Finish up the overhanging crack and exit jugs on the prow. Lower-off.&lt;br/&gt;&lt;br/&gt;The natural gear is bomber and placed easily from good stances (a few cams from BD #0.2 - 0.75 and a BD #2 for the final crack).</climb>  
+  <climb id="143" name="Rudge" fa="Lyle Closs, Ian Lewis, Oct 1973 (Original).  Jeroen Jansen, Stella Lawless, May 2022 (RH Variant) " length="20m" grade="16" extra="" stars="*" number="178.">Some rather interesting moves for the grade, take a big cam or two. Get upside down and climb onto the jammed block from the left to get yourself established in the wide crack. Follow this to the top and lower-off. A nice variant at grade 18 starts by entering the line from the RHS.</climb>  
+  <image id="359" src="danger hog new.jpg" height="745" width="800" legend="true" legendTitle="The Danger Hog Shuffle Buttress" legendx="2" legendy="2"> 
+    <drawing> 
+      <path id="1689" points="271.0,662.0, 365.0,313.0, 301.0,176.0, 366.0,94.0, 359.0,65.0,lower-left" d="M271.0,662.0C308.6,522.4 361.3,373.4 365.0,313.0C368.7,252.6 300.8,217.9 301.0,176.0C301.2,134.1 360.5,104.6 366.0,94.0C371.5,83.4 361.8,76.6 359.0,65.0" linkedTo="173"/>  
+      <path id="16497" points="761.0,329.0, 689.0,249.0, 642.0,170.0, 596.0,104.0,belay" d="M761.0,329.0C732.2,297.0 711.0,278.4 689.0,249.0C667.0,219.6 659.4,197.1 642.0,170.0C624.6,142.9 614.4,130.4 596.0,104.0" linkedTo="176"/>  
+      <rect id="9001" x="176" y="73" width="99" height="22" style="black_text_on_solid_yellow" text="Lumbar Cruncher" arrowDirection="south"/>  
+      <rect id="23252" x="73" y="700" width="111" height="22" style="black_text_on_solid_white" text="To Papillon Buttress" arrowDirection="west"/>  
+      <rect id="56006" x="642" y="699" width="88" height="22" style="black_text_on_solid_white" text="To Wailing Wall" arrowDirection="east"/>  
+      <path id="47119" points="182.0,582.0, 190.0,461.0, 84.0,416.0, 82.0,381.0," d="M182.0,582.0C185.2,533.6 213.4,500.7 190.0,461.0C166.6,421.3 95.3,424.3 84.0,416.0C72.7,407.7 82.8,395.0 82.0,381.0" linkedTo="143" arrow="true"/> 
+    </drawing>  
+    <legend> 
+      <climb>143</climb>  
+      <climb>173</climb>  
+      <climb>176</climb> 
+    </legend> 
+  </image>  
+  <climb id="173" name="The Danger Hog Shuffle" fa="Martin Walch, Garn Cooper, Jun 1986.  Re-bolted in 2022." stars="**" length="20m" grade="18" extra="Mixed" number="179.">Not one you'll forget in a hurry. Bridge the shallow corner past some wires then clip the bolt. Move up and left around the arete to reach the crack-line (crux). Compose yourself and continue up the crack until the horizontal break, step left around the arete and up to the lower-off. Careful pulling your rope from the anchor as this route has a tendency to jam ropes.</climb>  
+  <climb id="176" name="Wee Ratty" fa="Otmar Buchman, 1981." stars="" length="6m" grade="14" number="180." extra="">A good route given it's height. The crack/layaway on the small buttress just right of the Danger Hog Shuffle. Grade 4 down-climb to the right to get off.</climb>  
+  <climb id="177" name="Quine" fa="Marcel Jackson, Peter Jackson, Oct 1989." length="18m" grade="18" stars="" extra="" number="181.">A few metres right and uphill from Wee Ratty is a small flat buttress. Climb up easily to the base of the thin crack on the left arête. Follow this up, finishing to the right of the main face.</climb>  
+  <climb id="178" name="Exactuary" fa="Garn Cooper, Noel Ward, 1986." length="10m" grade="14" number="182.">Exact details unknown but known to be somewhere in the vicinity of Big Electric Cat.</climb>  
+  <climb id="179" name="Big Electric Cat" fa="Garn Cooper, 1986." length="10m" number="183." stars="" extra="" grade="12">The bridging problem to the L of Gilmigrim.</climb>  
+  <climb id="180" name="Gilmigrim" fa="Garn Cooper, Noel Ward, Aug 1984." length="10m" grade="13" number="184.">Beware of loose blocks. About 50m R of Wee Ratty is a higher and more prominent buttress with a square roof at its top. From the front of the buttress climb the wide crack to the ledge. Continue up the face to the small ledge then either pull through the roof or step back R and up.</climb>  
+  <climb id="188" name="Triangle Smile" fa="Ray Lassman" length="6m" grade="14" number="185.">Climb the crack through the bulge at the top of No Hi Jinx buttress.</climb>  
+  <climb id="189" name="Small Acoustic Dog" fa="Colin Reed, Evan Peacock, Steve Ford, Nov 1990." length="8m" grade="21" extra="" number="186." stars="">Located on the small buttress just L of No Hi Jinx. Climb straight through the roof on RP's and cams.</climb>  
+  <text id="298" class="heading3">Spook Fright</text>  
+  <text id="338" class="text">Located about 40 m above the Wailing Wall.</text>  
+  <image id="306" src="Spook fright.jpg" height="667" width="500" legend="true" legendx="4" legendy="17"> 
+    <drawing> 
+      <path id="64755" points="259.0,594.0, 261.0,594.0, 278.0,398.0, 265.0,301.0, 267.0,36.0," d="M259.0,594.0C259.1,593.2 260.9,594.8 261.0,594.0C261.1,593.2 277.5,437.1 278.0,398.0C278.5,358.9 266.2,340.1 265.0,301.0C263.8,261.9 266.2,142.0 267.0,36.0" linkedTo="299"/> 
+    </drawing>  
+    <legend> 
+      <climb>299</climb> 
+    </legend> 
+  </image>  
+  <climb id="299" stars="" extra="" number="187." name="Spook Fright" length="5m" grade="13" fa="Chris Lang, Jamie Spencer, Aug 2021">A fun filled 5 meters all by itself. Stonker gear and a few good moves makes it a good warm up before wailing wall, which is a further 40m down the hill.</climb>  
+  <text id="384" class="heading3">Confusalation Buttress</text>  
+  <text id="385" class="text">Somewhere lost between Greenknowe Buttress and Wailing Wall. Doesn't appear to be described?&lt;br/&gt;At that lower contour anyways.&lt;br/&gt;A few other cracks doable here but shorter and less appealing to modern tastes.</text>  
+  <image id="388" legend="true" src="Confusulation.jpg" height="711"> 
+    <drawing> 
+      <path id="88873" points="167.0,717.0, 189.0,364.0, 165.0,262.0, 203.0,156.0, 219.0,59.0," d="M167.0,717.0C175.8,575.8 189.2,405.9 189.0,364.0C188.8,322.1 162.2,303.8 165.0,262.0C167.8,220.2 192.9,194.0 203.0,156.0C213.1,118.0 212.6,97.8 219.0,59.0" linkedTo="386"/> 
+    </drawing>  
+    <legend> 
+      <climb>386</climb> 
+    </legend> 
+  </image>  
+  <climb id="386" stars="" extra="" number="188." name=" Fog" length="8" grade="13" fa="Probably climbed last century or else... Dave James and Tim Whelan. June 2022">Corner and crack on tallest and proudest part of the buttress, that is, if a topo photo isn't enough...&lt;br/&gt;Worthwhile.</climb>  
+  <text class="heading3" id="187">Wailing Wall</text>  
+  <text id="280" class="text">The last of the major buttresses on the RHS of the cliff. To get there from the base follow the faint ridge-line from the top of the fields up and R of the car park - this makes for a somewhat easier walk than than the central uphill track line. To traverse there from the south, take a slightly downward trajectory across from lunch stop ledge for 5 mins (300m) - the wall faces north so is not visible until you have crossed the ridgeline.</text>  
+  <image id="313" src="wailing wall.jpg" height="1080" legend="true" legendTitle="Wailing Wall"> 
+    <drawing> 
+      <path id="59381" points="45.0,851.0, 136.0,597.0, 256.0,478.0, 330.0,284.0, 353.0,184.0, 386.0,52.0," linkedTo="181" d="M45.0,851.0C81.4,749.4 102.7,655.8 136.0,597.0C169.3,538.2 220.4,535.5 256.0,478.0C291.6,420.5 317.1,323.0 330.0,284.0C342.9,245.0 343.4,223.9 353.0,184.0C362.6,144.1 372.8,104.8 386.0,52.0"/>  
+      <path id="6546" points="456.0,1046.0, 427.0,756.0, 446.0,586.0, 454.0,527.0, 443.0,477.0, 398.0,376.0, 419.0,245.0, 431.0,150.0, 435.0,107.0, 461.0,127.0, 477.0,92.0,lower 476.0,133.0," linkedTo="291" d="M456.0,1046.0C444.4,930.0 428.5,824.4 427.0,756.0C425.5,687.6 443.2,609.7 446.0,586.0C448.8,562.3 454.6,547.5 454.0,527.0C453.4,506.5 450.1,496.2 443.0,477.0C435.9,457.8 402.6,420.0 398.0,376.0C393.4,332.0 413.5,282.9 419.0,245.0C424.5,207.1 429.0,167.2 431.0,150.0C433.0,132.8 424.6,115.0 435.0,107.0C445.4,99.0 448.6,131.4 461.0,127.0C473.4,122.6 462.7,86.3 477.0,92.0C491.3,97.7 477.5,149.3 476.0,133.0"/>  
+      <path id="33682" points="655.0,876.0, 616.0,633.0, 587.0,500.0, 551.0,431.0, 503.0,337.0, 483.0,251.0, 477.0,136.0," linkedTo="182" d="M655.0,876.0C639.4,778.8 625.7,686.6 616.0,633.0C606.3,579.4 596.5,529.6 587.0,500.0C577.5,470.4 565.3,458.7 551.0,431.0C536.7,403.3 515.5,370.0 503.0,337.0C490.5,304.0 487.5,286.0 483.0,251.0C478.5,216.0 478.5,152.3 477.0,136.0"/>  
+      <path id="34705" points="738.0,865.0, 722.0,783.0, 689.0,712.0," d="M738.0,865.0C731.6,832.2 731.6,812.8 722.0,783.0C712.4,753.2 702.2,740.4 689.0,712.0" arrow="true" linkedTo="183"/>  
+      <path id="83728" points="777.0,866.0, 727.0,751.0, 703.0,660.0," d="M777.0,866.0C757.0,820.0 739.7,786.4 727.0,751.0C714.3,715.6 712.6,696.4 703.0,660.0" arrow="true" linkedTo="378"/> 
+    </drawing>  
+    <legend> 
+      <climb>181</climb>  
+      <climb>291</climb>  
+      <climb>182</climb>  
+      <climb>183</climb>  
+      <climb>378</climb> 
+    </legend> 
+  </image>  
+  <climb id="181" name="No Hi Jinx" fa="Al Adams, Garn Cooper, Pete Steane, Aug 1984." stars="*" length="12m" grade="17" extra="" number="189.">Start 3m L of Ashlars' Edge in the corner 2m left of the arate. From the base of the corner climb up and R to a small ledge then gain the arête and continue up it on the left side. Slightly loose. Small gear necessary.</climb>  
+  <climb id="291" stars="**" extra="Mixed" number="190." name="Ashlars' edge" length="15m" grade="22" fa="H Jackson and M Brown Aug 2021">Start 5m left of Wailing wall at the short orange corner 2m right of the arete. Climb short short corner (small cam optional), step left onto nose (crux) and continue up wall just R of arete to the small ledge 4m before the top (small cam required here &lt;0.3 camelot). Now climb diagonally right up face to DBB above the wailing wall.</climb>  
+  <climb id="182" name="Wailing Wall" fa="Marcel Jackson, Hamish Jackson, Jan 1992. Alt start H Jackson 2021" stars="***" length="12m" grade="26" extra="Mixed" number="191.">Superb and sustained face climbing on what is considered by some as the best rock at Lowdina. Climbs the distinctive blank orange wall past 4BR's (some recently replaced 2021) and a #2 camalot to protect final 4m to DBB lower-off.&lt;br/&gt;&lt;br/&gt;Alt start (18m 26): Start for Ashler's edge, up to first BR, then more right up obvious diagonal to reach first BR of WW (run out, or small cam at feet). Adds 6m of gr 22 climbing.</climb>  
+  <climb id="183" name="Argonautica" fa="Chris Dawson, Mary McWhirther, Oct 1974." length="15m" grade="16" number="192.">Start just to the R of Wailing Wall and climb the obvious crack/chimney.</climb>  
+  <climb id="378" stars="" extra="" number="193." name="Whimper" length="15" grade="16" fa="probably someone last century but otherwise Dave James and Tim Whelan June 2022">The wider crack about 2 m right of Argonautica. Not really offwidthing. No.5 handy but not essential.</climb>  
+  <climb id="184" name="Velveteen" fa="Rob Williams, Marcel Jackson, 1994." length="7m" grade="6" number="194.">Climbs the short arête and wall of perfect dolerite about 4m R of Argonautica. A knife blade was placed in the horizontal on the FA.</climb>  
+  <text id="308" class="heading3">Radical Centrist Buttress</text>  
+  <text id="309" class="text">This block has a lovely clean orange front face and is found 80m right and 30m up hill from the Wailing wall. Head north from the wailing wall crossing a minor gully at 50m, and a minor ridgeline at 80m. The buttress lies 30m up the hill.</text>  
+  <image id="310" src="Radical Centrist.jpg" height="1080" legend="true" legendTitle="Radical Centrist Buttress"> 
+    <drawing> 
+      <path id="38366" points="391.0,828.0, 397.0,736.0, 412.0,609.0, 383.0,531.0, 414.0,471.0, 359.0,465.0, 333.0,460.0, 319.0,434.0, 374.0,375.0, 426.0,269.0, 441.0,179.0, 455.0,158.0,lower" linkedTo="311" d="M391.0,828.0C393.4,791.2 393.5,772.7 397.0,736.0C400.5,699.3 414.3,642.2 412.0,609.0C409.7,575.8 382.6,558.0 383.0,531.0C383.4,504.0 421.6,491.8 414.0,471.0C406.4,450.2 369.5,466.4 359.0,465.0C348.5,463.6 341.4,466.5 333.0,460.0C324.6,453.5 313.9,444.6 319.0,434.0C324.1,423.4 356.4,402.1 374.0,375.0C391.6,347.9 414.2,303.5 426.0,269.0C437.8,234.5 438.4,188.8 441.0,179.0C443.6,169.2 449.4,166.4 455.0,158.0"/>  
+      <path id="93978" points="486.0,812.0, 500.0,678.0, 501.0,601.0, 510.0,507.0, 510.0,388.0, 521.0,310.0, 532.0,254.0, 513.0,182.0, 473.0,162.0," linkedTo="312" d="M486.0,812.0C491.6,758.4 497.8,708.7 500.0,678.0C502.2,647.3 499.2,631.8 501.0,601.0C502.8,570.2 508.4,544.7 510.0,507.0C511.6,469.3 508.2,419.5 510.0,388.0C511.8,356.5 517.3,332.5 521.0,310.0C524.7,287.5 533.4,276.8 532.0,254.0C530.6,231.2 522.7,197.1 513.0,182.0C503.3,166.9 489.0,170.0 473.0,162.0"/> 
+    </drawing>  
+    <legend> 
+      <climb>311</climb>  
+      <climb>312</climb> 
+    </legend> 
+  </image>  
+  <climb id="311" stars="*" extra="Mixed" number="195." name="Radical Centrist" length="12m" grade="24" fa="H Jackson  and G Broome Aug 2021">Start at the bottom right and move up the orange wall and small overlap with difficulty (crux - requires an usual number of moves left and right to facilitate progress to finally gain the upper left quadrant before the rooflet). Up seam above rooflet, then crack to top. DBB</climb>  
+  <climb id="312" stars="*" extra="Mixed" number="196." name="Authoritarian ultranationalism " length="10m" grade="20" fa="G Broome and H Jackson Aug 2021">A great companion route to RC. Climb steep face right of arete past 2 FH and funky moves, then gain finger crack, onto ledge, then hand crack to finish.</climb>  
+  <text id="300" class="heading3">Topless Buttress</text>  
+  <text id="339" class="text">Located downhill and across the gully from Wailing Wall.</text>  
+  <image id="305" width="700" height="933" legend="true" src="Topless rock(1).jpg" legendTitle="Topless Buttress"> 
+    <drawing> 
+      <path id="62366" points="457.0,761.0, 406.0,551.0, 440.0,450.0, 473.0,284.0, 455.0,137.0,label 446.0,66.0," d="M457.0,761.0C436.5,678.9 408.3,593.6 406.0,551.0C403.7,508.4 429.6,491.3 440.0,450.0C450.4,408.7 470.2,343.2 473.0,284.0C475.8,224.8 458.5,165.4 455.0,137.0C451.5,108.6 449.6,94.4 446.0,66.0" linkedTo="301"/>  
+      <path id="79593" points="457.0,759.0, 405.0,552.0, 441.0,449.0, 472.0,264.0, 398.0,198.0, 396.0,130.0,label 366.0,55.0," d="M457.0,759.0C436.5,676.9 407.1,595.6 405.0,552.0C402.9,508.4 431.0,491.5 441.0,449.0C451.0,406.5 478.9,303.1 472.0,264.0C465.1,224.9 418.8,215.5 398.0,198.0C377.2,180.5 401.9,156.6 396.0,130.0C390.1,103.4 378.0,85.0 366.0,55.0" linkedTo="303"/>  
+      <path id="10599" points="457.0,757.0, 405.0,552.0, 443.0,448.0, 473.0,264.0, 397.0,198.0, 315.0,201.0, 288.0,123.0,label 274.0,91.0," d="M457.0,757.0C436.5,674.9 407.1,595.6 405.0,552.0C402.9,508.4 433.0,490.5 443.0,448.0C453.0,405.5 479.9,303.1 473.0,264.0C466.1,224.9 417.8,215.5 397.0,198.0C376.2,180.5 342.0,219.6 315.0,201.0C288.0,182.4 292.9,136.1 288.0,123.0C283.1,109.9 279.6,103.8 274.0,91.0" linkedTo="302"/> 
+    </drawing>  
+    <legend> 
+      <climb>302</climb>  
+      <climb>303</climb>  
+      <climb>301</climb> 
+    </legend> 
+  </image>  
+  <climb id="302" stars="" extra="" number="197." name="Puffin" length="15m" grade="14" fa="Jamie Spencer, Chris Lang, Aug 2021">Climb 'Topless on 24s' to the horizontal break, go left and up the left-most groove. Bonus points if you sling the dead branches emerging from the crack.</climb>  
+  <climb id="303" stars="" extra="" number="198." name="Winter dog" length="15m" grade="14" fa="Chris Lang, Jamie Spencer, Aug 2021">Climb 'Topless on 24s' to the horizontal break, go left and up the middle groove.</climb>  
+  <climb id="301" stars="*" extra="" number="199." name="Topless on twenty-fours" length="15m" grade="14" fa="Chris Lang, Jamie Spencer, Aug 2021">The obvious clean fist-sized crack line, made for learning to jam. Two micro cams are nice, stonker gear to the top.</climb> 
+</guide>

@@ -1,0 +1,41 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Same typography and palette as the current thesarvo.com (Confluence): Helvetica/Arial, navy headings, blue chrome. */
+  --font-display: Helvetica, Tahoma, Arial, sans-serif;
+  --font-sans: Helvetica, Tahoma, Arial, sans-serif;
+
+  --color-ink: #000000;
+  --color-navy: #172b4d;
+  --color-link: #0052cc;
+  --color-muted: #6b778c;
+  --color-paper: #f4f5f7;
+  --color-card: #ffffff;
+  --color-line: #c0c0c0;
+  --color-forest: #0049b0;
+  --color-forest-soft: #0052cc;
+  --color-amber: #f7941e;
+  --color-amber-deep: #b45f06;
+}
+
+html {
+  background: #fff;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+}
+
+/* Guide text arrives with literal <br/> line breaks; see Lines component. */
+.guide-prose p + p {
+  margin-top: 0.75rem;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "name": "thesarvo-3",
+  "private": true,
+  "type": "module",
+  "imports": {
+    "#/*": "./src/*"
+  },
+  "scripts": {
+    "dev": "vite dev --port 47213 --strictPort",
+    "generate-routes": "tsr generate",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "node node_modules/typescript-7/bin/tsc --noEmit",
+    "lint": "eslint",
+    "format": "prettier --write . && eslint --fix",
+    "check": "prettier --check ."
+  },
+  "dependencies": {
+    "@tanstack/react-router": "1.170.46",
+    "@tanstack/react-start": "1.169.4",
+    "d3-shape": "^3.2.0",
+    "fast-xml-parser": "^5.11.2",
+    "heic-to": "^1.6.6",
+    "leaflet": "^1.9.4",
+    "nitro": "3.0.260610-beta",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@tanstack/eslint-config": "0.4.0",
+    "@tanstack/router-cli": "^1.132.0",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/d3-shape": "^3.2.0",
+    "@types/leaflet": "^1.9.22",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^9.20.0",
+    "happy-dom": "^21.0.4",
+    "prettier": "^3.8.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3",
+    "typescript-7": "npm:typescript@^7.0.2",
+    "vite": "^8.0.0",
+    "vitest": "^5.0.5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "lightningcss"
+    ]
+  }
+}
