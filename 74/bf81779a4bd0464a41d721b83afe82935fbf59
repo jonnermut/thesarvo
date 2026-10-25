@@ -1,0 +1,23 @@
+thesarvo-3/src/guide/edit/Editor.tsx
+  s_e20d0a1ebc47aa::t_67d10eedd2ac9c 175,182,229
+  s_e20d0a1ebc47aa::t_ec774e7432f3f0 177,184,227-228,230-231
+  s_e20d0a1ebc47aa::t_e9b0da8e0bfb67 232-234
+thesarvo-3/src/guide/edit/fields.tsx
+  s_e20d0a1ebc47aa::t_ec774e7432f3f0 82-84,90
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "74bf81779a4bd0464a41d721b83afe82935fbf59",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
