@@ -128,7 +128,7 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: P
         {/* While a drawing mode is active the other tools hide, leaving only the way out. */}
         {TOOLS.filter(([id]) => tool === 'select' || id === 'select').map(([id, label]) => (
           <Button key={id} variant={tool === id ? 'primary' : 'plain'} onClick={() => { setTool(id); setDrawing([]) }}>
-            {label}
+            {tool === 'select' ? label : 'Done'}
           </Button>
         ))}
         {tool === 'route' && (
