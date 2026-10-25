@@ -1,0 +1,46 @@
+thesarvo-3/src/routes/edit.$.tsx
+  s_e20d0a1ebc47aa::t_046ffd117b2309 1-31
+thesarvo-3/src/routeTree.gen.ts
+  s_e20d0a1ebc47aa::t_046ffd117b2309 14,27-31,41,47,54,59,61-62,68,88-94,108
+thesarvo-3/src/guide/content/disk.ts
+  s_e20d0a1ebc47aa::t_c5ef06ecd0bfe1 29-36
+thesarvo-3/src/guide/content/disk.test.ts
+  s_e20d0a1ebc47aa::t_c5ef06ecd0bfe1 25,28-30
+  s_e20d0a1ebc47aa::t_b829c8f0961b08 26-27
+thesarvo-3/src/guide/content/types.ts
+  s_e20d0a1ebc47aa::t_c5ef06ecd0bfe1 21-22
+thesarvo-3/src/guide/edit/Editor.tsx
+  s_e20d0a1ebc47aa::t_44e6926833068e 76-78,123,150-153,171
+  s_e20d0a1ebc47aa::t_046ffd117b2309 1-75,79-122,124-149,154-170,172-205
+thesarvo-3/src/guide/edit/fields.tsx
+  s_e20d0a1ebc47aa::t_ff84a38c96f0f2 1-95
+thesarvo-3/src/guide/server.ts
+  s_e20d0a1ebc47aa::t_c5ef06ecd0bfe1 10-13
+thesarvo-3/src/guide/edit/newNodes.ts
+  s_e20d0a1ebc47aa::t_046ffd117b2309 1-30
+thesarvo-3/src/guide/view/Topo.tsx
+  s_e20d0a1ebc47aa::t_ff84a38c96f0f2 1,18,23,32-33,35,70
+thesarvo-3/src/guide/edit/TopoEditor.tsx
+  s_e20d0a1ebc47aa::t_8b0e962f358561 1-137,139-276
+  s_e20d0a1ebc47aa::t_c8ab7f7655a6eb 138
+thesarvo-3/src/guide/edit/topoOps.ts
+  s_e20d0a1ebc47aa::t_8b0e962f358561 64-67
+thesarvo-3/src/guide/edit/NodeForms.tsx
+  s_e20d0a1ebc47aa::t_ff84a38c96f0f2 1-87
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "13ae2a39b03adeec19707caf053072c600e6d86b",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "unknown"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
