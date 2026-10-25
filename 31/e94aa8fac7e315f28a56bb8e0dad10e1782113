@@ -1,0 +1,24 @@
+thesarvo-3/src/guide/view/RoutesChart.tsx
+  s_e20d0a1ebc47aa::t_85958c96639c9b 19-34,38-53,61-77,81-99
+thesarvo-3/src/guide/view/routeStats.test.ts
+  s_e20d0a1ebc47aa::t_85958c96639c9b 8-11,13-15,19-23
+  s_e20d0a1ebc47aa::t_a2e47bc9ac7b49 24
+thesarvo-3/src/guide/view/routeStats.ts
+  s_e20d0a1ebc47aa::t_85958c96639c9b 3-4,7,9-12,15-16,18-42,44,47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "31e94aa8fac7e315f28a56bb8e0dad10e1782113",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
