@@ -1,0 +1,27 @@
+thesarvo-3/vite.config.ts
+  s_e20d0a1ebc47aa::t_595fa9e385be0e 1-3,8-29,33
+thesarvo-3/src/guide/content/index.ts
+  s_e20d0a1ebc47aa::t_595fa9e385be0e 1,10
+thesarvo-3/src/guide/content/defaultDir.ts
+  s_e20d0a1ebc47aa::t_595fa9e385be0e 1-3
+thesarvo-3/src/guide/view/Topo.tsx
+  s_e20d0a1ebc47aa::t_571850e5750350 31
+thesarvo-3/src/guide/view/GuideView.test.tsx
+  s_e20d0a1ebc47aa::t_56660039cfcbe0 1-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "16b41db4299394f164fd916aef914c5c4e18eb0b",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
