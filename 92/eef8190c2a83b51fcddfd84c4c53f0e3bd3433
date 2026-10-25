@@ -1,0 +1,40 @@
+thesarvo-3/src/guide/edit/NodeForms.tsx
+  s_e20d0a1ebc47aa::t_8fb47b3f1d7949 101,140
+thesarvo-3/src/guide/model/types.ts
+  s_e20d0a1ebc47aa::t_8fb47b3f1d7949 17,36,52,61,78,97,118,131,140,142
+thesarvo-3/src/guide/edit/state.test.ts
+  s_e20d0a1ebc47aa::t_8fb47b3f1d7949 5,7,9,53
+thesarvo-3/src/guide/view/kml.test.ts
+  s_e20d0a1ebc47aa::t_8fb47b3f1d7949 9,11-12
+thesarvo-3/src/guide/edit/topoOps.test.ts
+  s_e20d0a1ebc47aa::t_8fb47b3f1d7949 7
+thesarvo-3/src/guide/edit/newNodes.ts
+  s_e20d0a1ebc47aa::t_8fb47b3f1d7949 17,19,21,23,29
+thesarvo-3/scripts/sync-content.ts
+  s_e20d0a1ebc47aa::t_fdf0c5e6bfcc9c 71
+thesarvo-3/src/guide/convert/xml.ts
+  s_e20d0a1ebc47aa::t_40f7634f9a20a5 28
+  s_e20d0a1ebc47aa::t_8fb47b3f1d7949 139
+thesarvo-3/docs/plan-backend.md
+  s_e20d0a1ebc47aa::t_fdf0c5e6bfcc9c 48,51
+thesarvo-3/src/guide/edit/drafts.test.ts
+  s_e20d0a1ebc47aa::t_8fb47b3f1d7949 5
+thesarvo-3/src/guide/edit/topoOps.ts
+  s_e20d0a1ebc47aa::t_8fb47b3f1d7949 14,48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "92eef8190c2a83b51fcddfd84c4c53f0e3bd3433",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
