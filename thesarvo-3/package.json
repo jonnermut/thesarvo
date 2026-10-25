@@ -14,7 +14,8 @@
     "typecheck": "node node_modules/typescript-7/bin/tsc --noEmit",
     "lint": "eslint",
     "format": "prettier --write . && eslint --fix",
-    "check": "prettier --check ."
+    "check": "prettier --check .",
+    "sync-content": "tsx scripts/sync-content.ts"
   },
   "dependencies": {
     "@tanstack/react-router": "1.170.46",
@@ -43,6 +44,7 @@
     "happy-dom": "^21.0.4",
     "prettier": "^3.8.1",
     "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15",
     "typescript": "^6.0.3",
     "typescript-7": "npm:typescript@^7.0.2",
     "vite": "^8.0.0",
