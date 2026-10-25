@@ -583,7 +583,7 @@
 				CURRENT_PROJECT_VERSION = 108;
 				DEVELOPMENT_TEAM = 8K6T2FHY8E;
 				INFOPLIST_FILE = thesarvo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 2.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesarvo.guide;
@@ -602,7 +602,7 @@
 				CURRENT_PROJECT_VERSION = 108;
 				DEVELOPMENT_TEAM = 8K6T2FHY8E;
 				INFOPLIST_FILE = thesarvo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 2.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesarvo.guide;
