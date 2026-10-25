@@ -5,10 +5,10 @@ import { MAX_IMAGE_BYTES } from '#/guide/content/paths'
 const json = (body: unknown, status = 200) => Response.json(body, { status })
 
 /**
- * Accepts one image per request: `POST /upload?guide=<id>` with a multipart `file`.
+ * Accepts one image per request: `POST /g/upload?guide=<id>` with a multipart `file`.
  * No login check yet: editing is open until the auth stage of plan-backend.
  */
-export const Route = createFileRoute('/upload')({
+export const Route = createFileRoute('/g/upload')({
   server: {
     handlers: {
       POST: async ({ request }) => {

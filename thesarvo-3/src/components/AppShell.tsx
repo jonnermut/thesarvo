@@ -7,7 +7,7 @@ const STORAGE_KEY = 'thesarvo.sidebar'
 
 function Logo() {
   return (
-    <Link to="/" className="flex items-center gap-2.5 text-white">
+    <Link to="/g" className="flex items-center gap-2.5 text-white">
       <svg viewBox="0 0 32 32" className="size-8" aria-hidden>
         <path d="M2 27 12 8l6 10 3-5 9 14z" fill="#f7941e" />
         <path d="M12 8l-3 6 3-1 2 3z" fill="#fff" opacity=".85" />

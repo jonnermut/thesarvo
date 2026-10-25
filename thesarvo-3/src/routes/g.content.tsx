@@ -10,7 +10,7 @@ const TYPES: Record<string, string> = {
 }
 
 /** Serves images from the content source. Development stand-in for object storage + CDN. */
-export const Route = createFileRoute('/content')({
+export const Route = createFileRoute('/g/content')({
   server: {
     handlers: {
       GET: async ({ request }) => {

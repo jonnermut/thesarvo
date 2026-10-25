@@ -37,7 +37,7 @@ export function ancestorIds(root: IndexNode, path: string): string[] {
  * `<id>-<name>`, thumbnails as `<id>-t-<name>`.
  */
 export const imageUrl = (guideId: string, name: string, thumb = false) =>
-  `/content?f=${encodeURIComponent(`${guideId}-${thumb ? 't-' : ''}${name}`.toLowerCase())}`
+  `${GUIDE_PREFIX}/content?f=${encodeURIComponent(`${guideId}-${thumb ? 't-' : ''}${name}`.toLowerCase())}`
 
 export const MAX_IMAGE_BYTES = 25 * 1024 * 1024
 

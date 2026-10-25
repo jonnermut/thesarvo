@@ -1,4 +1,4 @@
-import { MAX_IMAGE_BYTES } from '#/guide/content/paths'
+import { GUIDE_PREFIX, MAX_IMAGE_BYTES } from '#/guide/content/paths'
 
 /** Longest edge kept when a photo is shrunk before upload; plenty for a topo on any screen. */
 const MAX_EDGE = 3200
@@ -50,7 +50,7 @@ export async function prepareImage(file: File): Promise<File> {
 export function uploadImage(guideId: string, file: File, onProgress: (fraction: number) => void): Promise<string> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
-    xhr.open('POST', `/upload?guide=${encodeURIComponent(guideId)}`)
+    xhr.open('POST', `${GUIDE_PREFIX}/upload?guide=${encodeURIComponent(guideId)}`)
     xhr.upload.onprogress = (e) => e.lengthComputable && onProgress(e.loaded / e.total)
     xhr.onload = () => {
       const body = JSON.parse(xhr.responseText || '{}') as { name?: string; error?: string }

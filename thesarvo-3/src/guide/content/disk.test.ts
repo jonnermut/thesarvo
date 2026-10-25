@@ -42,8 +42,8 @@ describe('DiskContentSource', () => {
 
 describe('imageUrl', () => {
   it('encodes names and picks the thumbnail variant', () => {
-    expect(imageUrl('167', 'A b.jpg')).toBe('/content?f=167-a%20b.jpg')
-    expect(imageUrl('167', 'a.jpg', true)).toBe('/content?f=167-t-a.jpg')
+    expect(imageUrl('167', 'A b.jpg')).toBe('/g/content?f=167-a%20b.jpg')
+    expect(imageUrl('167', 'a.jpg', true)).toBe('/g/content?f=167-t-a.jpg')
   })
 })
 

@@ -13,14 +13,14 @@ npx eslint src      # lint (needs TS 6, installed as `typescript`)
 npm run build       # production build
 ```
 
-Static HTML for chosen pages: `PRERENDER_PATHS="/,/g/south-east/lowdina" npm run build`.
+Static HTML for chosen pages: `PRERENDER_PATHS="/g,/g/south-east/lowdina" npm run build`.
 Every other guide renders on demand from the index.
 
 ## Content
 
 Guides are read through a `ContentSource` (`src/guide/content`). The dev default is the
 downloaded data folder; override with `CONTENT_DIR=/path/to/data`. In dev, images are
-served by a Vite middleware at `/content?f=<file>`.
+served by a Vite middleware at `/g/content?f=<file>`.
 
 ## Layout
 

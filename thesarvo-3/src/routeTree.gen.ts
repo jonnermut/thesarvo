@@ -10,23 +10,19 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ContentRouteImport } from './routes/content'
-import { Route as UploadRouteImport } from './routes/upload'
+import { Route as GIndexRouteImport } from './routes/g.index'
 import { Route as GSplatRouteImport } from './routes/g.$'
+import { Route as GContentRouteImport } from './routes/g.content'
+import { Route as GUploadRouteImport } from './routes/g.upload'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ContentRoute = ContentRouteImport.update({
-  id: '/content',
-  path: '/content',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const UploadRoute = UploadRouteImport.update({
-  id: '/upload',
-  path: '/upload',
+const GIndexRoute = GIndexRouteImport.update({
+  id: '/g/',
+  path: '/g/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GSplatRoute = GSplatRouteImport.update({
@@ -34,39 +30,53 @@ const GSplatRoute = GSplatRouteImport.update({
   path: '/g/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GContentRoute = GContentRouteImport.update({
+  id: '/g/content',
+  path: '/g/content',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GUploadRoute = GUploadRouteImport.update({
+  id: '/g/upload',
+  path: '/g/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/content': typeof ContentRoute
-  '/upload': typeof UploadRoute
   '/g/$': typeof GSplatRoute
+  '/g/content': typeof GContentRoute
+  '/g/upload': typeof GUploadRoute
+  '/g/': typeof GIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/content': typeof ContentRoute
-  '/upload': typeof UploadRoute
   '/g/$': typeof GSplatRoute
+  '/g/content': typeof GContentRoute
+  '/g/upload': typeof GUploadRoute
+  '/g': typeof GIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/content': typeof ContentRoute
-  '/upload': typeof UploadRoute
   '/g/$': typeof GSplatRoute
+  '/g/content': typeof GContentRoute
+  '/g/upload': typeof GUploadRoute
+  '/g/': typeof GIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/content' | '/upload' | '/g/$'
+  fullPaths: '/' | '/g/$' | '/g/content' | '/g/upload' | '/g/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/content' | '/upload' | '/g/$'
-  id: '__root__' | '/' | '/content' | '/upload' | '/g/$'
+  to: '/' | '/g/$' | '/g/content' | '/g/upload' | '/g'
+  id: '__root__' | '/' | '/g/$' | '/g/content' | '/g/upload' | '/g/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ContentRoute: typeof ContentRoute
-  UploadRoute: typeof UploadRoute
   GSplatRoute: typeof GSplatRoute
+  GContentRoute: typeof GContentRoute
+  GUploadRoute: typeof GUploadRoute
+  GIndexRoute: typeof GIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -78,18 +88,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/content': {
-      id: '/content'
-      path: '/content'
-      fullPath: '/content'
-      preLoaderRoute: typeof ContentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/upload': {
-      id: '/upload'
-      path: '/upload'
-      fullPath: '/upload'
-      preLoaderRoute: typeof UploadRouteImport
+    '/g/': {
+      id: '/g/'
+      path: '/g'
+      fullPath: '/g/'
+      preLoaderRoute: typeof GIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/g/$': {
@@ -99,14 +102,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/g/content': {
+      id: '/g/content'
+      path: '/g/content'
+      fullPath: '/g/content'
+      preLoaderRoute: typeof GContentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/g/upload': {
+      id: '/g/upload'
+      path: '/g/upload'
+      fullPath: '/g/upload'
+      preLoaderRoute: typeof GUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ContentRoute: ContentRoute,
-  UploadRoute: UploadRoute,
   GSplatRoute: GSplatRoute,
+  GContentRoute: GContentRoute,
+  GUploadRoute: GUploadRoute,
+  GIndexRoute: GIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

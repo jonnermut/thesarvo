@@ -1,32 +1,9 @@
-import { Link, createFileRoute, getRouteApi } from '@tanstack/react-router'
-import { guideUrl } from '#/guide/content/paths'
+import { createFileRoute, redirect } from '@tanstack/react-router'
+import { GUIDE_PREFIX } from '#/guide/content/paths'
 
-const root = getRouteApi('__root__')
-
-export const Route = createFileRoute('/')({ component: Home })
-
-function Home() {
-  const index = root.useLoaderData()
-  return (
-    <div>
-      <section className="bg-forest px-6 py-10 text-white">
-        <div className="mx-auto max-w-5xl">
-          <h1 className="text-3xl font-bold">Tasmanian climbing guides</h1>
-          <p className="mt-4 max-w-2xl text-lg text-white/75">Free, community-written guides to the crags and boulders of Tasmania. Pick a region to start.</p>
-        </div>
-      </section>
-      <section className="mx-auto grid max-w-5xl gap-4 px-6 py-10 sm:grid-cols-2 lg:grid-cols-3">
-        {index.children.map((region) => (
-          <Link
-            key={region.id}
-            to={guideUrl(region)}
-            className="group border border-line bg-card p-4 transition hover:bg-paper"
-          >
-            <h2 className="text-xl font-semibold text-navy">{region.title}</h2>
-            <p className="mt-1 text-sm text-muted">{region.children.length ? `${region.children.length} areas` : 'Guide'}</p>
-          </Link>
-        ))}
-      </section>
-    </div>
-  )
-}
+// The app owns only /g; the bare root just forwards there until the migration decides otherwise.
+export const Route = createFileRoute('/')({
+  beforeLoad: () => {
+    throw redirect({ href: GUIDE_PREFIX })
+  },
+})

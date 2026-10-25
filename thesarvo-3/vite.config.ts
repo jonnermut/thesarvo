@@ -8,7 +8,7 @@ import { nitro } from 'nitro/vite'
 import { DEFAULT_CONTENT_DIR } from './src/guide/content/defaultDir'
 
 /**
- * Dev only: serve `/content?f=<file>` straight from the content folder.
+ * Dev only: serve `/g/content?f=<file>` straight from the content folder.
  * The dev server answers image requests (Sec-Fetch-Dest: image) before our route sees them.
  */
 function devContentFiles(): Plugin {
@@ -17,7 +17,7 @@ function devContentFiles(): Plugin {
   return {
     name: 'dev-content-files',
     configureServer(server) {
-      server.middlewares.use('/content', (req, res, next) => {
+      server.middlewares.use('/g/content', (req, res, next) => {
         const name =
           new URL(req.url ?? '', 'http://x').searchParams.get('f') ?? ''
         const file = [dir, uploadDir]
@@ -36,7 +36,7 @@ function devContentFiles(): Plugin {
 }
 
 // Guides are rendered on demand; only the paths listed here become static HTML at build time.
-// e.g. PRERENDER_PATHS="/,/g/tasmania" npm run build
+// e.g. PRERENDER_PATHS="/g,/g/tasmania" npm run build
 const prerenderPaths = (process.env.PRERENDER_PATHS ?? '')
   .split(',')
   .filter(Boolean)
