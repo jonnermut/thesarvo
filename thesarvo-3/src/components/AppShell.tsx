@@ -1,4 +1,4 @@
-import { Link, useMatch } from '@tanstack/react-router'
+import { Link, useMatch, useMatches } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import type { IndexNode } from '#/guide/content/types'
 import { SideNav } from './SideNav'
@@ -42,7 +42,11 @@ function EditLink() {
 }
 
 /** Shared page frame: header, collapsible side navigation, footer. */
-export function AppShell({ index, children }: { index: IndexNode; children: React.ReactNode }) {
+export function AppShell({ children }: { children: React.ReactNode }) {
+  // Each page's loader brings a tree trimmed to its surroundings; the sidebar fills in the rest.
+  const tree = useMatches({
+    select: (matches) => matches.map((m) => m.loaderData as { tree?: IndexNode } | undefined).find((d) => d?.tree)?.tree,
+  })
   // Desktop: sidebar is open unless collapsed (remembered). Mobile: a drawer, closed by default.
   const [collapsed, setCollapsed] = useState(false)
   const [drawer, setDrawer] = useState(false)
@@ -102,7 +106,7 @@ export function AppShell({ index, children }: { index: IndexNode; children: Reac
             if ((e.target as HTMLElement).closest('a')) setDrawer(false)
           }}
         >
-          <SideNav root={index} />
+          {tree && <SideNav local={tree} />}
         </aside>
         <main className="min-w-0 flex-1">{children}</main>
       </div>

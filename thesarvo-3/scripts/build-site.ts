@@ -10,7 +10,7 @@ import { mkdir, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { flatten } from '../src/guide/content/paths'
 import { JsonContentSource } from '../src/guide/content/json'
-import { formatJson } from '../src/guide/content/syncFeed'
+import { buildManifest } from '../src/guide/content/manifest'
 
 const args = process.argv.slice(2)
 const option = (name: string, fallback: string) => {
@@ -26,7 +26,8 @@ const data = path.resolve('public/g-data')
 await rm(data, { recursive: true, force: true })
 await mkdir(path.join(data, 'guide'), { recursive: true })
 await mkdir(path.join(data, 'images'), { recursive: true })
-await writeFile(path.join(data, 'index.json'), formatJson(index))
+// The tree and stats every page refreshes itself from after loading.
+await writeFile(path.join(data, 'manifest.json'), JSON.stringify(await buildManifest(index, (id) => source.getGuide(id))))
 let guides = 0
 for (const node of flatten(index).filter((n) => n.isGuide)) {
   await writeFile(path.join(data, 'guide', `${node.id}.json`), JSON.stringify(await source.getGuide(node.id)))

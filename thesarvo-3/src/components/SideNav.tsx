@@ -1,6 +1,7 @@
 import { Link, useRouterState } from '@tanstack/react-router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ancestorIds, findByPath, guideUrl } from '#/guide/content/paths'
+import { fetchTree } from '#/guide/server'
 import type { IndexNode } from '#/guide/content/types'
 
 function Chevron({ open }: { open: boolean }) {
@@ -34,7 +35,7 @@ function NavItem({
         className={`flex items-center rounded-md hover:bg-black/5 ${active ? 'bg-amber/15' : ''}`}
         style={{ paddingLeft: depth * 12 }}
       >
-        {node.children.length ? (
+        {node.children.length || node.more ? (
           <button
             type="button"
             onClick={() => toggle(node.id)}
@@ -56,6 +57,11 @@ function NavItem({
         >
           {node.title}
         </Link>
+        {!!node.count && (
+          <span className="shrink-0 pr-2 text-xs text-muted tabular-nums" title={`${node.count} climbs and problems`}>
+            {node.count}
+          </span>
+        )}
       </div>
       {isOpen && node.children.length > 0 && (
         <ul>
@@ -78,7 +84,15 @@ function trailIds(root: IndexNode, path: string) {
  * Expandable site tree with a title filter. Every navigation opens the tree down to the
  * new page (and the page itself) and scrolls it into view; branches opened by hand stay open.
  */
-export function SideNav({ root }: { root: IndexNode }) {
+export function SideNav({ local }: { local: IndexNode }) {
+  // Rendered from the page's own trimmed tree, then the full current tree once the page is live.
+  const [full, setFull] = useState<IndexNode>()
+  useEffect(() => {
+    fetchTree().then(setFull, () => {
+      /* keep the trimmed tree */
+    })
+  }, [])
+  const root = full ?? local
   const pathname = useRouterState({ select: (s) => s.location.pathname })
   const currentPath = decodeURIComponent(pathname)
     .replace(/^\/g\/?/, '')

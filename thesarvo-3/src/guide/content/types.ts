@@ -1,4 +1,5 @@
 import type { Guide } from '#/guide/model/types'
+import type { GuideStats } from './manifest'
 
 /** One page in the site hierarchy (from index.json). */
 export type IndexNode = {
@@ -9,6 +10,11 @@ export type IndexNode = {
   /** False for plain pages that have no guide XML. */
   isGuide: boolean
   children: IndexNode[]
+  /** From the manifest: the page's own guide, and climbs in it and below. */
+  stats?: GuideStats
+  count?: number
+  /** Children were left out of this copy of the tree (see pageInfo). */
+  more?: true
 }
 
 /**

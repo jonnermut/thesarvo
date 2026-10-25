@@ -1,10 +1,8 @@
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
 import { AppShell } from '#/components/AppShell'
-import { fetchIndex } from '#/guide/server'
 import appCss from '../styles.css?url'
 
 export const Route = createRootRoute({
-  loader: () => fetchIndex(),
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
@@ -21,9 +19,8 @@ export const Route = createRootRoute({
 })
 
 function Layout() {
-  const index = Route.useLoaderData()
   return (
-    <AppShell index={index}>
+    <AppShell>
       <Outlet />
     </AppShell>
   )

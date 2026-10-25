@@ -1,12 +1,14 @@
-import { Link, createFileRoute, getRouteApi } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { guideUrl } from '#/guide/content/paths'
+import { fetchPage } from '#/guide/server'
 
-const root = getRouteApi('__root__')
-
-export const Route = createFileRoute('/g/')({ component: Home })
+export const Route = createFileRoute('/g/')({
+  loader: async () => (await fetchPage(''))!,
+  component: Home,
+})
 
 function Home() {
-  const index = root.useLoaderData()
+  const { node: index } = Route.useLoaderData()
   return (
     <div>
       <section className="bg-forest px-6 py-10 text-white">
@@ -23,7 +25,7 @@ function Home() {
             className="group border border-line bg-card p-4 transition hover:bg-paper"
           >
             <h2 className="text-xl font-semibold text-navy">{region.title}</h2>
-            <p className="mt-1 text-sm text-muted">{region.children.length ? `${region.children.length} areas` : 'Guide'}</p>
+            <p className="mt-1 text-sm text-muted">{region.count ? `${region.count.toLocaleString()} climbs` : 'Information'}</p>
           </Link>
         ))}
       </section>

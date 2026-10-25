@@ -1,9 +1,11 @@
 import { createServerFn } from '@tanstack/react-start'
+import { manifestTree, pageInfo } from './content/manifest'
+import type { Manifest, PageInfo } from './content/manifest'
 import { STATIC_SITE, GUIDE_PREFIX } from './content/paths'
 import type { ContentSource, IndexNode } from './content/types'
 import type { Guide } from './model/types'
 
-const serverIndex = createServerFn({ method: 'GET' }).handler(async () => (await import('./content')).getContentSource().getIndex())
+const serverManifest = createServerFn({ method: 'GET' }).handler(async () => (await import('./content/siteManifest')).siteManifest())
 
 const serverGuide = createServerFn({ method: 'GET' })
   .validator((id: string) => id)
@@ -19,13 +21,40 @@ const serverImageNames = createServerFn({ method: 'GET' })
  */
 async function staticData<T>(file: string, fromDisk: (source: ContentSource) => Promise<T>): Promise<T> {
   if (import.meta.env.SSR) return fromDisk((await import('./content/staticSource')).staticSource())
-  const res = await fetch(`${GUIDE_PREFIX}-data/${file}`)
+  return getJson<T>(file)
+}
+
+async function getJson<T>(file: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(`${GUIDE_PREFIX}-data/${file}`, init)
   if (!res.ok) throw new Error(`${res.status} ${file}`)
   return (await res.json()) as T
 }
 
-/** The whole site hierarchy. Small enough to send in one go. */
-export const fetchIndex = (): Promise<IndexNode> => (STATIC_SITE ? staticData('index.json', (s) => s.getIndex()) : serverIndex())
+let browserManifest: Promise<Manifest> | undefined
+const trees = new WeakMap<Manifest, IndexNode>()
+
+/**
+ * The whole site's tree and stats. The browser fetches it once per visit, always fresh
+ * (`no-cache`), so pages built earlier still show the current tree.
+ */
+export function fetchManifest(): Promise<Manifest> {
+  if (import.meta.env.SSR) return import('./content/siteManifest').then((m) => m.siteManifest())
+  browserManifest ??= (STATIC_SITE ? getJson<Manifest>('manifest.json', { cache: 'no-cache' }) : serverManifest()).catch((e: unknown) => {
+    browserManifest = undefined
+    throw e
+  })
+  return browserManifest
+}
+
+export async function fetchTree(): Promise<IndexNode> {
+  const manifest = await fetchManifest()
+  const tree = trees.get(manifest) ?? manifestTree(manifest)
+  trees.set(manifest, tree)
+  return tree
+}
+
+/** A page's node, trail and trimmed tree, or null if there is no such page. */
+export const fetchPage = async (path: string): Promise<PageInfo | null> => pageInfo(await fetchTree(), path)
 
 export const fetchGuide = ({ data: id }: { data: string }): Promise<Guide | null> =>
   STATIC_SITE ? staticData(`guide/${id}.json`, (s) => s.getGuide(id)) : serverGuide({ data: id })

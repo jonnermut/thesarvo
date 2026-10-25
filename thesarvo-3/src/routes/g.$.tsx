@@ -1,8 +1,8 @@
 import { ClientOnly, Link, createFileRoute, notFound } from '@tanstack/react-router'
 import { lazy, Suspense } from 'react'
 import { Breadcrumbs } from '#/components/Breadcrumbs'
-import { ancestors, findByPath, guideUrl } from '#/guide/content/paths'
-import { fetchGuide } from '#/guide/server'
+import { guideUrl } from '#/guide/content/paths'
+import { fetchGuide, fetchPage } from '#/guide/server'
 import { GuideView } from '#/guide/view/GuideView'
 
 // The editor is its own chunk: readers never download it.
@@ -12,16 +12,10 @@ export const Route = createFileRoute('/g/$')({
   // `?edit` switches the same address into the editor, so everything lives under /g.
   validateSearch: (search: Record<string, unknown>): { edit?: true } =>
     search.edit === true || search.edit === 'true' || search.edit === '' ? { edit: true } : {},
-  loader: async ({ params, parentMatchPromise }) => {
-    const index = (await parentMatchPromise).loaderData!
-    const path = decodeURIComponent(params._splat ?? '').replace(/\/$/, '')
-    const node = findByPath(index, path)
-    if (!node) throw notFound()
-    return {
-      node,
-      trail: ancestors(index, path),
-      guide: node.isGuide ? await fetchGuide({ data: node.id }) : null,
-    }
+  loader: async ({ params }) => {
+    const page = await fetchPage(decodeURIComponent(params._splat ?? '').replace(/\/$/, ''))
+    if (!page) throw notFound()
+    return { ...page, guide: page.node.isGuide ? await fetchGuide({ data: page.node.id }) : null }
   },
   head: ({ loaderData }) => ({
     meta: [{ title: `${loaderData?.node.title ?? 'Guide'} · thesarvo` }],
