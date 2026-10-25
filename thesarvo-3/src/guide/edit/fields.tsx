@@ -79,15 +79,15 @@ export function Button({
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'plain' | 'primary' | 'danger' }) {
   const styles = {
-    plain: 'border-line bg-white text-ink hover:bg-paper',
+    plain: 'border-line/70 bg-white text-ink hover:border-line hover:bg-paper',
     primary: 'border-forest bg-forest text-white hover:bg-forest-soft',
-    danger: 'border-red-200 bg-white text-red-700 hover:bg-red-50',
+    danger: 'border-transparent bg-red-50 text-red-700 hover:bg-red-100',
   }
   return (
     <button
       type="button"
       {...props}
-      className={`rounded-md border px-3 py-1.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-40 ${styles[variant]} ${props.className ?? ''}`}
+      className={`inline-flex h-7 items-center justify-center rounded border px-2.5 text-[13px] font-medium leading-none transition disabled:cursor-not-allowed disabled:opacity-40 ${styles[variant]} ${props.className ?? ''}`}
     >
       {children}
     </button>

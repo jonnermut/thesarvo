@@ -168,16 +168,18 @@ export default function Editor({ guide }: { guide: Guide }) {
                 >
                   <div className="mb-2 flex items-center gap-1.5 text-xs uppercase tracking-wide text-muted">
                     <span className="font-semibold">{node.type}</span>
-                    <span className="ml-auto flex gap-1.5">
+                    <span className="ml-auto flex gap-1">
                       <Button
                         onClick={() => dispatch({ type: 'move', id, by: -1 })}
                         aria-label="Move up"
+                        className="w-7 px-0"
                       >
                         ↑
                       </Button>
                       <Button
                         onClick={() => dispatch({ type: 'move', id, by: 1 })}
                         aria-label="Move down"
+                        className="w-7 px-0"
                       >
                         ↓
                       </Button>
