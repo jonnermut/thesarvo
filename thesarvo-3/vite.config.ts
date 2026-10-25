@@ -39,11 +39,13 @@ function devContentFiles(): Plugin {
 
 // Guides are rendered on demand; only the paths listed here become static HTML at build time.
 // e.g. PRERENDER_PATHS="/g,/g/tasmania" npm run build
-// For the static site (`npm run build-site`) every page of the content repo is rendered.
+// For the static site (`npm run build-site`) every page of the content repo is rendered, unless an
+// incremental build lists the changed ones.
 const staticSite = process.env.VITE_STATIC_SITE === '1'
-const prerenderPaths = staticSite
-  ? [GUIDE_PREFIX, `${GUIDE_PREFIX}/search`, ...flatten(await staticSource().getIndex()).filter((n) => n.path).map(guideUrl)]
-  : (process.env.PRERENDER_PATHS ?? '').split(',').filter(Boolean)
+const prerenderPaths =
+  staticSite && process.env.PRERENDER_PATHS === undefined
+    ? [GUIDE_PREFIX, `${GUIDE_PREFIX}/search`, ...flatten(await staticSource().getIndex()).filter((n) => n.path).map(guideUrl)]
+    : (process.env.PRERENDER_PATHS ?? '').split(',').filter(Boolean)
 
 export default defineConfig({
   resolve: { tsconfigPaths: true },
