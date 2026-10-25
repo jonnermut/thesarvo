@@ -1,30 +1,30 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-
+import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
+import { AppShell } from '#/components/AppShell'
+import { fetchIndex } from '#/guide/server'
 import appCss from '../styles.css?url'
 
 export const Route = createRootRoute({
+  loader: () => fetchIndex(),
   head: () => ({
     meta: [
-      {
-        charSet: 'utf-8',
-      },
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
-      },
-      {
-        title: 'TanStack Start Starter',
-      },
+      { charSet: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { title: 'thesarvo · Tasmanian climbing guides' },
     ],
-    links: [
-      {
-        rel: 'stylesheet',
-        href: appCss,
-      },
-    ],
+    links: [{ rel: 'stylesheet', href: appCss }],
   }),
   shellComponent: RootDocument,
+  component: Layout,
 })
+
+function Layout() {
+  const index = Route.useLoaderData()
+  return (
+    <AppShell index={index}>
+      <Outlet />
+    </AppShell>
+  )
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
@@ -34,7 +34,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
-
         <Scripts />
       </body>
     </html>

@@ -1,16 +1,38 @@
+@import 'tailwindcss';
 
+@theme {
+  --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-* {
-  box-sizing: border-box;
+  --color-ink: #1d2733;
+  --color-muted: #5d6b7a;
+  --color-paper: #f7f4ee;
+  --color-card: #ffffff;
+  --color-line: #e3ddd0;
+  --color-forest: #12302d;
+  --color-forest-soft: #1c4440;
+  --color-amber: #f7941e;
+  --color-amber-deep: #b45f06;
+}
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
 }
 
-main {
-  width: min(42rem, calc(100% - 2rem));
-  margin: 4rem auto;
+/* Guide text arrives with literal <br/> line breaks; see Lines component. */
+.guide-prose p + p {
+  margin-top: 0.75rem;
 }
 
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
