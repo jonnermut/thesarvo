@@ -3,7 +3,7 @@ import { imageUrl } from '#/guide/content/paths'
 import type { Climb, ImageTopo, LineStyle, Point, RectStyle } from '#/guide/model/types'
 import { Callout, Route } from '#/guide/view/Topo'
 import { RECT_STYLES } from '#/guide/view/topoStyles'
-import { AreaField, Button, NumberField, SelectField, TextField } from './fields'
+import { AreaField, Button, CheckField, NumberField, SelectField, TextField } from './fields'
 import * as ops from './topoOps'
 
 type Tool = 'select' | 'route' | 'rect'
@@ -20,7 +20,11 @@ type Props = {
 
 const LINE_STYLES = [['solid', 'Solid'], ['dashed', 'Dashed'], ['dotted', 'Dotted']] as const
 const END_MARKERS = [['', 'None'], ['belay', 'Belay'], ['lower', 'Lower-off'], ['lower-left', 'Lower-off left'], ['lower-right', 'Lower-off right']] as const
-const ARROWS = [['', 'None'], ['north', 'North'], ['south', 'South'], ['east', 'East'], ['west', 'West']] as const
+const ARROWS = [
+  ['', 'None'], ['north', 'North'], ['north_east', 'North-east'], ['east', 'East'], ['south_east', 'South-east'],
+  ['south', 'South'], ['south_west', 'South-west'], ['west', 'West'], ['north_west', 'North-west'],
+] as const
+const PRINT_LAYOUTS = ['auto', 'NotInPrint', 'OneColumn', 'TwoColumns', 'FitToPage', 'Rotate', 'DontRotate'].map((v) => [v, v] as const)
 const RECT_OPTIONS = (Object.keys(RECT_STYLES) as RectStyle[]).map((s) => [s, s.replace(/_/g, ' ')] as const)
 
 const TOOLS: [Tool, string][] = [['select', 'Select'], ['route', 'Draw route'], ['rect', 'Add label']]
@@ -230,10 +234,21 @@ export function TopoEditor({ guideId, topo, climbs, newId, onChange }: Props) {
                 options={END_MARKERS}
                 onChange={(kind) => onChange((t) => ops.setEndMarker(t, selectedPath.id, kind))}
               />
+              <CheckField label="Arrow head" checked={selectedPath.arrow} onChange={(arrow) => onChange((t) => ops.updatePath(t, selectedPath.id, { arrow }))} />
               <TextField label="Label" value={selectedPath.labelText} onChange={(labelText) => onChange((t) => ops.updatePath(t, selectedPath.id, { labelText }), `label-${selectedPath.id}`)} />
               <div className="flex flex-wrap gap-2">
                 <Button disabled={pointIndex === null || pointIndex >= selectedPath.points.length - 1} onClick={() => onChange((t) => ops.insertPointAfter(t, selectedPath.id, pointIndex!))}>
                   Insert point
+                </Button>
+                <Button
+                  disabled={pointIndex === null}
+                  onClick={() => {
+                    if (pointIndex === null) return
+                    const isLabel = selectedPath.points[pointIndex]?.kind === 'label'
+                    onChange((t) => ops.setPointKind(t, selectedPath.id, pointIndex, isLabel ? '' : 'label'))
+                  }}
+                >
+                  {pointIndex !== null && selectedPath.points[pointIndex]?.kind === 'label' ? 'Number not here' : 'Number here'}
                 </Button>
                 <Button variant="danger" onClick={removeSelected}>{pointIndex === null ? 'Delete route' : 'Delete point'}</Button>
               </div>
@@ -255,6 +270,12 @@ export function TopoEditor({ guideId, topo, climbs, newId, onChange }: Props) {
               <h4 className="font-semibold">Legend</h4>
               <TextField label="Title" value={topo.legendTitle} onChange={(legendTitle) => onChange((t) => ({ ...t, legendTitle }), 'legend-title')} />
               <TextField label="Footer" value={topo.legendFooter} onChange={(legendFooter) => onChange((t) => ({ ...t, legendFooter }), 'legend-footer')} />
+              <div className="grid grid-cols-2 gap-2">
+                <NumberField label="Legend x" value={topo.legendX} onChange={(legendX) => onChange((t) => ({ ...t, legendX }), 'legend-x')} />
+                <NumberField label="Legend y" value={topo.legendY} onChange={(legendY) => onChange((t) => ({ ...t, legendY }), 'legend-y')} />
+              </div>
+              <SelectField label="Print layout" value={topo.printLayout} options={PRINT_LAYOUTS} onChange={(printLayout) => onChange((t) => ({ ...t, printLayout }))} />
+              <CheckField label="Not in print version" checked={topo.noPrint} onChange={(noPrint) => onChange((t) => ({ ...t, noPrint }))} />
               <p className="text-xs font-medium text-muted">Climbs shown (in tick order)</p>
               <ul className="max-h-56 space-y-0.5 overflow-y-auto">
                 {climbs.map((c) => (

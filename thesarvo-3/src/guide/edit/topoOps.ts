@@ -65,3 +65,7 @@ export const toggleLegend = (topo: ImageTopo, climbId: string): ImageTopo => ({
 /** Sets the marker ('belay', 'lower' or '') on the last point of a route. */
 export const setEndMarker = (topo: ImageTopo, pathId: string, kind: string): ImageTopo =>
   mapPath(topo, pathId, (p) => ({ ...p, points: p.points.map((pt, i) => (i === p.points.length - 1 ? { ...pt, kind } : pt)) }))
+
+/** Sets the kind of one point, e.g. 'label' to say where the route number goes. */
+export const setPointKind = (topo: ImageTopo, pathId: string, index: number, kind: string): ImageTopo =>
+  mapPath(topo, pathId, (p) => ({ ...p, points: p.points.map((pt, i) => (i === index ? { ...pt, kind } : pt)) }))
