@@ -11,6 +11,8 @@ const parser = new XMLParser({
   attributeNamePrefix: ATTR,
   parseAttributeValue: false,
   parseTagValue: false,
+  // Kept as written so file names with a leading space survive; toRaw trims everything else.
+  trimValues: false,
 })
 
 const builder = new XMLBuilder({
@@ -32,13 +34,14 @@ function toRaw(node: ParsedNode): RawElement | null {
   if (!tag || JUNK_TAGS.has(tag)) return null
   const attrs: Record<string, string> = {}
   for (const [k, v] of Object.entries((node[ATTRS] ?? {}) as Record<string, string>)) {
-    attrs[k.slice(ATTR.length)] = String(v)
+    const name = k.slice(ATTR.length)
+    attrs[name] = name === 'src' ? String(v) : String(v).trim()
   }
   const kids = node[tag] as ParsedNode[]
   const children: RawElement[] = []
   let text = ''
   for (const kid of kids) {
-    if (TEXT in kid) text += String(kid[TEXT])
+    if (TEXT in kid) text += String(kid[TEXT]).trim()
     else {
       const child = toRaw(kid)
       if (child) children.push(child)

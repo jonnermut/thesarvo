@@ -77,3 +77,11 @@ describe('round trip', () => {
     expect(xml.endsWith('\n')).toBe(true)
   })
 })
+
+describe('image file names', () => {
+  it('keeps a leading space, which exists in some stored file names', () => {
+    const g = guideFromXml('1', '<guide><image id="2" src=" columns overall.jpg" width="0" height="0"/></guide>')
+    expect(g.nodes[0]).toMatchObject({ type: 'image', src: ' columns overall.jpg' })
+    expect(guideToXml(g)).toContain('src=" columns overall.jpg"')
+  })
+})
