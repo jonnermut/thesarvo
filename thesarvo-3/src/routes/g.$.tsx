@@ -35,18 +35,18 @@ function GuidePage() {
         </Suspense>
       </ClientOnly>
     )
-  const crumbs = <Breadcrumbs trail={trail} current={node} />
+  // Breadcrumbs line up with the page body beneath them.
   if (guide)
     return (
       <>
-        {crumbs}
+        <Breadcrumbs trail={trail} current={node} width="max-w-6xl px-4 sm:px-6" />
         <GuideView guide={guide} />
       </>
     )
   // A plain page or region: list what is beneath it.
   return (
     <>
-      {crumbs}
+      <Breadcrumbs trail={trail} current={node} width="max-w-3xl px-6" />
       <div className="mx-auto max-w-3xl px-6 py-6">
         <h1 className="text-[28px] font-bold text-navy">{node.title}</h1>
         <ul className="mt-6 grid gap-2 sm:grid-cols-2">

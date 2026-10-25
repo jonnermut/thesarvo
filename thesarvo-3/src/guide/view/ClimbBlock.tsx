@@ -8,12 +8,10 @@ export const ROW = 'flex flex-wrap items-baseline gap-x-4 gap-y-0.5 sm:grid sm:g
 const INDENT = 'sm:ml-[2.75rem]'
 
 /** One climb: blue number, bold name, length and grade, then description and credits (as on the live guide). */
-/** `anchor` is off for copies shown in popups, so the page keeps one element per `#climb-id`. */
-export function ClimbBlock({ climb, highlighted, anchor = true }: { climb: Climb; highlighted?: boolean; anchor?: boolean }) {
+export function ClimbBlock({ climb, highlighted }: { climb: Climb; highlighted?: boolean }) {
   return (
     <article
-      id={anchor ? `climb-${climb.id}` : undefined}
-      className={`scroll-mt-20 rounded px-2 py-1.5 text-[13px] leading-snug transition-colors ${highlighted ? 'bg-amber/20' : ''}`}
+      className={`rounded px-2 py-1.5 text-[13px] leading-snug transition-colors ${highlighted ? 'bg-amber/20' : ''}`}
     >
       <div className={ROW}>
         <span className="w-7 text-right font-bold tabular-nums text-[#0000a0] sm:w-auto">{climb.number}</span>
