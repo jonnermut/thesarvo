@@ -92,7 +92,7 @@ export default function Editor({ guide }: { guide: Guide }) {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
+    <div className="px-4 py-6 sm:px-6">
       <div className="sticky top-14 z-10 -mx-4 mb-4 flex flex-wrap items-center gap-2 border-b border-line bg-paper/95 px-4 py-2 backdrop-blur sm:-mx-6 sm:px-6">
         <Button
           disabled={!state.past.length}
