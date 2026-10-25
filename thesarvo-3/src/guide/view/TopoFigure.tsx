@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { Climb, ImageTopo } from '#/guide/model/types'
+import { ClimbBlock } from './ClimbBlock'
 import { Stars } from './Stars'
 import { Topo } from './Topo'
 
@@ -10,6 +11,7 @@ type Props = {
   climbs: Map<string, Climb>
   active: string | null
   onActive: (climbId: string | null) => void
+  onOpen?: (climbId: string) => void
 }
 
 /** Print options from the legacy editor: only "don't print" is honoured; Rotate/FitToPage/OneColumn just avoid page splits. */
@@ -36,6 +38,25 @@ function TopoCanvas({ legend, rows, ...props }: Props & { legend: Climb[]; rows:
         </div>
       )}
     </div>
+  )
+}
+
+/** The climb behind a route or legend row, as a popup like the legacy topo's route popover. */
+function ClimbPopup({ climb, onClose }: { climb: Climb; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
+  return createPortal(
+    <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4" onClick={onClose}>
+      <div role="dialog" aria-label={climb.name} className="relative max-h-[80dvh] w-full max-w-lg overflow-auto rounded-lg bg-card p-3 shadow-xl" onClick={(e) => e.stopPropagation()}>
+        <button type="button" aria-label="Close" onClick={onClose} className="absolute right-2 top-1 text-2xl leading-none text-muted hover:text-navy">×</button>
+        <ClimbBlock climb={climb} anchor={false} />
+        <a href={`#climb-${climb.id}`} onClick={onClose} className="mt-1 inline-block px-2 text-[13px] text-link hover:underline">Show in guide</a>
+      </div>
+    </div>,
+    document.body,
   )
 }
 
@@ -75,6 +96,8 @@ function Enlarged({ onClose, ...canvas }: { onClose: () => void } & Parameters<t
 export function TopoFigure(props: Props) {
   const { topo, climbs, active, onActive } = props
   const [open, setOpen] = useState(false)
+  const [popup, setPopup] = useState<string | null>(null)
+  const popupClimb = popup ? climbs.get(popup) : undefined
   const legend = topo.legend.map((id) => climbs.get(id)).filter((c): c is Climb => !!c)
 
   const rows = (compact: boolean) =>
@@ -82,6 +105,10 @@ export function TopoFigure(props: Props) {
       <li key={c.id} onPointerEnter={() => onActive(c.id)} onPointerLeave={() => onActive(null)}>
         <a
           href={`#climb-${c.id}`}
+          onClick={(e) => {
+            e.preventDefault()
+            setPopup(c.id)
+          }}
           className={`grid grid-cols-[1.2em_2.2em_1fr_auto] items-baseline gap-x-[0.5em] px-[0.4em] ${compact ? 'py-0' : 'py-1'} ${active === c.id ? 'bg-amber/60 text-black' : ''}`}
         >
           <span className="text-center"><Stars stars={c.stars} /></span>
@@ -94,7 +121,7 @@ export function TopoFigure(props: Props) {
 
   return (
     <figure className={`@container group relative my-3 print:break-inside-avoid ${hiddenInPrint(topo) ? 'no-print' : ''}`}>
-      <TopoCanvas {...props} legend={legend} rows={rows} />
+      <TopoCanvas {...props} onOpen={setPopup} legend={legend} rows={rows} />
       <button
         type="button"
         onClick={() => setOpen(true)}
@@ -112,7 +139,8 @@ export function TopoFigure(props: Props) {
         </figcaption>
       )}
       {topo.legendFooter && <p className="mt-1 text-[11px] text-muted">{topo.legendFooter}</p>}
-      {open && <Enlarged {...props} legend={legend} rows={rows} onClose={() => setOpen(false)} />}
+      {open && <Enlarged {...props} onOpen={setPopup} legend={legend} rows={rows} onClose={() => setOpen(false)} />}
+      {popupClimb && <ClimbPopup climb={popupClimb} onClose={() => setPopup(null)} />}
     </figure>
   )
 }

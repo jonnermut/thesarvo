@@ -15,11 +15,13 @@ type Props = {
   /** Climb id currently hovered/selected anywhere on the page. */
   active: string | null
   onActive: (climbId: string | null) => void
+  /** Called when a route is clicked or tapped, to show its climb. */
+  onOpen?: (climbId: string) => void
 }
 
 const numberLabel = (c?: Climb) => c?.number.replace(/\.$/, '') ?? ''
 
-export function Route({ path, climb, active, onActive, scale = 1 }: { path: RoutePath; climb?: Climb; active: string | null; onActive: Props['onActive']; scale?: number }) {
+export function Route({ path, climb, active, onActive, onOpen, scale = 1 }: { path: RoutePath; climb?: Climb; active: string | null; onActive: Props['onActive']; onOpen?: Props['onOpen']; scale?: number }) {
   const first = path.points[0]
   const last = path.points.at(-1)
   // A point of kind "label" says where the number goes; otherwise it sits on the first point.
@@ -34,6 +36,7 @@ export function Route({ path, climb, active, onActive, scale = 1 }: { path: Rout
       opacity={dimmed ? 0.3 : 1}
       onPointerEnter={() => onActive(path.linkedTo || null)}
       onPointerLeave={() => onActive(null)}
+      onClick={() => path.linkedTo && onOpen?.(path.linkedTo)}
       className="cursor-pointer"
     >
       {/* Wide invisible stroke makes thin lines easy to hover. */}
@@ -143,7 +146,7 @@ export function Callout({ rect }: { rect: TopoRect }) {
 }
 
 /** A photo with the route lines and callouts drawn over it as SVG. */
-export function Topo({ guideId, topo, climbs, active, onActive }: Props) {
+export function Topo({ guideId, topo, climbs, active, onActive, onOpen }: Props) {
   // Markers are sized in photo pixels, so on a phone they would shrink to specks: grow them to stay legible.
   const box = useRef<HTMLDivElement>(null)
   const [scale, setScale] = useState(1)
@@ -169,7 +172,7 @@ export function Topo({ guideId, topo, climbs, active, onActive }: Props) {
       />
       <svg viewBox={`0 0 ${topo.width} ${topo.height}`} className="absolute inset-0 size-full" role="img" aria-label="Route lines">
         {topo.paths.map((path) => (
-          <Route key={path.id} path={path} climb={climbs.get(path.linkedTo)} active={active} onActive={onActive} scale={scale} />
+          <Route key={path.id} path={path} climb={climbs.get(path.linkedTo)} active={active} onActive={onActive} onOpen={onOpen} scale={scale} />
         ))}
         {topo.rects.map((rect) => (
           <Callout key={rect.id} rect={rect} />
