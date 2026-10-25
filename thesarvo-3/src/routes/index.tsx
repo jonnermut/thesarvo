@@ -9,9 +9,9 @@ function Home() {
   const index = root.useLoaderData()
   return (
     <div>
-      <section className="bg-forest-soft px-6 py-16 text-white">
+      <section className="bg-forest px-6 py-10 text-white">
         <div className="mx-auto max-w-5xl">
-          <h1 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">Tasmanian climbing guides</h1>
+          <h1 className="text-3xl font-bold">Tasmanian climbing guides</h1>
           <p className="mt-4 max-w-2xl text-lg text-white/75">Free, community-written guides to the crags and boulders of Tasmania. Pick a region to start.</p>
         </div>
       </section>
@@ -20,9 +20,9 @@ function Home() {
           <Link
             key={region.id}
             to={guideUrl(region)}
-            className="group rounded-xl border border-line bg-card p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-amber hover:shadow-md"
+            className="group border border-line bg-card p-4 transition hover:bg-paper"
           >
-            <h2 className="font-display text-xl font-semibold group-hover:text-amber-deep">{region.title}</h2>
+            <h2 className="text-xl font-semibold text-navy">{region.title}</h2>
             <p className="mt-1 text-sm text-muted">{region.children.length ? `${region.children.length} areas` : 'Guide'}</p>
           </Link>
         ))}

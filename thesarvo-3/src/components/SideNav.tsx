@@ -22,14 +22,14 @@ function NavItem({ node, currentPath, expanded, toggle, depth }: {
   const active = node.path === currentPath
   return (
     <li>
-      <div className="flex items-center rounded-md hover:bg-forest-soft/60" style={{ paddingLeft: depth * 12 }}>
+      <div className="flex items-center rounded-md hover:bg-black/5" style={{ paddingLeft: depth * 12 }}>
         {node.children.length ? (
           <button
             type="button"
             onClick={() => toggle(node.id)}
             aria-label={`${isOpen ? 'Collapse' : 'Expand'} ${node.title}`}
             aria-expanded={isOpen}
-            className="grid size-7 shrink-0 place-items-center text-white/60 hover:text-white"
+            className="grid size-7 shrink-0 place-items-center text-muted hover:text-navy"
           >
             <Chevron open={isOpen} />
           </button>
@@ -38,7 +38,7 @@ function NavItem({ node, currentPath, expanded, toggle, depth }: {
         )}
         <Link
           to={guideUrl(node)}
-          className={`min-w-0 flex-1 truncate py-1.5 pr-2 text-sm ${active ? 'font-semibold text-amber' : node.isGuide ? 'text-white' : 'text-white/70'}`}
+          className={`min-w-0 flex-1 truncate py-1.5 pr-2 text-sm ${active ? 'font-semibold text-link' : 'text-navy'}`}
           aria-current={active ? 'page' : undefined}
         >
           {node.title}
@@ -82,7 +82,7 @@ export function SideNav({ root }: { root: IndexNode }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Find a crag…"
-          className="w-full rounded-md border border-white/15 bg-white/10 px-3 py-1.5 text-sm text-white placeholder:text-white/50 focus:border-amber focus:outline-none"
+          className="w-full rounded-md border border-line bg-white px-3 py-1.5 text-sm placeholder:text-muted focus:border-link focus:outline-none"
         />
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-4">
@@ -90,12 +90,12 @@ export function SideNav({ root }: { root: IndexNode }) {
           <ul>
             {matches.map((n) => (
               <li key={n.id}>
-                <Link to={guideUrl(n)} className="block truncate rounded-md px-3 py-1.5 text-sm text-white hover:bg-forest-soft/60">
+                <Link to={guideUrl(n)} className="block truncate rounded-md px-3 py-1.5 text-sm text-navy hover:bg-black/5">
                   {n.title}
                 </Link>
               </li>
             ))}
-            {!matches.length && <li className="px-3 py-2 text-sm text-white/60">No matches</li>}
+            {!matches.length && <li className="px-3 py-2 text-sm text-muted">No matches</li>}
           </ul>
         ) : (
           <ul>

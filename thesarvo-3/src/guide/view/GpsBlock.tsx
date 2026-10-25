@@ -10,12 +10,12 @@ export function GpsBlock({ gps }: { gps: Gps }) {
   if (!gps.points.length) return null
   return (
     <section className="my-6">
-      <div className="flex items-center justify-between">
-        <h2 className="font-display text-2xl font-semibold text-forest">GPS</h2>
+      <div className="flex items-end justify-between gap-4">
+        <h2 className="border-b border-line text-2xl text-navy flex-1">GPS</h2>
         <button
           type="button"
           onClick={() => setShowMap((v) => !v)}
-          className="rounded-md bg-forest px-3 py-1.5 text-sm font-medium text-white hover:bg-forest-soft"
+          className="rounded bg-paper border border-line px-3 py-1.5 text-[13px] text-navy hover:bg-black/5"
         >
           {showMap ? 'Hide map' : 'Open map'}
         </button>
@@ -27,8 +27,8 @@ export function GpsBlock({ gps }: { gps: Gps }) {
           </Suspense>
         </div>
       )}
-      <div className="mt-3 overflow-x-auto rounded-lg border border-line bg-card">
-        <table className="w-full text-sm">
+      <div className="mt-3 overflow-x-auto border border-line bg-card">
+        <table className="w-full text-[13px]">
           <thead className="bg-paper text-left text-muted">
             <tr>
               <th className="px-3 py-2 font-medium">Point</th>
@@ -41,7 +41,7 @@ export function GpsBlock({ gps }: { gps: Gps }) {
               <tr key={p.pid} className="border-t border-line">
                 <td className="px-3 py-2 font-medium">{p.description || p.code}</td>
                 <td className="px-3 py-2 tabular-nums">
-                  <a className="text-forest underline decoration-amber underline-offset-2" href={mapsUrl(p.latitude, p.longitude)}>
+                  <a className="text-link" href={mapsUrl(p.latitude, p.longitude)}>
                     {p.latitude}, {p.longitude}
                   </a>
                 </td>

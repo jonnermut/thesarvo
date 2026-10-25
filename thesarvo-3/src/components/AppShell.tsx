@@ -12,8 +12,8 @@ function Logo() {
         <path d="M2 27 12 8l6 10 3-5 9 14z" fill="#f7941e" />
         <path d="M12 8l-3 6 3-1 2 3z" fill="#fff" opacity=".85" />
       </svg>
-      <span className="font-display text-xl font-semibold tracking-tight">thesarvo</span>
-      <span className="hidden text-sm text-white/60 sm:inline">Tasmanian climbing guides</span>
+      <span className="text-xl font-semibold tracking-tight">thesarvo</span>
+      <span className="hidden text-sm text-white/70 sm:inline">Tasmanian climbing guides</span>
     </Link>
   )
 }
@@ -64,7 +64,7 @@ export function AppShell({ index, children }: { index: IndexNode; children: Reac
       <div className="flex flex-1">
         {drawer && <button type="button" aria-label="Close navigation" className="fixed inset-0 z-20 bg-black/40 lg:hidden" onClick={() => setDrawer(false)} />}
         <aside
-          className={`no-print fixed inset-y-14 left-0 z-20 w-72 bg-forest transition-transform lg:sticky lg:top-14 lg:h-[calc(100dvh-3.5rem)] lg:shrink-0 ${
+          className={`no-print fixed inset-y-14 left-0 z-20 w-72 bg-paper transition-transform lg:sticky lg:top-14 lg:h-[calc(100dvh-3.5rem)] border-r border-black/10 lg:shrink-0 ${
             drawer ? 'translate-x-0' : '-translate-x-full'
           } ${collapsed ? 'lg:hidden' : 'lg:translate-x-0'}`}
           onClick={(e) => {
@@ -76,7 +76,7 @@ export function AppShell({ index, children }: { index: IndexNode; children: Reac
         <main className="min-w-0 flex-1">{children}</main>
       </div>
 
-      <footer className="no-print bg-forest px-4 py-8 text-sm text-white/70">
+      <footer className="no-print border-t border-black/10 bg-paper px-4 py-6 text-xs text-muted">
         <div className="mx-auto flex max-w-5xl flex-col gap-2 sm:flex-row sm:justify-between">
           <p>© thesarvo.com · Climb safely. Guides are a starting point, not a guarantee.</p>
           <p>Tasmania, Australia</p>

@@ -1,7 +1,7 @@
 import { pathData } from '#/guide/model/geometry'
 import { imageUrl } from '#/guide/content/paths'
 import type { Climb, ImageTopo, RoutePath, TopoRect } from '#/guide/model/types'
-import { DASH, RECT_STYLES, ROUTE_COLOUR } from './topoStyles'
+import { DASH, MARKER_NAVY, RECT_STYLES, ROUTE_COLOUR } from './topoStyles'
 import { splitLines } from './text'
 
 type Props = {
@@ -30,22 +30,21 @@ export function Route({ path, climb, active, onActive }: { path: RoutePath; clim
     >
       {/* Wide invisible stroke makes thin lines easy to hover. */}
       <path d={d} fill="none" stroke="transparent" strokeWidth={16} vectorEffect="non-scaling-stroke" />
-      <path d={d} fill="none" stroke="#000" strokeOpacity={0.55} strokeWidth={active === path.linkedTo ? 7 : 5} strokeLinecap="round" strokeDasharray={DASH[path.lineStyle]} vectorEffect="non-scaling-stroke" />
+      <path d={d} fill="none" stroke="#000" strokeOpacity={0.35} strokeWidth={active === path.linkedTo ? 7 : 5} strokeLinecap="round" strokeDasharray={DASH[path.lineStyle]} vectorEffect="non-scaling-stroke" />
       <path
         d={d}
         fill="none"
         stroke={ROUTE_COLOUR}
-        strokeWidth={active === path.linkedTo ? 4 : 2.5}
+        strokeWidth={active === path.linkedTo ? 4.5 : 3}
         strokeLinecap="round"
         strokeDasharray={DASH[path.lineStyle]}
         vectorEffect="non-scaling-stroke"
       />
-      {last?.kind === 'belay' && <rect x={last.x - 5} y={last.y - 5} width={10} height={10} fill="#fff" stroke={ROUTE_COLOUR} strokeWidth={2} />}
-      {last?.kind === 'lower' && <circle cx={last.x} cy={last.y} r={5} fill="#fff" stroke={ROUTE_COLOUR} strokeWidth={2} />}
+      {(last?.kind === 'belay' || last?.kind === 'lower') && <circle cx={last.x} cy={last.y} r={7} fill={MARKER_NAVY} stroke="#fff" strokeWidth={2} />}
       {first && label && (
         <>
-          <circle cx={first.x} cy={first.y} r={11} fill="#fff" stroke={ROUTE_COLOUR} strokeWidth={2} />
-          <text x={first.x} y={first.y} textAnchor="middle" dominantBaseline="central" fontSize={11} fontWeight={700} fill="#000">
+          <circle cx={first.x} cy={first.y} r={11} fill="#000" />
+          <text x={first.x} y={first.y} textAnchor="middle" dominantBaseline="central" fontSize={label.length > 2 ? 9 : 11} fontWeight={700} fill="#fff">
             {label}
           </text>
         </>
@@ -82,7 +81,7 @@ export function Callout({ rect }: { rect: TopoRect }) {
         height={rect.height}
         rx={4}
         fill={style.fill}
-        fillOpacity={0.9}
+        fillOpacity={1}
         stroke={style.stroke}
         strokeWidth={style.stroke === 'none' ? 0 : 2}
       />
@@ -101,7 +100,7 @@ export function Callout({ rect }: { rect: TopoRect }) {
 /** A photo with the route lines and callouts drawn over it as SVG. */
 export function Topo({ guideId, topo, climbs, active, onActive }: Props) {
   return (
-    <div className="relative overflow-hidden rounded-lg bg-black/5 shadow-md">
+    <div className="relative overflow-hidden bg-black/5">
       <img
         src={imageUrl(guideId, topo.src)}
         alt={topo.legendTitle || topo.src}

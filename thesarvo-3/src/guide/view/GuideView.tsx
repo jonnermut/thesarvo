@@ -16,7 +16,7 @@ export function GuideView({ guide }: { guide: Guide }) {
   )
 
   return (
-    <article className="mx-auto max-w-4xl space-y-3 px-4 py-8 sm:px-6">
+    <article className="mx-auto max-w-4xl space-y-2 px-4 py-6 sm:px-6">
       {guide.nodes.map((node, i) => {
         switch (node.type) {
           case 'header':

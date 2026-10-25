@@ -22,11 +22,11 @@ function GuidePage() {
   // A plain page or region: list what is beneath it.
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">
-      <h1 className="font-display text-3xl font-semibold">{node.title}</h1>
+      <h1 className="text-[28px] font-bold text-navy">{node.title}</h1>
       <ul className="mt-6 grid gap-2 sm:grid-cols-2">
         {node.children.map((c) => (
           <li key={c.id}>
-            <Link to={guideUrl(c)} className="block rounded-lg border border-line bg-card px-4 py-3 hover:border-amber">
+            <Link to={guideUrl(c)} className="block border border-line bg-card px-4 py-3 text-navy hover:bg-paper">
               {c.title}
             </Link>
           </li>

@@ -1,6 +1,8 @@
 import type { LineStyle, RectStyle } from '#/guide/model/types'
 
-export const ROUTE_COLOUR = '#ff3b30'
+export const ROUTE_COLOUR = '#ffffff'
+/** Route end marker and start-number fills, as on the live guide. */
+export const MARKER_NAVY = '#262262'
 
 export const RECT_STYLES: Record<RectStyle, { fill: string; stroke: string; text: string }> = {
   black_text_on_solid_white: { fill: '#fff', stroke: 'none', text: '#000' },
