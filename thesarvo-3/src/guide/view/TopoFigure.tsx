@@ -50,7 +50,7 @@ function ClimbPopup({ climb, onClose }: { climb: Climb; onClose: () => void }) {
   }, [onClose])
   return createPortal(
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4" onClick={onClose}>
-      <div role="dialog" aria-label={climb.name} className="relative max-h-[80dvh] w-full max-w-lg overflow-auto rounded-lg bg-card p-3 shadow-xl" onClick={(e) => e.stopPropagation()}>
+      <div role="dialog" aria-label={climb.name} className="relative max-h-[80dvh] w-full max-w-lg overflow-auto rounded-lg bg-card p-3 pr-8 shadow-xl" onClick={(e) => e.stopPropagation()}>
         <button type="button" aria-label="Close" onClick={onClose} className="absolute right-2 top-1 text-2xl leading-none text-muted hover:text-navy">×</button>
         <ClimbBlock climb={climb} anchor={false} />
         <a href={`#climb-${climb.id}`} onClick={onClose} className="mt-1 inline-block px-2 text-[13px] text-link hover:underline">Show in guide</a>
