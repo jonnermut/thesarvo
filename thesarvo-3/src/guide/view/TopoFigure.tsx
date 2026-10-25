@@ -14,8 +14,16 @@ type Props = {
   onOpen?: (climbId: string) => void
 }
 
-/** Print options from the legacy editor: only "don't print" is honoured; Rotate/FitToPage/OneColumn just avoid page splits. */
+/** Print options from the legacy editor. */
 const hiddenInPrint = (topo: ImageTopo) => topo.noPrint || topo.printLayout === 'NotInPrint'
+
+/** FitToPage fills a printed page by itself; the other layouts only steer the separate InDesign layout tool. */
+const printClasses = (topo: ImageTopo) =>
+  hiddenInPrint(topo)
+    ? 'no-print'
+    : topo.printLayout === 'FitToPage'
+      ? 'print:break-before-page print:break-after-page print:mx-auto print:max-w-[18cm]'
+      : ''
 
 /** The photo with route lines, plus the legend laid over it when the photo is wide enough to read it. */
 function TopoCanvas({ legend, rows, ...props }: Props & { legend: Climb[]; rows: (compact: boolean) => React.ReactNode }) {
@@ -120,7 +128,7 @@ export function TopoFigure(props: Props) {
     ))
 
   return (
-    <figure className={`@container group relative my-3 print:break-inside-avoid ${hiddenInPrint(topo) ? 'no-print' : ''}`}>
+    <figure className={`@container group relative my-3 print:break-inside-avoid ${printClasses(topo)}`}>
       <TopoCanvas {...props} onOpen={setPopup} legend={legend} rows={rows} />
       <button
         type="button"
