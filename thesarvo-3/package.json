@@ -15,7 +15,8 @@
     "lint": "eslint",
     "format": "prettier --write . && eslint --fix",
     "check": "prettier --check .",
-    "sync-content": "tsx scripts/sync-content.ts"
+    "sync-content": "tsx scripts/sync-content.ts",
+    "build-images": "tsx scripts/build-images.ts"
   },
   "dependencies": {
     "@tanstack/react-router": "1.170.46",
