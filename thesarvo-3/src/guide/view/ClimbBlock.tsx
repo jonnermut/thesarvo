@@ -21,7 +21,7 @@ export function ClimbBlock({ climb, highlighted }: { climb: Climb; highlighted?:
         </span>
         <span className="font-bold">{climb.length}</span>
         <span className="font-bold">{climb.grade}</span>
-        {climb.extra && <span className="text-muted sm:col-auto">{climb.extra}</span>}
+        {climb.extra && <span className="text-muted sm:col-auto">{climb.extra.replace(/B$/, 'Þ')}</span>}
       </div>
       {climb.text && (
         <p className={`mt-0.5 ${INDENT}`}>

@@ -13,7 +13,7 @@ export type RouteStats = {
 }
 
 /** Sport routes carry a bolt marker in `extra`: the legacy bolt glyph (char 222) or a count like "6B". */
-const isSport = (extra: string) => extra.includes('Þ') || /\d+B/.test(extra)
+export const isSport = (extra: string) => extra.includes('Þ') || /\d+B/.test(extra)
 
 /** Mirrors the legacy GraphServlet: keeps the first number of grades like "17/18", "M5", "VE" or "A2". */
 function gradeNumber(grade: string): number | null {

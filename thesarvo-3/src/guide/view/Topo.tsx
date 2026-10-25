@@ -4,6 +4,9 @@ import { imageUrl } from '#/guide/content/paths'
 import type { Climb, ImageTopo, RoutePath, TopoRect } from '#/guide/model/types'
 import { DASH, MARKER_NAVY, RECT_STYLES, ROUTE_COLOUR } from './topoStyles'
 import { splitLines } from './text'
+import { isSport } from './routeStats'
+
+const SPORT_RED = '#c8102e'
 
 type Props = {
   guideId: string
@@ -19,6 +22,8 @@ const numberLabel = (c?: Climb) => c?.number.replace(/\.$/, '') ?? ''
 export function Route({ path, climb, active, onActive, scale = 1 }: { path: RoutePath; climb?: Climb; active: string | null; onActive: Props['onActive']; scale?: number }) {
   const first = path.points[0]
   const last = path.points.at(-1)
+  // A point of kind "label" says where the number goes; otherwise it sits on the first point.
+  const at = path.points.find((p) => p.kind === 'label') ?? first
   const dimmed = active !== null && active !== path.linkedTo
   const label = numberLabel(climb)
   const d = path.d || pathData(path.points)
@@ -42,10 +47,10 @@ export function Route({ path, climb, active, onActive, scale = 1 }: { path: Rout
         vectorEffect="non-scaling-stroke"
       />
       {(last?.kind === 'belay' || last?.kind === 'lower') && <circle cx={last.x} cy={last.y} r={7 * scale} fill={MARKER_NAVY} stroke="#fff" strokeWidth={2} />}
-      {first && label && (
+      {at && label && (
         <>
-          <circle cx={first.x} cy={first.y} r={11 * scale} fill="#000" />
-          <text x={first.x} y={first.y} textAnchor="middle" dominantBaseline="central" fontSize={(label.length > 2 ? 9 : 11) * scale} fontWeight={700} fill="#fff">
+          <circle cx={at.x} cy={at.y} r={11 * scale} fill={climb && isSport(climb.extra) ? SPORT_RED : '#000'} />
+          <text x={at.x} y={at.y} textAnchor="middle" dominantBaseline="central" fontSize={(label.length > 2 ? 9 : 11) * scale} fontWeight={700} fill="#fff">
             {label}
           </text>
         </>
@@ -54,17 +59,20 @@ export function Route({ path, climb, active, onActive, scale = 1 }: { path: Rout
   )
 }
 
-/** Little triangle on the rect edge, pointing the way the callout refers to. */
-function arrowPoints(r: TopoRect): string | null {
-  const cx = r.x + r.width / 2
-  const cy = r.y + r.height / 2
-  switch (r.arrowDirection) {
-    case 'south': return `${cx - 6},${r.y + r.height} ${cx + 6},${r.y + r.height} ${cx},${r.y + r.height + 8}`
-    case 'north': return `${cx - 6},${r.y} ${cx + 6},${r.y} ${cx},${r.y - 8}`
-    case 'east': return `${r.x + r.width},${cy - 6} ${r.x + r.width},${cy + 6} ${r.x + r.width + 8},${cy}`
-    case 'west': return `${r.x},${cy - 6} ${r.x},${cy + 6} ${r.x - 8},${cy}`
-    default: return null
-  }
+/** Legacy callouts point with a 30px line from the rect edge (or corner) towards the thing they refer to. */
+const ARROW_LEN = 30
+const ARROW_VECTORS: Record<string, [number, number]> = {
+  north: [0, -1], north_east: [1, -1], east: [1, 0], south_east: [1, 1],
+  south: [0, 1], south_west: [-1, 1], west: [-1, 0], north_west: [-1, -1],
+}
+
+function arrowLine(r: TopoRect) {
+  const v = ARROW_VECTORS[r.arrowDirection]
+  if (!v) return null
+  const [dx, dy] = v
+  const x1 = r.x + (dx < 0 ? 0 : dx > 0 ? r.width : r.width / 2)
+  const y1 = r.y + (dy < 0 ? 0 : dy > 0 ? r.height : r.height / 2)
+  return { x1, y1, x2: x1 + dx * ARROW_LEN, y2: y1 + dy * ARROW_LEN, angle: (Math.atan2(dy, dx) * 180) / Math.PI }
 }
 
 export function Callout({ rect }: { rect: TopoRect }) {
@@ -72,7 +80,8 @@ export function Callout({ rect }: { rect: TopoRect }) {
   const lines = splitLines(rect.text)
   const lineHeight = 14
   const top = rect.y + rect.height / 2 - ((lines.length - 1) * lineHeight) / 2
-  const arrow = arrowPoints(rect)
+  const arrow = arrowLine(rect)
+  const colour = style.fill === 'none' ? style.stroke : style.fill
   return (
     <g>
       <rect
@@ -86,7 +95,12 @@ export function Callout({ rect }: { rect: TopoRect }) {
         stroke={style.stroke}
         strokeWidth={style.stroke === 'none' ? 0 : 2}
       />
-      {arrow && <polygon points={arrow} fill={style.fill === 'none' ? style.stroke : style.fill} />}
+      {arrow && (
+        <g stroke={colour} fill={colour}>
+          <line x1={arrow.x1} y1={arrow.y1} x2={arrow.x2} y2={arrow.y2} strokeWidth={4} />
+          <polygon points="0,-7 14,0 0,7" stroke="none" transform={`translate(${arrow.x2} ${arrow.y2}) rotate(${arrow.angle})`} />
+        </g>
+      )}
       <text x={rect.x + rect.width / 2} textAnchor="middle" fontSize={12} fontFamily="Tahoma, Verdana, sans-serif" fill={style.text}>
         {lines.map((line, i) => (
           <tspan key={i} x={rect.x + rect.width / 2} y={top + i * lineHeight} dominantBaseline="central">
