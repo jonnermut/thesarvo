@@ -1,3 +1,4 @@
+import { useSizedTopo } from '#/guide/view/useSizedTopo'
 import { useEffect, useRef, useState } from 'react'
 import { imageUrl } from '#/guide/content/paths'
 import type { Climb, ImageTopo, LineStyle, Point, RectStyle } from '#/guide/model/types'
@@ -29,7 +30,8 @@ const RECT_OPTIONS = (Object.keys(RECT_STYLES) as RectStyle[]).map((s) => [s, s.
 
 const TOOLS: [Tool, string][] = [['select', 'Select'], ['route', 'Draw route'], ['rect', 'Add label']]
 
-export function TopoEditor({ guideId, topo, climbs, newId, onChange }: Props) {
+export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: Props) {
+  const topo = useSizedTopo(guideId, stored)
   const svgRef = useRef<SVGSVGElement>(null)
   const gesture = useRef(0)
   const [tool, setTool] = useState<Tool>('select')

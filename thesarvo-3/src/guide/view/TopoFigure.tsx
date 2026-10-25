@@ -4,6 +4,7 @@ import type { Climb, ImageTopo } from '#/guide/model/types'
 import { ClimbBlock } from './ClimbBlock'
 import { Stars } from './Stars'
 import { Topo } from './Topo'
+import { useSizedTopo } from './useSizedTopo'
 
 type Props = {
   guideId: string
@@ -101,8 +102,10 @@ function Enlarged({ onClose, ...canvas }: { onClose: () => void } & Parameters<t
  * Photo topo plus its legend. On wide photos the legend sits on the image like the live guide;
  * on narrow ones its text would be unreadably small, so it drops below the photo instead.
  */
-export function TopoFigure(props: Props) {
-  const { topo, climbs, active, onActive } = props
+export function TopoFigure({ topo: stored, ...rest }: Props) {
+  const topo = useSizedTopo(rest.guideId, stored)
+  const props = { ...rest, topo }
+  const { climbs, active, onActive } = props
   const [open, setOpen] = useState(false)
   const [popup, setPopup] = useState<string | null>(null)
   const popupClimb = popup ? climbs.get(popup) : undefined
@@ -128,7 +131,11 @@ export function TopoFigure(props: Props) {
     ))
 
   return (
-    <figure className={`@container group relative my-3 print:break-inside-avoid ${printClasses(topo)}`}>
+    <figure
+      // Never scaled past the photo's own size: small old topos turn to mush when stretched to the page.
+      style={{ maxWidth: topo.width }}
+      className={`@container group relative my-3 print:break-inside-avoid ${printClasses(topo)}`}
+    >
       <TopoCanvas {...props} onOpen={setPopup} legend={legend} rows={rows} />
       <button
         type="button"
