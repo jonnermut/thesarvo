@@ -1,0 +1,23 @@
+thesarvo-3/src/guide/view/icons/rock.svg
+  s_e20d0a1ebc47aa::t_a65aabaddc11b1 1
+thesarvo-3/src/guide/view/icons/sun.svg
+  s_e20d0a1ebc47aa::t_11af7895b2282f 1
+thesarvo-3/src/guide/view/icons/walk.svg
+  s_e20d0a1ebc47aa::t_a1bed166489649 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5699400a7de7791591e7e41457e471c3cdea10a8",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "unknown"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
