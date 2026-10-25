@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useMatch } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import type { IndexNode } from '#/guide/content/types'
 import { SideNav } from './SideNav'
@@ -14,6 +14,29 @@ function Logo() {
       </svg>
       <span className="text-xl font-semibold tracking-tight">thesarvo</span>
       <span className="hidden text-sm text-white/70 sm:inline">Tasmanian climbing guides</span>
+    </Link>
+  )
+}
+
+/** "Edit this Guide" (or back to reading) for the guide on screen; nothing on other pages. */
+function EditLink() {
+  const match = useMatch({ from: '/g/$', shouldThrow: false })
+  if (!match?.loaderData?.guide) return null
+  const editing = !!match.search.edit
+  return (
+    <Link
+      to="/g/$"
+      params={{ _splat: match.params._splat }}
+      search={editing ? {} : { edit: true }}
+      className="ml-auto rounded-md border border-white/40 px-3 py-1.5 text-sm font-medium text-white hover:bg-white/10"
+    >
+      {editing ? (
+        'View'
+      ) : (
+        <>
+          Edit<span className="hidden sm:inline"> this Guide</span>
+        </>
+      )}
     </Link>
   )
 }
@@ -59,6 +82,7 @@ export function AppShell({ index, children }: { index: IndexNode; children: Reac
           </svg>
         </button>
         <Logo />
+        <EditLink />
       </header>
 
       <div className="flex flex-1">
