@@ -1,0 +1,33 @@
+thesarvo-3/src/guide/edit/TopoEditor.tsx
+  s_e20d0a1ebc47aa::t_3573184f11c67d 94
+thesarvo-3/src/guide/edit/Editor.tsx
+  s_e20d0a1ebc47aa::t_3573184f11c67d 11-13,197
+thesarvo-3/src/guide/edit/state.ts
+  s_e20d0a1ebc47aa::t_3573184f11c67d 55
+thesarvo-3/src/guide/edit/topoOps.test.ts
+  s_e20d0a1ebc47aa::t_3573184f11c67d 16,21-22,26,32
+thesarvo-3/src/guide/content/types.ts
+  s_e20d0a1ebc47aa::t_3573184f11c67d 19-20,22,24
+thesarvo-3/eslint.config.js
+  s_e20d0a1ebc47aa::t_3e7a1a5d70bf92 14-16
+thesarvo-3/src/guide/edit/drafts.ts
+  s_e20d0a1ebc47aa::t_3573184f11c67d 15-17
+thesarvo-3/src/guide/convert/xml.ts
+  s_e20d0a1ebc47aa::t_3e7a1a5d70bf92 21,24-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "089d9e11a511064902575de4adce276101425d58",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
