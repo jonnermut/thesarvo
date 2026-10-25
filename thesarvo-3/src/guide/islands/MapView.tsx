@@ -9,7 +9,7 @@ const BASEMAPS = {
   Satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     maxNativeZoom: 18,
     maxZoom: 20,
-    attribution: 'Tiles © Esri — Maxar, Earthstar Geographics, and the GIS User Community',
+    attribution: '© Esri, Maxar, Earthstar Geographics',
   }),
   Map: L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -31,6 +31,7 @@ export default function MapView({ points, lines }: { points: GpsPoint[]; lines: 
     if (!el.current) return
     const map = L.map(el.current, { scrollWheelZoom: false, layers: [BASEMAPS.Satellite] })
     L.control.layers(BASEMAPS, undefined, { position: 'topright' }).addTo(map)
+    L.control.attribution({ prefix: false }).addTo(map)
     L.control.scale({ imperial: false }).addTo(map)
 
     const bounds = L.latLngBounds([])
