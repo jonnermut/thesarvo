@@ -1,0 +1,41 @@
+thesarvo-3/src/routes/g.index.tsx
+  s_e20d0a1ebc47aa::t_c550b02670ab2d 1-32
+thesarvo-3/src/routeTree.gen.ts
+  s_e20d0a1ebc47aa::t_c550b02670ab2d 13,15-16,23-25,33-42,47-49,54-56,62-64,68,70-71,77-79,91-95,105-118,125-127
+thesarvo-3/src/guide/edit/upload.ts
+  s_e20d0a1ebc47aa::t_c550b02670ab2d 1,53
+thesarvo-3/vite.config.ts
+  s_e20d0a1ebc47aa::t_c550b02670ab2d 11,20,39
+thesarvo-3/src/routes/g.upload.tsx
+  s_e20d0a1ebc47aa::t_c550b02670ab2d 1-28
+thesarvo-3/src/routes/index.tsx
+  s_e20d0a1ebc47aa::t_c550b02670ab2d 1-2,4-9
+thesarvo-3/src/guide/content/paths.ts
+  s_e20d0a1ebc47aa::t_c550b02670ab2d 40
+thesarvo-3/README.md
+  s_e20d0a1ebc47aa::t_c550b02670ab2d 16,23
+thesarvo-3/src/components/AppShell.tsx
+  s_e20d0a1ebc47aa::t_c550b02670ab2d 10
+thesarvo-3/docs/plan-guide.md
+  s_e20d0a1ebc47aa::t_c550b02670ab2d 255
+thesarvo-3/src/guide/content/disk.test.ts
+  s_e20d0a1ebc47aa::t_c550b02670ab2d 45-46
+thesarvo-3/src/routes/g.content.tsx
+  s_e20d0a1ebc47aa::t_c550b02670ab2d 1-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7bb6a17c82fd48edaaad46df99532a3e5e381bf1",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
