@@ -1,0 +1,21 @@
+thesarvo-3/src/guide/edit/gpx.test.ts
+  s_e20d0a1ebc47aa::t_557aa52fd8ef97 1-12
+thesarvo-3/src/guide/edit/NodeForms.tsx
+  s_e20d0a1ebc47aa::t_0ee97b60a01bbd 78-87,95-106,113-116,122-125,128-134
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8192b88b076fc47beabd94381fa87e2ffa8a07ff",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
