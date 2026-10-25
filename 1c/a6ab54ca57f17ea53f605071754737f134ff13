@@ -1,0 +1,27 @@
+thesarvo-3/src/routeTree.gen.ts
+  s_e20d0a1ebc47aa::t_295953d137f0cc 59,61-62
+thesarvo-3/src/components/AppShell.tsx
+  s_e20d0a1ebc47aa::t_295953d137f0cc 1,21-43,85
+thesarvo-3/docs/plan-guide.md
+  s_e20d0a1ebc47aa::t_295953d137f0cc 184
+thesarvo-3/docs/live-site-differences.md
+  s_e20d0a1ebc47aa::t_295953d137f0cc 16
+thesarvo-3/src/routes/g.$.tsx
+  s_e20d0a1ebc47aa::t_295953d137f0cc 1-2,7-8,11-13,27-35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1ca6ab54ca57f17ea53f605071754737f134ff13",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
