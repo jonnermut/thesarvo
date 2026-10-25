@@ -13,6 +13,8 @@ export type IndexNode = {
   /** From the manifest: the page's own guide, and climbs in it and below. */
   stats?: GuideStats
   count?: number
+  /** Guides with climbs in it and below. */
+  guides?: number
   /** Children were left out of this copy of the tree (see pageInfo). */
   more?: true
 }
@@ -24,6 +26,8 @@ export type IndexNode = {
 export interface ContentSource {
   getIndex: () => Promise<IndexNode>
   getGuide: (id: string) => Promise<Guide | null>
+  /** The cleaned body of a page that is not a guide (see pageBody), or null if it has none. */
+  getPageBody: (id: string) => Promise<string | null>
   /** Image names attached to a guide (without the id prefix, thumbnails excluded). */
   listImages: (guideId: string) => Promise<string[]>
   /** Stores an uploaded image for a guide and returns the name the guide should reference. */

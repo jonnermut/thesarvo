@@ -9,9 +9,26 @@ const climb = (grade: string, stars = '', extra = ''): Climb =>
   ({ type: 'climb', id: grade, name: 'x', grade, stars, extra, number: '', length: '', fa: '', text: '' })
 
 describe('guideStats', () => {
-  it('counts climbs, bands, sport and stars', () => {
-    const guide = { id: '1', nodes: [climb('15', '*'), climb('22', '***', '6B'), climb('22', '**'), climb('?')] } as Guide
-    expect(guideStats(guide)).toEqual({ total: 4, problems: false, bands: [1, 0, 2, 0], sport: 1, stars: [1, 1, 1], topos: 0, gps: false })
+  it('counts climbs, bands, sport and stars, and picks the classics', () => {
+    const guide = { id: '1', nodes: [climb('15', '*'), climb('22', '**'), climb('22', '***', '6B'), climb('?')] } as Guide
+    expect(guideStats(guide)).toEqual({
+      total: 4,
+      problems: false,
+      bands: [1, 0, 2, 0],
+      sport: 1,
+      stars: [1, 1, 1],
+      topos: 0,
+      gps: false,
+      classics: [
+        ['c-22-2', 'x', '22', 3],
+        ['c-22', 'x', '22', 2],
+      ],
+    })
+  })
+
+  it('pins the guide at its first usable GPS point', () => {
+    const gps = { type: 'gps', id: '9', lines: [], points: [{ latitude: '', longitude: '' }, { latitude: '-42.6', longitude: '147.4' }] }
+    expect(guideStats({ id: '1', nodes: [gps] } as unknown as Guide).pin).toEqual([-42.6, 147.4])
   })
 })
 
@@ -26,6 +43,7 @@ describe('manifest', async () => {
     expect(lowdina.stats?.total).toBeGreaterThan(0)
     expect(tree.children[0].count).toBe(lowdina.count! + (tree.children[0].children[1].count ?? 0))
     expect(tree.count).toBe(flatten(tree).reduce((sum, n) => sum + (n.stats?.total ?? 0), 0))
+    expect(tree.guides).toBe(flatten(tree).filter((n) => n.stats?.total).length)
   })
 
   it('gives a page its trail and a tree trimmed to its surroundings', () => {
@@ -34,6 +52,7 @@ describe('manifest', async () => {
     expect(info.trail.map((n) => n.path)).toEqual(['', 'south-east'])
     expect(info.tree.children.map((n) => n.path)).toEqual(['south-east', 'bouldering-and-more', 'some-crag'])
     expect(info.tree.children[0].children.map((n) => n.path)).toEqual(['south-east/lowdina', 'south-east/lowdina-2'])
+    expect(pageInfo(manifestTree(manifest), '')!.node.children[0].children.map((n) => n.path)).toEqual(['south-east/lowdina', 'south-east/lowdina-2'])
     expect(pageInfo(root, 'nowhere')).toBeNull()
   })
 

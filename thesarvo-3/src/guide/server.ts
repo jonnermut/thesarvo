@@ -1,5 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 import { manifestTree, pageInfo } from './content/manifest'
+import { resolvePageBody } from './content/pageLinks'
 import type { Manifest, PageInfo } from './content/manifest'
 import { STATIC_SITE, GUIDE_PREFIX } from './content/paths'
 import type { ContentSource, IndexNode } from './content/types'
@@ -10,6 +11,10 @@ const serverManifest = createServerFn({ method: 'GET' }).handler(async () => (aw
 const serverGuide = createServerFn({ method: 'GET' })
   .validator((id: string) => id)
   .handler(async ({ data: id }) => (await import('./content')).getContentSource().getGuide(id))
+
+const serverPageBody = createServerFn({ method: 'GET' })
+  .validator((id: string) => id)
+  .handler(async ({ data: id }) => (await import('./content')).getContentSource().getPageBody(id))
 
 const serverImageNames = createServerFn({ method: 'GET' })
   .validator((id: string) => id)
@@ -58,6 +63,12 @@ export const fetchPage = async (path: string): Promise<PageInfo | null> => pageI
 
 export const fetchGuide = ({ data: id }: { data: string }): Promise<Guide | null> =>
   STATIC_SITE ? staticData(`guide/${id}.json`, (s) => s.getGuide(id)) : serverGuide({ data: id })
+
+/** The body of a page that is not a guide, with its links pointing at the current site, or null. */
+export async function fetchPageBody(id: string): Promise<string | null> {
+  const body = await (STATIC_SITE ? staticData(`page/${id}.json`, (s) => s.getPageBody(id)) : serverPageBody({ data: id }))
+  return body && resolvePageBody(body, await fetchTree(), id)
+}
 
 export const fetchImageNames = ({ data: id }: { data: string }): Promise<string[]> =>
   STATIC_SITE ? staticData(`images/${id}.json`, (s) => s.listImages(id)) : serverImageNames({ data: id })

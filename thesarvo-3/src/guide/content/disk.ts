@@ -13,10 +13,14 @@ export type RawIndexNode = { id: number; title: string; children: RawIndexNode[]
 export class DiskContentSource implements ContentSource {
   private index?: Promise<IndexNode>
 
-  /** `uploadDir` keeps new images apart from the downloaded content, which stays read-only. */
+  /**
+   * `uploadDir` keeps new images apart from the downloaded content, which stays read-only. The old
+   * downloads have no page bodies, so those come from the content repo's `pages` folder.
+   */
   constructor(
     private readonly dir: string,
     private readonly uploadDir = path.join(dir, 'uploads'),
+    private readonly pagesDir = path.join(dir, 'pages'),
   ) {}
 
   getIndex() {
@@ -28,6 +32,10 @@ export class DiskContentSource implements ContentSource {
     if (!/^\d+$/.test(id)) return null
     const xml = await this.read(`${id}.xml`)
     return xml ? guideFromXml(id, new TextDecoder().decode(xml)) : null
+  }
+
+  getPageBody(id: string) {
+    return readPageBody(this.pagesDir, id)
   }
 
   async saveImage(guideId: string, fileName: string, bytes: Uint8Array) {
@@ -88,4 +96,10 @@ export function toNode(raw: RawIndexNode, parentPath: string, guideFiles: Set<st
   })
   // Slugs use the original title so URLs stay put; only the shown title is tidied.
   return { id, title: navTitle(raw.title), path: parentPath, isGuide: guideFiles.has(`${id}.xml`), children }
+}
+
+/** `pages/<id>/page.html` under `pagesDir`, or null. */
+export async function readPageBody(pagesDir: string, id: string): Promise<string | null> {
+  if (!/^\d+$/.test(id)) return null
+  return readFile(path.join(pagesDir, id, 'page.html'), 'utf8').catch(() => null)
 }

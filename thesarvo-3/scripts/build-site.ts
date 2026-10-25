@@ -26,6 +26,7 @@ const data = path.resolve('public/g-data')
 await rm(data, { recursive: true, force: true })
 await mkdir(path.join(data, 'guide'), { recursive: true })
 await mkdir(path.join(data, 'images'), { recursive: true })
+await mkdir(path.join(data, 'page'), { recursive: true })
 // The tree and stats every page refreshes itself from after loading.
 await writeFile(path.join(data, 'manifest.json'), JSON.stringify(await buildManifest(index, (id) => source.getGuide(id))))
 let guides = 0
@@ -34,7 +35,10 @@ for (const node of flatten(index).filter((n) => n.isGuide)) {
   await writeFile(path.join(data, 'images', `${node.id}.json`), JSON.stringify(await source.listImages(node.id)))
   guides++
 }
-console.log(`Wrote data for ${guides} guides`)
+for (const node of flatten(index).filter((n) => !n.isGuide)) {
+  await writeFile(path.join(data, 'page', `${node.id}.json`), JSON.stringify(await source.getPageBody(node.id)))
+}
+console.log(`Wrote data for ${guides} guides and ${flatten(index).length - guides} other pages`)
 
 const build = spawnSync('npx', ['vite', 'build'], {
   stdio: 'inherit',

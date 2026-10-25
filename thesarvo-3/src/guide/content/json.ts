@@ -1,13 +1,14 @@
-import { readFile, readdir } from 'node:fs/promises'
+import { access, readFile, readdir } from 'node:fs/promises'
 import path from 'node:path'
 import type { Guide } from '#/guide/model/types'
-import { toNode  } from './disk'
+import { readPageBody, toNode } from './disk'
 import type {RawIndexNode} from './disk';
 import { referencedImages } from './attachments'
 import type { ContentSource } from './types'
 
 /**
- * Reads a checkout of the content repo: `index.json` and `pages/<id>/guide.json`.
+ * Reads a checkout of the content repo: `index.json`, `pages/<id>/guide.json` and, for pages that
+ * are not guides, `pages/<id>/page.html`.
  * Read-only, and images live in object storage, so the file and upload methods refuse.
  */
 export class JsonContentSource implements ContentSource {
@@ -29,6 +30,10 @@ export class JsonContentSource implements ContentSource {
     }
   }
 
+  getPageBody(id: string) {
+    return readPageBody(path.join(this.dir, 'pages'), id)
+  }
+
   /** The images the guide already uses: all that the static site can offer. */
   async listImages(guideId: string) {
     const guide = await this.getGuide(guideId)
@@ -45,6 +50,11 @@ export class JsonContentSource implements ContentSource {
 
   private async loadIndex() {
     const raw = JSON.parse(await readFile(path.join(this.dir, 'index.json'), 'utf8')) as RawIndexNode
-    return toNode(raw, '', new Set((await readdir(path.join(this.dir, 'pages'))).map((id) => `${id}.xml`)))
+    const pages = path.join(this.dir, 'pages')
+    const guides = new Set<string>()
+    for (const id of await readdir(pages)) {
+      if (await access(path.join(pages, id, 'guide.json')).then(() => true, () => false)) guides.add(`${id}.xml`)
+    }
+    return toNode(raw, '', guides)
   }
 }

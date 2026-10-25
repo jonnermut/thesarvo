@@ -1,4 +1,5 @@
 import type { Climb, Guide } from '#/guide/model/types'
+import { nodeAnchors } from '#/guide/view/contents'
 import { routeStats } from '#/guide/view/routeStats'
 import { findByPath, flatten } from './paths'
 import type { IndexNode } from './types'
@@ -15,7 +16,15 @@ export type GuideStats = {
   stars: [number, number, number]
   topos: number
   gps: boolean
+  /** The best few climbs (three stars, then two): anchor, name, grade, stars. */
+  classics: Classic[]
+  /** Where to put the crag on a map: the first GPS point, as latitude and longitude. */
+  pin?: [number, number]
 }
+
+export type Classic = [anchor: string, name: string, grade: string, stars: number]
+
+const CLASSICS = 5
 
 export type ManifestNode = { id: string; parent: string | null; title: string; path: string; isGuide: boolean; stats?: GuideStats }
 
@@ -28,15 +37,24 @@ export type Manifest = { version: 1; nodes: ManifestNode[] }
 /** What a page needs to render on its own: itself, the way up, and a tree trimmed to its surroundings. */
 export type PageInfo = { node: IndexNode; trail: IndexNode[]; tree: IndexNode }
 
+const starCount = (c: Climb) => Math.min(c.stars.replace(/[^*]/g, '').length, 3)
+
 export function guideStats(guide: Guide): GuideStats {
   const climbs = guide.nodes.filter((n): n is Climb => n.type === 'climb' || n.type === 'problem')
   const stats = routeStats(climbs)
   const counted = climbs.filter((c) => (c.type === 'problem') === stats.problems)
   const stars: GuideStats['stars'] = [0, 0, 0]
   for (const c of counted) {
-    const n = c.stars.replace(/[^*]/g, '').length
-    if (n) stars[Math.min(n, 3) - 1]++
+    const n = starCount(c)
+    if (n) stars[n - 1]++
   }
+  const anchors = nodeAnchors(guide.nodes)
+  const classics = guide.nodes
+    .flatMap((n, i): Classic[] => ((n.type === 'climb' || n.type === 'problem') && starCount(n) >= 2 ? [[anchors[i]!, n.name, n.grade, starCount(n)]] : []))
+    .sort((a, b) => b[3] - a[3])
+    .slice(0, CLASSICS)
+  const point = guide.nodes.flatMap((n) => (n.type === 'gps' ? n.points : [])).map((p) => [Number(p.latitude), Number(p.longitude)] as [number, number])
+    .find(([lat, lng]) => lat && lng && !Number.isNaN(lat) && !Number.isNaN(lng))
   return {
     total: stats.total,
     problems: stats.problems,
@@ -45,6 +63,8 @@ export function guideStats(guide: Guide): GuideStats {
     stars,
     topos: guide.nodes.filter((n) => n.type === 'image').length,
     gps: guide.nodes.some((n) => n.type === 'gps' && (n.points.length > 0 || n.lines.length > 0)),
+    classics,
+    ...(point && { pin: point }),
   }
 }
 
@@ -59,7 +79,7 @@ export async function buildManifest(root: IndexNode, getGuide: (id: string) => P
   return { version: 1, nodes }
 }
 
-/** Rebuilds the tree, with `count` on every node: climbs and problems in it and everything below. */
+/** Rebuilds the tree, with `count` (climbs and problems) and `guides` on every node, for it and everything below. */
 export function manifestTree(manifest: Manifest): IndexNode {
   const byId = new Map<string, IndexNode>()
   let root: IndexNode | undefined
@@ -70,15 +90,20 @@ export function manifestTree(manifest: Manifest): IndexNode {
     else byId.get(m.parent)?.children.push(node)
   }
   if (!root) throw new Error('Manifest has no root')
-  const count = (n: IndexNode): number => (n.count = (n.stats?.total ?? 0) + n.children.reduce((sum, c) => sum + count(c), 0))
-  count(root)
+  const sum = (n: IndexNode) => {
+    for (const c of n.children) sum(c)
+    n.count = (n.stats?.total ?? 0) + n.children.reduce((total, c) => total + c.count!, 0)
+    n.guides = (n.stats?.total ? 1 : 0) + n.children.reduce((total, c) => total + c.guides!, 0)
+  }
+  sum(root)
   return root
 }
 
 /**
- * The page's node, its ancestors, and a copy of the tree holding only the ancestors, their
- * children and the page's own children. Branches left out are marked `more`, so the sidebar
- * can still show them as expandable before the full tree arrives.
+ * The page's node (with two levels of children, for its contents view), its ancestors, and a copy
+ * of the tree holding only the ancestors, their children and the page's own children. Branches
+ * left out are marked `more`, so the sidebar can still show them as expandable before the full
+ * tree arrives.
  */
 export function pageInfo(root: IndexNode, path: string): PageInfo | null {
   const node = findByPath(root, path)
@@ -91,5 +116,6 @@ export function pageInfo(root: IndexNode, path: string): PageInfo | null {
     return { ...rest, children: [], ...(children.length > 0 && { more: true }) }
   }
   const strip = ({ children: _, ...rest }: IndexNode): IndexNode => ({ ...rest, children: [] })
-  return { node: { ...strip(node), children: node.children.map(trim) }, trail: trail.map(strip), tree: trim(root) }
+  const withChildren = (n: IndexNode): IndexNode => ({ ...strip(n), children: n.children.map(trim) })
+  return { node: { ...strip(node), children: node.children.map(withChildren) }, trail: trail.map(strip), tree: trim(root) }
 }

@@ -7,6 +7,10 @@ let source: ContentSource | undefined
 
 /** Server-only. */
 export function getContentSource(): ContentSource {
-  source ??= new DiskContentSource(process.env.CONTENT_DIR ?? DEFAULT_CONTENT_DIR, process.env.UPLOAD_DIR ?? 'uploads')
+  source ??= new DiskContentSource(
+    process.env.CONTENT_DIR ?? DEFAULT_CONTENT_DIR,
+    process.env.UPLOAD_DIR ?? 'uploads',
+    process.env.PAGES_DIR ?? '../../thesarvo-content/pages',
+  )
   return source
 }

@@ -1,7 +1,7 @@
 import type { Climb } from '#/guide/model/types'
 
-const ROUTE_BANDS = ['<16', '16-19', '20-24', '25+'] as const
-const PROBLEM_BANDS = ['VE-2', '3-5', '6-8', '9+'] as const
+export const ROUTE_BANDS = ['<16', '16-19', '20-24', '25+'] as const
+export const PROBLEM_BANDS = ['VE-2', '3-5', '6-8', '9+'] as const
 
 export type RouteStats = {
   /** Number of climbs (or problems) in the guide, whether or not they have a usable grade. */
