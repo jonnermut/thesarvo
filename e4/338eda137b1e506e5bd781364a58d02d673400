@@ -1,0 +1,45 @@
+thesarvo-3/src/guide/view/GuideView.tsx
+  s_e20d0a1ebc47aa::t_749553e3cd30fb 2,4-5,23-41,46-64
+  s_e20d0a1ebc47aa::t_a3337cb92b8a71 44-45
+thesarvo-3/src/guide/view/contents.test.ts
+  s_e20d0a1ebc47aa::t_542035a249f249 41-44
+  s_e20d0a1ebc47aa::t_cdd064c30332e4 1-40,45-46
+thesarvo-3/src/routes/g.$.tsx
+  s_e20d0a1ebc47aa::t_27540cb3022795 38,42,49
+thesarvo-3/src/guide/view/contents.ts
+  s_e20d0a1ebc47aa::t_542035a249f249 4,13-14
+  s_e20d0a1ebc47aa::t_747df7b63252ea 1-3,5-12,15-76
+thesarvo-3/src/guide/view/GuideContents.tsx
+  s_e20d0a1ebc47aa::t_73267401ae4451 26,31
+  s_e20d0a1ebc47aa::t_abd41990c94adb 11,14-16,44,106
+  s_e20d0a1ebc47aa::t_11a262121ab89a 1-10,12-13,17-25,27-30,32-43,45-105,107-215
+thesarvo-3/src/styles.css
+  s_e20d0a1ebc47aa::t_6a18aecc8503e8 37-54
+thesarvo-3/src/components/Breadcrumbs.tsx
+  s_e20d0a1ebc47aa::t_42a11758806594 6,9
+thesarvo-3/src/guide/view/ClimbBlock.tsx
+  s_e20d0a1ebc47aa::t_749553e3cd30fb 11,14
+thesarvo-3/src/guide/view/TopoFigure.tsx
+  s_e20d0a1ebc47aa::t_749553e3cd30fb 64-65,118
+thesarvo-3/src/guide/view/GuideView.test.tsx
+  s_e20d0a1ebc47aa::t_abd41990c94adb 12,16-20
+  s_e20d0a1ebc47aa::t_d322af2ee3a9d8 21-22
+thesarvo-3/docs/plan-navigation.md
+  s_e20d0a1ebc47aa::t_5b528a322e81eb 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e4338eda137b1e506e5bd781364a58d02d673400",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
