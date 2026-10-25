@@ -1,0 +1,44 @@
+thesarvo-3/src/guide/convert/xml.ts
+  s_e20d0a1ebc47aa::t_90862bde45b5ae 5,56,133-138,233
+thesarvo-3/src/guide/view/kml.test.ts
+  s_e20d0a1ebc47aa::t_8ecbbfbf562786 1-26
+thesarvo-3/src/guide/islands/MapView.tsx
+  s_e20d0a1ebc47aa::t_90862bde45b5ae 20-21,43-44,46-49
+  s_e20d0a1ebc47aa::t_6e265aec0dad63 34
+  s_e20d0a1ebc47aa::t_2da64795a1225f 45
+thesarvo-3/src/guide/convert/xml.test.ts
+  s_e20d0a1ebc47aa::t_b0f0878db98192 55-69
+thesarvo-3/src/guide/edit/Editor.tsx
+  s_e20d0a1ebc47aa::t_f865b8c35c23aa 7,210
+  s_e20d0a1ebc47aa::t_134a4c93eda9ad 228,233,255
+thesarvo-3/src/guide/view/FactIcons.tsx
+  s_e20d0a1ebc47aa::t_2187fcbd5b7994 8
+thesarvo-3/src/guide/model/types.ts
+  s_e20d0a1ebc47aa::t_90862bde45b5ae 134-140
+thesarvo-3/src/guide/view/GpsBlock.tsx
+  s_e20d0a1ebc47aa::t_8ecbbfbf562786 3,10-19,23-25,30-36,70,74,80,95
+  s_e20d0a1ebc47aa::t_2187fcbd5b7994 58,102
+thesarvo-3/src/guide/view/GuideView.tsx
+  s_e20d0a1ebc47aa::t_f865b8c35c23aa 4,40
+thesarvo-3/src/guide/view/kml.ts
+  s_e20d0a1ebc47aa::t_f865b8c35c23aa 1,20-21,28,32-34
+  s_e20d0a1ebc47aa::t_8ecbbfbf562786 2-19,22-27,29-31
+thesarvo-3/docs/live-site-differences.md
+  s_e20d0a1ebc47aa::t_bf46d38b52b908 44-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "09099353990f677330ca12e83e9a3acbac34e942",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
