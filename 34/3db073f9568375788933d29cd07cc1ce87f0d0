@@ -1,0 +1,37 @@
+thesarvo-3/src/guide/edit/state.test.ts
+  s_e20d0a1ebc47aa::t_c5c27a78f5cef8 1-57
+thesarvo-3/src/guide/edit/drafts.ts
+  s_e20d0a1ebc47aa::t_58409c108cdca6 1-54
+thesarvo-3/tsconfig.json
+  s_e20d0a1ebc47aa::t_584661bacd4251 5,12
+thesarvo-3/src/guide/edit/drafts.test.ts
+  s_e20d0a1ebc47aa::t_58409c108cdca6 1-29
+thesarvo-3/src/guide/edit/state.ts
+  s_e20d0a1ebc47aa::t_c5c27a78f5cef8 1-89
+thesarvo-3/src/guide/model/geometry.ts
+  s_e20d0a1ebc47aa::t_58409c108cdca6 1-13
+thesarvo-3/package.json
+  s_e20d0a1ebc47aa::t_c5c27a78f5cef8 22,35
+thesarvo-3/src/guide/edit/topoOps.ts
+  s_e20d0a1ebc47aa::t_58409c108cdca6 1-63
+thesarvo-3/src/guide/edit/topoOps.test.ts
+  s_e20d0a1ebc47aa::t_58409c108cdca6 1-40
+thesarvo-3/package-lock.json
+  s_e20d0a1ebc47aa::t_9620c750efd3cb 11,24,2441-2457,3752-3772
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "343db073f9568375788933d29cd07cc1ce87f0d0",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
