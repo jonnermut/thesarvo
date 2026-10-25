@@ -1,10 +1,13 @@
 import type { Header } from '#/guide/model/types'
+import { RockIcon, SunIcon, WalkIcon } from './FactIcons'
+import { RoutesChart } from './RoutesChart'
+import type { RouteStats } from './routeStats'
 import { Lines } from './text'
 
 const FACTS = [
-  ['Walk', 'walk'],
-  ['Sun', 'sun'],
-  ['Rock', 'rock'],
+  [WalkIcon, 'walk'],
+  [SunIcon, 'sun'],
+  [RockIcon, 'rock'],
 ] as const
 
 const SECTIONS = [
@@ -15,18 +18,21 @@ const SECTIONS = [
   ['Camping', 'camping'],
 ] as const
 
-export function HeaderBlock({ header }: { header: Header }) {
+export function HeaderBlock({ header, stats }: { header: Header; stats: RouteStats }) {
   return (
     <header className="pb-4">
       <h1 className="border-b border-line pb-1 text-[28px] font-bold leading-tight text-navy">{header.name}</h1>
-      <dl className="mt-4 space-y-1 text-[13px]">
-        {FACTS.filter(([, key]) => header[key]).map(([label, key]) => (
-          <div key={key} className="flex gap-2">
-            <dt className="w-12 shrink-0 font-bold text-navy">{label}</dt>
-            <dd>{header[key]}</dd>
-          </div>
-        ))}
-      </dl>
+      <div className="mt-4 flex flex-wrap items-center gap-x-8 gap-y-4">
+        {stats.total > 0 && <RoutesChart stats={stats} />}
+        <ul className="space-y-2 text-[13px]">
+          {FACTS.filter(([, key]) => header[key]).map(([Icon, key]) => (
+            <li key={key} className="flex items-center gap-2">
+              <Icon />
+              {header[key]}
+            </li>
+          ))}
+        </ul>
+      </div>
       <div className="mt-6 space-y-5">
         {SECTIONS.filter(([, key]) => header[key]).map(([label, key]) => (
           // Live site: label column on the left; stacked on phones.

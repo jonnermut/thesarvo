@@ -4,6 +4,7 @@ import { ClimbBlock } from './ClimbBlock'
 import { GpsBlock } from './GpsBlock'
 import { HeaderBlock } from './HeaderBlock'
 import { TextBlock } from './TextBlock'
+import { routeStats } from './routeStats'
 import { TopoFigure } from './TopoFigure'
 
 /** Read-only guide: renders every node in order. */
@@ -15,12 +16,14 @@ export function GuideView({ guide }: { guide: Guide }) {
     [guide],
   )
 
+  const stats = useMemo(() => routeStats([...climbs.values()]), [climbs])
+
   return (
     <article className="mx-auto max-w-4xl space-y-2 px-4 py-6 sm:px-6">
       {guide.nodes.map((node, i) => {
         switch (node.type) {
           case 'header':
-            return <HeaderBlock key={node.id} header={node} />
+            return <HeaderBlock key={node.id} header={node} stats={stats} />
           case 'climb':
           case 'problem':
             return (

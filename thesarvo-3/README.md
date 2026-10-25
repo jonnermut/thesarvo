@@ -6,7 +6,7 @@ Plans live in [`docs/`](docs/).
 ## Commands
 
 ```bash
-npm run dev         # dev server on :3000
+npm run dev         # dev server on :47213
 npm test            # vitest
 npm run typecheck   # tsc 7
 npx eslint src      # lint (needs TS 6, installed as `typescript`)

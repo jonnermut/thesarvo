@@ -131,6 +131,9 @@ export type GpsPoint = {
   other: Other
 }
 
-export type Gps = { type: 'gps'; id: string; points: GpsPoint[]; other: Other }
+/** A track on the map (e.g. a taped approach path). `path` is the raw "lat,lon lat,lon ..." text. */
+export type GpsLine = { pid: string; description: string; path: string; other: Other }
+
+export type Gps = { type: 'gps'; id: string; points: GpsPoint[]; lines: GpsLine[]; other: Other }
 
 export type UnknownNode = { type: 'unknown'; raw: RawElement }

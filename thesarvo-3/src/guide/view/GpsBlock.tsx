@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import type { Gps } from '#/guide/model/types'
 
 const MapView = lazy(() => import('#/guide/islands/MapView'))
@@ -6,7 +6,9 @@ const MapView = lazy(() => import('#/guide/islands/MapView'))
 const mapsUrl = (lat: string, lon: string) => `https://www.google.com/maps?q=${lat},${lon}`
 
 export function GpsBlock({ gps }: { gps: Gps }) {
+  // Open by default, but only after mount: Leaflet needs the browser.
   const [showMap, setShowMap] = useState(false)
+  useEffect(() => setShowMap(true), [])
   if (!gps.points.length) return null
   return (
     <section className="my-6">
@@ -17,13 +19,13 @@ export function GpsBlock({ gps }: { gps: Gps }) {
           onClick={() => setShowMap((v) => !v)}
           className="rounded bg-paper border border-line px-3 py-1.5 text-[13px] text-navy hover:bg-black/5"
         >
-          {showMap ? 'Hide map' : 'Open map'}
+          {showMap ? 'Hide map' : 'Show map'}
         </button>
       </div>
       {showMap && (
         <div className="mt-3">
           <Suspense fallback={<div className="grid h-80 place-items-center rounded-lg bg-black/5 text-muted">Loading map…</div>}>
-            <MapView points={gps.points} />
+            <MapView points={gps.points} lines={gps.lines} />
           </Suspense>
         </div>
       )}

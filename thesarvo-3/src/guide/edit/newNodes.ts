@@ -20,7 +20,7 @@ export function newNode(kind: NewNodeKind, id: string): GuideNode {
     case 'header':
       return { type: 'header', id, name: '', rock: '', sun: '', walk: '', access: '', camping: '', acknowledgement: '', intro: '', history: '', autonumber: '', other: {} } satisfies Header
     case 'gps':
-      return { type: 'gps', id, points: [], other: {} } satisfies Gps
+      return { type: 'gps', id, points: [], lines: [], other: {} } satisfies Gps
   }
 }
 

@@ -1,6 +1,7 @@
 import type {
   Climb,
   Gps,
+  GpsLine,
   GpsPoint,
   Guide,
   GuideNode,
@@ -51,6 +52,7 @@ const TEXT_KEYS = ['id', 'class'] as const
 const IMAGE_KEYS = ['id', 'src', 'width', 'height', 'noPrint', 'printLayout', 'legendTitle', 'legendFooter', 'legendx', 'legendy'] as const
 const PATH_KEYS = ['id', 'points', 'd', 'linkedTo', 'lineStyle', 'labelText', 'arrow'] as const
 const RECT_KEYS = ['id', 'x', 'y', 'width', 'height', 'style', 'arrowDirection', 'text'] as const
+const GPS_LINE_KEYS = ['pid', 'description'] as const
 const GPS_POINT_KEYS = ['pid', 'code', 'description', 'zone', 'easting', 'northing', 'latitude', 'longitude', 'height'] as const
 
 function headerFromXml(el: RawElement): Header {
@@ -126,7 +128,11 @@ function gpsFromXml(el: RawElement): Gps {
     const { known, other } = pick(p.attrs, GPS_POINT_KEYS)
     return { ...known, other }
   })
-  return { type: 'gps', id: el.attrs.id ?? '', points, other: {} }
+  const lines: GpsLine[] = children(el, 'polyline').map((l) => {
+    const { known, other } = pick(l.attrs, GPS_LINE_KEYS)
+    return { ...known, path: l.text.trim(), other }
+  })
+  return { type: 'gps', id: el.attrs.id ?? '', points, lines, other: {} }
 }
 
 function nodeFromXml(el: RawElement): GuideNode {
@@ -218,7 +224,10 @@ function nodeToXml(n: GuideNode): RawElement {
       }, n.other), [...legend, el('drawing', {}, shapes)])
     }
     case 'gps':
-      return el('gps', attrs({ id: n.id }, n.other), n.points.map(({ other, ...p }) => el('point', attrs(p, other))))
+      return el('gps', attrs({ id: n.id }, n.other), [
+        ...n.points.map(({ other, ...p }) => el('point', attrs(p, other))),
+        ...n.lines.map(({ other, path, ...l }) => el('polyline', attrs(l, other), [], path)),
+      ])
     case 'unknown':
       return n.raw
   }

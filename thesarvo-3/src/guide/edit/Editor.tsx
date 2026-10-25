@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { guideToXml } from '#/guide/convert/xml'
+import { routeStats } from '#/guide/view/routeStats'
 import type { Climb, Guide, GuideNode } from '#/guide/model/types'
 import { ClimbBlock } from '#/guide/view/ClimbBlock'
 import { GpsBlock } from '#/guide/view/GpsBlock'
@@ -137,7 +138,7 @@ export default function Editor({ guide }: { guide: Guide }) {
 
 function NodePreview({ node, guideId, climbs }: { node: GuideNode; guideId: string; climbs: Climb[] }) {
   switch (node.type) {
-    case 'header': return <HeaderBlock header={node} />
+    case 'header': return <HeaderBlock header={node} stats={routeStats(climbs)} />
     case 'climb':
     case 'problem': return <ClimbBlock climb={node} />
     case 'text': return <TextBlock block={node} />

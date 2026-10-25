@@ -43,6 +43,15 @@ describe('guideFromXml', () => {
   })
 })
 
+describe('GPS tracks', () => {
+  it('keeps polylines through a round trip', () => {
+    const guide = guideFromXml('167', fixture('167'))
+    const gps = guide.nodes.find((n) => n.type === 'gps')
+    expect(gps?.type === 'gps' && gps.lines.length).toBeGreaterThan(0)
+    expect(guideFromXml('167', guideToXml(guide))).toEqual(guide)
+  })
+})
+
 describe('round trip', () => {
   it.each(['167', '200900619', '1966082'])('guide %s survives xml -> model -> xml -> model', (id) => {
     const model = guideFromXml(id, fixture(id))
