@@ -87,7 +87,7 @@ export function TopoFigure(props: Props) {
           <span className="text-center"><Stars stars={c.stars} /></span>
           <span className="text-right tabular-nums">{c.number}</span>
           <span className="truncate">{c.name}</span>
-          <span className="tabular-nums">{c.grade}</span>
+          <span className="tabular-nums">{c.grade.split('/')[0]}</span>
         </a>
       </li>
     ))

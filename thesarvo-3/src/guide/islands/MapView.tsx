@@ -26,15 +26,28 @@ const toLatLngs = (path: string): L.LatLngTuple[] =>
     .filter((p): p is [number, number] => p.length === 2 && p.every((n) => !Number.isNaN(n)))
 
 /** Leaflet map of GPS points and tracks. Loaded lazily and only in the browser. */
-export default function MapView({ points, lines }: { points: GpsPoint[]; lines: GpsLine[] }) {
+type Props = {
+  points: GpsPoint[]
+  lines: GpsLine[]
+  /** `pid` of the point to highlight, e.g. the table row last clicked. */
+  selected?: string | null
+  onSelect?: (pid: string) => void
+}
+
+export default function MapView({ points, lines, selected, onSelect }: Props) {
   const el = useRef<HTMLDivElement>(null)
+  const map = useRef<L.Map | null>(null)
+  const markers = useRef(new Map<string, L.CircleMarker>())
+  const select = useRef(onSelect)
+  select.current = onSelect
 
   useEffect(() => {
     if (!el.current) return
-    const map = L.map(el.current, { scrollWheelZoom: false, attributionControl: false, layers: [BASEMAPS.Satellite] })
-    L.control.layers(BASEMAPS, undefined, { position: 'topright' }).addTo(map)
-    L.control.attribution({ prefix: false }).addTo(map)
-    L.control.scale({ imperial: false }).addTo(map)
+    const m = L.map(el.current, { scrollWheelZoom: false, attributionControl: false, layers: [BASEMAPS.Satellite] })
+    map.current = m
+    L.control.layers(BASEMAPS, undefined, { position: 'topright' }).addTo(m)
+    L.control.attribution({ prefix: false }).addTo(m)
+    L.control.scale({ imperial: false }).addTo(m)
 
     const bounds = L.latLngBounds([])
     for (const line of lines) {
@@ -43,13 +56,13 @@ export default function MapView({ points, lines }: { points: GpsPoint[]; lines: 
       if (line.shape !== 'polyline') {
         // Areas are shaded outlines; a rectangle is stored as two opposite corners.
         const shape = line.shape === 'rectangle' ? L.rectangle([latlngs[0], latlngs[1]], AREA) : L.polygon(latlngs, AREA)
-        shape.bindTooltip(line.description, { sticky: true }).addTo(map)
+        shape.bindTooltip(line.description, { sticky: true }).addTo(m)
         bounds.extend(latlngs)
         continue
       }
       // White with a dark casing stays visible on both satellite and street maps.
-      L.polyline(latlngs, { color: '#000', weight: 5, opacity: 0.4 }).addTo(map)
-      L.polyline(latlngs, { color: '#fff', weight: 3 }).bindTooltip(line.description, { sticky: true }).addTo(map)
+      L.polyline(latlngs, { color: '#000', weight: 5, opacity: 0.4 }).addTo(m)
+      L.polyline(latlngs, { color: '#fff', weight: 3 }).bindTooltip(line.description, { sticky: true }).addTo(m)
       bounds.extend(latlngs)
     }
     for (const p of points) {
@@ -57,17 +70,29 @@ export default function MapView({ points, lines }: { points: GpsPoint[]; lines: 
       const lon = Number.parseFloat(p.longitude)
       if (Number.isNaN(lat) || Number.isNaN(lon)) continue
       bounds.extend([lat, lon])
-      L.circleMarker([lat, lon], { radius: 7, color: '#fff', weight: 2, fillColor: '#f7941e', fillOpacity: 1 })
+      const marker = L.circleMarker([lat, lon], { radius: 7, color: '#fff', weight: 2, fillColor: '#f7941e', fillOpacity: 1 })
         .bindTooltip(p.description || p.code, { direction: 'top' })
-        .addTo(map)
+        .on('click', () => select.current?.(p.pid))
+        .addTo(m)
+      markers.current.set(p.pid, marker)
     }
-    if (bounds.isValid()) map.fitBounds(bounds, { padding: [30, 30], maxZoom: 17 })
-    else map.setView([-42, 147], 7)
+    if (bounds.isValid()) m.fitBounds(bounds, { padding: [30, 30], maxZoom: 17 })
+    else m.setView([-42, 147], 7)
 
     return () => {
-      map.remove()
+      m.remove()
+      map.current = null
+      markers.current.clear()
     }
   }, [points, lines])
+
+  // Move to the selected point and open its label.
+  useEffect(() => {
+    const marker = selected ? markers.current.get(selected) : undefined
+    if (!marker || !map.current) return
+    map.current.flyTo(marker.getLatLng(), Math.max(map.current.getZoom(), 16), { duration: 0.6 })
+    marker.openTooltip()
+  }, [selected])
 
   return <div ref={el} className="h-96 w-full border border-line sm:h-[28rem]" />
 }

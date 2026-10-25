@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import type { Gps } from '#/guide/model/types'
 import { gpsToKml } from './kml'
 
@@ -19,6 +19,8 @@ function downloadKml(name: string, gps: Gps) {
 export function GpsBlock({ gps, guideName = '' }: { gps: Gps; guideName?: string }) {
   // Open by default, but only after mount: Leaflet needs the browser.
   const [showMap, setShowMap] = useState(false)
+  const [selected, setSelected] = useState<string | null>(null)
+  const mapBox = useRef<HTMLDivElement>(null)
   useEffect(() => setShowMap(true), [])
   if (!gps.points.length && !gps.lines.length) return null
   const hasCode = gps.points.some((p) => p.code)
@@ -43,7 +45,7 @@ export function GpsBlock({ gps, guideName = '' }: { gps: Gps; guideName?: string
         </button>
       </div>
       {showMap && (
-        <div className="mt-3">
+        <div ref={mapBox} className="mt-3 scroll-mt-20">
           <Suspense
             fallback={
               <div className="grid h-80 place-items-center rounded-lg bg-black/5 text-muted">
@@ -51,7 +53,7 @@ export function GpsBlock({ gps, guideName = '' }: { gps: Gps; guideName?: string
               </div>
             }
           >
-            <MapView points={gps.points} lines={gps.lines} />
+            <MapView points={gps.points} lines={gps.lines} selected={selected} onSelect={setSelected} />
           </Suspense>
         </div>
       )}
@@ -76,7 +78,14 @@ export function GpsBlock({ gps, guideName = '' }: { gps: Gps; guideName?: string
             </thead>
             <tbody>
               {gps.points.map((p) => (
-                <tr key={p.pid} className="border-t border-line">
+                <tr
+                  key={p.pid}
+                  onClick={() => {
+                    setSelected(p.pid)
+                    mapBox.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+                  }}
+                  className={`cursor-pointer border-t border-line hover:bg-amber/10 ${selected === p.pid ? 'bg-amber/20' : ''}`}
+                >
                   {hasCode && <td className="px-3 py-1 text-muted">{p.code}</td>}
                   <td className="px-3 py-1 font-medium">
                     {p.description || p.code}
@@ -84,6 +93,7 @@ export function GpsBlock({ gps, guideName = '' }: { gps: Gps; guideName?: string
                   <td className="px-3 py-1 tabular-nums">
                     <a
                       className="text-link"
+                      onClick={(e) => e.stopPropagation()}
                       href={mapsUrl(p.latitude, p.longitude)}
                     >
                       {p.latitude}, {p.longitude}
