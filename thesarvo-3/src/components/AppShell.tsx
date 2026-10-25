@@ -47,13 +47,20 @@ export function AppShell({ index, children }: { index: IndexNode; children: Reac
   const [collapsed, setCollapsed] = useState(false)
   const [drawer, setDrawer] = useState(false)
 
+  // Editing wants the whole width: collapse while it lasts, then return to the remembered choice.
+  const editing = !!useMatch({ from: '/g/$', shouldThrow: false })?.search.edit
+
   useEffect(() => {
+    if (editing) {
+      setCollapsed(true)
+      return
+    }
     try {
       setCollapsed(localStorage.getItem(STORAGE_KEY) === 'collapsed')
     } catch {
       /* storage unavailable: keep the default */
     }
-  }, [])
+  }, [editing])
 
   const toggle = () => {
     if (window.matchMedia('(min-width: 1024px)').matches) {
