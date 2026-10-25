@@ -20,6 +20,8 @@ export interface ContentSource {
   getGuide: (id: string) => Promise<Guide | null>
   /** Image names attached to a guide (without the id prefix, thumbnails excluded). */
   listImages: (guideId: string) => Promise<string[]>
+  /** Stores an uploaded image for a guide and returns the name the guide should reference. */
+  saveImage: (guideId: string, fileName: string, bytes: Uint8Array) => Promise<string>
   /** Reads an image (or other file) for serving in development. */
   readFile: (name: string) => Promise<Uint8Array | null>
 }

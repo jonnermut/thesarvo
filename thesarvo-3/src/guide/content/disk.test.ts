@@ -1,6 +1,9 @@
+import { mkdtemp, readFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { DiskContentSource } from './disk'
-import { ancestorIds, findByPath, flatten, imageUrl } from './paths'
+import { ancestorIds, findByPath, flatten, imageUrl, uploadName } from './paths'
 
 const source = new DiskContentSource('fixtures')
 
@@ -41,5 +44,24 @@ describe('imageUrl', () => {
   it('encodes names and picks the thumbnail variant', () => {
     expect(imageUrl('167', 'A b.jpg')).toBe('/content?f=167-a%20b.jpg')
     expect(imageUrl('167', 'a.jpg', true)).toBe('/content?f=167-t-a.jpg')
+  })
+})
+
+describe('image uploads', () => {
+  it('cleans names and only accepts images', () => {
+    expect(uploadName('C:\\pics\\My Topo!.JPG')).toBe('my topo_.jpg')
+    expect(uploadName('notes.txt')).toBeNull()
+    expect(uploadName('.jpg')).toBeNull()
+  })
+
+  it('stores uploads apart from content, never overwriting', async () => {
+    const dir = await mkdtemp(path.join(tmpdir(), 'uploads-'))
+    const up = new DiskContentSource('fixtures', dir)
+    expect(await up.saveImage('167', 'New.png', new Uint8Array([1, 2]))).toBe('new.png')
+    expect(await up.saveImage('167', 'New.png', new Uint8Array([3]))).toBe('new-2.png')
+    expect(await up.listImages('167')).toEqual(['a topo.jpg', 'new-2.png', 'new.png'])
+    expect([...((await up.readFile('167-new.png')) ?? [])]).toEqual([1, 2])
+    expect((await readFile(path.join(dir, '167-new-2.png')))[0]).toBe(3)
+    await expect(up.saveImage('x', 'a.png', new Uint8Array())).rejects.toThrow()
   })
 })

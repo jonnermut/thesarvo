@@ -13,14 +13,17 @@ import { DEFAULT_CONTENT_DIR } from './src/guide/content/defaultDir'
  */
 function devContentFiles(): Plugin {
   const dir = process.env.CONTENT_DIR ?? DEFAULT_CONTENT_DIR
+  const uploadDir = path.resolve(process.env.UPLOAD_DIR ?? 'uploads')
   return {
     name: 'dev-content-files',
     configureServer(server) {
       server.middlewares.use('/content', (req, res, next) => {
         const name =
           new URL(req.url ?? '', 'http://x').searchParams.get('f') ?? ''
-        const file = path.join(dir, path.basename(name))
-        if (!name || !existsSync(file)) return next()
+        const file = [dir, uploadDir]
+          .map((d) => path.join(d, path.basename(name)))
+          .find((f) => name && existsSync(f))
+        if (!file) return next()
         res.setHeader(
           'content-type',
           file.endsWith('.png') ? 'image/png' : 'image/jpeg',

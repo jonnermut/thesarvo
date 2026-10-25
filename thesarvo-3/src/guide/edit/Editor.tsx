@@ -7,8 +7,8 @@ import { GuideView } from '#/guide/view/GuideView'
 import { guideTitle } from '#/guide/view/kml'
 import { HeaderBlock } from '#/guide/view/HeaderBlock'
 import { TextBlock } from '#/guide/view/TextBlock'
-import { fetchImageNames } from '#/guide/server'
-import { Button, SelectField } from './fields'
+import { ImagePicker } from './ImagePicker'
+import { Button } from './fields'
 import { fingerprint, localStore } from './drafts'
 import type { Draft } from './drafts'
 import { newNode, newTopo, NEW_NODE_LABELS } from './newNodes'
@@ -348,7 +348,7 @@ function AddNode({
   guide: Guide
   onAdd: (node: GuideNode) => void
 }) {
-  const [images, setImages] = useState<string[] | null>(null)
+  const [picking, setPicking] = useState(false)
   const [error, setError] = useState('')
 
   const addImage = async (name: string) => {
@@ -356,7 +356,7 @@ function AddNode({
       const { imageUrl } = await import('#/guide/content/paths')
       const size = await measure(imageUrl(guide.id, name))
       onAdd(newTopo(nextId(guide), name, size.width, size.height))
-      setImages(null)
+      setPicking(false)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed')
     }
@@ -370,21 +370,9 @@ function AddNode({
           {label}
         </Button>
       ))}
-      <Button
-        onClick={async () =>
-          setImages(await fetchImageNames({ data: guide.id }))
-        }
-      >
-        Topo image…
-      </Button>
-      {images && (
-        <SelectField
-          className="min-w-60"
-          label="Choose an image"
-          value=""
-          options={[['', '—'], ...images.map((n) => [n, n] as const)]}
-          onChange={(n) => n && addImage(n)}
-        />
+      <Button onClick={() => setPicking(true)}>Topo image…</Button>
+      {picking && (
+        <ImagePicker guideId={guide.id} onPick={addImage} onClose={() => setPicking(false)} />
       )}
       {error && <span className="text-sm text-red-700">{error}</span>}
     </div>

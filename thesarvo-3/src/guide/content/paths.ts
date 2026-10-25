@@ -38,3 +38,12 @@ export function ancestorIds(root: IndexNode, path: string): string[] {
  */
 export const imageUrl = (guideId: string, name: string, thumb = false) =>
   `/content?f=${encodeURIComponent(`${guideId}-${thumb ? 't-' : ''}${name}`.toLowerCase())}`
+
+export const MAX_IMAGE_BYTES = 25 * 1024 * 1024
+
+/** Picks the stored name for an upload: a plain lower-case file name with a known image extension, or null. */
+export function uploadName(fileName: string): string | null {
+  const base = (fileName.split(/[\\/]/).pop() ?? '').trim().toLowerCase().replace(/[^a-z0-9 ._()-]+/g, '_')
+  const match = /^(.*?)\.(jpe?g|png|gif)$/.exec(base)
+  return match?.[1] ? base : null
+}

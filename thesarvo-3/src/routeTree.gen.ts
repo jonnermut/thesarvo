@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ContentRouteImport } from './routes/content'
+import { Route as UploadRouteImport } from './routes/upload'
 import { Route as EditSplatRouteImport } from './routes/edit.$'
 import { Route as GSplatRouteImport } from './routes/g.$'
 
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 const ContentRoute = ContentRouteImport.update({
   id: '/content',
   path: '/content',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UploadRoute = UploadRouteImport.update({
+  id: '/upload',
+  path: '/upload',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EditSplatRoute = EditSplatRouteImport.update({
@@ -38,12 +44,14 @@ const GSplatRoute = GSplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/content': typeof ContentRoute
+  '/upload': typeof UploadRoute
   '/edit/$': typeof EditSplatRoute
   '/g/$': typeof GSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/content': typeof ContentRoute
+  '/upload': typeof UploadRoute
   '/edit/$': typeof EditSplatRoute
   '/g/$': typeof GSplatRoute
 }
@@ -51,20 +59,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/content': typeof ContentRoute
+  '/upload': typeof UploadRoute
   '/edit/$': typeof EditSplatRoute
   '/g/$': typeof GSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/content' | '/edit/$' | '/g/$'
+  fullPaths: '/' | '/content' | '/upload' | '/edit/$' | '/g/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/content' | '/edit/$' | '/g/$'
-  id: '__root__' | '/' | '/content' | '/edit/$' | '/g/$'
+  to: '/' | '/content' | '/upload' | '/edit/$' | '/g/$'
+  id: '__root__' | '/' | '/content' | '/upload' | '/edit/$' | '/g/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContentRoute: typeof ContentRoute
+  UploadRoute: typeof UploadRoute
   EditSplatRoute: typeof EditSplatRoute
   GSplatRoute: typeof GSplatRoute
 }
@@ -83,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/content'
       fullPath: '/content'
       preLoaderRoute: typeof ContentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/upload': {
+      id: '/upload'
+      path: '/upload'
+      fullPath: '/upload'
+      preLoaderRoute: typeof UploadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/edit/$': {
@@ -105,6 +122,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContentRoute: ContentRoute,
+  UploadRoute: UploadRoute,
   EditSplatRoute: EditSplatRoute,
   GSplatRoute: GSplatRoute,
 }
