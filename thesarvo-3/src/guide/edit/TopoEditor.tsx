@@ -227,7 +227,9 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: P
           </svg>
         </div>
 
-        <aside className="space-y-3 rounded-lg border border-line bg-paper p-3">
+        {/* On wide screens the panel is sized by the photo, so switching panels never changes the page height. */}
+        <div className="relative lg:min-h-80">
+        <aside className="space-y-3 rounded-lg border border-line bg-paper p-3 lg:absolute lg:inset-0 lg:overflow-y-auto">
           {selectedPath ? (
             <>
               <h4 className="font-semibold">Route</h4>
@@ -287,7 +289,7 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: P
               <SelectField label="Print layout" value={topo.printLayout} options={PRINT_LAYOUTS} onChange={(printLayout) => onChange((t) => ({ ...t, printLayout }))} />
               <CheckField label="Not in print version" checked={topo.noPrint} onChange={(noPrint) => onChange((t) => ({ ...t, noPrint }))} />
               <p className="text-xs font-medium text-muted">Climbs shown (in tick order)</p>
-              <ul className="max-h-56 space-y-0.5 overflow-y-auto">
+              <ul className="space-y-0.5">
                 {climbs.map((c) => (
                   <li key={c.id}>
                     <label className="flex cursor-pointer items-center gap-2 rounded px-1 py-0.5 text-sm hover:bg-white">
@@ -301,6 +303,7 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: P
             </>
           )}
         </aside>
+        </div>
       </div>
     </div>
   )
