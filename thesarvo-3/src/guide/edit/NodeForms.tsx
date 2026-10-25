@@ -1,6 +1,9 @@
+import { lazy, Suspense, useState } from 'react'
 import { latLonToUtm, parseZone, utmToLatLon } from '#/guide/model/utm'
-import type { Climb, Gps, GpsPoint, Header, TextBlock } from '#/guide/model/types'
+import type { Climb, Gps, GpsLine, GpsPoint, Header, TextBlock } from '#/guide/model/types'
 import { AreaField, Button, CheckField, SelectField, TextField } from './fields'
+
+const MapView = lazy(() => import('#/guide/islands/MapView'))
 
 type Change<T> = (patch: Partial<T>) => void
 
@@ -86,6 +89,14 @@ export function parseGpx(text: string): Omit<GpsPoint, 'pid'>[] {
   })
 }
 
+/** A new point at a spot clicked on the map, with its UTM filled in. */
+const pointAt = (pid: string, lat: number, lon: number): GpsPoint => {
+  const p = { ...emptyPoint(pid), description: 'Point', latitude: lat.toFixed(5), longitude: lon.toFixed(5) }
+  return { ...p, ...convertPoint(p) }
+}
+
+const SHAPE_NAMES = { polyline: 'Track', polygon: 'Area', rectangle: 'Box' } as const
+
 const emptyPoint = (pid: string): GpsPoint => ({
   pid, code: '', description: '', zone: '55G', easting: '', northing: '', latitude: '', longitude: '', height: '', other: {},
 })
@@ -105,10 +116,39 @@ export function GpsForm({ node, onChange }: { node: Gps; onChange: Change<Gps> }
     const added = parseGpx(await file.text()).map((p, k) => ({ ...p, pid: String(base + k + 1) }))
     onChange({ points: [...node.points, ...added] })
   }
-  const nextPid = String(Math.max(0, ...node.points.map((p) => Number(p.pid) || 0)) + 1)
+  const nextPid = String(Math.max(0, ...node.points.map((p) => Number(p.pid) || 0), ...node.lines.map((l) => Number(l.pid) || 0)) + 1)
+  const setLine = (i: number, patch: Partial<GpsLine>) =>
+    onChange({ lines: node.lines.map((l, j) => (j === i ? { ...l, ...patch } : l)) })
+  const [selected, setSelected] = useState<string | null>(null)
 
   return (
     <div className="space-y-3">
+      <Suspense fallback={<div className="grid h-80 place-items-center rounded-lg bg-black/5 text-muted">Loading map…</div>}>
+        <MapView
+          points={node.points}
+          lines={node.lines}
+          selected={selected}
+          onSelect={setSelected}
+          edit={{
+            onAddPoint: (lat, lon) =>
+              onChange({ points: [...node.points, pointAt(nextPid, lat, lon)] }),
+            onMovePoint: (pid, lat, lon) => {
+              const i = node.points.findIndex((p) => p.pid === pid)
+              if (i >= 0) setCoord(i, { latitude: lat.toFixed(5), longitude: lon.toFixed(5) })
+            },
+            onAddLine: (shape, path) =>
+              onChange({ lines: [...node.lines, { shape, pid: nextPid, description: SHAPE_NAMES[shape], path, other: {} }] }),
+            onMoveLine: (i, path) => setLine(i, { path }),
+          }}
+        />
+      </Suspense>
+      {node.lines.map((l, i) => (
+        <div key={l.pid} className="grid grid-cols-[auto_1fr_auto] items-end gap-2 rounded-lg border border-line bg-paper p-3">
+          <span className="pb-2 text-xs uppercase text-muted">{l.shape}</span>
+          <TextField label="Description" value={l.description} onChange={(description) => setLine(i, { description })} />
+          <Button variant="danger" onClick={() => onChange({ lines: node.lines.filter((_, j) => j !== i) })}>Remove</Button>
+        </div>
+      ))}
       {node.points.map((p, i) => (
         <div key={p.pid} className="grid gap-2 rounded-lg border border-line bg-paper p-3 sm:grid-cols-6">
           <TextField label="Description" value={p.description} onChange={(description) => setPoint(i, { description })} className="sm:col-span-2" />
