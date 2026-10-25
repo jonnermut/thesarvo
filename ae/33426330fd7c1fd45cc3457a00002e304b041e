@@ -1,0 +1,26 @@
+thesarvo-3/src/guide/view/useSizedTopo.ts
+  s_e20d0a1ebc47aa::t_0b3b6309693e07 1-19
+thesarvo-3/src/guide/edit/TopoEditor.tsx
+  s_e20d0a1ebc47aa::t_a7be9e643a5dff 1,33-34
+thesarvo-3/src/guide/view/TopoFigure.tsx
+  s_e20d0a1ebc47aa::t_ff3a63e66d5582 134-138
+  s_e20d0a1ebc47aa::t_0b3b6309693e07 7,105-108
+thesarvo-3/docs/live-site-differences.md
+  s_e20d0a1ebc47aa::t_60b088091f7e49 57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ae33426330fd7c1fd45cc3457a00002e304b041e",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
