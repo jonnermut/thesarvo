@@ -18,6 +18,8 @@ export type IndexNode = {
 export interface ContentSource {
   getIndex(): Promise<IndexNode>
   getGuide(id: string): Promise<Guide | null>
+  /** Image names attached to a guide (without the id prefix, thumbnails excluded). */
+  listImages(guideId: string): Promise<string[]>
   /** Reads an image (or other file) for serving in development. */
   readFile(name: string): Promise<Uint8Array | null>
 }

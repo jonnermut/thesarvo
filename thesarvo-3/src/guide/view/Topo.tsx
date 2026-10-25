@@ -1,3 +1,4 @@
+import { pathData } from '#/guide/model/geometry'
 import { imageUrl } from '#/guide/content/paths'
 import type { Climb, ImageTopo, RoutePath, TopoRect } from '#/guide/model/types'
 import { DASH, RECT_STYLES, ROUTE_COLOUR } from './topoStyles'
@@ -14,11 +15,12 @@ type Props = {
 
 const numberLabel = (c?: Climb) => c?.number.replace(/\.$/, '') ?? ''
 
-function Route({ path, climb, active, onActive }: { path: RoutePath; climb?: Climb; active: string | null; onActive: Props['onActive'] }) {
+export function Route({ path, climb, active, onActive }: { path: RoutePath; climb?: Climb; active: string | null; onActive: Props['onActive'] }) {
   const first = path.points[0]
   const last = path.points.at(-1)
   const dimmed = active !== null && active !== path.linkedTo
   const label = numberLabel(climb)
+  const d = path.d || pathData(path.points)
   return (
     <g
       opacity={dimmed ? 0.3 : 1}
@@ -27,10 +29,10 @@ function Route({ path, climb, active, onActive }: { path: RoutePath; climb?: Cli
       className="cursor-pointer"
     >
       {/* Wide invisible stroke makes thin lines easy to hover. */}
-      <path d={path.d} fill="none" stroke="transparent" strokeWidth={16} vectorEffect="non-scaling-stroke" />
-      <path d={path.d} fill="none" stroke="#000" strokeOpacity={0.55} strokeWidth={active === path.linkedTo ? 7 : 5} strokeLinecap="round" strokeDasharray={DASH[path.lineStyle]} vectorEffect="non-scaling-stroke" />
+      <path d={d} fill="none" stroke="transparent" strokeWidth={16} vectorEffect="non-scaling-stroke" />
+      <path d={d} fill="none" stroke="#000" strokeOpacity={0.55} strokeWidth={active === path.linkedTo ? 7 : 5} strokeLinecap="round" strokeDasharray={DASH[path.lineStyle]} vectorEffect="non-scaling-stroke" />
       <path
-        d={path.d}
+        d={d}
         fill="none"
         stroke={ROUTE_COLOUR}
         strokeWidth={active === path.linkedTo ? 4 : 2.5}
@@ -65,7 +67,7 @@ function arrowPoints(r: TopoRect): string | null {
   }
 }
 
-function Callout({ rect }: { rect: TopoRect }) {
+export function Callout({ rect }: { rect: TopoRect }) {
   const style = RECT_STYLES[rect.style] ?? RECT_STYLES.black_text_on_solid_white
   const lines = splitLines(rect.text)
   const lineHeight = 14

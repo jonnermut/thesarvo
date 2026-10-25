@@ -22,6 +22,12 @@ describe('DiskContentSource', () => {
     expect(await source.getGuide('../package')).toBeNull()
   })
 
+  it('lists image names without the id prefix or thumbnails', async () => {
+    const names = await source.listImages('167')
+    expect(names).toEqual(['a topo.jpg'])
+    expect(names.some((n) => n.startsWith('t-'))).toBe(false)
+  })
+
   it('does not read files outside the folder', async () => {
     expect(await source.readFile('../package.json')).toBeNull()
   })

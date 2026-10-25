@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ContentRouteImport } from './routes/content'
+import { Route as EditSplatRouteImport } from './routes/edit.$'
 import { Route as GSplatRouteImport } from './routes/g.$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const ContentRoute = ContentRouteImport.update({
   path: '/content',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EditSplatRoute = EditSplatRouteImport.update({
+  id: '/edit/$',
+  path: '/edit/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GSplatRoute = GSplatRouteImport.update({
   id: '/g/$',
   path: '/g/$',
@@ -32,30 +38,34 @@ const GSplatRoute = GSplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/content': typeof ContentRoute
+  '/edit/$': typeof EditSplatRoute
   '/g/$': typeof GSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/content': typeof ContentRoute
+  '/edit/$': typeof EditSplatRoute
   '/g/$': typeof GSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/content': typeof ContentRoute
+  '/edit/$': typeof EditSplatRoute
   '/g/$': typeof GSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/content' | '/g/$'
+  fullPaths: '/' | '/content' | '/edit/$' | '/g/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/content' | '/g/$'
-  id: '__root__' | '/' | '/content' | '/g/$'
+  to: '/' | '/content' | '/edit/$' | '/g/$'
+  id: '__root__' | '/' | '/content' | '/edit/$' | '/g/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContentRoute: typeof ContentRoute
+  EditSplatRoute: typeof EditSplatRoute
   GSplatRoute: typeof GSplatRoute
 }
 
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/edit/$': {
+      id: '/edit/$'
+      path: '/edit/$'
+      fullPath: '/edit/$'
+      preLoaderRoute: typeof EditSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/g/$': {
       id: '/g/$'
       path: '/g/$'
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContentRoute: ContentRoute,
+  EditSplatRoute: EditSplatRoute,
   GSplatRoute: GSplatRoute,
 }
 export const routeTree = rootRouteImport

@@ -7,3 +7,7 @@ export const fetchIndex = createServerFn({ method: 'GET' }).handler(() => getCon
 export const fetchGuide = createServerFn({ method: 'GET' })
   .validator((id: string) => id)
   .handler(({ data: id }) => getContentSource().getGuide(id))
+
+export const fetchImageNames = createServerFn({ method: 'GET' })
+  .validator((id: string) => id)
+  .handler(({ data: id }) => getContentSource().listImages(id))

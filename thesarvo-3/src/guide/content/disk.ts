@@ -26,6 +26,14 @@ export class DiskContentSource implements ContentSource {
     return xml ? guideFromXml(id, new TextDecoder().decode(xml)) : null
   }
 
+  async listImages(guideId: string) {
+    const prefix = `${guideId}-`
+    return (await readdir(this.dir))
+      .filter((f) => f.startsWith(prefix) && !f.startsWith(`${prefix}t-`) && /\.(jpe?g|png|gif)$/i.test(f))
+      .map((f) => f.slice(prefix.length))
+      .sort()
+  }
+
   readFile(name: string) {
     return this.read(name)
   }
