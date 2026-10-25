@@ -131,8 +131,13 @@ export type GpsPoint = {
   other: Other
 }
 
-/** A track on the map (e.g. a taped approach path). `path` is the raw "lat,lon lat,lon ..." text. */
-export type GpsLine = { pid: string; description: string; path: string; other: Other }
+export type GpsShape = 'polyline' | 'polygon' | 'rectangle'
+
+/**
+ * A track (polyline), area (polygon) or box (rectangle, two opposite corners) on the map.
+ * `path` is the raw "lat,lon lat,lon ..." text.
+ */
+export type GpsLine = { shape: GpsShape; pid: string; description: string; path: string; other: Other }
 
 export type Gps = { type: 'gps'; id: string; points: GpsPoint[]; lines: GpsLine[]; other: Other }
 

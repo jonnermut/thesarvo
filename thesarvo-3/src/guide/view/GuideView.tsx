@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { Climb, Guide } from '#/guide/model/types'
 import { ClimbBlock } from './ClimbBlock'
+import { guideTitle } from './kml'
 import { GpsBlock } from './GpsBlock'
 import { HeaderBlock } from './HeaderBlock'
 import { TextBlock } from './TextBlock'
@@ -36,7 +37,7 @@ export function GuideView({ guide }: { guide: Guide }) {
           case 'image':
             return <TopoFigure key={node.id} guideId={guide.id} topo={node} climbs={climbs} active={active} onActive={setActive} />
           case 'gps':
-            return <GpsBlock key={node.id} gps={node} />
+            return <GpsBlock key={node.id} gps={node} guideName={guideTitle(guide)} />
           case 'unknown':
             return <div key={i} hidden />
         }

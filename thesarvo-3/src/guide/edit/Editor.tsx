@@ -4,6 +4,7 @@ import type { Climb, Guide, GuideNode } from '#/guide/model/types'
 import { ClimbBlock } from '#/guide/view/ClimbBlock'
 import { GpsBlock } from '#/guide/view/GpsBlock'
 import { GuideView } from '#/guide/view/GuideView'
+import { guideTitle } from '#/guide/view/kml'
 import { HeaderBlock } from '#/guide/view/HeaderBlock'
 import { TextBlock } from '#/guide/view/TextBlock'
 import { fetchImageNames } from '#/guide/server'
@@ -206,6 +207,7 @@ export default function Editor({ guide }: { guide: Guide }) {
                     <NodePreview
                       node={node}
                       guideId={guide.id}
+                      guideName={guideTitle(guide)}
                       climbs={climbs}
                     />
                   )}
@@ -223,10 +225,12 @@ export default function Editor({ guide }: { guide: Guide }) {
 function NodePreview({
   node,
   guideId,
+  guideName,
   climbs,
 }: {
   node: GuideNode
   guideId: string
+  guideName: string
   climbs: Climb[]
 }) {
   switch (node.type) {
@@ -248,7 +252,7 @@ function NodePreview({
         />
       )
     case 'gps':
-      return <GpsBlock gps={node} />
+      return <GpsBlock gps={node} guideName={guideName} />
     case 'unknown':
       return null
   }

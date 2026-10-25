@@ -17,6 +17,8 @@ const BASEMAPS = {
   }),
 }
 
+const AREA = { color: '#f7941e', weight: 2, fillOpacity: 0.15 }
+
 const toLatLngs = (path: string): L.LatLngTuple[] =>
   path
     .split(/\s+/)
@@ -29,7 +31,7 @@ export default function MapView({ points, lines }: { points: GpsPoint[]; lines: 
 
   useEffect(() => {
     if (!el.current) return
-    const map = L.map(el.current, { scrollWheelZoom: false, layers: [BASEMAPS.Satellite] })
+    const map = L.map(el.current, { scrollWheelZoom: false, attributionControl: false, layers: [BASEMAPS.Satellite] })
     L.control.layers(BASEMAPS, undefined, { position: 'topright' }).addTo(map)
     L.control.attribution({ prefix: false }).addTo(map)
     L.control.scale({ imperial: false }).addTo(map)
@@ -38,6 +40,13 @@ export default function MapView({ points, lines }: { points: GpsPoint[]; lines: 
     for (const line of lines) {
       const latlngs = toLatLngs(line.path)
       if (latlngs.length < 2) continue
+      if (line.shape !== 'polyline') {
+        // Areas are shaded outlines; a rectangle is stored as two opposite corners.
+        const shape = line.shape === 'rectangle' ? L.rectangle([latlngs[0], latlngs[1]], AREA) : L.polygon(latlngs, AREA)
+        shape.bindTooltip(line.description, { sticky: true }).addTo(map)
+        bounds.extend(latlngs)
+        continue
+      }
       // White with a dark casing stays visible on both satellite and street maps.
       L.polyline(latlngs, { color: '#000', weight: 5, opacity: 0.4 }).addTo(map)
       L.polyline(latlngs, { color: '#fff', weight: 3 }).bindTooltip(line.description, { sticky: true }).addTo(map)

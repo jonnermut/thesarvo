@@ -52,6 +52,21 @@ describe('GPS tracks', () => {
   })
 })
 
+describe('GPS areas', () => {
+  it('keeps polygons and rectangles through a round trip', () => {
+    const xml = `<guide><gps id="1">
+      <polygon pid="1" description="Area">-42.1,147.1 -42.2,147.2 -42.3,147.1</polygon>
+      <rectangle pid="2">-42.1,147.1 -42.2,147.2</rectangle>
+    </gps></guide>`
+    const guide = guideFromXml('x', xml)
+    const gps = guide.nodes.find((n) => n.type === 'gps')
+    expect(gps?.type === 'gps' && gps.lines.map((l) => l.shape)).toEqual(['polygon', 'rectangle'])
+    const out = guideToXml(guide)
+    expect(out).toContain('<polygon')
+    expect(out).toContain('<rectangle')
+  })
+})
+
 describe('round trip', () => {
   it.each(['167', '200900619', '1966082'])('guide %s survives xml -> model -> xml -> model', (id) => {
     const model = guideFromXml(id, fixture(id))
