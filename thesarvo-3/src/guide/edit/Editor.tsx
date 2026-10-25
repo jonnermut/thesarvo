@@ -172,16 +172,16 @@ export default function Editor({ guide }: { guide: Guide }) {
                       <Button
                         onClick={() => dispatch({ type: 'move', id, by: -1 })}
                         aria-label="Move up"
-                        className="w-7 px-0"
+                        className="w-6 px-0!"
                       >
-                        ↑
+                        <Chevron up />
                       </Button>
                       <Button
                         onClick={() => dispatch({ type: 'move', id, by: 1 })}
                         aria-label="Move down"
-                        className="w-7 px-0"
+                        className="w-6 px-0!"
                       >
-                        ↓
+                        <Chevron />
                       </Button>
                       <Button
                         variant={open ? 'primary' : 'plain'}
@@ -221,6 +221,14 @@ export default function Editor({ guide }: { guide: Guide }) {
         </div>
       )}
     </div>
+  )
+}
+
+function Chevron({ up }: { up?: boolean }) {
+  return (
+    <svg viewBox="0 0 16 16" className={`size-3.5 shrink-0 ${up ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="m4 6 4 4 4-4" />
+    </svg>
   )
 }
 

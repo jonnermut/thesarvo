@@ -79,15 +79,15 @@ export function Button({
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'plain' | 'primary' | 'danger' }) {
   const styles = {
-    plain: 'border-line/70 bg-white text-ink hover:border-line hover:bg-paper',
-    primary: 'border-forest bg-forest text-white hover:bg-forest-soft',
-    danger: 'border-transparent bg-red-50 text-red-700 hover:bg-red-100',
+    plain: 'border-transparent bg-black/[.04] text-ink hover:bg-black/10',
+    primary: 'border-transparent bg-forest text-white hover:bg-forest-soft',
+    danger: 'border-transparent text-red-700 hover:bg-red-50',
   }
   return (
     <button
       type="button"
       {...props}
-      className={`inline-flex h-7 items-center justify-center rounded border px-2.5 text-[13px] font-medium leading-none transition disabled:cursor-not-allowed disabled:opacity-40 ${styles[variant]} ${props.className ?? ''}`}
+      className={`inline-flex h-6 items-center justify-center rounded-md border px-2 text-xs font-medium normal-case leading-none tracking-normal transition disabled:cursor-not-allowed disabled:opacity-40 ${styles[variant]} ${props.className ?? ''}`}
     >
       {children}
     </button>
