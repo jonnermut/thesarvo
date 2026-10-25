@@ -17,10 +17,14 @@ function devContentFiles(): Plugin {
     name: 'dev-content-files',
     configureServer(server) {
       server.middlewares.use('/content', (req, res, next) => {
-        const name = new URL(req.url ?? '', 'http://x').searchParams.get('f') ?? ''
+        const name =
+          new URL(req.url ?? '', 'http://x').searchParams.get('f') ?? ''
         const file = path.join(dir, path.basename(name))
         if (!name || !existsSync(file)) return next()
-        res.setHeader('content-type', file.endsWith('.png') ? 'image/png' : 'image/jpeg')
+        res.setHeader(
+          'content-type',
+          file.endsWith('.png') ? 'image/png' : 'image/jpeg',
+        )
         res.setHeader('cache-control', 'public, max-age=3600')
         createReadStream(file).pipe(res)
       })
@@ -28,7 +32,26 @@ function devContentFiles(): Plugin {
   }
 }
 
+// Guides are rendered on demand; only the paths listed here become static HTML at build time.
+// e.g. PRERENDER_PATHS="/,/g/tasmania" npm run build
+const prerenderPaths = (process.env.PRERENDER_PATHS ?? '')
+  .split(',')
+  .filter(Boolean)
+
 export default defineConfig({
   resolve: { tsconfigPaths: true },
-  plugins: [devContentFiles(), nitro(), tanstackStart(), viteReact(), tailwindcss()],
+  plugins: [
+    devContentFiles(),
+    nitro(),
+    tanstackStart(
+      prerenderPaths.length
+        ? {
+            prerender: { enabled: true, crawlLinks: false },
+            pages: prerenderPaths.map((path) => ({ path })),
+          }
+        : {},
+    ),
+    viteReact(),
+    tailwindcss(),
+  ],
 })
