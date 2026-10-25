@@ -49,6 +49,23 @@ describe('editorReducer', () => {
   })
 })
 
+describe('autonumber', () => {
+  const header = { type: 'header', id: 'h', autonumber: 'true', other: {} } as unknown as Guide['nodes'][number]
+
+  it('renumbers climbs in order when the header asks for it', () => {
+    let s = initEditor(guide(header, climb('a'), text('t'), climb('b')))
+    s = editorReducer(s, { type: 'add', node: climb('c'), afterId: 'a' })
+    const numbers = s.present.nodes.flatMap((n) => (n.type === 'climb' ? [n.number] : []))
+    expect(numbers).toEqual(['1.', '2.', '3.'])
+  })
+
+  it('leaves numbers alone when the option is off', () => {
+    const off = { ...header, autonumber: 'false' } as Guide['nodes'][number]
+    const s = editorReducer(initEditor(guide(off, climb('a'))), { type: 'add', node: climb('b') })
+    expect(s.present.nodes.flatMap((n) => (n.type === 'climb' ? [n.number] : []))).toEqual(['', ''])
+  })
+})
+
 describe('nextId', () => {
   it('is one more than the largest id anywhere in the guide', () => {
     expect(nextId(guide(text('4'), climb('9')))).toBe('10')

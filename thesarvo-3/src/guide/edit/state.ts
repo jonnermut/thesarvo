@@ -30,7 +30,27 @@ function push(state: EditorState, next: Guide, key: string | null): EditorState 
   return { present: next, past: [...state.past, state.present].slice(-MAX_HISTORY), future: [], lastKey: key }
 }
 
+/** When the header's "Auto number" option is on, climbs and problems are numbered "1.", "2." … in order, as in the legacy editor. */
+export function autonumber(guide: Guide): Guide {
+  const header = guide.nodes.find((n) => n.type === 'header')
+  if (header?.autonumber !== 'true') return guide
+  let next = 1
+  const nodes = guide.nodes.map((n) => {
+    if (n.type !== 'climb' && n.type !== 'problem') return n
+    const number = `${next++}.`
+    return n.number === number ? n : { ...n, number }
+  })
+  return { ...guide, nodes }
+}
+
 export function editorReducer(state: EditorState, action: Action): EditorState {
+  const next = reduce(state, action)
+  if (next.present === state.present) return next
+  const numbered = autonumber(next.present)
+  return numbered === next.present ? next : { ...next, present: numbered }
+}
+
+function reduce(state: EditorState, action: Action): EditorState {
   const { present } = state
   const withNodes = (nodes: GuideNode[]): Guide => ({ ...present, nodes })
 

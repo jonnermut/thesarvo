@@ -1,6 +1,6 @@
 import { latLonToUtm, parseZone, utmToLatLon } from '#/guide/model/utm'
 import type { Climb, Gps, GpsPoint, Header, TextBlock } from '#/guide/model/types'
-import { AreaField, Button, SelectField, TextField } from './fields'
+import { AreaField, Button, CheckField, SelectField, TextField } from './fields'
 
 type Change<T> = (patch: Partial<T>) => void
 
@@ -16,6 +16,7 @@ export function HeaderForm({ node, onChange }: { node: Header; onChange: Change<
       <AreaField label="History" value={node.history} onChange={(history) => onChange({ history })} rows={6} className="sm:col-span-2" />
       <AreaField label="Access" value={node.access} onChange={(access) => onChange({ access })} className="sm:col-span-2" />
       <AreaField label="Camping" value={node.camping} onChange={(camping) => onChange({ camping })} rows={3} className="sm:col-span-2" />
+      <CheckField label="Auto number climbs" checked={node.autonumber === 'true'} onChange={(on) => onChange({ autonumber: String(on) })} />
     </div>
   )
 }
