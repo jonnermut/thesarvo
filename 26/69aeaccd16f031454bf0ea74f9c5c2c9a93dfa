@@ -1,0 +1,33 @@
+thesarvo-3/src/guide/view/icons/sun.svg
+  s_e20d0a1ebc47aa::t_e4363ae84b1b94 1
+thesarvo-3/src/guide/view/FactIcons.tsx
+  s_e20d0a1ebc47aa::t_e4363ae84b1b94 1-13
+thesarvo-3/src/guide/view/ClimbBlock.tsx
+  s_e20d0a1ebc47aa::t_40f1ab55a83d51 5-8,14,16-24,26-31
+thesarvo-3/src/guide/edit/NodeForms.tsx
+  s_e20d0a1ebc47aa::t_40f1ab55a83d51 25,28-38
+thesarvo-3/src/guide/view/RoutesChart.tsx
+  s_e20d0a1ebc47aa::t_c5c4ff51f9613a 20
+thesarvo-3/src/guide/view/icons/walk.svg
+  s_e20d0a1ebc47aa::t_e4363ae84b1b94 1
+thesarvo-3/src/guide/view/icons/rock.svg
+  s_e20d0a1ebc47aa::t_e4363ae84b1b94 1
+thesarvo-3/docs/live-site-differences.md
+  s_e20d0a1ebc47aa::t_9caf6316e45d34 33-38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2669aeaccd16f031454bf0ea74f9c5c2c9a93dfa",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
