@@ -1,0 +1,24 @@
+thesarvo-3/src/guide/model/utm.ts
+  s_e20d0a1ebc47aa::t_bbe88b78970bf7 1-79
+thesarvo-3/src/guide/edit/NodeForms.tsx
+  s_e20d0a1ebc47aa::t_3860ee91a3d215 1,59-74,91-92
+thesarvo-3/src/guide/model/utm.test.ts
+  s_e20d0a1ebc47aa::t_3860ee91a3d215 18-23
+  s_e20d0a1ebc47aa::t_bbe88b78970bf7 1-17,24-34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3798aa195a561fd6a99602218b2a3a6ed6c6d0f6",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
