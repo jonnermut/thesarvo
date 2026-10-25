@@ -1,0 +1,22 @@
+thesarvo-3/src/guide/edit/Editor.tsx
+  s_e20d0a1ebc47aa::t_e68f2239c10d37 12-14,23-29,38-39,73-77,85-87,90-96,98-104,109-123,125-140,148-168,176,182-230,232,241-249,251-252,254-257,259-271,276-280,282-294,298-299,301-302,304-309,317-319,325-364,383-385,387-393,395-401
+  s_e20d0a1ebc47aa::t_71ae566600d9f7 231
+thesarvo-3/docs/live-site-differences.md
+  s_e20d0a1ebc47aa::t_17813024cbfedb 18,20-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "814a4a2a99864850b34a66cee7d9ac7ef4b942ff",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
