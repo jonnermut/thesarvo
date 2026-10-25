@@ -1,0 +1,26 @@
+thesarvo-3/src/guide/view/Topo.tsx
+  s_e20d0a1ebc47aa::t_2daf103c4d5e09 7-9,62-75,83-84,98-103
+  s_e20d0a1ebc47aa::t_d869ea966bcdc3 25-26,50,52-53
+thesarvo-3/src/guide/view/ClimbBlock.tsx
+  s_e20d0a1ebc47aa::t_58d2df33eaa115 24
+thesarvo-3/src/guide/view/routeStats.ts
+  s_e20d0a1ebc47aa::t_2daf103c4d5e09 16
+thesarvo-3/docs/live-site-differences.md
+  s_e20d0a1ebc47aa::t_6d527296fc63c3 39-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dd86c6cda8f299bf3f1abb75266a200886d2d123",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
