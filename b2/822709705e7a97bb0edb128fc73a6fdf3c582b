@@ -1,0 +1,19 @@
+thesarvo-3/docs/thesarvo-3-masterplan.md
+  s_e20d0a1ebc47aa::t_ffac2901de70fc 182
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b2822709705e7a97bb0edb128fc73a6fdf3c582b",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
