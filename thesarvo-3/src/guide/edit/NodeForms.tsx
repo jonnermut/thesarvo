@@ -75,6 +75,16 @@ function convertPoint(p: GpsPoint): Partial<GpsPoint> {
   return { latitude: ll.lat.toFixed(5), longitude: ll.lon.toFixed(5) }
 }
 
+/** Imports waypoints from a GPX file's text, as the legacy "Import GPX" button did. */
+export function parseGpx(text: string): Omit<GpsPoint, 'pid'>[] {
+  const doc = new DOMParser().parseFromString(text, 'application/xml')
+  return [...doc.getElementsByTagName('wpt')].map((w) => {
+    const point = { ...emptyPoint(''), latitude: w.getAttribute('lat') ?? '', longitude: w.getAttribute('lon') ?? '' }
+    const { pid: _pid, ...rest } = { ...point, description: w.getElementsByTagName('name')[0]?.textContent ?? '', height: w.getElementsByTagName('ele')[0]?.textContent ?? '' }
+    return { ...rest, ...convertPoint(point) }
+  })
+}
+
 const emptyPoint = (pid: string): GpsPoint => ({
   pid, code: '', description: '', zone: '55G', easting: '', northing: '', latitude: '', longitude: '', height: '', other: {},
 })
@@ -82,27 +92,46 @@ const emptyPoint = (pid: string): GpsPoint => ({
 export function GpsForm({ node, onChange }: { node: Gps; onChange: Change<Gps> }) {
   const setPoint = (i: number, patch: Partial<GpsPoint>) =>
     onChange({ points: node.points.map((p, j) => (j === i ? { ...p, ...patch } : p)) })
+  /** Editing UTM updates lat/lon and vice versa, like the legacy table. */
+  const setCoord = (i: number, patch: Partial<GpsPoint>) => {
+    const p = { ...node.points[i], ...patch }
+    const fromLatLon = 'latitude' in patch || 'longitude' in patch
+    setPoint(i, { ...patch, ...convertPoint(fromLatLon ? p : { ...p, latitude: '', longitude: '' }) })
+  }
+  const importGpx = async (file: File | undefined) => {
+    if (!file) return
+    const base = Math.max(0, ...node.points.map((p) => Number(p.pid) || 0))
+    const added = parseGpx(await file.text()).map((p, k) => ({ ...p, pid: String(base + k + 1) }))
+    onChange({ points: [...node.points, ...added] })
+  }
   const nextPid = String(Math.max(0, ...node.points.map((p) => Number(p.pid) || 0)) + 1)
 
   return (
     <div className="space-y-3">
       {node.points.map((p, i) => (
         <div key={p.pid} className="grid gap-2 rounded-lg border border-line bg-paper p-3 sm:grid-cols-6">
-          <TextField label="Description" value={p.description} onChange={(description) => setPoint(i, { description })} className="sm:col-span-3" />
-          <TextField label="Latitude" value={p.latitude} onChange={(latitude) => setPoint(i, { latitude })} />
-          <TextField label="Longitude" value={p.longitude} onChange={(longitude) => setPoint(i, { longitude })} />
+          <TextField label="Description" value={p.description} onChange={(description) => setPoint(i, { description })} className="sm:col-span-2" />
+          <TextField label="Code" value={p.code} onChange={(code) => setPoint(i, { code })} />
+          <TextField label="Latitude" value={p.latitude} onChange={(latitude) => setCoord(i, { latitude })} />
+          <TextField label="Longitude" value={p.longitude} onChange={(longitude) => setCoord(i, { longitude })} />
           <div className="flex items-end gap-2">
-            <Button onClick={() => setPoint(i, convertPoint(p))}>Convert</Button>
             <Button variant="danger" onClick={() => onChange({ points: node.points.filter((_, j) => j !== i) })}>
               Remove
             </Button>
           </div>
-          <TextField label="Zone" value={p.zone} onChange={(zone) => setPoint(i, { zone })} />
-          <TextField label="Easting" value={p.easting} onChange={(easting) => setPoint(i, { easting })} />
-          <TextField label="Northing" value={p.northing} onChange={(northing) => setPoint(i, { northing })} />
+          <TextField label="Zone" value={p.zone} onChange={(zone) => setCoord(i, { zone })} />
+          <TextField label="Easting" value={p.easting} onChange={(easting) => setCoord(i, { easting })} />
+          <TextField label="Northing" value={p.northing} onChange={(northing) => setCoord(i, { northing })} />
+          <TextField label="Height" value={p.height} onChange={(height) => setPoint(i, { height })} />
         </div>
       ))}
-      <Button onClick={() => onChange({ points: [...node.points, emptyPoint(nextPid)] })}>Add point</Button>
+      <div className="flex flex-wrap items-center gap-2">
+        <Button onClick={() => onChange({ points: [...node.points, emptyPoint(nextPid)] })}>Add point</Button>
+        <label className="cursor-pointer rounded border border-line bg-paper px-3 py-1.5 text-sm hover:bg-black/5">
+          Import GPX…
+          <input type="file" accept=".gpx,application/gpx+xml,text/xml" hidden onChange={(e) => { void importGpx(e.target.files?.[0]); e.target.value = '' }} />
+        </label>
+      </div>
     </div>
   )
 }
