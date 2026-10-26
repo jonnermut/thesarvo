@@ -13,7 +13,8 @@ const list = (service: string, maxNativeZoom: number, licence: string) =>
   })
 
 // Satellite is the default because that is what climbers use to find crags. Esri's imagery has no API key.
-const BASEMAPS: Record<string, L.TileLayer> = {
+// Made per map: a Leaflet layer belongs to one map, so shared layers break when a page has two maps or a map is remade.
+const basemaps = (): Record<string, L.TileLayer> => ({
   Satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     maxNativeZoom: 18,
     maxZoom: 20,
@@ -28,15 +29,15 @@ const BASEMAPS: Record<string, L.TileLayer> = {
     maxZoom: 19,
     attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }),
-}
+})
 const BASEMAP_KEY = 'thesarvo.basemap'
 
 /** The basemap last picked in this browser, else satellite. */
-function savedBasemap() {
+function savedBasemap(layers: Record<string, L.TileLayer>) {
   try {
-    return BASEMAPS[localStorage.getItem(BASEMAP_KEY) ?? ''] ?? BASEMAPS.Satellite
+    return layers[localStorage.getItem(BASEMAP_KEY) ?? ''] ?? layers.Satellite
   } catch {
-    return BASEMAPS.Satellite
+    return layers.Satellite
   }
 }
 
@@ -123,10 +124,11 @@ export default function MapView({ points, lines, selected, onSelect, edit }: Pro
   // The map itself is created once, so dragging never resets the view.
   useEffect(() => {
     if (!el.current) return
-    const m = L.map(el.current, { scrollWheelZoom: false, attributionControl: false, layers: [savedBasemap()] })
+    const bases = basemaps()
+    const m = L.map(el.current, { scrollWheelZoom: false, attributionControl: false, layers: [savedBasemap(bases)] })
     map.current = m
     layer.current = L.layerGroup().addTo(m)
-    L.control.layers(BASEMAPS, undefined, { position: 'topright' }).addTo(m)
+    L.control.layers(bases, undefined, { position: 'topright' }).addTo(m)
     m.on('baselayerchange', (e: L.LayersControlEvent) => {
       try {
         localStorage.setItem(BASEMAP_KEY, e.name)
