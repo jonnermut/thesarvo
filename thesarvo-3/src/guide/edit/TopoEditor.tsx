@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { imageUrl } from '#/guide/content/paths'
 import type { Climb, ImageTopo, LineStyle, Point, RectStyle } from '#/guide/model/types'
 import { Callout, Route } from '#/guide/view/Topo'
+import { labelSpots } from '#/guide/view/labelSpot'
 import { RECT_STYLES } from '#/guide/view/topoStyles'
 import { AreaField, Button, CheckField, CommitNumberField, DeleteButton, NumberField, SelectField, TextField } from './fields'
 import * as ops from './topoOps'
@@ -48,6 +49,7 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
   const selectedPath = selection?.kind === 'path' ? topo.paths.find((p) => p.id === selection.id) : undefined
   const selectedRect = selection?.kind === 'rect' ? topo.rects.find((r) => r.id === selection.id) : undefined
   const climbById = new Map(climbs.map((c) => [c.id, c]))
+  const spots = labelSpots(topo.paths, topo.width, topo.height)
   const linked = selectedPath && climbById.get(selectedPath.linkedTo)
   const noun = kind === 'problem' ? 'problem' : 'climb'
 
@@ -184,7 +186,7 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
                 }}
                 className={selection?.id === path.id ? '[&_path:nth-child(2)]:stroke-amber' : ''}
               >
-                <Route path={path} climb={climbById.get(path.linkedTo)} active={null} onActive={() => {}} />
+                <Route path={path} climb={climbById.get(path.linkedTo)} active={null} onActive={() => {}} labelAt={spots.get(path.id)} />
               </g>
             ))}
             {topo.rects.map((rect) => (

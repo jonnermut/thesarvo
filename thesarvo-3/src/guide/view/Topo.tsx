@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { pathData } from '#/guide/model/geometry'
 import { imageUrl } from '#/guide/content/paths'
 import type { Climb, ImageTopo, RoutePath, TopoRect } from '#/guide/model/types'
+import { LABEL_SIZE, labelSpots } from './labelSpot'
 import { DASH, MARKER_NAVY, RECT_STYLES, ROUTE_COLOUR } from './topoStyles'
 import { splitLines } from './text'
 import { isSport } from './routeStats'
@@ -23,11 +24,26 @@ type Props = {
 
 const numberLabel = (c?: Climb) => c?.number.replace(/\.$/, '') ?? ''
 
-export function Route({ path, climb, active, onActive, onOpen, scale = 1 }: { path: RoutePath; climb?: Climb; active: string | null; onActive: Props['onActive']; onOpen?: Props['onOpen']; scale?: number }) {
-  const first = path.points[0]
+export function Route({
+  path,
+  climb,
+  active,
+  onActive,
+  onOpen,
+  scale = 1,
+  labelAt,
+}: {
+  path: RoutePath
+  climb?: Climb
+  active: string | null
+  onActive: Props['onActive']
+  onOpen?: Props['onOpen']
+  scale?: number
+  /** Where the number goes, from `labelSpots`. */
+  labelAt?: { x: number; y: number }
+}) {
   const last = path.points.at(-1)
-  // A point of kind "label" says where the number goes; otherwise it sits on the first point.
-  const at = path.points.find((p) => p.kind === 'label') ?? first
+  const at = labelAt ?? path.points[0]
   const prev = path.points.findLast((p) => last && (p.x !== last.x || p.y !== last.y))
   const endMarker = last?.kind === 'belay' || last?.kind.startsWith('lower')
   const dimmed = active !== null && active !== path.linkedTo
@@ -66,7 +82,7 @@ export function Route({ path, climb, active, onActive, onOpen, scale = 1 }: { pa
       {last && endMarker && <EndMarker kind={last.kind} x={last.x} y={last.y} scale={scale} />}
       {at && label && (
         <>
-          <circle cx={at.x} cy={at.y} r={11 * scale} fill={climb && isSport(climb.extra) ? SPORT_RED : '#000'} />
+          <circle cx={at.x} cy={at.y} r={(LABEL_SIZE / 2) * scale} fill={climb && isSport(climb.extra) ? SPORT_RED : '#000'} />
           <text x={at.x} y={at.y} textAnchor="middle" dominantBaseline="central" fontSize={(label.length > 2 ? 9 : 11) * scale} fontWeight={700} fill="#fff">
             {label}
           </text>
@@ -164,6 +180,7 @@ export function Topo({ guideId, topo, climbs, active, onActive, onOpen, displayW
     return () => observer.disconnect()
   }, [topo.width, displayWidth])
   const scale = displayWidth ? markerScale(displayWidth, topo.width) : measured
+  const spots = useMemo(() => labelSpots(topo.paths, topo.width, topo.height, scale), [topo.paths, topo.width, topo.height, scale])
 
   return (
     <div ref={box} className="relative overflow-hidden bg-black/5">
@@ -178,7 +195,7 @@ export function Topo({ guideId, topo, climbs, active, onActive, onOpen, displayW
       />
       <svg viewBox={`0 0 ${topo.width} ${topo.height}`} className="absolute inset-0 size-full" role="img" aria-label="Route lines">
         {topo.paths.map((path) => (
-          <Route key={path.id} path={path} climb={climbs.get(path.linkedTo)} active={active} onActive={onActive} onOpen={onOpen} scale={scale} />
+          <Route key={path.id} path={path} climb={climbs.get(path.linkedTo)} active={active} onActive={onActive} onOpen={onOpen} scale={scale} labelAt={spots.get(path.id)} />
         ))}
         {topo.rects.map((rect) => (
           <Callout key={rect.id} rect={rect} />
