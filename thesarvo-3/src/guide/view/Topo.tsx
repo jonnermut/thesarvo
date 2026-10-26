@@ -17,6 +17,8 @@ type Props = {
   onActive: (climbId: string | null) => void
   /** Called when a route is clicked or tapped, to show its climb. */
   onOpen?: (climbId: string) => void
+  /** The photo's width on screen, when something other than its box sets it (the zoomable viewer). */
+  displayWidth?: number
 }
 
 const numberLabel = (c?: Climb) => c?.number.replace(/\.$/, '') ?? ''
@@ -146,19 +148,22 @@ export function Callout({ rect }: { rect: TopoRect }) {
 }
 
 /** A photo with the route lines and callouts drawn over it as SVG. */
-export function Topo({ guideId, topo, climbs, active, onActive, onOpen }: Props) {
-  // Markers are sized in photo pixels, so on a phone they would shrink to specks: grow them to stay legible.
+/** Markers are sized in photo pixels, so on a phone they would shrink to specks: grow them to stay legible. */
+const markerScale = (shownWidth: number, photoWidth: number) => Math.min(2.2, Math.max(1, 8 / ((11 * shownWidth) / photoWidth)))
+
+export function Topo({ guideId, topo, climbs, active, onActive, onOpen, displayWidth }: Props) {
   const box = useRef<HTMLDivElement>(null)
-  const [scale, setScale] = useState(1)
+  const [measured, setMeasured] = useState(1)
   useEffect(() => {
     const node = box.current
-    if (!node) return
-    const update = () => setScale(Math.min(2.2, Math.max(1, 8 / ((11 * node.clientWidth) / topo.width))))
+    if (!node || displayWidth) return
+    const update = () => setMeasured(markerScale(node.clientWidth, topo.width))
     update()
     const observer = new ResizeObserver(update)
     observer.observe(node)
     return () => observer.disconnect()
-  }, [topo.width])
+  }, [topo.width, displayWidth])
+  const scale = displayWidth ? markerScale(displayWidth, topo.width) : measured
 
   return (
     <div ref={box} className="relative overflow-hidden bg-black/5">
@@ -168,6 +173,7 @@ export function Topo({ guideId, topo, climbs, active, onActive, onOpen }: Props)
         width={topo.width}
         height={topo.height}
         loading="lazy"
+        draggable={false}
         className="block h-auto w-full"
       />
       <svg viewBox={`0 0 ${topo.width} ${topo.height}`} className="absolute inset-0 size-full" role="img" aria-label="Route lines">

@@ -9,12 +9,13 @@ import { HeaderBlock } from './HeaderBlock'
 import { TextBlock } from './TextBlock'
 import { routeStats } from './routeStats'
 import { TopoFigure } from './TopoFigure'
+import { widthClass } from './width'
 
 /**
  * Read-only guide: renders every node in order. `hash` is the location's, which flashes the block it
- * names. `width` is the page's max-width class; at full width the text column fills it too.
+ * names. At `full` width the text column fills the page too.
  */
-export function GuideView({ guide, hash, width = 'max-w-6xl' }: { guide: Guide; hash?: string; width?: string }) {
+export function GuideView({ guide, hash, full = false }: { guide: Guide; hash?: string; full?: boolean }) {
   // Hovering a route, legend row or climb highlights the other two.
   const [active, setActive] = useState<string | null>(null)
   const climbs = useMemo(
@@ -53,8 +54,8 @@ export function GuideView({ guide, hash, width = 'max-w-6xl' }: { guide: Guide; 
   }
 
   return (
-    <div className={`mx-auto flex ${width} px-4 py-6 sm:px-6 xl:gap-8`}>
-      <article className={`min-w-0 flex-1 space-y-2 wrap-break-word ${width === 'max-w-none' ? '' : 'max-w-4xl'}`}>
+    <div className={`mx-auto flex ${widthClass(full)} px-4 py-6 sm:px-6 xl:gap-8`}>
+      <article className={`guide-width min-w-0 flex-1 space-y-2 wrap-break-word ${full ? 'max-w-full' : 'max-w-4xl'}`}>
         {guide.nodes.map((node, i) => {
           const climb = node.type === 'climb' || node.type === 'problem'
           // Each block is wrapped so it can be linked to (#c-173) and flashes when it is.

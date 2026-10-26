@@ -1,6 +1,7 @@
 import { Link, useMatch, useMatches } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import type { IndexNode } from '#/guide/content/types'
+import { animateLayout, useEscape, useScrollLock } from './overlay'
 import { SearchBox } from './SearchBox'
 import { SideNav } from './SideNav'
 
@@ -48,6 +49,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   // Desktop: sidebar is open unless collapsed (remembered). Mobile: a drawer, closed by default.
   const [collapsed, setCollapsed] = useState(false)
   const [drawer, setDrawer] = useState(false)
+  const closeDrawer = useCallback(() => setDrawer(false), [])
 
   // Editing wants the whole width: collapse while it lasts, then return to the remembered choice.
   const editing = !!useMatch({ from: '/g/$', shouldThrow: false })?.search.edit
@@ -64,8 +66,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     }
   }, [editing])
 
+  useScrollLock(drawer)
+  useEscape(drawer, closeDrawer)
+
   const toggle = () => {
     if (window.matchMedia('(min-width: 1024px)').matches) {
+      animateLayout()
       setCollapsed((c) => {
         try {
           localStorage.setItem(STORAGE_KEY, c ? 'open' : 'collapsed')
@@ -98,11 +104,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </header>
 
       <div className="flex flex-1">
-        {drawer && <button type="button" aria-label="Close navigation" className="fixed inset-0 z-20 bg-black/40 lg:hidden" onClick={() => setDrawer(false)} />}
+        <button
+          type="button"
+          aria-label="Close navigation"
+          tabIndex={-1}
+          className={`fixed inset-0 z-20 touch-none bg-black/40 transition-opacity duration-180 lg:hidden ${drawer ? '' : 'pointer-events-none opacity-0'}`}
+          onClick={closeDrawer}
+        />
+        {/* Phones: a drawer that slides in. Desktop: a column that slides away (see animateLayout), hidden from tabbing when shut. */}
         <aside
-          className={`no-print fixed inset-y-14 left-0 z-20 w-72 bg-paper transition-transform lg:sticky lg:top-14 lg:h-[calc(100dvh-3.5rem)] border-r border-black/10 lg:shrink-0 ${
-            drawer ? 'translate-x-0' : '-translate-x-full'
-          } ${collapsed ? 'lg:hidden' : 'lg:translate-x-0'}`}
+          className={`side-nav no-print fixed inset-y-14 left-0 z-20 w-72 overscroll-contain border-r border-black/10 bg-paper max-lg:transition-[translate,visibility] max-lg:duration-180 max-lg:ease-out lg:sticky lg:top-14 lg:h-[calc(100dvh-3.5rem)] lg:shrink-0 lg:translate-x-0 ${
+            drawer ? '' : '-translate-x-full invisible'
+          } ${collapsed ? 'lg:invisible lg:-ml-72' : 'lg:visible'}`}
           onClick={(e) => {
             if ((e.target as HTMLElement).closest('a')) setDrawer(false)
           }}

@@ -1,21 +1,49 @@
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useEffect, useRef, useState } from 'react'
+import { useEscape, useScrollLock } from '#/components/overlay'
 import type { GpsLine, GpsPoint, GpsShape } from '#/guide/model/types'
 
-// Satellite is the default because that is what climbers use to find crags. Esri's imagery has no
-// API key; add the Tasmanian LIST layers here (see plan-guide, map section) as further basemaps.
-const BASEMAPS = {
+/** Tasmania's own basemaps from theLIST: Web Mercator tiles, no key. Topographic is CC BY; the aerial photos and Tasmap scans are CC BY-NC-ND, which allows showing them unaltered. */
+const list = (service: string, maxNativeZoom: number, licence: string) =>
+  L.tileLayer(`https://services.thelist.tas.gov.au/arcgis/rest/services/Basemaps/${service}/MapServer/tile/{z}/{y}/{x}`, {
+    maxNativeZoom,
+    maxZoom: 20,
+    attribution: `© State of Tasmania, <a href="https://www.thelist.tas.gov.au">theLIST</a> (${licence})`,
+  })
+
+// Satellite is the default because that is what climbers use to find crags. Esri's imagery has no API key.
+const BASEMAPS: Record<string, L.TileLayer> = {
   Satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     maxNativeZoom: 18,
     maxZoom: 20,
     attribution: '© Esri, Maxar, Earthstar Geographics',
   }),
-  Map: L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  'LIST aerial': list('Orthophoto', 19, 'CC BY-NC-ND 3.0 AU'),
+  'LIST topographic': list('Topographic', 18, 'CC BY 3.0 AU'),
+  'Tasmap 1:25k': list('TasmapRaster', 16, 'CC BY-NC-ND 3.0 AU'),
+  // Shaded relief from the 30 m elevation grid and all of the state's LiDAR: shows cliff lines well.
+  'LIST hillshade (LiDAR)': list('Hillshade', 18, 'CC BY 3.0 AU'),
+  OpenStreetMap: L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }),
 }
+const BASEMAP_KEY = 'thesarvo.basemap'
+
+/** The basemap last picked in this browser, else satellite. */
+function savedBasemap() {
+  try {
+    return BASEMAPS[localStorage.getItem(BASEMAP_KEY) ?? ''] ?? BASEMAPS.Satellite
+  } catch {
+    return BASEMAPS.Satellite
+  }
+}
+
+const EXPAND = '<path d="M3 7V3h4M17 7V3h-4M3 13v4h4M17 13v4h-4"/>'
+const SHRINK = '<path d="M7 3v4H3M13 3v4h4M7 17v-4H3M13 17v-4h4"/>'
+const icon = (paths: string) =>
+  `<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin:7px" aria-hidden="true">${paths}</svg>`
 
 const MAX_AUTO_HANDLES = 12
 
@@ -73,6 +101,8 @@ export default function MapView({ points, lines, selected, onSelect, edit }: Pro
   const editRef = useRef(edit)
   editRef.current = edit
   const [tool, setTool] = useState<MapTool>('none')
+  const [full, setFull] = useState(false)
+  const fullButton = useRef<HTMLAnchorElement | null>(null)
   // Long tracks would drown the map in handles, so only the clicked line (or a short one) gets them.
   const [activeLine, setActiveLine] = useState<number | null>(null)
   const [drawn, setDrawn] = useState<L.LatLng[]>([])
@@ -90,10 +120,34 @@ export default function MapView({ points, lines, selected, onSelect, edit }: Pro
   // The map itself is created once, so dragging never resets the view.
   useEffect(() => {
     if (!el.current) return
-    const m = L.map(el.current, { scrollWheelZoom: false, attributionControl: false, layers: [BASEMAPS.Satellite] })
+    const m = L.map(el.current, { scrollWheelZoom: false, attributionControl: false, layers: [savedBasemap()] })
     map.current = m
     layer.current = L.layerGroup().addTo(m)
     L.control.layers(BASEMAPS, undefined, { position: 'topright' }).addTo(m)
+    m.on('baselayerchange', (e: L.LayersControlEvent) => {
+      try {
+        localStorage.setItem(BASEMAP_KEY, e.name)
+      } catch {
+        /* not remembered */
+      }
+    })
+    const fullControl = new L.Control({ position: 'topleft' })
+    fullControl.onAdd = () => {
+      const bar = L.DomUtil.create('div', 'leaflet-bar')
+      const a = L.DomUtil.create('a', '', bar)
+      a.href = '#'
+      a.role = 'button'
+      a.title = 'Full screen'
+      a.setAttribute('aria-label', 'Full screen')
+      a.innerHTML = icon(EXPAND)
+      L.DomEvent.on(a, 'click', (e) => {
+        L.DomEvent.stop(e)
+        setFull((f) => !f)
+      })
+      fullButton.current = a
+      return bar
+    }
+    fullControl.addTo(m)
     L.control.attribution({ prefix: false }).addTo(m)
     L.control.scale({ imperial: false }).addTo(m)
     m.setView([-42, 147], 7)
@@ -115,6 +169,23 @@ export default function MapView({ points, lines, selected, onSelect, edit }: Pro
       fitted.current = false
     }
   }, [])
+
+  // Full screen is the same map grown over the page: the wheel zooms there, and the page behind stays still.
+  useScrollLock(full)
+  useEscape(full, () => setFull(false))
+  useEffect(() => {
+    const m = map.current
+    if (!m) return
+    m.invalidateSize()
+    if (full) m.scrollWheelZoom.enable()
+    else m.scrollWheelZoom.disable()
+    const a = fullButton.current
+    if (a) {
+      a.innerHTML = icon(full ? SHRINK : EXPAND)
+      a.title = full ? 'Exit full screen' : 'Full screen'
+      a.setAttribute('aria-pressed', String(full))
+    }
+  }, [full])
 
   // The in-progress shape.
   useEffect(() => {
@@ -213,7 +284,13 @@ export default function MapView({ points, lines, selected, onSelect, edit }: Pro
           </span>
         </div>
       )}
-      <div ref={el} className="h-96 w-full border border-line sm:h-[28rem]" />
+      {/* `isolate` keeps Leaflet's own z-indexes (400 and up) below the sticky page header. The map
+          element's classes belong to Leaflet, so full screen styles a wrapper around it. */}
+      <div
+        className={full ? 'fixed inset-0 z-50 isolate h-dvh w-full animate-[overlay-in_180ms_ease-out]' : 'isolate h-96 w-full border border-line sm:h-[28rem]'}
+      >
+        <div ref={el} className="size-full" />
+      </div>
     </>
   )
 }

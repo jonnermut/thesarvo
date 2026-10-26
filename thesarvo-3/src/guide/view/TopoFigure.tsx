@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useEscape, usePresence, useScrollLock } from '#/components/overlay'
 import type { Climb, ImageTopo } from '#/guide/model/types'
 import { ClimbBlock } from './ClimbBlock'
 import { Stars } from './Stars'
 import { Topo } from './Topo'
+import { TopoViewer } from './TopoViewer'
 import { useSizedTopo } from './useSizedTopo'
 
 type Props = {
@@ -27,7 +29,7 @@ const printClasses = (topo: ImageTopo) =>
       : ''
 
 /** The photo with route lines, plus the legend laid over it when the photo is wide enough to read it. */
-function TopoCanvas({ legend, rows, ...props }: Props & { legend: Climb[]; rows: (compact: boolean) => React.ReactNode }) {
+function TopoCanvas({ legend, rows, ...props }: Props & { legend: Climb[]; rows: (compact: boolean) => React.ReactNode; displayWidth?: number }) {
   const { topo } = props
   return (
     <div className="relative">
@@ -51,47 +53,23 @@ function TopoCanvas({ legend, rows, ...props }: Props & { legend: Climb[]; rows:
 }
 
 /** The climb behind a route or legend row, as a popup like the legacy topo's route popover. */
-function ClimbPopup({ climb, onClose }: { climb: Climb; onClose: () => void }) {
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
+function ClimbPopup({ climb, open, onClose }: { climb: Climb; open: boolean; onClose: () => void }) {
+  useEscape(open, onClose)
+  useScrollLock(open)
   return createPortal(
-    <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4" onClick={onClose}>
-      <div role="dialog" aria-label={climb.name} className="relative max-h-[80dvh] w-full max-w-lg overflow-auto rounded-lg bg-card p-3 pr-8 shadow-xl" onClick={(e) => e.stopPropagation()}>
+    <div
+      className={`fixed inset-0 z-50 grid place-items-center bg-black/50 p-4 transition-opacity duration-180 starting:opacity-0 ${open ? '' : 'pointer-events-none opacity-0'}`}
+      onClick={onClose}
+    >
+      <div
+        role="dialog"
+        aria-label={climb.name}
+        className={`relative max-h-[80dvh] w-full max-w-lg overflow-auto overscroll-contain rounded-lg bg-card p-3 pr-8 shadow-xl transition-[translate] duration-180 ease-out starting:translate-y-3 ${open ? '' : 'translate-y-3'}`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <button type="button" aria-label="Close" onClick={onClose} className="absolute right-2 top-1 text-2xl leading-none text-muted hover:text-navy">×</button>
         <ClimbBlock climb={climb} />
         <a href={`#c-${climb.id}`} onClick={onClose} className="mt-1 inline-block px-2 text-[13px] text-link hover:underline">Show in guide</a>
-      </div>
-    </div>,
-    document.body,
-  )
-}
-
-/** Full-screen view: the photo can be larger than the screen and is scrolled (or pinch-zoomed) in place. */
-function Enlarged({ onClose, ...canvas }: { onClose: () => void } & Parameters<typeof TopoCanvas>[0]) {
-  const [zoom, setZoom] = useState(1)
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
-
-  const btn = 'rounded bg-white/15 px-3 py-1.5 text-sm text-white hover:bg-white/25'
-  // Portalled: the figure is a size container, which would otherwise become the containing block of `fixed`.
-  return createPortal(
-    <div role="dialog" aria-label="Topo" className="fixed inset-0 z-50 flex flex-col bg-black/90">
-      <div className="flex items-center gap-2 p-2">
-        <button type="button" className={btn} onClick={() => setZoom((z) => Math.max(1, z - 0.5))} aria-label="Zoom out">−</button>
-        <button type="button" className={btn} onClick={() => setZoom((z) => Math.min(4, z + 0.5))} aria-label="Zoom in">+</button>
-        <span className="text-sm text-white/70">{Math.round(zoom * 100)}%</span>
-        <button type="button" className={`${btn} ml-auto`} onClick={onClose}>Close</button>
-      </div>
-      <div className="min-h-0 flex-1 overflow-auto">
-        <div className="@container mx-auto" style={{ width: `${zoom * 100}%`, maxWidth: zoom === 1 ? `calc((100dvh - 4rem) * ${canvas.topo.width / canvas.topo.height})` : undefined }}>
-          <TopoCanvas {...canvas} />
-        </div>
       </div>
     </div>,
     document.body,
@@ -108,7 +86,13 @@ export function TopoFigure({ topo: stored, ...rest }: Props) {
   const { climbs, active, onActive } = props
   const [open, setOpen] = useState(false)
   const [popup, setPopup] = useState<string | null>(null)
+  // The last climb shown stays on screen while its popup fades out.
+  const [shownClimb, setShownClimb] = useState<Climb>()
   const popupClimb = popup ? climbs.get(popup) : undefined
+  if (popupClimb && popupClimb !== shownClimb) setShownClimb(popupClimb)
+  const popupMounted = usePresence(!!popupClimb)
+  const closePopup = useCallback(() => setPopup(null), [])
+  const closeViewer = useCallback(() => setOpen(false), [])
   const legend = topo.legend.map((id) => climbs.get(id)).filter((c): c is Climb => !!c)
 
   const rows = (compact: boolean) =>
@@ -154,8 +138,10 @@ export function TopoFigure({ topo: stored, ...rest }: Props) {
         </figcaption>
       )}
       {topo.legendFooter && <p className="mt-1 text-[11px] text-muted">{topo.legendFooter}</p>}
-      {open && <Enlarged {...props} onOpen={setPopup} legend={legend} rows={rows} onClose={() => setOpen(false)} />}
-      {popupClimb && <ClimbPopup climb={popupClimb} onClose={() => setPopup(null)} />}
+      <TopoViewer width={topo.width} height={topo.height} open={open} onClose={closeViewer}>
+        {(shownWidth) => <TopoCanvas {...props} onOpen={setPopup} legend={legend} rows={rows} displayWidth={shownWidth} />}
+      </TopoViewer>
+      {popupMounted && shownClimb && <ClimbPopup climb={shownClimb} open={!!popupClimb} onClose={closePopup} />}
     </figure>
   )
 }

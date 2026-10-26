@@ -5,6 +5,7 @@ import { useRecent } from '#/guide/recent'
 import { loadSearchIndex } from '#/guide/search/load'
 import { NothingFound, SearchResults, useResultKeys, useSearch } from '#/guide/search/SearchResults'
 import type { Target } from '#/guide/search/SearchResults'
+import { usePresence, useScrollLock } from './overlay'
 import { RecentGuides } from './RecentGuides'
 
 // The form posts here before the page is live, so on S3 it must be the folder (see router.tsx).
@@ -70,8 +71,12 @@ export function SearchBox() {
     if (sheet) input.current?.focus()
   }, [sheet])
 
+  // The sheet fades and slides in and out; the page behind it stays put.
+  const sheetMounted = usePresence(sheet)
+  useScrollLock(sheet)
+
   const searching = query.trim() !== ''
-  const showing = (open || sheet) && (searching || recent.length > 0)
+  const showing = (open || sheetMounted) && (searching || recent.length > 0)
   return (
     <>
       <a
@@ -90,17 +95,21 @@ export function SearchBox() {
         role="search"
         action={SEARCH_URL}
         method="get"
-        className={sheet ? 'fixed inset-0 z-40 flex flex-col bg-card' : 'relative hidden sm:block'}
+        className={
+          sheetMounted
+            ? `fixed inset-0 z-40 flex flex-col overscroll-contain bg-card transition-[opacity,translate] duration-180 ease-out starting:translate-y-4 starting:opacity-0 ${sheet ? '' : 'pointer-events-none translate-y-4 opacity-0'}`
+            : 'relative hidden sm:block'
+        }
         onSubmit={(e) => {
           e.preventDefault()
           close()
           void navigate({ to: `${GUIDE_PREFIX}/search`, search: { q: query.trim() } })
         }}
       >
-        <div className={sheet ? 'flex items-center gap-2 border-b border-line p-3' : ''}>
+        <div className={sheetMounted ? 'flex items-center gap-2 border-b border-line p-3' : ''}>
           <label className="relative block flex-1">
             <span className="sr-only">Search climbs and crags</span>
-            <SearchIcon className={`pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 ${sheet ? 'text-muted' : 'text-white/70'}`} />
+            <SearchIcon className={`pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 ${sheetMounted ? 'text-muted' : 'text-white/70'}`} />
             <input
               ref={input}
               name="q"
@@ -121,13 +130,13 @@ export function SearchBox() {
                 else onKeyDown(e)
               }}
               className={
-                sheet
+                sheetMounted
                   ? 'w-full rounded-md border border-line py-2 pr-2 pl-8 text-base outline-none focus:border-link'
                   : 'w-52 rounded-md bg-white/15 py-1.5 pr-2 pl-8 text-sm text-white placeholder:text-white/60 outline-none focus:bg-white focus:text-ink focus:placeholder:text-muted md:w-72'
               }
             />
           </label>
-          {sheet && (
+          {sheetMounted && (
             <button type="button" onClick={close} className="px-2 py-1 text-sm font-medium text-link">
               Close
             </button>
@@ -137,7 +146,7 @@ export function SearchBox() {
           <div
             ref={panel}
             className={
-              sheet
+              sheetMounted
                 ? 'min-h-0 flex-1 overflow-y-auto'
                 : 'absolute top-full right-0 mt-2 max-h-[70vh] w-[min(32rem,calc(100vw-2rem))] overflow-y-auto rounded-md border border-line bg-card text-ink shadow-lg'
             }

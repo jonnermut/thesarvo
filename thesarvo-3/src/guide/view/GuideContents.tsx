@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEscape, usePresence, useScrollLock } from '#/components/overlay'
 import type { GuideNode } from '#/guide/model/types'
 import { guideContents, matchesQuery } from './contents'
 import type { ContentsEntry } from './contents'
@@ -105,12 +106,10 @@ export function GuideContents({ nodes }: { nodes: GuideNode[] }) {
   const shown = entries.filter((e) => (e.kind !== 'climb' || withClimbs) && (!query.trim() || matchesQuery(e, query)))
   const current = useCurrentAnchor(shown.map((e) => e.anchor).join(' '))
 
-  useEffect(() => {
-    if (!sheet) return
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setSheet(false)
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [sheet])
+  const closeSheet = useCallback(() => setSheet(false), [])
+  const sheetMounted = usePresence(sheet)
+  useEscape(sheet, closeSheet)
+  useScrollLock(sheet)
 
   if (entries.length < 3) return null
 
@@ -142,12 +141,21 @@ export function GuideContents({ nodes }: { nodes: GuideNode[] }) {
           </svg>
           Contents
         </button>
-        {sheet && (
+        {sheetMounted && (
           <>
-            <button type="button" aria-label="Close contents" className="fixed inset-0 z-30 bg-black/40" onClick={() => setSheet(false)} />
-            <div role="dialog" aria-label="On this page" className="fixed inset-x-0 bottom-0 z-40 flex max-h-[75dvh] flex-col rounded-t-2xl bg-white pt-2 shadow-2xl">
+            <button
+              type="button"
+              aria-label="Close contents"
+              className={`fixed inset-0 z-30 touch-none bg-black/40 transition-opacity duration-180 starting:opacity-0 ${sheet ? '' : 'pointer-events-none opacity-0'}`}
+              onClick={closeSheet}
+            />
+            <div
+              role="dialog"
+              aria-label="On this page"
+              className={`fixed inset-x-0 bottom-0 z-40 flex max-h-[75dvh] flex-col overscroll-contain rounded-t-2xl bg-white pt-2 shadow-2xl transition-[translate] duration-180 ease-out starting:translate-y-full ${sheet ? '' : 'translate-y-full'}`}
+            >
               <div className="mx-auto mb-1 h-1 w-10 rounded-full bg-black/15" aria-hidden />
-              {panel(() => setSheet(false))}
+              {panel(closeSheet)}
             </div>
           </>
         )}

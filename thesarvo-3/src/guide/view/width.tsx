@@ -1,4 +1,5 @@
 import { useEffect, useState, useSyncExternalStore } from 'react'
+import { animateLayout } from '#/components/overlay'
 
 const KEY = 'thesarvo.width'
 /** The fixed width a guide uses (Tailwind's max-w-6xl); wider than this, full width is worth offering. */
@@ -20,12 +21,16 @@ const subscribe = (listener: () => void) => {
 /** Whether guides fill the window (remembered in this browser); fixed on the server and first render. */
 export const useFullWidth = () => useSyncExternalStore(subscribe, read, () => false)
 
+/** The max-width classes of a guide's columns. Both are lengths, so the change between them can slide. */
+export const widthClass = (full: boolean) => `guide-width ${full ? 'max-w-full' : 'max-w-6xl'}`
+
 function setFullWidth(full: boolean) {
   try {
     localStorage.setItem(KEY, full ? 'full' : 'fixed')
   } catch {
     /* storage unavailable: not remembered */
   }
+  animateLayout()
   listeners.forEach((l) => l())
 }
 
@@ -33,14 +38,14 @@ function setFullWidth(full: boolean) {
 export function WidthToggle() {
   const full = useFullWidth()
   const [room, setRoom] = useState(false)
-  // The main column narrows when the sidebar opens, so watch the page and measure it each time.
+  // The main column narrows when the sidebar opens or the window shrinks.
   useEffect(() => {
-    const measure = () => setRoom((document.querySelector('main')?.clientWidth ?? 0) > FIXED_PX + 96)
+    const main = document.querySelector('main')
+    if (!main) return
+    const measure = () => setRoom(main.clientWidth > FIXED_PX + 96)
     measure()
     const observer = new ResizeObserver(measure)
-    observer.observe(document.body)
-    const aside = document.querySelector('aside')
-    if (aside) observer.observe(aside)
+    observer.observe(main)
     return () => observer.disconnect()
   }, [])
   if (!room) return null
