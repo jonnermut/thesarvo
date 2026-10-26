@@ -1,0 +1,38 @@
+thesarvo-3/src/guide/view/ContentsView.tsx
+  s_e20d0a1ebc47aa::t_dcf2dc8cd45ac3 112-113,115
+  s_e20d0a1ebc47aa::t_4fce01021d3c32 125,127
+  s_e20d0a1ebc47aa::t_c3fe9aeab25f0c 14-19,21-22,49-50,61-62,69-72,93-96,108-110,116-118,121-124,128-130,132,135-142,145-147,156,167-169,174-180,193-199,201-208,212-218,228-231,237-249,257-268
+thesarvo-3/src/guide/view/rollup.ts
+  s_e20d0a1ebc47aa::t_3f7bb0d89cdb75 6,18
+thesarvo-3/src/guide/islands/MapView.tsx
+  s_e20d0a1ebc47aa::t_9b6e39e01fc42d 140-141
+  s_e20d0a1ebc47aa::t_f3780f8ea9e9cf 184-197
+  s_e20d0a1ebc47aa::t_92cb0c979a63c8 46
+  s_e20d0a1ebc47aa::t_0414e64604e8bb 158
+  s_e20d0a1ebc47aa::t_2eede5661b050a 106-108
+thesarvo-3/src/routes/g.index.tsx
+  s_e20d0a1ebc47aa::t_788c74d4327680 73
+  s_e20d0a1ebc47aa::t_60a29897350b6c 26
+  s_e20d0a1ebc47aa::t_403079d894b690 2,15,24-25,27-72,74-80
+  s_e20d0a1ebc47aa::t_2e55d555c89396 81-94
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_d68417cb8d2d9d 16
+thesarvo-3/src/guide/view/rollup.test.ts
+  s_e20d0a1ebc47aa::t_3f7bb0d89cdb75 19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "795b336617f2836c93951ae746a0e0442ca063be",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "unknown"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
