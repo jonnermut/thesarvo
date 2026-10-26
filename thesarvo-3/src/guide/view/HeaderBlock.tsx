@@ -16,6 +16,7 @@ const SECTIONS = [
   ['History', 'history'],
   ['Access', 'access'],
   ['Camping', 'camping'],
+  ['Crag Steward', 'steward'],
 ] as const
 
 export function HeaderBlock({ header, stats }: { header: Header; stats: RouteStats }) {
@@ -40,7 +41,7 @@ export function HeaderBlock({ header, stats }: { header: Header; stats: RouteSta
           <section key={key} className="gap-6 sm:grid sm:grid-cols-[13rem_1fr]">
             <h2 className="mb-1 h-fit border-b border-line text-xl font-bold text-navy wrap-normal sm:mb-0">{label}</h2>
             <p className="text-[13px] leading-snug">
-              <Lines text={header[key]} />
+              <Lines text={header[key] ?? ''} />
             </p>
           </section>
         ))}

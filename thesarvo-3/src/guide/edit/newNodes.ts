@@ -18,7 +18,7 @@ export function newNode(kind: NewNodeKind, id: string): GuideNode {
     case 'text':
       return { type: 'text', id, cls: 'text', text: '' } satisfies TextBlock
     case 'header':
-      return { type: 'header', id, name: '', rock: '', sun: '', walk: '', access: '', camping: '', acknowledgement: '', intro: '', history: '', autonumber: '' } satisfies Header
+      return { type: 'header', id, name: '', rock: '', sun: '', walk: '', access: '', camping: '', steward: '', acknowledgement: '', intro: '', history: '', autonumber: '' } satisfies Header
     case 'gps':
       return { type: 'gps', id, points: [], lines: [] } satisfies Gps
   }

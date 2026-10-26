@@ -1,0 +1,34 @@
+name: thesarvo-3
+
+on:
+  push:
+    branches: [master]
+    paths: ['thesarvo-3/**', '.github/workflows/thesarvo-3.yml']
+  pull_request:
+    paths: ['thesarvo-3/**', '.github/workflows/thesarvo-3.yml']
+
+concurrency:
+  group: thesarvo-3-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: thesarvo-3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: thesarvo-3/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      # The tests that need the content repo skip themselves when it is not checked out.
+      - run: npm test
+      - run: npm run build
+      # Readers must never download the editor.
+      - run: npm run check-bundle

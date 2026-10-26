@@ -9,6 +9,7 @@ export const Route = createRootRoute({
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { title: 'thesarvo · Tasmanian climbing guides' },
+      { name: 'description', content: 'Climbing guides to Tasmanian crags and bouldering: topos, grades, access and GPS.' },
       { name: 'theme-color', content: '#1b1464' },
     ],
     links: [

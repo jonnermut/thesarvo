@@ -4,6 +4,7 @@ import { Breadcrumbs } from '#/components/Breadcrumbs'
 import { fetchGuide, fetchPage, fetchPageBody } from '#/guide/server'
 import { ContentsView } from '#/guide/view/ContentsView'
 import { addRecent } from '#/guide/recent'
+import { guideDescription, guideImage, pageDescription, pageHead } from '#/guide/seo'
 import { GuideView } from '#/guide/view/GuideView'
 import { PrevNext } from '#/guide/view/PrevNext'
 import { useFullWidth, WidthToggle, widthClass } from '#/guide/view/width'
@@ -22,9 +23,16 @@ export const Route = createFileRoute('/g/$')({
     const [guide, body] = await Promise.all([isGuide ? fetchGuide({ data: id }) : null, isGuide ? null : fetchPageBody(id)])
     return { ...page, guide, body }
   },
-  head: ({ loaderData }) => ({
-    meta: [{ title: `${loaderData?.node.title ?? 'Guide'} · thesarvo` }],
-  }),
+  head: ({ loaderData }) => {
+    if (!loaderData) return { meta: [{ title: 'Guide · thesarvo' }] }
+    const { node, guide, body } = loaderData
+    return pageHead({
+      title: `${node.title} · thesarvo`,
+      description: guide ? guideDescription(guide, node) : pageDescription(node, body),
+      path: node.path,
+      image: guide ? guideImage(guide) : undefined,
+    })
+  },
   component: GuidePage,
   notFoundComponent: () => <p className="p-8">Page not found.</p>,
 })

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ImageTopo } from '#/guide/model/types'
-import { addPath, addRect, newRouteArrow, insertPointAfter, movePoint, removePoint, resize, setPointKind, toggleLegend } from './topoOps'
+import { addPath, addRect, newRouteArrow, insertPointAfter, movePoint, nudgePath, nudgePoint, nudgeRect, removePoint, resize, setPointKind, snapPoint, toggleLegend } from './topoOps'
 
 const empty: ImageTopo = {
   type: 'image', id: '1', src: 'a.jpg', width: 100, height: 100, noPrint: false, printLayout: '',
@@ -65,5 +65,30 @@ describe('newRouteArrow', () => {
   it('follows most of the topo’s routes once it has some', () => {
     expect(newRouteArrow(withArrows(false, false, true), 'problem')).toBe(false)
     expect(newRouteArrow(withArrows(true, true, false), 'climb')).toBe(true)
+  })
+})
+
+describe('nudging and snapping', () => {
+  const topo = addPath(empty, 'p1', [pt(5, 50), pt(40, 60), pt(90, 10)])
+
+  it('nudges one point and keeps it on the photo', () => {
+    expect(nudgePoint(topo, 'p1', 1, 10, -5).paths[0].points[1]).toMatchObject({ x: 50, y: 55 })
+    expect(nudgePoint(topo, 'p1', 0, -10, 0).paths[0].points[0].x).toBe(0)
+  })
+  it('nudges a whole route, stopping at the edge instead of squashing it', () => {
+    expect(nudgePath(topo, 'p1', 3, 0).paths[0].points.map((p) => p.x)).toEqual([8, 43, 93])
+    expect(nudgePath(topo, 'p1', 50, 0).paths[0].points.map((p) => p.x)).toEqual([15, 50, 100])
+  })
+  it('nudges a label', () => {
+    const t = addRect(empty, 'r', { x: 10, y: 10 })
+    expect(nudgeRect(t, 'r', 10, -20).rects[0]).toMatchObject({ x: 20, y: 0 })
+  })
+  it('snaps to the nearest start or end of a route within the radius', () => {
+    expect(snapPoint(topo, { x: 8, y: 52 }, 10)).toEqual({ x: 5, y: 50 })
+    expect(snapPoint(topo, { x: 86, y: 14 }, 10)).toEqual({ x: 90, y: 10 })
+  })
+  it('leaves a point alone when nothing is close, or only a middle point is', () => {
+    expect(snapPoint(topo, { x: 40, y: 62 }, 10)).toEqual({ x: 40, y: 62 })
+    expect(snapPoint(topo, { x: 70, y: 70 }, 10)).toEqual({ x: 70, y: 70 })
   })
 })

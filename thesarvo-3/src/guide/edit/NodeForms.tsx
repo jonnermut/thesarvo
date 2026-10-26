@@ -19,6 +19,7 @@ export function HeaderForm({ node, onChange }: { node: Header; onChange: Change<
       <AreaField label="History" value={node.history} onChange={(history) => onChange({ history })} rows={6} className="sm:col-span-2" />
       <AreaField label="Access" value={node.access} onChange={(access) => onChange({ access })} className="sm:col-span-2" />
       <AreaField label="Camping" value={node.camping} onChange={(camping) => onChange({ camping })} rows={3} className="sm:col-span-2" />
+      <AreaField label="Crag Steward" value={node.steward ?? ''} onChange={(steward) => onChange({ steward })} rows={2} className="sm:col-span-2" />
       <CheckField label="Auto number climbs" checked={node.autonumber === 'true'} onChange={(on) => onChange({ autonumber: String(on) })} />
     </div>
   )

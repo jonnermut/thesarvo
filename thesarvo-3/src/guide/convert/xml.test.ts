@@ -85,3 +85,12 @@ describe('image file names', () => {
     expect(guideToXml(g)).toContain('src=" columns overall.jpg"')
   })
 })
+
+describe('crag steward', () => {
+  it('is a header field that round-trips, and is left out of the xml when empty', () => {
+    const g = guideFromXml('1', '<guide><header id="2" name="Crag" steward="Tasmanian Climbing Club"/></guide>')
+    expect(g.nodes[0]).toMatchObject({ type: 'header', steward: 'Tasmanian Climbing Club' })
+    expect(guideFromXml('1', guideToXml(g))).toEqual(g)
+    expect(guideToXml(guideFromXml('1', '<guide><header id="2" name="Crag"/></guide>'))).not.toContain('steward')
+  })
+})

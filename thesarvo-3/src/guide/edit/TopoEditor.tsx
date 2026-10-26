@@ -1,5 +1,5 @@
 import { useSizedTopo } from '#/guide/view/useSizedTopo'
-import { useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { imageUrl } from '#/guide/content/paths'
 import type { Climb, ImageTopo, LineStyle, Point, RectStyle } from '#/guide/model/types'
 import { Callout, Route } from '#/guide/view/Topo'
@@ -35,6 +35,20 @@ const ARROWS = [
 const PRINT_LAYOUTS = ['auto', 'NotInPrint', 'OneColumn', 'TwoColumns', 'FitToPage', 'Rotate', 'DontRotate'].map((v) => [v, v] as const)
 const RECT_OPTIONS = (Object.keys(RECT_STYLES) as RectStyle[]).map((s) => [s, s.replace(/_/g, ' ')] as const)
 
+const ARROW_KEYS: Record<string, [number, number]> = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }
+const SHORTCUTS = [
+  ['Arrow keys', 'Nudge the selected point, route or label by 1px (Shift: 10px)'],
+  ['Delete', 'Remove the selected point, route or label'],
+  ['Enter', 'Finish the route you are drawing'],
+  ['Esc', 'Stop drawing, or let go of the selection'],
+  ['Space + drag', 'Pan the photo'],
+  ['⌘/Ctrl + scroll', 'Zoom the photo'],
+  ['?', 'Show or hide this list'],
+] as const
+
+/** How close (screen px) a new route's start must be to another route's end to join it. */
+const SNAP_PX = 12
+
 const TOOLS: [Tool, string][] = [['select', 'Select'], ['route', 'Draw route'], ['rect', 'Add label']]
 
 export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kind, onAddClimb, onEditClimb }: Props) {
@@ -45,6 +59,9 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
   const [selection, setSelection] = useState<Selection>(null)
   const [pointIndex, setPointIndex] = useState<number | null>(null)
   const [drawing, setDrawing] = useState<Point[]>([])
+  const [help, setHelp] = useState(false)
+  /** Screen pixels per photo pixel, to snap by a steady distance however far the photo is zoomed. */
+  const zoom = useRef(1)
 
   const selectedPath = selection?.kind === 'path' ? topo.paths.find((p) => p.id === selection.id) : undefined
   const selectedRect = selection?.kind === 'rect' ? topo.rects.find((r) => r.id === selection.id) : undefined
@@ -99,10 +116,22 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
       const typing = e.target instanceof HTMLElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)
       if (typing) return
       if (e.key === 'Enter' && drawing.length) finishRoute()
+      if (e.key === '?') setHelp((h) => !h)
       if (e.key === 'Escape') {
+        setHelp(false)
         setDrawing([])
         setTool('select')
         setSelection(null)
+        setPointIndex(null)
+      }
+      const arrow = ARROW_KEYS[e.key]
+      if (arrow && selection && tool === 'select' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault()
+        const [dx, dy] = arrow.map((n) => n * (e.shiftKey ? 10 : 1))
+        const key = `nudge-${selection.id}-${pointIndex}`
+        if (selectedRect) onChange((t) => ops.nudgeRect(t, selectedRect.id, dx, dy), key)
+        else if (selectedPath && pointIndex !== null) onChange((t) => ops.nudgePoint(t, selectedPath.id, pointIndex, dx, dy), key)
+        else if (selectedPath) onChange((t) => ops.nudgePath(t, selectedPath.id, dx, dy), key)
       }
       if ((e.key === 'Delete' || e.key === 'Backspace') && selection) {
         e.preventDefault()
@@ -131,7 +160,12 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
   // Clicks, not presses: a press that pans or pinches the photo ends without one.
   const onBackgroundClick = (e: React.MouseEvent) => {
     const at = toImage(e)
-    if (tool === 'route') setDrawing((d) => (d.length && Math.hypot(d.at(-1)!.x - at.x, d.at(-1)!.y - at.y) < 3 ? d : [...d, { ...at, kind: '' }]))
+    if (tool === 'route')
+      setDrawing((d) => {
+        // A new route's start joins the start or end of a route close by.
+        if (!d.length) return [{ ...ops.snapPoint(topo, at, SNAP_PX / zoom.current), kind: '' }]
+        return Math.hypot(d.at(-1)!.x - at.x, d.at(-1)!.y - at.y) < 3 ? d : [...d, { ...at, kind: '' }]
+      })
     else if (tool === 'rect') {
       const id = newId()
       onChange((t) => ops.addRect(t, id, at))
@@ -159,7 +193,7 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
           </>
         )}
         {tool === 'select' ? (
-          <span className="text-xs text-muted">Drag handles to move. Delete removes the selection.</span>
+          <span className="text-xs text-muted">Drag handles to move, or use the arrow keys. Delete removes the selection.</span>
         ) : (
           <span className="flex items-center gap-2 rounded-md bg-amber/15 px-2 py-1 text-xs font-medium text-ink">
             <span className="size-2 animate-pulse rounded-full bg-amber" aria-hidden />
@@ -168,12 +202,26 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
               : 'Adding a label: click the photo to place it. Esc cancels.'}
           </span>
         )}
+        <Button className="ml-auto" onClick={() => setHelp((h) => !h)} aria-label="Keyboard shortcuts" title="Keyboard shortcuts (?)">
+          ?
+        </Button>
       </div>
+      {help && (
+        <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 rounded-lg border border-line bg-paper p-3 text-sm">
+          {SHORTCUTS.map(([keys, what]) => (
+            <Fragment key={keys}>
+              <dt className="font-medium">{keys}</dt>
+              <dd className="text-muted">{what}</dd>
+            </Fragment>
+          ))}
+        </dl>
+      )}
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <ZoomBox width={topo.width} height={topo.height} panOnDrag={tool === 'select'} className={`w-full rounded-lg bg-black/5 shadow-md ${tool === 'select' ? '' : 'ring-2 ring-amber'}`}>
           {(scale) => {
           // Handles keep one size on screen however far the photo is zoomed.
+          zoom.current = scale
           const u = 1 / scale
           return (
           <>

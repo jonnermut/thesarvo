@@ -29,6 +29,8 @@ export type Header = {
   walk: string
   access: string
   camping: string
+  /** Who looks after the crag, shown with the access notes. Absent from guides saved before it existed. */
+  steward?: string
   acknowledgement: string
   intro: string
   history: string

@@ -92,3 +92,42 @@ export function resize(topo: ImageTopo, width: number): ImageTopo {
 /** A new route matches the topo's other routes; on a topo with none yet, boulder problems get arrow heads. */
 export const newRouteArrow = (topo: ImageTopo, kind: 'climb' | 'problem') =>
   topo.paths.length ? topo.paths.filter((p) => p.arrow).length * 2 > topo.paths.length : kind === 'problem'
+
+const clamp = (n: number, max: number) => Math.min(Math.max(0, n), max)
+
+/** Moves one point of a route by (dx, dy), keeping it on the photo. */
+export const nudgePoint = (topo: ImageTopo, pathId: string, index: number, dx: number, dy: number): ImageTopo => {
+  const pt = topo.paths.find((p) => p.id === pathId)?.points[index]
+  return pt ? movePoint(topo, pathId, index, { x: clamp(pt.x + dx, topo.width), y: clamp(pt.y + dy, topo.height) }) : topo
+}
+
+/** Moves a whole route; it stops at the photo's edge rather than squashing. */
+export const nudgePath = (topo: ImageTopo, pathId: string, dx: number, dy: number): ImageTopo =>
+  mapPath(topo, pathId, (p) => {
+    const xs = p.points.map((pt) => pt.x)
+    const ys = p.points.map((pt) => pt.y)
+    const mx = Math.min(Math.max(dx, -Math.min(...xs)), topo.width - Math.max(...xs))
+    const my = Math.min(Math.max(dy, -Math.min(...ys)), topo.height - Math.max(...ys))
+    return withPoints(p, p.points.map((pt) => ({ ...pt, x: pt.x + mx, y: pt.y + my })))
+  })
+
+/** Moves a label by (dx, dy), keeping its corner on the photo. */
+export const nudgeRect = (topo: ImageTopo, id: string, dx: number, dy: number): ImageTopo => {
+  const r = topo.rects.find((rect) => rect.id === id)
+  return r ? updateRect(topo, id, { x: clamp(r.x + dx, topo.width), y: clamp(r.y + dy, topo.height) }) : topo
+}
+
+/**
+ * The start or end of another route within `radius` of `at`, else `at`: a new route that begins where
+ * another begins or ends shares that exact pixel, so the numbers fan out and the lines join up.
+ */
+export function snapPoint(topo: ImageTopo, at: { x: number; y: number }, radius: number): { x: number; y: number } {
+  let best = at
+  let bestDist = radius
+  for (const path of topo.paths)
+    for (const pt of [path.points[0], path.points.at(-1)]) {
+      const d = pt && Math.hypot(pt.x - at.x, pt.y - at.y)
+      if (pt && d !== undefined && d <= bestDist) [best, bestDist] = [{ x: pt.x, y: pt.y }, d]
+    }
+  return best
+}

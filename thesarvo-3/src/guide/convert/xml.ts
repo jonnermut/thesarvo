@@ -47,7 +47,7 @@ export const formatPoints = (points: Point[]) => points.map((p) => `${p.x},${p.y
 
 // ---- XML -> model ----
 
-const HEADER_KEYS = ['id', 'name', 'rock', 'sun', 'walk', 'access', 'camping', 'acknowledgement', 'intro', 'history', 'autonumber'] as const
+const HEADER_KEYS = ['id', 'name', 'rock', 'sun', 'walk', 'access', 'camping', 'steward', 'acknowledgement', 'intro', 'history', 'autonumber'] as const
 const CLIMB_KEYS = ['id', 'name', 'number', 'grade', 'extra', 'length', 'stars', 'fa'] as const
 const TEXT_KEYS = ['id', 'class'] as const
 const IMAGE_KEYS = ['id', 'src', 'width', 'height', 'noPrint', 'printLayout', 'legendTitle', 'legendFooter', 'legendx', 'legendy'] as const

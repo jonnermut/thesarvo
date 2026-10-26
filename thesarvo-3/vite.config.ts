@@ -1,6 +1,7 @@
 import { createReadStream, existsSync } from 'node:fs'
 import path from 'node:path'
-import { defineConfig, type Plugin } from 'vite'
+import { defineConfig } from 'vite'
+import type { Plugin } from 'vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import tailwindcss from '@tailwindcss/vite'
 import viteReact from '@vitejs/plugin-react'
@@ -56,7 +57,7 @@ export default defineConfig({
       prerenderPaths.length
         ? {
             prerender: { enabled: true, crawlLinks: false, autoSubfolderIndex: true },
-            pages: prerenderPaths.map((path) => ({ path })),
+            pages: prerenderPaths.map((page) => ({ path: page })),
           }
         : {},
     ),

@@ -1,10 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router'
 import type { IndexNode } from '#/guide/content/types'
+import { pageHead, pageDescription } from '#/guide/seo'
 import { fetchPage } from '#/guide/server'
 import { ContentsView } from '#/guide/view/ContentsView'
 
 export const Route = createFileRoute('/g/')({
   loader: async () => (await fetchPage(''))!,
+  head: ({ loaderData }) =>
+    pageHead({
+      title: 'thesarvo · Tasmanian climbing guides',
+      description: loaderData ? pageDescription({ ...loaderData.node, title: 'Tasmanian climbing guides' }, null) : '',
+      path: '',
+    }),
   component: Home,
 })
 
