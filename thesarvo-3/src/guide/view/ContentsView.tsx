@@ -93,17 +93,18 @@ function Card({ node }: { node: IndexNode }) {
   const sum = useMemo(() => (s ? undefined : rollup(node)), [node, s])
   const classics = s ? s.classics.map((c) => [node, c] as const) : (sum?.classics ?? [])
   return (
-    <div className="h-full border border-line bg-card p-3">
+    // The title link stretches over the whole card; the climb and child links sit above it.
+    <div className="relative h-full border border-line bg-card p-3 transition-colors hover:border-link/60 hover:bg-paper/60">
       <div className="flex items-baseline justify-between gap-3">
-        <Link to={guideUrl(node)} className="text-[17px] font-semibold text-link hover:underline">
+        <Link to={guideUrl(node)} className="text-[17px] font-semibold text-link after:absolute after:inset-0 hover:underline">
           {node.title}
         </Link>
         {!!node.count && <span className="shrink-0 text-[13px] text-muted tabular-nums">{node.count.toLocaleString()}</span>}
       </div>
       {s && s.total > 0 && <Summary stats={s} gps={s.gps ? 'GPS' : undefined} />}
-      {sum && <Summary stats={sum} gps={`GPS for ${sum.withGps} of ${plural(sum.guides, 'guide')}`} />}
+      {sum && <Summary stats={sum} />}
       {classics.length > 0 && (
-        <ul className="mt-2 space-y-0.5 text-[13px]">
+        <ul className="relative mt-2 space-y-0.5 text-[13px]">
           {classics.slice(0, 3).map(([guide, [anchor, name, grade, stars]]) => (
             <li key={`${guide.id}${anchor}`}>
               <Link to={guideUrl(guide)} hash={anchor} className="flex gap-1.5 hover:text-link">
@@ -119,7 +120,7 @@ function Card({ node }: { node: IndexNode }) {
         </ul>
       )}
       {node.children.length > 0 && (
-        <p className="mt-2 text-[13px] leading-relaxed text-muted">
+        <p className="relative mt-2 text-[13px] leading-relaxed text-muted">
           {node.children.map((c, i) => (
             <span key={c.id}>
               {i > 0 && ', '}

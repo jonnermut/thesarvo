@@ -43,7 +43,7 @@ function savedBasemap() {
 const EXPAND = '<path d="M3 7V3h4M17 7V3h-4M3 13v4h4M17 13v4h-4"/>'
 const SHRINK = '<path d="M7 3v4H3M13 3v4h4M7 17v-4H3M13 17v-4h4"/>'
 const icon = (paths: string) =>
-  `<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin:7px" aria-hidden="true">${paths}</svg>`
+  `<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">${paths}</svg>`
 
 const MAX_AUTO_HANDLES = 12
 
@@ -103,6 +103,9 @@ export default function MapView({ points, lines, selected, onSelect, edit }: Pro
   const [tool, setTool] = useState<MapTool>('none')
   const [full, setFull] = useState(false)
   const fullButton = useRef<HTMLAnchorElement | null>(null)
+  // The last settled view, and the in-page view full screen was entered from, so both ways show the same area.
+  const shown = useRef<L.LatLngBounds | null>(null)
+  const entered = useRef<{ from: { center: L.LatLng; zoom: number }; at: { center: L.LatLng; zoom: number } } | null>(null)
   // Long tracks would drown the map in handles, so only the clicked line (or a short one) gets them.
   const [activeLine, setActiveLine] = useState<number | null>(null)
   const [drawn, setDrawn] = useState<L.LatLng[]>([])
@@ -134,7 +137,8 @@ export default function MapView({ points, lines, selected, onSelect, edit }: Pro
     const fullControl = new L.Control({ position: 'topleft' })
     fullControl.onAdd = () => {
       const bar = L.DomUtil.create('div', 'leaflet-bar')
-      const a = L.DomUtil.create('a', '', bar)
+      // Leaflet's bar buttons are line-boxes sized for a text glyph; centre the icon instead.
+      const a = L.DomUtil.create('a', '!flex items-center justify-center', bar)
       a.href = '#'
       a.role = 'button'
       a.title = 'Full screen'
@@ -151,6 +155,7 @@ export default function MapView({ points, lines, selected, onSelect, edit }: Pro
     L.control.attribution({ prefix: false }).addTo(m)
     L.control.scale({ imperial: false }).addTo(m)
     m.setView([-42, 147], 7)
+    m.on('moveend', () => (shown.current = m.getBounds()))
     m.on('click', (e: L.LeafletMouseEvent) => {
       const t = toolRef.current
       if (t === 'point') {
@@ -176,7 +181,20 @@ export default function MapView({ points, lines, selected, onSelect, edit }: Pro
   useEffect(() => {
     const m = map.current
     if (!m) return
-    m.invalidateSize()
+    const view = () => ({ center: m.getCenter(), zoom: m.getZoom() })
+    const before = shown.current
+    const from = view()
+    m.invalidateSize({ pan: false })
+    if (full) {
+      if (before) m.fitBounds(before, { animate: false })
+      entered.current = { from, at: view() }
+    } else if (entered.current) {
+      // Untouched in full screen: back exactly where it was; otherwise fit what full screen showed.
+      const { from: was, at } = entered.current
+      if (at.zoom === from.zoom && at.center.equals(from.center)) m.setView(was.center, was.zoom, { animate: false })
+      else if (before) m.fitBounds(before, { animate: false })
+      entered.current = null
+    }
     if (full) m.scrollWheelZoom.enable()
     else m.scrollWheelZoom.disable()
     const a = fullButton.current

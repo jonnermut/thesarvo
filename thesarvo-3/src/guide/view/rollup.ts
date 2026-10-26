@@ -3,7 +3,7 @@ import { flatten } from '#/guide/content/paths'
 import type { IndexNode } from '#/guide/content/types'
 
 /** A region's guides added up, for a contents card. Classics name the guide each comes from. */
-export type Rollup = Omit<GuideStats, 'classics' | 'pin' | 'gps'> & { classics: [IndexNode, Classic][]; guides: number; withGps: number }
+export type Rollup = Omit<GuideStats, 'classics' | 'pin' | 'gps'> & { classics: [IndexNode, Classic][]; guides: number }
 
 /**
  * Adds up the guides below `node` of the kind most of them are (routes or problems, whose grade
@@ -15,14 +15,13 @@ export function rollup(node: IndexNode, classics = 3): Rollup | undefined {
   const problems = all.filter((n) => n.stats!.problems).length > all.length / 2
   const guides = all.filter((n) => n.stats!.problems === problems)
   if (!guides.length) return undefined
-  const sum: Rollup = { total: 0, problems, bands: [], sport: 0, stars: [0, 0, 0], topos: 0, classics: [], guides: guides.length, withGps: 0 }
+  const sum: Rollup = { total: 0, problems, bands: [], sport: 0, stars: [0, 0, 0], topos: 0, classics: [], guides: guides.length }
   for (const { stats: s } of guides) {
     sum.total += s!.total
     s!.bands.forEach((n, i) => (sum.bands[i] = (sum.bands[i] ?? 0) + n))
     sum.sport += s!.sport
     s!.stars.forEach((n, i) => (sum.stars[i] += n))
     sum.topos += s!.topos
-    if (s!.gps) sum.withGps++
   }
   // Round robin over the guides, best stars first.
   const queues = guides.map((g) => g.stats!.classics.map((c): [IndexNode, Classic] => [g, c]))

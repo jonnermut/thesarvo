@@ -16,7 +16,7 @@ describe('rollup', () => {
       node('c', stats(4, [['c-4', 'C1', '24', 3]])),
     ])
     const r = rollup(region)!
-    expect(r).toMatchObject({ total: 19, bands: [3, 6, 9, 12], sport: 3, stars: [3, 3, 3], topos: 6, guides: 3, withGps: 1 })
+    expect(r).toMatchObject({ total: 19, bands: [3, 6, 9, 12], sport: 3, stars: [3, 3, 3], topos: 6, guides: 3 })
     expect(r.classics.map(([g, c]) => `${g.id}:${c[1]}`)).toEqual(['a:A1', 'c:C1', 'b:B1'])
   })
 
