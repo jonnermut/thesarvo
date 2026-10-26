@@ -94,6 +94,8 @@ export function TopoFigure({ topo: stored, ...rest }: Props) {
   const closePopup = useCallback(() => setPopup(null), [])
   const closeViewer = useCallback(() => setOpen(false), [])
   const legend = topo.legend.map((id) => climbs.get(id)).filter((c): c is Climb => !!c)
+  // Wide enough for the most stars in this legend on one line; "★★" wrapping looked like blank rows.
+  const starsWidth = Math.max(1, ...legend.map((c) => c.stars.replace(/[^*]/g, '').length))
 
   const rows = (compact: boolean) =>
     legend.map((c) => (
@@ -104,9 +106,10 @@ export function TopoFigure({ topo: stored, ...rest }: Props) {
             e.preventDefault()
             setPopup(c.id)
           }}
-          className={`grid grid-cols-[1.2em_2.2em_1fr_auto] items-baseline gap-x-[0.5em] px-[0.4em] ${compact ? 'py-0' : 'py-1'} ${active === c.id ? 'bg-amber/60 text-black' : ''}`}
+          style={{ gridTemplateColumns: `${starsWidth}em 2.2em 1fr auto` }}
+          className={`grid items-baseline gap-x-[0.5em] px-[0.4em] ${compact ? 'py-0' : 'py-1'} ${active === c.id ? 'bg-amber/60 text-black' : ''}`}
         >
-          <span className="text-center"><Stars stars={c.stars} /></span>
+          <span className="text-right whitespace-nowrap"><Stars stars={c.stars} /></span>
           <span className="text-right tabular-nums">{c.number}</span>
           <span className="truncate">{c.name}</span>
           <span className="tabular-nums">{c.grade.split('/')[0]}</span>
