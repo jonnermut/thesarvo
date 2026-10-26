@@ -51,7 +51,8 @@ function GuidePage() {
     return (
       <>
         <Breadcrumbs trail={trail} current={node} width={`${width} px-4 sm:px-6`} end={<WidthToggle />} />
-        <GuideView guide={guide} hash={hash} full={full} />
+        {/* Keyed per guide: moving between guides starts afresh, so maps fit the new guide's points. */}
+        <GuideView key={node.id} guide={guide} hash={hash} full={full} />
         <PrevNext id={node.id} width={width} />
         {node.children.length > 0 && (
           <div className={`mx-auto ${width} px-4 pb-10 sm:px-6`}>

@@ -1,4 +1,5 @@
-import type { Guide, GuideNode } from '#/guide/model/types'
+import type { Climb, Guide, GuideNode } from '#/guide/model/types'
+import { topoSection } from '#/guide/view/section'
 
 /** Editor state: the guide being edited plus undo/redo history. */
 export type EditorState = {
@@ -12,6 +13,8 @@ export type EditorState = {
 export type Action =
   | { type: 'edit'; id: string; update: (node: GuideNode) => GuideNode; key?: string }
   | { type: 'add'; node: GuideNode; afterId?: string }
+  /** A climb drawn on a topo: listed after the topo's climbs, in its legend and, given `pathId`, on that route. */
+  | { type: 'addClimbToTopo'; topoId: string; climb: Climb; pathId?: string }
   | { type: 'delete'; id: string }
   | { type: 'move'; id: string; by: -1 | 1 }
   | { type: 'replace'; guide: Guide }
@@ -65,6 +68,20 @@ function reduce(state: EditorState, action: Action): EditorState {
       const at = action.afterId ? present.nodes.findIndex((n) => nodeId(n) === action.afterId) + 1 : present.nodes.length
       return push(state, withNodes(present.nodes.toSpliced(at, 0, action.node)), null)
     }
+    case 'addClimbToTopo': {
+      const at = present.nodes.findIndex((n) => n.type === 'image' && n.id === action.topoId)
+      if (at < 0) return state
+      const { insertAt } = topoSection(present.nodes, at)
+      const { climb, pathId } = action
+      const climbs = present.nodes.slice(0, insertAt).filter((n): n is Climb => n.type === 'climb' || n.type === 'problem')
+      const numbered = { ...climb, number: climb.number || nextNumber(climbs.at(-1)?.number ?? '') }
+      const nodes = present.nodes.map((n) =>
+        n.type === 'image' && n.id === action.topoId
+          ? { ...n, legend: [...n.legend, climb.id], paths: n.paths.map((p) => (p.id === pathId ? { ...p, linkedTo: climb.id } : p)) }
+          : n,
+      )
+      return push(state, withNodes(nodes.toSpliced(insertAt, 0, numbered)), null)
+    }
     case 'delete':
       return push(state, withNodes(present.nodes.filter((n) => nodeId(n) !== action.id)), null)
     case 'move': {
@@ -106,4 +123,16 @@ export function nextId(guide: Guide): string {
     }
   }
   return String(max + 1)
+}
+
+/** The number after `previous` in the guide's own style ("7." follows "6.", "12" follows "11"); blank when it is not a number. */
+export function nextNumber(previous: string): string {
+  const m = /^(\d+)(\.?)$/.exec(previous.trim())
+  return m ? `${Number(m[1]) + 1}${m[2]}` : ''
+}
+
+/** Whether a guide is mostly boulder problems, so new climbs in it are problems too. */
+export const climbKind = (guide: Guide): 'climb' | 'problem' => {
+  const kinds = guide.nodes.filter((n) => n.type === 'climb' || n.type === 'problem')
+  return kinds.filter((n) => n.type === 'problem').length * 2 > kinds.length ? 'problem' : 'climb'
 }

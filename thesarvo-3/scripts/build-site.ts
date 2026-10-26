@@ -22,6 +22,7 @@ import type { Manifest } from '../src/guide/content/manifest'
 import { flatten, GUIDE_PREFIX, guideUrl } from '../src/guide/content/paths'
 import type { IndexNode } from '../src/guide/content/types'
 import type { Guide } from '../src/guide/model/types'
+import { treeToKml } from '../src/guide/view/kml'
 import { guideShard } from '../src/guide/search/shard'
 import type { Pack, SearchFiles } from '../src/guide/search/shard'
 
@@ -73,7 +74,7 @@ const pages = partial ? pagesToRebuild(index, before.nodes, build.nodes) : nodes
 
 const data = path.resolve('public/g-data')
 await rm(data, { recursive: true, force: true })
-for (const sub of ['guide', 'images', 'page', 'search']) await mkdir(path.join(data, sub), { recursive: true })
+for (const sub of ['guide', 'images', 'kml', 'page', 'search']) await mkdir(path.join(data, sub), { recursive: true })
 const writeJson = (file: string, value: unknown) => writeFile(path.join(data, file), JSON.stringify(value))
 
 for (const node of pages) {
@@ -81,6 +82,12 @@ for (const node of pages) {
     await writeJson(`guide/${node.id}.json`, await guideOf(node.id))
     await writeJson(`images/${node.id}.json`, await source.listImages(node.id))
   } else await writeJson(`page/${node.id}.json`, await source.getPageBody(node.id))
+}
+
+// Google Earth files of everything below each contents page, rewritten every build as any guide's GPS may change them.
+for (const node of nodes.filter((n) => n.children.length)) {
+  const kml = await treeToKml(node, guideOf)
+  if (kml) await writeFile(path.join(data, 'kml', `${node.id}.kml`), kml)
 }
 
 // Search data is named by its content, so browsers keep it until it changes.

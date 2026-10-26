@@ -270,6 +270,8 @@ export default function MapView({ points, lines, selected, onSelect, edit }: Pro
     }
     // Fit once: after that the view is the user's, even while they edit.
     if (!fitted.current && bounds.isValid()) {
+      // The container may have been laid out since the map was made; fit to its real size.
+      m.invalidateSize({ pan: false })
       m.fitBounds(bounds, { padding: [30, 30], maxZoom: 17 })
       fitted.current = true
     }

@@ -8,6 +8,7 @@ import { GpsBlock } from './GpsBlock'
 import { HeaderBlock } from './HeaderBlock'
 import { TextBlock } from './TextBlock'
 import { routeStats } from './routeStats'
+import { legendRedundant, topoSection } from './section'
 import { TopoFigure } from './TopoFigure'
 import { widthClass } from './width'
 
@@ -25,6 +26,10 @@ export function GuideView({ guide, hash, full = false }: { guide: Guide; hash?: 
 
   const stats = useMemo(() => routeStats([...climbs.values()]), [climbs])
   const anchors = useMemo(() => nodeAnchors(guide.nodes), [guide])
+  const redundant = useMemo(
+    () => new Set(guide.nodes.flatMap((n, i) => (n.type === 'image' && legendRedundant(n, topoSection(guide.nodes, i).climbs) ? [n.id] : []))),
+    [guide],
+  )
 
   // `:target` flashes a linked block on a full load; links followed inside the app set no target, so flash it here.
   useEffect(() => {
@@ -45,7 +50,7 @@ export function GuideView({ guide, hash, full = false }: { guide: Guide; hash?: 
       case 'text':
         return <TextBlock block={node} />
       case 'image':
-        return <TopoFigure guideId={guide.id} topo={node} climbs={climbs} active={active} onActive={setActive} />
+        return <TopoFigure guideId={guide.id} topo={node} climbs={climbs} active={active} onActive={setActive} redundantLegend={redundant.has(node.id)} />
       case 'gps':
         return <GpsBlock gps={node} guideName={guideTitle(guide)} />
       case 'unknown':

@@ -33,6 +33,20 @@ export function NumberField({ label, value, onChange, className }: { label: stri
   )
 }
 
+/** A number applied on Enter or leaving the field, for changes too big to make on every keystroke. */
+export function CommitNumberField({ label, value, onCommit, className }: { label: string; value: number; onCommit: (v: number) => void; className?: string }) {
+  const [text, setText] = useState(String(Math.round(value)))
+  useEffect(() => setText(String(Math.round(value))), [value])
+  const commit = () => (Number(text) > 0 ? onCommit(Math.round(Number(text))) : setText(String(Math.round(value))))
+  return (
+    <Field label={label} className={className}>
+      {(id) => (
+        <input id={id} type="number" min={1} className={INPUT} value={text} onChange={(e) => setText(e.target.value)} onBlur={commit} onKeyDown={(e) => e.key === 'Enter' && commit()} />
+      )}
+    </Field>
+  )
+}
+
 /** Guide text stores line breaks as `<br/>`; the editor shows real newlines so they are never lost. */
 const toEditable = (s: string) => s.replace(/<br\s*\/?>/gi, '\n')
 const fromEditable = (s: string) => s.replace(/\r?\n/g, '<br/>')

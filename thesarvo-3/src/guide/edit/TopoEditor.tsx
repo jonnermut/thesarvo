@@ -4,8 +4,9 @@ import { imageUrl } from '#/guide/content/paths'
 import type { Climb, ImageTopo, LineStyle, Point, RectStyle } from '#/guide/model/types'
 import { Callout, Route } from '#/guide/view/Topo'
 import { RECT_STYLES } from '#/guide/view/topoStyles'
-import { AreaField, Button, CheckField, DeleteButton, NumberField, SelectField, TextField } from './fields'
+import { AreaField, Button, CheckField, CommitNumberField, DeleteButton, NumberField, SelectField, TextField } from './fields'
 import * as ops from './topoOps'
+import { ZoomBox } from './ZoomBox'
 
 type Tool = 'select' | 'route' | 'rect'
 type Selection = { kind: 'path' | 'rect'; id: string } | null
@@ -17,6 +18,11 @@ type Props = {
   newId: () => string
   /** `key` folds a burst of changes (a drag) into one undo step. */
   onChange: (update: (t: ImageTopo) => ImageTopo, key?: string) => void
+  /** What the guide lists, so a new one is a climb or a boulder problem. */
+  kind: 'climb' | 'problem'
+  /** Adds a climb after this topo's climbs and to its legend; with `pathId`, on that route too. */
+  onAddClimb: (pathId?: string) => void
+  onEditClimb: (id: string, patch: Partial<Climb>, key: string) => void
 }
 
 const LINE_STYLES = [['solid', 'Solid'], ['dashed', 'Dashed'], ['dotted', 'Dotted']] as const
@@ -30,7 +36,7 @@ const RECT_OPTIONS = (Object.keys(RECT_STYLES) as RectStyle[]).map((s) => [s, s.
 
 const TOOLS: [Tool, string][] = [['select', 'Select'], ['route', 'Draw route'], ['rect', 'Add label']]
 
-export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: Props) {
+export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kind, onAddClimb, onEditClimb }: Props) {
   const topo = useSizedTopo(guideId, stored)
   const svgRef = useRef<SVGSVGElement>(null)
   const gesture = useRef(0)
@@ -42,6 +48,8 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: P
   const selectedPath = selection?.kind === 'path' ? topo.paths.find((p) => p.id === selection.id) : undefined
   const selectedRect = selection?.kind === 'rect' ? topo.rects.find((r) => r.id === selection.id) : undefined
   const climbById = new Map(climbs.map((c) => [c.id, c]))
+  const linked = selectedPath && climbById.get(selectedPath.linkedTo)
+  const noun = kind === 'problem' ? 'problem' : 'climb'
 
   /** Pointer position in image coordinates. */
   const toImage = (e: { clientX: number; clientY: number }) => {
@@ -108,15 +116,16 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: P
     target.addEventListener('pointerup', up)
   }
 
-  const onBackgroundDown = (e: React.PointerEvent) => {
+  // Clicks, not presses: a press that pans or pinches the photo ends without one.
+  const onBackgroundClick = (e: React.MouseEvent) => {
     const at = toImage(e)
-    if (tool === 'route') setDrawing((d) => [...d, { ...at, kind: '' }])
+    if (tool === 'route') setDrawing((d) => (d.length && Math.hypot(d.at(-1)!.x - at.x, d.at(-1)!.y - at.y) < 3 ? d : [...d, { ...at, kind: '' }]))
     else if (tool === 'rect') {
       const id = newId()
       onChange((t) => ops.addRect(t, id, at))
       setSelection({ kind: 'rect', id })
       setTool('select')
-    } else {
+    } else if (e.target === e.currentTarget) {
       setSelection(null)
       setPointIndex(null)
     }
@@ -150,13 +159,18 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: P
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_20rem]">
-        <div className={`relative overflow-hidden rounded-lg bg-black/5 shadow-md ${tool === 'select' ? '' : 'ring-2 ring-amber'}`}>
-          <img src={imageUrl(guideId, topo.src)} alt="" width={topo.width} height={topo.height} className="block h-auto w-full select-none" draggable={false} />
+        <ZoomBox width={topo.width} height={topo.height} panOnDrag={tool === 'select'} className={`w-full rounded-lg bg-black/5 shadow-md ${tool === 'select' ? '' : 'ring-2 ring-amber'}`}>
+          {(scale) => {
+          // Handles keep one size on screen however far the photo is zoomed.
+          const u = 1 / scale
+          return (
+          <>
+          <img src={imageUrl(guideId, topo.src)} alt="" width={topo.width} height={topo.height} className="block size-full select-none" draggable={false} />
           <svg
             ref={svgRef}
             viewBox={`0 0 ${topo.width} ${topo.height}`}
-            className={`absolute inset-0 size-full touch-none ${tool === 'select' ? '' : 'cursor-crosshair'}`}
-            onPointerDown={onBackgroundDown}
+            className={`absolute inset-0 size-full ${tool === 'select' ? '' : 'cursor-crosshair'}`}
+            onClick={onBackgroundClick}
             onDoubleClick={() => drawing.length && finishRoute()}
           >
             {topo.paths.map((path) => (
@@ -188,12 +202,12 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: P
                 <Callout rect={rect} />
                 {selection?.id === rect.id && (
                   <>
-                    <rect x={rect.x - 2} y={rect.y - 2} width={rect.width + 4} height={rect.height + 4} fill="none" stroke="#0ea5e9" strokeWidth={2} strokeDasharray="5 3" />
+                    <rect x={rect.x - 2 * u} y={rect.y - 2 * u} width={rect.width + 4 * u} height={rect.height + 4 * u} fill="none" stroke="#0ea5e9" strokeWidth={2 * u} strokeDasharray={`${5 * u} ${3 * u}`} />
                     <rect
-                      x={rect.x + rect.width - 6}
-                      y={rect.y + rect.height - 6}
-                      width={12}
-                      height={12}
+                      x={rect.x + rect.width - 6 * u}
+                      y={rect.y + rect.height - 6 * u}
+                      width={12 * u}
+                      height={12 * u}
                       fill="#0ea5e9"
                       className="cursor-nwse-resize"
                       onPointerDown={(e) => startDrag(e, (p) => (t) => ops.updateRect(t, rect.id, { width: Math.max(20, p.x - rect.x), height: Math.max(16, p.y - rect.y) }))}
@@ -207,10 +221,10 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: P
                 key={i}
                 cx={pt.x}
                 cy={pt.y}
-                r={pointIndex === i ? 9 : 7}
+                r={(pointIndex === i ? 9 : 7) * u}
                 fill={pointIndex === i ? '#0ea5e9' : '#fff'}
                 stroke="#0ea5e9"
-                strokeWidth={2}
+                strokeWidth={2 * u}
                 className="cursor-grab"
                 onPointerDown={(e) => {
                   setPointIndex(i)
@@ -220,12 +234,15 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: P
             ))}
             {drawing.length > 0 && (
               <g pointerEvents="none">
-                <polyline points={drawing.map((p) => `${p.x},${p.y}`).join(' ')} fill="none" stroke="#0ea5e9" strokeWidth={3} strokeDasharray="6 4" />
-                {drawing.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={5} fill="#0ea5e9" />)}
+                <polyline points={drawing.map((p) => `${p.x},${p.y}`).join(' ')} fill="none" stroke="#0ea5e9" strokeWidth={3 * u} strokeDasharray={`${6 * u} ${4 * u}`} />
+                {drawing.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={5 * u} fill="#0ea5e9" />)}
               </g>
             )}
           </svg>
-        </div>
+          </>
+          )
+          }}
+        </ZoomBox>
 
         {/* On wide screens the panel is sized by the photo, so switching panels never changes the page height. */}
         <div className="relative lg:min-h-80">
@@ -239,12 +256,17 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: P
                 options={[['', '— none —'], ...climbs.map((c) => [c.id, `${c.number} ${c.name}`.trim() || c.id] as const)]}
                 onChange={(linkedTo) => onChange((t) => ops.updatePath(t, selectedPath.id, { linkedTo }))}
               />
+              {linked ? (
+                <ClimbQuickFields climb={linked} onEdit={onEditClimb} />
+              ) : (
+                <Button onClick={() => onAddClimb(selectedPath.id)}>New {noun} for this route</Button>
+              )}
               <SelectField label="Line" value={selectedPath.lineStyle} options={LINE_STYLES} onChange={(lineStyle: LineStyle) => onChange((t) => ops.updatePath(t, selectedPath.id, { lineStyle }))} />
               <SelectField
                 label="End marker"
                 value={selectedPath.points.at(-1)?.kind ?? ''}
                 options={END_MARKERS}
-                onChange={(kind) => onChange((t) => ops.setEndMarker(t, selectedPath.id, kind))}
+                onChange={(marker) => onChange((t) => ops.setEndMarker(t, selectedPath.id, marker))}
               />
               <CheckField label="Arrow head" checked={selectedPath.arrow} onChange={(arrow) => onChange((t) => ops.updatePath(t, selectedPath.id, { arrow }))} />
               <TextField label="Label" value={selectedPath.labelText} onChange={(labelText) => onChange((t) => ops.updatePath(t, selectedPath.id, { labelText }), `label-${selectedPath.id}`)} />
@@ -279,6 +301,12 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: P
             </>
           ) : (
             <>
+              <h4 className="font-semibold">Topo</h4>
+              <CommitNumberField
+                label="Width (px): the most it is shown at; routes scale with it"
+                value={topo.width}
+                onCommit={(width) => onChange((t) => ops.resize({ ...t, width: topo.width, height: topo.height }, width))}
+              />
               <h4 className="font-semibold">Legend</h4>
               <TextField label="Title" value={topo.legendTitle} onChange={(legendTitle) => onChange((t) => ({ ...t, legendTitle }), 'legend-title')} />
               <TextField label="Footer" value={topo.legendFooter} onChange={(legendFooter) => onChange((t) => ({ ...t, legendFooter }), 'legend-footer')} />
@@ -288,7 +316,10 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: P
               </div>
               <SelectField label="Print layout" value={topo.printLayout} options={PRINT_LAYOUTS} onChange={(printLayout) => onChange((t) => ({ ...t, printLayout }))} />
               <CheckField label="Not in print version" checked={topo.noPrint} onChange={(noPrint) => onChange((t) => ({ ...t, noPrint }))} />
-              <p className="text-xs font-medium text-muted">Climbs shown (in tick order)</p>
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-xs font-medium text-muted">Climbs shown (in tick order)</p>
+                <Button onClick={() => onAddClimb()}>Add {noun}</Button>
+              </div>
               <ul className="space-y-0.5">
                 {climbs.map((c) => (
                   <li key={c.id}>
@@ -305,6 +336,21 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange }: P
         </aside>
         </div>
       </div>
+    </div>
+  )
+}
+
+/** The fields a topo's reader sees, editable without leaving the topo. */
+function ClimbQuickFields({ climb, onEdit }: { climb: Climb; onEdit: Props['onEditClimb'] }) {
+  const field = (name: 'number' | 'name' | 'grade' | 'stars', label: string, className = '') => (
+    <TextField label={label} className={className} value={climb[name]} onChange={(v) => onEdit(climb.id, { [name]: v }, `${climb.id}-${name}`)} />
+  )
+  return (
+    <div className="grid grid-cols-[3.5rem_1fr] gap-2">
+      {field('number', 'No.')}
+      {field('name', 'Name')}
+      {field('stars', 'Stars')}
+      {field('grade', 'Grade')}
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import type { Climb, Guide, TextBlock } from '#/guide/model/types'
-import { editorReducer, initEditor, nextId } from './state'
+import type { Climb, Guide, ImageTopo, TextBlock } from '#/guide/model/types'
+import { newTopo } from './newNodes'
+import { climbKind, editorReducer, initEditor, nextId, nextNumber } from './state'
 
 const text = (id: string, t = ''): TextBlock => ({ type: 'text', id, cls: 'text', text: t })
 const climb = (id: string): Climb => ({
@@ -70,5 +71,36 @@ describe('nextId', () => {
   it('is one more than the largest id anywhere in the guide', () => {
     expect(nextId(guide(text('4'), climb('9')))).toBe('10')
     expect(nextId(guide())).toBe('1')
+  })
+})
+
+describe('addClimbToTopo', () => {
+  const topo: ImageTopo = { ...newTopo('t', 'a.jpg', 400, 300), paths: [{ id: 'p', points: [], d: '', linkedTo: '', lineStyle: 'solid', labelText: '', arrow: false }] }
+  const numbered = (id: string, number: string) => ({ ...climb(id), number })
+
+  it('adds after the topo’s last climb, numbered on, in the legend and on the route, as one undo step', () => {
+    let s = initEditor(guide(topo, text('note'), numbered('a', '6.'), text('aside'), { ...text('h'), cls: 'heading2' }, numbered('b', '7.')))
+    s = editorReducer(s, { type: 'addClimbToTopo', topoId: 't', climb: climb('new'), pathId: 'p' })
+    expect(ids(s.present)).toEqual(['t', 'note', 'a', 'new', 'aside', 'h', 'b'])
+    expect((s.present.nodes[3] as Climb).number).toBe('7.')
+    const t = s.present.nodes[0] as ImageTopo
+    expect(t.legend).toEqual(['new'])
+    expect(t.paths[0].linkedTo).toBe('new')
+    expect(s.past).toHaveLength(1)
+  })
+})
+
+describe('nextNumber', () => {
+  it('follows the guide’s style and gives up on odd numbers', () => {
+    expect(nextNumber('6.')).toBe('7.')
+    expect(nextNumber('11')).toBe('12')
+    expect(nextNumber('4a')).toBe('')
+  })
+})
+
+describe('climbKind', () => {
+  it('is problems for a guide of mostly problems', () => {
+    expect(climbKind(guide(climb('a'), { ...climb('b'), type: 'problem' }, { ...climb('c'), type: 'problem' }))).toBe('problem')
+    expect(climbKind(guide(climb('a'), { ...climb('b'), type: 'problem' }))).toBe('climb')
   })
 })

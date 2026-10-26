@@ -69,3 +69,22 @@ export const setEndMarker = (topo: ImageTopo, pathId: string, kind: string): Ima
 /** Sets the kind of one point, e.g. 'label' to say where the route number goes. */
 export const setPointKind = (topo: ImageTopo, pathId: string, index: number, kind: string): ImageTopo =>
   mapPath(topo, pathId, (p) => ({ ...p, points: p.points.map((pt, i) => (i === index ? { ...pt, kind } : pt)) }))
+
+/**
+ * Sets how wide the topo is shown at most. Routes, labels and the legend are drawn in that width's
+ * pixels, so they all scale with it and stay where they were on the photo.
+ */
+export function resize(topo: ImageTopo, width: number): ImageTopo {
+  if (width <= 0 || width === topo.width) return topo
+  const k = width / topo.width
+  const r = (n: number) => Math.round(n * k)
+  return {
+    ...topo,
+    width,
+    height: r(topo.height),
+    legendX: r(topo.legendX),
+    legendY: r(topo.legendY),
+    paths: topo.paths.map((p) => withPoints(p, p.points.map((pt) => ({ ...pt, x: r(pt.x), y: r(pt.y) })))),
+    rects: topo.rects.map((rect) => ({ ...rect, x: r(rect.x), y: r(rect.y), width: r(rect.width), height: r(rect.height) })),
+  }
+}

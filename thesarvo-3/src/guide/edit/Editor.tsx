@@ -14,11 +14,13 @@ import { fingerprint, localStore } from './drafts'
 import type { Draft } from './drafts'
 import { newNode, newTopo, NEW_NODE_LABELS } from './newNodes'
 import { ClimbForm, GpsForm, HeaderForm, TextForm } from './NodeForms'
-import { editorReducer, initEditor, nextId, nodeId } from './state'
+import { climbKind, editorReducer, initEditor, nextId, nodeId } from './state'
 import { TopoEditor } from './TopoEditor'
 import { TopoFigure } from '#/guide/view/TopoFigure'
 
 const SAVE_DELAY_MS = 400
+/** New topos start no wider than this, like the old guides' photos, so phone photos are not shown huge. */
+const NEW_TOPO_WIDTH = 800
 
 /** Loads an image just to learn its size, which topos need up front. */
 const measure = (src: string) =>
@@ -91,6 +93,9 @@ export default function Editor({ guide }: { guide: Guide }) {
     dispatch({ type: 'add', node, afterId })
     setEditingId(nodeId(node))
   }
+  // Stays in the topo editor: the new climb is named from the topo's panel.
+  const addClimbToTopo: AddClimbFn = (topoId, pathId) =>
+    dispatch({ type: 'addClimbToTopo', topoId, pathId, climb: newNode(climbKind(present), nextId(present)) as Climb })
 
   return (
     <div className="px-4 py-6 sm:px-6">
@@ -206,6 +211,7 @@ export default function Editor({ guide }: { guide: Guide }) {
                       guide={present}
                       edit={edit}
                       editWith={editWith}
+                      onAddClimb={addClimbToTopo}
                     />
                   ) : (
                     <NodePreview
@@ -271,6 +277,7 @@ function NodePreview({
 }
 
 type EditFn = (id: string, patch: Partial<GuideNode>, key?: string) => void
+type AddClimbFn = (topoId: string, pathId?: string) => void
 type EditWithFn = (
   id: string,
   update: (n: GuideNode) => GuideNode,
@@ -283,12 +290,14 @@ function NodeEditor({
   guide,
   edit,
   editWith,
+  onAddClimb,
 }: {
   node: GuideNode
   climbs: Climb[]
   guide: Guide
   edit: EditFn
   editWith: EditWithFn
+  onAddClimb: AddClimbFn
 }) {
   if (node.type === 'unknown') return null
   const key = (field: string) => `${node.id}-${field}`
@@ -315,6 +324,9 @@ function NodeEditor({
           onChange={(update, k) =>
             editWith(node.id, (n) => (n.type === 'image' ? update(n) : n), k)
           }
+          kind={climbKind(guide)}
+          onAddClimb={(pathId) => onAddClimb(node.id, pathId)}
+          onEditClimb={(id, patch, k) => edit(id, patch, k)}
         />
       )
   }
@@ -362,12 +374,18 @@ function AddNode({
 }) {
   const [picking, setPicking] = useState(false)
   const [error, setError] = useState('')
+  // The guide's own kind of climb comes first, as the main choice.
+  const kind = climbKind(guide)
+  const labels = NEW_NODE_LABELS.filter(([k]) => k !== kind && k !== 'climb' && k !== 'problem')
+  const other = NEW_NODE_LABELS.find(([k]) => (k === 'climb' || k === 'problem') && k !== kind)!
+  const main = NEW_NODE_LABELS.find(([k]) => k === kind)!
 
   const addImage = async (name: string) => {
     try {
       const { imageUrl } = await import('#/guide/content/paths')
       const size = await measure(imageUrl(guide.id, name))
-      onAdd(newTopo(nextId(guide), name, size.width, size.height))
+      const width = Math.min(size.width, NEW_TOPO_WIDTH)
+      onAdd(newTopo(nextId(guide), name, width, Math.round((size.height * width) / size.width)))
       setPicking(false)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed')
@@ -377,8 +395,8 @@ function AddNode({
   return (
     <div className="flex flex-wrap items-center gap-2 rounded-xl border border-dashed border-line p-3">
       <span className="text-sm font-medium text-muted">Add</span>
-      {NEW_NODE_LABELS.map(([kind, label]) => (
-        <Button key={kind} onClick={() => onAdd(newNode(kind, nextId(guide)))}>
+      {[main, ...labels, other].map(([k, label]) => (
+        <Button key={k} variant={k === kind ? 'primary' : 'plain'} onClick={() => onAdd(newNode(k, nextId(guide)))}>
           {label}
         </Button>
       ))}

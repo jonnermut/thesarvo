@@ -5,6 +5,8 @@ import { findByPath, flatten, guideUrl } from '#/guide/content/paths'
 import type { IndexNode } from '#/guide/content/types'
 import type { GpsPoint } from '#/guide/model/types'
 import { fetchTree } from '#/guide/server'
+import { DownloadIcon } from './GpsBlock'
+import { treeKmlUrl } from './kml'
 import { rollup } from './rollup'
 import { PROBLEM_BANDS, ROUTE_BANDS } from './routeStats'
 
@@ -31,7 +33,8 @@ export function ContentsView({ node }: { node: IndexNode }) {
       live = false
     }
   }, [node.path])
-  const current = fresh ?? node
+  // The last page's fresh tree stays in state until this page's arrives.
+  const current = fresh?.path === node.path ? fresh : node
   const below = useMemo(() => flatten(current).slice(1), [current])
   if (!current.children.length) return null
 
@@ -69,7 +72,7 @@ export function ContentsView({ node }: { node: IndexNode }) {
           </li>
         ))}
       </ul>
-      <CragMap nodes={below} />
+      <CragMap id={current.id} nodes={below} />
     </section>
   )
 }
@@ -160,8 +163,11 @@ function Summary({ stats, gps }: { stats: Pick<GuideStats, 'problems' | 'bands' 
   )
 }
 
-/** One pin per guide that has GPS; clicking a pin opens that guide. Only in the browser. */
-function CragMap({ nodes }: { nodes: IndexNode[] }) {
+/**
+ * One pin per guide that has GPS; clicking a pin opens that guide. Only in the browser. The build
+ * writes every point below as one KML file, as the old site's recursive export did.
+ */
+function CragMap({ id, nodes }: { id: string; nodes: IndexNode[] }) {
   const navigate = useNavigate()
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
@@ -180,8 +186,18 @@ function CragMap({ nodes }: { nodes: IndexNode[] }) {
   return (
     <div className="no-print pt-2">
       <Suspense fallback={<div className="grid h-80 place-items-center rounded-lg bg-black/5 text-muted">Loading map…</div>}>
-        <MapView points={points} lines={[]} onSelect={(path) => void navigate({ to: guideUrl({ path }) })} />
+        {/* Keyed on the pins so another page's map fits its own crags. */}
+        <MapView key={key} points={points} lines={[]} onSelect={(path) => void navigate({ to: guideUrl({ path }) })} />
       </Suspense>
+      <a
+        href={treeKmlUrl(id)}
+        download
+        title="Every GPS point below this page, for Google Earth and other GPS apps"
+        className="mt-1 inline-flex items-center gap-1 text-[13px] text-muted hover:text-link"
+      >
+        <DownloadIcon />
+        KML of all GPS points
+      </a>
     </div>
   )
 }

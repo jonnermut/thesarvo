@@ -15,6 +15,8 @@ type Props = {
   active: string | null
   onActive: (climbId: string | null) => void
   onOpen?: (climbId: string) => void
+  /** Leave the legend off the page (the full-screen viewer keeps it): the climbs below say the same. */
+  redundantLegend?: boolean
 }
 
 /** Print options from the legacy editor. */
@@ -80,7 +82,7 @@ function ClimbPopup({ climb, open, onClose }: { climb: Climb; open: boolean; onC
  * Photo topo plus its legend. On wide photos the legend sits on the image like the live guide;
  * on narrow ones its text would be unreadably small, so it drops below the photo instead.
  */
-export function TopoFigure({ topo: stored, ...rest }: Props) {
+export function TopoFigure({ topo: stored, redundantLegend, ...rest }: Props) {
   const topo = useSizedTopo(rest.guideId, stored)
   const props = { ...rest, topo }
   const { climbs, active, onActive } = props
@@ -123,7 +125,7 @@ export function TopoFigure({ topo: stored, ...rest }: Props) {
       style={{ maxWidth: topo.width }}
       className={`@container group relative my-3 print:break-inside-avoid ${printClasses(topo)}`}
     >
-      <TopoCanvas {...props} onOpen={setPopup} legend={legend} rows={rows} />
+      <TopoCanvas {...props} onOpen={setPopup} legend={redundantLegend ? [] : legend} rows={rows} />
       <button
         type="button"
         onClick={() => setOpen(true)}
@@ -134,7 +136,7 @@ export function TopoFigure({ topo: stored, ...rest }: Props) {
           <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
         </svg>
       </button>
-      {legend.length > 0 && (
+      {legend.length > 0 && !redundantLegend && (
         <figcaption className="@lg:hidden mt-2 border border-line p-2 text-[13px]">
           {topo.legendTitle && <p className="mb-1 font-bold">{topo.legendTitle}</p>}
           <ol>{rows(false)}</ol>

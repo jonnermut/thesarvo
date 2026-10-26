@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ImageTopo } from '#/guide/model/types'
-import { addPath, insertPointAfter, movePoint, removePoint, setPointKind, toggleLegend } from './topoOps'
+import { addPath, addRect, insertPointAfter, movePoint, removePoint, resize, setPointKind, toggleLegend } from './topoOps'
 
 const empty: ImageTopo = {
   type: 'image', id: '1', src: 'a.jpg', width: 100, height: 100, noPrint: false, printLayout: '',
@@ -41,5 +41,17 @@ describe('topo ops', () => {
   it('marks one point as the label position', () => {
     const marked = setPointKind(topo, 'p1', 1, 'label')
     expect(marked.paths[0].points.map((p) => p.kind)).toEqual(['', 'label', ''])
+  })
+})
+
+describe('resize', () => {
+  it('scales the photo and everything drawn on it together', () => {
+    let t = addPath({ ...empty, width: 400, height: 301 }, 'p', [{ x: 100, y: 50, kind: '' }, { x: 200, y: 150, kind: 'label' }])
+    t = addRect({ ...t, legendX: 40, legendY: 20 }, 'r', { x: 10, y: 10 })
+    const half = resize(t, t.width / 2)
+    expect([half.width, half.height]).toEqual([t.width / 2, Math.round(t.height / 2)])
+    expect(half.paths[0].points).toEqual([{ x: 50, y: 25, kind: '' }, { x: 100, y: 75, kind: 'label' }])
+    expect(half.paths[0].d).not.toBe(t.paths[0].d)
+    expect([half.rects[0].x, half.rects[0].width, half.legendX, half.legendY]).toEqual([5, 40, 20, 10])
   })
 })
