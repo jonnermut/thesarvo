@@ -21,11 +21,12 @@ describe('topoSection', () => {
 
 describe('legendRedundant', () => {
   const below = [climb('a'), climb('b'), climb('c')]
-  it('hides a legend the old site never drew when its climbs follow the photo', () => {
+  it('hides a legend when its climbs follow the photo, whether or not the old site drew it', () => {
     expect(legendRedundant(topo('t', ['b', 'a']), below)).toBe(true)
+    expect(legendRedundant(topo('t', ['a', 'b'], { legend: 'true' }), below)).toBe(true)
   })
-  it('keeps a legend the author turned on', () => {
-    expect(legendRedundant(topo('t', ['a', 'b'], { legend: 'true' }), below)).toBe(false)
+  it('keeps a legend with a title or footer', () => {
+    expect(legendRedundant({ ...topo('t', ['a', 'b']), legendTitle: 'Left wall' }, below)).toBe(false)
   })
   it('keeps a legend naming climbs listed elsewhere', () => {
     expect(legendRedundant(topo('t', ['a', 'z']), below)).toBe(false)

@@ -15,7 +15,10 @@ type Props = {
   active: string | null
   onActive: (climbId: string | null) => void
   onOpen?: (climbId: string) => void
-  /** Leave the legend off the page (the full-screen viewer keeps it): the climbs below say the same. */
+  /**
+   * The climbs below say the same as the legend: no box of it under the photo, and none on the photo
+   * unless the old site drew it there (its `legend` flag). The full-screen viewer keeps it.
+   */
   redundantLegend?: boolean
 }
 
@@ -30,6 +33,20 @@ const printClasses = (topo: ImageTopo) =>
       ? 'print:break-before-page print:break-after-page print:mx-auto print:max-w-[18cm]'
       : ''
 
+/**
+ * Container widths at which a legend moves onto the photo, as [on photo, below photo] classes. Its
+ * text is 10px at the photo's own size, so it is readable down to 80% of that; small photos never
+ * get much smaller, so their legend stays on them. Literal classes, for Tailwind to find.
+ */
+const BREAKS = [
+  [512, '@lg:block', '@lg:hidden'],
+  [448, '@md:block', '@md:hidden'],
+  [384, '@sm:block', '@sm:hidden'],
+  [320, '@xs:block', '@xs:hidden'],
+  [256, '@3xs:block', '@3xs:hidden'],
+] as const
+export const legendBreak = (width: number) => BREAKS.find(([at]) => at <= width * 0.8) ?? [0, 'block!', 'hidden']
+
 /** The photo with route lines, plus the legend laid over it when the photo is wide enough to read it. */
 function TopoCanvas({ legend, rows, ...props }: Props & { legend: Climb[]; rows: (compact: boolean) => React.ReactNode; displayWidth?: number }) {
   const { topo } = props
@@ -38,7 +55,7 @@ function TopoCanvas({ legend, rows, ...props }: Props & { legend: Climb[]; rows:
       <Topo {...props} />
       {legend.length > 0 && (
         <div
-          className="absolute hidden rounded-lg bg-black/40 py-[0.3em] text-white @lg:block"
+          className={`absolute hidden rounded-lg bg-black/40 py-[0.3em] text-white ${legendBreak(topo.width)[1]}`}
           style={{
             left: `${(topo.legendX / topo.width) * 100}%`,
             top: `${(topo.legendY / topo.height) * 100}%`,
@@ -125,7 +142,7 @@ export function TopoFigure({ topo: stored, redundantLegend, ...rest }: Props) {
       style={{ maxWidth: topo.width }}
       className={`@container group relative my-3 print:break-inside-avoid ${printClasses(topo)}`}
     >
-      <TopoCanvas {...props} onOpen={setPopup} legend={redundantLegend ? [] : legend} rows={rows} />
+      <TopoCanvas {...props} onOpen={setPopup} legend={redundantLegend && topo.other?.legend !== 'true' ? [] : legend} rows={rows} />
       <button
         type="button"
         onClick={() => setOpen(true)}
@@ -137,7 +154,7 @@ export function TopoFigure({ topo: stored, redundantLegend, ...rest }: Props) {
         </svg>
       </button>
       {legend.length > 0 && !redundantLegend && (
-        <figcaption className="@lg:hidden mt-2 border border-line p-2 text-[13px]">
+        <figcaption className={`${legendBreak(topo.width)[2]} mt-2 border border-line p-2 text-[13px]`}>
           {topo.legendTitle && <p className="mb-1 font-bold">{topo.legendTitle}</p>}
           <ol>{rows(false)}</ol>
         </figcaption>

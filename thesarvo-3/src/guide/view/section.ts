@@ -24,12 +24,12 @@ export function topoSection(nodes: GuideNode[], at: number): { climbs: Climb[]; 
 }
 
 /**
- * A legend not worth showing: the old site drew a topo's legend only when its `legend` flag was set,
- * and without one the climbs the guide lists straight after the photo already say the same.
+ * A legend not worth showing: the climbs the guide lists straight after the photo already say the
+ * same. The old site's `legend` flag is no guide, as most flagged legends repeat the climbs below.
  */
 export function legendRedundant(topo: ImageTopo, section: Climb[]): boolean {
   const { legend } = topo
-  if (!legend.length || topo.other?.legend === 'true' || topo.legendTitle || topo.legendFooter) return false
+  if (!legend.length || topo.legendTitle || topo.legendFooter) return false
   const first = new Set(section.slice(0, legend.length).map((c) => c.id))
   return legend.every((id) => first.has(id))
 }
