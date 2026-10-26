@@ -24,9 +24,10 @@ export function ClimbBlock({ climb, highlighted, anchor }: { climb: Climb; highl
     >
       <div className={ROW}>
         <span className="w-7 text-right font-bold tabular-nums text-[#0000a0] sm:w-auto">
-          {anchor ? (
+          {/* An unnumbered climb shows nothing here: a stand-in "#" read as a number. */}
+          {anchor && climb.number ? (
             <a href={`#${anchor}`} onClick={copy} title="Link to this climb" className="hover:underline">
-              {climb.number || '#'}
+              {climb.number}
             </a>
           ) : (
             climb.number
