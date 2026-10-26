@@ -1,0 +1,60 @@
+thesarvo-3/src/components/overlay.ts
+  s_e20d0a1ebc47aa::t_43ce347e81c6cc 1-59
+thesarvo-3/src/guide/view/GuideView.tsx
+  s_e20d0a1ebc47aa::t_c1810f5813e177 12,16,18,57-58
+thesarvo-3/src/routes/g.$.tsx
+  s_e20d0a1ebc47aa::t_c1810f5813e177 9,36-37,54
+thesarvo-3/src/guide/islands/MapView.tsx
+  s_e20d0a1ebc47aa::t_86f13c80a72e26 287-288,291-293
+  s_e20d0a1ebc47aa::t_3b943d37bc0e74 25-26
+  s_e20d0a1ebc47aa::t_590ebfed71adc7 4,7-16,22-24,27,32-46,104-105,123,127-150,173-188,289-290
+  s_e20d0a1ebc47aa::t_4cc03200eb78ff 189
+thesarvo-3/src/components/SearchBox.tsx
+  s_e20d0a1ebc47aa::t_41229de206566a 79,109,112,139
+  s_e20d0a1ebc47aa::t_b8564afefdd049 8,74-77,98-102
+  s_e20d0a1ebc47aa::t_c9d1bdea19d6fb 133,149
+thesarvo-3/src/guide/view/zoom.ts
+  s_e20d0a1ebc47aa::t_702a945eec0b0f 1-35
+thesarvo-3/src/guide/view/width.tsx
+  s_e20d0a1ebc47aa::t_c1810f5813e177 2,24-26,33,41,43-45,48
+thesarvo-3/src/guide/view/TopoFigure.tsx
+  s_e20d0a1ebc47aa::t_dbdb96d70d9f2d 1,3,8,32,56-58,60-69,89-90,92-95,141-144
+thesarvo-3/src/components/AppShell.tsx
+  s_e20d0a1ebc47aa::t_2126932c1b53e9 69-71,74
+  s_e20d0a1ebc47aa::t_3aec6e36fb00d2 107-114,116-118
+  s_e20d0a1ebc47aa::t_d5fcafe5cd1010 52
+  s_e20d0a1ebc47aa::t_a8acd176ab5756 2,4
+thesarvo-3/src/guide/view/TopoViewer.tsx
+  s_e20d0a1ebc47aa::t_dfa106f80cc975 1-178,180-216
+  s_e20d0a1ebc47aa::t_53b6899033ecbf 179
+thesarvo-3/src/guide/view/zoom.test.ts
+  s_e20d0a1ebc47aa::t_b878ffd1c4f5d8 1-30
+thesarvo-3/src/guide/view/Topo.tsx
+  s_e20d0a1ebc47aa::t_67a028a79e9019 20-21,151-154,156,159-160,165-166,176
+thesarvo-3/src/styles.css
+  s_e20d0a1ebc47aa::t_eb6f63398b799b 34-56
+  s_e20d0a1ebc47aa::t_590ebfed71adc7 152-158
+thesarvo-3/src/guide/view/HeaderBlock.tsx
+  s_e20d0a1ebc47aa::t_92cf78b06f2b9f 39,41
+  s_e20d0a1ebc47aa::t_c2e153d6423a1d 40
+thesarvo-3/src/guide/view/GpsBlock.tsx
+  s_e20d0a1ebc47aa::t_4995b3454b7a0d 2,12-16,24-30,35-37,55-58,64-70,72-86,90-107,109-149
+thesarvo-3/src/guide/view/GuideContents.tsx
+  s_e20d0a1ebc47aa::t_41898c3fe006f1 1-2,109-112,144,146-156,158
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d0e0c9148631b9daab28f8ca0373dcf20b391ae8",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
