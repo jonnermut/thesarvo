@@ -10,8 +10,8 @@ const mapPath = (topo: ImageTopo, id: string, fn: (p: RoutePath) => RoutePath): 
   paths: topo.paths.map((p) => (p.id === id ? fn(p) : p)),
 })
 
-export function addPath(topo: ImageTopo, id: string, points: Point[], linkedTo = ''): ImageTopo {
-  const path: RoutePath = { id, points, d: pathData(points), linkedTo, lineStyle: 'solid', labelText: '', arrow: false }
+export function addPath(topo: ImageTopo, id: string, points: Point[], linkedTo = '', arrow = false): ImageTopo {
+  const path: RoutePath = { id, points, d: pathData(points), linkedTo, lineStyle: 'solid', labelText: '', arrow }
   return { ...topo, paths: [...topo.paths, path] }
 }
 
@@ -88,3 +88,7 @@ export function resize(topo: ImageTopo, width: number): ImageTopo {
     rects: topo.rects.map((rect) => ({ ...rect, x: r(rect.x), y: r(rect.y), width: r(rect.width), height: r(rect.height) })),
   }
 }
+
+/** A new route matches the topo's other routes; on a topo with none yet, boulder problems get arrow heads. */
+export const newRouteArrow = (topo: ImageTopo, kind: 'climb' | 'problem') =>
+  topo.paths.length ? topo.paths.filter((p) => p.arrow).length * 2 > topo.paths.length : kind === 'problem'

@@ -15,7 +15,7 @@ const typing = (t: EventTarget | null) => t instanceof HTMLElement && (['INPUT',
 
 /**
  * The topo editor's photo, zoomable and pannable without getting in the way of drawing. Never wider
- * than the topo's own width or taller than most of the screen. Pinch, ⌘/Ctrl + scroll or the buttons
+ * than the topo's own width or taller than most of the screen; zoomed in, it widens to the free space. Pinch, ⌘/Ctrl + scroll or the buttons
  * zoom; once zoomed in, scrolling pans. Two fingers, Space + drag or the middle button pan in any
  * tool, and with `panOnDrag` (the select tool) so does dragging the background. A press that moved
  * swallows its click, so panning never adds a point. `children` draws at the topo's own pixel size
@@ -29,6 +29,8 @@ export function ZoomBox({ width, height, panOnDrag, className = '', children }: 
   const size = useRef<Size>({ w: 1, h: 1 })
   const [scale, setScale] = useState(1)
   const [zoomed, setZoomed] = useState(false)
+  /** The box's height at fit. Zoomed in, the box keeps it and widens into the free space beside, so the zoom holds. */
+  const [fitHeight, setFitHeight] = useState(0)
 
   const apply = useCallback(
     (next: View, animate = false) => {
@@ -38,7 +40,9 @@ export function ZoomBox({ width, height, panOnDrag, className = '', children }: 
       el.style.transition = animate ? `transform ${MOTION_MS}ms ease-out` : 'none'
       el.style.transform = `translate(${next.x}px, ${next.y}px) scale(${next.s})`
       setScale(next.s)
-      setZoomed(next.s > scaleRange(size.current, image)[0] * 1.001)
+      const isZoomed = next.s > scaleRange(size.current, image)[0] * 1.001
+      setZoomed(isZoomed)
+      if (!isZoomed) setFitHeight(size.current.h)
     },
     [image],
   )
@@ -53,7 +57,10 @@ export function ZoomBox({ width, height, panOnDrag, className = '', children }: 
       size.current = { w: el.clientWidth, h: el.clientHeight }
       const atFit = first || view.current.s <= scaleRange(before, image)[0] * 1.001
       first = false
-      apply(atFit ? fitView(size.current, image) : clampView(view.current, size.current, image))
+      const { s, x, y } = view.current
+      // Zoomed in, what was in the middle of the box stays there as it grows or shrinks.
+      const kept = { s, x: x + (size.current.w - before.w) / 2, y: y + (size.current.h - before.h) / 2 }
+      apply(atFit ? fitView(size.current, image) : clampView(kept, size.current, image))
     }
     measure()
     const observer = new ResizeObserver(measure)
@@ -158,7 +165,7 @@ export function ZoomBox({ width, height, panOnDrag, className = '', children }: 
     <div
       className={`relative overflow-hidden ${className}`}
       // The topo's own width at most, and short enough to see whole beside the page.
-      style={{ aspectRatio: `${width} / ${height}`, maxWidth: `min(${width}px, ${(75 * width) / height}vh)` }}
+      style={zoomed && fitHeight ? { height: fitHeight } : { aspectRatio: `${width} / ${height}`, maxWidth: `min(${width}px, ${(75 * width) / height}vh)` }}
       onPointerEnter={() => (hovered.current = true)}
       onPointerLeave={() => (hovered.current = false)}
     >

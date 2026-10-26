@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ImageTopo } from '#/guide/model/types'
-import { addPath, addRect, insertPointAfter, movePoint, removePoint, resize, setPointKind, toggleLegend } from './topoOps'
+import { addPath, addRect, newRouteArrow, insertPointAfter, movePoint, removePoint, resize, setPointKind, toggleLegend } from './topoOps'
 
 const empty: ImageTopo = {
   type: 'image', id: '1', src: 'a.jpg', width: 100, height: 100, noPrint: false, printLayout: '',
@@ -53,5 +53,17 @@ describe('resize', () => {
     expect(half.paths[0].points).toEqual([{ x: 50, y: 25, kind: '' }, { x: 100, y: 75, kind: 'label' }])
     expect(half.paths[0].d).not.toBe(t.paths[0].d)
     expect([half.rects[0].x, half.rects[0].width, half.legendX, half.legendY]).toEqual([5, 40, 20, 10])
+  })
+})
+
+describe('newRouteArrow', () => {
+  const withArrows = (...arrows: boolean[]) => ({ ...empty, paths: arrows.map((arrow, i) => ({ id: `${i}`, points: [], d: '', linkedTo: '', lineStyle: 'solid' as const, labelText: '', arrow })) })
+  it('gives arrow heads to the first route on a bouldering topo only', () => {
+    expect(newRouteArrow(empty, 'problem')).toBe(true)
+    expect(newRouteArrow(empty, 'climb')).toBe(false)
+  })
+  it('follows most of the topo’s routes once it has some', () => {
+    expect(newRouteArrow(withArrows(false, false, true), 'problem')).toBe(false)
+    expect(newRouteArrow(withArrows(true, true, false), 'climb')).toBe(true)
   })
 })

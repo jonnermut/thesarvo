@@ -60,10 +60,20 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
     return { x: Math.round(p.x), y: Math.round(p.y) }
   }
 
+  // Drawing something new lets go of the selection, so the panel never shows one route while you draw another.
+  const startTool = (next: Tool) => {
+    setTool(next)
+    setDrawing([])
+    if (next !== 'select') {
+      setSelection(null)
+      setPointIndex(null)
+    }
+  }
+
   const finishRoute = () => {
     if (drawing.length >= 2) {
       const id = newId()
-      onChange((t) => ops.addPath(t, id, drawing))
+      onChange((t) => ops.addPath(t, id, drawing, '', ops.newRouteArrow(t, kind)))
       setSelection({ kind: 'path', id })
     }
     setDrawing([])
@@ -138,7 +148,7 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
       <div className="flex flex-wrap items-center gap-2">
         {/* While a drawing mode is active the other tools hide, leaving only the way out. */}
         {TOOLS.filter(([id]) => tool === 'select' || id === 'select').map(([id, label]) => (
-          <Button key={id} variant={tool === id ? 'primary' : 'plain'} onClick={() => { setTool(id); setDrawing([]) }}>
+          <Button key={id} variant={tool === id ? 'primary' : 'plain'} onClick={() => startTool(id)}>
             {tool === 'select' ? label : 'Done'}
           </Button>
         ))}
