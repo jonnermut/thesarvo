@@ -1,0 +1,73 @@
+thesarvo-3/src/guide/edit/TopoEditor.tsx
+  s_e20d0a1ebc47aa::t_42228a8ab29cdc 7,9,21-25,39,51-52,119-120,122,128,162-168,172-173,205,207-210,224,227,237-238,242-245,259-263,304-309,319-322,342-353,355
+  s_e20d0a1ebc47aa::t_f73c0bd3f51f0e 269
+  s_e20d0a1ebc47aa::t_f3697378128b2f 354
+  s_e20d0a1ebc47aa::t_d12f447522eb16 356
+thesarvo-3/src/guide/view/TopoFigure.tsx
+  s_e20d0a1ebc47aa::t_a1c263ed8f1d2f 18-19,85,128,139
+thesarvo-3/src/guide/view/GpsBlock.tsx
+  s_e20d0a1ebc47aa::t_3b02b33713ceb2 30-44,47,59-60,64-65,68,70-85,91-93,98-132,134-137
+  s_e20d0a1ebc47aa::t_9701d3fea83831 24-29,67
+thesarvo-3/src/guide/edit/state.test.ts
+  s_e20d0a1ebc47aa::t_e1763054a5ad40 2-4,76-106
+thesarvo-3/src/guide/edit/topoOps.ts
+  s_e20d0a1ebc47aa::t_965b8d1c765544 72-90
+thesarvo-3/scripts/build-site.ts
+  s_e20d0a1ebc47aa::t_6a5d0706dfdfe5 90
+  s_e20d0a1ebc47aa::t_00efada05680ac 25,77,87-89
+  s_e20d0a1ebc47aa::t_eba06d8a758127 91-92
+thesarvo-3/src/routes/g.$.tsx
+  s_e20d0a1ebc47aa::t_f1d0de39b4ff2f 54-55
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_944fceac5fed75 20-52
+thesarvo-3/src/guide/view/ContentsView.tsx
+  s_e20d0a1ebc47aa::t_9701d3fea83831 8,198
+  s_e20d0a1ebc47aa::t_c48838937e7880 9,36-37,75,166-170,189-190,192-197,199-200
+thesarvo-3/src/guide/view/GpsBlock.test.tsx
+  s_e20d0a1ebc47aa::t_e70f2eaf79c062 9
+  s_e20d0a1ebc47aa::t_3119061ae09a38 1-8,10-18
+thesarvo-3/src/guide/edit/fields.tsx
+  s_e20d0a1ebc47aa::t_26d1ecf3f07a19 36-49
+thesarvo-3/src/guide/view/kml.ts
+  s_e20d0a1ebc47aa::t_d5866dcb4ad0d5 1,14-15,31,34-56
+  s_e20d0a1ebc47aa::t_abf933a3a2f975 57
+thesarvo-3/src/guide/edit/Editor.tsx
+  s_e20d0a1ebc47aa::t_2b8d8993ef9651 22-23,387-388
+  s_e20d0a1ebc47aa::t_f9657b4f7f8950 17,96-98,214,280,293,300,327-329,377-381,398-399
+thesarvo-3/src/guide/view/section.test.ts
+  s_e20d0a1ebc47aa::t_58c34fc7e31267 1-34
+thesarvo-3/src/guide/view/GuideView.tsx
+  s_e20d0a1ebc47aa::t_a1c263ed8f1d2f 11,29-32,53
+thesarvo-3/src/guide/edit/ZoomBox.tsx
+  s_e20d0a1ebc47aa::t_2417dc99f915ea 1-205
+thesarvo-3/src/guide/edit/state.ts
+  s_e20d0a1ebc47aa::t_dfa813568b697a 1-2,16-17,71-84,127-138
+thesarvo-3/src/guide/islands/MapView.tsx
+  s_e20d0a1ebc47aa::t_942b54af25cd74 273-274
+thesarvo-3/src/guide/view/kml.test.ts
+  s_e20d0a1ebc47aa::t_099bfdc87d28fd 2-4,28-43
+  s_e20d0a1ebc47aa::t_8b7867fc347570 44
+thesarvo-3/src/guide/edit/topoOps.test.ts
+  s_e20d0a1ebc47aa::t_4a51f7d5bec88e 3,46-48,50-55
+  s_e20d0a1ebc47aa::t_b7fc2f1e10a86a 49
+  s_e20d0a1ebc47aa::t_1bcbbb6a592bb1 56-57
+thesarvo-3/src/guide/view/section.ts
+  s_e20d0a1ebc47aa::t_f892bab6df0c15 1-26,29-31,33-35
+  s_e20d0a1ebc47aa::t_58c34fc7e31267 27-28,32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "90abdd3e256b44ae3cacb3029d481eb555527812",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
