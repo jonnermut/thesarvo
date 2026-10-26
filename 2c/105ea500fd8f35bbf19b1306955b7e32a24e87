@@ -1,0 +1,71 @@
+thesarvo-3/src/guide/view/GuideView.test.tsx
+  s_e20d0a1ebc47aa::t_5f7c3197abebe8 29-30,32,37
+  s_e20d0a1ebc47aa::t_36bd4102af5d57 2
+  s_e20d0a1ebc47aa::t_b416bd5fbab827 31,33-36
+thesarvo-3/src/guide/edit/TopoEditor.tsx
+  s_e20d0a1ebc47aa::t_0472935b6c0c24 2,38-51,62-64,119,121,125-134,163-168,196,205-207,209-218,224
+thesarvo-3/src/guide/edit/topoOps.test.ts
+  s_e20d0a1ebc47aa::t_88c9e23bf17e9e 3,70-93
+  s_e20d0a1ebc47aa::t_7bfc06707229d3 94
+thesarvo-3/src/guide/view/HeaderBlock.tsx
+  s_e20d0a1ebc47aa::t_9f17959c26a61c 44
+  s_e20d0a1ebc47aa::t_96dd50c55d64c7 19
+thesarvo-3/src/routes/g.index.tsx
+  s_e20d0a1ebc47aa::t_08e4bb8c32d3da 3,9-14
+thesarvo-3/src/guide/seo.ts
+  s_e20d0a1ebc47aa::t_a9c43ec034041e 2-16,19-32,34-47,50-64
+  s_e20d0a1ebc47aa::t_08e4bb8c32d3da 33
+  s_e20d0a1ebc47aa::t_5eccf0ff6901e9 1,48-49
+  s_e20d0a1ebc47aa::t_24a3a5952eccf5 17-18
+thesarvo-3/src/guide/edit/newNodes.ts
+  s_e20d0a1ebc47aa::t_96dd50c55d64c7 21
+thesarvo-3/src/guide/edit/topoOps.ts
+  s_e20d0a1ebc47aa::t_88c9e23bf17e9e 109-111
+  s_e20d0a1ebc47aa::t_b18831b8f83b38 95-108,112-133
+thesarvo-3/scripts/check-bundle.ts
+  s_e20d0a1ebc47aa::t_1571d03933cecd 1-4,6-8,11-33
+  s_e20d0a1ebc47aa::t_ee0cf4a98e50c5 5,9-10
+thesarvo-3/src/guide/edit/NodeForms.tsx
+  s_e20d0a1ebc47aa::t_96dd50c55d64c7 22
+thesarvo-3/src/guide/convert/xml.test.ts
+  s_e20d0a1ebc47aa::t_5f7c3197abebe8 88-96
+thesarvo-3/scripts/build-logo.ts
+  s_e20d0a1ebc47aa::t_5eccf0ff6901e9 3,18-21,23
+.github/workflows/thesarvo-3.yml
+  s_e20d0a1ebc47aa::t_4774996df5a889 1-34
+thesarvo-3/eslint.config.js
+  s_e20d0a1ebc47aa::t_d2bd9c62a3a3cd 21-32
+  s_e20d0a1ebc47aa::t_ddb1bd20783ba6 33
+thesarvo-3/src/guide/seo.test.ts
+  s_e20d0a1ebc47aa::t_13fc7c76e5ca18 1-50
+thesarvo-3/package.json
+  s_e20d0a1ebc47aa::t_1571d03933cecd 20-21
+thesarvo-3/src/guide/convert/xml.ts
+  s_e20d0a1ebc47aa::t_96dd50c55d64c7 50
+thesarvo-3/src/routes/g.$.tsx
+  s_e20d0a1ebc47aa::t_08e4bb8c32d3da 7,26-35
+thesarvo-3/src/routes/__root.tsx
+  s_e20d0a1ebc47aa::t_08e4bb8c32d3da 12
+thesarvo-3/vite.config.ts
+  s_e20d0a1ebc47aa::t_ddb1bd20783ba6 3-4,60
+thesarvo-3/src/guide/model/types.ts
+  s_e20d0a1ebc47aa::t_96dd50c55d64c7 32-33
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_d08e8918a90041 13-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2c105ea500fd8f35bbf19b1306955b7e32a24e87",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
