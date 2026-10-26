@@ -1,0 +1,21 @@
+thesarvo-3/src/guide/islands/MapView.test.tsx
+  s_e20d0a1ebc47aa::t_4048e68109e199 2-7,24-25
+  s_e20d0a1ebc47aa::t_72193b8aebe449 1,9-14
+  s_e20d0a1ebc47aa::t_e83782548d5d3e 8,15-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e7096dde8e6b91a3c20453b832eb8028251326de",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
