@@ -1,0 +1,21 @@
+thesarvo-3/src/guide/view/TopoFigure.tsx
+  s_e20d0a1ebc47aa::t_a01ea721b9269b 97
+  s_e20d0a1ebc47aa::t_8ef1c7b0d2c38a 109-110,112
+  s_e20d0a1ebc47aa::t_985ca7bfac1840 98
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "36300f202af0f204c88af9acd89a2b0dc373f6ed",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
