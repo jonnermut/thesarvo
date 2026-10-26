@@ -6,6 +6,7 @@ import { ContentsView } from '#/guide/view/ContentsView'
 import { addRecent } from '#/guide/recent'
 import { GuideView } from '#/guide/view/GuideView'
 import { PrevNext } from '#/guide/view/PrevNext'
+import { useFullWidth, WidthToggle } from '#/guide/view/width'
 
 // The editor is its own chunk: readers never download it.
 const Editor = lazy(() => import('#/guide/edit/Editor'))
@@ -32,6 +33,7 @@ function GuidePage() {
   const { node, trail, guide, body } = Route.useLoaderData()
   const { edit } = Route.useSearch()
   const hash = useLocation({ select: (l) => l.hash })
+  const width = useFullWidth() ? 'max-w-none' : 'max-w-6xl'
   useEffect(() => {
     if (guide) addRecent({ path: node.path, title: node.title })
   }, [guide, node.path, node.title])
@@ -47,11 +49,11 @@ function GuidePage() {
   if (guide)
     return (
       <>
-        <Breadcrumbs trail={trail} current={node} width="max-w-6xl px-4 sm:px-6" />
-        <GuideView guide={guide} hash={hash} />
-        <PrevNext id={node.id} />
+        <Breadcrumbs trail={trail} current={node} width={`${width} px-4 sm:px-6`} end={<WidthToggle />} />
+        <GuideView guide={guide} hash={hash} width={width} />
+        <PrevNext id={node.id} width={width} />
         {node.children.length > 0 && (
-          <div className="mx-auto max-w-6xl px-4 pb-10 sm:px-6">
+          <div className={`mx-auto ${width} px-4 pb-10 sm:px-6`}>
             <div className="max-w-4xl">
               <ContentsView node={node} />
             </div>

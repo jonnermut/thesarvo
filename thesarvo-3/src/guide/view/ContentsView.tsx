@@ -5,6 +5,7 @@ import { findByPath, flatten, guideUrl } from '#/guide/content/paths'
 import type { IndexNode } from '#/guide/content/types'
 import type { GpsPoint } from '#/guide/model/types'
 import { fetchTree } from '#/guide/server'
+import { rollup } from './rollup'
 import { PROBLEM_BANDS, ROUTE_BANDS } from './routeStats'
 
 const MapView = lazy(() => import('#/guide/islands/MapView'))
@@ -63,7 +64,7 @@ export function ContentsView({ node }: { node: IndexNode }) {
       )}
       <ul className="grid gap-3 sm:grid-cols-2">
         {current.children.map((child) => (
-          <li key={child.id}>
+          <li key={child.id} className="min-w-0">
             <Card node={child} />
           </li>
         ))}
@@ -88,6 +89,9 @@ function BandLegend({ labels }: { labels: readonly string[] }) {
 
 function Card({ node }: { node: IndexNode }) {
   const s = node.stats
+  // A region has no climbs of its own: show its guides added up.
+  const sum = useMemo(() => (s ? undefined : rollup(node)), [node, s])
+  const classics = s ? s.classics.map((c) => [node, c] as const) : (sum?.classics ?? [])
   return (
     <div className="h-full border border-line bg-card p-3">
       <div className="flex items-baseline justify-between gap-3">
@@ -96,14 +100,18 @@ function Card({ node }: { node: IndexNode }) {
         </Link>
         {!!node.count && <span className="shrink-0 text-[13px] text-muted tabular-nums">{node.count.toLocaleString()}</span>}
       </div>
-      {s && s.total > 0 && <Summary stats={s} />}
-      {s && s.classics.length > 0 && (
+      {s && s.total > 0 && <Summary stats={s} gps={s.gps ? 'GPS' : undefined} />}
+      {sum && <Summary stats={sum} gps={`GPS for ${sum.withGps} of ${plural(sum.guides, 'guide')}`} />}
+      {classics.length > 0 && (
         <ul className="mt-2 space-y-0.5 text-[13px]">
-          {s.classics.slice(0, 3).map(([anchor, name, grade, stars]) => (
-            <li key={anchor}>
-              <Link to={guideUrl(node)} hash={anchor} className="flex gap-1.5 hover:text-link">
+          {classics.slice(0, 3).map(([guide, [anchor, name, grade, stars]]) => (
+            <li key={`${guide.id}${anchor}`}>
+              <Link to={guideUrl(guide)} hash={anchor} className="flex gap-1.5 hover:text-link">
                 <span className="w-9 shrink-0 text-amber-deep">{'★'.repeat(stars)}</span>
-                <span className="min-w-0 truncate">{name}</span>
+                <span className="min-w-0 truncate">
+                  {name}
+                  {guide !== node && <span className="text-muted"> · {guide.title}</span>}
+                </span>
                 <span className="text-muted">{grade}</span>
               </Link>
             </li>
@@ -127,7 +135,7 @@ function Card({ node }: { node: IndexNode }) {
   )
 }
 
-function Summary({ stats }: { stats: GuideStats }) {
+function Summary({ stats, gps }: { stats: Pick<GuideStats, 'problems' | 'bands' | 'stars' | 'sport' | 'topos'>; gps?: string }) {
   const labels = stats.problems ? PROBLEM_BANDS : ROUTE_BANDS
   const graded = stats.bands.reduce((a, b) => a + b, 0)
   const facts = [
@@ -135,7 +143,7 @@ function Summary({ stats }: { stats: GuideStats }) {
     stats.stars[1] > 0 && `★★ ${stats.stars[1]}`,
     stats.sport > 0 && `${stats.sport} sport`,
     stats.topos > 0 && plural(stats.topos, 'topo'),
-    stats.gps && 'GPS',
+    gps,
   ].filter(Boolean)
   return (
     <div className="mt-2 space-y-1.5">

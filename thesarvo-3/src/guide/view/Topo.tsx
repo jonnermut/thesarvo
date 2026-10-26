@@ -58,7 +58,7 @@ export function Route({ path, climb, active, onActive, onOpen, scale = 1 }: { pa
           stroke="#000"
           strokeOpacity={0.35}
           strokeWidth={1}
-          transform={`translate(${last.x} ${last.y}) rotate(${(Math.atan2(last.y - prev.y, last.x - prev.x) * 180) / Math.PI}) scale(${scale})`}
+          transform={`translate(${last.x} ${last.y}) rotate(${((Math.atan2(last.y - prev.y, last.x - prev.x) * 180) / Math.PI).toFixed(2)}) scale(${scale})`}
         />
       )}
       {last && endMarker && <EndMarker kind={last.kind} x={last.x} y={last.y} scale={scale} />}
@@ -131,7 +131,7 @@ export function Callout({ rect }: { rect: TopoRect }) {
       {arrow && (
         <g stroke={colour} fill={colour}>
           <line x1={arrow.x1} y1={arrow.y1} x2={arrow.x2} y2={arrow.y2} strokeWidth={4} />
-          <polygon points="0,-7 14,0 0,7" stroke="none" transform={`translate(${arrow.x2} ${arrow.y2}) rotate(${arrow.angle})`} />
+          <polygon points="0,-7 14,0 0,7" stroke="none" transform={`translate(${arrow.x2} ${arrow.y2}) rotate(${arrow.angle.toFixed(2)})`} />
         </g>
       )}
       <text x={rect.x + rect.width / 2} textAnchor="middle" fontSize={12} fontFamily="Tahoma, Verdana, sans-serif" fill={style.text}>

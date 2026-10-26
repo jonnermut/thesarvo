@@ -14,7 +14,7 @@ const guidesIn = (node: IndexNode, parent?: IndexNode): Placed[] => [
  * The guides before and after this one in the tree, from the full tree once the page is live. One
  * in another area also names its parent, so "Articles" reads as part of the guide it belongs to.
  */
-export function PrevNext({ id }: { id: string }) {
+export function PrevNext({ id, width = 'max-w-6xl' }: { id: string; width?: string }) {
   const [around, setAround] = useState<[Placed | undefined, Placed | undefined]>()
   useEffect(() => {
     let live = true
@@ -36,7 +36,7 @@ export function PrevNext({ id }: { id: string }) {
   if (!around) return null
   const [prev, next] = around
   return (
-    <nav aria-label="Other guides" className="no-print mx-auto grid max-w-6xl grid-cols-2 gap-3 px-4 pb-8 sm:px-6">
+    <nav aria-label="Other guides" className={`no-print mx-auto grid ${width} grid-cols-2 gap-3 px-4 pb-8 sm:px-6`}>
       <div className="max-w-sm">{prev && <Neighbour {...prev} label="← Previous" />}</div>
       <div className="ml-auto max-w-sm text-right">{next && <Neighbour {...next} label="Next →" />}</div>
     </nav>

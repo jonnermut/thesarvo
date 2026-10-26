@@ -9,10 +9,7 @@ const STORAGE_KEY = 'thesarvo.sidebar'
 function Logo() {
   return (
     <Link to="/g" className="flex items-center gap-2.5 text-white">
-      <svg viewBox="0 0 32 32" className="size-8" aria-hidden>
-        <path d="M2 27 12 8l6 10 3-5 9 14z" fill="#f7941e" />
-        <path d="M12 8l-3 6 3-1 2 3z" fill="#fff" opacity=".85" />
-      </svg>
+      <img src="/favicon.svg" alt="" className="size-8" />
       <span className="text-xl font-semibold tracking-tight">thesarvo</span>
       <span className="hidden text-sm text-white/70 sm:inline">Tasmanian climbing guides</span>
     </Link>
@@ -82,7 +79,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <header className="no-print sticky top-0 z-30 flex h-14 items-center gap-3 bg-forest px-4 shadow-md">
+      <header className="no-print sticky top-0 z-30 flex h-14 items-center gap-3 bg-brand px-4 shadow-md">
         <button
           type="button"
           onClick={toggle}
