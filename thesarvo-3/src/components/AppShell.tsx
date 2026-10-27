@@ -1,5 +1,6 @@
 import { Link, useMatch, useMatches } from '@tanstack/react-router'
 import { useCallback, useEffect, useState } from 'react'
+import { signIn, useUser } from '#/auth/session'
 import type { IndexNode } from '#/guide/content/types'
 import { AccountMenu } from './AccountMenu'
 import { animateLayout, useEscape, useScrollLock } from './overlay'
@@ -21,6 +22,7 @@ function Logo() {
 /** "Edit this Guide" (or back to reading) for the guide on screen; nothing on other pages. */
 function EditLink() {
   const match = useMatch({ from: '/g/$', shouldThrow: false })
+  const user = useUser()
   if (!match?.loaderData?.guide) return null
   const editing = !!match.search.edit
   return (
@@ -28,6 +30,12 @@ function EditLink() {
       to="/g/$"
       params={{ _splat: match.params._splat }}
       search={editing ? {} : { edit: true }}
+      // Editing needs an account: sign in first, then land in the editor.
+      onClick={(e) => {
+        if (editing || user) return
+        e.preventDefault()
+        void signIn(`${location.pathname}?edit=true`)
+      }}
       className="rounded-md border border-white/40 px-3 py-1.5 text-sm font-medium text-white hover:bg-white/10"
     >
       {editing ? (

@@ -1,5 +1,6 @@
 import { ClientOnly, createFileRoute, notFound, useLocation } from '@tanstack/react-router'
 import { lazy, Suspense, useEffect } from 'react'
+import { RequireSignIn } from '#/auth/RequireSignIn'
 import { Breadcrumbs } from '#/components/Breadcrumbs'
 import { fetchGuide, fetchPage, fetchPageBody } from '#/guide/server'
 import { ContentsView } from '#/guide/view/ContentsView'
@@ -49,9 +50,12 @@ function GuidePage() {
   if (guide && edit)
     return (
       <ClientOnly fallback={<p className="p-8 text-muted">Loading editor…</p>}>
-        <Suspense fallback={<p className="p-8 text-muted">Loading editor…</p>}>
-          <Editor guide={guide} />
-        </Suspense>
+        {/* Outside the lazy editor, so signed-out visitors never download it. */}
+        <RequireSignIn what="edit this guide">
+          <Suspense fallback={<p className="p-8 text-muted">Loading editor…</p>}>
+            <Editor guide={guide} />
+          </Suspense>
+        </RequireSignIn>
       </ClientOnly>
     )
   // Breadcrumbs line up with the page body beneath them. A guide with pages below it lists them after the guide.
