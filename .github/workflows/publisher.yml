@@ -1,0 +1,37 @@
+# Builds the publisher package (thesarvo-3/scripts/package-publisher.sh) and attaches it to the rolling "publisher" release, which
+# the content repo's Publish Action downloads instead of checking out and building the app (plan-backend B3).
+name: publisher
+
+on:
+  push:
+    branches: [master, thesarvo-3/plan-backend]
+    paths: ['thesarvo-3/**', '.github/workflows/publisher.yml']
+  workflow_dispatch:
+
+concurrency:
+  group: publisher
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: thesarvo-3/package-lock.json
+      - run: npm ci --no-audit --no-fund
+        working-directory: thesarvo-3
+      - run: scripts/package-publisher.sh
+        working-directory: thesarvo-3
+      - name: Attach to the publisher release
+        run: |
+          gh release view publisher > /dev/null 2>&1 || gh release create publisher --title publisher --notes "The latest app build for the publish Action. Replaced on every push; not a version." --prerelease
+          gh release upload publisher thesarvo-3/dist/publisher.tgz --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}

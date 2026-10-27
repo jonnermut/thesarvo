@@ -11,6 +11,7 @@ npm test            # vitest
 npm run typecheck   # tsc 7
 npm run lint        # eslint (needs TS 6, installed as `typescript`)
 npm run build       # production build
+npm run package-publisher  # dist/publisher.tgz: the app prebuilt for the publish Action (CI does this on push)
 ```
 
 Static HTML for chosen pages: `PRERENDER_PATHS="/g,/g/south-east/lowdina" npm run build`.

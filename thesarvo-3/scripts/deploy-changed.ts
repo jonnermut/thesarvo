@@ -1,8 +1,8 @@
 /**
- * Uploads what differs between dist/client and the bucket (compared by MD5 against the objects' ETags), in parallel,
+ * Uploads what differs between dist/site and the bucket (compared by MD5 against the objects' ETags), in parallel,
  * and removes what a full build no longer has. Called by scripts/deploy-site.sh.
  *
- *   tsx scripts/deploy-changed.ts [--dry-run]
+ *   tsx scripts/deploy-changed.ts [--dist dist/site] [--dry-run]
  *
  * Credentials: AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY (the publish Action), else the AWS_PROFILE's through the CLI.
  */
@@ -14,7 +14,7 @@ import type { LocalFile, RemoteFile } from '../src/aws/deploy'
 import { credentialsFromEnv, deleteObject, listObjects, putObject } from '../src/aws/s3'
 import type { Credentials } from '../src/aws/s3'
 
-const dist = 'dist/client'
+const dist = process.argv.includes('--dist') ? process.argv[process.argv.indexOf('--dist') + 1] : 'dist/site'
 const bucket = { name: process.env.BUCKET ?? 'thesarvo-content', region: process.env.AWS_DEFAULT_REGION ?? 'ap-southeast-2' }
 const dry = process.argv.includes('--dry-run')
 /** The site's own prefixes: nothing else in the bucket (images/, uploads/, confluence/) is ever touched. */

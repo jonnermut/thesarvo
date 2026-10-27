@@ -1,19 +1,23 @@
 /**
- * Builds the static site (rendered pages, JS and CSS) from a checkout of the content repo into dist/client.
+ * Builds the static site (rendered pages, JS and CSS) from a checkout of the content repo into dist/site.
  *
- *   npm run build-site -- [--dir ../../thesarvo-content] [--images /images]   (same origin: CloudFront serves the bucket's images/)
- *                         [--incremental] [--since http://thesarvo-content.s3-website-ap-southeast-2.amazonaws.com/g-data]
+ *   npm run build-site -- [--dir ../../thesarvo-content] [--out dist/site]
+ *                         [--package dist] [--incremental] [--since http://thesarvo-content.s3-website-ap-southeast-2.amazonaws.com/g-data]
  *
- * Pages are rendered at build time; the browser loads the same data as plain files from /g-data.
+ * Pages are rendered at build time, by the app's server bundle; the browser loads the same data as plain files from /g-data.
+ * The app comes from `--package`, a folder holding client/ (the JS and CSS), server/ and, built elsewhere, app.json with the
+ * app's id. Without it the app is built here first with vite (into dist) and its id is its git tree.
  * With --incremental it reads what the deployed site was built from (`--since`, a URL or folder
  * holding its manifest.json and build.json) and renders only the pages that changed; the app's
- * code must be committed and unchanged since then, or it builds everything. dist/client/deploy.json
- * tells deploy-site.sh which kind of build it is and which pages to remove.
+ * code must be unchanged since then, or it builds everything. <out>/deploy.json
+ * tells deploy-changed.ts which kind of build it is and which pages to remove.
  */
 import { spawnSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
+import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
+import { pathToFileURL } from 'node:url'
+import { ACCOUNT_PATH, CALLBACK_PATH, PASSWORD_PATH } from '../src/auth/paths'
 import { pagesToRebuild, treeHashes } from '../src/guide/content/incremental'
 import type { BuildInfo } from '../src/guide/content/incremental'
 import { JsonContentSource } from '../src/guide/content/json'
@@ -32,7 +36,8 @@ const option = (name: string, fallback: string) => {
   return i >= 0 && args[i + 1] ? args[i + 1] : fallback
 }
 const dir = path.resolve(option('dir', '../../thesarvo-content'))
-const images = option('images', '/images')
+const out = path.resolve(option('out', 'dist/site'))
+const prebuilt = option('package', '')
 const since = option('since', 'http://thesarvo-content.s3-website-ap-southeast-2.amazonaws.com/g-data')
 const incremental = args.includes('--incremental')
 /** Changed guides get their own search shard until there are this many; then the pack is rewritten. */
@@ -59,7 +64,9 @@ const guideCache = new Map<string, Promise<Guide | null>>()
 const guideOf = (id: string) => guideCache.get(id) ?? guideCache.set(id, source.getGuide(id)).get(id)!
 
 // The app's committed code: anything uncommitted makes this build unlike any other.
-const app = dirty('.') ? `uncommitted-${Date.now()}` : git('.', 'rev-parse', 'HEAD:./')
+const app = prebuilt
+  ? (JSON.parse(await readFile(path.join(prebuilt, 'app.json'), 'utf8')) as { app: string }).app
+  : dirty('.') ? `uncommitted-${Date.now()}` : git('.', 'rev-parse', 'HEAD:./')
 const build: BuildInfo = {
   app,
   content: git(dir, 'rev-parse', 'HEAD') + (dirty(dir) ? '+' : ''),
@@ -72,8 +79,8 @@ const partial = !!(before && beforeManifest?.search)
 if (incremental && !partial) console.log(before ? 'The app changed since the deployed build: building everything' : 'No deployed build found: building everything')
 const pages = partial ? pagesToRebuild(index, before.nodes, build.nodes) : nodes
 
-const data = path.resolve('public/g-data')
-await rm(data, { recursive: true, force: true })
+const data = path.join(out, 'g-data')
+await rm(out, { recursive: true, force: true })
 for (const sub of ['guide', 'history', 'images', 'kml', 'page', 'search']) await mkdir(path.join(data, sub), { recursive: true })
 const writeJson = (file: string, value: unknown) => writeFile(path.join(data, file), JSON.stringify(value))
 
@@ -137,22 +144,35 @@ console.log(
     : `Wrote data for all ${nodes.length} pages`,
 )
 
-const vite = spawnSync('npx', ['vite', 'build'], {
-  stdio: 'inherit',
-  env: {
-    ...process.env,
-    CONTENT_DIR: dir,
-    VITE_STATIC_SITE: '1',
-    VITE_IMAGE_BASE: images,
-    ...(partial && { PRERENDER_PATHS: pages.map(url).join(',') }),
-  },
-})
-if (vite.status) process.exit(vite.status)
+// The app, built here unless it comes ready-made: the static site's server bundle carries its dependencies and renders the pages itself.
+let pkg = prebuilt
+if (!pkg) {
+  pkg = path.resolve('dist')
+  const vite = spawnSync('npx', ['vite', 'build'], { stdio: 'inherit', env: { ...process.env, VITE_STATIC_SITE: '1', VITE_IMAGE_BASE: '/images', PRERENDER_PATHS: '' } })
+  if (vite.status) process.exit(vite.status)
+}
+await cp(path.join(pkg, 'client'), out, { recursive: true })
+process.env.CONTENT_DIR = dir
+const { default: renderer } = (await import(pathToFileURL(path.resolve(pkg, 'server/server.js')).href)) as { default: { fetch: (r: Request) => Promise<Response> } }
+const fixed = [GUIDE_PREFIX, `${GUIDE_PREFIX}/search`, CALLBACK_PATH, PASSWORD_PATH, ACCOUNT_PATH]
+const render = partial ? pages.map(url) : [...new Set([...fixed, ...nodes.map(url)])]
+let next = 0
+await Promise.all(
+  Array.from({ length: 8 }, async () => {
+    for (let p = render[next++]; p; p = render[next++]) {
+      const res = await renderer.fetch(new Request(`http://localhost${p}/`))
+      if (res.status !== 200) throw new Error(`rendering ${p} gave ${res.status}`)
+      await mkdir(path.join(out, p), { recursive: true })
+      await writeFile(path.join(out, p, 'index.html'), await res.text())
+    }
+  }),
+)
+console.log(`Rendered ${render.length} pages`)
 
 // The bucket's front door: / goes to the guides.
 await writeFile(
-  'dist/client/index.html',
+  path.join(out, 'index.html'),
   '<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=/g/"><title>thesarvo</title><a href="/g/">Tasmanian climbing guides</a>\n',
 )
-// For deploy-site.sh: a partial build must not delete what it did not build. Not uploaded.
-await writeFile('dist/client/deploy.json', JSON.stringify({ incremental: partial, remove: remove.map((p) => `${p.slice(1)}/index.html`) }))
+// For deploy-changed.ts: a partial build must not delete what it did not build. Not uploaded.
+await writeFile(path.join(out, 'deploy.json'), JSON.stringify({ incremental: partial, remove: remove.map((p) => `${p.slice(1)}/index.html`) }))

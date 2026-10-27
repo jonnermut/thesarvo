@@ -7,9 +7,6 @@ import tailwindcss from '@tailwindcss/vite'
 import viteReact from '@vitejs/plugin-react'
 import { nitro } from 'nitro/vite'
 import { DEFAULT_CONTENT_DIR } from './src/guide/content/defaultDir'
-import { staticSource } from './src/guide/content/staticSource'
-import { flatten, guideUrl, GUIDE_PREFIX } from './src/guide/content/paths'
-import { ACCOUNT_PATH, CALLBACK_PATH, PASSWORD_PATH } from './src/auth/paths'
 
 /**
  * Dev only: serve `/g/content?f=<file>` straight from the content folder.
@@ -41,16 +38,15 @@ function devContentFiles(): Plugin {
 
 // Guides are rendered on demand; only the paths listed here become static HTML at build time.
 // e.g. PRERENDER_PATHS="/g,/g/tasmania" npm run build
-// For the static site (`npm run build-site`) every page of the content repo is rendered, unless an
-// incremental build lists the changed ones.
+// The static site (`npm run build-site`) builds no pages here: PRERENDER_PATHS is empty and build-site.ts renders them from
+// the server bundle, which for that reason carries its own dependencies (a package with no node_modules).
 const staticSite = process.env.VITE_STATIC_SITE === '1'
 const prerenderPaths =
-  staticSite && process.env.PRERENDER_PATHS === undefined
-    ? [GUIDE_PREFIX, `${GUIDE_PREFIX}/search`, CALLBACK_PATH, PASSWORD_PATH, ACCOUNT_PATH, ...flatten(await staticSource().getIndex()).filter((n) => n.path).map(guideUrl)]
-    : (process.env.PRERENDER_PATHS ?? '').split(',').filter(Boolean)
+  (process.env.PRERENDER_PATHS ?? '').split(',').filter(Boolean)
 
 export default defineConfig({
   resolve: { tsconfigPaths: true },
+  ...(staticSite && { ssr: { noExternal: true } }),
   plugins: [
     devContentFiles(),
     // The Lambda build (NITRO_PRESET=aws-lambda) carries the JS and CSS inside the function; behind CloudFront they would come from S3.
