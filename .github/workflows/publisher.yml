@@ -35,3 +35,12 @@ jobs:
           gh release upload publisher thesarvo-3/dist/publisher.tgz --clobber
         env:
           GH_TOKEN: ${{ github.token }}
+      # An app release republishes the whole site: the content repo's Publish Action sees the new app and builds everything. Starting
+      # it needs a token that can (fine-grained, Actions write on thesarvo-content, kept as the secret CONTENT_DISPATCH_TOKEN);
+      # until it is set the next save does it.
+      - name: Republish the content
+        if: env.DISPATCH_TOKEN != ''
+        run: gh workflow run publish.yml -R jonnermut/thesarvo-content --ref main
+        env:
+          DISPATCH_TOKEN: ${{ secrets.CONTENT_DISPATCH_TOKEN }}
+          GH_TOKEN: ${{ secrets.CONTENT_DISPATCH_TOKEN }}
