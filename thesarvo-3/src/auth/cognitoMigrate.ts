@@ -20,8 +20,9 @@ export const migrateUser = (table: Record<string, string>, pepper: string) => as
   const signingIn = event.triggerSource === 'UserMigration_Authentication'
   if (!credential || (signingIn && !verifyConfluencePassword(credential, event.request.password ?? '')))
     throw new Error('Incorrect username or password.')
+  // The email must be exactly what was typed, case included, or Cognito refuses the user; the pool ignores case anyway.
   event.response = {
-    userAttributes: { email: event.userName.trim().toLowerCase(), email_verified: 'true' },
+    userAttributes: { email: event.userName, email_verified: 'true' },
     finalUserStatus: signingIn ? 'CONFIRMED' : 'RESET_REQUIRED',
     messageAction: 'SUPPRESS',
   }

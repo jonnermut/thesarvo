@@ -80,7 +80,7 @@ describe('Cognito migrate-user trigger', () => {
 
   it('creates a confirmed user when the old password matches', async () => {
     const result = await handler(event('UserMigration_Authentication', 'ALICE@example.com', 'crimp hard'))
-    expect(result.response).toEqual({ userAttributes: { email: 'alice@example.com', email_verified: 'true' }, finalUserStatus: 'CONFIRMED', messageAction: 'SUPPRESS' })
+    expect(result.response).toEqual({ userAttributes: { email: 'ALICE@example.com', email_verified: 'true' }, finalUserStatus: 'CONFIRMED', messageAction: 'SUPPRESS' })
   })
 
   it('refuses a wrong password or an unknown email', async () => {
