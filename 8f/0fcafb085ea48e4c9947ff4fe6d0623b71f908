@@ -1,0 +1,35 @@
+thesarvo-3/src/guide/edit/BlockDrag.tsx
+  s_e20d0a1ebc47aa::t_d7cf96f604fb81 1-89
+thesarvo-3/src/guide/edit/Editor.tsx
+  s_e20d0a1ebc47aa::t_9cf52befcfeba8 11
+  s_e20d0a1ebc47aa::t_5231870f001080 243-246
+  s_e20d0a1ebc47aa::t_6ca7dd16178c13 172,174,178,180-183,185-186,189
+  s_e20d0a1ebc47aa::t_080ae23e2862ae 100
+thesarvo-3/src/guide/edit/state.ts
+  s_e20d0a1ebc47aa::t_bb7b66efb96fb9 97-105
+  s_e20d0a1ebc47aa::t_92ce2aa929f4fa 20-21
+thesarvo-3/src/guide/edit/BlockDrag.test.tsx
+  s_e20d0a1ebc47aa::t_b01824f1354af6 1-28
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_ed62bcb67a00ec 138-139
+thesarvo-3/src/guide/edit/state.test.ts
+  s_e20d0a1ebc47aa::t_452165ef2fc928 34-45
+thesarvo-3/docs/plan-guide.md
+  s_e20d0a1ebc47aa::t_ce7420305bb5f5 274
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8f0fcafb085ea48e4c9947ff4fe6d0623b71f908",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
