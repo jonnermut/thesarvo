@@ -1,0 +1,25 @@
+thesarvo-3/src/auth/cognitoMigrate.ts
+  s_e20d0a1ebc47aa::t_9dbf16a1a37053 23,25
+thesarvo-3/scripts/cognito-setup.sh
+  s_e20d0a1ebc47aa::t_b0373b5ed5712d 12-13
+thesarvo-3/src/auth/auth.test.ts
+  s_e20d0a1ebc47aa::t_f654a94e743bb3 83
+thesarvo-3/docs/auth-comparison.md
+  s_e20d0a1ebc47aa::t_c6e1f3376f60ea 3,87,90-98
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e9b5eda3b449df99460f1e851d8dd6545cb898ac",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
