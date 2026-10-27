@@ -46,19 +46,27 @@ export function useBlockDrag(count: number, onDrop: (id: string, to: number) => 
       y = ev.clientY
       measure()
     }
-    const end = (drop: boolean) => () => {
+    const end = (drop: boolean) => {
       cancelAnimationFrame(frame)
       handle.removeEventListener('pointermove', move)
       handle.removeEventListener('pointerup', onUp)
       handle.removeEventListener('pointercancel', onCancel)
+      handle.removeEventListener('lostpointercapture', onUp)
+      window.removeEventListener('keydown', onKey)
+      if (handle.hasPointerCapture(e.pointerId)) handle.releasePointerCapture(e.pointerId)
       setDrag(null)
       if (drop) onDrop(id, to)
     }
-    const onUp = end(true)
-    const onCancel = end(false)
+    const onUp = () => end(true)
+    const onCancel = () => end(false)
+    const onKey = (ev: KeyboardEvent) => ev.key === 'Escape' && end(false)
     handle.addEventListener('pointermove', move)
     handle.addEventListener('pointerup', onUp)
     handle.addEventListener('pointercancel', onCancel)
+    // Capture can end without a pointerup reaching the grip (released outside the window, some remote and touch
+    // input); the drag must still finish, or it stays stuck on screen.
+    handle.addEventListener('lostpointercapture', onUp)
+    window.addEventListener('keydown', onKey)
     measure()
     frame = requestAnimationFrame(scroll)
   }
