@@ -1,0 +1,44 @@
+thesarvo-3/docs/plan-backend.md
+  s_e20d0a1ebc47aa::t_2eaa25e97d64f0 3,61-66,68-81,106,114
+  s_e20d0a1ebc47aa::t_3997f95388014c 67
+thesarvo-3/vite.config.ts
+  s_e20d0a1ebc47aa::t_9420a1b1d74c35 56-57
+thesarvo-3/src/routeTree.gen.ts
+  s_e20d0a1ebc47aa::t_fabb7c350d544a 19-20,57-66,76-77,87-88,99-100,112-113,123-124,134-135,146-147,201-214,226-227
+thesarvo-3/.gitignore
+  s_e20d0a1ebc47aa::t_6d75ea17dc28b4 16
+thesarvo-3/docs/lambda-backend.md
+  s_e20d0a1ebc47aa::t_3997f95388014c 9-10,48-49,60-62,64,76
+  s_e20d0a1ebc47aa::t_33464affe7b409 1-8,11-47,50-59,63,65-75,77-95
+thesarvo-3/src/auth/verifyToken.ts
+  s_e20d0a1ebc47aa::t_fabb7c350d544a 5-9,31-32,46-50,53,55,59
+thesarvo-3/src/routes/g.api.me.tsx
+  s_e20d0a1ebc47aa::t_fabb7c350d544a 1-14
+thesarvo-3/src/routes/g.api.admin.tsx
+  s_e20d0a1ebc47aa::t_fabb7c350d544a 1-14
+thesarvo-3/src/auth/verifyToken.test.ts
+  s_e20d0a1ebc47aa::t_fabb7c350d544a 23-26
+thesarvo-3/src/guide/content/index.ts
+  s_e20d0a1ebc47aa::t_fabb7c350d544a 3,9,11
+thesarvo-3/scripts/deploy-lambda.sh
+  s_e20d0a1ebc47aa::t_c20c1f58e31f14 53-55
+  s_e20d0a1ebc47aa::t_718eed23f4caab 1-52,56-69
+thesarvo-3/scripts/cognito-setup-policy.json
+  s_e20d0a1ebc47aa::t_3997f95388014c 21-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2c4a3ef2ca6afca9a573906276268e4373c531a9",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
