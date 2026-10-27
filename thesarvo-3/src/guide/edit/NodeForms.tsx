@@ -1,4 +1,6 @@
 import { lazy, Suspense, useState } from 'react'
+import { createPortal } from 'react-dom'
+import { useEscape, useScrollLock } from '#/components/overlay'
 import { latLonToUtm, parseZone, utmToLatLon } from '#/guide/model/utm'
 import type { Climb, Gps, GpsLine, GpsPoint, Header, TextBlock } from '#/guide/model/types'
 import { AreaField, Button, CheckField, SelectField, TextField } from './fields'
@@ -25,7 +27,7 @@ export function HeaderForm({ node, onChange }: { node: Header; onChange: Change<
   )
 }
 
-const STARS = [['', 'None'], ['*', '★'], ['**', '★★'], ['***', '★★★']] as const
+export const STARS = [['', 'None'], ['*', '★'], ['**', '★★'], ['***', '★★★']] as const
 
 /** Mirrors ClimbBlock: number, name, stars, length, grade and extra on one row, then description, then first ascent. */
 export function ClimbForm({ node, onChange }: { node: Climb; onChange: Change<Climb> }) {
@@ -42,6 +44,24 @@ export function ClimbForm({ node, onChange }: { node: Climb; onChange: Change<Cl
       <AreaField label="Description" value={node.text} onChange={(text) => onChange({ text })} />
       <TextField label="First ascent" value={node.fa} onChange={(fa) => onChange({ fa })} />
     </div>
+  )
+}
+
+/** The climb form in a popup, for editing a climb without leaving the topo it is drawn on. */
+export function ClimbDialog({ node, onChange, onClose }: { node: Climb; onChange: Change<Climb>; onClose: () => void }) {
+  useScrollLock(true)
+  useEscape(true, onClose)
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center sm:p-4" onPointerDown={(e) => e.target === e.currentTarget && onClose()}>
+      <div role="dialog" aria-modal="true" aria-label={`${node.type === 'problem' ? 'Problem' : 'Climb'} details`} className="max-h-[90dvh] w-full max-w-3xl overflow-y-auto rounded-t-lg bg-white p-4 shadow-xl sm:rounded-lg">
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <h3 className="font-semibold">{`${node.number} ${node.name}`.trim() || (node.type === 'problem' ? 'Problem' : 'Climb')}</h3>
+          <Button onClick={onClose}>Done</Button>
+        </div>
+        <ClimbForm node={node} onChange={onChange} />
+      </div>
+    </div>,
+    document.body,
   )
 }
 

@@ -6,6 +6,7 @@ import { Callout, Route } from '#/guide/view/Topo'
 import { labelSpots } from '#/guide/view/labelSpot'
 import { RECT_STYLES } from '#/guide/view/topoStyles'
 import { AreaField, Button, CheckField, CommitNumberField, DeleteButton, NumberField, SelectField, TextField } from './fields'
+import { ClimbDialog, STARS } from './NodeForms'
 import * as ops from './topoOps'
 import { ZoomBox } from './ZoomBox'
 
@@ -60,6 +61,8 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
   const [pointIndex, setPointIndex] = useState<number | null>(null)
   const [drawing, setDrawing] = useState<Point[]>([])
   const [help, setHelp] = useState(false)
+  /** The linked climb's full form is open in a popup. */
+  const [details, setDetails] = useState(false)
   /** Screen pixels per photo pixel, to snap by a steady distance however far the photo is zoomed. */
   const zoom = useRef(1)
 
@@ -114,7 +117,8 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const typing = e.target instanceof HTMLElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)
-      if (typing) return
+      // The climb popup has its own keys: Escape closes it, and Backspace must never delete the route behind it.
+      if (typing || details) return
       if (e.key === 'Enter' && drawing.length) finishRoute()
       if (e.key === '?') setHelp((h) => !h)
       if (e.key === 'Escape') {
@@ -317,9 +321,23 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
                 onChange={(linkedTo) => onChange((t) => ops.updatePath(t, selectedPath.id, { linkedTo }))}
               />
               {linked ? (
-                <ClimbQuickFields climb={linked} onEdit={onEditClimb} />
+                <>
+                  <ClimbQuickFields climb={linked} onEdit={onEditClimb} />
+                  <Button onClick={() => setDetails(true)}>All {noun} details…</Button>
+                  {details && (
+                    <ClimbDialog node={linked} onChange={(patch) => onEditClimb(linked.id, patch, `${linked.id}-${Object.keys(patch).join()}`)} onClose={() => setDetails(false)} />
+                  )}
+                </>
               ) : (
-                <Button onClick={() => onAddClimb(selectedPath.id)}>New {noun} for this route</Button>
+                <Button
+                  onClick={() => {
+                    // The new climb is linked at once, so the popup opens on it for the rest of its details.
+                    onAddClimb(selectedPath.id)
+                    setDetails(true)
+                  }}
+                >
+                  New {noun} for this route
+                </Button>
               )}
               <SelectField label="Line" value={selectedPath.lineStyle} options={LINE_STYLES} onChange={(lineStyle: LineStyle) => onChange((t) => ops.updatePath(t, selectedPath.id, { lineStyle }))} />
               <SelectField
@@ -402,14 +420,14 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
 
 /** The fields a topo's reader sees, editable without leaving the topo. */
 function ClimbQuickFields({ climb, onEdit }: { climb: Climb; onEdit: Props['onEditClimb'] }) {
-  const field = (name: 'number' | 'name' | 'grade' | 'stars', label: string, className = '') => (
-    <TextField label={label} className={className} value={climb[name]} onChange={(v) => onEdit(climb.id, { [name]: v }, `${climb.id}-${name}`)} />
+  const field = (name: 'number' | 'name' | 'grade', label: string) => (
+    <TextField label={label} value={climb[name]} onChange={(v) => onEdit(climb.id, { [name]: v }, `${climb.id}-${name}`)} />
   )
   return (
-    <div className="grid grid-cols-[3.5rem_1fr] gap-2">
+    <div className="grid grid-cols-[4.5rem_1fr] gap-2">
       {field('number', 'No.')}
       {field('name', 'Name')}
-      {field('stars', 'Stars')}
+      <SelectField label="Stars" value={climb.stars} options={STARS} onChange={(stars) => onEdit(climb.id, { stars }, `${climb.id}-stars`)} />
       {field('grade', 'Grade')}
     </div>
   )

@@ -8,7 +8,8 @@ type FieldProps = { label: string; className?: string; children: (id: string) =>
 export function Field({ label, className = '', children }: FieldProps) {
   const id = useId()
   return (
-    <div className={className}>
+    // min-w-0: in a grid, inputs may shrink below their default width (phones).
+    <div className={`min-w-0 ${className}`}>
       <label htmlFor={id} className="mb-1 block text-xs font-medium text-muted">
         {label}
       </label>
