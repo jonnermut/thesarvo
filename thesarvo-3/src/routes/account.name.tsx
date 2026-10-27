@@ -40,7 +40,7 @@ function YourName() {
     )
   return (
     <Page>
-      {!user.name && <p className="mb-4">Welcome. Please tell us your name: it shows beside the changes you make to the guides.</p>}
+      {!user.name && <p className="mb-4">Welcome. Please tell us your name.</p>}
       <p className="mb-4 text-sm text-muted">{user.email}</p>
       <NameForm submit={then ? 'Continue' : 'Save'} onSaved={() => (then ? void navigate({ href: then, replace: true }) : setDone(true))} />
     </Page>

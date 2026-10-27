@@ -17,7 +17,7 @@ export function RequireSignIn({ what, children }: { what: string; children: Reac
   if (user)
     return (
       <div className="mx-auto max-w-md p-6 sm:p-8">
-        <p className="mb-4">Before you {what}, please tell us your name: it shows beside your changes in the history.</p>
+        <p className="mb-4">Before you {what}, please tell us your name.</p>
         {/* Saving refreshes the token, so the name arrives through useUser and the children show. */}
         <NameForm submit="Continue" onSaved={() => {}} />
       </div>
