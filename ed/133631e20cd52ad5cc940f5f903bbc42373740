@@ -1,0 +1,32 @@
+thesarvo-3/scripts/cognito-setup.sh
+  s_e20d0a1ebc47aa::t_a71136cf119aee 4,19
+thesarvo-3/docs/auth-comparison.md
+  s_e20d0a1ebc47aa::t_a71136cf119aee 90
+thesarvo-3/docs/lambda-backend.md
+  s_e20d0a1ebc47aa::t_a71136cf119aee 89
+thesarvo-3/scripts/aws/agent-policy.json
+  s_e20d0a1ebc47aa::t_b9cc08503b3e1f 4-107
+  s_e20d0a1ebc47aa::t_063a867cc316cd 1-3,108-110
+thesarvo-3/scripts/aws/README.md
+  s_e20d0a1ebc47aa::t_6406f16b6a1063 1-41
+thesarvo-3/scripts/aws/boundary-policy.json
+  s_e20d0a1ebc47aa::t_8fcecc9ff9e072 1-53
+thesarvo-3/scripts/deploy-lambda.sh
+  s_e20d0a1ebc47aa::t_a71136cf119aee 6,36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ed133631e20cd52ad5cc940f5f903bbc42373740",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
