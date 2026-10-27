@@ -1,0 +1,40 @@
+thesarvo-3/scripts/build-site.ts
+  s_e20d0a1ebc47aa::t_b00df4f03c8193 73-74
+thesarvo-3/src/guide/content/incremental.ts
+  s_e20d0a1ebc47aa::t_b00df4f03c8193 11
+thesarvo-3/src/guide/justSaved.ts
+  s_e20d0a1ebc47aa::t_b00df4f03c8193 1-45,47-49,52-65,67
+  s_e20d0a1ebc47aa::t_c7a601c86ec3a4 46,50-51,66
+thesarvo-3/src/guide/edit/saver.test.ts
+  s_e20d0a1ebc47aa::t_612da9fcb123e9 59-69
+thesarvo-3/src/guide/justSaved.test.ts
+  s_e20d0a1ebc47aa::t_b00df4f03c8193 1-36
+thesarvo-3/src/routes/g.$.tsx
+  s_e20d0a1ebc47aa::t_b00df4f03c8193 7,47-48
+thesarvo-3/src/guide/save/save.ts
+  s_e20d0a1ebc47aa::t_b00df4f03c8193 11,45
+thesarvo-3/src/guide/edit/saver.ts
+  s_e20d0a1ebc47aa::t_b00df4f03c8193 6,181
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_6a08180757cfc2 151
+thesarvo-3/docs/plan-backend.md
+  s_e20d0a1ebc47aa::t_4f9f6797c998e3 181-182
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_5edcf8c3732847 54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9b9abdb33bb68332933814142923212bdc6702fa",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
