@@ -20,7 +20,10 @@ function sign(claims: object, key = privateKey, header: object = { alg: 'RS256',
 
 describe('verifyIdToken', () => {
   it('accepts a good token', async () => {
-    expect(await verifyIdToken(sign({ name: 'Al' }), opts)).toEqual({ sub: 'u1', email: 'a@b.c', name: 'Al' })
+    expect(await verifyIdToken(sign({ name: 'Al' }), opts)).toEqual({ sub: 'u1', email: 'a@b.c', name: 'Al', groups: [] })
+  })
+  it('reads the groups', async () => {
+    expect((await verifyIdToken(sign({ 'cognito:groups': ['admins'] }), opts)).groups).toEqual(['admins'])
   })
   it.each([
     ['a bad signature', sign({}, other), /signature/],

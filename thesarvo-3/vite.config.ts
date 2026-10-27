@@ -53,7 +53,8 @@ export default defineConfig({
   resolve: { tsconfigPaths: true },
   plugins: [
     devContentFiles(),
-    ...(staticSite ? [] : [nitro()]),
+    // The Lambda build (NITRO_PRESET=aws-lambda) carries the JS and CSS inside the function; behind CloudFront they would come from S3.
+    ...(staticSite ? [] : [nitro(process.env.NITRO_PRESET === 'aws-lambda' ? { serveStatic: 'inline' } : undefined)]),
     tanstackStart(
       prerenderPaths.length
         ? {

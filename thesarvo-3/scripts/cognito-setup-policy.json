@@ -18,7 +18,11 @@
         "lambda:GetFunctionConfiguration",
         "lambda:AddPermission",
         "lambda:InvokeFunction",
-        "lambda:DeleteFunction"
+        "lambda:DeleteFunction",
+        "lambda:CreateFunctionUrlConfig",
+        "lambda:GetFunctionUrlConfig",
+        "lambda:UpdateFunctionUrlConfig",
+        "lambda:PutFunctionConcurrency"
       ],
       "Resource": "arn:aws:lambda:ap-southeast-2:562771238447:function:thesarvo-*"
     },

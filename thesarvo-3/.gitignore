@@ -13,3 +13,4 @@ __unconfig*
 todos.json
 uploads
 public/g-data
+.g-data-aside

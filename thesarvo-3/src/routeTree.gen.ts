@@ -16,6 +16,8 @@ import { Route as GSplatRouteImport } from './routes/g.$'
 import { Route as GContentRouteImport } from './routes/g.content'
 import { Route as GSearchRouteImport } from './routes/g.search'
 import { Route as GUploadRouteImport } from './routes/g.upload'
+import { Route as GApiAdminRouteImport } from './routes/g.api.admin'
+import { Route as GApiMeRouteImport } from './routes/g.api.me'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +54,16 @@ const GUploadRoute = GUploadRouteImport.update({
   path: '/g/upload',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GApiAdminRoute = GApiAdminRouteImport.update({
+  id: '/g/api/admin',
+  path: '/g/api/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GApiMeRoute = GApiMeRouteImport.update({
+  id: '/g/api/me',
+  path: '/g/api/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -61,6 +73,8 @@ export interface FileRoutesByFullPath {
   '/g/search': typeof GSearchRoute
   '/g/upload': typeof GUploadRoute
   '/g/': typeof GIndexRoute
+  '/g/api/admin': typeof GApiAdminRoute
+  '/g/api/me': typeof GApiMeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +84,8 @@ export interface FileRoutesByTo {
   '/g/search': typeof GSearchRoute
   '/g/upload': typeof GUploadRoute
   '/g': typeof GIndexRoute
+  '/g/api/admin': typeof GApiAdminRoute
+  '/g/api/me': typeof GApiMeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +96,8 @@ export interface FileRoutesById {
   '/g/search': typeof GSearchRoute
   '/g/upload': typeof GUploadRoute
   '/g/': typeof GIndexRoute
+  '/g/api/admin': typeof GApiAdminRoute
+  '/g/api/me': typeof GApiMeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +109,8 @@ export interface FileRouteTypes {
     | '/g/search'
     | '/g/upload'
     | '/g/'
+    | '/g/api/admin'
+    | '/g/api/me'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +120,8 @@ export interface FileRouteTypes {
     | '/g/search'
     | '/g/upload'
     | '/g'
+    | '/g/api/admin'
+    | '/g/api/me'
   id:
     | '__root__'
     | '/'
@@ -109,6 +131,8 @@ export interface FileRouteTypes {
     | '/g/search'
     | '/g/upload'
     | '/g/'
+    | '/g/api/admin'
+    | '/g/api/me'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +143,8 @@ export interface RootRouteChildren {
   GSearchRoute: typeof GSearchRoute
   GUploadRoute: typeof GUploadRoute
   GIndexRoute: typeof GIndexRoute
+  GApiAdminRoute: typeof GApiAdminRoute
+  GApiMeRoute: typeof GApiMeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -172,6 +198,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GUploadRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/g/api/admin': {
+      id: '/g/api/admin'
+      path: '/g/api/admin'
+      fullPath: '/g/api/admin'
+      preLoaderRoute: typeof GApiAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/g/api/me': {
+      id: '/g/api/me'
+      path: '/g/api/me'
+      fullPath: '/g/api/me'
+      preLoaderRoute: typeof GApiMeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -183,6 +223,8 @@ const rootRouteChildren: RootRouteChildren = {
   GSearchRoute: GSearchRoute,
   GUploadRoute: GUploadRoute,
   GIndexRoute: GIndexRoute,
+  GApiAdminRoute: GApiAdminRoute,
+  GApiMeRoute: GApiMeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

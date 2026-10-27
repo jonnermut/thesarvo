@@ -2,8 +2,11 @@ import { createPublicKey, createVerify } from 'node:crypto'
 import type { JsonWebKey } from 'node:crypto'
 import { COGNITO } from './config'
 
-/** Who made a request, from a verified Cognito ID token. The email and name become the git commit author. */
-export type Editor = { sub: string; email: string; name: string }
+/**
+ * Who made a request, from a verified Cognito ID token. The email and name become the git commit author;
+ * `groups` are the user's Cognito groups (roles), current as of the token's last refresh.
+ */
+export type Editor = { sub: string; email: string; name: string; groups: string[] }
 
 type Jwk = JsonWebKey & { kid: string }
 type Options = { issuer: string; clientId: string; keys: () => Promise<Jwk[]>; now?: () => number }
@@ -25,7 +28,8 @@ export async function verifyIdToken(jwt: string, o: Options): Promise<Editor> {
   const c = part(p)
   if (c.iss !== o.issuer || c.aud !== o.clientId || c.token_use !== 'id') throw new Error('Token is not for this site')
   if (typeof c.exp !== 'number' || c.exp * 1000 <= (o.now ?? Date.now)()) throw new Error('Token expired')
-  return { sub: String(c.sub), email: String(c.email ?? ''), name: String(c.name ?? c.email ?? '') }
+  const groups = Array.isArray(c['cognito:groups']) ? c['cognito:groups'].map(String) : []
+  return { sub: String(c.sub), email: String(c.email ?? ''), name: String(c.name ?? c.email ?? ''), groups }
 }
 
 let jwks: Promise<Jwk[]> | undefined
@@ -39,13 +43,18 @@ const cognitoKeys = () =>
       throw e
     }))
 
-/** The signed-in editor behind a request (`Authorization: Bearer <ID token>`), or a 401 response to return. */
-export async function requireEditor(request: Request): Promise<Editor | Response> {
+/**
+ * The signed-in editor behind a request (`Authorization: Bearer <ID token>`), or a response to return:
+ * 401 when not signed in, 403 when `group` is given and the user is not in it.
+ */
+export async function requireEditor(request: Request, group?: string): Promise<Editor | Response> {
   const token = request.headers.get('authorization')?.match(/^Bearer (.+)$/)?.[1]
   if (!token) return Response.json({ error: 'Please sign in' }, { status: 401 })
+  let editor: Editor
   try {
-    return await verifyIdToken(token, { issuer: COGNITO.issuer, clientId: COGNITO.clientId, keys: cognitoKeys })
+    editor = await verifyIdToken(token, { issuer: COGNITO.issuer, clientId: COGNITO.clientId, keys: cognitoKeys })
   } catch {
     return Response.json({ error: 'Your sign-in has expired. Please sign in again.' }, { status: 401 })
   }
+  return !group || editor.groups.includes(group) ? editor : Response.json({ error: 'Not allowed' }, { status: 403 })
 }
