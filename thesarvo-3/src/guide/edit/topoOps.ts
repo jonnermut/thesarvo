@@ -89,6 +89,30 @@ export function resize(topo: ImageTopo, width: number): ImageTopo {
   }
 }
 
+/**
+ * The topo moved onto an edited copy of its photo, `width` by `height`. `place` says where a spot of the old photo
+ * (in topo pixels) lands, as fractions of the new one; routes, labels and the legend follow, kept on the photo.
+ * Labels keep their size.
+ */
+export function reframe(topo: ImageTopo, src: string, width: number, height: number, place: (x: number, y: number) => { x: number; y: number }): ImageTopo {
+  const at = (x: number, y: number) => {
+    const p = place(x, y)
+    return { x: Math.round(clamp(p.x * width, width)), y: Math.round(clamp(p.y * height, height)) }
+  }
+  return {
+    ...topo,
+    src,
+    width,
+    height,
+    ...(({ x, y }) => ({ legendX: x, legendY: y }))(at(topo.legendX, topo.legendY)),
+    paths: topo.paths.map((p) => withPoints(p, p.points.map((pt) => ({ ...pt, ...at(pt.x, pt.y) })))),
+    rects: topo.rects.map((r) => {
+      const c = at(r.x + r.width / 2, r.y + r.height / 2)
+      return { ...r, x: Math.round(clamp(c.x - r.width / 2, width - r.width)), y: Math.round(clamp(c.y - r.height / 2, height - r.height)) }
+    }),
+  }
+}
+
 /** A new route matches the topo's other routes; on a topo with none yet, boulder problems get arrow heads. */
 export const newRouteArrow = (topo: ImageTopo, kind: 'climb' | 'problem') =>
   topo.paths.length ? topo.paths.filter((p) => p.arrow).length * 2 > topo.paths.length : kind === 'problem'

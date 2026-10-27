@@ -4,7 +4,7 @@ import { imageUrl } from '#/guide/content/paths'
 import { fetchImageNames } from '#/guide/server'
 import { Button } from './fields'
 import { PhotoEditor } from './PhotoEditor'
-import { isHeicFile, prepareImage, uploadImage } from './upload'
+import { fetchPhoto, isHeicFile, prepareImage, uploadImage } from './upload'
 
 type Upload = { id: number; file: File; progress: number; error?: string }
 
@@ -120,7 +120,7 @@ export function ImagePicker({ guideId, onPick, onClose }: { guideId: string; onP
           <PhotoEditor
             file={editing.file}
             onCancel={() => setEditing(null)}
-            onDone={(file) => {
+            onDone={({ file }) => {
               setEditing(null)
               send(file, async (ready) => ready)
             }}
@@ -154,15 +154,30 @@ export function ImagePicker({ guideId, onPick, onClose }: { guideId: string; onP
 
       <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
         {names.map((name) => (
-          <button
-            key={name}
-            type="button"
-            onClick={() => onPick(name)}
-            className="group overflow-hidden rounded-lg border border-line bg-card text-left hover:border-amber"
-          >
-            <img src={imageUrl(guideId, name)} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover" />
-            <span className="block truncate px-2 py-1 text-xs text-muted group-hover:text-ink">{name}</span>
-          </button>
+          <div key={name} className="relative">
+            <button
+              type="button"
+              onClick={() => onPick(name)}
+              className="group block w-full overflow-hidden rounded-lg border border-line bg-card text-left hover:border-amber"
+            >
+              <img src={imageUrl(guideId, name)} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover" />
+              <span className="block truncate px-2 py-1 text-xs text-muted group-hover:text-ink">{name}</span>
+            </button>
+            {/* Edits a copy: the original stays, for the topos that use it. */}
+            {user && (
+              <Button
+                className="absolute top-1 right-1 bg-white/90! shadow-sm"
+                aria-label={`Edit a copy of ${name}`}
+                onClick={() =>
+                  void fetchPhoto(guideId, name)
+                    .then((file) => setEditing({ file, fromCamera: false }))
+                    .catch((e: unknown) => setUploads((all) => [...all, { id: nextId.current++, file: new File([], name), progress: 0, error: e instanceof Error ? e.message : 'Failed' }]))
+                }
+              >
+                Edit
+              </Button>
+            )}
+          </div>
         ))}
         {!names.length && <p className="col-span-full text-sm text-muted">No photos yet for this guide.</p>}
       </div>

@@ -1,8 +1,8 @@
 import { getIdToken } from '#/auth/session'
-import { GUIDE_PREFIX, MAX_IMAGE_BYTES, STATIC_SITE } from '#/guide/content/paths'
+import { GUIDE_PREFIX, imageUrl, MAX_IMAGE_BYTES, STATIC_SITE } from '#/guide/content/paths'
 import type { UploadTicket } from '#/guide/content/bucketImages'
 
-import { jpegName, quarterTurn, toJpeg } from './photoEdit'
+import { jpegName, toJpeg, workCopy } from './photoEdit'
 
 /** iPhones shoot HEIC; most browsers (not Safari) cannot show it, so it is always converted. */
 export const isHeicFile = (file: Pick<File, 'type' | 'name'>) => /^image\/hei[cf]/i.test(file.type) || /\.hei[cf]$/i.test(file.name)
@@ -29,7 +29,7 @@ export async function prepareImage(file: File): Promise<File> {
   if (!needsRecode(file) && (file.type === 'image/gif' || file.size <= MAX_IMAGE_BYTES / 4)) return file
   try {
     const bitmap = await decode(file)
-    const upright = quarterTurn(bitmap, 0)
+    const upright = workCopy(bitmap)
     bitmap.close()
     return new File([await toJpeg(upright, true)], jpegName(file.name), { type: 'image/jpeg' })
   } catch (e) {
@@ -38,6 +38,14 @@ export async function prepareImage(file: File): Promise<File> {
     if (e instanceof Error && file.size > MAX_IMAGE_BYTES) throw e
     return file
   }
+}
+
+/** One of the guide's photos, to edit a copy of it. */
+export async function fetchPhoto(guideId: string, name: string): Promise<File> {
+  const res = await fetch(imageUrl(guideId, name))
+  if (!res.ok) throw new Error(`Could not load ${name} (${res.status})`)
+  const blob = await res.blob()
+  return new File([blob], name, { type: blob.type })
 }
 
 /** Posts a form, reporting upload progress from 0 to 1; resolves with the finished request whatever its status. */

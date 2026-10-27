@@ -7,7 +7,11 @@ import { labelSpots } from '#/guide/view/labelSpot'
 import { RECT_STYLES } from '#/guide/view/topoStyles'
 import { AreaField, Button, CheckField, CommitNumberField, DeleteButton, NumberField, SelectField, TextField } from './fields'
 import { ClimbDialog, STARS } from './NodeForms'
+import { editedPoint } from './photoEdit'
+import { PhotoEditor } from './PhotoEditor'
+import type { EditedPhoto } from './PhotoEditor'
 import * as ops from './topoOps'
+import { fetchPhoto, uploadImage } from './upload'
 import { ZoomBox } from './ZoomBox'
 
 type Tool = 'select' | 'route' | 'rect'
@@ -63,6 +67,9 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
   const [help, setHelp] = useState(false)
   /** The linked climb's full form is open in a popup. */
   const [details, setDetails] = useState(false)
+  /** The photo, open in the photo editor; an edited copy replaces it, with the drawing moved to match. */
+  const [photo, setPhoto] = useState<File | null>(null)
+  const [photoState, setPhotoState] = useState('')
   /** Screen pixels per photo pixel, to snap by a steady distance however far the photo is zoomed. */
   const zoom = useRef(1)
 
@@ -118,7 +125,7 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
     const onKey = (e: KeyboardEvent) => {
       const typing = e.target instanceof HTMLElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)
       // The climb popup has its own keys: Escape closes it, and Backspace must never delete the route behind it.
-      if (typing || details) return
+      if (typing || details || photo) return
       if (e.key === 'Enter' && drawing.length) finishRoute()
       if (e.key === '?') setHelp((h) => !h)
       if (e.key === 'Escape') {
@@ -146,6 +153,27 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
     return () => window.removeEventListener('keydown', onKey)
   })
 
+  const openPhoto = () => {
+    setPhotoState('Opening the photo…')
+    fetchPhoto(guideId, topo.src)
+      .then((file) => {
+        setPhoto(file)
+        setPhotoState('')
+      })
+      .catch((e: unknown) => setPhotoState(`Could not open the photo: ${e instanceof Error ? e.message : e}`))
+  }
+
+  // The edited copy goes up under a new name (the original stays for anything else using it), then the topo moves onto it.
+  const savePhoto = async ({ file, edit, width: w, height: h }: EditedPhoto) => {
+    const name = await uploadImage(guideId, file, () => {})
+    const width = Math.min(topo.width, w)
+    const place = (x: number, y: number) => editedPoint(topo.width, topo.height, edit, x, y)
+    onChange((t) => ops.reframe({ ...t, width: topo.width, height: topo.height }, name, width, Math.round((width * h) / w), place))
+    setSelection(null)
+    setPointIndex(null)
+    setPhoto(null)
+  }
+
   /** Starts a drag; moves are reported as one undo step. */
   const startDrag = (e: React.PointerEvent, onMove: (p: { x: number; y: number }) => (t: ImageTopo) => ImageTopo) => {
     e.stopPropagation()
@@ -156,9 +184,12 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
     const up = () => {
       target.removeEventListener('pointermove', move as EventListener)
       target.removeEventListener('pointerup', up)
+      target.removeEventListener('lostpointercapture', up)
     }
     target.addEventListener('pointermove', move as EventListener)
     target.addEventListener('pointerup', up)
+    // Capture can end without a pointerup reaching the target; the drag must still stop following the pointer.
+    target.addEventListener('lostpointercapture', up)
   }
 
   // Clicks, not presses: a press that pans or pinches the photo ends without one.
@@ -385,6 +416,13 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
                 value={topo.width}
                 onCommit={(width) => onChange((t) => ops.resize({ ...t, width: topo.width, height: topo.height }, width))}
               />
+              <div className="flex flex-wrap items-center gap-2">
+                <Button onClick={openPhoto} disabled={!!photoState && !photoState.startsWith('Could')}>
+                  Edit photo…
+                </Button>
+                <span className="text-xs text-muted">{photoState || 'Turn, straighten, crop or brighten it; routes and labels move with it.'}</span>
+                {photo && <PhotoEditor file={photo} onDone={savePhoto} onCancel={() => setPhoto(null)} />}
+              </div>
               <h4 className="font-semibold">Legend</h4>
               <TextField label="Title" value={topo.legendTitle} onChange={(legendTitle) => onChange((t) => ({ ...t, legendTitle }), 'legend-title')} />
               <TextField label="Footer" value={topo.legendFooter} onChange={(legendFooter) => onChange((t) => ({ ...t, legendFooter }), 'legend-footer')} />

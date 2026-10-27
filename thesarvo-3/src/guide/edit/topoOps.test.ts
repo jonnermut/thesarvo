@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ImageTopo } from '#/guide/model/types'
-import { addPath, addRect, newRouteArrow, insertPointAfter, movePoint, nudgePath, nudgePoint, nudgeRect, removePoint, resize, setPointKind, snapPoint, toggleLegend } from './topoOps'
+import { addPath, addRect, newRouteArrow, insertPointAfter, movePoint, nudgePath, nudgePoint, nudgeRect, reframe, removePoint, resize, setPointKind, snapPoint, toggleLegend } from './topoOps'
 
 const empty: ImageTopo = {
   type: 'image', id: '1', src: 'a.jpg', width: 100, height: 100, noPrint: false, printLayout: '',
@@ -53,6 +53,24 @@ describe('resize', () => {
     expect(half.paths[0].points).toEqual([{ x: 50, y: 25, kind: '' }, { x: 100, y: 75, kind: 'label' }])
     expect(half.paths[0].d).not.toBe(t.paths[0].d)
     expect([half.rects[0].x, half.rects[0].width, half.legendX, half.legendY]).toEqual([5, 40, 20, 10])
+  })
+})
+
+describe('reframe', () => {
+  it('moves routes, labels and the legend onto an edited copy of the photo', () => {
+    let t = addPath({ ...empty, width: 400, height: 300, legendX: 0, legendY: 0 }, 'p', [pt(200, 150), pt(300, 0)])
+    t = addRect(t, 'r', { x: 300, y: 100 })
+    // The right half of the photo, as a new photo 200 wide.
+    const right = (x: number, y: number) => ({ x: (x - 200) / 200, y: y / 300 })
+    const moved = reframe(t, 'b.jpg', 200, 300, right)
+    expect([moved.src, moved.width, moved.height]).toEqual(['b.jpg', 200, 300])
+    expect(moved.paths[0].points).toEqual([pt(0, 150), pt(100, 0)])
+    expect(moved.paths[0].d).not.toBe(t.paths[0].d)
+    // The label keeps its size and its centre moves; the legend, now off the photo, is kept on its edge.
+    const [before, after] = [t.rects[0], moved.rects[0]]
+    expect([after.width, after.height]).toEqual([before.width, before.height])
+    expect(after.x).toBe(before.x - 200)
+    expect([moved.legendX, moved.legendY]).toEqual([0, 0])
   })
 })
 
