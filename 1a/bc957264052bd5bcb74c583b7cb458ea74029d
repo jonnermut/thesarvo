@@ -1,0 +1,32 @@
+thesarvo-3/src/auth/RequireSignIn.tsx
+  s_e20d0a1ebc47aa::t_3773a174d945b8 1-24
+thesarvo-3/src/auth/RequireSignIn.test.tsx
+  s_e20d0a1ebc47aa::t_2b0e31bba102a4 1-2,12
+  s_e20d0a1ebc47aa::t_d5a661e49a8307 3-11,13-40
+thesarvo-3/src/components/AppShell.tsx
+  s_e20d0a1ebc47aa::t_932d3be34d91bc 25,33-38
+  s_e20d0a1ebc47aa::t_b6a3015aca7794 3
+thesarvo-3/src/routes/g.$.tsx
+  s_e20d0a1ebc47aa::t_8e84acfb636245 53-58
+  s_e20d0a1ebc47aa::t_8da14ef86d7372 3
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_b36bfe3590edca 89-90
+thesarvo-3/docs/plan-backend.md
+  s_e20d0a1ebc47aa::t_7857a48a6a71ba 84
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1abc957264052bd5bcb74c583b7cb458ea74029d",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
