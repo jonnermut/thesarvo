@@ -1,0 +1,52 @@
+thesarvo-3/src/auth/RequireSignIn.test.tsx
+  s_e20d0a1ebc47aa::t_d2b848c936512d 7,41-47
+  s_e20d0a1ebc47aa::t_11e5d0b1c8673f 48
+thesarvo-3/src/auth/session.test.ts
+  s_e20d0a1ebc47aa::t_d2b848c936512d 2,60-86
+  s_e20d0a1ebc47aa::t_6e99e6677ed6bc 87
+thesarvo-3/src/components/NameForm.tsx
+  s_e20d0a1ebc47aa::t_2176dd8aa7f3ef 1-33
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_fa3fd545042ffd 86-87,103-107,217-218
+thesarvo-3/src/components/AccountMenu.test.tsx
+  s_e20d0a1ebc47aa::t_d2b848c936512d 7-13,38,41-46
+  s_e20d0a1ebc47aa::t_b8b583707b85c4 47
+thesarvo-3/docs/plan-backend.md
+  s_e20d0a1ebc47aa::t_fa3fd545042ffd 70
+thesarvo-3/vite.config.ts
+  s_e20d0a1ebc47aa::t_253453eff48493 12,49
+thesarvo-3/src/routeTree.gen.ts
+  s_e20d0a1ebc47aa::t_731d24f0ddacc6 13,33-37,106,123,141,160,177,194,212,237-243,340
+thesarvo-3/src/auth/session.ts
+  s_e20d0a1ebc47aa::t_253453eff48493 62,69,137-138,140,159,165-166,171-172,177-198
+thesarvo-3/src/auth/RequireSignIn.tsx
+  s_e20d0a1ebc47aa::t_731d24f0ddacc6 3,6,16-24
+thesarvo-3/src/auth/paths.ts
+  s_e20d0a1ebc47aa::t_731d24f0ddacc6 6-8
+  s_e20d0a1ebc47aa::t_253453eff48493 5
+thesarvo-3/src/components/AccountMenu.tsx
+  s_e20d0a1ebc47aa::t_731d24f0ddacc6 50-52
+thesarvo-3/src/routes/auth.callback.tsx
+  s_e20d0a1ebc47aa::t_731d24f0ddacc6 3-4,17-18
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_fa3fd545042ffd 62
+thesarvo-3/src/routes/account.name.tsx
+  s_e20d0a1ebc47aa::t_7a59f5425d5dcf 1-2,4-55
+  s_e20d0a1ebc47aa::t_731d24f0ddacc6 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6368732a6ada4f43c8ddb4003911456cd8fed3ec",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
