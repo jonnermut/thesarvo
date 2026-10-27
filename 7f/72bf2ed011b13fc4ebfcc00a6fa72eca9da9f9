@@ -1,0 +1,23 @@
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_015c4540985b1f 151
+thesarvo-3/docs/plan-backend.md
+  s_e20d0a1ebc47aa::t_15fca3b4af6af6 150-170
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_65bd42dbe6d9e0 54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7f72bf2ed011b13fc4ebfcc00a6fa72eca9da9f9",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
