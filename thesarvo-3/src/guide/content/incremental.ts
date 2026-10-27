@@ -8,7 +8,7 @@ export type NodeHashes = [body: string, place: string, kids: string]
  * What a deployed static site was built from, at `g-data/build.json`, so the next build can redo
  * only what changed. `app` names the app's code; a different one needs a full build.
  */
-export type BuildInfo = { app: string; content: string; nodes: Record<string, NodeHashes> }
+export type BuildInfo = { app: string; content: string; contentAt?: string; nodes: Record<string, NodeHashes> }
 
 export async function treeHashes(root: IndexNode, bodyOf: (node: IndexNode) => Promise<string>, hash: (s: string) => string): Promise<Record<string, NodeHashes>> {
   const out: Record<string, NodeHashes> = {}

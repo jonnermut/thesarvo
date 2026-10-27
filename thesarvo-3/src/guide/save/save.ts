@@ -8,7 +8,7 @@ import type { SaveRequest } from './validate'
 
 export type SaveResult =
   /** Saved (or nothing left to save). `rename`: ids the server gave this save's new nodes, which clashed with others'. */
-  | { status: 'saved'; head: string; guide: Guide; rename: Record<string, string> }
+  | { status: 'saved'; head: string; guide: Guide; rename: Record<string, string>; at?: string }
   /** Someone else changed these nodes too; nothing was saved. */
   | { status: 'conflict'; head: string; guide: Guide; conflicts: Conflict[] }
   | { status: 'missing' }
@@ -42,7 +42,7 @@ export async function saveGuide(repo: GuideRepo, editor: Editor, request: SaveRe
     const history = updateHistory(stored.history, { session: request.session, user: who, at: now().toISOString(), changes: applied, guide: merged.guide, note: request.note })
     const message = commitMessage(merged.guide, applied, who, request.session)
     const head = await repo.commit({ id: request.guide, head: stored.head, guide: merged.guide, history, message })
-    if (head) return { status: 'saved', head, guide: merged.guide, rename: merged.rename }
+    if (head) return { status: 'saved', head, guide: merged.guide, rename: merged.rename, at: now().toISOString() }
     if (attempt === ATTEMPTS) throw new Error('The guide is busy: too many saves at once')
   }
 }

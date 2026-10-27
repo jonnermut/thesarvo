@@ -3,6 +3,7 @@ import { getIdToken } from '#/auth/session'
 import { GUIDE_PREFIX } from '#/guide/content/paths'
 import { diffGuides, ensureIds, isEmpty, mergeChanges, nodeKeys, nodesByKey, renameChanges, same } from '#/guide/save/changes'
 import type { Changes, Conflict } from '#/guide/save/changes'
+import { rememberSaved } from '#/guide/justSaved'
 import type { SaveResult } from '#/guide/save/save'
 
 /** What the server said, as far as the saver cares. */
@@ -177,6 +178,7 @@ export class Saver {
     const result = answer.value
     const latest = this.present
     this.saved = result.guide
+    if (result.status === 'saved' && result.at) rememberSaved(result.guide, result.at)
     // What to carry over onto the server's guide: edits made while saving, or on a conflict, everything.
     if (result.status === 'conflict') for (const c of result.conflicts) this.conflicts.set(c.id, c)
     const pending = result.status === 'saved' ? renameChanges(diffGuides(sent, latest), result.rename) : diffGuides(base, latest)

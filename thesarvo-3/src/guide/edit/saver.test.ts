@@ -56,6 +56,17 @@ describe('Saver', () => {
   afterEach(() => vi.useRealTimers())
   const start = guide(text('1', 'a'), text('2', 'b'))
 
+  it('remembers what it saved, for the page to show until the site is rebuilt', async () => {
+    localStorage.clear()
+    const { api } = server(start)
+    const { type } = await editor(api, start)
+    type(edit(start, '1', 'changed'))
+    await settle()
+    const kept = JSON.parse(localStorage.getItem('thesarvo.justSaved') ?? '{}') as Record<string, { guide: Guide; at: string }>
+    expect(kept['7'].guide).toEqual(edit(start, '1', 'changed'))
+    expect(Date.parse(kept['7'].at)).not.toBeNaN()
+  })
+
   it('saves a second after the last edit, starting from the latest version', async () => {
     const { api, state } = server(edit(start, '2', 'newer'))
     const { saver, shown, type } = await editor(api, start)

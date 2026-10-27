@@ -4,6 +4,7 @@ import { RequireSignIn } from '#/auth/RequireSignIn'
 import { Breadcrumbs } from '#/components/Breadcrumbs'
 import { fetchGuide, fetchPage, fetchPageBody } from '#/guide/server'
 import { ContentsView } from '#/guide/view/ContentsView'
+import { useJustSaved } from '#/guide/justSaved'
 import { addRecent } from '#/guide/recent'
 import { guideDescription, guideImage, pageDescription, pageHead } from '#/guide/seo'
 import { GuideView } from '#/guide/view/GuideView'
@@ -43,7 +44,8 @@ export const Route = createFileRoute('/g/$')({
 })
 
 function GuidePage() {
-  const { node, trail, guide, body } = Route.useLoaderData()
+  const { node, trail, guide: published, body } = Route.useLoaderData()
+  const guide = useJustSaved(published)
   const { edit, history } = Route.useSearch()
   const hash = useLocation({ select: (l) => l.hash })
   const full = useFullWidth()

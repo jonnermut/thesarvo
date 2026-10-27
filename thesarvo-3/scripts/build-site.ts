@@ -70,6 +70,8 @@ const app = prebuilt
 const build: BuildInfo = {
   app,
   content: git(dir, 'rev-parse', 'HEAD') + (dirty(dir) ? '+' : ''),
+  // When that commit was made: browsers compare it with their own saves to tell when the site shows them.
+  contentAt: git(dir, 'log', '-1', '--format=%cI'),
   nodes: await treeHashes(index, async (n) => JSON.stringify([n.isGuide ? await guideOf(n.id) : null, await source.getPageBody(n.id), await source.getHistory(n.id)]), hash),
 }
 
