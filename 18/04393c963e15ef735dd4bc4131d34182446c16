@@ -1,0 +1,63 @@
+thesarvo-3/src/components/PageMenu.tsx
+  s_e20d0a1ebc47aa::t_e59d211a50af05 5,53-54,57,88-89,91-96
+  s_e20d0a1ebc47aa::t_7fadc80beea4fd 90
+thesarvo-3/src/components/AppShell.tsx
+  s_e20d0a1ebc47aa::t_8adcbc8ebd2981 67
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_f243d724625fde 196-198,202-203
+thesarvo-3/src/guide/edit/TopoEditor.tsx
+  s_e20d0a1ebc47aa::t_569776dc73c11e 218,220,224,231
+thesarvo-3/docs/plan-guide.md
+  s_e20d0a1ebc47aa::t_f243d724625fde 275,277
+thesarvo-3/src/guide/edit/TopoEditor.test.tsx
+  s_e20d0a1ebc47aa::t_4c2e281abc0c0f 1-3,5-41
+  s_e20d0a1ebc47aa::t_7dc4e763917494 4
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_f243d724625fde 77
+thesarvo-3/src/guide/view/TopoFigure.tsx
+  s_e20d0a1ebc47aa::t_f39ad6f0d37c65 6,93-100
+thesarvo-3/src/guide/view/place.ts
+  s_e20d0a1ebc47aa::t_67032dab3cdc20 19,23
+  s_e20d0a1ebc47aa::t_f39ad6f0d37c65 14-18,20-22,24-27
+  s_e20d0a1ebc47aa::t_9a4f71e061882b 1-2,5,7,10,28-30,32-33,35,37-40,45-48,61
+  s_e20d0a1ebc47aa::t_4d8874671d80be 3-4,6,8-9,11-13,31,34,36,41-44,49-60
+thesarvo-3/src/styles.css
+  s_e20d0a1ebc47aa::t_dd3b87cc7e8d41 67,69-70
+thesarvo-3/src/guide/view/place.test.ts
+  s_e20d0a1ebc47aa::t_3284ea8a3aff65 17-20,34,62-80,83-87
+  s_e20d0a1ebc47aa::t_5f7bab304bb588 81-82
+  s_e20d0a1ebc47aa::t_8a7834f7d62ecd 1,3,9-16,21-31,42-61,98
+  s_e20d0a1ebc47aa::t_dd3b87cc7e8d41 2,88-97
+  s_e20d0a1ebc47aa::t_8bac7e9262bb5a 4-8,32-33,35-41
+thesarvo-3/src/guide/view/GpsBlock.tsx
+  s_e20d0a1ebc47aa::t_e2413fb8539a66 84,101,103-104
+  s_e20d0a1ebc47aa::t_01d0a3453bf10f 1,53-54,102
+thesarvo-3/src/guide/view/GpsBlock.test.tsx
+  s_e20d0a1ebc47aa::t_01d0a3453bf10f 19-27
+thesarvo-3/src/guide/edit/Editor.tsx
+  s_e20d0a1ebc47aa::t_8adcbc8ebd2981 65-67,112
+  s_e20d0a1ebc47aa::t_e59d211a50af05 64,68
+  s_e20d0a1ebc47aa::t_061e93dbce6942 8,129-134,188
+thesarvo-3/src/guide/edit/PhotoEditor.tsx
+  s_e20d0a1ebc47aa::t_378efafed71851 129-130
+thesarvo-3/src/guide/view/GuideView.tsx
+  s_e20d0a1ebc47aa::t_061e93dbce6942 74
+  s_e20d0a1ebc47aa::t_e59d211a50af05 5,35
+  s_e20d0a1ebc47aa::t_85fe14a4bec66f 36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1804393c963e15ef735dd4bc4131d34182446c16",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
