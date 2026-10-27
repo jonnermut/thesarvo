@@ -32,6 +32,16 @@ export function storedIndex(node: RawIndexNode): StoredIndexNode {
   return { id: String(node.id), title: node.title, children: (node.children ?? []).map(storedIndex) }
 }
 
+/** Ids from here up are pages made in the content repo (such as the test guide), never by Confluence, whose ids are far below. */
+const LOCAL_ID_MIN = 9_000_000_000
+export const isLocalPage = (id: string) => /^\d+$/.test(id) && Number(id) >= LOCAL_ID_MIN
+
+/** The fresh index from Confluence, keeping the previous index's local top-level pages after its own. */
+export const withLocalPages = (fresh: StoredIndexNode, previous: StoredIndexNode | null): StoredIndexNode => ({
+  ...fresh,
+  children: [...fresh.children, ...(previous?.children.filter((n) => isLocalPage(n.id)) ?? [])],
+})
+
 /** The one place content files are formatted: two-space JSON, trailing newline, so reruns never create diffs. */
 export const formatJson = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`
 

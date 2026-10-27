@@ -49,11 +49,9 @@ Cognito sign-in. The owner is Jon. The content lives in a separate repo, `../../
    new commands or layout; this file for new rules.
 2. **Typecheck:** `npm run typecheck` (TS 7).
 3. **Lint:** `npm run lint` (eslint; needs TS 6, installed as `typescript`).
-4. **Format:** prettier on the files you changed, once the codebase has had its one-off prettier reformat. Until
-   then do not run prettier or `npm run format`; they would rewrite whole files.
-5. **Tests:** `npm test`, all passing.
-6. **Build** when the change touches build or bundling: `npm run build` and `npm run check-bundle`.
-7. Commit with a message that says what changed and why, ending with the `Co-Authored-By:` trailer for the model
+4. **Tests:** `npm test`, all passing.
+5. **Build** when the change touches build or bundling: `npm run build` and `npm run check-bundle`.
+6. Commit with a message that says what changed and why, ending with the `Co-Authored-By:` trailer for the model
    that wrote it.
 
 CI (`.github/workflows/thesarvo-3.yml`) runs typecheck, lint, tests, build and check-bundle on pushes to master and on PRs.

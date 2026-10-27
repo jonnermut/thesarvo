@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { formatJson, guideEntries, guideIdOf, guideToStoredJson, parseFeed, storedIndex } from './syncFeed'
+import { formatJson, guideEntries, guideIdOf, guideToStoredJson, isLocalPage, parseFeed, storedIndex, withLocalPages } from './syncFeed'
+import type { StoredIndexNode } from './syncFeed'
 
 const FEED = `<?xml version="1.0"?><updates indexHash="abc" maxLastMod="42">
 <update url="http://www.thesarvo.com/confluence/plugins/servlet/guide/xml/96" lastModified="10" filename="96.xml"/>
@@ -26,6 +27,14 @@ describe('sync feed', () => {
       title: 'A',
       children: [{ id: '2', title: 'B', children: [] }],
     })
+  })
+
+  it('keeps local pages such as the test guide when the index is replaced', () => {
+    const node = (id: string, children: StoredIndexNode[] = []) => ({ id, title: id, children })
+    const previous = node('414', [node('84'), node('9000000001'), node('12')])
+    expect(withLocalPages(node('414', [node('84'), node('99')]), previous).children.map((n) => n.id)).toEqual(['84', '99', '9000000001'])
+    expect(withLocalPages(node('414', [node('84')]), null).children).toHaveLength(1)
+    expect([isLocalPage('9000000001'), isLocalPage('497614867'), isLocalPage('x')]).toEqual([true, false, false])
   })
 
   it('formats guides identically every time', () => {
