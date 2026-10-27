@@ -1,0 +1,46 @@
+thesarvo-3/src/auth/config.ts
+  s_e20d0a1ebc47aa::t_da321d35388193 1-6
+thesarvo-3/vite.config.ts
+  s_e20d0a1ebc47aa::t_e70fb54c684a28 12
+  s_e20d0a1ebc47aa::t_b1d3132eb10be5 49
+thesarvo-3/src/auth/verifyToken.ts
+  s_e20d0a1ebc47aa::t_e39efa9f82cc2d 1-51
+thesarvo-3/src/components/AccountMenu.tsx
+  s_e20d0a1ebc47aa::t_5aad09a7b3653e 2-9,12-13,17-51
+  s_e20d0a1ebc47aa::t_bd25675c810f2d 1,10-11,14-16
+thesarvo-3/src/routes/auth.callback.tsx
+  s_e20d0a1ebc47aa::t_b0ca2a7e01d532 1-34
+thesarvo-3/src/auth/verifyToken.test.ts
+  s_e20d0a1ebc47aa::t_8a0b4985cfe245 1-37
+thesarvo-3/src/auth/session.ts
+  s_e20d0a1ebc47aa::t_e70fb54c684a28 2-3
+  s_e20d0a1ebc47aa::t_dbd82715266715 1,4-145
+thesarvo-3/src/components/AppShell.tsx
+  s_e20d0a1ebc47aa::t_b1d3132eb10be5 4,104
+thesarvo-3/src/routeTree.gen.ts
+  s_e20d0a1ebc47aa::t_b1d3132eb10be5 13,25-29,58,67,77,86-93,95-102,104-111,116,133-139,180
+thesarvo-3/src/routes/g.upload.tsx
+  s_e20d0a1ebc47aa::t_528997247984bf 4,10,16-17
+thesarvo-3/src/auth/paths.ts
+  s_e20d0a1ebc47aa::t_e70fb54c684a28 1-2
+thesarvo-3/src/guide/edit/upload.ts
+  s_e20d0a1ebc47aa::t_528997247984bf 1,51-53,57
+thesarvo-3/docs/plan-backend.md
+  s_e20d0a1ebc47aa::t_45a15e2efd1c23 64-65
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "97d3fe444aafadb10bb3fe07e16d60aa601b90af",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
