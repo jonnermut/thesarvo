@@ -35,13 +35,7 @@ it('shows a signed-in user’s initial and their name in the menu', () => {
   render(<AccountMenu />)
   act(() => screen.getByRole('button', { name: 'Account: Jon' }).click())
   expect(screen.getByText('jon@example.com')).toBeTruthy()
-  expect(screen.getByRole('menuitem', { name: 'Change your name' })).toBeTruthy()
+  expect(screen.getByRole('menuitem', { name: 'Account settings' }).getAttribute('href')).toBe('/account')
   expect(screen.getByRole('menuitem', { name: 'Sign out' })).toBeTruthy()
 })
 
-it('asks someone without a name to add one', () => {
-  session.user = { sub: '1', email: 'jon@example.com', name: '', hasPassword: false, admin: false }
-  render(<AccountMenu />)
-  act(() => screen.getByRole('button', { name: 'Account: jon@example.com' }).click())
-  expect(screen.getByRole('menuitem', { name: 'Add your name' }).getAttribute('href')).toBe('/account/name')
-})

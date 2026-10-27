@@ -10,7 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AccountNameRouteImport } from './routes/account.name'
+import { Route as AccountIndexRouteImport } from './routes/account.index'
 import { Route as AccountPasswordRouteImport } from './routes/account.password'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as GIndexRouteImport } from './routes/g.index'
@@ -30,9 +30,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AccountNameRoute = AccountNameRouteImport.update({
-  id: '/account/name',
-  path: '/account/name',
+const AccountIndexRoute = AccountIndexRouteImport.update({
+  id: '/account/',
+  path: '/account/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountPasswordRoute = AccountPasswordRouteImport.update({
@@ -103,13 +103,13 @@ const GApiUploadUrlRoute = GApiUploadUrlRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/account/name': typeof AccountNameRoute
   '/account/password': typeof AccountPasswordRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/g/$': typeof GSplatRoute
   '/g/content': typeof GContentRoute
   '/g/search': typeof GSearchRoute
   '/g/upload': typeof GUploadRoute
+  '/account/': typeof AccountIndexRoute
   '/g/': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
   '/g/api/guide': typeof GApiGuideRoute
@@ -120,13 +120,13 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/account/name': typeof AccountNameRoute
   '/account/password': typeof AccountPasswordRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/g/$': typeof GSplatRoute
   '/g/content': typeof GContentRoute
   '/g/search': typeof GSearchRoute
   '/g/upload': typeof GUploadRoute
+  '/account': typeof AccountIndexRoute
   '/g': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
   '/g/api/guide': typeof GApiGuideRoute
@@ -138,13 +138,13 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/account/name': typeof AccountNameRoute
   '/account/password': typeof AccountPasswordRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/g/$': typeof GSplatRoute
   '/g/content': typeof GContentRoute
   '/g/search': typeof GSearchRoute
   '/g/upload': typeof GUploadRoute
+  '/account/': typeof AccountIndexRoute
   '/g/': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
   '/g/api/guide': typeof GApiGuideRoute
@@ -157,13 +157,13 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/account/name'
     | '/account/password'
     | '/auth/callback'
     | '/g/$'
     | '/g/content'
     | '/g/search'
     | '/g/upload'
+    | '/account/'
     | '/g/'
     | '/g/api/admin'
     | '/g/api/guide'
@@ -174,13 +174,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/account/name'
     | '/account/password'
     | '/auth/callback'
     | '/g/$'
     | '/g/content'
     | '/g/search'
     | '/g/upload'
+    | '/account'
     | '/g'
     | '/g/api/admin'
     | '/g/api/guide'
@@ -191,13 +191,13 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/account/name'
     | '/account/password'
     | '/auth/callback'
     | '/g/$'
     | '/g/content'
     | '/g/search'
     | '/g/upload'
+    | '/account/'
     | '/g/'
     | '/g/api/admin'
     | '/g/api/guide'
@@ -209,13 +209,13 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AccountNameRoute: typeof AccountNameRoute
   AccountPasswordRoute: typeof AccountPasswordRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
   GSplatRoute: typeof GSplatRoute
   GContentRoute: typeof GContentRoute
   GSearchRoute: typeof GSearchRoute
   GUploadRoute: typeof GUploadRoute
+  AccountIndexRoute: typeof AccountIndexRoute
   GIndexRoute: typeof GIndexRoute
   GApiAdminRoute: typeof GApiAdminRoute
   GApiGuideRoute: typeof GApiGuideRoute
@@ -234,11 +234,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/account/name': {
-      id: '/account/name'
-      path: '/account/name'
-      fullPath: '/account/name'
-      preLoaderRoute: typeof AccountNameRouteImport
+    '/account/': {
+      id: '/account/'
+      path: '/account'
+      fullPath: '/account/'
+      preLoaderRoute: typeof AccountIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/account/password': {
@@ -337,13 +337,13 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AccountNameRoute: AccountNameRoute,
   AccountPasswordRoute: AccountPasswordRoute,
   AuthCallbackRoute: AuthCallbackRoute,
   GSplatRoute: GSplatRoute,
   GContentRoute: GContentRoute,
   GSearchRoute: GSearchRoute,
   GUploadRoute: GUploadRoute,
+  AccountIndexRoute: AccountIndexRoute,
   GIndexRoute: GIndexRoute,
   GApiAdminRoute: GApiAdminRoute,
   GApiGuideRoute: GApiGuideRoute,
