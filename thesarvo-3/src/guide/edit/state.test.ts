@@ -31,6 +31,18 @@ describe('editorReducer', () => {
     expect(editorReducer(s, { type: 'move', id: '1', by: -1 })).toBe(s)
   })
 
+  it('drops a dragged node into any gap, in one undo step', () => {
+    const s0 = initEditor(guide(text('1'), text('2'), text('3'), text('4')))
+    expect(ids(editorReducer(s0, { type: 'moveTo', id: '1', to: 3 }).present)).toEqual(['2', '3', '1', '4'])
+    expect(ids(editorReducer(s0, { type: 'moveTo', id: '1', to: 4 }).present)).toEqual(['2', '3', '4', '1'])
+    const s = editorReducer(s0, { type: 'moveTo', id: '4', to: 0 })
+    expect(ids(s.present)).toEqual(['4', '1', '2', '3'])
+    expect(ids(editorReducer(s, { type: 'undo' }).present)).toEqual(['1', '2', '3', '4'])
+    // Either side of itself: no change, no undo step.
+    expect(editorReducer(s0, { type: 'moveTo', id: '2', to: 1 })).toBe(s0)
+    expect(editorReducer(s0, { type: 'moveTo', id: '2', to: 2 })).toBe(s0)
+  })
+
   it('folds edits with the same key into one undo step', () => {
     let s = initEditor(guide(text('1')))
     for (const t of ['h', 'he', 'hel']) {

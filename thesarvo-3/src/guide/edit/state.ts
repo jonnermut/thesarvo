@@ -17,6 +17,8 @@ export type Action =
   | { type: 'addClimbToTopo'; topoId: string; climb: Climb; pathId?: string }
   | { type: 'delete'; id: string }
   | { type: 'move'; id: string; by: -1 | 1 }
+  /** Drag and drop: `to` is the gap the node is dropped in, 0 (before the first) to the node count (after the last). */
+  | { type: 'moveTo'; id: string; to: number }
   | { type: 'replace'; guide: Guide }
   | { type: 'undo' }
   | { type: 'redo' }
@@ -90,6 +92,15 @@ function reduce(state: EditorState, action: Action): EditorState {
       if (from < 0 || to < 0 || to >= present.nodes.length) return state
       const nodes = present.nodes.slice()
       ;[nodes[from], nodes[to]] = [nodes[to], nodes[from]]
+      return push(state, withNodes(nodes), null)
+    }
+    case 'moveTo': {
+      const from = present.nodes.findIndex((n) => nodeId(n) === action.id)
+      // Dropping into the gap either side of the node leaves it where it is.
+      if (from < 0 || action.to === from || action.to === from + 1) return state
+      const nodes = present.nodes.slice()
+      const [node] = nodes.splice(from, 1)
+      nodes.splice(action.to > from ? action.to - 1 : action.to, 0, node)
       return push(state, withNodes(nodes), null)
     }
     case 'replace':

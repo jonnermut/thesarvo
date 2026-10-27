@@ -8,6 +8,7 @@ import { guideTitle } from '#/guide/view/kml'
 import { HeaderBlock } from '#/guide/view/HeaderBlock'
 import { TextBlock } from '#/guide/view/TextBlock'
 import { STATIC_SITE } from '#/guide/content/paths'
+import { DragHandle, useBlockDrag } from './BlockDrag'
 import { ImagePicker } from './ImagePicker'
 import { Button, DeleteButton } from './fields'
 import { fingerprint, localStore } from './drafts'
@@ -96,6 +97,7 @@ export default function Editor({ guide }: { guide: Guide }) {
   // Stays in the topo editor: the new climb is named from the topo's panel.
   const addClimbToTopo: AddClimbFn = (topoId, pathId) =>
     dispatch({ type: 'addClimbToTopo', topoId, pathId, climb: newNode(climbKind(present), nextId(present)) as Climb })
+  const blockDrag = useBlockDrag(present.nodes.length, (id, to) => dispatch({ type: 'moveTo', id, to }))
 
   return (
     <div className="px-4 py-6 sm:px-6">
@@ -167,18 +169,24 @@ export default function Editor({ guide }: { guide: Guide }) {
       {preview ? (
         <GuideView guide={present} />
       ) : (
-        <div className="space-y-4">
+        <div ref={blockDrag.listRef} className="space-y-4">
           <InsertPoint guide={present} onAdd={add} />
-          {present.nodes.map((node) => {
+          {present.nodes.map((node, index) => {
             if (node.type === 'unknown') return null
             const id = nodeId(node)
             const open = editingId === id
+            const { drag } = blockDrag
             return (
-              <div key={id} className="space-y-4">
+              <div key={id} className="relative space-y-4">
+                {/* Where a dragged block would land: before this one, or after the last. */}
+                {drag?.to === index && <DropLine className="-top-2.5" />}
+                {drag?.to === present.nodes.length && index === present.nodes.length - 1 && <DropLine className="-bottom-2.5" />}
                 <section
-                  className={`rounded-xl border bg-card p-3 shadow-sm ${open ? 'border-amber' : 'border-line'}`}
+                  data-block={index}
+                  className={`rounded-xl border bg-card p-3 shadow-sm ${open ? 'border-amber' : 'border-line'} ${drag?.id === id ? 'opacity-50' : ''}`}
                 >
                   <div className="mb-2 flex items-center gap-1.5 text-xs uppercase tracking-wide text-muted">
+                    <DragHandle onPointerDown={(e) => blockDrag.start(e, id)} onMove={(by) => dispatch({ type: 'move', id, by })} />
                     <span className="font-semibold">{node.type}</span>
                     <span className="ml-auto flex gap-1">
                       <Button
@@ -230,6 +238,10 @@ export default function Editor({ guide }: { guide: Guide }) {
       )}
     </div>
   )
+}
+
+function DropLine({ className }: { className: string }) {
+  return <div aria-hidden className={`pointer-events-none absolute inset-x-0 h-1 -translate-y-px rounded-full bg-amber ${className}`} />
 }
 
 function Chevron({ up }: { up?: boolean }) {
