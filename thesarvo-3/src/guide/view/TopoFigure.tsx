@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { useEscape, usePresence, useScrollLock } from '#/components/overlay'
 import type { Climb, ImageTopo } from '#/guide/model/types'
 import { ClimbBlock } from './ClimbBlock'
+import { legendOnPhoto } from './section'
 import { Stars } from './Stars'
 import { Topo } from './Topo'
 import { TopoViewer } from './TopoViewer'
@@ -142,7 +143,7 @@ export function TopoFigure({ topo: stored, redundantLegend, ...rest }: Props) {
       style={{ maxWidth: topo.width }}
       className={`@container group relative my-3 print:break-inside-avoid ${printClasses(topo)}`}
     >
-      <TopoCanvas {...props} onOpen={setPopup} legend={redundantLegend && topo.other?.legend !== 'true' ? [] : legend} rows={rows} />
+      <TopoCanvas {...props} onOpen={setPopup} legend={redundantLegend && !legendOnPhoto(topo) ? [] : legend} rows={rows} />
       <button
         type="button"
         onClick={() => setOpen(true)}

@@ -62,6 +62,13 @@ export const toggleLegend = (topo: ImageTopo, climbId: string): ImageTopo => ({
   legend: topo.legend.includes(climbId) ? topo.legend.filter((c) => c !== climbId) : [...topo.legend, climbId],
 })
 
+export { legendOnPhoto } from '#/guide/view/section'
+
+export const setLegendOnPhoto = (topo: ImageTopo, on: boolean): ImageTopo => {
+  const { legend: _, ...rest } = topo.other ?? {}
+  return { ...topo, other: on ? { ...rest, legend: 'true' } : rest }
+}
+
 /** Sets the marker ('belay', 'lower' or '') on the last point of a route. */
 export const setEndMarker = (topo: ImageTopo, pathId: string, kind: string): ImageTopo =>
   mapPath(topo, pathId, (p) => ({ ...p, points: p.points.map((pt, i) => (i === p.points.length - 1 ? { ...pt, kind } : pt)) }))

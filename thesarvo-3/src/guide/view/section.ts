@@ -27,6 +27,9 @@ export function topoSection(nodes: GuideNode[], at: number): { climbs: Climb[]; 
  * A legend not worth showing: the climbs the guide lists straight after the photo already say the
  * same. The old site's `legend` flag is no guide, as most flagged legends repeat the climbs below.
  */
+/** The old site's `legend` flag: on, the legend is drawn on the photo even when the climbs follow straight after. */
+export const legendOnPhoto = (topo: ImageTopo) => topo.other?.legend === 'true'
+
 export function legendRedundant(topo: ImageTopo, section: Climb[]): boolean {
   const { legend } = topo
   if (!legend.length || topo.legendTitle || topo.legendFooter) return false

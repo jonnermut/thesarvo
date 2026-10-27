@@ -103,6 +103,7 @@ const topoFields = (n: ImageTopo): Field[] => [
   { field: 'Labels', value: n.rects.map((r) => readable(r.text)).filter(Boolean).join(', ') },
   { field: 'Legend title', value: readable(n.legendTitle) },
   { field: 'Legend footer', value: readable(n.legendFooter), long: true },
+  { field: 'Legend always on the photo', value: n.other?.legend === 'true' ? 'yes' : '' },
   { field: 'Climbs in the legend', value: n.legend.length ? String(n.legend.length) : '' },
   // Moving a point or a label: worth saying even though there is no word for it.
   { field: 'Drawing', value: JSON.stringify([n.paths.map((p) => [p.d, p.linkedTo, p.lineStyle, p.labelText, p.arrow]), n.rects, n.legendX, n.legendY, n.width, n.height]) },

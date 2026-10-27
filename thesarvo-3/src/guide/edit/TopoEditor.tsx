@@ -424,6 +424,7 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
                 {photo && <PhotoEditor file={photo} onDone={savePhoto} onCancel={() => setPhoto(null)} />}
               </div>
               <h4 className="font-semibold">Legend</h4>
+              <CheckField label="Always on the photo (otherwise left off when the climbs follow straight after)" checked={ops.legendOnPhoto(topo)} onChange={(on) => onChange((t) => ops.setLegendOnPhoto(t, on))} />
               <TextField label="Title" value={topo.legendTitle} onChange={(legendTitle) => onChange((t) => ({ ...t, legendTitle }), 'legend-title')} />
               <TextField label="Footer" value={topo.legendFooter} onChange={(legendFooter) => onChange((t) => ({ ...t, legendFooter }), 'legend-footer')} />
               <div className="grid grid-cols-2 gap-2">

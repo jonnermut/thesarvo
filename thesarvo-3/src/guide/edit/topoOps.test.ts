@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ImageTopo } from '#/guide/model/types'
-import { addPath, addRect, newRouteArrow, insertPointAfter, movePoint, nudgePath, nudgePoint, nudgeRect, reframe, removePoint, resize, setPointKind, snapPoint, toggleLegend } from './topoOps'
+import { addPath, addRect, newRouteArrow, insertPointAfter, movePoint, nudgePath, nudgePoint, nudgeRect, reframe, removePoint, resize, setPointKind, setLegendOnPhoto, snapPoint, toggleLegend } from './topoOps'
 
 const empty: ImageTopo = {
   type: 'image', id: '1', src: 'a.jpg', width: 100, height: 100, noPrint: false, printLayout: '',
@@ -36,6 +36,12 @@ describe('topo ops', () => {
     const t = toggleLegend(toggleLegend(empty, 'b'), 'a')
     expect(t.legend).toEqual(['b', 'a'])
     expect(toggleLegend(t, 'b').legend).toEqual(['a'])
+  })
+
+  it('turns the legend on the photo on and off, keeping the other legacy attributes', () => {
+    const on = setLegendOnPhoto({ ...empty, other: { legendExtraPage: 'x' } }, true)
+    expect(on.other).toEqual({ legendExtraPage: 'x', legend: 'true' })
+    expect(setLegendOnPhoto(on, false).other).toEqual({ legendExtraPage: 'x' })
   })
 
   it('marks one point as the label position', () => {
