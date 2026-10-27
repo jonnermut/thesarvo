@@ -1,0 +1,23 @@
+thesarvo-3/scripts/cognito-setup.sh
+  s_e20d0a1ebc47aa::t_ca4d5f927bc2d2 78-80,110
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_c8bcf11954934e 88
+thesarvo-3/docs/plan-backend.md
+  s_e20d0a1ebc47aa::t_7cac6ea1b6772c 85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2f080536e64d1a58e3a712a1f9439d09ae630e12",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
