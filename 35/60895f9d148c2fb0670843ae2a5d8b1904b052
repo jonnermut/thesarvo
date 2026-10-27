@@ -1,0 +1,50 @@
+thesarvo-3/package.json
+  s_e20d0a1ebc47aa::t_fcef371976a1f4 32,34-35
+thesarvo-3/docs/plan-guide.md
+  s_e20d0a1ebc47aa::t_898a071a50da57 277
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_99845c8deaf8b9 73
+  s_e20d0a1ebc47aa::t_46a14f7af65106 61
+thesarvo-3/src/guide/edit/ImagePicker.tsx
+  s_e20d0a1ebc47aa::t_8dd8cb222d5ec5 6
+  s_e20d0a1ebc47aa::t_85848fd05a3766 13
+  s_e20d0a1ebc47aa::t_44b1d0bf55381e 108-137
+  s_e20d0a1ebc47aa::t_e1af13d25b9ed5 19,21,23-24
+  s_e20d0a1ebc47aa::t_900b2c0a85db42 79-88
+  s_e20d0a1ebc47aa::t_9220bdca5844e3 33-46,48-50
+thesarvo-3/docs/live-site-differences.md
+  s_e20d0a1ebc47aa::t_2a7cb17bb95d98 50
+thesarvo-3/src/guide/edit/photoEdit.ts
+  s_e20d0a1ebc47aa::t_53a68e0eac0913 1
+  s_e20d0a1ebc47aa::t_f20e070a785d4e 72
+  s_e20d0a1ebc47aa::t_4b9fe0ba0ebfaf 2-71,73-85
+thesarvo-3/src/guide/edit/PhotoEditor.tsx
+  s_e20d0a1ebc47aa::t_ef66edabfd9a1e 1-170
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_3ab04a87672587 146-151
+  s_e20d0a1ebc47aa::t_4697ec1614d0e7 93-94
+thesarvo-3/src/guide/edit/photoEdit.test.ts
+  s_e20d0a1ebc47aa::t_4237346003fe72 1-47
+thesarvo-3/src/guide/edit/upload.ts
+  s_e20d0a1ebc47aa::t_3842d10b334256 32,34
+  s_e20d0a1ebc47aa::t_44462684421067 5
+  s_e20d0a1ebc47aa::t_b8b91172a581ca 13-14
+thesarvo-3/package-lock.json
+  s_e20d0a1ebc47aa::t_5c61da6b184051 16,18-19,5178-5183,5826-5834,6071-6076,6216-6235,6369-6381
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3560895f9d148c2fb0670843ae2a5d8b1904b052",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
