@@ -1,0 +1,21 @@
+thesarvo-3/src/routes/account.name.tsx
+  s_e20d0a1ebc47aa::t_5374483afaebd6 43
+thesarvo-3/src/auth/RequireSignIn.tsx
+  s_e20d0a1ebc47aa::t_5374483afaebd6 20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5c5cb09848d9924d7fcd617d49c198002e179c10",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
