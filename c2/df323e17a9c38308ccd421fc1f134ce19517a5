@@ -1,0 +1,30 @@
+thesarvo-3/src/guide/edit/NodeForms.tsx
+  s_e20d0a1ebc47aa::t_6fb276c7d42771 2-3,30,50-64
+  s_e20d0a1ebc47aa::t_705fd36ffb33b0 65-67
+thesarvo-3/src/guide/edit/NodeForms.test.tsx
+  s_e20d0a1ebc47aa::t_7b6aad222f735e 1-23
+thesarvo-3/src/guide/view/HeaderBlock.tsx
+  s_e20d0a1ebc47aa::t_8e6e3dd440c327 43
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_48ceb4b6c2db00 139-140
+thesarvo-3/src/guide/edit/TopoEditor.tsx
+  s_e20d0a1ebc47aa::t_6fb276c7d42771 9,64-65,120-121,324-330,332-340,423-424,427,430
+thesarvo-3/src/guide/edit/fields.tsx
+  s_e20d0a1ebc47aa::t_e79fa67a750cc9 11-12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c2df323e17a9c38308ccd421fc1f134ce19517a5",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
