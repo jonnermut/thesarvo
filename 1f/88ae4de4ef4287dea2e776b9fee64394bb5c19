@@ -1,0 +1,46 @@
+thesarvo-3/scripts/package-publisher.sh
+  s_e20d0a1ebc47aa::t_3c32838e497c39 1-21
+thesarvo-3/scripts/build-site.ts
+  s_e20d0a1ebc47aa::t_7a7ae75212ffa9 2,4-5,7-9,12-13,17,19-20,39-40,67-69,82-83,147-155,157-162,164-170,174,177-178
+  s_e20d0a1ebc47aa::t_d8ca46b2114154 156,163
+thesarvo-3/scripts/deploy-changed.ts
+  s_e20d0a1ebc47aa::t_7a7ae75212ffa9 17
+  s_e20d0a1ebc47aa::t_a6bb86f925e6dd 2,5
+thesarvo-3/scripts/publish.sh
+  s_e20d0a1ebc47aa::t_3c32838e497c39 5-6,11-17,37,41
+.github/workflows/publisher.yml
+  s_e20d0a1ebc47aa::t_fa4d93c77495ff 1-37
+thesarvo-3/scripts/gps-report.ts
+  s_e20d0a1ebc47aa::t_7a7ae75212ffa9 5,10
+thesarvo-3/scripts/deploy-site.sh
+  s_e20d0a1ebc47aa::t_7a7ae75212ffa9 2,12
+  s_e20d0a1ebc47aa::t_2907f4d7a5d1b3 32
+thesarvo-3/package.json
+  s_e20d0a1ebc47aa::t_3c32838e497c39 21
+thesarvo-3/vite.config.ts
+  s_e20d0a1ebc47aa::t_2d8bbce74ed4ef 41-42,45,49
+thesarvo-3/README.md
+  s_e20d0a1ebc47aa::t_52b2b52f086994 14
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_955ead6bb95a15 150-151
+thesarvo-3/docs/plan-backend.md
+  s_e20d0a1ebc47aa::t_ac08d23d03eb91 150,171-172
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_6c2c9b82f92dc3 54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1f88ae4de4ef4287dea2e776b9fee64394bb5c19",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
