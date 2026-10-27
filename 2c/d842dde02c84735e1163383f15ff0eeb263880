@@ -1,0 +1,34 @@
+thesarvo-3/scripts/deploy-site.sh
+  s_e20d0a1ebc47aa::t_65799b1db116c8 4,30-33
+thesarvo-3/scripts/deploy-changed.ts
+  s_e20d0a1ebc47aa::t_d5d1ceae677537 1-58
+thesarvo-3/src/aws/s3.test.ts
+  s_e20d0a1ebc47aa::t_923d5f18310d78 2
+  s_e20d0a1ebc47aa::t_0c9cea78c5874c 72-81
+thesarvo-3/src/aws/deploy.ts
+  s_e20d0a1ebc47aa::t_30bd3eed932331 1-43
+thesarvo-3/scripts/publish.sh
+  s_e20d0a1ebc47aa::t_0da5a3e4283ebd 34-40
+thesarvo-3/src/aws/deploy.test.ts
+  s_e20d0a1ebc47aa::t_991ead24e60aee 1-37
+thesarvo-3/src/aws/s3.ts
+  s_e20d0a1ebc47aa::t_e37fae8fb8f45c 122
+  s_e20d0a1ebc47aa::t_6ee4361ea61b7b 2
+  s_e20d0a1ebc47aa::t_2a3ced921576bb 64-65,97-121,123-130
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2cd842dde02c84735e1163383f15ff0eeb263880",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
