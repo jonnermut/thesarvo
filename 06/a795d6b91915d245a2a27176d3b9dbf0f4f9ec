@@ -1,0 +1,60 @@
+thesarvo-3/src/guide/edit/photoEdit.ts
+  s_e20d0a1ebc47aa::t_55bb112e3aa410 7-8,14-22,31-32,34-48,55,57,61-62,64-65,69-77,82-128,131-132,134,136-140
+thesarvo-3/src/guide/edit/PhotoEditor.tsx
+  s_e20d0a1ebc47aa::t_5be4e99f4aae54 3-5,8-9,12,14-15,22-25,28-30,32-42,50-51,59,68-75,78-91,95,98-102,109-113,121-122,128-129,131-133,144,146,152,154-156,159-162,164,187,190,197-198,201,207
+  s_e20d0a1ebc47aa::t_4b24bc1bcb8649 126-127,130
+thesarvo-3/src/guide/edit/topoOps.test.ts
+  s_e20d0a1ebc47aa::t_8b04388766ca3c 3
+  s_e20d0a1ebc47aa::t_8406eef3c0006f 59-73
+  s_e20d0a1ebc47aa::t_1ba334da199864 74-76
+thesarvo-3/src/guide/edit/topoOps.ts
+  s_e20d0a1ebc47aa::t_ee9c52560c4281 92-115
+thesarvo-3/src/guide/edit/photoEdit.test.ts
+  s_e20d0a1ebc47aa::t_005d90403407d0 2,11-24,27-42,45-69
+thesarvo-3/src/guide/edit/upload.ts
+  s_e20d0a1ebc47aa::t_3614815175caa2 43-48
+  s_e20d0a1ebc47aa::t_a4cc6468b30603 2
+  s_e20d0a1ebc47aa::t_4f598ece07b145 32
+  s_e20d0a1ebc47aa::t_5e6f3f4ae8bcfc 5
+  s_e20d0a1ebc47aa::t_61496b6dbc73ad 49-50
+thesarvo-3/package.json
+  s_e20d0a1ebc47aa::t_daa43eda1db1fe 35
+thesarvo-3/src/guide/edit/TopoEditor.tsx
+  s_e20d0a1ebc47aa::t_f636fda34f0a9b 424
+  s_e20d0a1ebc47aa::t_d53cf6e7104e9c 70-72
+  s_e20d0a1ebc47aa::t_fdc53cdc1aa867 187,191-192
+  s_e20d0a1ebc47aa::t_e5eefc24d68555 128
+  s_e20d0a1ebc47aa::t_99d4ec37c95c2e 419-423,425
+  s_e20d0a1ebc47aa::t_d7ff5c7115f15a 10-12,14
+  s_e20d0a1ebc47aa::t_afd926214ec517 156-176
+thesarvo-3/docs/plan-guide.md
+  s_e20d0a1ebc47aa::t_46703011c69a68 277
+thesarvo-3/src/guide/edit/ImagePicker.tsx
+  s_e20d0a1ebc47aa::t_2e33eb6e08de92 7
+  s_e20d0a1ebc47aa::t_5a37ad48f3afc5 157-168,170-180
+  s_e20d0a1ebc47aa::t_05f5a15d0f4c62 123
+  s_e20d0a1ebc47aa::t_6a69dee475f605 169
+thesarvo-3/docs/live-site-differences.md
+  s_e20d0a1ebc47aa::t_2d845c8b706825 50
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_28024291ea6a09 150-158
+  s_e20d0a1ebc47aa::t_917f459c26cf22 94-96
+thesarvo-3/package-lock.json
+  s_e20d0a1ebc47aa::t_e56cd3585189a8 19,6363-6367,6369
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "06a795d6b91915d245a2a27176d3b9dbf0f4f9ec",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
