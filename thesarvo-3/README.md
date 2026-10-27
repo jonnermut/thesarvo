@@ -29,14 +29,19 @@ served by a Vite middleware at `/g/content?f=<file>`.
 - `src/guide/convert` XML <-> model (round-trips the fixtures)
 - `src/guide/view` read view (topo overlay, climbs, GPS)
 - `src/guide/islands` lazy Leaflet map
-- `src/guide/edit` editor: reducer with undo/redo, topo operations, local drafts
+- `src/guide/edit` editor: reducer with undo/redo, topo operations, local drafts, the saver
+- `src/guide/save` saving on the server: per-node merge, edit-session history, validation, the GitHub and local repos
 
 - `src/auth` Cognito sign-in in the browser, token checks on the server, the Confluence user migration
 - `src/aws` S3 signing (presigned uploads, listing)
 - `src/routes/g.api.*` the Lambda's API routes
 
-Editor edits are saved as drafts in localStorage; saving to the content repo is not built yet
-(`docs/plan-backend.md` B2). Photo uploads go to S3.
+Editor edits save by themselves through `POST /g/api/save` (`docs/plan-backend.md` B2), with a draft in
+localStorage until each save succeeds. The dev server saves to `.saves/` (gitignored; `SAVES_DIR` overrides) and
+reads guides from there first; delete it to start again. Elsewhere saving commits to GitHub when `CONTENT_REPO`
+(`owner/name`, optional `CONTENT_BRANCH`) and `GITHUB_TOKEN` or `GITHUB_APP_ID`, `GITHUB_APP_INSTALLATION_ID` and
+`GITHUB_APP_PRIVATE_KEY` are set; without them the API answers 501 and the editor keeps drafts only. Photo uploads
+go to S3.
 
 ## Tooling note
 

@@ -18,8 +18,10 @@ import { Route as GContentRouteImport } from './routes/g.content'
 import { Route as GSearchRouteImport } from './routes/g.search'
 import { Route as GUploadRouteImport } from './routes/g.upload'
 import { Route as GApiAdminRouteImport } from './routes/g.api.admin'
+import { Route as GApiGuideRouteImport } from './routes/g.api.guide'
 import { Route as GApiImagesRouteImport } from './routes/g.api.images'
 import { Route as GApiMeRouteImport } from './routes/g.api.me'
+import { Route as GApiSaveRouteImport } from './routes/g.api.save'
 import { Route as GApiUploadUrlRouteImport } from './routes/g.api.upload-url'
 
 const IndexRoute = IndexRouteImport.update({
@@ -67,6 +69,11 @@ const GApiAdminRoute = GApiAdminRouteImport.update({
   path: '/g/api/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GApiGuideRoute = GApiGuideRouteImport.update({
+  id: '/g/api/guide',
+  path: '/g/api/guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GApiImagesRoute = GApiImagesRouteImport.update({
   id: '/g/api/images',
   path: '/g/api/images',
@@ -75,6 +82,11 @@ const GApiImagesRoute = GApiImagesRouteImport.update({
 const GApiMeRoute = GApiMeRouteImport.update({
   id: '/g/api/me',
   path: '/g/api/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GApiSaveRoute = GApiSaveRouteImport.update({
+  id: '/g/api/save',
+  path: '/g/api/save',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GApiUploadUrlRoute = GApiUploadUrlRouteImport.update({
@@ -93,8 +105,10 @@ export interface FileRoutesByFullPath {
   '/g/upload': typeof GUploadRoute
   '/g/': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
+  '/g/api/guide': typeof GApiGuideRoute
   '/g/api/images': typeof GApiImagesRoute
   '/g/api/me': typeof GApiMeRoute
+  '/g/api/save': typeof GApiSaveRoute
   '/g/api/upload-url': typeof GApiUploadUrlRoute
 }
 export interface FileRoutesByTo {
@@ -107,8 +121,10 @@ export interface FileRoutesByTo {
   '/g/upload': typeof GUploadRoute
   '/g': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
+  '/g/api/guide': typeof GApiGuideRoute
   '/g/api/images': typeof GApiImagesRoute
   '/g/api/me': typeof GApiMeRoute
+  '/g/api/save': typeof GApiSaveRoute
   '/g/api/upload-url': typeof GApiUploadUrlRoute
 }
 export interface FileRoutesById {
@@ -122,8 +138,10 @@ export interface FileRoutesById {
   '/g/upload': typeof GUploadRoute
   '/g/': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
+  '/g/api/guide': typeof GApiGuideRoute
   '/g/api/images': typeof GApiImagesRoute
   '/g/api/me': typeof GApiMeRoute
+  '/g/api/save': typeof GApiSaveRoute
   '/g/api/upload-url': typeof GApiUploadUrlRoute
 }
 export interface FileRouteTypes {
@@ -138,8 +156,10 @@ export interface FileRouteTypes {
     | '/g/upload'
     | '/g/'
     | '/g/api/admin'
+    | '/g/api/guide'
     | '/g/api/images'
     | '/g/api/me'
+    | '/g/api/save'
     | '/g/api/upload-url'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -152,8 +172,10 @@ export interface FileRouteTypes {
     | '/g/upload'
     | '/g'
     | '/g/api/admin'
+    | '/g/api/guide'
     | '/g/api/images'
     | '/g/api/me'
+    | '/g/api/save'
     | '/g/api/upload-url'
   id:
     | '__root__'
@@ -166,8 +188,10 @@ export interface FileRouteTypes {
     | '/g/upload'
     | '/g/'
     | '/g/api/admin'
+    | '/g/api/guide'
     | '/g/api/images'
     | '/g/api/me'
+    | '/g/api/save'
     | '/g/api/upload-url'
   fileRoutesById: FileRoutesById
 }
@@ -181,8 +205,10 @@ export interface RootRouteChildren {
   GUploadRoute: typeof GUploadRoute
   GIndexRoute: typeof GIndexRoute
   GApiAdminRoute: typeof GApiAdminRoute
+  GApiGuideRoute: typeof GApiGuideRoute
   GApiImagesRoute: typeof GApiImagesRoute
   GApiMeRoute: typeof GApiMeRoute
+  GApiSaveRoute: typeof GApiSaveRoute
   GApiUploadUrlRoute: typeof GApiUploadUrlRoute
 }
 
@@ -251,6 +277,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GApiAdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/g/api/guide': {
+      id: '/g/api/guide'
+      path: '/g/api/guide'
+      fullPath: '/g/api/guide'
+      preLoaderRoute: typeof GApiGuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/g/api/images': {
       id: '/g/api/images'
       path: '/g/api/images'
@@ -263,6 +296,13 @@ declare module '@tanstack/react-router' {
       path: '/g/api/me'
       fullPath: '/g/api/me'
       preLoaderRoute: typeof GApiMeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/g/api/save': {
+      id: '/g/api/save'
+      path: '/g/api/save'
+      fullPath: '/g/api/save'
+      preLoaderRoute: typeof GApiSaveRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/g/api/upload-url': {
@@ -285,8 +325,10 @@ const rootRouteChildren: RootRouteChildren = {
   GUploadRoute: GUploadRoute,
   GIndexRoute: GIndexRoute,
   GApiAdminRoute: GApiAdminRoute,
+  GApiGuideRoute: GApiGuideRoute,
   GApiImagesRoute: GApiImagesRoute,
   GApiMeRoute: GApiMeRoute,
+  GApiSaveRoute: GApiSaveRoute,
   GApiUploadUrlRoute: GApiUploadUrlRoute,
 }
 export const routeTree = rootRouteImport

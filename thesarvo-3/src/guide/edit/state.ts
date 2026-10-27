@@ -20,6 +20,8 @@ export type Action =
   /** Drag and drop: `to` is the gap the node is dropped in, 0 (before the first) to the node count (after the last). */
   | { type: 'moveTo'; id: string; to: number }
   | { type: 'replace'; guide: Guide }
+  /** The guide changed under the editor (others' saves merged in): not an undo step, and earlier steps no longer apply. */
+  | { type: 'rebase'; guide: Guide }
   | { type: 'undo' }
   | { type: 'redo' }
 
@@ -105,6 +107,8 @@ function reduce(state: EditorState, action: Action): EditorState {
     }
     case 'replace':
       return push(state, action.guide, null)
+    case 'rebase':
+      return initEditor(action.guide)
     case 'undo': {
       const previous = state.past.at(-1)
       if (!previous) return state

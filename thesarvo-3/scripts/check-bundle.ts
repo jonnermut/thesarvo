@@ -9,7 +9,7 @@ import { readdir, readFile } from 'node:fs/promises'
 /** `npm run build` writes here; for a static site build pass dist/client/assets. */
 const DIR = process.argv[2] ?? '.output/public/assets'
 /** Strings from src/guide/edit that no public page has. */
-const EDITOR_ONLY = ['Draft saved in this browser', 'Drawing a route: click the photo', 'Auto number climbs']
+const EDITOR_ONLY = ['Loading the latest version', 'Drawing a route: click the photo', 'Auto number climbs']
 
 const files = (await readdir(DIR)).filter((f) => f.endsWith('.js'))
 const text = new Map(await Promise.all(files.map(async (f) => [f, await readFile(`${DIR}/${f}`, 'utf8')] as const)))

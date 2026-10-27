@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
+import type { ReactNode } from 'react'
 import { routeStats } from '#/guide/view/routeStats'
 import type { Climb, Guide, GuideNode } from '#/guide/model/types'
 import { ClimbBlock } from '#/guide/view/ClimbBlock'
@@ -7,19 +8,18 @@ import { GuideView } from '#/guide/view/GuideView'
 import { guideTitle } from '#/guide/view/kml'
 import { HeaderBlock } from '#/guide/view/HeaderBlock'
 import { TextBlock } from '#/guide/view/TextBlock'
-import { STATIC_SITE } from '#/guide/content/paths'
+import type { Conflict } from '#/guide/save/changes'
 import { DragHandle, useBlockDrag } from './BlockDrag'
 import { ImagePicker } from './ImagePicker'
 import { Button, DeleteButton } from './fields'
-import { fingerprint, localStore } from './drafts'
-import type { Draft } from './drafts'
 import { newNode, newTopo, NEW_NODE_LABELS } from './newNodes'
 import { ClimbForm, GpsForm, HeaderForm, TextForm } from './NodeForms'
+import type { Saver } from './saver'
 import { climbKind, editorReducer, initEditor, nextId, nodeId } from './state'
 import { TopoEditor } from './TopoEditor'
 import { TopoFigure } from '#/guide/view/TopoFigure'
+import { useSaver } from './useSaver'
 
-const SAVE_DELAY_MS = 400
 /** New topos start no wider than this, like the old guides' photos, so phone photos are not shown huge. */
 const NEW_TOPO_WIDTH = 800
 
@@ -33,31 +33,32 @@ const measure = (src: string) =>
     img.src = src
   })
 
+/** The header's line on saving. */
+function statusText(saver: Saver): string {
+  const { status } = saver
+  switch (status.kind) {
+    case 'loading':
+      return 'Loading the latest version…'
+    case 'unavailable':
+      return saver.hasUnsaved() ? 'Draft kept in this browser' : 'No changes'
+    case 'retrying':
+      return `Not saved: ${status.message}. Kept in this browser, trying again`
+    case 'saving':
+      return 'Saving…'
+    case 'saved':
+      if (saver.conflicts.size) return 'Not saved: choose which version to keep below'
+      return saver.unsaved().nodes.length || saver.unsaved().order ? 'Saving…' : 'All changes saved'
+  }
+}
+
 export default function Editor({ guide }: { guide: Guide }) {
-  const base = useMemo(() => fingerprint(guide), [guide])
   const [state, dispatch] = useReducer(editorReducer, guide, initEditor)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [preview, setPreview] = useState(false)
-  const [pendingDraft, setPendingDraft] = useState<Draft | null>(null)
-  const loaded = useRef(false)
   const { present } = state
-
-  // On first load, offer to restore a draft saved by an earlier session.
-  useEffect(() => {
-    const draft = localStore.loadDraft(guide.id)
-    if (draft && fingerprint(draft.guide) !== base) setPendingDraft(draft)
-    loaded.current = true
-  }, [guide.id, base])
-
-  // Persist every change (debounced), unless the guide is back to the published state.
-  useEffect(() => {
-    if (!loaded.current || pendingDraft) return
-    const timer = setTimeout(() => {
-      if (fingerprint(present) === base) localStore.clearDraft(guide.id)
-      else localStore.saveDraft(guide.id, present, base)
-    }, SAVE_DELAY_MS)
-    return () => clearTimeout(timer)
-  }, [present, base, guide.id, pendingDraft])
+  const { saver, ready, pendingDraft, restoreDraft } = useSaver(guide, present, dispatch)
+  const unsavedIds = ready ? saver.unsavedIds() : new Set<string>()
+  const notSaved = saver.status.kind === 'retrying' || saver.status.kind === 'unavailable'
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -77,7 +78,6 @@ export default function Editor({ guide }: { guide: Guide }) {
   const climbs = present.nodes.filter(
     (n): n is Climb => n.type === 'climb' || n.type === 'problem',
   )
-  const dirty = fingerprint(present) !== base
 
   const edit: EditFn = (id, patch, key) =>
     dispatch({
@@ -99,6 +99,8 @@ export default function Editor({ guide }: { guide: Guide }) {
     dispatch({ type: 'addClimbToTopo', topoId, pathId, climb: newNode(climbKind(present), nextId(present)) as Climb })
   const blockDrag = useBlockDrag(present.nodes.length, (id, to) => dispatch({ type: 'moveTo', id, to }))
 
+  if (!ready) return <p className="px-4 py-6 text-sm text-muted sm:px-6">Loading the latest version…</p>
+
   return (
     <div className="px-4 py-6 sm:px-6">
       <div className="sticky top-14 z-10 -mx-4 mb-4 flex flex-wrap items-center gap-2 border-b border-line bg-paper/95 px-4 py-2 backdrop-blur sm:-mx-6 sm:px-6">
@@ -114,29 +116,29 @@ export default function Editor({ guide }: { guide: Guide }) {
         >
           Redo
         </Button>
-        <span className="mx-1 text-sm text-muted">
-          {dirty ? 'Draft saved in this browser' : 'No changes'}
+        <span role="status" className={`mx-1 text-sm ${saver.status.kind === 'retrying' ? 'text-red-700' : 'text-muted'}`}>
+          {statusText(saver)}
         </span>
         <div className="ml-auto flex gap-2">
           <Button onClick={() => setPreview((p) => !p)}>
             {preview ? 'Back to editing' : 'Preview'}
           </Button>
-          <Button
-            variant="danger"
-            disabled={!dirty}
-            onClick={() => {
-              if (confirm('Discard all changes?'))
-                dispatch({ type: 'replace', guide })
-            }}
-          >
-            Discard
-          </Button>
         </div>
       </div>
 
-      {STATIC_SITE && (
+      {saver.status.kind === 'unavailable' ? (
         <p className="mb-4 rounded-lg border border-line bg-card p-3 text-sm text-muted">
-          Beta: you can try every editing tool, but changes are only kept as a draft in this browser. Nothing is published.
+          Saving is not switched on here yet: you can try every editing tool, but changes are only kept as a draft in this browser.
+        </p>
+      ) : (
+        <p className="mb-4 rounded-lg border border-line bg-card p-3 text-sm text-muted">
+          Edits save straight away. Until thesarvo.com switches to this site, changes made on the live site replace them.
+        </p>
+      )}
+
+      {saver.conflicts.size > 0 && (
+        <p className="mb-4 rounded-lg border border-amber bg-amber/10 p-3 text-sm">
+          Someone else changed {saver.conflicts.size === 1 ? 'a block' : `${saver.conflicts.size} blocks`} you were editing. Choose which version to keep below.
         </p>
       )}
 
@@ -146,21 +148,10 @@ export default function Editor({ guide }: { guide: Guide }) {
             You have unsaved changes from{' '}
             {new Date(pendingDraft.savedAt).toLocaleString()}.
           </span>
-          <Button
-            variant="primary"
-            onClick={() => {
-              dispatch({ type: 'replace', guide: pendingDraft.guide })
-              setPendingDraft(null)
-            }}
-          >
-            Restore
+          <Button variant="primary" onClick={() => restoreDraft(true)}>
+            Restore and save
           </Button>
-          <Button
-            onClick={() => {
-              localStore.clearDraft(guide.id)
-              setPendingDraft(null)
-            }}
-          >
+          <Button onClick={() => restoreDraft(false)}>
             Discard
           </Button>
         </div>
@@ -188,6 +179,9 @@ export default function Editor({ guide }: { guide: Guide }) {
                   <div className="mb-2 flex items-center gap-1.5 text-xs uppercase tracking-wide text-muted">
                     <DragHandle onPointerDown={(e) => blockDrag.start(e, id)} onMove={(by) => dispatch({ type: 'move', id, by })} />
                     <span className="font-semibold">{node.type}</span>
+                    {(unsavedIds.has(id) || saver.conflicts.has(id)) && (
+                      <span className={notSaved || saver.conflicts.has(id) ? 'text-red-700' : ''}>{notSaved || saver.conflicts.has(id) ? 'Not saved' : 'Saving…'}</span>
+                    )}
                     <span className="ml-auto flex gap-1">
                       <Button
                         onClick={() => dispatch({ type: 'move', id, by: -1 })}
@@ -212,6 +206,13 @@ export default function Editor({ guide }: { guide: Guide }) {
                       <DeleteButton className="ml-3" onConfirm={() => dispatch({ type: 'delete', id })} />
                     </span>
                   </div>
+                  {saver.conflicts.has(id) && (
+                    <ConflictPanel
+                      conflict={saver.conflicts.get(id)!}
+                      onKeep={(keep) => saver.resolve(id, keep)}
+                      preview={(theirs) => <NodePreview node={theirs} guideId={guide.id} guideName={guideTitle(present)} climbs={climbs} />}
+                    />
+                  )}
                   {open ? (
                     <NodeEditor
                       node={node}
@@ -225,7 +226,7 @@ export default function Editor({ guide }: { guide: Guide }) {
                     <NodePreview
                       node={node}
                       guideId={guide.id}
-                      guideName={guideTitle(guide)}
+                      guideName={guideTitle(present)}
                       climbs={climbs}
                     />
                   )}
@@ -236,6 +237,22 @@ export default function Editor({ guide }: { guide: Guide }) {
           })}
         </div>
       )}
+    </div>
+  )
+}
+
+/** A block someone else changed while this editor had unsaved changes to it. */
+function ConflictPanel({ conflict, onKeep, preview }: { conflict: Conflict; onKeep: (keep: 'mine' | 'theirs') => void; preview: (theirs: GuideNode) => ReactNode }) {
+  return (
+    <div className="mb-3 space-y-2 rounded-lg border border-amber bg-amber/10 p-3 text-sm">
+      <p>{conflict.theirs ? 'Someone else changed this block while you were editing it. Theirs:' : 'Someone else deleted this block while you were editing it.'}</p>
+      {conflict.theirs && <div className="rounded-md border border-line bg-card p-2">{preview(conflict.theirs)}</div>}
+      <div className="flex flex-wrap gap-2">
+        <Button variant="primary" onClick={() => onKeep('mine')}>
+          Keep mine
+        </Button>
+        <Button onClick={() => onKeep('theirs')}>{conflict.theirs ? 'Use theirs' : 'Delete it'}</Button>
+      </div>
     </div>
   )
 }

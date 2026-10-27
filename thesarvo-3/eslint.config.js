@@ -19,9 +19,9 @@ export default [
   },
   {
     // Readers never download the editor: public code reaches it only through a lazy import(), which this rule allows.
-    // `npm run check-bundle` checks the built files as well.
+    // `npm run check-bundle` checks the built files as well. Saving (src/guide/save) is the editor's and the server's.
     files: ['src/**/*.{ts,tsx}'],
-    ignores: ['src/guide/edit/**'],
+    ignores: ['src/guide/edit/**', 'src/guide/save/**'],
     rules: {
       'no-restricted-imports': [
         'error',

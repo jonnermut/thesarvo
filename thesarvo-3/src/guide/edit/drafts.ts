@@ -2,18 +2,16 @@ import type { Guide } from '#/guide/model/types'
 
 export type Draft = {
   guide: Guide
-  /** Fingerprint of the published content the draft was started from. */
-  base: string
+  /** The guide as last saved when the draft was written, so the draft's changes can be saved on top of it. A string
+   * (a fingerprint) in drafts from before saving existed. */
+  base: Guide | string
   savedAt: number
 }
 
-/**
- * Where edits go. Today: the browser only. The backend plan adds a server-backed
- * implementation (publish = commit to the content repo) behind the same shape.
- */
+/** Edits not saved yet, kept in the browser until they are (see `saver.ts`). */
 export interface GuideStore {
   loadDraft: (guideId: string) => Draft | null
-  saveDraft: (guideId: string, guide: Guide, base: string) => void
+  saveDraft: (guideId: string, guide: Guide, base: Guide) => void
   clearDraft: (guideId: string) => void
 }
 
@@ -43,12 +41,4 @@ export const localStore: GuideStore = {
       /* ignore */
     }
   },
-}
-
-/** Cheap stable fingerprint (FNV-1a) of a guide, to tell whether content changed under a draft. */
-export function fingerprint(guide: Guide): string {
-  const s = JSON.stringify(guide)
-  let h = 0x811c9dc5
-  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 0x01000193)
-  return (h >>> 0).toString(16)
 }
