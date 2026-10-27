@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { changePassword, getIdToken, signUp } from './session'
+import { changePassword, currentUser, getIdToken, nameProblem, setName, signUp } from './session'
 
 const jwt = (claims: object) => `h.${btoa(JSON.stringify(claims)).replace(/=+$/, '')}.s`
 const signIn = (extra: object = {}) =>
@@ -55,5 +55,33 @@ describe('getIdToken', () => {
     expect(await getIdToken()).toBeNull()
     signIn()
     expect(await getIdToken()).toMatch(/^h\./)
+  })
+})
+
+describe('names', () => {
+  it('wants a real name, not an email or nothing', () => {
+    expect(nameProblem('Jon Nermut')).toBeNull()
+    expect(nameProblem(' ')).toBe('Please enter your name.')
+    expect(nameProblem('jon@example.com')).toBe('Your name, not your email address.')
+    expect(nameProblem('x'.repeat(61))).toBe('At most 60 characters.')
+  })
+
+  it('leaves the name empty when the token has none', () => {
+    signIn()
+    expect(currentUser()?.name).toBe('')
+  })
+
+  it('sets the name with Cognito, then refreshes so the ID token carries it', async () => {
+    signIn({ accessToken: 'acc' })
+    const fetch = vi.spyOn(globalThis, 'fetch').mockImplementation(async (url) =>
+      String(url).endsWith('/oauth2/token')
+        ? new Response(JSON.stringify({ id_token: jwt({ sub: 'u1', email: 'a@b.c', name: 'Jon Nermut' }), access_token: 'acc2', expires_in: 3600 }))
+        : new Response('{}'),
+    )
+    await setName('  Jon Nermut ')
+    const [, init] = fetch.mock.calls[0] as [string, RequestInit]
+    expect((init.headers as Record<string, string>)['x-amz-target']).toBe('AWSCognitoIdentityProviderService.UpdateUserAttributes')
+    expect(JSON.parse(init.body as string)).toEqual({ AccessToken: 'acc', UserAttributes: [{ Name: 'name', Value: 'Jon Nermut' }] })
+    expect(currentUser()?.name).toBe('Jon Nermut')
   })
 })

@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AccountNameRouteImport } from './routes/account.name'
 import { Route as AccountPasswordRouteImport } from './routes/account.password'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as GIndexRouteImport } from './routes/g.index'
@@ -27,6 +28,11 @@ import { Route as GApiUploadUrlRouteImport } from './routes/g.api.upload-url'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountNameRoute = AccountNameRouteImport.update({
+  id: '/account/name',
+  path: '/account/name',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountPasswordRoute = AccountPasswordRouteImport.update({
@@ -97,6 +103,7 @@ const GApiUploadUrlRoute = GApiUploadUrlRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/account/name': typeof AccountNameRoute
   '/account/password': typeof AccountPasswordRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/g/$': typeof GSplatRoute
@@ -113,6 +120,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/account/name': typeof AccountNameRoute
   '/account/password': typeof AccountPasswordRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/g/$': typeof GSplatRoute
@@ -130,6 +138,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/account/name': typeof AccountNameRoute
   '/account/password': typeof AccountPasswordRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/g/$': typeof GSplatRoute
@@ -148,6 +157,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/account/name'
     | '/account/password'
     | '/auth/callback'
     | '/g/$'
@@ -164,6 +174,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/account/name'
     | '/account/password'
     | '/auth/callback'
     | '/g/$'
@@ -180,6 +191,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/account/name'
     | '/account/password'
     | '/auth/callback'
     | '/g/$'
@@ -197,6 +209,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountNameRoute: typeof AccountNameRoute
   AccountPasswordRoute: typeof AccountPasswordRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
   GSplatRoute: typeof GSplatRoute
@@ -219,6 +232,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/name': {
+      id: '/account/name'
+      path: '/account/name'
+      fullPath: '/account/name'
+      preLoaderRoute: typeof AccountNameRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/account/password': {
@@ -317,6 +337,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountNameRoute: AccountNameRoute,
   AccountPasswordRoute: AccountPasswordRoute,
   AuthCallbackRoute: AuthCallbackRoute,
   GSplatRoute: GSplatRoute,

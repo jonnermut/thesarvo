@@ -47,6 +47,9 @@ export function AccountMenu() {
                 <div className="truncate font-medium">{label}</div>
                 {user.name && <div className="truncate text-muted">{user.email}</div>}
               </div>
+              <Link to="/account/name" search={{}} role="menuitem" onClick={close} className={ITEM}>
+                {user.name ? 'Change your name' : 'Add your name'}
+              </Link>
               {user.hasPassword && (
                 <Link to="/account/password" role="menuitem" onClick={close} className={ITEM}>
                   Change password

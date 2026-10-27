@@ -59,14 +59,14 @@ export const claims = (jwt: string) =>
 
 let cached: { raw: string | null; user: User | null } = { raw: null, user: null }
 /** Who is signed in, from the stored ID token. Stable between changes, as useSyncExternalStore needs. */
-function currentUser(): User | null {
+export function currentUser(): User | null {
   const raw = storage.get(KEY)
   if (raw !== cached.raw) {
     const t = raw ? (JSON.parse(raw) as Tokens) : null
     const c = t && claims(t.idToken)
     cached = {
       raw,
-      user: c ? { sub: String(c.sub), email: String(c.email ?? ''), name: String(c.name ?? c.email ?? ''), hasPassword: !c.identities, admin: Array.isArray(c['cognito:groups']) && c['cognito:groups'].includes('admins') } : null,
+      user: c ? { sub: String(c.sub), email: String(c.email ?? ''), name: String(c.name ?? ''), hasPassword: !c.identities, admin: Array.isArray(c['cognito:groups']) && c['cognito:groups'].includes('admins') } : null,
     }
   }
   return cached.user
@@ -134,10 +134,10 @@ export async function completeSignIn(url: URL): Promise<string> {
 }
 
 let refreshing: Promise<Tokens | null> | undefined
-/** Current tokens, refreshed when close to expiry; null when signed out. */
-async function freshTokens(): Promise<Tokens | null> {
+/** Current tokens, refreshed when close to expiry (or now, with `force`); null when signed out. */
+async function freshTokens(force = false): Promise<Tokens | null> {
   const t = readTokens()
-  if (!t || t.expiresAt - MARGIN_MS > Date.now()) return t
+  if (!t || (!force && t.expiresAt - MARGIN_MS > Date.now())) return t
   refreshing ??= token({ grant_type: 'refresh_token', refresh_token: t.refreshToken })
     .then((r) => {
       const next = { ...t, idToken: r.id_token, accessToken: r.access_token, expiresAt: Date.now() + r.expires_in * 1000 }
@@ -156,25 +156,46 @@ async function freshTokens(): Promise<Tokens | null> {
 export const getIdToken = async () => (await freshTokens())?.idToken ?? null
 
 /** Cognito's messages for the errors a person can fix. */
-const PASSWORD_ERRORS: Record<string, string> = {
+const ERRORS: Record<string, string> = {
   NotAuthorizedException: 'Your current password is not right.',
   LimitExceededException: 'Too many tries. Please wait a while and try again.',
   TooManyRequestsException: 'Too many tries. Please wait a while and try again.',
 }
 
-/** Changes the signed-in user's password, straight with Cognito. Throws a message to show. */
-export async function changePassword(previous: string, proposed: string) {
+/** One of Cognito's calls on the signed-in user's own account, with their access token. Throws a message to show. */
+async function onOwnAccount(action: string, request: object, failed: string) {
   const t = await freshTokens()
   if (!t?.accessToken) throw new Error('Please sign out and in again first.') // a session from before access tokens were kept
   const res = await fetch(`${new URL(COGNITO.issuer).origin}/`, {
     method: 'POST',
-    headers: { 'content-type': 'application/x-amz-json-1.1', 'x-amz-target': 'AWSCognitoIdentityProviderService.ChangePassword' },
-    body: JSON.stringify({ AccessToken: t.accessToken, PreviousPassword: previous, ProposedPassword: proposed }),
+    headers: { 'content-type': 'application/x-amz-json-1.1', 'x-amz-target': `AWSCognitoIdentityProviderService.${action}` },
+    body: JSON.stringify({ AccessToken: t.accessToken, ...request }),
   })
   if (res.ok) return
   const body = (await res.json().catch(() => ({}))) as { __type?: string; message?: string }
   const type = body.__type?.split('#').pop() ?? ''
-  throw new Error(PASSWORD_ERRORS[type] ?? body.message ?? `Could not change the password (${res.status})`)
+  throw new Error(ERRORS[type] ?? body.message ?? `${failed} (${res.status})`)
+}
+
+/** Changes the signed-in user's password, straight with Cognito. */
+export const changePassword = (previous: string, proposed: string) =>
+  onOwnAccount('ChangePassword', { PreviousPassword: previous, ProposedPassword: proposed }, 'Could not change the password')
+
+export const NAME_MAX = 60
+
+/** What is wrong with a name, or null. It shows beside the person's changes, so a real name: not an email. */
+export function nameProblem(name: string): string | null {
+  const n = name.trim()
+  if (n.length < 2) return 'Please enter your name.'
+  if (n.length > NAME_MAX) return `At most ${NAME_MAX} characters.`
+  if (n.includes('@')) return 'Your name, not your email address.'
+  return null
+}
+
+/** Sets the signed-in user's name, then refreshes the tokens so the ID token carries it. */
+export async function setName(name: string) {
+  await onOwnAccount('UpdateUserAttributes', { UserAttributes: [{ Name: 'name', Value: name.trim() }] }, 'Could not save your name')
+  await freshTokens(true)
 }
 
 /** Forgets the tokens here and ends the Cognito session, coming back to the home page. */
