@@ -5,6 +5,7 @@ import type { Climb, Guide, GuideNode } from '#/guide/model/types'
 import { ClimbBlock } from '#/guide/view/ClimbBlock'
 import { GpsBlock } from '#/guide/view/GpsBlock'
 import { GuideView } from '#/guide/view/GuideView'
+import { rememberPlace, restorePlace } from '#/guide/view/place'
 import { guideTitle } from '#/guide/view/kml'
 import { HeaderBlock } from '#/guide/view/HeaderBlock'
 import { TextBlock } from '#/guide/view/TextBlock'
@@ -60,6 +61,11 @@ export default function Editor({ guide }: { guide: Guide }) {
   const unsavedIds = ready ? saver.unsavedIds() : new Set<string>()
   const notSaved = saver.status.kind === 'retrying' || saver.status.kind === 'unavailable'
 
+  // Switching between reading, editing and preview keeps the block at the top of the screen where it was.
+  useEffect(() => {
+    if (ready) restorePlace()
+  }, [preview, ready])
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== 'z') return
@@ -103,7 +109,7 @@ export default function Editor({ guide }: { guide: Guide }) {
 
   return (
     <div className="px-4 py-6 sm:px-6">
-      <div className="sticky top-14 z-10 -mx-4 mb-4 flex flex-wrap items-center gap-2 border-b border-line bg-paper/95 px-4 py-2 backdrop-blur sm:-mx-6 sm:px-6">
+      <div data-bar className="sticky top-14 z-10 -mx-4 mb-4 flex flex-wrap items-center gap-2 border-b border-line bg-paper/95 px-4 py-2 backdrop-blur sm:-mx-6 sm:px-6">
         <Button
           disabled={!state.past.length}
           onClick={() => dispatch({ type: 'undo' })}
@@ -120,7 +126,12 @@ export default function Editor({ guide }: { guide: Guide }) {
           {statusText(saver)}
         </span>
         <div className="ml-auto flex gap-2">
-          <Button onClick={() => setPreview((p) => !p)}>
+          <Button
+            onClick={() => {
+              rememberPlace()
+              setPreview((p) => !p)
+            }}
+          >
             {preview ? 'Back to editing' : 'Preview'}
           </Button>
         </div>
@@ -174,6 +185,7 @@ export default function Editor({ guide }: { guide: Guide }) {
                 {drag?.to === present.nodes.length && index === present.nodes.length - 1 && <DropLine className="-bottom-2.5" />}
                 <section
                   data-block={index}
+                  data-node={id}
                   className={`rounded-xl border bg-card p-3 shadow-sm ${open ? 'border-amber' : 'border-line'} ${drag?.id === id ? 'opacity-50' : ''}`}
                 >
                   <div className="mb-2 flex items-center gap-1.5 text-xs uppercase tracking-wide text-muted">

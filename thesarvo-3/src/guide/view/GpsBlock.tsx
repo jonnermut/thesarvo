@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { usePresence } from '#/components/overlay'
 import type { Gps } from '#/guide/model/types'
 import { gpsToKml } from './kml'
@@ -50,6 +50,8 @@ export function GpsBlock({ gps, guideName = '' }: { gps: Gps; guideName?: string
   // Slides open and shut when the reader asks, not when it first appears.
   const [toggled, setToggled] = useState(false)
   const mapMounted = usePresence(showMap)
+  // Below an open map the list can start off screen: bring it into view as it opens, so the button visibly does something.
+  const showTable = useCallback((el: HTMLDivElement | null) => el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), [])
   useEffect(() => setShowMap(true), [])
   if (!gps.points.length && !gps.lines.length) return null
   const hasCode = gps.points.some((p) => p.code)
@@ -79,7 +81,7 @@ export function GpsBlock({ gps, guideName = '' }: { gps: Gps; guideName?: string
           </Toggle>
           {gps.points.length > 0 && (
             <Toggle on={showPoints} onClick={() => setShowPoints((v) => !v)}>
-              {gps.points.length} points
+              {gps.points.length} points <span aria-hidden>{showPoints ? '▴' : '▾'}</span>
             </Toggle>
           )}
         </div>
@@ -96,7 +98,10 @@ export function GpsBlock({ gps, guideName = '' }: { gps: Gps; guideName?: string
         </div>
       )}
       {showPoints && (
-        <div className="mt-3 overflow-x-auto border border-line bg-card">
+        <div
+          ref={showTable}
+          className="mt-3 scroll-mt-20 overflow-x-auto border border-line bg-card"
+        >
           <table className="w-full text-[13px]">
             <thead className="bg-paper text-left text-muted">
               <tr>

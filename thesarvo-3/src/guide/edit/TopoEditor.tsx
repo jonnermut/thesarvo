@@ -215,25 +215,20 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2">
-        {/* While a drawing mode is active the other tools hide, leaving only the way out. */}
+        {/* While a drawing mode is active the other tools hide, leaving only the way out. Done keeps the route drawn so far. */}
         {TOOLS.filter(([id]) => tool === 'select' || id === 'select').map(([id, label]) => (
-          <Button key={id} variant={tool === id ? 'primary' : 'plain'} onClick={() => startTool(id)}>
+          <Button key={id} variant={tool === id || tool === 'route' ? 'primary' : 'plain'} onClick={() => (tool === 'route' ? finishRoute() : startTool(id))}>
             {tool === 'select' ? label : 'Done'}
           </Button>
         ))}
-        {tool === 'route' && (
-          <>
-            <Button variant="primary" disabled={drawing.length < 2} onClick={finishRoute}>Finish route</Button>
-            {drawing.length > 0 && <Button onClick={() => setDrawing([])}>Clear points</Button>}
-          </>
-        )}
+        {tool === 'route' && drawing.length > 0 && <Button onClick={() => setDrawing([])}>Clear points</Button>}
         {tool === 'select' ? (
           <span className="text-xs text-muted">Drag handles to move, or use the arrow keys. Delete removes the selection.</span>
         ) : (
           <span className="flex items-center gap-2 rounded-md bg-amber/15 px-2 py-1 text-xs font-medium text-ink">
             <span className="size-2 animate-pulse rounded-full bg-amber" aria-hidden />
             {tool === 'route'
-              ? 'Drawing a route: click the photo to add points. Enter finishes, Esc stops.'
+              ? 'Drawing a route: click the photo to add points. Done or Enter finishes it, Esc throws it away.'
               : 'Adding a label: click the photo to place it. Esc cancels.'}
           </span>
         )}

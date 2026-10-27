@@ -16,3 +16,12 @@ it('lists every point, even where guides repeat a pid, and only the current guid
   rerender(<GpsBlock gps={gps(point('0', 'Crag'))} />)
   expect(rows()).toEqual([expect.stringContaining('Crag')])
 })
+
+it('brings the list of points into view as it opens, once', () => {
+  const into = vi.spyOn(Element.prototype, 'scrollIntoView').mockImplementation(() => {})
+  render(<GpsBlock gps={gps(point('0', 'Car park'), point('1', 'Boulder'))} />)
+  fireEvent.click(screen.getByRole('button', { name: '2 points' }))
+  expect(into).toHaveBeenCalledTimes(1)
+  expect(screen.getByRole('button', { name: '2 points' }).getAttribute('aria-pressed')).toBe('true')
+  into.mockRestore()
+})

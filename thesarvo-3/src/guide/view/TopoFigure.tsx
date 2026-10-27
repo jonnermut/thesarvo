@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { useEscape, usePresence, useScrollLock } from '#/components/overlay'
 import type { Climb, ImageTopo } from '#/guide/model/types'
 import { ClimbBlock } from './ClimbBlock'
+import { showNode } from './place'
 import { legendOnPhoto } from './section'
 import { Stars } from './Stars'
 import { Topo } from './Topo'
@@ -89,7 +90,14 @@ function ClimbPopup({ climb, open, onClose }: { climb: Climb; open: boolean; onC
       >
         <button type="button" aria-label="Close" onClick={onClose} className="absolute right-2 top-1 text-2xl leading-none text-muted hover:text-navy">×</button>
         <ClimbBlock climb={climb} />
-        <a href={`#c-${climb.id}`} onClick={onClose} className="mt-1 inline-block px-2 text-[13px] text-link hover:underline">Show in guide</a>
+        <a
+          href={`#c-${climb.id}`}
+          onClick={(e) => {
+            onClose()
+            // The editor's blocks have no anchors: go to the climb's block instead.
+            if (!document.getElementById(`c-${climb.id}`) && showNode(climb.id)) e.preventDefault()
+          }}
+          className="mt-1 inline-block px-2 text-[13px] text-link hover:underline">Show in guide</a>
       </div>
     </div>,
     document.body,

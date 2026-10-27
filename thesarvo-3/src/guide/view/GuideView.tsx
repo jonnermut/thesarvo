@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { Climb, Guide, GuideNode } from '#/guide/model/types'
 import { ClimbBlock } from './ClimbBlock'
 import { nodeAnchors } from './contents'
+import { restorePlace } from './place'
 import { GuideContents } from './GuideContents'
 import { guideTitle } from './kml'
 import { GpsBlock } from './GpsBlock'
@@ -30,6 +31,8 @@ export function GuideView({ guide, hash, full = false }: { guide: Guide; hash?: 
     () => new Set(guide.nodes.flatMap((n, i) => (n.type === 'image' && legendRedundant(n, topoSection(guide.nodes, i).climbs) ? [n.id] : []))),
     [guide],
   )
+
+  useEffect(restorePlace, [])
 
   // `:target` flashes a linked block on a full load; links followed inside the app set no target, so flash it here.
   useEffect(() => {
@@ -68,6 +71,7 @@ export function GuideView({ guide, hash, full = false }: { guide: Guide; hash?: 
             <div
               key={anchors[i] ?? i}
               id={anchors[i]}
+              data-node={node.type === 'unknown' ? undefined : node.id}
               className="anchor"
               hidden={node.type === 'unknown'}
               onPointerEnter={climb ? () => setActive(node.id) : undefined}

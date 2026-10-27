@@ -126,7 +126,8 @@ export function PhotoEditor({
         {/* The padding leaves room for the crop handles, which stick out past the photo's edges. */}
         <div className="flex h-[50dvh] min-h-60 items-center justify-center overflow-hidden rounded bg-neutral-900 p-4">
           {url ? (
-            <ReactCrop crop={crop} aspect={aspect} keepSelection ruleOfThirds minWidth={24} minHeight={24} onChange={(_, pc) => setCrop(pc)}>
+            // ReactCrop's styles give the photo the crop box's max-height (`inherit`), so the limit goes on the box: a tall photo fits whole.
+            <ReactCrop crop={crop} aspect={aspect} keepSelection ruleOfThirds minWidth={24} minHeight={24} onChange={(_, pc) => setCrop(pc)} className="max-h-[calc(50dvh-2rem)]">
               <img src={url} alt="Photo being edited" className="block max-h-[calc(50dvh-2rem)] max-w-full" style={{ filter: toneFilter(tone) }} />
             </ReactCrop>
           ) : (

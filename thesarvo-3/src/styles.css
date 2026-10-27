@@ -64,9 +64,10 @@ html.animate-layout :is(.guide-width, .side-nav) {
   scroll-margin-top: 4.5rem;
   border-radius: 0.25rem;
 }
-/* `.arrived` is set by GuideView for links followed inside the app, which set no :target. */
+/* `.arrived` is set by GuideView for links followed inside the app, which set no :target, and on editor blocks. */
 .anchor:target,
-.anchor.arrived {
+.anchor.arrived,
+[data-node].arrived {
   animation: arrived 2.4s ease-out;
 }
 @keyframes arrived {

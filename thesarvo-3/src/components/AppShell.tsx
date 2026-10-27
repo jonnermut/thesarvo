@@ -64,7 +64,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <header className="no-print sticky top-0 z-30 flex h-14 items-center gap-3 bg-brand px-4 shadow-md">
+      <header data-bar className="no-print sticky top-0 z-30 flex h-14 items-center gap-3 bg-brand px-4 shadow-md">
         <button
           type="button"
           onClick={toggle}
