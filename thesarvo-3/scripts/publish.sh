@@ -31,9 +31,10 @@ lap built
 [ -z "${CI:-}" ] || [ -n "${AWS_ACCESS_KEY_ID:-}" ] || { echo "no AWS key in the Action's secrets: built only, not published"; exit 0; }
 scripts/deploy-site.sh
 lap deployed
-# Pages and data are uploaded no-cache, so CloudFront may already serve them; the invalidation is the backstop.
-live && lap "visible before invalidating" || echo "not yet visible after deploying"
-invalidation=$(aws cloudfront create-invalidation --distribution-id "$DISTRIBUTION" --paths '/g/*' '/g-data/*' '/index.html' --query Invalidation.Id --output text)
-lap "invalidation $invalidation sent"
-for _ in $(seq 150); do live && break || sleep 2; done
-live && lap visible || { lap "not visible after 5 minutes"; exit 1; }
+# Pages and data are uploaded no-cache, so CloudFront already serves them: invalidating is only for when it does not.
+if live; then lap visible; else
+  invalidation=$(aws cloudfront create-invalidation --distribution-id "$DISTRIBUTION" --paths '/g/*' '/g-data/*' '/index.html' --query Invalidation.Id --output text)
+  lap "not visible after deploying: invalidation $invalidation sent"
+  for _ in $(seq 150); do live && break || sleep 2; done
+  live && lap visible || { lap "not visible after 5 minutes"; exit 1; }
+fi

@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { createHmac } from 'node:crypto'
+import { createHash, createHmac } from 'node:crypto'
 import { describe, expect, it } from 'vitest'
 import { amzDate, presignedPost, signedHeaders, signingKey } from './s3'
 
@@ -67,5 +67,15 @@ describe('presignedPost', () => {
   it('signs the policy with the day key', () => {
     const key = signingKey(creds.secretAccessKey, '20261027', 'ap-southeast-2', 's3')
     expect(post.fields['x-amz-signature']).toBe(createHmac('sha256', key).update(post.fields.policy).digest('hex'))
+  })
+})
+
+describe('uploads', () => {
+  it('signs the hash of the body it sends', () => {
+    const url = new URL('https://examplebucket.s3.amazonaws.com/test%24file.text')
+    const body = 'Welcome to Amazon S3.'
+    const h = signedHeaders('PUT', url, 'us-east-1', creds, new Date('2013-05-24T00:00:00Z'), createHash('sha256').update(body).digest('hex'))
+    expect(h['x-amz-content-sha256']).toBe('44ce7dd67c959e0d3524ffac1771dfbba87d2b6b4b4e99e42034a8b803f8b072')
+    expect(h.authorization).toContain('SignedHeaders=host;x-amz-content-sha256;x-amz-date,')
   })
 })

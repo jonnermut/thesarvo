@@ -1,5 +1,5 @@
 /**
- * The two S3 calls the API needs, signed with AWS Signature V4 using the Lambda role's credentials
+ * The S3 calls the API and the site deploy need, signed with AWS Signature V4 using the Lambda role's credentials
  * (from the environment). Hand-written to keep the AWS SDK out of the function bundle.
  */
 import { createHash, createHmac } from 'node:crypto'
@@ -61,10 +61,9 @@ export function presignedPost(
   return { url: bucketUrl(b), fields: { ...fields, policy, 'x-amz-signature': signature } }
 }
 
-/** The `Authorization` and `x-amz-*` headers for a request with no body. */
-export function signedHeaders(method: string, url: URL, region: string, c: Credentials, now = new Date()): Record<string, string> {
+/** The `Authorization` and `x-amz-*` headers for a request; `payload` is the SHA-256 (hex) of its body, empty by default. */
+export function signedHeaders(method: string, url: URL, region: string, c: Credentials, now = new Date(), payload = sha256('')): Record<string, string> {
   const date = amzDate(now)
-  const payload = sha256('')
   const headers: Record<string, string> = {
     host: url.host,
     'x-amz-content-sha256': payload,
@@ -95,3 +94,37 @@ export async function listKeys(b: Bucket, c: Credentials, prefix: string): Promi
 
 const unescapeXml = (s: string) =>
   s.replace(/&(lt|gt|quot|apos|amp);/g, (_, e: string) => ({ lt: '<', gt: '>', quot: '"', apos: "'", amp: '&' })[e] ?? '')
+
+export type Listed = { key: string; etag: string }
+
+/** Every object under `prefix` with its ETag, which for a single-part upload is the MD5 of its content. */
+export async function listObjects(b: Bucket, c: Credentials, prefix: string): Promise<Listed[]> {
+  const found: Listed[] = []
+  for (let token = ''; ; ) {
+    const url = new URL(bucketUrl(b))
+    url.searchParams.set('list-type', '2')
+    url.searchParams.set('prefix', prefix)
+    if (token) url.searchParams.set('continuation-token', token)
+    const res = await fetch(url, { headers: signedHeaders('GET', url, b.region, c) })
+    if (!res.ok) throw new Error(`S3 list failed (${res.status})`)
+    const xml = await res.text()
+    for (const m of xml.matchAll(/<Contents>.*?<Key>([^<]*)<\/Key>.*?<ETag>([^<]*)<\/ETag>.*?<\/Contents>/gs)) found.push({ key: unescapeXml(m[1]), etag: unescapeXml(m[2]).replaceAll('"', '') })
+    token = /<IsTruncated>true<\/IsTruncated>/.test(xml) ? (/<NextContinuationToken>([^<]*)<\/NextContinuationToken>/.exec(xml)?.[1] ?? '') : ''
+    if (!token) return found
+  }
+}
+
+const encodeKey = (key: string) => key.split('/').map(encodeURIComponent).join('/')
+
+export async function putObject(b: Bucket, c: Credentials, key: string, body: Buffer, o: { contentType: string; cacheControl: string }): Promise<void> {
+  const url = new URL(`${bucketUrl(b)}${encodeKey(key)}`)
+  const headers = { ...signedHeaders('PUT', url, b.region, c, new Date(), createHash('sha256').update(body).digest('hex')), 'content-type': o.contentType, 'cache-control': o.cacheControl }
+  const res = await fetch(url, { method: 'PUT', headers, body: new Uint8Array(body) })
+  if (!res.ok) throw new Error(`S3 put ${key} failed (${res.status})`)
+}
+
+export async function deleteObject(b: Bucket, c: Credentials, key: string): Promise<void> {
+  const url = new URL(`${bucketUrl(b)}${encodeKey(key)}`)
+  const res = await fetch(url, { method: 'DELETE', headers: signedHeaders('DELETE', url, b.region, c) })
+  if (!res.ok) throw new Error(`S3 delete ${key} failed (${res.status})`)
+}
