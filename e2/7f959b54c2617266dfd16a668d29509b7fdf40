@@ -1,0 +1,32 @@
+thesarvo-3/AGENTS.md
+  s_e20d0a1ebc47aa::t_41ac0a075fed6c 52-54
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_4df4b88dcc6517 49-55
+  s_e20d0a1ebc47aa::t_0d09a18658d88e 69
+thesarvo-3/src/guide/content/syncFeed.ts
+  s_e20d0a1ebc47aa::t_ca8ecad0e7e1ea 35-44
+thesarvo-3/src/guide/content/syncFeed.test.ts
+  s_e20d0a1ebc47aa::t_82497b4b417bd6 32-39
+  s_e20d0a1ebc47aa::t_308097bc141e92 2-3
+thesarvo-3/scripts/sync-content.ts
+  s_e20d0a1ebc47aa::t_f4cfbd070b5afd 86-88
+  s_e20d0a1ebc47aa::t_82bef78ec55a49 17
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_33a54883586746 34-37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e27f959b54c2617266dfd16a668d29509b7fdf40",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
