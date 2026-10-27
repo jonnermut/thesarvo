@@ -1,0 +1,19 @@
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_f5f29eed6c9bc0 55-59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c6cae5929a9cff53852c307e7b7dbff3dbd8c7cb",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
