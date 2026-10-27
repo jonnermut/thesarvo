@@ -1,0 +1,48 @@
+thesarvo-3/src/auth/session.test.ts
+  s_e20d0a1ebc47aa::t_a2085aca36c8e0 40-52
+  s_e20d0a1ebc47aa::t_35e5758d62652d 2
+thesarvo-3/src/auth/auth.test.ts
+  s_e20d0a1ebc47aa::t_98dbbe41c4058b 98-118
+  s_e20d0a1ebc47aa::t_b7ed55c4d07f27 6-7
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_7be5ec94311c18 86-90,98,113,168-169
+  s_e20d0a1ebc47aa::t_d3ebd9dbc53ef4 54
+thesarvo-3/docs/plan-backend.md
+  s_e20d0a1ebc47aa::t_fd29cbb939fe3e 84
+  s_e20d0a1ebc47aa::t_a2ab9d95049d3e 79
+  s_e20d0a1ebc47aa::t_d3ebd9dbc53ef4 81
+thesarvo-3/src/auth/cognitoLambda.ts
+  s_e20d0a1ebc47aa::t_13fa9980a91c97 18-20
+  s_e20d0a1ebc47aa::t_20d9c9245852be 3-5,7-10,15-17
+thesarvo-3/src/auth/session.ts
+  s_e20d0a1ebc47aa::t_06e7a6fc63fe67 88-93
+  s_e20d0a1ebc47aa::t_8aab2607ea88b3 108
+thesarvo-3/scripts/cognito-setup.sh
+  s_e20d0a1ebc47aa::t_c45cfec77714b0 2-3,5,9,34-41,64,66-80
+thesarvo-3/src/auth/cognitoPreSignUp.ts
+  s_e20d0a1ebc47aa::t_8f14b24af9f82a 1-15,18-21,24-31
+  s_e20d0a1ebc47aa::t_ace697d88e8780 16-17,22-23
+thesarvo-3/src/components/AccountMenu.tsx
+  s_e20d0a1ebc47aa::t_050001f1df6814 6
+  s_e20d0a1ebc47aa::t_f638fb223f0feb 24
+  s_e20d0a1ebc47aa::t_018ef52d32146a 3
+  s_e20d0a1ebc47aa::t_3e59dad746d137 20,23,25-30
+thesarvo-3/src/guide/edit/ImagePicker.tsx
+  s_e20d0a1ebc47aa::t_6962db6fa1d27a 72-78,154-164
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "824a868d0bf7808274e5c6e43ddbcbbf45e8d33f",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "unknown"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
