@@ -1,7 +1,7 @@
 /**
  * Builds the static site (rendered pages, JS and CSS) from a checkout of the content repo into dist/client.
  *
- *   npm run build-site -- [--dir ../../thesarvo-content] [--images https://thesarvo-content.s3.ap-southeast-2.amazonaws.com/images]
+ *   npm run build-site -- [--dir ../../thesarvo-content] [--images /images]   (same origin: CloudFront serves the bucket's images/)
  *                         [--incremental] [--since http://thesarvo-content.s3-website-ap-southeast-2.amazonaws.com/g-data]
  *
  * Pages are rendered at build time; the browser loads the same data as plain files from /g-data.
@@ -32,7 +32,7 @@ const option = (name: string, fallback: string) => {
   return i >= 0 && args[i + 1] ? args[i + 1] : fallback
 }
 const dir = path.resolve(option('dir', '../../thesarvo-content'))
-const images = option('images', 'https://thesarvo-content.s3.ap-southeast-2.amazonaws.com/images')
+const images = option('images', '/images')
 const since = option('since', 'http://thesarvo-content.s3-website-ap-southeast-2.amazonaws.com/g-data')
 const incremental = args.includes('--incremental')
 /** Changed guides get their own search shard until there are this many; then the pack is rewritten. */
