@@ -7,8 +7,10 @@ import { CALLBACK_PATH } from './paths'
  * tokens kept in localStorage and refreshed straight from Cognito's token endpoint.
  */
 
-export type User = { sub: string; email: string; name: string }
-type Tokens = { idToken: string; refreshToken: string; expiresAt: number }
+/** `hasPassword` is false for a Google, Apple or Facebook sign-in: there is no password to change. */
+export type User = { sub: string; email: string; name: string; hasPassword: boolean }
+/** `accessToken` is missing from sessions started before it was kept. */
+type Tokens = { idToken: string; accessToken?: string; refreshToken: string; expiresAt: number }
 
 const KEY = 'thesarvo.auth'
 const PENDING = 'thesarvo.auth.pending'
@@ -59,7 +61,10 @@ function currentUser(): User | null {
   if (raw !== cached.raw) {
     const t = raw ? (JSON.parse(raw) as Tokens) : null
     const c = t && claims(t.idToken)
-    cached = { raw, user: c ? { sub: String(c.sub), email: String(c.email ?? ''), name: String(c.name ?? c.email ?? '') } : null }
+    cached = {
+      raw,
+      user: c ? { sub: String(c.sub), email: String(c.email ?? ''), name: String(c.name ?? c.email ?? ''), hasPassword: !c.identities } : null,
+    }
   }
   return cached.user
 }
@@ -88,7 +93,8 @@ export async function signIn(returnTo = location.pathname + location.search) {
   const q = new URLSearchParams({
     client_id: COGNITO.clientId,
     response_type: 'code',
-    scope: 'openid email profile',
+    // The last scope lets the access token change the user's own password.
+    scope: 'openid email profile aws.cognito.signin.user.admin',
     redirect_uri: redirectUri(),
     state,
     code_challenge: challenge,
@@ -104,7 +110,7 @@ async function token(params: Record<string, string>) {
     body: new URLSearchParams({ client_id: COGNITO.clientId, ...params }),
   })
   if (!res.ok) throw new Error(`Sign-in failed (${res.status})`)
-  return (await res.json()) as { id_token: string; refresh_token?: string; expires_in: number }
+  return (await res.json()) as { id_token: string; access_token: string; refresh_token?: string; expires_in: number }
 }
 
 /** Finishes a sign-in on the callback page. Returns where to go next. */
@@ -115,20 +121,20 @@ export async function completeSignIn(url: URL): Promise<string> {
   if (url.searchParams.get('error')) throw new Error(url.searchParams.get('error_description') ?? 'Sign-in was cancelled')
   if (!code || !pending || url.searchParams.get('state') !== pending.state) throw new Error('This sign-in link has expired. Please try again.')
   const t = await token({ grant_type: 'authorization_code', code, code_verifier: pending.verifier, redirect_uri: redirectUri() })
-  writeTokens({ idToken: t.id_token, refreshToken: t.refresh_token ?? '', expiresAt: Date.now() + t.expires_in * 1000 })
+  writeTokens({ idToken: t.id_token, accessToken: t.access_token, refreshToken: t.refresh_token ?? '', expiresAt: Date.now() + t.expires_in * 1000 })
   return pending.returnTo
 }
 
-let refreshing: Promise<string | null> | undefined
-/** A current ID token for calling our own server, refreshed when close to expiry; null when signed out. */
-export async function getIdToken(): Promise<string | null> {
+let refreshing: Promise<Tokens | null> | undefined
+/** Current tokens, refreshed when close to expiry; null when signed out. */
+async function freshTokens(): Promise<Tokens | null> {
   const t = readTokens()
-  if (!t) return null
-  if (t.expiresAt - MARGIN_MS > Date.now()) return t.idToken
+  if (!t || t.expiresAt - MARGIN_MS > Date.now()) return t
   refreshing ??= token({ grant_type: 'refresh_token', refresh_token: t.refreshToken })
     .then((r) => {
-      writeTokens({ ...t, idToken: r.id_token, expiresAt: Date.now() + r.expires_in * 1000 })
-      return r.id_token
+      const next = { ...t, idToken: r.id_token, accessToken: r.access_token, expiresAt: Date.now() + r.expires_in * 1000 }
+      writeTokens(next)
+      return next
     })
     .catch(() => {
       writeTokens(null) // refresh token expired or revoked: signed out
@@ -136,6 +142,31 @@ export async function getIdToken(): Promise<string | null> {
     })
     .finally(() => (refreshing = undefined))
   return refreshing
+}
+
+/** A current ID token for calling our own server; null when signed out. */
+export const getIdToken = async () => (await freshTokens())?.idToken ?? null
+
+/** Cognito's messages for the errors a person can fix. */
+const PASSWORD_ERRORS: Record<string, string> = {
+  NotAuthorizedException: 'Your current password is not right.',
+  LimitExceededException: 'Too many tries. Please wait a while and try again.',
+  TooManyRequestsException: 'Too many tries. Please wait a while and try again.',
+}
+
+/** Changes the signed-in user's password, straight with Cognito. Throws a message to show. */
+export async function changePassword(previous: string, proposed: string) {
+  const t = await freshTokens()
+  if (!t?.accessToken) throw new Error('Please sign out and in again first.') // a session from before access tokens were kept
+  const res = await fetch(`${new URL(COGNITO.issuer).origin}/`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/x-amz-json-1.1', 'x-amz-target': 'AWSCognitoIdentityProviderService.ChangePassword' },
+    body: JSON.stringify({ AccessToken: t.accessToken, PreviousPassword: previous, ProposedPassword: proposed }),
+  })
+  if (res.ok) return
+  const body = (await res.json().catch(() => ({}))) as { __type?: string; message?: string }
+  const type = body.__type?.split('#').pop() ?? ''
+  throw new Error(PASSWORD_ERRORS[type] ?? body.message ?? `Could not change the password (${res.status})`)
 }
 
 /** Forgets the tokens here and ends the Cognito session, coming back to the home page. */

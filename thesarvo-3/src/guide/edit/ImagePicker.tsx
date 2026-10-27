@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { imageUrl, STATIC_SITE  } from '#/guide/content/paths'
+import { signIn, useUser } from '#/auth/session'
+import { imageUrl } from '#/guide/content/paths'
 import { fetchImageNames } from '#/guide/server'
 import { Button } from './fields'
 import { isHeicFile, prepareImage, uploadImage } from './upload'
@@ -16,6 +17,7 @@ export function ImagePicker({ guideId, onPick, onClose }: { guideId: string; onP
   const [dragging, setDragging] = useState(false)
   const input = useRef<HTMLInputElement>(null)
   const nextId = useRef(0)
+  const user = useUser()
 
   useEffect(() => {
     void fetchImageNames({ data: guideId }).then(setNames)
@@ -24,7 +26,7 @@ export function ImagePicker({ guideId, onPick, onClose }: { guideId: string; onP
   const patch = (id: number, change: Partial<Upload>) => setUploads((all) => all.map((u) => (u.id === id ? { ...u, ...change } : u)))
 
   const add = (files: Iterable<File>) => {
-    if (STATIC_SITE) return
+    if (!user) return
     for (const file of files) {
       if (!file.type.startsWith('image/') && !isHeicFile(file)) continue
       const id = nextId.current++
@@ -62,11 +64,15 @@ export function ImagePicker({ guideId, onPick, onClose }: { guideId: string; onP
     >
       <div className="flex flex-wrap items-center gap-2">
         <span className="text-sm font-medium">
-          {STATIC_SITE ? 'Choose one of the guide’s photos (new photos can’t be added in the beta)' : 'Choose a photo, or drop, paste or add new ones'}
+          {user ? 'Choose a photo, or drop, paste or add new ones' : 'Choose one of the guide’s photos, or sign in to add new ones'}
         </span>
-        {!STATIC_SITE && (
+        {user ? (
           <Button variant="primary" onClick={() => input.current?.click()}>
             Add photos…
+          </Button>
+        ) : (
+          <Button variant="primary" onClick={() => void signIn()}>
+            Sign in to add photos
           </Button>
         )}
         <Button className="ml-auto" onClick={onClose}>

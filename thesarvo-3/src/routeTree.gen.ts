@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AccountPasswordRouteImport } from './routes/account.password'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as GIndexRouteImport } from './routes/g.index'
 import { Route as GSplatRouteImport } from './routes/g.$'
@@ -17,11 +18,18 @@ import { Route as GContentRouteImport } from './routes/g.content'
 import { Route as GSearchRouteImport } from './routes/g.search'
 import { Route as GUploadRouteImport } from './routes/g.upload'
 import { Route as GApiAdminRouteImport } from './routes/g.api.admin'
+import { Route as GApiImagesRouteImport } from './routes/g.api.images'
 import { Route as GApiMeRouteImport } from './routes/g.api.me'
+import { Route as GApiUploadUrlRouteImport } from './routes/g.api.upload-url'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountPasswordRoute = AccountPasswordRouteImport.update({
+  id: '/account/password',
+  path: '/account/password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthCallbackRoute = AuthCallbackRouteImport.update({
@@ -59,14 +67,25 @@ const GApiAdminRoute = GApiAdminRouteImport.update({
   path: '/g/api/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GApiImagesRoute = GApiImagesRouteImport.update({
+  id: '/g/api/images',
+  path: '/g/api/images',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GApiMeRoute = GApiMeRouteImport.update({
   id: '/g/api/me',
   path: '/g/api/me',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GApiUploadUrlRoute = GApiUploadUrlRouteImport.update({
+  id: '/g/api/upload-url',
+  path: '/g/api/upload-url',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/account/password': typeof AccountPasswordRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/g/$': typeof GSplatRoute
   '/g/content': typeof GContentRoute
@@ -74,10 +93,13 @@ export interface FileRoutesByFullPath {
   '/g/upload': typeof GUploadRoute
   '/g/': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
+  '/g/api/images': typeof GApiImagesRoute
   '/g/api/me': typeof GApiMeRoute
+  '/g/api/upload-url': typeof GApiUploadUrlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/account/password': typeof AccountPasswordRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/g/$': typeof GSplatRoute
   '/g/content': typeof GContentRoute
@@ -85,11 +107,14 @@ export interface FileRoutesByTo {
   '/g/upload': typeof GUploadRoute
   '/g': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
+  '/g/api/images': typeof GApiImagesRoute
   '/g/api/me': typeof GApiMeRoute
+  '/g/api/upload-url': typeof GApiUploadUrlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/account/password': typeof AccountPasswordRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/g/$': typeof GSplatRoute
   '/g/content': typeof GContentRoute
@@ -97,12 +122,15 @@ export interface FileRoutesById {
   '/g/upload': typeof GUploadRoute
   '/g/': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
+  '/g/api/images': typeof GApiImagesRoute
   '/g/api/me': typeof GApiMeRoute
+  '/g/api/upload-url': typeof GApiUploadUrlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/account/password'
     | '/auth/callback'
     | '/g/$'
     | '/g/content'
@@ -110,10 +138,13 @@ export interface FileRouteTypes {
     | '/g/upload'
     | '/g/'
     | '/g/api/admin'
+    | '/g/api/images'
     | '/g/api/me'
+    | '/g/api/upload-url'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/account/password'
     | '/auth/callback'
     | '/g/$'
     | '/g/content'
@@ -121,10 +152,13 @@ export interface FileRouteTypes {
     | '/g/upload'
     | '/g'
     | '/g/api/admin'
+    | '/g/api/images'
     | '/g/api/me'
+    | '/g/api/upload-url'
   id:
     | '__root__'
     | '/'
+    | '/account/password'
     | '/auth/callback'
     | '/g/$'
     | '/g/content'
@@ -132,11 +166,14 @@ export interface FileRouteTypes {
     | '/g/upload'
     | '/g/'
     | '/g/api/admin'
+    | '/g/api/images'
     | '/g/api/me'
+    | '/g/api/upload-url'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountPasswordRoute: typeof AccountPasswordRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
   GSplatRoute: typeof GSplatRoute
   GContentRoute: typeof GContentRoute
@@ -144,7 +181,9 @@ export interface RootRouteChildren {
   GUploadRoute: typeof GUploadRoute
   GIndexRoute: typeof GIndexRoute
   GApiAdminRoute: typeof GApiAdminRoute
+  GApiImagesRoute: typeof GApiImagesRoute
   GApiMeRoute: typeof GApiMeRoute
+  GApiUploadUrlRoute: typeof GApiUploadUrlRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -154,6 +193,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/password': {
+      id: '/account/password'
+      path: '/account/password'
+      fullPath: '/account/password'
+      preLoaderRoute: typeof AccountPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/callback': {
@@ -205,6 +251,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GApiAdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/g/api/images': {
+      id: '/g/api/images'
+      path: '/g/api/images'
+      fullPath: '/g/api/images'
+      preLoaderRoute: typeof GApiImagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/g/api/me': {
       id: '/g/api/me'
       path: '/g/api/me'
@@ -212,11 +265,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GApiMeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/g/api/upload-url': {
+      id: '/g/api/upload-url'
+      path: '/g/api/upload-url'
+      fullPath: '/g/api/upload-url'
+      preLoaderRoute: typeof GApiUploadUrlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountPasswordRoute: AccountPasswordRoute,
   AuthCallbackRoute: AuthCallbackRoute,
   GSplatRoute: GSplatRoute,
   GContentRoute: GContentRoute,
@@ -224,7 +285,9 @@ const rootRouteChildren: RootRouteChildren = {
   GUploadRoute: GUploadRoute,
   GIndexRoute: GIndexRoute,
   GApiAdminRoute: GApiAdminRoute,
+  GApiImagesRoute: GApiImagesRoute,
   GApiMeRoute: GApiMeRoute,
+  GApiUploadUrlRoute: GApiUploadUrlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,7 +1,7 @@
 # thesarvo-3
 
 Climbing guide site for thesarvo.com: TanStack Start, React 19, Tailwind 4, Vite, Vitest.
-Plans live in [`docs/`](docs/).
+Plans live in [`docs/`](docs/); what is deployed is in [`docs/as-built.md`](docs/as-built.md), and the working rules in [`AGENTS.md`](AGENTS.md).
 
 ## Commands
 
@@ -9,7 +9,7 @@ Plans live in [`docs/`](docs/).
 npm run dev         # dev server on :47213
 npm test            # vitest
 npm run typecheck   # tsc 7
-npx eslint src      # lint (needs TS 6, installed as `typescript`)
+npm run lint        # eslint (needs TS 6, installed as `typescript`)
 npm run build       # production build
 ```
 
@@ -31,8 +31,12 @@ served by a Vite middleware at `/g/content?f=<file>`.
 - `src/guide/islands` lazy Leaflet map
 - `src/guide/edit` editor: reducer with undo/redo, topo operations, local drafts
 
-Editor edits are saved as drafts in localStorage and can be downloaded as XML; there is no
-backend yet (see `docs/plan-backend.md`).
+- `src/auth` Cognito sign-in in the browser, token checks on the server, the Confluence user migration
+- `src/aws` S3 signing (presigned uploads, listing)
+- `src/routes/g.api.*` the Lambda's API routes
+
+Editor edits are saved as drafts in localStorage; saving to the content repo is not built yet
+(`docs/plan-backend.md` B2). Photo uploads go to S3.
 
 ## Tooling note
 

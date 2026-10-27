@@ -1,5 +1,6 @@
 import { getIdToken } from '#/auth/session'
-import { GUIDE_PREFIX, MAX_IMAGE_BYTES } from '#/guide/content/paths'
+import { GUIDE_PREFIX, MAX_IMAGE_BYTES, STATIC_SITE } from '#/guide/content/paths'
+import type { UploadTicket } from '#/guide/content/bucketImages'
 
 /** Longest edge kept when a photo is shrunk before upload; plenty for a topo on any screen. */
 const MAX_EDGE = 3200
@@ -47,23 +48,48 @@ export async function prepareImage(file: File): Promise<File> {
   }
 }
 
-/** Uploads one image, reporting progress from 0 to 1. Resolves with the stored name. */
+/** Posts a form, reporting upload progress from 0 to 1; resolves with the finished request whatever its status. */
+function post(url: string, form: FormData, headers: Record<string, string>, onProgress: (fraction: number) => void) {
+  return new Promise<XMLHttpRequest>((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', url)
+    for (const [k, v] of Object.entries(headers)) xhr.setRequestHeader(k, v)
+    xhr.upload.onprogress = (e) => e.lengthComputable && onProgress(e.loaded / e.total)
+    xhr.onload = () => resolve(xhr)
+    xhr.onerror = () => reject(new Error('Network error'))
+    xhr.send(form)
+  })
+}
+
+/**
+ * Uploads one image, reporting progress from 0 to 1. Resolves with the stored name.
+ * The static site asks the API for a presigned form and posts the photo straight to the bucket;
+ * the dev server takes the photo itself.
+ */
 export async function uploadImage(guideId: string, file: File, onProgress: (fraction: number) => void): Promise<string> {
   const token = await getIdToken()
   if (!token) throw new Error('Please sign in to upload images')
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest()
-    xhr.open('POST', `${GUIDE_PREFIX}/upload?guide=${encodeURIComponent(guideId)}`)
-    xhr.setRequestHeader('authorization', `Bearer ${token}`)
-    xhr.upload.onprogress = (e) => e.lengthComputable && onProgress(e.loaded / e.total)
-    xhr.onload = () => {
-      const body = JSON.parse(xhr.responseText || '{}') as { name?: string; error?: string }
-      if (xhr.status === 200 && body.name) resolve(body.name)
-      else reject(new Error(body.error ?? `Upload failed (${xhr.status})`))
-    }
-    xhr.onerror = () => reject(new Error('Network error'))
+  const auth = { authorization: `Bearer ${token}` }
+  if (!STATIC_SITE) {
     const form = new FormData()
     form.append('file', file)
-    xhr.send(form)
+    const xhr = await post(`${GUIDE_PREFIX}/upload?guide=${encodeURIComponent(guideId)}`, form, auth, onProgress)
+    const body = JSON.parse(xhr.responseText || '{}') as { name?: string; error?: string }
+    if (xhr.status === 200 && body.name) return body.name
+    throw new Error(body.error ?? `Upload failed (${xhr.status})`)
+  }
+  const res = await fetch(`${GUIDE_PREFIX}/api/upload-url`, {
+    method: 'POST',
+    headers: { ...auth, 'content-type': 'application/json' },
+    body: JSON.stringify({ guide: guideId, name: file.name, size: file.size }),
   })
+  const ticket = (await res.json().catch(() => ({}))) as Partial<UploadTicket> & { error?: string }
+  if (!res.ok || !ticket.url || !ticket.fields || !ticket.name) throw new Error(ticket.error ?? `Upload failed (${res.status})`)
+  const form = new FormData()
+  for (const [k, v] of Object.entries(ticket.fields)) form.append(k, v)
+  form.append('Content-Type', file.type || 'image/jpeg')
+  form.append('file', file) // S3 reads fields only before the file
+  const xhr = await post(ticket.url, form, {}, onProgress)
+  if (xhr.status >= 200 && xhr.status < 300) return ticket.name
+  throw new Error(/<Message>([^<]*)/.exec(xhr.responseText)?.[1] ?? `Upload failed (${xhr.status})`)
 }

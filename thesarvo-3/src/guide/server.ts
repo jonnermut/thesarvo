@@ -86,5 +86,14 @@ export async function fetchSearchShards(): Promise<Shard[]> {
   return mergeShards(pack, overrides, search.removed)
 }
 
-export const fetchImageNames = ({ data: id }: { data: string }): Promise<string[]> =>
-  STATIC_SITE ? staticData(`images/${id}.json`, (s) => s.listImages(id)) : serverImageNames({ data: id })
+/** The static site's list holds the photos pages used at build time; the API adds later uploads when it is reachable. */
+export const fetchImageNames = async ({ data: id }: { data: string }): Promise<string[]> => {
+  if (!STATIC_SITE) return serverImageNames({ data: id })
+  const [built, stored] = await Promise.all([
+    staticData(`images/${id}.json`, (s) => s.listImages(id)),
+    fetch(`${GUIDE_PREFIX}/api/images?guide=${encodeURIComponent(id)}`)
+      .then((r) => (r.ok ? (r.json() as Promise<string[]>) : []))
+      .catch(() => []),
+  ])
+  return [...new Set([...built, ...stored])].sort()
+}

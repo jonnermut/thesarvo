@@ -9,7 +9,7 @@ import { nitro } from 'nitro/vite'
 import { DEFAULT_CONTENT_DIR } from './src/guide/content/defaultDir'
 import { staticSource } from './src/guide/content/staticSource'
 import { flatten, guideUrl, GUIDE_PREFIX } from './src/guide/content/paths'
-import { CALLBACK_PATH } from './src/auth/paths'
+import { CALLBACK_PATH, PASSWORD_PATH } from './src/auth/paths'
 
 /**
  * Dev only: serve `/g/content?f=<file>` straight from the content folder.
@@ -46,7 +46,7 @@ function devContentFiles(): Plugin {
 const staticSite = process.env.VITE_STATIC_SITE === '1'
 const prerenderPaths =
   staticSite && process.env.PRERENDER_PATHS === undefined
-    ? [GUIDE_PREFIX, `${GUIDE_PREFIX}/search`, CALLBACK_PATH, ...flatten(await staticSource().getIndex()).filter((n) => n.path).map(guideUrl)]
+    ? [GUIDE_PREFIX, `${GUIDE_PREFIX}/search`, CALLBACK_PATH, PASSWORD_PATH, ...flatten(await staticSource().getIndex()).filter((n) => n.path).map(guideUrl)]
     : (process.env.PRERENDER_PATHS ?? '').split(',').filter(Boolean)
 
 export default defineConfig({

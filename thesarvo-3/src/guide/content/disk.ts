@@ -1,7 +1,7 @@
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { guideFromXml } from '#/guide/convert/xml'
-import { isHiddenPage, navTitle, slugify, uploadName } from './paths'
+import { freeName, isHiddenPage, navTitle, slugify, uploadName } from './paths'
 import type { ContentSource, IndexNode } from './types'
 
 export type RawIndexNode = { id: number; title: string; children: RawIndexNode[] }
@@ -42,11 +42,7 @@ export class DiskContentSource implements ContentSource {
     const name = uploadName(fileName)
     if (!/^\d+$/.test(guideId) || !name) throw new Error('Not a supported image')
     await mkdir(this.uploadDir, { recursive: true })
-    const taken = new Set(await this.listImages(guideId))
-    // Never overwrite: "a.jpg" becomes "a-2.jpg", "a-3.jpg"...
-    const dot = name.lastIndexOf('.')
-    let stored = name
-    for (let n = 2; taken.has(stored); n++) stored = `${name.slice(0, dot)}-${n}${name.slice(dot)}`
+    const stored = freeName(name, new Set(await this.listImages(guideId)))
     await writeFile(path.join(this.uploadDir, `${guideId}-${stored}`), bytes)
     return stored
   }

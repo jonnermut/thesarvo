@@ -63,3 +63,11 @@ export function uploadName(fileName: string): string | null {
   const match = /^(.*?)\.(jpe?g|png|gif)$/.exec(base)
   return match?.[1] ? base : null
 }
+
+/** Never overwrite: "a.jpg" becomes "a-2.jpg", "a-3.jpg"... when the name is taken. */
+export function freeName(name: string, taken: ReadonlySet<string>): string {
+  const dot = name.lastIndexOf('.')
+  let stored = name
+  for (let n = 2; taken.has(stored); n++) stored = `${name.slice(0, dot)}-${n}${name.slice(dot)}`
+  return stored
+}
