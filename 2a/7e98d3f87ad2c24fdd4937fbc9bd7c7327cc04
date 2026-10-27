@@ -1,0 +1,31 @@
+thesarvo-3/scripts/cloudfront-setup.sh
+  s_e20d0a1ebc47aa::t_552a8d9e3a737d 1-110
+thesarvo-3/docs/plan-backend.md
+  s_e20d0a1ebc47aa::t_92b6e258d09f89 68,79,143,166,169-171
+thesarvo-3/scripts/deploy-site.sh
+  s_e20d0a1ebc47aa::t_8c3c90936cb9a3 4,47-48
+  s_e20d0a1ebc47aa::t_4c31d7395c0ff3 5
+thesarvo-3/scripts/cognito-setup.sh
+  s_e20d0a1ebc47aa::t_67cc051fd43aa6 73-74,77,82
+  s_e20d0a1ebc47aa::t_11e44042a57faf 12-13,71-72,75-76,78-81
+thesarvo-3/scripts/build-site.ts
+  s_e20d0a1ebc47aa::t_b2b85cc3912bdf 4,35
+thesarvo-3/docs/lambda-backend.md
+  s_e20d0a1ebc47aa::t_92b6e258d09f89 89,93
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2a7e98d3f87ad2c24fdd4937fbc9bd7c7327cc04",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
