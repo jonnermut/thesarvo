@@ -2,8 +2,7 @@ import { getIdToken } from '#/auth/session'
 import { GUIDE_PREFIX, MAX_IMAGE_BYTES, STATIC_SITE } from '#/guide/content/paths'
 import type { UploadTicket } from '#/guide/content/bucketImages'
 
-/** Longest edge kept when a photo is shrunk before upload; plenty for a topo on any screen. */
-const MAX_EDGE = 3200
+import { jpegName, quarterTurn, toJpeg } from './photoEdit'
 
 /** iPhones shoot HEIC; most browsers (not Safari) cannot show it, so it is always converted. */
 export const isHeicFile = (file: Pick<File, 'type' | 'name'>) => /^image\/hei[cf]/i.test(file.type) || /\.hei[cf]$/i.test(file.name)
@@ -11,7 +10,8 @@ export const isHeicFile = (file: Pick<File, 'type' | 'name'>) => /^image\/hei[cf
 /** Photos carry their rotation as an EXIF tag that other software ignores, so JPEG and HEIC are always re-drawn upright. */
 export const needsRecode = (file: Pick<File, 'type' | 'name'>) => isHeicFile(file) || /^image\/jpe?g$/i.test(file.type)
 
-async function decode(file: File): Promise<ImageBitmap> {
+/** Reads a photo upright, whatever its format. */
+export async function decode(file: File): Promise<ImageBitmap> {
   try {
     // Applies the EXIF rotation. Safari also decodes HEIC here.
     return await createImageBitmap(file, { imageOrientation: 'from-image' })
@@ -29,17 +29,9 @@ export async function prepareImage(file: File): Promise<File> {
   if (!needsRecode(file) && (file.type === 'image/gif' || file.size <= MAX_IMAGE_BYTES / 4)) return file
   try {
     const bitmap = await decode(file)
-    const scale = Math.min(1, MAX_EDGE / Math.max(bitmap.width, bitmap.height))
-    const width = Math.round(bitmap.width * scale)
-    const height = Math.round(bitmap.height * scale)
-    const canvas = document.createElement('canvas')
-    canvas.width = width
-    canvas.height = height
-    canvas.getContext('2d')?.drawImage(bitmap, 0, 0, width, height)
+    const upright = quarterTurn(bitmap, 0)
     bitmap.close()
-    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.9))
-    if (!blob) throw new Error('Could not convert the image')
-    return new File([blob], file.name.replace(/\.\w+$/, '') + '.jpg', { type: 'image/jpeg' })
+    return new File([await toJpeg(upright, true)], jpegName(file.name), { type: 'image/jpeg' })
   } catch (e) {
     // A HEIC the browser cannot read is useless on the server, so report it; anything else goes up as it is.
     if (heic) throw new Error('This HEIC photo could not be converted. Try sharing it as JPEG.')

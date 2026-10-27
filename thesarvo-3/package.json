@@ -29,8 +29,10 @@
     "heic-to": "^1.6.6",
     "leaflet": "^1.9.4",
     "nitro": "3.0.260610-beta",
+    "pica": "^10.0.3",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "react-easy-crop": "^6.2.4"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",

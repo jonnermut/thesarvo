@@ -3,20 +3,25 @@ import { signIn, useUser } from '#/auth/session'
 import { imageUrl } from '#/guide/content/paths'
 import { fetchImageNames } from '#/guide/server'
 import { Button } from './fields'
+import { PhotoEditor } from './PhotoEditor'
 import { isHeicFile, prepareImage, uploadImage } from './upload'
 
 type Upload = { id: number; file: File; progress: number; error?: string }
 
 /**
  * Choose a photo for a new topo: pick from the guide's images or add new ones by
- * dragging, pasting or the file dialog (which offers the camera on phones).
+ * dragging, pasting, the file dialog or (on phones) the camera. A single new photo opens the photo editor first.
  */
 export function ImagePicker({ guideId, onPick, onClose }: { guideId: string; onPick: (name: string) => void; onClose: () => void }) {
   const [names, setNames] = useState<string[]>([])
   const [uploads, setUploads] = useState<Upload[]>([])
   const [dragging, setDragging] = useState(false)
+  const [editing, setEditing] = useState<{ file: File; fromCamera: boolean } | null>(null)
   const input = useRef<HTMLInputElement>(null)
+  const camera = useRef<HTMLInputElement>(null)
   const nextId = useRef(0)
+  // Phones and tablets: a button straight to the rear camera (the file dialog offers it too, one tap further).
+  const [touch] = useState(() => matchMedia('(pointer: coarse)').matches)
   const user = useUser()
 
   useEffect(() => {
@@ -25,20 +30,24 @@ export function ImagePicker({ guideId, onPick, onClose }: { guideId: string; onP
 
   const patch = (id: number, change: Partial<Upload>) => setUploads((all) => all.map((u) => (u.id === id ? { ...u, ...change } : u)))
 
-  const add = (files: Iterable<File>) => {
+  const send = (file: File, prepare: (file: File) => Promise<File>) => {
+    const id = nextId.current++
+    setUploads((all) => [...all, { id, file, progress: 0 }])
+    void prepare(file)
+      .then((ready) => uploadImage(guideId, ready, (progress) => patch(id, { progress })))
+      .then((name) => {
+        setNames((all) => (all.includes(name) ? all : [...all, name].sort()))
+        setUploads((all) => all.filter((u) => u.id !== id))
+      })
+      .catch((e: unknown) => patch(id, { error: e instanceof Error ? e.message : 'Failed' }))
+  }
+
+  // One photo opens the editor first; a batch goes straight up, upright, shrunk and sharpened.
+  const add = (files: Iterable<File>, fromCamera = false) => {
     if (!user) return
-    for (const file of files) {
-      if (!file.type.startsWith('image/') && !isHeicFile(file)) continue
-      const id = nextId.current++
-      setUploads((all) => [...all, { id, file, progress: 0 }])
-      void prepareImage(file)
-        .then((ready) => uploadImage(guideId, ready, (progress) => patch(id, { progress })))
-        .then((name) => {
-          setNames((all) => (all.includes(name) ? all : [...all, name].sort()))
-          setUploads((all) => all.filter((u) => u.id !== id))
-        })
-        .catch((e: unknown) => patch(id, { error: e instanceof Error ? e.message : 'Failed' }))
-    }
+    const images = [...files].filter((f) => f.type.startsWith('image/') || isHeicFile(f))
+    if (images.length === 1 && images[0].type !== 'image/gif') setEditing({ file: images[0], fromCamera })
+    else for (const file of images) send(file, prepareImage)
   }
 
   // Paste a screenshot or copied photo anywhere while the picker is open.
@@ -67,9 +76,16 @@ export function ImagePicker({ guideId, onPick, onClose }: { guideId: string; onP
           {user ? 'Choose a photo, or drop, paste or add new ones' : 'Choose one of the guide’s photos, or sign in to add new ones'}
         </span>
         {user ? (
-          <Button variant="primary" onClick={() => input.current?.click()}>
-            Add photos…
-          </Button>
+          <>
+            <Button variant="primary" onClick={() => input.current?.click()}>
+              Add photos…
+            </Button>
+            {touch && (
+              <Button variant="primary" onClick={() => camera.current?.click()}>
+                Take photo
+              </Button>
+            )}
+          </>
         ) : (
           <Button variant="primary" onClick={() => void signIn()}>
             Sign in to add photos
@@ -89,6 +105,36 @@ export function ImagePicker({ guideId, onPick, onClose }: { guideId: string; onP
             e.target.value = ''
           }}
         />
+        <input
+          ref={camera}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          hidden
+          onChange={(e) => {
+            add(e.target.files ?? [], true)
+            e.target.value = ''
+          }}
+        />
+        {editing && (
+          <PhotoEditor
+            file={editing.file}
+            onCancel={() => setEditing(null)}
+            onDone={(file) => {
+              setEditing(null)
+              send(file, async (ready) => ready)
+            }}
+            // Still inside the tap, so the browser lets the camera open again.
+            onRetake={
+              editing.fromCamera
+                ? () => {
+                    setEditing(null)
+                    camera.current?.click()
+                  }
+                : undefined
+            }
+          />
+        )}
       </div>
 
       {uploads.length > 0 && (
