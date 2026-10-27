@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as GIndexRouteImport } from './routes/g.index'
 import { Route as GSplatRouteImport } from './routes/g.$'
 import { Route as GContentRouteImport } from './routes/g.content'
@@ -19,6 +20,11 @@ import { Route as GUploadRouteImport } from './routes/g.upload'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GIndexRoute = GIndexRouteImport.update({
@@ -49,6 +55,7 @@ const GUploadRoute = GUploadRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/g/$': typeof GSplatRoute
   '/g/content': typeof GContentRoute
   '/g/search': typeof GSearchRoute
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/g/$': typeof GSplatRoute
   '/g/content': typeof GContentRoute
   '/g/search': typeof GSearchRoute
@@ -66,6 +74,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/g/$': typeof GSplatRoute
   '/g/content': typeof GContentRoute
   '/g/search': typeof GSearchRoute
@@ -74,15 +83,37 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/g/$' | '/g/content' | '/g/search' | '/g/upload' | '/g/'
+  fullPaths:
+    | '/'
+    | '/auth/callback'
+    | '/g/$'
+    | '/g/content'
+    | '/g/search'
+    | '/g/upload'
+    | '/g/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/g/$' | '/g/content' | '/g/search' | '/g/upload' | '/g'
+  to:
+    | '/'
+    | '/auth/callback'
+    | '/g/$'
+    | '/g/content'
+    | '/g/search'
+    | '/g/upload'
+    | '/g'
   id:
-    '__root__' | '/' | '/g/$' | '/g/content' | '/g/search' | '/g/upload' | '/g/'
+    | '__root__'
+    | '/'
+    | '/auth/callback'
+    | '/g/$'
+    | '/g/content'
+    | '/g/search'
+    | '/g/upload'
+    | '/g/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
   GSplatRoute: typeof GSplatRoute
   GContentRoute: typeof GContentRoute
   GSearchRoute: typeof GSearchRoute
@@ -97,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/g/': {
@@ -139,6 +177,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
   GSplatRoute: GSplatRoute,
   GContentRoute: GContentRoute,
   GSearchRoute: GSearchRoute,

@@ -1,6 +1,7 @@
 import { Link, useMatch, useMatches } from '@tanstack/react-router'
 import { useCallback, useEffect, useState } from 'react'
 import type { IndexNode } from '#/guide/content/types'
+import { AccountMenu } from './AccountMenu'
 import { animateLayout, useEscape, useScrollLock } from './overlay'
 import { SearchBox } from './SearchBox'
 import { SideNav } from './SideNav'
@@ -100,6 +101,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="ml-auto flex items-center gap-2">
           <SearchBox />
           <EditLink />
+          <AccountMenu />
         </div>
       </header>
 

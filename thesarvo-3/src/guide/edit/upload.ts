@@ -1,3 +1,4 @@
+import { getIdToken } from '#/auth/session'
 import { GUIDE_PREFIX, MAX_IMAGE_BYTES } from '#/guide/content/paths'
 
 /** Longest edge kept when a photo is shrunk before upload; plenty for a topo on any screen. */
@@ -47,10 +48,13 @@ export async function prepareImage(file: File): Promise<File> {
 }
 
 /** Uploads one image, reporting progress from 0 to 1. Resolves with the stored name. */
-export function uploadImage(guideId: string, file: File, onProgress: (fraction: number) => void): Promise<string> {
+export async function uploadImage(guideId: string, file: File, onProgress: (fraction: number) => void): Promise<string> {
+  const token = await getIdToken()
+  if (!token) throw new Error('Please sign in to upload images')
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
     xhr.open('POST', `${GUIDE_PREFIX}/upload?guide=${encodeURIComponent(guideId)}`)
+    xhr.setRequestHeader('authorization', `Bearer ${token}`)
     xhr.upload.onprogress = (e) => e.lengthComputable && onProgress(e.loaded / e.total)
     xhr.onload = () => {
       const body = JSON.parse(xhr.responseText || '{}') as { name?: string; error?: string }
