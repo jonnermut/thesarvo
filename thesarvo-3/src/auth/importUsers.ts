@@ -58,9 +58,20 @@ export const toWorkos = (u: ConfluenceUser) => {
   }
 }
 
-/** The Cognito migration table's key: an HMAC of the email, so the table names no one without the pepper. */
+/** The Cognito migration table's key: an HMAC of the email, so the table holds no emails. */
 export const cognitoKey = (pepper: string, email: string) => createHmac('sha256', pepper).update(email.trim().toLowerCase()).digest('base64url')
 
-/** Email HMAC to Confluence credential, for the Cognito migrate-user Lambda. Legacy hashes are left out. */
-export const toCognitoTable = (users: ConfluenceUser[], pepper: string): Record<string, string> =>
-  Object.fromEntries(users.filter((u) => phc(u)).map((u) => [cognitoKey(pepper, u.email), u.credential]))
+/** What the migrate-user Lambda knows of an old account: its Confluence credential and the name it went by. */
+export type CognitoEntry = { credential: string; name: string }
+
+/** Tables built before names came over hold just the credential. */
+export type CognitoTable = Record<string, string | CognitoEntry>
+
+export const cognitoEntry = (table: CognitoTable, pepper: string, email: string): CognitoEntry | undefined => {
+  const e = table[cognitoKey(pepper, email)]
+  return typeof e === 'string' ? { credential: e, name: '' } : e
+}
+
+/** Email HMAC to credential and name, for the Cognito migrate-user Lambda. Legacy hashes are left out. */
+export const toCognitoTable = (users: ConfluenceUser[], pepper: string): Record<string, CognitoEntry> =>
+  Object.fromEntries(users.filter((u) => phc(u)).map((u) => [cognitoKey(pepper, u.email), { credential: u.credential, name: u.displayName || u.username }]))

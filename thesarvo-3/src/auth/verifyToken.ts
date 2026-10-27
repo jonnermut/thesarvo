@@ -29,7 +29,7 @@ export async function verifyIdToken(jwt: string, o: Options): Promise<Editor> {
   if (c.iss !== o.issuer || c.aud !== o.clientId || c.token_use !== 'id') throw new Error('Token is not for this site')
   if (typeof c.exp !== 'number' || c.exp * 1000 <= (o.now ?? Date.now)()) throw new Error('Token expired')
   const groups = Array.isArray(c['cognito:groups']) ? c['cognito:groups'].map(String) : []
-  return { sub: String(c.sub), email: String(c.email ?? ''), name: String(c.name ?? c.email ?? ''), groups }
+  return { sub: String(c.sub), email: String(c.email ?? ''), name: String(c.name ?? ''), groups }
 }
 
 let jwks: Promise<Jwk[]> | undefined

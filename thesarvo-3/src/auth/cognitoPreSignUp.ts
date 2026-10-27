@@ -1,4 +1,5 @@
-import { cognitoKey } from './importUsers'
+import { cognitoEntry } from './importUsers'
+import type { CognitoTable } from './importUsers'
 
 /** The parts of Cognito's pre-sign-up trigger event this uses. */
 export type PreSignUpEvent = {
@@ -22,10 +23,10 @@ export const DISPOSABLE_EMAIL = 'Please use an email address you keep: throwaway
  * which migrates the old one. Throwaway inboxes are refused. Throwing shows the message on the sign-up form, after
  * "PreSignUp failed with error" and with a full stop added, so the messages end without one.
  */
-export const preSignUp = (table: Record<string, string>, pepper: string) => async (event: PreSignUpEvent) => {
+export const preSignUp = (table: CognitoTable, pepper: string) => async (event: PreSignUpEvent) => {
   if (event.triggerSource !== 'PreSignUp_SignUp') return event
   const email = event.request.userAttributes.email ?? ''
-  if (table[cognitoKey(pepper, email)]) throw new Error(OLD_ACCOUNT)
+  if (cognitoEntry(table, pepper, email)) throw new Error(OLD_ACCOUNT)
   if (DISPOSABLE.has(email.split('@').pop()?.trim().toLowerCase() ?? '')) throw new Error(DISPOSABLE_EMAIL)
   return event
 }

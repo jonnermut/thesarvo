@@ -69,7 +69,9 @@ describe('importing users', () => {
   it('keys the Cognito table by an HMAC of the email, without legacy hashes', () => {
     const table = toCognitoTable([user({}), user({ email: 'b@x.org', credential: legacy })], 'pepper')
     expect(Object.keys(table)).toEqual([cognitoKey('pepper', 'alice@example.com')])
-    expect(JSON.stringify(table)).not.toContain('alice')
+    expect(JSON.stringify(table)).not.toContain('example.com')
+    expect(Object.values(table)).toEqual([{ credential: modern, name: 'Alice' }])
+    expect(Object.values(toCognitoTable([user({ displayName: '' })], 'pepper'))[0].name).toBe('alice')
     expect(cognitoKey('other', 'alice@example.com')).not.toBe(Object.keys(table)[0])
   })
 })
@@ -82,7 +84,13 @@ describe('Cognito migrate-user trigger', () => {
 
   it('creates a confirmed user when the old password matches', async () => {
     const result = await handler(event('UserMigration_Authentication', 'ALICE@example.com', 'crimp hard'))
-    expect(result.response).toEqual({ userAttributes: { email: 'ALICE@example.com', email_verified: 'true' }, finalUserStatus: 'CONFIRMED', messageAction: 'SUPPRESS' })
+    expect(result.response).toEqual({ userAttributes: { email: 'ALICE@example.com', email_verified: 'true', name: 'Alice' }, finalUserStatus: 'CONFIRMED', messageAction: 'SUPPRESS' })
+  })
+
+  it('still reads a table from before names came over', async () => {
+    const old = migrateUser({ [cognitoKey('pepper', 'alice@example.com')]: modern }, 'pepper')
+    const result = await old(event('UserMigration_Authentication', 'alice@example.com', 'crimp hard'))
+    expect(result.response.userAttributes).toEqual({ email: 'alice@example.com', email_verified: 'true' })
   })
 
   it('refuses a wrong password or an unknown email', async () => {

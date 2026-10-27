@@ -3,12 +3,13 @@ import { migrateUser } from './cognitoMigrate'
 import type { MigrateUserEvent } from './cognitoMigrate'
 import { preSignUp } from './cognitoPreSignUp'
 import type { PreSignUpEvent } from './cognitoPreSignUp'
+import type { CognitoTable } from './importUsers'
 
 /**
  * The deployed Lambda, for the pool's migrate-user and pre-sign-up triggers: `users.json` (from
  * `npm run auth-import -- … --to cognito`) sits beside it in the zip.
  */
-const table = JSON.parse(readFileSync(new URL('./users.json', import.meta.url), 'utf8')) as Record<string, string>
+const table = JSON.parse(readFileSync(new URL('./users.json', import.meta.url), 'utf8')) as CognitoTable
 const pepper = process.env.AUTH_PEPPER
 if (!pepper) throw new Error('AUTH_PEPPER is not set')
 
