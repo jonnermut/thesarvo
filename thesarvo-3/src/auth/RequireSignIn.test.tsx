@@ -6,7 +6,7 @@ import { RequireSignIn } from './RequireSignIn'
 const session = vi.hoisted(() => ({ user: null as User | null, signIn: vi.fn(async () => {}) }))
 vi.mock('./session', () => ({ useUser: () => session.user, signIn: session.signIn }))
 
-const jon: User = { sub: '1', email: 'a@b.c', name: 'A', hasPassword: true }
+const jon: User = { sub: '1', email: 'a@b.c', name: 'A', hasPassword: true, admin: false }
 const page = () => render(<RequireSignIn what="edit this guide"><p>Editor</p></RequireSignIn>)
 
 afterEach(cleanup)

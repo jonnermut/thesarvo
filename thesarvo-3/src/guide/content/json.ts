@@ -1,7 +1,7 @@
 import { access, readFile, readdir } from 'node:fs/promises'
 import path from 'node:path'
 import type { Guide } from '#/guide/model/types'
-import { readPageBody, toNode } from './disk'
+import { readHistory, readPageBody, toNode } from './disk'
 import type {RawIndexNode} from './disk';
 import { referencedImages } from './attachments'
 import type { ContentSource } from './types'
@@ -32,6 +32,10 @@ export class JsonContentSource implements ContentSource {
 
   getPageBody(id: string) {
     return readPageBody(path.join(this.dir, 'pages'), id)
+  }
+
+  getHistory(id: string) {
+    return readHistory(path.join(this.dir, 'pages'), id)
   }
 
   /** The images the guide already uses: all that the static site can offer. */

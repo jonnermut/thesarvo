@@ -10,7 +10,7 @@ export type Answer<T> = { ok: true; value: T } | { ok: false; unavailable?: bool
 
 export interface SaveApi {
   latest: (guideId: string) => Promise<Answer<{ guide: Guide }>>
-  save: (request: { guide: string; session: string; changes: Changes }) => Promise<Answer<Exclude<SaveResult, { status: 'missing' }>>>
+  save: (request: { guide: string; session: string; changes: Changes; note?: string }) => Promise<Answer<Exclude<SaveResult, { status: 'missing' }>>>
 }
 
 const call = async <T>(path: string, init: RequestInit = {}): Promise<Answer<T>> => {
@@ -46,7 +46,7 @@ export const SESSION_IDLE_MS = 30 * 60_000
 export const SAVE_DEBOUNCE_MS = 1000
 const RETRY_MS = [2000, 5000, 15_000, 30_000, 60_000]
 
-const newSession = () => (typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`)
+export const newSession = () => (typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`)
 
 type Hooks = {
   /** The guide being edited has to change: others' saves came in, or the server renumbered or renamed something. */

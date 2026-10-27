@@ -1,4 +1,5 @@
 import type { Guide } from '#/guide/model/types'
+import type { HistoryEntry } from '#/guide/save/history'
 import type { GuideStats } from './manifest'
 
 /** One page in the site hierarchy (from index.json). */
@@ -28,6 +29,8 @@ export interface ContentSource {
   getGuide: (id: string) => Promise<Guide | null>
   /** The cleaned body of a page that is not a guide (see pageBody), or null if it has none. */
   getPageBody: (id: string) => Promise<string | null>
+  /** A page's edit sessions saved through the site (`pages/<id>/history.json`), newest last; empty if it has none. */
+  getHistory: (id: string) => Promise<HistoryEntry[]>
   /** Image names attached to a guide (without the id prefix, thumbnails excluded). */
   listImages: (guideId: string) => Promise<string[]>
   /** Stores an uploaded image for a guide and returns the name the guide should reference. */

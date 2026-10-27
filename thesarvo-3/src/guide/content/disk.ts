@@ -2,6 +2,7 @@ import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { guideFromXml } from '#/guide/convert/xml'
 import { freeName, isHiddenPage, navTitle, slugify, uploadName } from './paths'
+import type { HistoryEntry } from '#/guide/save/history'
 import type { ContentSource, IndexNode } from './types'
 
 export type RawIndexNode = { id: number; title: string; children: RawIndexNode[] }
@@ -36,6 +37,10 @@ export class DiskContentSource implements ContentSource {
 
   getPageBody(id: string) {
     return readPageBody(this.pagesDir, id)
+  }
+
+  getHistory(id: string) {
+    return readHistory(this.pagesDir, id)
   }
 
   async saveImage(guideId: string, fileName: string, bytes: Uint8Array) {
@@ -95,6 +100,13 @@ export function toNode(raw: RawIndexNode, parentPath: string, guideFiles: Set<st
 }
 
 /** `pages/<id>/page.html` under `pagesDir`, or null. */
+export async function readHistory(pagesDir: string, id: string): Promise<HistoryEntry[]> {
+  if (!/^\d+$/.test(id)) return []
+  const json = await readFile(path.join(pagesDir, id, 'history.json'), 'utf8').catch(() => null)
+  // Written by the site's saves (see src/guide/save).
+  return json ? (JSON.parse(json) as HistoryEntry[]) : []
+}
+
 export async function readPageBody(pagesDir: string, id: string): Promise<string | null> {
   if (!/^\d+$/.test(id)) return null
   return readFile(path.join(pagesDir, id, 'page.html'), 'utf8').catch(() => null)

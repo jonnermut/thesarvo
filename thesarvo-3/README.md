@@ -31,6 +31,7 @@ served by a Vite middleware at `/g/content?f=<file>`.
 - `src/guide/islands` lazy Leaflet map
 - `src/guide/edit` editor: reducer with undo/redo, topo operations, local drafts, the saver
 - `src/guide/save` saving on the server: per-node merge, edit-session history, validation, the GitHub and local repos
+- `src/guide/history` the history page (`?history`): word and field diffs, revert and restore worked out from `history.json`
 
 - `src/auth` Cognito sign-in in the browser, token checks on the server, the Confluence user migration
 - `src/aws` S3 signing (presigned uploads, listing)

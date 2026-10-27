@@ -7,6 +7,7 @@ import type { ContentSource, IndexNode } from './content/types'
 import { mergeShards } from './search/shard'
 import type { Pack, Shard } from './search/shard'
 import type { Guide } from './model/types'
+import type { HistoryEntry } from './save/history'
 
 const serverManifest = createServerFn({ method: 'GET' }).handler(async () => (await import('./content/siteManifest')).siteManifest())
 
@@ -19,6 +20,10 @@ const serverPageBody = createServerFn({ method: 'GET' })
   .handler(async ({ data: id }) => (await import('./content')).getContentSource().getPageBody(id))
 
 const serverSearchShards = createServerFn({ method: 'GET' }).handler(async () => (await import('./search/allShards')).allShards())
+
+const serverHistory = createServerFn({ method: 'GET' })
+  .validator((id: string) => id)
+  .handler(async ({ data: id }) => (await import('./content')).getContentSource().getHistory(id))
 
 const serverImageNames = createServerFn({ method: 'GET' })
   .validator((id: string) => id)
@@ -67,6 +72,16 @@ export const fetchPage = async (path: string): Promise<PageInfo | null> => pageI
 
 export const fetchGuide = ({ data: id }: { data: string }): Promise<Guide | null> =>
   STATIC_SITE ? staticData(`guide/${id}.json`, (s) => s.getGuide(id)) : serverGuide({ data: id })
+
+/**
+ * A page's edit sessions, newest last. The static site has a file only for pages with history, written at build
+ * time like the page, so it is as current as the page itself.
+ */
+export const fetchHistory = async (id: string): Promise<HistoryEntry[]> => {
+  if (!STATIC_SITE) return serverHistory({ data: id })
+  const res = await fetch(`${GUIDE_PREFIX}-data/history/${id}.json`, { cache: 'no-cache' })
+  return res.ok ? ((await res.json()) as HistoryEntry[]) : []
+}
 
 /** The body of a page that is not a guide, with its links pointing at the current site, or null. */
 export async function fetchPageBody(id: string): Promise<string | null> {

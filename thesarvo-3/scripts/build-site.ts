@@ -63,7 +63,7 @@ const app = dirty('.') ? `uncommitted-${Date.now()}` : git('.', 'rev-parse', 'HE
 const build: BuildInfo = {
   app,
   content: git(dir, 'rev-parse', 'HEAD') + (dirty(dir) ? '+' : ''),
-  nodes: await treeHashes(index, async (n) => JSON.stringify([n.isGuide ? await guideOf(n.id) : null, await source.getPageBody(n.id)]), hash),
+  nodes: await treeHashes(index, async (n) => JSON.stringify([n.isGuide ? await guideOf(n.id) : null, await source.getPageBody(n.id), await source.getHistory(n.id)]), hash),
 }
 
 const before = incremental ? await deployed<BuildInfo>('build.json') : null
@@ -74,7 +74,7 @@ const pages = partial ? pagesToRebuild(index, before.nodes, build.nodes) : nodes
 
 const data = path.resolve('public/g-data')
 await rm(data, { recursive: true, force: true })
-for (const sub of ['guide', 'images', 'kml', 'page', 'search']) await mkdir(path.join(data, sub), { recursive: true })
+for (const sub of ['guide', 'history', 'images', 'kml', 'page', 'search']) await mkdir(path.join(data, sub), { recursive: true })
 const writeJson = (file: string, value: unknown) => writeFile(path.join(data, file), JSON.stringify(value))
 
 for (const node of pages) {
@@ -82,6 +82,9 @@ for (const node of pages) {
     await writeJson(`guide/${node.id}.json`, await guideOf(node.id))
     await writeJson(`images/${node.id}.json`, await source.listImages(node.id))
   } else await writeJson(`page/${node.id}.json`, await source.getPageBody(node.id))
+  // Its page menu's History reads this as it is: the saves wrote everything it shows.
+  const history = await source.getHistory(node.id)
+  if (history.length) await writeJson(`history/${node.id}.json`, history)
 }
 
 // Google Earth files of everything below each contents page, rewritten every build as any guide's GPS may change them.

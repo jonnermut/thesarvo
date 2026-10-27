@@ -10,13 +10,17 @@ import { GuideView } from '#/guide/view/GuideView'
 import { PrevNext } from '#/guide/view/PrevNext'
 import { useFullWidth, WidthToggle, widthClass } from '#/guide/view/width'
 
-// The editor is its own chunk: readers never download it.
+// The editor is its own chunk: readers never download it. The history too, until someone opens it.
 const Editor = lazy(() => import('#/guide/edit/Editor'))
+const HistoryView = lazy(() => import('#/guide/history/HistoryView'))
+
+/** What the address shows of a page: the page, `?edit` the editor, `?history` its history. */
+export type PageMode = { edit?: true; history?: true }
+const flag = (v: unknown) => v === true || v === 'true' || v === ''
 
 export const Route = createFileRoute('/g/$')({
-  // `?edit` switches the same address into the editor, so everything lives under /g.
-  validateSearch: (search: Record<string, unknown>): { edit?: true } =>
-    search.edit === true || search.edit === 'true' || search.edit === '' ? { edit: true } : {},
+  // `?edit` and `?history` switch the same address into the editor or the history, so everything lives under /g.
+  validateSearch: (search: Record<string, unknown>): PageMode => (flag(search.edit) ? { edit: true } : flag(search.history) ? { history: true } : {}),
   loader: async ({ params }) => {
     const page = await fetchPage(decodeURIComponent(params._splat ?? '').replace(/\/$/, ''))
     if (!page) throw notFound()
@@ -40,7 +44,7 @@ export const Route = createFileRoute('/g/$')({
 
 function GuidePage() {
   const { node, trail, guide, body } = Route.useLoaderData()
-  const { edit } = Route.useSearch()
+  const { edit, history } = Route.useSearch()
   const hash = useLocation({ select: (l) => l.hash })
   const full = useFullWidth()
   const width = widthClass(full)
@@ -57,6 +61,17 @@ function GuidePage() {
           </Suspense>
         </RequireSignIn>
       </ClientOnly>
+    )
+  if (history)
+    return (
+      <>
+        <Breadcrumbs trail={trail} current={node} width="max-w-4xl px-4 sm:px-6" />
+        <ClientOnly fallback={<p className="p-8 text-muted">Loading history…</p>}>
+          <Suspense fallback={<p className="p-8 text-muted">Loading history…</p>}>
+            <HistoryView node={node} guide={guide} hash={hash} />
+          </Suspense>
+        </ClientOnly>
+      </>
     )
   // Breadcrumbs line up with the page body beneath them. A guide with pages below it lists them after the guide.
   if (guide)

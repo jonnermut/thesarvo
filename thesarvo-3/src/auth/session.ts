@@ -7,8 +7,11 @@ import { CALLBACK_PATH } from './paths'
  * tokens kept in localStorage and refreshed straight from Cognito's token endpoint.
  */
 
-/** `hasPassword` is false for a Google, Apple or Facebook sign-in: there is no password to change. */
-export type User = { sub: string; email: string; name: string; hasPassword: boolean }
+/**
+ * `hasPassword` is false for a Google, Apple or Facebook sign-in: there is no password to change. `admin` (the Cognito
+ * group `admins`) only shows admin actions: the API checks the token itself.
+ */
+export type User = { sub: string; email: string; name: string; hasPassword: boolean; admin: boolean }
 /** `accessToken` is missing from sessions started before it was kept. */
 type Tokens = { idToken: string; accessToken?: string; refreshToken: string; expiresAt: number }
 
@@ -63,7 +66,7 @@ function currentUser(): User | null {
     const c = t && claims(t.idToken)
     cached = {
       raw,
-      user: c ? { sub: String(c.sub), email: String(c.email ?? ''), name: String(c.name ?? c.email ?? ''), hasPassword: !c.identities } : null,
+      user: c ? { sub: String(c.sub), email: String(c.email ?? ''), name: String(c.name ?? c.email ?? ''), hasPassword: !c.identities, admin: Array.isArray(c['cognito:groups']) && c['cognito:groups'].includes('admins') } : null,
     }
   }
   return cached.user

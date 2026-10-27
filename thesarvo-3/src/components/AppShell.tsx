@@ -1,8 +1,8 @@
 import { Link, useMatch, useMatches } from '@tanstack/react-router'
 import { useCallback, useEffect, useState } from 'react'
-import { signIn, useUser } from '#/auth/session'
 import type { IndexNode } from '#/guide/content/types'
 import { AccountMenu } from './AccountMenu'
+import { PageMenu } from './PageMenu'
 import { animateLayout, useEscape, useScrollLock } from './overlay'
 import { SearchBox } from './SearchBox'
 import { SideNav } from './SideNav'
@@ -15,36 +15,6 @@ function Logo() {
       <img src="/favicon.svg" alt="" className="size-8" />
       <span className="text-xl font-semibold tracking-tight">thesarvo</span>
       <span className="hidden text-sm text-white/70 sm:inline">Tasmanian climbing guides</span>
-    </Link>
-  )
-}
-
-/** "Edit this Guide" (or back to reading) for the guide on screen; nothing on other pages. */
-function EditLink() {
-  const match = useMatch({ from: '/g/$', shouldThrow: false })
-  const user = useUser()
-  if (!match?.loaderData?.guide) return null
-  const editing = !!match.search.edit
-  return (
-    <Link
-      to="/g/$"
-      params={{ _splat: match.params._splat }}
-      search={editing ? {} : { edit: true }}
-      // Editing needs an account: sign in first, then land in the editor.
-      onClick={(e) => {
-        if (editing || user) return
-        e.preventDefault()
-        void signIn(`${location.pathname}?edit=true`)
-      }}
-      className="rounded-md border border-white/40 px-3 py-1.5 text-sm font-medium text-white hover:bg-white/10"
-    >
-      {editing ? (
-        'View'
-      ) : (
-        <>
-          Edit<span className="hidden sm:inline"> this Guide</span>
-        </>
-      )}
     </Link>
   )
 }
@@ -108,7 +78,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <Logo />
         <div className="ml-auto flex items-center gap-2">
           <SearchBox />
-          <EditLink />
+          <PageMenu />
           <AccountMenu />
         </div>
       </header>

@@ -2,10 +2,9 @@ import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import type { Guide } from '#/guide/model/types'
 import { DEFAULT_CONTENT_DIR } from './defaultDir'
-import { DiskContentSource } from './disk'
+import { DiskContentSource, readHistory } from './disk'
 import { JsonContentSource } from './json'
 import type { ContentSource } from './types'
-
 
 let source: ContentSource | undefined
 
@@ -27,5 +26,10 @@ function withSaves(s: ContentSource, dir: string) {
     const saved = await readFile(path.join(dir, 'pages', id, 'guide.json'), 'utf8').catch(() => null)
     // Written by the dev server's own saves.
     return saved ? (JSON.parse(saved) as Guide) : getGuide(id)
+  }
+  const getHistory = s.getHistory.bind(s)
+  s.getHistory = async (id) => {
+    const saved = await readHistory(path.join(dir, 'pages'), id)
+    return saved.length ? saved : getHistory(id)
   }
 }

@@ -109,7 +109,7 @@ const kindOf = (n: GuideNode): Kind => {
 const plain = (s: string) => s.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
 
 /** "the climb Albatros", "a topo", "the header". */
-function label(n: GuideNode): string {
+export function label(n: GuideNode): string {
   const kind = kindOf(n).one
   const name = n.type === 'climb' || n.type === 'problem' ? plain(n.name) : n.type === 'text' && kind === 'heading' ? plain(n.text) : ''
   if (name) return `the ${kind} ${name.length > 40 ? `${name.slice(0, 40)}…` : name}`
@@ -127,7 +127,7 @@ function some(nodes: GuideNode[]): string {
   return list([...counts].map(([k, count]) => (count === 1 ? `a ${k.one}` : `${count} ${k.many}`)))
 }
 
-const headerFields: [keyof Header, string][] = [
+export const headerFields: [keyof Header, string][] = [
   ['name', 'the crag name'],
   ['intro', 'the intro'],
   ['history', 'the history'],
