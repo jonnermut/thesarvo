@@ -85,7 +85,12 @@ export const useUser = () => useSyncExternalStore(subscribe, currentUser, () => 
 const redirectUri = () => location.origin + CALLBACK_PATH
 
 /** Sends the browser to Cognito's login page; it comes back to the callback route, then to `returnTo`. */
-export async function signIn(returnTo = location.pathname + location.search) {
+export const signIn = (returnTo = location.pathname + location.search) => toCognito('/oauth2/authorize', returnTo)
+
+/** The same, starting on Cognito's sign-up form: the new user comes back signed in. */
+export const signUp = (returnTo = location.pathname + location.search) => toCognito('/signup', returnTo)
+
+async function toCognito(path: string, returnTo: string) {
   const verifier = random()
   const state = random()
   storage.set(PENDING, JSON.stringify({ verifier, state, returnTo }), sessionStorage)
@@ -100,7 +105,7 @@ export async function signIn(returnTo = location.pathname + location.search) {
     code_challenge: challenge,
     code_challenge_method: 'S256',
   })
-  location.assign(`${COGNITO.domain}/oauth2/authorize?${q}`)
+  location.assign(`${COGNITO.domain}${path}?${q}`)
 }
 
 async function token(params: Record<string, string>) {

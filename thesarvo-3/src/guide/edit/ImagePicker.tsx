@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { signIn, useUser } from '#/auth/session'
 import { imageUrl } from '#/guide/content/paths'
 import { fetchImageNames } from '#/guide/server'
 import { Button } from './fields'
@@ -22,7 +21,6 @@ export function ImagePicker({ guideId, onPick, onClose }: { guideId: string; onP
   const nextId = useRef(0)
   // Phones and tablets: a button straight to the rear camera (the file dialog offers it too, one tap further).
   const [touch] = useState(() => matchMedia('(pointer: coarse)').matches)
-  const user = useUser()
 
   useEffect(() => {
     void fetchImageNames({ data: guideId }).then(setNames)
@@ -44,7 +42,6 @@ export function ImagePicker({ guideId, onPick, onClose }: { guideId: string; onP
 
   // One photo opens the editor first; a batch goes straight up, upright, shrunk and sharpened.
   const add = (files: Iterable<File>, fromCamera = false) => {
-    if (!user) return
     const images = [...files].filter((f) => f.type.startsWith('image/') || isHeicFile(f))
     if (images.length === 1 && images[0].type !== 'image/gif') setEditing({ file: images[0], fromCamera })
     else for (const file of images) send(file, prepareImage)
@@ -72,23 +69,13 @@ export function ImagePicker({ guideId, onPick, onClose }: { guideId: string; onP
       }}
     >
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-sm font-medium">
-          {user ? 'Choose a photo, or drop, paste or add new ones' : 'Choose one of the guide’s photos, or sign in to add new ones'}
-        </span>
-        {user ? (
-          <>
-            <Button variant="primary" onClick={() => input.current?.click()}>
-              Add photos…
-            </Button>
-            {touch && (
-              <Button variant="primary" onClick={() => camera.current?.click()}>
-                Take photo
-              </Button>
-            )}
-          </>
-        ) : (
-          <Button variant="primary" onClick={() => void signIn()}>
-            Sign in to add photos
+        <span className="text-sm font-medium">Choose a photo, or drop, paste or add new ones</span>
+        <Button variant="primary" onClick={() => input.current?.click()}>
+          Add photos…
+        </Button>
+        {touch && (
+          <Button variant="primary" onClick={() => camera.current?.click()}>
+            Take photo
           </Button>
         )}
         <Button className="ml-auto" onClick={onClose}>
@@ -164,19 +151,17 @@ export function ImagePicker({ guideId, onPick, onClose }: { guideId: string; onP
               <span className="block truncate px-2 py-1 text-xs text-muted group-hover:text-ink">{name}</span>
             </button>
             {/* Edits a copy: the original stays, for the topos that use it. */}
-            {user && (
-              <Button
-                className="absolute top-1 right-1 bg-white/90! shadow-sm"
-                aria-label={`Edit a copy of ${name}`}
-                onClick={() =>
-                  void fetchPhoto(guideId, name)
-                    .then((file) => setEditing({ file, fromCamera: false }))
-                    .catch((e: unknown) => setUploads((all) => [...all, { id: nextId.current++, file: new File([], name), progress: 0, error: e instanceof Error ? e.message : 'Failed' }]))
-                }
-              >
-                Edit
-              </Button>
-            )}
+            <Button
+              className="absolute top-1 right-1 bg-white/90! shadow-sm"
+              aria-label={`Edit a copy of ${name}`}
+              onClick={() =>
+                void fetchPhoto(guideId, name)
+                  .then((file) => setEditing({ file, fromCamera: false }))
+                  .catch((e: unknown) => setUploads((all) => [...all, { id: nextId.current++, file: new File([], name), progress: 0, error: e instanceof Error ? e.message : 'Failed' }]))
+              }
+            >
+              Edit
+            </Button>
           </div>
         ))}
         {!names.length && <p className="col-span-full text-sm text-muted">No photos yet for this guide.</p>}

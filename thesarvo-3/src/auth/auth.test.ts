@@ -3,6 +3,8 @@ import { createHash, pbkdf2Sync } from 'node:crypto'
 import { describe, expect, it } from 'vitest'
 import { migrateUser } from './cognitoMigrate'
 import type { MigrateUserEvent } from './cognitoMigrate'
+import { DISPOSABLE_EMAIL, OLD_ACCOUNT, preSignUp } from './cognitoPreSignUp'
+import type { PreSignUpEvent } from './cognitoPreSignUp'
 import { confluenceCredential, parseConfluenceHash, toPhc, verifyConfluencePassword } from './confluenceHash'
 import type { ConfluenceUser } from './importUsers'
 import { cognitoKey, onePerEmail, parseUsersTsv, toAuth0, toCognitoTable, toWorkos } from './importUsers'
@@ -91,5 +93,26 @@ describe('Cognito migrate-user trigger', () => {
   it('lets a known email reset its password without the old one', async () => {
     const result = await handler(event('UserMigration_ForgotPassword', 'alice@example.com'))
     expect(result.response.finalUserStatus).toBe('RESET_REQUIRED')
+  })
+})
+
+describe('Cognito pre-sign-up trigger', () => {
+  const handler = preSignUp(toCognitoTable([user({})], 'pepper'), 'pepper')
+  const event = (email: string, triggerSource: PreSignUpEvent['triggerSource'] = 'PreSignUp_SignUp'): PreSignUpEvent => ({
+    triggerSource, request: { userAttributes: { email } }, response: {},
+  })
+
+  it('sends someone with an old Confluence account to sign in instead', async () => {
+    await expect(handler(event('Alice@Example.com'))).rejects.toThrow(OLD_ACCOUNT)
+  })
+
+  it('refuses throwaway inboxes', async () => {
+    await expect(handler(event('x@Mailinator.com'))).rejects.toThrow(DISPOSABLE_EMAIL)
+  })
+
+  it('lets a new email sign up, and leaves admin-created and social users alone', async () => {
+    await expect(handler(event('bob@example.com'))).resolves.toMatchObject({ response: {} })
+    await expect(handler(event('alice@example.com', 'PreSignUp_AdminCreateUser'))).resolves.toBeTruthy()
+    await expect(handler(event('alice@example.com', 'PreSignUp_ExternalProvider'))).resolves.toBeTruthy()
   })
 })

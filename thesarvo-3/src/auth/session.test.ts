@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { changePassword, getIdToken } from './session'
+import { changePassword, getIdToken, signUp } from './session'
 
 const jwt = (claims: object) => `h.${btoa(JSON.stringify(claims)).replace(/=+$/, '')}.s`
 const signIn = (extra: object = {}) =>
@@ -34,6 +34,19 @@ describe('changePassword', () => {
   it('asks an older session to sign in again', async () => {
     signIn()
     await expect(changePassword('old', 'newpassword')).rejects.toThrow('sign out and in again')
+  })
+})
+
+describe('signUp', () => {
+  it('opens Cognito’s sign-up form with the same PKCE request as sign-in', async () => {
+    const assign = vi.fn()
+    vi.spyOn(window, 'location', 'get').mockReturnValue({ ...window.location, origin: 'https://x.test', pathname: '/g/a', search: '', assign })
+    await signUp()
+    const url = new URL(assign.mock.calls[0][0] as string)
+    expect(url.pathname).toBe('/signup')
+    expect(url.searchParams.get('redirect_uri')).toBe('https://x.test/auth/callback')
+    expect(url.searchParams.get('code_challenge_method')).toBe('S256')
+    expect(JSON.parse(sessionStorage.getItem('thesarvo.auth.pending') ?? '{}')).toMatchObject({ returnTo: '/g/a', state: url.searchParams.get('state') })
   })
 })
 

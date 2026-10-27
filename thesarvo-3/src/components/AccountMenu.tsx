@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { signIn, signOut, useUser } from '#/auth/session'
+import { signIn, signOut, signUp, useUser } from '#/auth/session'
 import { useEscape } from './overlay'
 
-/** "Sign in", or the signed-in user's initial opening a small menu. Decided after hydration, in the browser. */
+/** "Sign in" and "Create account", or the signed-in user's initial opening a small menu. Decided after hydration, in the browser. */
 export function AccountMenu() {
   const user = useUser()
   const [open, setOpen] = useState(false)
@@ -17,11 +17,17 @@ export function AccountMenu() {
     return () => document.removeEventListener('pointerdown', outside)
   }, [open])
 
+  // On phones the login page's own "Create an account" link stands in for the second button.
   if (!user)
     return (
-      <button type="button" onClick={() => void signIn()} className="rounded-md px-3 py-1.5 text-sm font-medium text-white hover:bg-white/10">
-        Sign in
-      </button>
+      <div className="flex items-center gap-1">
+        <button type="button" onClick={() => void signIn()} className="rounded-md px-3 py-1.5 text-sm font-medium whitespace-nowrap text-white hover:bg-white/10">
+          Sign in
+        </button>
+        <button type="button" onClick={() => void signUp()} className="hidden rounded-md border border-white/40 px-3 py-1.5 text-sm font-medium whitespace-nowrap text-white hover:bg-white/10 sm:block">
+          Create account
+        </button>
+      </div>
     )
 
   const label = user.name || user.email
