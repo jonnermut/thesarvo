@@ -1,10 +1,12 @@
-import { metaOf } from './types'
-import type { Author, Comment, Thread, ThreadMeta } from './types'
+import { metaOf, noticeOf } from './types'
+import type { Author, Comment, Notice, Thread, ThreadMeta } from './types'
 import type { ForumStore } from './store'
 
 export const TITLE_MAX = 120
 export const TEXT_MAX = 10_000
 export const RECENT_COUNT = 8
+/** A notice lasts at most this long. */
+export const NOTICE_MAX_DAYS = 366
 const RETRIES = 6
 
 /** Who is asking: `groups` decide which restricted threads they see; `admin` may hide things. */
@@ -66,6 +68,38 @@ async function reindex(store: ForumStore, t: Thread) {
     return (t.hidden ? rest : [meta, ...rest]).toSorted((a, b) => b.last.localeCompare(a.last))
   })
   await update<ThreadMeta[]>(store, 'recent.json', [], () => (index ?? []).filter((m) => !m.group).slice(0, RECENT_COUNT))
+  const notice = noticeOf(t)
+  await update<Notice[]>(store, 'notices.json', [], (list) => {
+    const rest = list.filter((n) => n.id !== t.id)
+    return notice ? [notice, ...rest] : rest.length === list.length ? null : rest
+  })
+}
+
+/** The notices that have not run out, for the home page (public: they are the texts an admin chose to show everyone). */
+export async function activeNotices(store: ForumStore, now = new Date()): Promise<Notice[]> {
+  const got = await store.read('notices.json')
+  return ((got?.value ?? []) as Notice[]).filter((n) => n.until > now.toISOString())
+}
+
+/** Admin: make a thread a notice until `until` (an ISO time in the future, within a year), or stop it being one (`until` null). Restricted threads cannot be notices. */
+export async function setNotice(store: ForumStore, v: Viewer, input: { thread?: unknown; until?: unknown }, now = new Date()): Promise<Thread> {
+  if (!v.admin) throw new Refused('Only an admin can do that')
+  const id = isId(input.thread) ? input.thread : ''
+  let until: string | undefined
+  if (input.until !== null && input.until !== undefined) {
+    const at = typeof input.until === 'string' ? new Date(input.until) : new Date(NaN)
+    if (Number.isNaN(at.getTime()) || at <= now) throw new Refused('The end of a notice must be a time in the future')
+    if (at.getTime() - now.getTime() > NOTICE_MAX_DAYS * 86_400_000) throw new Refused('A notice can last a year at most')
+    until = at.toISOString()
+  }
+  const t = await update<Thread | null>(store, threadFile(id), null, (cur) => {
+    if (!cur) throw new Refused('No such post')
+    if (until && (cur.group || cur.hidden)) throw new Refused('A restricted or hidden post cannot be a notice')
+    return { ...cur, notice: until }
+  })
+  if (!t) throw new Refused('No such post')
+  await reindex(store, t)
+  return t
 }
 
 export async function createThread(store: ForumStore, v: Viewer, input: { title?: unknown; text?: unknown }, now = new Date()): Promise<Thread> {

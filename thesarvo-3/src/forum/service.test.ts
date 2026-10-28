@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { addComment, createThread, listThreads, readThread, recentThreads, Refused, setHidden } from './service'
+import { activeNotices, addComment, createThread, listThreads, readThread, recentThreads, Refused, setHidden, setNotice } from './service'
 import type { Viewer } from './service'
 import type { ForumStore } from './store'
 import type { Thread, ThreadMeta } from './types'
@@ -102,5 +102,29 @@ describe('forum', () => {
     expect(await readThread(store, ann, t.id)).toBeNull()
     expect(await listThreads(store, ann)).toEqual([])
     expect(await recentThreads(store)).toEqual([])
+  })
+
+  it('lets an admin make a post a notice for a while; it shows its text but not its comments, and runs out', async () => {
+    const store = memory()
+    const now = new Date('2026-03-01T00:00:00Z')
+    const t = await createThread(store, ann, { title: 'Closure', text: 'The road is shut' }, now)
+    await addComment(store, bob, { thread: t.id, text: 'private chatter' }, now)
+    await expect(setNotice(store, ann, { thread: t.id, until: '2026-03-08T00:00:00Z' }, now)).rejects.toThrow('admin')
+    await expect(setNotice(store, root, { thread: t.id, until: '2026-02-01T00:00:00Z' }, now)).rejects.toThrow('future')
+    await expect(setNotice(store, root, { thread: t.id, until: '2030-01-01T00:00:00Z' }, now)).rejects.toThrow('year')
+    await setNotice(store, root, { thread: t.id, until: '2026-03-08T00:00:00Z' }, now)
+    const shown = await activeNotices(store, new Date('2026-03-02T00:00:00Z'))
+    expect(shown).toMatchObject([{ id: t.id, title: 'Closure', text: 'The road is shut', until: '2026-03-08T00:00:00.000Z' }])
+    expect(JSON.stringify(shown)).not.toContain('chatter')
+    expect((await listThreads(store, ann))[0].notice).toBe('2026-03-08T00:00:00.000Z')
+    expect(await activeNotices(store, new Date('2026-03-09T00:00:00Z'))).toEqual([])
+    await setNotice(store, root, { thread: t.id, until: null }, now)
+    expect(await activeNotices(store, new Date('2026-03-02T00:00:00Z'))).toEqual([])
+  })
+
+  it('never makes a restricted or hidden post a public notice', async () => {
+    const thread: Thread = { id: '9', title: 'CCT', author: { sub: 'c', name: 'C' }, at: '2010-01-01T00:00:00Z', text: 'x', comments: [], group: 'cct-members' }
+    const store = memory({ 'threads/9.json': thread })
+    await expect(setNotice(store, root, { thread: '9', until: new Date(Date.now() + 86_400_000).toISOString() })).rejects.toThrow('restricted')
   })
 })

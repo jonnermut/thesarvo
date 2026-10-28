@@ -22,6 +22,7 @@ import { Route as GUploadRouteImport } from './routes/g.upload'
 import { Route as GApiAdminRouteImport } from './routes/g.api.admin'
 import { Route as GApiCreatePageRouteImport } from './routes/g.api.create-page'
 import { Route as GApiForumRouteImport } from './routes/g.api.forum'
+import { Route as GApiForumNoticesRouteImport } from './routes/g.api.forum-notices'
 import { Route as GApiForumRecentRouteImport } from './routes/g.api.forum-recent'
 import { Route as GApiGuideRouteImport } from './routes/g.api.guide'
 import { Route as GApiImagesRouteImport } from './routes/g.api.images'
@@ -96,6 +97,11 @@ const GApiForumRoute = GApiForumRouteImport.update({
   path: '/g/api/forum',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GApiForumNoticesRoute = GApiForumNoticesRouteImport.update({
+  id: '/g/api/forum-notices',
+  path: '/g/api/forum-notices',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GApiForumRecentRoute = GApiForumRecentRouteImport.update({
   id: '/g/api/forum-recent',
   path: '/g/api/forum-recent',
@@ -151,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/g/api/admin': typeof GApiAdminRoute
   '/g/api/create-page': typeof GApiCreatePageRoute
   '/g/api/forum': typeof GApiForumRoute
+  '/g/api/forum-notices': typeof GApiForumNoticesRoute
   '/g/api/forum-recent': typeof GApiForumRecentRoute
   '/g/api/guide': typeof GApiGuideRoute
   '/g/api/images': typeof GApiImagesRoute
@@ -174,6 +181,7 @@ export interface FileRoutesByTo {
   '/g/api/admin': typeof GApiAdminRoute
   '/g/api/create-page': typeof GApiCreatePageRoute
   '/g/api/forum': typeof GApiForumRoute
+  '/g/api/forum-notices': typeof GApiForumNoticesRoute
   '/g/api/forum-recent': typeof GApiForumRecentRoute
   '/g/api/guide': typeof GApiGuideRoute
   '/g/api/images': typeof GApiImagesRoute
@@ -198,6 +206,7 @@ export interface FileRoutesById {
   '/g/api/admin': typeof GApiAdminRoute
   '/g/api/create-page': typeof GApiCreatePageRoute
   '/g/api/forum': typeof GApiForumRoute
+  '/g/api/forum-notices': typeof GApiForumNoticesRoute
   '/g/api/forum-recent': typeof GApiForumRecentRoute
   '/g/api/guide': typeof GApiGuideRoute
   '/g/api/images': typeof GApiImagesRoute
@@ -223,6 +232,7 @@ export interface FileRouteTypes {
     | '/g/api/admin'
     | '/g/api/create-page'
     | '/g/api/forum'
+    | '/g/api/forum-notices'
     | '/g/api/forum-recent'
     | '/g/api/guide'
     | '/g/api/images'
@@ -246,6 +256,7 @@ export interface FileRouteTypes {
     | '/g/api/admin'
     | '/g/api/create-page'
     | '/g/api/forum'
+    | '/g/api/forum-notices'
     | '/g/api/forum-recent'
     | '/g/api/guide'
     | '/g/api/images'
@@ -269,6 +280,7 @@ export interface FileRouteTypes {
     | '/g/api/admin'
     | '/g/api/create-page'
     | '/g/api/forum'
+    | '/g/api/forum-notices'
     | '/g/api/forum-recent'
     | '/g/api/guide'
     | '/g/api/images'
@@ -293,6 +305,7 @@ export interface RootRouteChildren {
   GApiAdminRoute: typeof GApiAdminRoute
   GApiCreatePageRoute: typeof GApiCreatePageRoute
   GApiForumRoute: typeof GApiForumRoute
+  GApiForumNoticesRoute: typeof GApiForumNoticesRoute
   GApiForumRecentRoute: typeof GApiForumRecentRoute
   GApiGuideRoute: typeof GApiGuideRoute
   GApiImagesRoute: typeof GApiImagesRoute
@@ -396,6 +409,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GApiForumRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/g/api/forum-notices': {
+      id: '/g/api/forum-notices'
+      path: '/g/api/forum-notices'
+      fullPath: '/g/api/forum-notices'
+      preLoaderRoute: typeof GApiForumNoticesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/g/api/forum-recent': {
       id: '/g/api/forum-recent'
       path: '/g/api/forum-recent'
@@ -469,6 +489,7 @@ const rootRouteChildren: RootRouteChildren = {
   GApiAdminRoute: GApiAdminRoute,
   GApiCreatePageRoute: GApiCreatePageRoute,
   GApiForumRoute: GApiForumRoute,
+  GApiForumNoticesRoute: GApiForumNoticesRoute,
   GApiForumRecentRoute: GApiForumRecentRoute,
   GApiGuideRoute: GApiGuideRoute,
   GApiImagesRoute: GApiImagesRoute,
