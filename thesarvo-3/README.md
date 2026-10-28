@@ -12,6 +12,8 @@ npm run typecheck   # tsc 7
 npm run lint        # eslint (needs TS 6, installed as `typescript`)
 npm run build       # production build
 npm run package-publisher  # dist/publisher.tgz: the app prebuilt for the publish Action (CI does this on push)
+npm run sync-access        # access.json in the content repo, from Confluence's view restrictions (read-only)
+npm run import-members -- --from-confluence   # group members into private/groups.json; dry run unless --apply
 ```
 
 Static HTML for chosen pages: `PRERENDER_PATHS="/g,/g/south-east/lowdina" npm run build`.
@@ -22,6 +24,10 @@ Every other guide renders on demand from the index.
 Guides are read through a `ContentSource` (`src/guide/content`). The dev default is the
 downloaded data folder; override with `CONTENT_DIR=/path/to/data`. In dev, images are
 served by a Vite middleware at `/g/content?f=<file>`.
+
+Private pages: `access.json` in the content repo says who may read which page (`src/guide/content/access.ts`). The
+public build and every public source leave them out; the Lambda's private API serves them to signed-in people with
+access. Groups are roles (`admins` is the admin role); who is in a group is `private/groups.json` in the bucket.
 
 ## Layout
 

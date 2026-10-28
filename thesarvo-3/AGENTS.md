@@ -45,6 +45,7 @@ Cognito sign-in. The owner is Jon. The content lives in a separate repo, `../../
 - Tests with every change (Vitest, beside the code as `*.test.ts`). Tests that need the content repo skip
   themselves when it is not checked out.
 - API routes must never answer 404: CloudFront turns every 404 into the guide home page. Use 400 for bad input.
+- **Private pages:** anything that reads content for the public (build, static source, `getContentSource`) goes through `publicSource` (`src/guide/content/access.ts`); `getFullContent()` is only for code that has checked `canRead` first (`src/auth/pageGuard.ts`). Run `src/guide/content/leak.test.ts` after touching a source or the build. Never put group members or private photos under a public bucket prefix; `private/` is not public.
 - Readers must never download the editor: `npm run check-bundle` guards it.
 
 ## Before every commit
