@@ -103,6 +103,7 @@ export function SideNav({ local }: { local: IndexNode }) {
   const currentPath = decodeURIComponent(pathname)
     .replace(/^\/g\/?/, '')
     .replace(/\/$/, '')
+  const forum = currentPath === 'forum'
   const [expanded, setExpanded] = useState(() => new Set(trailIds(root, currentPath)))
   const [query, setQuery] = useState('')
   const [shownPath, setShownPath] = useState(currentPath)
@@ -176,6 +177,15 @@ export function SideNav({ local }: { local: IndexNode }) {
             ))}
           </ul>
         )}
+      </div>
+      <div className="border-t border-line px-2 py-2">
+        <Link
+          to="/g/forum"
+          aria-current={forum ? 'page' : undefined}
+          className={`block rounded-md px-3 py-1.5 text-sm hover:bg-black/5 ${forum ? 'bg-amber/15 font-semibold text-link' : 'text-navy'}`}
+        >
+          Forum
+        </Link>
       </div>
     </nav>
   )
