@@ -1,0 +1,59 @@
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_edbeb594c3e68b 37,64
+thesarvo-3/src/routes/g.api.avatar.tsx
+  s_e20d0a1ebc47aa::t_6809df490588b5 1-2,4-44
+  s_e20d0a1ebc47aa::t_e5465c5dabae12 3
+thesarvo-3/src/routes/account.index.tsx
+  s_e20d0a1ebc47aa::t_f1ecbc7c451561 5,46
+thesarvo-3/scripts/import-forum-images.ts
+  s_e20d0a1ebc47aa::t_01f74bc74c984b 1-63
+thesarvo-3/src/forum/files.ts
+  s_e20d0a1ebc47aa::t_8cd80d44d91ad5 1-25
+thesarvo-3/src/forum/store.ts
+  s_e20d0a1ebc47aa::t_b51ce00110ce1c 20-21,27
+thesarvo-3/src/routeTree.gen.ts
+  s_e20d0a1ebc47aa::t_f1ecbc7c451561 23,91-95,164,189,215,242,267,292,318,411-417,510
+thesarvo-3/src/guide/avatars/upload.ts
+  s_e20d0a1ebc47aa::t_b51ce00110ce1c 16
+  s_e20d0a1ebc47aa::t_6809df490588b5 1-15,17-55
+thesarvo-3/package.json
+  s_e20d0a1ebc47aa::t_01f74bc74c984b 29,31
+  s_e20d0a1ebc47aa::t_17b074d4403aff 30
+thesarvo-3/README.md
+  s_e20d0a1ebc47aa::t_edbeb594c3e68b 20-21
+thesarvo-3/docs/plan-mvp.md
+  s_e20d0a1ebc47aa::t_edbeb594c3e68b 443
+thesarvo-3/src/routes/g.api.forum.tsx
+  s_e20d0a1ebc47aa::t_8cd80d44d91ad5 4,27
+thesarvo-3/scripts/deploy-lambda.sh
+  s_e20d0a1ebc47aa::t_b51ce00110ce1c 49,54
+  s_e20d0a1ebc47aa::t_8cd80d44d91ad5 53
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_edbeb594c3e68b 193-195
+thesarvo-3/src/forum/files.test.ts
+  s_e20d0a1ebc47aa::t_8cd80d44d91ad5 1-9
+thesarvo-3/src/guide/avatars/upload.test.ts
+  s_e20d0a1ebc47aa::t_6809df490588b5 1-45
+thesarvo-3/src/guide/avatars/Avatar.tsx
+  s_e20d0a1ebc47aa::t_9de66c506a13f1 7-8,11-30,34,38-40,43,46-47
+thesarvo-3/src/guide/avatars/Avatar.test.tsx
+  s_e20d0a1ebc47aa::t_f1ecbc7c451561 8,13-14,18-21
+thesarvo-3/src/components/AvatarForm.tsx
+  s_e20d0a1ebc47aa::t_f1ecbc7c451561 1-72
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4d8fd3a829e706561176ad804c4e1f7d1e87e991",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
