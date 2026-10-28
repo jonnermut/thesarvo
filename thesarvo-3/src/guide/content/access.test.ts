@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { canRead, parseAccess, privateAccess, publicSource, publicTree } from './access'
+import { canRead, isAdmin, parseAccess, privateAccess, publicSource, publicTree } from './access'
 import type { ContentSource, IndexNode } from './types'
 
 const node = (id: string, children: IndexNode[] = []): IndexNode => ({ id, title: `Page ${id}`, path: id === '1' ? '' : `p${id}`, isGuide: true, children })
@@ -66,5 +66,21 @@ describe('publicTree and publicSource', () => {
     expect(calls).toEqual([])
     expect(await source.getGuide('5')).not.toBeNull()
     expect((await source.getIndex()).children.map((c) => c.id)).toEqual(['5'])
+  })
+})
+
+describe('signedIn and roles', () => {
+  it('lets any signed-in user read a signedIn page, but not anonymous visitors', () => {
+    expect(parseAccess('{"1":{"signedIn":true}}')).toEqual({ '1': { signedIn: true } })
+    expect(canRead({ signedIn: true }, [])).toBe(true)
+    expect(canRead({ signedIn: true }, null)).toBe(false)
+    expect(canRead({ groups: ['cct-members'] }, ['other'])).toBe(false)
+    expect(canRead({ draft: true }, ['admins'])).toBe(true)
+    expect(() => parseAccess('{"1":{"signedIn":false}}')).toThrow('signedIn')
+  })
+  it('treats the admins group as the admin role', () => {
+    expect(isAdmin(['admins'])).toBe(true)
+    expect(isAdmin(['cct-members'])).toBe(false)
+    expect(isAdmin(null)).toBe(false)
   })
 })

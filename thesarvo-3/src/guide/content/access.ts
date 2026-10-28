@@ -3,16 +3,17 @@ import type { ContentSource, IndexNode } from './types'
 
 /**
  * Who may read a page, from `access.json` at the root of the content repo, keyed by page id. A page with no entry
- * (and no ancestor with one) is public. `groups`: Cognito groups that may read it; `draft`: not published, so only
- * admins and `groups`. Admins read everything. The static build leaves out every page with an entry, and the pages
+ * (and no ancestor with one) is public. Groups are roles: `admins` is the admin role (history, deletion, everything
+ * readable), and any other group is membership. `groups`: Cognito groups that may read it; `signedIn`: any signed-in user
+ * may; `draft`: not published, so only admins and `groups`. Admins read everything. The static build leaves out every page with an entry, and the pages
  * below it; the private API (src/routes/g.api.private) serves them to the right people.
  */
-export type PageAccess = { groups?: string[]; draft?: true }
+export type PageAccess = { groups?: string[]; signedIn?: true; draft?: true }
 export type AccessMap = Record<string, PageAccess>
 
 export const ADMINS = 'admins'
 
-/** Reads `access.json`'s text; throws on anything that is not a map of id to `{ groups?: string[], draft?: true }`, so a typo never makes a page public. */
+/** Reads `access.json`'s text; throws on anything that is not a map of id to `{ groups?, signedIn?, draft? }`, so a typo never makes a page public. */
 export function parseAccess(text: string | null): AccessMap {
   if (text === null) return {}
   const raw: unknown = JSON.parse(text)
@@ -21,11 +22,12 @@ export function parseAccess(text: string | null): AccessMap {
   for (const [id, value] of Object.entries(raw)) {
     const v: unknown = value
     if (typeof v !== 'object' || v === null || Array.isArray(v)) throw new Error(`access.json: ${id}: expected an object`)
-    const { groups, draft, ...rest } = v as Record<string, unknown>
+    const { groups, signedIn, draft, ...rest } = v as Record<string, unknown>
     if (Object.keys(rest).length) throw new Error(`access.json: ${id}: unknown field ${Object.keys(rest)[0]}`)
     if (groups !== undefined && !(Array.isArray(groups) && groups.every((g) => typeof g === 'string' && g))) throw new Error(`access.json: ${id}: groups must be a list of names`)
+    if (signedIn !== undefined && signedIn !== true) throw new Error(`access.json: ${id}: signedIn must be true`)
     if (draft !== undefined && draft !== true) throw new Error(`access.json: ${id}: draft must be true`)
-    out[id] = { ...(groups && { groups: groups as string[] }), ...(draft && { draft: true as const }) }
+    out[id] = { ...(groups && { groups: groups as string[] }), ...(signedIn && { signedIn: true as const }), ...(draft && { draft: true as const }) }
   }
   return out
 }
@@ -42,8 +44,12 @@ export function privateAccess(root: Pick<IndexNode, 'id' | 'children'>, access: 
   return out
 }
 
-/** May someone in these Cognito groups read the page? */
-export const canRead = (a: PageAccess, groups: readonly string[]) => groups.includes(ADMINS) || !!a.groups?.some((g) => groups.includes(g))
+/** May this user read the page? `groups` is the signed-in user's Cognito groups, or null for someone not signed in. */
+export const canRead = (a: PageAccess, groups: readonly string[] | null) =>
+  groups !== null && (groups.includes(ADMINS) || !!a.signedIn || !!a.groups?.some((g) => groups.includes(g)))
+
+/** Is this user an admin (the admin role: history operations, page deletion, and reading everything)? */
+export const isAdmin = (groups: readonly string[] | null) => !!groups?.includes(ADMINS)
 
 /** The tree without private pages and everything below them. */
 export function publicTree(root: IndexNode, hidden: ReadonlyMap<string, PageAccess>): IndexNode {
