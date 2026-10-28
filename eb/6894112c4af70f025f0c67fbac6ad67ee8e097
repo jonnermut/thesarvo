@@ -1,0 +1,26 @@
+thesarvo-3/src/auth/members.ts
+  s_e20d0a1ebc47aa::t_ae5d606625ee22 63-65,69
+  s_e20d0a1ebc47aa::t_2b46ea0451e1f4 1-62,66-68,70-72
+thesarvo-3/src/guide/content/access.ts
+  s_e20d0a1ebc47aa::t_f3e09041abf3b0 6-8,11,16,25,28,30,47-52
+thesarvo-3/src/auth/members.test.ts
+  s_e20d0a1ebc47aa::t_803cae37d1333f 1-43
+thesarvo-3/src/guide/content/access.test.ts
+  s_e20d0a1ebc47aa::t_b2ada2ccb337e7 2,71-86
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "eb6894112c4af70f025f0c67fbac6ad67ee8e097",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
