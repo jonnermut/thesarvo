@@ -3,6 +3,7 @@ import path from 'node:path'
 import type { Guide } from '#/guide/model/types'
 import { readHistory, readPageBody, toNode } from './disk'
 import type {RawIndexNode} from './disk';
+import { parseAccess, publicSource } from './access'
 import { referencedImages } from './attachments'
 import type { ContentSource } from './types'
 
@@ -62,3 +63,9 @@ export class JsonContentSource implements ContentSource {
     return toNode(raw, '', guides)
   }
 }
+
+/** `access.json` of a content repo checkout (none: everything is public). */
+export const readAccess = async (dir: string) => parseAccess(await readFile(path.join(dir, 'access.json'), 'utf8').catch(() => null))
+
+/** What the static site and the server's pages are made from: a checkout without its private pages. */
+export const publicJsonSource = (dir: string): ContentSource => publicSource(new JsonContentSource(dir), () => readAccess(dir))

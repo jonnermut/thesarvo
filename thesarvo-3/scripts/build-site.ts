@@ -20,7 +20,7 @@ import { pathToFileURL } from 'node:url'
 import { ACCOUNT_PATH, CALLBACK_PATH, PASSWORD_PATH } from '../src/auth/paths'
 import { pagesToRebuild, treeHashes } from '../src/guide/content/incremental'
 import type { BuildInfo } from '../src/guide/content/incremental'
-import { JsonContentSource } from '../src/guide/content/json'
+import { publicJsonSource } from '../src/guide/content/json'
 import { buildManifest } from '../src/guide/content/manifest'
 import type { Manifest } from '../src/guide/content/manifest'
 import { flatten, GUIDE_PREFIX, guideUrl } from '../src/guide/content/paths'
@@ -57,7 +57,8 @@ async function deployed<T>(file: string): Promise<T | null> {
   }
 }
 
-const source = new JsonContentSource(dir)
+// Only public pages: whatever access.json restricts is not built, listed, searched or deployed (src/guide/content/access.ts).
+const source = publicJsonSource(dir)
 const index = await source.getIndex()
 const nodes = flatten(index)
 const guideCache = new Map<string, Promise<Guide | null>>()
