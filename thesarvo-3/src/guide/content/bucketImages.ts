@@ -13,28 +13,29 @@ export function imageBucket(env = process.env): { bucket: Bucket; creds: Credent
   return env.IMAGE_BUCKET && creds ? { bucket: { name: env.IMAGE_BUCKET, region: env.AWS_REGION ?? 'ap-southeast-2' }, creds } : null
 }
 
-const prefix = (guideId: string) => `images/${guideId}/`
+/** Photos of a private guide are under `private/`, which the bucket does not serve publicly: they are read through signed links (see src/routes/g.api.private.tsx). */
+const prefix = (guideId: string, hidden = false) => `${hidden ? 'private/' : ''}images/${guideId}/`
 
-export async function bucketImageNames(b: Bucket, c: Credentials, guideId: string): Promise<string[]> {
-  return (await listKeys(b, c, prefix(guideId))).map((k) => k.slice(prefix(guideId).length)).filter((n) => n && !n.includes('/'))
+export async function bucketImageNames(b: Bucket, c: Credentials, guideId: string, hidden = false): Promise<string[]> {
+  return (await listKeys(b, c, prefix(guideId, hidden))).map((k) => k.slice(prefix(guideId, hidden).length)).filter((n) => n && !n.includes('/'))
 }
 
 export type UploadTicket = PresignedPost & { name: string }
 
 /** A one-off form for uploading `fileName` under a name no other photo of the guide has. Throws a message for the user. */
-export async function uploadTicket(b: Bucket, c: Credentials, guideId: string, fileName: string, size: number): Promise<UploadTicket> {
+export async function uploadTicket(b: Bucket, c: Credentials, guideId: string, fileName: string, size: number, hidden = false): Promise<UploadTicket> {
   const name = uploadName(fileName)
   if (!/^\d+$/.test(guideId) || !name) throw new Error('Not a supported image (JPEG, PNG or GIF)')
   if (!(size > 0 && size <= MAX_IMAGE_BYTES)) throw new Error('Image is over 25 MB')
-  const taken = new Set((await bucketImageNames(b, c, guideId)).map((n) => n.toLowerCase()))
+  const taken = new Set((await bucketImageNames(b, c, guideId, hidden)).map((n) => n.toLowerCase()))
   const stored = freeName(name, taken)
   const post = presignedPost(b, c, {
-    key: prefix(guideId) + stored,
+    key: prefix(guideId, hidden) + stored,
     maxBytes: MAX_IMAGE_BYTES,
     typePrefix: 'image/',
     expiresIn: 600,
     // A stored name is never reused, so the photo can be cached for good.
-    cacheControl: 'public, max-age=31536000, immutable',
+    cacheControl: `${hidden ? 'private' : 'public'}, max-age=31536000, immutable`,
   })
   return { ...post, name: stored }
 }

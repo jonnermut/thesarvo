@@ -18,6 +18,8 @@ export type IndexNode = {
   guides?: number
   /** Children were left out of this copy of the tree (see pageInfo). */
   more?: true
+  /** Not public: the page, its guide and its photos come from the private API, for people with access (see access.ts). */
+  private?: true
 }
 
 /**

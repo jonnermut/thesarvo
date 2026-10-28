@@ -22,6 +22,8 @@ import { Route as GApiAdminRouteImport } from './routes/g.api.admin'
 import { Route as GApiGuideRouteImport } from './routes/g.api.guide'
 import { Route as GApiImagesRouteImport } from './routes/g.api.images'
 import { Route as GApiMeRouteImport } from './routes/g.api.me'
+import { Route as GApiPrivateRouteImport } from './routes/g.api.private'
+import { Route as GApiPrivateTreeRouteImport } from './routes/g.api.private-tree'
 import { Route as GApiSaveRouteImport } from './routes/g.api.save'
 import { Route as GApiUploadUrlRouteImport } from './routes/g.api.upload-url'
 
@@ -90,6 +92,16 @@ const GApiMeRoute = GApiMeRouteImport.update({
   path: '/g/api/me',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GApiPrivateRoute = GApiPrivateRouteImport.update({
+  id: '/g/api/private',
+  path: '/g/api/private',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GApiPrivateTreeRoute = GApiPrivateTreeRouteImport.update({
+  id: '/g/api/private-tree',
+  path: '/g/api/private-tree',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GApiSaveRoute = GApiSaveRouteImport.update({
   id: '/g/api/save',
   path: '/g/api/save',
@@ -115,6 +127,8 @@ export interface FileRoutesByFullPath {
   '/g/api/guide': typeof GApiGuideRoute
   '/g/api/images': typeof GApiImagesRoute
   '/g/api/me': typeof GApiMeRoute
+  '/g/api/private': typeof GApiPrivateRoute
+  '/g/api/private-tree': typeof GApiPrivateTreeRoute
   '/g/api/save': typeof GApiSaveRoute
   '/g/api/upload-url': typeof GApiUploadUrlRoute
 }
@@ -132,6 +146,8 @@ export interface FileRoutesByTo {
   '/g/api/guide': typeof GApiGuideRoute
   '/g/api/images': typeof GApiImagesRoute
   '/g/api/me': typeof GApiMeRoute
+  '/g/api/private': typeof GApiPrivateRoute
+  '/g/api/private-tree': typeof GApiPrivateTreeRoute
   '/g/api/save': typeof GApiSaveRoute
   '/g/api/upload-url': typeof GApiUploadUrlRoute
 }
@@ -150,6 +166,8 @@ export interface FileRoutesById {
   '/g/api/guide': typeof GApiGuideRoute
   '/g/api/images': typeof GApiImagesRoute
   '/g/api/me': typeof GApiMeRoute
+  '/g/api/private': typeof GApiPrivateRoute
+  '/g/api/private-tree': typeof GApiPrivateTreeRoute
   '/g/api/save': typeof GApiSaveRoute
   '/g/api/upload-url': typeof GApiUploadUrlRoute
 }
@@ -169,6 +187,8 @@ export interface FileRouteTypes {
     | '/g/api/guide'
     | '/g/api/images'
     | '/g/api/me'
+    | '/g/api/private'
+    | '/g/api/private-tree'
     | '/g/api/save'
     | '/g/api/upload-url'
   fileRoutesByTo: FileRoutesByTo
@@ -186,6 +206,8 @@ export interface FileRouteTypes {
     | '/g/api/guide'
     | '/g/api/images'
     | '/g/api/me'
+    | '/g/api/private'
+    | '/g/api/private-tree'
     | '/g/api/save'
     | '/g/api/upload-url'
   id:
@@ -203,6 +225,8 @@ export interface FileRouteTypes {
     | '/g/api/guide'
     | '/g/api/images'
     | '/g/api/me'
+    | '/g/api/private'
+    | '/g/api/private-tree'
     | '/g/api/save'
     | '/g/api/upload-url'
   fileRoutesById: FileRoutesById
@@ -221,6 +245,8 @@ export interface RootRouteChildren {
   GApiGuideRoute: typeof GApiGuideRoute
   GApiImagesRoute: typeof GApiImagesRoute
   GApiMeRoute: typeof GApiMeRoute
+  GApiPrivateRoute: typeof GApiPrivateRoute
+  GApiPrivateTreeRoute: typeof GApiPrivateTreeRoute
   GApiSaveRoute: typeof GApiSaveRoute
   GApiUploadUrlRoute: typeof GApiUploadUrlRoute
 }
@@ -318,6 +344,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GApiMeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/g/api/private': {
+      id: '/g/api/private'
+      path: '/g/api/private'
+      fullPath: '/g/api/private'
+      preLoaderRoute: typeof GApiPrivateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/g/api/private-tree': {
+      id: '/g/api/private-tree'
+      path: '/g/api/private-tree'
+      fullPath: '/g/api/private-tree'
+      preLoaderRoute: typeof GApiPrivateTreeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/g/api/save': {
       id: '/g/api/save'
       path: '/g/api/save'
@@ -349,6 +389,8 @@ const rootRouteChildren: RootRouteChildren = {
   GApiGuideRoute: GApiGuideRoute,
   GApiImagesRoute: GApiImagesRoute,
   GApiMeRoute: GApiMeRoute,
+  GApiPrivateRoute: GApiPrivateRoute,
+  GApiPrivateTreeRoute: GApiPrivateTreeRoute,
   GApiSaveRoute: GApiSaveRoute,
   GApiUploadUrlRoute: GApiUploadUrlRoute,
 }

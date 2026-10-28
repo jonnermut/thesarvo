@@ -128,3 +128,32 @@ export async function deleteObject(b: Bucket, c: Credentials, key: string): Prom
   const res = await fetch(url, { method: 'DELETE', headers: signedHeaders('DELETE', url, b.region, c) })
   if (!res.ok) throw new Error(`S3 delete ${key} failed (${res.status})`)
 }
+
+/** The object's bytes, or null when there is no such key. */
+export async function getObject(b: Bucket, c: Credentials, key: string): Promise<Buffer | null> {
+  const url = new URL(`${bucketUrl(b)}${encodeKey(key)}`)
+  const res = await fetch(url, { headers: signedHeaders('GET', url, b.region, c) })
+  if (res.status === 404 || res.status === 403) return null
+  if (!res.ok) throw new Error(`S3 get ${key} failed (${res.status})`)
+  return Buffer.from(await res.arrayBuffer())
+}
+
+/** A link that lets anyone holding it read one object until `expiresIn` seconds pass: for photos in a prefix the bucket does not serve publicly. */
+export function presignedGet(b: Bucket, c: Credentials, key: string, expiresIn: number, now = new Date()): string {
+  const date = amzDate(now)
+  const scope = `${date.slice(0, 8)}/${b.region}/s3/aws4_request`
+  const url = new URL(`${bucketUrl(b)}${encodeKey(key)}`)
+  const params: Record<string, string> = {
+    'X-Amz-Algorithm': 'AWS4-HMAC-SHA256',
+    'X-Amz-Credential': `${c.accessKeyId}/${scope}`,
+    'X-Amz-Date': date,
+    'X-Amz-Expires': String(expiresIn),
+    ...(c.sessionToken && { 'X-Amz-Security-Token': c.sessionToken }),
+    'X-Amz-SignedHeaders': 'host',
+  }
+  const enc = (v: string) => encodeURIComponent(v).replace(/[!'()*]/g, (ch) => `%${ch.charCodeAt(0).toString(16).toUpperCase()}`)
+  const query = Object.entries(params).sort(([a], [b2]) => (a < b2 ? -1 : 1)).map(([k, v]) => `${enc(k)}=${enc(v)}`).join('&')
+  const request = ['GET', url.pathname, query, `host:${url.host}\n`, 'host', 'UNSIGNED-PAYLOAD'].join('\n')
+  const signature = hmac(signingKey(c.secretAccessKey, date.slice(0, 8), b.region, 's3'), ['AWS4-HMAC-SHA256', date, scope, sha256(request)].join('\n')).toString('hex')
+  return `${url.origin}${url.pathname}?${query}&X-Amz-Signature=${signature}`
+}

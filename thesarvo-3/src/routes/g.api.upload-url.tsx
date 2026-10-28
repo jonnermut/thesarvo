@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { guardPage, pageAccess } from '#/auth/pageGuard'
 import { requireEditor } from '#/auth/verifyToken'
-import { getContentSource } from '#/guide/content'
+import { getFullContent } from '#/guide/content'
 import { imageBucket, uploadTicket } from '#/guide/content/bucketImages'
 
 const json = (body: unknown, status = 200) => Response.json(body, { status })
@@ -20,9 +21,11 @@ export const Route = createFileRoute('/g/api/upload-url')({
         if (!store) return json({ error: 'Uploads are not set up here' }, 501)
         const body = (await request.json().catch(() => ({}))) as { guide?: unknown; name?: unknown; size?: unknown }
         const guide = String(body.guide ?? '')
-        if (!/^\d+$/.test(guide) || !(await getContentSource().getGuide(guide))) return json({ error: 'No such guide' }, 400)
+        if (!/^\d+$/.test(guide) || !(await getFullContent().all.getGuide(guide))) return json({ error: 'No such guide' }, 400)
+        const denied = await guardPage(editor, guide)
+        if (denied) return denied
         try {
-          const ticket = await uploadTicket(store.bucket, store.creds, guide, String(body.name ?? ''), Number(body.size))
+          const ticket = await uploadTicket(store.bucket, store.creds, guide, String(body.name ?? ''), Number(body.size), (await pageAccess(editor, guide)) === 'allowed')
           console.log(JSON.stringify({ upload: `${guide}/${ticket.name}`, by: editor.email }))
           return json(ticket)
         } catch (e) {

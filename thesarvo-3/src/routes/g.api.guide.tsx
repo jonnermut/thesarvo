@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { guardPage } from '#/auth/pageGuard'
 import { requireEditor } from '#/auth/verifyToken'
 import { guideRepo } from '#/guide/save/repo'
 
@@ -19,6 +20,8 @@ export const Route = createFileRoute('/g/api/guide')({
         if (!repo) return json({ error: 'Saving is not set up here' }, 501)
         const id = new URL(request.url).searchParams.get('id') ?? ''
         if (!/^\d+$/.test(id)) return json({ error: 'No such guide' }, 400)
+        const denied = await guardPage(editor, id)
+        if (denied) return denied
         try {
           const stored = await repo.read(id)
           return stored ? json({ head: stored.head, guide: stored.guide }) : json({ error: 'No such guide' }, 400)

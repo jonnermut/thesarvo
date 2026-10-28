@@ -72,7 +72,11 @@ export function publicSource(source: ContentSource, getAccess: () => Promise<Acc
     getHistory: async (id) => ((await isPrivate(id)) ? [] : source.getHistory(id)),
     listImages: async (id) => ((await isPrivate(id)) ? [] : source.listImages(id)),
     saveImage: (id, name, bytes) => source.saveImage(id, name, bytes),
-    readFile: source.readFile.bind(source),
+    // Photos are stored as `<id>-<name>` in the folder source, so a private guide's must not be served either.
+    readFile: async (name) => {
+      const id = /^(\d+)-/.exec(name)?.[1]
+      return id && (await isPrivate(id)) ? null : source.readFile(name)
+    },
   }
 }
 

@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { createHash, createHmac } from 'node:crypto'
 import { describe, expect, it } from 'vitest'
-import { amzDate, presignedPost, signedHeaders, signingKey } from './s3'
+import { amzDate, presignedGet, presignedPost, signedHeaders, signingKey } from './s3'
 
 // The example keys from the AWS Signature V4 documentation.
 const creds = { accessKeyId: 'AKIAIOSFODNN7EXAMPLE', secretAccessKey: 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY' }
@@ -77,5 +77,30 @@ describe('uploads', () => {
     const h = signedHeaders('PUT', url, 'us-east-1', creds, new Date('2013-05-24T00:00:00Z'), createHash('sha256').update(body).digest('hex'))
     expect(h['x-amz-content-sha256']).toBe('44ce7dd67c959e0d3524ffac1771dfbba87d2b6b4b4e99e42034a8b803f8b072')
     expect(h.authorization).toContain('SignedHeaders=host;x-amz-content-sha256;x-amz-date,')
+  })
+})
+
+describe('presignedGet', () => {
+  const keys = { accessKeyId: 'AKIAIOSFODNN7EXAMPLE', secretAccessKey: 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY' }
+  const bucket = { name: 'examplebucket', region: 'us-east-1' }
+  const now = new Date('2013-05-24T00:00:00Z')
+
+  it('signs the canonical request the way S3 documents for query-string auth', () => {
+    const link = new URL(presignedGet(bucket, keys, 'private/images/12/a b.jpg', 86400, now))
+    const signature = link.searchParams.get('X-Amz-Signature')
+    link.searchParams.delete('X-Amz-Signature')
+    const query = [...link.searchParams].map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).sort().join('&')
+    const canonical = ['GET', '/private/images/12/a%20b.jpg', query, 'examplebucket.s3.us-east-1.amazonaws.com'.replace(/^/, 'host:') + '\n', 'host', 'UNSIGNED-PAYLOAD'].join('\n')
+    const toSign = ['AWS4-HMAC-SHA256', '20130524T000000Z', '20130524/us-east-1/s3/aws4_request', createHash('sha256').update(canonical).digest('hex')].join('\n')
+    expect(signature).toBe(createHmac('sha256', signingKey(keys.secretAccessKey, '20130524', 'us-east-1', 's3')).update(toSign).digest('hex'))
+    expect(link.searchParams.get('X-Amz-Expires')).toBe('86400')
+    expect(link.searchParams.get('X-Amz-Credential')).toBe('AKIAIOSFODNN7EXAMPLE/20130524/us-east-1/s3/aws4_request')
+  })
+
+  it('carries a session token, which changes the signature', () => {
+    const plain = presignedGet(bucket, keys, 'k', 60, now)
+    const withToken = presignedGet(bucket, { ...keys, sessionToken: 'tok/en' }, 'k', 60, now)
+    expect(withToken).toContain('X-Amz-Security-Token=tok%2Fen')
+    expect(withToken.split('X-Amz-Signature=')[1]).not.toBe(plain.split('X-Amz-Signature=')[1])
   })
 })
