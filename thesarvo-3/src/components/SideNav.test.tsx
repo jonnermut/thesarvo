@@ -26,7 +26,7 @@ it('marks private pages with a padlock, in the tree and in the filter results', 
   expect(screen.getByText('Secret Crag').closest('div')?.querySelector('[aria-label="Private page"]')).toBeTruthy()
   expect(screen.getByText('Open Crag').closest('div')?.querySelector('[aria-label="Private page"]')).toBeNull()
   act(() => {
-    const box = screen.getByPlaceholderText('Find a crag…') as HTMLInputElement
+    const box = screen.getByPlaceholderText<HTMLInputElement>('Find a crag…')
     Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set?.call(box, 'secret')
     box.dispatchEvent(new Event('input', { bubbles: true }))
   })
