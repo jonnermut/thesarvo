@@ -16,6 +16,7 @@
     "format": "prettier --write . && eslint --fix",
     "check": "prettier --check .",
     "sync-content": "tsx scripts/sync-content.ts",
+    "sync-access": "tsx scripts/sync-access.ts",
     "build-images": "tsx scripts/build-images.ts",
     "build-site": "tsx scripts/build-site.ts",
     "package-publisher": "scripts/package-publisher.sh",
