@@ -7,7 +7,7 @@
  * Credentials: AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY (the publish Action), else the AWS_PROFILE's through the CLI.
  */
 import { spawnSync } from 'node:child_process'
-import { readdir, readFile } from 'node:fs/promises'
+import { readdir, readFile, stat } from 'node:fs/promises'
 import path from 'node:path'
 import { cacheControl, contentType, md5, plan } from '../src/aws/deploy'
 import type { LocalFile, RemoteFile } from '../src/aws/deploy'
@@ -44,7 +44,7 @@ const started = Date.now()
 const c = credentials()
 const deploy = JSON.parse(await readFile(path.join(dist, 'deploy.json'), 'utf8')) as { incremental: boolean; remove: string[] }
 
-const keys = (await Promise.all(prefixes.map((p) => (p.endsWith('/') ? walk(p) : [p])))).flat()
+const keys = (await Promise.all(prefixes.map((p) => (p.endsWith('/') ? walk(p) : stat(path.join(dist, p)).then(() => [p], () => []))))).flat()
 const bodies = new Map(await Promise.all(keys.map(async (k) => [k, await readFile(path.join(dist, k))] as const)))
 const local: LocalFile[] = keys.map((key) => ({ key, md5: md5(bodies.get(key) ?? Buffer.alloc(0)) }))
 const remote: RemoteFile[] = (await Promise.all(prefixes.map((p) => listObjects(bucket, c, p)))).flat().map(({ key, etag }) => ({ key, etag }))
