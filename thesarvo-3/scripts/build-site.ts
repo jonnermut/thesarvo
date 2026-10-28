@@ -23,6 +23,7 @@ import type { BuildInfo } from '../src/guide/content/incremental'
 import { publicJsonSource } from '../src/guide/content/json'
 import { buildManifest } from '../src/guide/content/manifest'
 import type { Manifest } from '../src/guide/content/manifest'
+import { robotsTxt, sitemapXml } from '../src/guide/content/sitemap'
 import { siteRecent } from '../src/guide/content/recent'
 import { flatten, GUIDE_PREFIX, guideUrl } from '../src/guide/content/paths'
 import type { IndexNode } from '../src/guide/content/types'
@@ -139,6 +140,9 @@ const search = partial
 await writeJson('manifest.json', { ...(await buildManifest(index, guideOf)), search } satisfies Manifest)
 // What's new on the home page: every build rewrites it, from every guide's history, since any page's change belongs in it.
 await writeJson('recent.json', await siteRecent(source, index))
+// People's pictures (`npm run import-avatars`), a small folder copied whole.
+await cp(path.join(dir, 'avatars'), path.join(data, 'avatars'), { recursive: true }).catch(() => undefined)
+await writeFile(path.join(data, 'avatars.json'), await readFile(path.join(dir, 'avatars.json'), 'utf8').catch(() => '{}'))
 await writeJson('build.json', build)
 
 const url = (n: Pick<IndexNode, 'path'>) => (n.path ? guideUrl(n) : GUIDE_PREFIX)
@@ -160,7 +164,7 @@ if (!pkg) {
 await cp(path.join(pkg, 'client'), out, { recursive: true })
 process.env.CONTENT_DIR = dir
 const { default: renderer } = (await import(pathToFileURL(path.resolve(pkg, 'server/server.js')).href)) as { default: { fetch: (r: Request) => Promise<Response> } }
-const fixed = [GUIDE_PREFIX, `${GUIDE_PREFIX}/search`, CALLBACK_PATH, PASSWORD_PATH, ACCOUNT_PATH]
+const fixed = [GUIDE_PREFIX, `${GUIDE_PREFIX}/search`, `${GUIDE_PREFIX}/forum`, CALLBACK_PATH, PASSWORD_PATH, ACCOUNT_PATH]
 const render = partial ? pages.map(url) : [...new Set([...fixed, ...nodes.map(url)])]
 let next = 0
 await Promise.all(
@@ -174,6 +178,12 @@ await Promise.all(
   }),
 )
 console.log(`Rendered ${render.length} pages`)
+
+// Crawlers: a sitemap of the public pages (when VITE_SITE_URL is set) and robots.txt.
+const siteUrl = process.env.VITE_SITE_URL
+const sitemap = sitemapXml(siteUrl, [...paths])
+if (sitemap) await writeFile(path.join(out, 'sitemap.xml'), sitemap)
+await writeFile(path.join(out, 'robots.txt'), robotsTxt(siteUrl))
 
 // The bucket's front door: / goes to the guides.
 await writeFile(

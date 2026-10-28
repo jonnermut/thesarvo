@@ -16,10 +16,13 @@ import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as GIndexRouteImport } from './routes/g.index'
 import { Route as GSplatRouteImport } from './routes/g.$'
 import { Route as GContentRouteImport } from './routes/g.content'
+import { Route as GForumRouteImport } from './routes/g.forum'
 import { Route as GSearchRouteImport } from './routes/g.search'
 import { Route as GUploadRouteImport } from './routes/g.upload'
 import { Route as GApiAdminRouteImport } from './routes/g.api.admin'
 import { Route as GApiCreatePageRouteImport } from './routes/g.api.create-page'
+import { Route as GApiForumRouteImport } from './routes/g.api.forum'
+import { Route as GApiForumRecentRouteImport } from './routes/g.api.forum-recent'
 import { Route as GApiGuideRouteImport } from './routes/g.api.guide'
 import { Route as GApiImagesRouteImport } from './routes/g.api.images'
 import { Route as GApiMeRouteImport } from './routes/g.api.me'
@@ -63,6 +66,11 @@ const GContentRoute = GContentRouteImport.update({
   path: '/g/content',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GForumRoute = GForumRouteImport.update({
+  id: '/g/forum',
+  path: '/g/forum',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GSearchRoute = GSearchRouteImport.update({
   id: '/g/search',
   path: '/g/search',
@@ -81,6 +89,16 @@ const GApiAdminRoute = GApiAdminRouteImport.update({
 const GApiCreatePageRoute = GApiCreatePageRouteImport.update({
   id: '/g/api/create-page',
   path: '/g/api/create-page',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GApiForumRoute = GApiForumRouteImport.update({
+  id: '/g/api/forum',
+  path: '/g/api/forum',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GApiForumRecentRoute = GApiForumRecentRouteImport.update({
+  id: '/g/api/forum-recent',
+  path: '/g/api/forum-recent',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GApiGuideRoute = GApiGuideRouteImport.update({
@@ -125,12 +143,15 @@ export interface FileRoutesByFullPath {
   '/auth/callback': typeof AuthCallbackRoute
   '/g/$': typeof GSplatRoute
   '/g/content': typeof GContentRoute
+  '/g/forum': typeof GForumRoute
   '/g/search': typeof GSearchRoute
   '/g/upload': typeof GUploadRoute
   '/account/': typeof AccountIndexRoute
   '/g/': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
   '/g/api/create-page': typeof GApiCreatePageRoute
+  '/g/api/forum': typeof GApiForumRoute
+  '/g/api/forum-recent': typeof GApiForumRecentRoute
   '/g/api/guide': typeof GApiGuideRoute
   '/g/api/images': typeof GApiImagesRoute
   '/g/api/me': typeof GApiMeRoute
@@ -145,12 +166,15 @@ export interface FileRoutesByTo {
   '/auth/callback': typeof AuthCallbackRoute
   '/g/$': typeof GSplatRoute
   '/g/content': typeof GContentRoute
+  '/g/forum': typeof GForumRoute
   '/g/search': typeof GSearchRoute
   '/g/upload': typeof GUploadRoute
   '/account': typeof AccountIndexRoute
   '/g': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
   '/g/api/create-page': typeof GApiCreatePageRoute
+  '/g/api/forum': typeof GApiForumRoute
+  '/g/api/forum-recent': typeof GApiForumRecentRoute
   '/g/api/guide': typeof GApiGuideRoute
   '/g/api/images': typeof GApiImagesRoute
   '/g/api/me': typeof GApiMeRoute
@@ -166,12 +190,15 @@ export interface FileRoutesById {
   '/auth/callback': typeof AuthCallbackRoute
   '/g/$': typeof GSplatRoute
   '/g/content': typeof GContentRoute
+  '/g/forum': typeof GForumRoute
   '/g/search': typeof GSearchRoute
   '/g/upload': typeof GUploadRoute
   '/account/': typeof AccountIndexRoute
   '/g/': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
   '/g/api/create-page': typeof GApiCreatePageRoute
+  '/g/api/forum': typeof GApiForumRoute
+  '/g/api/forum-recent': typeof GApiForumRecentRoute
   '/g/api/guide': typeof GApiGuideRoute
   '/g/api/images': typeof GApiImagesRoute
   '/g/api/me': typeof GApiMeRoute
@@ -188,12 +215,15 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/g/$'
     | '/g/content'
+    | '/g/forum'
     | '/g/search'
     | '/g/upload'
     | '/account/'
     | '/g/'
     | '/g/api/admin'
     | '/g/api/create-page'
+    | '/g/api/forum'
+    | '/g/api/forum-recent'
     | '/g/api/guide'
     | '/g/api/images'
     | '/g/api/me'
@@ -208,12 +238,15 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/g/$'
     | '/g/content'
+    | '/g/forum'
     | '/g/search'
     | '/g/upload'
     | '/account'
     | '/g'
     | '/g/api/admin'
     | '/g/api/create-page'
+    | '/g/api/forum'
+    | '/g/api/forum-recent'
     | '/g/api/guide'
     | '/g/api/images'
     | '/g/api/me'
@@ -228,12 +261,15 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/g/$'
     | '/g/content'
+    | '/g/forum'
     | '/g/search'
     | '/g/upload'
     | '/account/'
     | '/g/'
     | '/g/api/admin'
     | '/g/api/create-page'
+    | '/g/api/forum'
+    | '/g/api/forum-recent'
     | '/g/api/guide'
     | '/g/api/images'
     | '/g/api/me'
@@ -249,12 +285,15 @@ export interface RootRouteChildren {
   AuthCallbackRoute: typeof AuthCallbackRoute
   GSplatRoute: typeof GSplatRoute
   GContentRoute: typeof GContentRoute
+  GForumRoute: typeof GForumRoute
   GSearchRoute: typeof GSearchRoute
   GUploadRoute: typeof GUploadRoute
   AccountIndexRoute: typeof AccountIndexRoute
   GIndexRoute: typeof GIndexRoute
   GApiAdminRoute: typeof GApiAdminRoute
   GApiCreatePageRoute: typeof GApiCreatePageRoute
+  GApiForumRoute: typeof GApiForumRoute
+  GApiForumRecentRoute: typeof GApiForumRecentRoute
   GApiGuideRoute: typeof GApiGuideRoute
   GApiImagesRoute: typeof GApiImagesRoute
   GApiMeRoute: typeof GApiMeRoute
@@ -315,6 +354,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GContentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/g/forum': {
+      id: '/g/forum'
+      path: '/g/forum'
+      fullPath: '/g/forum'
+      preLoaderRoute: typeof GForumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/g/search': {
       id: '/g/search'
       path: '/g/search'
@@ -341,6 +387,20 @@ declare module '@tanstack/react-router' {
       path: '/g/api/create-page'
       fullPath: '/g/api/create-page'
       preLoaderRoute: typeof GApiCreatePageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/g/api/forum': {
+      id: '/g/api/forum'
+      path: '/g/api/forum'
+      fullPath: '/g/api/forum'
+      preLoaderRoute: typeof GApiForumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/g/api/forum-recent': {
+      id: '/g/api/forum-recent'
+      path: '/g/api/forum-recent'
+      fullPath: '/g/api/forum-recent'
+      preLoaderRoute: typeof GApiForumRecentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/g/api/guide': {
@@ -401,12 +461,15 @@ const rootRouteChildren: RootRouteChildren = {
   AuthCallbackRoute: AuthCallbackRoute,
   GSplatRoute: GSplatRoute,
   GContentRoute: GContentRoute,
+  GForumRoute: GForumRoute,
   GSearchRoute: GSearchRoute,
   GUploadRoute: GUploadRoute,
   AccountIndexRoute: AccountIndexRoute,
   GIndexRoute: GIndexRoute,
   GApiAdminRoute: GApiAdminRoute,
   GApiCreatePageRoute: GApiCreatePageRoute,
+  GApiForumRoute: GApiForumRoute,
+  GApiForumRecentRoute: GApiForumRecentRoute,
   GApiGuideRoute: GApiGuideRoute,
   GApiImagesRoute: GApiImagesRoute,
   GApiMeRoute: GApiMeRoute,

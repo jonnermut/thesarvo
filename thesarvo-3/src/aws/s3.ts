@@ -138,6 +138,33 @@ export async function getObject(b: Bucket, c: Credentials, key: string): Promise
   return Buffer.from(await res.arrayBuffer())
 }
 
+/** The object's bytes and its ETag, or null when there is no such key. */
+export async function getObjectTagged(b: Bucket, c: Credentials, key: string): Promise<{ body: Buffer; etag: string } | null> {
+  const url = new URL(`${bucketUrl(b)}${encodeKey(key)}`)
+  const res = await fetch(url, { headers: signedHeaders('GET', url, b.region, c) })
+  if (res.status === 404 || res.status === 403) return null
+  if (!res.ok) throw new Error(`S3 get ${key} failed (${res.status})`)
+  return { body: Buffer.from(await res.arrayBuffer()), etag: res.headers.get('etag') ?? '' }
+}
+
+/**
+ * Writes an object only if nobody changed it since `etag` was read (`null`: only if it does not exist yet). False when someone
+ * did (S3 answers 412, or 409 for a write racing another); the caller reads again and retries.
+ */
+export async function putObjectIf(b: Bucket, c: Credentials, key: string, body: Buffer, etag: string | null, o: { contentType: string; cacheControl: string }): Promise<boolean> {
+  const url = new URL(`${bucketUrl(b)}${encodeKey(key)}`)
+  const headers = {
+    ...signedHeaders('PUT', url, b.region, c, new Date(), createHash('sha256').update(body).digest('hex')),
+    'content-type': o.contentType,
+    'cache-control': o.cacheControl,
+    ...(etag === null ? { 'if-none-match': '*' } : { 'if-match': etag }),
+  }
+  const res = await fetch(url, { method: 'PUT', headers, body: new Uint8Array(body) })
+  if (res.status === 412 || res.status === 409) return false
+  if (!res.ok) throw new Error(`S3 put ${key} failed (${res.status})`)
+  return true
+}
+
 /** A link that lets anyone holding it read one object until `expiresIn` seconds pass: for photos in a prefix the bucket does not serve publicly. */
 export function presignedGet(b: Bucket, c: Credentials, key: string, expiresIn: number, now = new Date()): string {
   const date = amzDate(now)

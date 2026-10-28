@@ -1,31 +1,17 @@
 import type { Guide } from '#/guide/model/types'
-import { getIdToken } from '#/auth/session'
-import { GUIDE_PREFIX } from '#/guide/content/paths'
+import { call } from '#/auth/apiCall'
+import type { Answer } from '#/auth/apiCall'
 import { diffGuides, ensureIds, isEmpty, mergeChanges, nodeKeys, nodesByKey, renameChanges, same } from '#/guide/save/changes'
 import type { Changes, Conflict } from '#/guide/save/changes'
 import { rememberSaved } from '#/guide/justSaved'
 import type { SaveResult } from '#/guide/save/save'
 
-/** What the server said, as far as the saver cares. */
-export type Answer<T> = { ok: true; value: T } | { ok: false; unavailable?: boolean; message: string }
+export { call }
+export type { Answer }
 
 export interface SaveApi {
   latest: (guideId: string) => Promise<Answer<{ guide: Guide }>>
   save: (request: { guide: string; session: string; changes: Changes; note?: string }) => Promise<Answer<Exclude<SaveResult, { status: 'missing' }>>>
-}
-
-export const call = async <T>(path: string, init: RequestInit = {}): Promise<Answer<T>> => {
-  const token = await getIdToken()
-  if (!token) return { ok: false, message: 'Sign in again to save' }
-  try {
-    const res = await fetch(`${GUIDE_PREFIX}/api/${path}`, { ...init, headers: { ...init.headers, authorization: `Bearer ${token}`, 'content-type': 'application/json' } })
-    const body = (await res.json().catch(() => ({}))) as T & { error?: string }
-    // 409 is a conflict, which the body describes.
-    if (res.ok || res.status === 409) return { ok: true, value: body }
-    return { ok: false, unavailable: res.status === 501, message: body.error ?? `Saving failed (${res.status})` }
-  } catch {
-    return { ok: false, message: 'Offline' }
-  }
 }
 
 export const serverApi: SaveApi = {
