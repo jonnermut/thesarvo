@@ -1,0 +1,93 @@
+thesarvo-3/src/guide/content/siteManifest.ts
+  s_e20d0a1ebc47aa::t_69608899613ff0 17-21
+thesarvo-3/scripts/build-site.ts
+  s_e20d0a1ebc47aa::t_60546baddd872f 26,140-141
+thesarvo-3/src/guide/save/repo.ts
+  s_e20d0a1ebc47aa::t_006587c039061c 1,19-25
+  s_e20d0a1ebc47aa::t_7f9207a594070f 17-18,29,32
+thesarvo-3/src/guide/save/save.test.ts
+  s_e20d0a1ebc47aa::t_7f9207a594070f 68
+  s_e20d0a1ebc47aa::t_28617e72fd6d8a 116-129
+thesarvo-3/src/guide/save/local.ts
+  s_e20d0a1ebc47aa::t_7f9207a594070f 11,30,64
+  s_e20d0a1ebc47aa::t_1dd92b97cb69be 9-10,50-59,61-63,65-72,76-77
+  s_e20d0a1ebc47aa::t_a46e322ec962b7 4,6,13,33,60,84
+  s_e20d0a1ebc47aa::t_4395f3b0c25a88 12
+thesarvo-3/src/guide/view/WhatsNew.test.tsx
+  s_e20d0a1ebc47aa::t_04064f1b99bf4e 1-32
+thesarvo-3/docs/plan-mvp.md
+  s_e20d0a1ebc47aa::t_ef60c851f700df 24,366-381
+  s_e20d0a1ebc47aa::t_e81c1d999f8c31 362
+thesarvo-3/src/guide/content/recent.ts
+  s_e20d0a1ebc47aa::t_60546baddd872f 1-28
+thesarvo-3/src/routes/g.api.create-page.tsx
+  s_e20d0a1ebc47aa::t_69608899613ff0 37-38
+  s_e20d0a1ebc47aa::t_71b8fedf1256a2 1-36,39-48
+thesarvo-3/src/guide/view/WhatsNew.tsx
+  s_e20d0a1ebc47aa::t_7c46375dcda2e0 1-50
+thesarvo-3/src/components/AddPageDialog.tsx
+  s_e20d0a1ebc47aa::t_1ff64c4e83a24f 1-5,8-33,36-88
+  s_e20d0a1ebc47aa::t_067cd0154d9d05 6-7,34-35
+thesarvo-3/src/guide/content/index.ts
+  s_e20d0a1ebc47aa::t_7d9dabaa38ac3b 1,5-6,10,45-53
+  s_e20d0a1ebc47aa::t_169e75339deb5c 54
+thesarvo-3/src/guide/content/syncFeed.test.ts
+  s_e20d0a1ebc47aa::t_1dd92b97cb69be 37-39
+thesarvo-3/src/guide/save/addPage.test.ts
+  s_e20d0a1ebc47aa::t_71b8fedf1256a2 1-72
+thesarvo-3/src/routeTree.gen.ts
+  s_e20d0a1ebc47aa::t_1ff64c4e83a24f 22,81-85,133,153,174,196,216,236,257,339-345,409
+thesarvo-3/src/routes/g.index.tsx
+  s_e20d0a1ebc47aa::t_7c46375dcda2e0 6,27
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_e81c1d999f8c31 49,53
+  s_e20d0a1ebc47aa::t_ef60c851f700df 61
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_ef60c851f700df 79,189,216
+thesarvo-3/src/guide/edit/saver.ts
+  s_e20d0a1ebc47aa::t_dcbe2fb54c7c23 17
+thesarvo-3/src/guide/edit/createPage.ts
+  s_e20d0a1ebc47aa::t_e4f3a993ec6ab8 22-26,28
+  s_e20d0a1ebc47aa::t_dcbe2fb54c7c23 2-16,18-21,29-32
+  s_e20d0a1ebc47aa::t_e5e9f8b4429de3 1,17,27
+thesarvo-3/src/components/SideNav.tsx
+  s_e20d0a1ebc47aa::t_dcbe2fb54c7c23 4,94-99
+thesarvo-3/src/guide/save/github.ts
+  s_e20d0a1ebc47aa::t_7f9207a594070f 8,62,119
+  s_e20d0a1ebc47aa::t_1dd92b97cb69be 6-7,53-58,104-118,120-124,130
+thesarvo-3/src/guide/save/addPage.ts
+  s_e20d0a1ebc47aa::t_64b24ce0c406ba 17-18
+  s_e20d0a1ebc47aa::t_006587c039061c 1-8,10-16,19-61,63-76
+  s_e20d0a1ebc47aa::t_7f9207a594070f 9,62
+thesarvo-3/src/guide/server.ts
+  s_e20d0a1ebc47aa::t_e4f3a993ec6ab8 79-80,82
+  s_e20d0a1ebc47aa::t_dcbe2fb54c7c23 71-78,81,83-84
+  s_e20d0a1ebc47aa::t_60546baddd872f 5,25-29,137-138
+  s_e20d0a1ebc47aa::t_aeaafb0fef093d 139
+thesarvo-3/src/components/PageMenu.tsx
+  s_e20d0a1ebc47aa::t_1ff64c4e83a24f 6,9,30,45-46,105-110,113
+thesarvo-3/src/guide/content/syncFeed.ts
+  s_e20d0a1ebc47aa::t_1dd92b97cb69be 39-54
+thesarvo-3/src/guide/content/recent.test.ts
+  s_e20d0a1ebc47aa::t_60546baddd872f 1-34
+thesarvo-3/src/components/SideNav.test.tsx
+  s_e20d0a1ebc47aa::t_dcbe2fb54c7c23 17
+thesarvo-3/src/components/AddPageDialog.test.tsx
+  s_e20d0a1ebc47aa::t_e2ccee8d82b02f 1-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f26fae96252f9085b8a602f49ae26a18f524e3c3",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
