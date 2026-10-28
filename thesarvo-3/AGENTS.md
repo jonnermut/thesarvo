@@ -30,6 +30,7 @@ Cognito sign-in. The owner is Jon. The content lives in a separate repo, `../../
 - **AWS as the agent:** the `claude-agent-thesarvo` profile (the scripts' default), never `grayplanning`. Its rights are
   in [scripts/aws/README.md](scripts/aws/README.md); ask the owner when it lacks one rather than switching profile.
 - **Content changes publish themselves.** Every push to `main` of `../../thesarvo-content` runs the Publish Action (about 15 s to live, with the latest `publisher` package), so editing files there directly publishes them like a save. The Action uses minutes from a 2,000 a month allowance; do not push content in bursts. See plan-backend B3.
+- **A push to `master` deploys the app.** The `publisher` workflow builds the package and releases it, which starts a full publish of the content repo (live in about 20 s). Work on a branch and merge to `master` only when it should go live; branch pushes deploy nothing. Check `typecheck`, `lint`, `test` and the build first.
 - **Never push** unless asked. Commit on the current branch.
 - Keep `PublicRead` and website hosting on the bucket until the owner says the beta tester has moved to the
   https address.

@@ -4,7 +4,7 @@ name: publisher
 
 on:
   push:
-    branches: [master, thesarvo-3/plan-backend]
+    branches: [master]
     paths: ['thesarvo-3/**', '.github/workflows/publisher.yml']
   workflow_dispatch:
 
