@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { signIn, signOut, signUp, useUser } from '#/auth/session'
+import { MyAvatar } from '#/guide/avatars/Avatar'
 import { useEscape } from './overlay'
 
 const ITEM = 'block w-full rounded-md px-3 py-2 text-left hover:bg-black/5'
@@ -31,7 +32,7 @@ export function AccountMenu() {
         className="grid size-9 place-items-center rounded-full bg-white/15 text-sm font-semibold text-white uppercase hover:bg-white/25"
       >
         {user ? (
-          label.charAt(0)
+          <MyAvatar className="size-9 text-sm" tone="bg-white/15 text-white hover:bg-white/25" />
         ) : (
           <svg viewBox="0 0 20 20" className="size-5" aria-hidden>
             <circle cx="10" cy="7" r="3.25" fill="none" stroke="currentColor" strokeWidth="1.6" />

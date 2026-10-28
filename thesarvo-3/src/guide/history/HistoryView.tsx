@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 import { useUser } from '#/auth/session'
+import { Avatar } from '#/guide/avatars/Avatar'
 import { guideUrl } from '#/guide/content/paths'
 import type { IndexNode } from '#/guide/content/types'
 import type { Climb, Guide, GuideNode } from '#/guide/model/types'
@@ -72,8 +73,11 @@ function Entry({ entry, latest, open: opened, guide, history }: { entry: History
   return (
     <li ref={box} id={entry.session} className="scroll-mt-20 rounded-lg border border-black/10 bg-card p-4">
       <div className="font-medium">{capital(entry.description)}</div>
-      <div className="mt-0.5 text-sm text-muted">
-        {entry.user.name || 'Someone'} · <time dateTime={entry.end}>{span}</time>
+      <div className="mt-0.5 flex items-center gap-1.5 text-sm text-muted">
+        <Avatar ids={[entry.user.sub]} name={entry.user.name} className="size-5 text-[10px]" />
+        <span>
+          {entry.user.name || 'Someone'} · <time dateTime={entry.end}>{span}</time>
+        </span>
       </div>
       {entry.note && <p className="mt-1 text-sm italic">{entry.note}</p>}
       <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm">

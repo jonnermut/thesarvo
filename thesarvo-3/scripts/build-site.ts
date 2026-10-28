@@ -139,6 +139,9 @@ const search = partial
 await writeJson('manifest.json', { ...(await buildManifest(index, guideOf)), search } satisfies Manifest)
 // What's new on the home page: every build rewrites it, from every guide's history, since any page's change belongs in it.
 await writeJson('recent.json', await siteRecent(source, index))
+// People's pictures (`npm run import-avatars`), a small folder copied whole.
+await cp(path.join(dir, 'avatars'), path.join(data, 'avatars'), { recursive: true }).catch(() => undefined)
+await writeFile(path.join(data, 'avatars.json'), await readFile(path.join(dir, 'avatars.json'), 'utf8').catch(() => '{}'))
 await writeJson('build.json', build)
 
 const url = (n: Pick<IndexNode, 'path'>) => (n.path ? guideUrl(n) : GUIDE_PREFIX)

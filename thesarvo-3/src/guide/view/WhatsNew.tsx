@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import type { RecentChange } from '#/guide/content/recent'
+import { Avatar } from '#/guide/avatars/Avatar'
 import { fetchRecent } from '#/guide/server'
 
 const day = (iso: string) => new Date(iso).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -31,7 +32,9 @@ export function WhatsNew() {
       </h2>
       <ul className="mt-3 divide-y divide-line">
         {changes.map((c) => (
-          <li key={c.id} className="py-2">
+          <li key={c.id} className="flex items-start gap-2 py-2">
+            <Avatar ids={[c.sub]} name={c.name} className="mt-0.5 size-6 text-xs" />
+            <div>
             <Link to="/g/$" params={{ _splat: c.path }} search={{ history: true }} hash={c.session} rel="nofollow" className="font-semibold text-link hover:underline">
               {c.title}
             </Link>
@@ -42,6 +45,7 @@ export function WhatsNew() {
               {' · '}
               {day(c.at)}
             </span>
+            </div>
           </li>
         ))}
       </ul>

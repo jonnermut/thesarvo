@@ -3,7 +3,7 @@ import type { ContentSource, IndexNode } from './types'
 import { flatten } from './paths'
 
 /** One line of "What's new": a page's latest change. `name` is empty when the editor is not known. */
-export type RecentChange = { id: string; path: string; title: string; session: string; name: string; at: string; description: string }
+export type RecentChange = { id: string; path: string; title: string; session: string; sub: string; name: string; at: string; description: string }
 
 export const RECENT_LIMIT = 20
 
@@ -15,7 +15,7 @@ export function recentChanges(pages: { node: Pick<IndexNode, 'id' | 'path' | 'ti
   return pages
     .flatMap(({ node, history }) => {
       const e = history.findLast(isEdit)
-      return e ? [{ id: node.id, path: node.path, title: node.title, session: e.session, name: e.user.name === 'Unknown' ? '' : e.user.name, at: e.end, description: e.description }] : []
+      return e ? [{ id: node.id, path: node.path, title: node.title, session: e.session, sub: e.user.sub, name: e.user.name === 'Unknown' ? '' : e.user.name, at: e.end, description: e.description }] : []
     })
     .toSorted((a, b) => b.at.localeCompare(a.at))
     .slice(0, limit)

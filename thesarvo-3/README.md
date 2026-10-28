@@ -14,6 +14,7 @@ npm run build       # production build
 npm run package-publisher  # dist/publisher.tgz: the app prebuilt for the publish Action (CI does this on push)
 npm run sync-access        # access.json in the content repo, from Confluence's view restrictions (read-only)
 npm run import-members -- --from-confluence   # group members into private/groups.json; dry run unless --apply
+npm run import-avatars                        # Confluence profile pictures into avatars/ and avatars.json (128 px); dry run unless --apply
 npm run import-history                        # Confluence's version history of each guide into pages/<id>/history.json; dry run unless --apply
 ```
 

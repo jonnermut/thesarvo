@@ -19,6 +19,7 @@
     "sync-access": "tsx scripts/sync-access.ts",
     "import-members": "tsx scripts/import-members.ts",
     "import-history": "tsx scripts/import-history.ts",
+    "import-avatars": "tsx scripts/import-avatars.ts",
     "build-images": "tsx scripts/build-images.ts",
     "build-site": "tsx scripts/build-site.ts",
     "package-publisher": "scripts/package-publisher.sh",
