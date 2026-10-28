@@ -4,6 +4,8 @@ import { resolvePageBody } from './content/pageLinks'
 import type { Manifest, PageInfo } from './content/manifest'
 import { STATIC_SITE, GUIDE_PREFIX } from './content/paths'
 import type { ContentSource, IndexNode } from './content/types'
+import { fetchGrafts, fetchPrivatePage, isPrivateId } from './privateClient'
+import { withGrafts } from './content/privateSite'
 import { mergeShards } from './search/shard'
 import type { Pack, Shard } from './search/shard'
 import type { Guide } from './model/types'
@@ -60,24 +62,35 @@ export function fetchManifest(): Promise<Manifest> {
   return browserManifest
 }
 
+const merged = new WeakMap<IndexNode, WeakMap<object, IndexNode>>()
+
+/** The tree, with the private pages the signed-in user may read grafted in. */
 export async function fetchTree(): Promise<IndexNode> {
   const manifest = await fetchManifest()
   const tree = trees.get(manifest) ?? manifestTree(manifest)
   trees.set(manifest, tree)
-  return tree
+  const grafts = await fetchGrafts()
+  if (!grafts.length) return tree
+  // Stable between calls, since components compare trees to know when to update.
+  const byGrafts = merged.get(tree) ?? new WeakMap<object, IndexNode>()
+  merged.set(tree, byGrafts)
+  const known = byGrafts.get(grafts) ?? withGrafts(tree, grafts)
+  byGrafts.set(grafts, known)
+  return known
 }
 
 /** A page's node, trail and trimmed tree, or null if there is no such page. */
 export const fetchPage = async (path: string): Promise<PageInfo | null> => pageInfo(await fetchTree(), path)
 
 export const fetchGuide = ({ data: id }: { data: string }): Promise<Guide | null> =>
-  STATIC_SITE ? staticData(`guide/${id}.json`, (s) => s.getGuide(id)) : serverGuide({ data: id })
+  isPrivateId(id) ? fetchPrivatePage(id).then((p) => p.guide) : STATIC_SITE ? staticData(`guide/${id}.json`, (s) => s.getGuide(id)) : serverGuide({ data: id })
 
 /**
  * A page's edit sessions, newest last. The static site has a file only for pages with history, written at build
  * time like the page, so it is as current as the page itself.
  */
 export const fetchHistory = async (id: string): Promise<HistoryEntry[]> => {
+  if (isPrivateId(id)) return (await fetchPrivatePage(id)).history
   if (!STATIC_SITE) return serverHistory({ data: id })
   const res = await fetch(`${GUIDE_PREFIX}-data/history/${id}.json`, { cache: 'no-cache' })
   return res.ok ? ((await res.json()) as HistoryEntry[]) : []
@@ -85,7 +98,7 @@ export const fetchHistory = async (id: string): Promise<HistoryEntry[]> => {
 
 /** The body of a page that is not a guide, with its links pointing at the current site, or null. */
 export async function fetchPageBody(id: string): Promise<string | null> {
-  const body = await (STATIC_SITE ? staticData(`page/${id}.json`, (s) => s.getPageBody(id)) : serverPageBody({ data: id }))
+  const body = await (isPrivateId(id) ? fetchPrivatePage(id).then((p) => p.body) : STATIC_SITE ? staticData(`page/${id}.json`, (s) => s.getPageBody(id)) : serverPageBody({ data: id }))
   return body && resolvePageBody(body, await fetchTree(), id)
 }
 
@@ -103,6 +116,7 @@ export async function fetchSearchShards(): Promise<Shard[]> {
 
 /** The static site's list holds the photos pages used at build time; the API adds later uploads when it is reachable. */
 export const fetchImageNames = async ({ data: id }: { data: string }): Promise<string[]> => {
+  if (isPrivateId(id)) return Object.keys((await fetchPrivatePage(id)).images).sort()
   if (!STATIC_SITE) return serverImageNames({ data: id })
   const [built, stored] = await Promise.all([
     staticData(`images/${id}.json`, (s) => s.listImages(id)),

@@ -1,6 +1,7 @@
 import { ClientOnly, createFileRoute, notFound, useLocation } from '@tanstack/react-router'
 import { lazy, Suspense, useEffect } from 'react'
 import { RequireSignIn } from '#/auth/RequireSignIn'
+import { signIn, useUser } from '#/auth/session'
 import { Breadcrumbs } from '#/components/Breadcrumbs'
 import { fetchGuide, fetchPage, fetchPageBody } from '#/guide/server'
 import { ContentsView } from '#/guide/view/ContentsView'
@@ -40,8 +41,29 @@ export const Route = createFileRoute('/g/$')({
     })
   },
   component: GuidePage,
-  notFoundComponent: () => <p className="p-8">Page not found.</p>,
+  notFoundComponent: NotFound,
 })
+
+/** A path that is not in the tree: for someone signed out it may be a private page, which only shows once they sign in. */
+function NotFound() {
+  const user = useUser()
+  return (
+    <div className="p-8">
+      <p>Page not found.</p>
+      {user ? (
+        <p className="mt-2 text-muted">If you expected a members-only page, you may not have access to it. Ask a committee member to add you to the group.</p>
+      ) : (
+        <p className="mt-2 text-muted">
+          Some pages are for members only.{' '}
+          <button type="button" className="font-semibold text-navy underline" onClick={() => void signIn()}>
+            Sign in
+          </button>{' '}
+          to see them.
+        </p>
+      )}
+    </div>
+  )
+}
 
 function GuidePage() {
   const { node, trail, guide: published, body } = Route.useLoaderData()

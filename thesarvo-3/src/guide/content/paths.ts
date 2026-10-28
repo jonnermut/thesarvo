@@ -46,14 +46,19 @@ export const ancestorIds = (root: IndexNode, path: string) => ancestors(root, pa
 export const STATIC_SITE = import.meta.env?.VITE_STATIC_SITE === '1'
 const IMAGE_BASE = (import.meta.env?.VITE_IMAGE_BASE as string | undefined)?.replace(/\/$/, '')
 
+/** Signed links to the photos of private guides, by `<guideId>/<name>`, from the private API (see src/guide/privateClient.ts). */
+const signedImages = new Map<string, string>()
+export const registerImages = (guideId: string, urls: Record<string, string>) => Object.entries(urls).forEach(([name, url]) => signedImages.set(`${guideId}/${name}`, url))
+
 /**
  * Image URL. In development files are served by the content route, stored lower-case as
  * `<id>-<name>` (thumbnails `<id>-t-<name>`); in the static site they are `images/<id>/<name>`.
  */
 export const imageUrl = (guideId: string, name: string, thumb = false) =>
-  IMAGE_BASE
+  signedImages.get(`${guideId}/${name}`) ??
+  (IMAGE_BASE
     ? `${IMAGE_BASE}/${guideId}/${encodeURIComponent(name)}`
-    : `${GUIDE_PREFIX}/content?f=${encodeURIComponent(`${guideId}-${thumb ? 't-' : ''}${name}`.toLowerCase())}`
+    : `${GUIDE_PREFIX}/content?f=${encodeURIComponent(`${guideId}-${thumb ? 't-' : ''}${name}`.toLowerCase())}`)
 
 export const MAX_IMAGE_BYTES = 25 * 1024 * 1024
 
