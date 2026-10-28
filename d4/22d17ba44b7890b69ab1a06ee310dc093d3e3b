@@ -1,0 +1,25 @@
+thesarvo-3/scripts/sync-access.ts
+  s_e20d0a1ebc47aa::t_09a8eb458d843e 1-33
+thesarvo-3/package.json
+  s_e20d0a1ebc47aa::t_09a8eb458d843e 19
+thesarvo-3/src/guide/content/accessSync.ts
+  s_e20d0a1ebc47aa::t_09a8eb458d843e 1-35
+thesarvo-3/src/guide/content/accessSync.test.ts
+  s_e20d0a1ebc47aa::t_09a8eb458d843e 1-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d422d17ba44b7890b69ab1a06ee310dc093d3e3b",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
