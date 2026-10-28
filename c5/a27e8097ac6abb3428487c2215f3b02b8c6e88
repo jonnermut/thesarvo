@@ -1,0 +1,83 @@
+thesarvo-3/src/forum/store.ts
+  s_e20d0a1ebc47aa::t_9ec57fb10f6594 21,24,27
+thesarvo-3/src/forum/service.ts
+  s_e20d0a1ebc47aa::t_c74dfbb32c9734 13-14,75,89
+thesarvo-3/src/forum/ui/ForumPage.test.tsx
+  s_e20d0a1ebc47aa::t_7cd9a5e7b93458 1-51
+thesarvo-3/src/routes/g.api.forum.tsx
+  s_e20d0a1ebc47aa::t_8581306d331848 1-21,23-32,34-48
+  s_e20d0a1ebc47aa::t_c74dfbb32c9734 22,33
+thesarvo-3/src/components/AccountMenu.tsx
+  s_e20d0a1ebc47aa::t_068f81f1366106 51-53
+thesarvo-3/src/guide/edit/saver.ts
+  s_e20d0a1ebc47aa::t_3ecf1270a8c06f 2-3,9-10
+thesarvo-3/src/routes/g.forum.tsx
+  s_e20d0a1ebc47aa::t_edfec9e447543d 1-6,12-23
+  s_e20d0a1ebc47aa::t_0f28911994e189 7-11
+thesarvo-3/package.json
+  s_e20d0a1ebc47aa::t_c6739895a33ee2 24
+thesarvo-3/scripts/export-forum.ts
+  s_e20d0a1ebc47aa::t_c6739895a33ee2 3,12,51
+thesarvo-3/AGENTS.md
+  s_e20d0a1ebc47aa::t_99602c804d20fb 49
+thesarvo-3/src/forum/client.ts
+  s_e20d0a1ebc47aa::t_c74dfbb32c9734 3-15
+  s_e20d0a1ebc47aa::t_3ecf1270a8c06f 1-2
+thesarvo-3/scripts/deploy-lambda.sh
+  s_e20d0a1ebc47aa::t_c6739895a33ee2 48-49,54
+thesarvo-3/src/forum/ui/ForumFeed.test.tsx
+  s_e20d0a1ebc47aa::t_7cd9a5e7b93458 1-29
+thesarvo-3/src/routes/g.api.forum-recent.tsx
+  s_e20d0a1ebc47aa::t_8581306d331848 1-19
+thesarvo-3/src/forum/ui/Body.test.tsx
+  s_e20d0a1ebc47aa::t_7cd9a5e7b93458 1-20
+thesarvo-3/src/forum/ui/ForumPage.tsx
+  s_e20d0a1ebc47aa::t_edfec9e447543d 1-10,12-15,17-224
+  s_e20d0a1ebc47aa::t_01dbfbabeb42a8 11,16
+thesarvo-3/src/routeTree.gen.ts
+  s_e20d0a1ebc47aa::t_01dbfbabeb42a8 19,24-25,69-73,94-103,146,153-154,169,176-177,193,200-201,218,225-226,241,248-249,264,271-272,288,295-296,357-363,392-405,464,471-472
+thesarvo-3/src/routes/g.index.tsx
+  s_e20d0a1ebc47aa::t_068f81f1366106 6,29
+thesarvo-3/src/forum/viewer.ts
+  s_e20d0a1ebc47aa::t_8581306d331848 2-5
+  s_e20d0a1ebc47aa::t_c74dfbb32c9734 1,6
+thesarvo-3/src/forum/types.ts
+  s_e20d0a1ebc47aa::t_c74dfbb32c9734 1-2
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_99602c804d20fb 52,80-82,192
+thesarvo-3/scripts/build-site.ts
+  s_e20d0a1ebc47aa::t_edfec9e447543d 166
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_99602c804d20fb 36-43
+thesarvo-3/src/forum/ui/ForumFeed.tsx
+  s_e20d0a1ebc47aa::t_068f81f1366106 1-41
+thesarvo-3/README.md
+  s_e20d0a1ebc47aa::t_99602c804d20fb 17-18
+thesarvo-3/src/auth/apiCall.ts
+  s_e20d0a1ebc47aa::t_c02dc9f078b9c6 1-6,8-20
+  s_e20d0a1ebc47aa::t_3ecf1270a8c06f 7
+thesarvo-3/src/forum/ui/Body.tsx
+  s_e20d0a1ebc47aa::t_edfec9e447543d 1-26
+thesarvo-3/scripts/seed-forum.sh
+  s_e20d0a1ebc47aa::t_c6739895a33ee2 1-14
+thesarvo-3/docs/forum-archive.md
+  s_e20d0a1ebc47aa::t_b1d6a0f4c7c54d 1-30
+thesarvo-3/docs/plan-mvp.md
+  s_e20d0a1ebc47aa::t_6e15d7c4083e5f 309-318
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c5a27e8097ac6abb3428487c2215f3b02b8c6e88",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
