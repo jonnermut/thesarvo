@@ -41,7 +41,7 @@ export default function HistoryView({ node, guide, hash }: { node: IndexNode; gu
       <meta name="robots" content="noindex" />
       <h1 className="border-b border-line text-[28px] font-bold text-navy">History</h1>
       <p className="mt-2 text-sm text-muted">
-        Changes made to <Link to={guideUrl(node)} className="text-link hover:underline">{node.title}</Link> on this site, newest first. Edits on the old site are not listed.
+        Changes made to <Link to={guideUrl(node)} className="text-link hover:underline">{node.title}</Link>, newest first. Edits made on Confluence, the old site, are imported (the oldest are summed up in one entry).
       </p>
       {history === null ? (
         <p className="mt-6 text-muted">Loading…</p>
