@@ -1,0 +1,23 @@
+.github/workflows/publisher.yml
+  s_e20d0a1ebc47aa::t_99a9544dd83812 7
+thesarvo-3/AGENTS.md
+  s_e20d0a1ebc47aa::t_dc40c5cd3ffad3 33
+thesarvo-3/docs/plan-backend.md
+  s_e20d0a1ebc47aa::t_53befd85f8b4c6 171-172
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6ae8de68fa9a9a10510fb05948a686aef49cfd6e",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
