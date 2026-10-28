@@ -1,0 +1,29 @@
+thesarvo-3/docs/plan-mvp.md
+  s_e20d0a1ebc47aa::t_39a1e0e82f7a3b 194-206
+thesarvo-3/README.md
+  s_e20d0a1ebc47aa::t_39a1e0e82f7a3b 15-16,28-30
+  s_e20d0a1ebc47aa::t_a2a7b810967b3c 31
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_39a1e0e82f7a3b 79-80,83-85
+  s_e20d0a1ebc47aa::t_d59e4588bda5f9 86
+thesarvo-3/AGENTS.md
+  s_e20d0a1ebc47aa::t_7ead1b5638bfe3 48
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_4f41463f137495 73
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "26a2119300dba1b36e8900b1f5d965146c9cfbb0",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
