@@ -5,6 +5,7 @@ import { findByPath, flatten, guideUrl } from '#/guide/content/paths'
 import type { IndexNode } from '#/guide/content/types'
 import type { GpsPoint } from '#/guide/model/types'
 import { fetchTree } from '#/guide/server'
+import { LockMark } from '#/components/LockMark'
 import { DownloadIcon } from './GpsBlock'
 import { treeKmlUrl } from './kml'
 import { rollup } from './rollup'
@@ -101,6 +102,7 @@ function Card({ node }: { node: IndexNode }) {
       <div className="flex items-baseline justify-between gap-3">
         <Link to={guideUrl(node)} className="text-[17px] font-semibold text-link after:absolute after:inset-0 hover:underline">
           {node.title}
+          {node.private && <LockMark className="ml-1.5 align-[-1px]" />}
         </Link>
         {!!node.count && <span className="shrink-0 text-[13px] text-muted tabular-nums">{node.count.toLocaleString()}</span>}
       </div>
@@ -130,6 +132,7 @@ function Card({ node }: { node: IndexNode }) {
               <Link to={guideUrl(c)} className="text-link hover:underline">
                 {c.title}
               </Link>
+              {c.private && <LockMark className="ml-1 align-[-1px]" />}
             </span>
           ))}
         </p>

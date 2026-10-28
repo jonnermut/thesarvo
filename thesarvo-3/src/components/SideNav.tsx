@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ancestorIds, findByPath, guideUrl } from '#/guide/content/paths'
 import { fetchTree } from '#/guide/server'
 import type { IndexNode } from '#/guide/content/types'
+import { LockMark } from './LockMark'
 import { RecentGuides } from './RecentGuides'
 
 function Chevron({ open }: { open: boolean }) {
@@ -58,6 +59,7 @@ function NavItem({
         >
           {node.title}
         </Link>
+        {node.private && <LockMark className="mr-1.5" />}
         {!!node.count && (
           <span className="shrink-0 pr-2 text-xs text-muted tabular-nums" title={`${node.count} climbs and problems`}>
             {node.count}
@@ -156,6 +158,7 @@ export function SideNav({ local }: { local: IndexNode }) {
             {matches.map(({ node, parent }) => (
               <li key={node.id}>
                 <Link to={guideUrl(node)} className="block truncate rounded-md px-3 py-1.5 text-sm text-navy hover:bg-black/5">
+                  {node.private && <LockMark className="mr-1.5 align-[-1px]" />}
                   {node.title}
                   {parent && <span className="ml-1.5 text-xs text-muted">{parent}</span>}
                 </Link>
