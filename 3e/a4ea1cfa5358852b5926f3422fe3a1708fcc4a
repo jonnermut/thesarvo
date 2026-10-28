@@ -1,0 +1,34 @@
+thesarvo-3/src/guide/content/edge.test.ts
+  s_e20d0a1ebc47aa::t_0c2bdebf815f04 9
+  s_e20d0a1ebc47aa::t_8702fb97ea5a68 1-8,10-30
+thesarvo-3/scripts/edge/viewer-request.js
+  s_e20d0a1ebc47aa::t_b41670b274789e 1-44
+thesarvo-3/src/guide/content/redirects.ts
+  s_e20d0a1ebc47aa::t_07a7b81143d3a4 1-32
+thesarvo-3/scripts/build-redirects.ts
+  s_e20d0a1ebc47aa::t_17b074d4403aff 1-15,17-20,22-46
+  s_e20d0a1ebc47aa::t_f10d003afbc29b 16,21
+thesarvo-3/eslint.config.js
+  s_e20d0a1ebc47aa::t_9812b2273d01c9 33
+thesarvo-3/scripts/cloudfront-setup.sh
+  s_e20d0a1ebc47aa::t_b51ce00110ce1c 102
+  s_e20d0a1ebc47aa::t_b41670b274789e 19-22,24,26-27,29-30
+thesarvo-3/src/guide/content/redirects.test.ts
+  s_e20d0a1ebc47aa::t_07a7b81143d3a4 1-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3ea4ea1cfa5358852b5926f3422fe3a1708fcc4a",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
