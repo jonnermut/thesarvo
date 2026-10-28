@@ -17,6 +17,8 @@ npm run import-members -- --from-confluence   # group members into private/group
 npm run export-forum                          # the old forum (Confluence blog posts and comments) into the content repo's forum/; dry run unless --apply
 npm run seed-forum                            # copies forum/ to the bucket's private/forum/ once (refuses if the live forum is there)
 npm run import-avatars                        # Confluence profile pictures into avatars/ and avatars.json (128 px); dry run unless --apply
+npm run import-forum-images                   # photos in old forum posts into the bucket's private/forum-images/; dry run unless --apply
+npm run build-redirects                       # old /confluence/ addresses to new paths, for the CloudFront key value store; --apply stores them
 npm run import-history                        # Confluence's version history of each guide into pages/<id>/history.json; dry run unless --apply
 ```
 

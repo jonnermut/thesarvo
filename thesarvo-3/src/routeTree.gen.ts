@@ -20,6 +20,7 @@ import { Route as GForumRouteImport } from './routes/g.forum'
 import { Route as GSearchRouteImport } from './routes/g.search'
 import { Route as GUploadRouteImport } from './routes/g.upload'
 import { Route as GApiAdminRouteImport } from './routes/g.api.admin'
+import { Route as GApiAvatarRouteImport } from './routes/g.api.avatar'
 import { Route as GApiCreatePageRouteImport } from './routes/g.api.create-page'
 import { Route as GApiForumRouteImport } from './routes/g.api.forum'
 import { Route as GApiForumNoticesRouteImport } from './routes/g.api.forum-notices'
@@ -85,6 +86,11 @@ const GUploadRoute = GUploadRouteImport.update({
 const GApiAdminRoute = GApiAdminRouteImport.update({
   id: '/g/api/admin',
   path: '/g/api/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GApiAvatarRoute = GApiAvatarRouteImport.update({
+  id: '/g/api/avatar',
+  path: '/g/api/avatar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GApiCreatePageRoute = GApiCreatePageRouteImport.update({
@@ -155,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/account/': typeof AccountIndexRoute
   '/g/': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
+  '/g/api/avatar': typeof GApiAvatarRoute
   '/g/api/create-page': typeof GApiCreatePageRoute
   '/g/api/forum': typeof GApiForumRoute
   '/g/api/forum-notices': typeof GApiForumNoticesRoute
@@ -179,6 +186,7 @@ export interface FileRoutesByTo {
   '/account': typeof AccountIndexRoute
   '/g': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
+  '/g/api/avatar': typeof GApiAvatarRoute
   '/g/api/create-page': typeof GApiCreatePageRoute
   '/g/api/forum': typeof GApiForumRoute
   '/g/api/forum-notices': typeof GApiForumNoticesRoute
@@ -204,6 +212,7 @@ export interface FileRoutesById {
   '/account/': typeof AccountIndexRoute
   '/g/': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
+  '/g/api/avatar': typeof GApiAvatarRoute
   '/g/api/create-page': typeof GApiCreatePageRoute
   '/g/api/forum': typeof GApiForumRoute
   '/g/api/forum-notices': typeof GApiForumNoticesRoute
@@ -230,6 +239,7 @@ export interface FileRouteTypes {
     | '/account/'
     | '/g/'
     | '/g/api/admin'
+    | '/g/api/avatar'
     | '/g/api/create-page'
     | '/g/api/forum'
     | '/g/api/forum-notices'
@@ -254,6 +264,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/g'
     | '/g/api/admin'
+    | '/g/api/avatar'
     | '/g/api/create-page'
     | '/g/api/forum'
     | '/g/api/forum-notices'
@@ -278,6 +289,7 @@ export interface FileRouteTypes {
     | '/account/'
     | '/g/'
     | '/g/api/admin'
+    | '/g/api/avatar'
     | '/g/api/create-page'
     | '/g/api/forum'
     | '/g/api/forum-notices'
@@ -303,6 +315,7 @@ export interface RootRouteChildren {
   AccountIndexRoute: typeof AccountIndexRoute
   GIndexRoute: typeof GIndexRoute
   GApiAdminRoute: typeof GApiAdminRoute
+  GApiAvatarRoute: typeof GApiAvatarRoute
   GApiCreatePageRoute: typeof GApiCreatePageRoute
   GApiForumRoute: typeof GApiForumRoute
   GApiForumNoticesRoute: typeof GApiForumNoticesRoute
@@ -393,6 +406,13 @@ declare module '@tanstack/react-router' {
       path: '/g/api/admin'
       fullPath: '/g/api/admin'
       preLoaderRoute: typeof GApiAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/g/api/avatar': {
+      id: '/g/api/avatar'
+      path: '/g/api/avatar'
+      fullPath: '/g/api/avatar'
+      preLoaderRoute: typeof GApiAvatarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/g/api/create-page': {
@@ -487,6 +507,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountIndexRoute: AccountIndexRoute,
   GIndexRoute: GIndexRoute,
   GApiAdminRoute: GApiAdminRoute,
+  GApiAvatarRoute: GApiAvatarRoute,
   GApiCreatePageRoute: GApiCreatePageRoute,
   GApiForumRoute: GApiForumRoute,
   GApiForumNoticesRoute: GApiForumNoticesRoute,

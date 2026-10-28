@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { nextPath } from '#/auth/paths'
 import { signIn, useUser } from '#/auth/session'
+import { AvatarForm } from '#/components/AvatarForm'
 import { NameForm } from '#/components/NameForm'
 
 /**
@@ -42,6 +43,7 @@ function AccountSettings() {
   return (
     <Page title="Account settings">
       <p className="mb-6 text-sm text-muted">{user.email}</p>
+      <AvatarForm />
       <NameForm onSaved={() => setSaved(true)} />
       {saved && <p className="mt-2 text-sm text-muted">Saved.</p>}
       {user.hasPassword && (

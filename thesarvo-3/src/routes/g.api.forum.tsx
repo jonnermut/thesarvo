@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { requireEditor } from '#/auth/verifyToken'
 import { addComment, createThread, listThreads, readThread, Refused, setHidden, setNotice } from '#/forum/service'
+import { withFileLinks } from '#/forum/files'
 import { forumStore } from '#/forum/store'
 import { viewerOf } from '#/forum/viewer'
 
@@ -23,7 +24,7 @@ export const Route = createFileRoute('/g/api/forum')({
         const id = new URL(request.url).searchParams.get('thread')
         if (id === null) return json(await listThreads(store, viewer))
         const thread = await readThread(store, viewer, id)
-        return thread ? json(thread) : json({ error: 'No such post' }, 400)
+        return thread ? json(withFileLinks(thread)) : json({ error: 'No such post' }, 400)
       },
       POST: async ({ request }) => {
         const editor = await requireEditor(request)

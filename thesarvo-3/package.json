@@ -26,7 +26,9 @@
     "build-site": "tsx scripts/build-site.ts",
     "package-publisher": "scripts/package-publisher.sh",
     "check-bundle": "tsx scripts/check-bundle.ts",
-    "auth-import": "tsx scripts/auth-import.ts"
+    "auth-import": "tsx scripts/auth-import.ts",
+    "build-redirects": "tsx scripts/build-redirects.ts",
+    "import-forum-images": "tsx scripts/import-forum-images.ts"
   },
   "dependencies": {
     "@tanstack/react-router": "1.170.46",
