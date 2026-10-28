@@ -32,3 +32,9 @@ it('marks private pages with a padlock, in the tree and in the filter results', 
   })
   expect(screen.getAllByRole('img', { name: 'Private page' })).toHaveLength(1)
 })
+
+it('links to the forum below the tree', async () => {
+  render(<SideNav local={root} />)
+  await act(async () => {})
+  expect(screen.getByRole('link', { name: 'Forum' }).getAttribute('href')).toBe('/g/forum')
+})

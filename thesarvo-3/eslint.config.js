@@ -30,6 +30,6 @@ export default [
     },
   },
   {
-    ignores: ['eslint.config.js', 'prettier.config.js', 'dist/**', '.output/**', 'public/**'],
+    ignores: ['eslint.config.js', 'prettier.config.js', 'dist/**', '.output/**', 'public/**', 'scripts/edge/**'],
   },
 ]

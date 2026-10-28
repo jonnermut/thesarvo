@@ -95,6 +95,58 @@ function CommentNode({ c, kids, depth, reply, setReply, send, admin, hide }: { c
   )
 }
 
+const DAY = 86_400_000
+const DURATIONS = [
+  ['a day', 1],
+  ['a week', 7],
+  ['two weeks', 14],
+  ['a month', 30],
+  ['three months', 90],
+] as const
+
+/** Admin: show this post's title and text at the top of the home page and the forum for a while. */
+function NoticeControls({ thread, onChange }: { thread: Thread; onChange: (t: Thread) => void }) {
+  const [days, setDays] = useState(7)
+  const [error, setError] = useState('')
+  const live = thread.notice && thread.notice > new Date().toISOString()
+  const set = async (until: string | null) => {
+    const a = await post({ action: 'notice', thread: thread.id, until })
+    if (a.ok) {
+      setError('')
+      onChange(a.value)
+    } else setError(a.message)
+  }
+  return (
+    <div className="mt-4 flex flex-wrap items-center gap-2 rounded-md bg-amber/10 px-3 py-2 text-sm">
+      {live ? (
+        <>
+          <span>A notice until {when(thread.notice!)}.</span>
+          <button type="button" onClick={() => void set(null)} className="text-link hover:underline">
+            End it now
+          </button>
+        </>
+      ) : (
+        <>
+          <label>
+            Show as a notice for{' '}
+            <select value={days} onChange={(e) => setDays(Number(e.target.value))} className="rounded border border-line bg-white px-1 py-0.5">
+              {DURATIONS.map(([label, d]) => (
+                <option key={d} value={d}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button type="button" onClick={() => void set(new Date(Date.now() + days * DAY).toISOString())} className="text-link hover:underline">
+            Show it on the home page
+          </button>
+        </>
+      )}
+      {error && <span role="alert" className="text-red-700">{error}</span>}
+    </div>
+  )
+}
+
 function ThreadView({ id, back }: { id: string; back: () => void }) {
   const user = useUser()
   const [thread, setThread] = useState<Thread | null>(null)
@@ -139,6 +191,7 @@ function ThreadView({ id, back }: { id: string; back: () => void }) {
       <div className="mt-3">
         <Body html={thread.html} text={thread.text} />
       </div>
+      {user?.admin && !thread.group && <NoticeControls thread={thread} onChange={setThread} />}
       <h2 className="mt-8 border-b border-line pb-1 text-lg font-bold text-navy">
         {thread.comments.length} {thread.comments.length === 1 ? 'comment' : 'comments'}
       </h2>
@@ -155,6 +208,7 @@ function ThreadView({ id, back }: { id: string; back: () => void }) {
 }
 
 const PAGE = 40
+const isLive = (t: ThreadMeta) => !!t.notice && t.notice > new Date().toISOString()
 
 function ThreadList({ open }: { open: (id: string) => void }) {
   const [threads, setThreads] = useState<ThreadMeta[] | null>(null)
@@ -192,8 +246,9 @@ function ThreadList({ open }: { open: (id: string) => void }) {
       {threads && (
         <>
           <ul className="mt-4 divide-y divide-line">
-            {threads.slice(0, shown).map((t) => (
-              <li key={t.id} className="py-2">
+            {[...threads.filter((t) => isLive(t)), ...threads.filter((t) => !isLive(t))].slice(0, shown).map((t) => (
+              <li key={t.id} className={isLive(t) ? 'bg-amber/10 px-2 py-2' : 'py-2'}>
+                {isLive(t) && <span className="mr-2 text-xs font-semibold tracking-wide text-amber-800 uppercase">Notice</span>}
                 <button type="button" onClick={() => open(t.id)} className="text-left font-semibold text-link hover:underline">
                   {t.title}
                 </button>

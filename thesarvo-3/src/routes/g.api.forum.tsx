@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { requireEditor } from '#/auth/verifyToken'
-import { addComment, createThread, listThreads, readThread, Refused, setHidden } from '#/forum/service'
+import { addComment, createThread, listThreads, readThread, Refused, setHidden, setNotice } from '#/forum/service'
+import { withFileLinks } from '#/forum/files'
 import { forumStore } from '#/forum/store'
 import { viewerOf } from '#/forum/viewer'
 
@@ -9,7 +10,7 @@ const json = (body: unknown, status = 200) => Response.json(body, { status, head
 /**
  * The forum, for signed-in users only. `GET /g/api/forum` lists the threads they may read; `?thread=<id>` gives one with its comments.
  * `POST` with `{ action: 'thread', title, text }`, `{ action: 'comment', thread, parent?, text }` or (admins) `{ action: 'hide', thread, comment?,
- * hidden }` answers with the thread. 400 for anything wrong (never 404: CloudFront turns those into the home page).
+ * hidden }` or (admins) `{ action: 'notice', thread, until }` (an ISO time, or null to end it) answers with the thread. 400 for anything wrong (never 404: CloudFront turns those into the home page).
  */
 export const Route = createFileRoute('/g/api/forum')({
   server: {
@@ -23,7 +24,7 @@ export const Route = createFileRoute('/g/api/forum')({
         const id = new URL(request.url).searchParams.get('thread')
         if (id === null) return json(await listThreads(store, viewer))
         const thread = await readThread(store, viewer, id)
-        return thread ? json(thread) : json({ error: 'No such post' }, 400)
+        return thread ? json(withFileLinks(thread)) : json({ error: 'No such post' }, 400)
       },
       POST: async ({ request }) => {
         const editor = await requireEditor(request)
@@ -36,6 +37,7 @@ export const Route = createFileRoute('/g/api/forum')({
           if (body?.action === 'thread') return json(await createThread(store, viewer, body))
           if (body?.action === 'comment') return json(await addComment(store, viewer, body))
           if (body?.action === 'hide') return json(await setHidden(store, viewer, body))
+          if (body?.action === 'notice') return json(await setNotice(store, viewer, body))
           return json({ error: 'Unknown action' }, 400)
         } catch (e) {
           if (e instanceof Refused) return json({ error: e.message }, 400)
