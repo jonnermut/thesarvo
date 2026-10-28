@@ -1,0 +1,31 @@
+thesarvo-3/src/components/SideNav.tsx
+  s_e20d0a1ebc47aa::t_359e277a711312 6,62,161
+thesarvo-3/src/guide/view/ContentsView.tsx
+  s_e20d0a1ebc47aa::t_022507e3ae668d 105
+  s_e20d0a1ebc47aa::t_359e277a711312 8,135
+thesarvo-3/src/components/LockMark.tsx
+  s_e20d0a1ebc47aa::t_359e277a711312 1-9
+thesarvo-3/src/components/LockMark.test.tsx
+  s_e20d0a1ebc47aa::t_359e277a711312 1-10
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_022507e3ae668d 73,76-78
+  s_e20d0a1ebc47aa::t_f39d304e48397f 79
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_9b4750b84648d4 85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ff840b803c259914779b0ea603e1d8ec4c37b7d9",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
