@@ -1,0 +1,23 @@
+thesarvo-3/docs/google-signin.md
+  s_e20d0a1ebc47aa::t_006da0a28948da 1-40
+thesarvo-3/docs/plan-mvp.md
+  s_e20d0a1ebc47aa::t_89cc497131b4e5 496-497
+thesarvo-3/scripts/add-google.sh
+  s_e20d0a1ebc47aa::t_ff1f7c4b31acc8 1-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e421e685614e2a4a3da0a4e3a840124a4ccbae95",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
