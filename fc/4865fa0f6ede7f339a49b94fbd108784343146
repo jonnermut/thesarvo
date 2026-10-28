@@ -1,0 +1,32 @@
+thesarvo-3/scripts/build-site.ts
+  s_e20d0a1ebc47aa::t_dfa78c941c86e6 26,182-186
+  s_e20d0a1ebc47aa::t_45d3ec7612dce2 187
+thesarvo-3/src/guide/content/sitemap.ts
+  s_e20d0a1ebc47aa::t_dfa78c941c86e6 1-13
+thesarvo-3/src/guide/content/sitemap.test.ts
+  s_e20d0a1ebc47aa::t_dfa78c941c86e6 1-15
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_3d0b6ab79b9317 13
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_3e7c6ff345eab6 64
+thesarvo-3/scripts/cloudfront-setup.sh
+  s_e20d0a1ebc47aa::t_464a2da41dcff5 109
+thesarvo-3/scripts/deploy-changed.ts
+  s_e20d0a1ebc47aa::t_a0bf6c51079653 21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fc4865fa0f6ede7f339a49b94fbd108784343146",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
