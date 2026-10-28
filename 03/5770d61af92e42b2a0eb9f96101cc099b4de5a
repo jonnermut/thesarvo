@@ -1,0 +1,22 @@
+thesarvo-3/scripts/confluence-query.sh
+  s_e20d0a1ebc47aa::t_29c4ab51be49a1 1-27
+thesarvo-3/docs/plan-mvp.md
+  s_e20d0a1ebc47aa::t_86bb720a779e01 27,29,48-49,69-76,120-136,166-175,210-215,330,384-419,422-423,427,430-431
+  s_e20d0a1ebc47aa::t_3d8da246141f69 275,335
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "035770d61af92e42b2a0eb9f96101cc099b4de5a",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
