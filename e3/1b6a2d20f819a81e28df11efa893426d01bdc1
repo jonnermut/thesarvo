@@ -1,0 +1,23 @@
+thesarvo-3/src/aws/s3.ts
+  s_e20d0a1ebc47aa::t_adf93a8006b8c5 117-118,170,181
+thesarvo-3/src/forum/files.ts
+  s_e20d0a1ebc47aa::t_938736e232bba8 7,23
+thesarvo-3/src/aws/s3.test.ts
+  s_e20d0a1ebc47aa::t_938736e232bba8 84-89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e31b6a2d20f819a81e28df11efa893426d01bdc1",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
