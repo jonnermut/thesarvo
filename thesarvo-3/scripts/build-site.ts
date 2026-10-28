@@ -23,6 +23,7 @@ import type { BuildInfo } from '../src/guide/content/incremental'
 import { publicJsonSource } from '../src/guide/content/json'
 import { buildManifest } from '../src/guide/content/manifest'
 import type { Manifest } from '../src/guide/content/manifest'
+import { siteRecent } from '../src/guide/content/recent'
 import { flatten, GUIDE_PREFIX, guideUrl } from '../src/guide/content/paths'
 import type { IndexNode } from '../src/guide/content/types'
 import type { Guide } from '../src/guide/model/types'
@@ -136,6 +137,8 @@ const search = partial
   : await writePack()
 // The tree and stats every page refreshes itself from after loading.
 await writeJson('manifest.json', { ...(await buildManifest(index, guideOf)), search } satisfies Manifest)
+// What's new on the home page: every build rewrites it, from every guide's history, since any page's change belongs in it.
+await writeJson('recent.json', await siteRecent(source, index))
 await writeJson('build.json', build)
 
 const url = (n: Pick<IndexNode, 'path'>) => (n.path ? guideUrl(n) : GUIDE_PREFIX)

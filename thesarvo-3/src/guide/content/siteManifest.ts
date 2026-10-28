@@ -14,3 +14,8 @@ export function siteManifest(): Promise<Manifest> {
   })()
   return manifest
 }
+
+/** Forget the manifest, so the next one sees pages added since (the dev server's, where an added page shows at once). */
+export const resetSiteManifest = () => {
+  manifest = undefined
+}

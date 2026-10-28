@@ -14,7 +14,7 @@ export interface SaveApi {
   save: (request: { guide: string; session: string; changes: Changes; note?: string }) => Promise<Answer<Exclude<SaveResult, { status: 'missing' }>>>
 }
 
-const call = async <T>(path: string, init: RequestInit = {}): Promise<Answer<T>> => {
+export const call = async <T>(path: string, init: RequestInit = {}): Promise<Answer<T>> => {
   const token = await getIdToken()
   if (!token) return { ok: false, message: 'Sign in again to save' }
   try {

@@ -1,13 +1,16 @@
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import type { Guide } from '#/guide/model/types'
-import { getContentSource } from '#/guide/content'
+import { getFullContent } from '#/guide/content'
 import { formatJson } from '#/guide/content/syncFeed'
-import type { ContentSource } from '#/guide/content/types'
+import type { ContentSource, IndexNode } from '#/guide/content/types'
 import { canonical, ensureIds } from './changes'
 import type { HistoryEntry } from './history'
-import { guidePath, historyPath } from './repo'
-import type { GuideRepo, Stored } from './repo'
+import type { StoredIndexNode } from '#/guide/content/syncFeed'
+import { guidePath, historyPath, indexPath } from './repo'
+import type { GuideRepo, PageRepo, Stored } from './repo'
+
+const storedOf = (n: IndexNode): StoredIndexNode => ({ id: n.id, title: n.title, children: n.children.map(storedOf) })
 
 const readJson = async (file: string): Promise<unknown> =>
   JSON.parse(await readFile(file, 'utf8').catch(() => 'null'))
@@ -24,10 +27,10 @@ const version = (guide: Guide) => {
  * Saves for development, in a gitignored folder laid out like the content repo. A guide not saved there yet is read
  * from the content source. Saves are not committed anywhere.
  */
-export class LocalRepo implements GuideRepo {
+export class LocalRepo implements GuideRepo, PageRepo {
   constructor(
     private readonly dir: string,
-    private readonly source: () => Pick<ContentSource, 'getGuide'>,
+    private readonly source: () => Pick<ContentSource, 'getGuide' | 'getIndex'>,
   ) {}
 
   /** The saved guide, if this folder has one. */
@@ -44,21 +47,38 @@ export class LocalRepo implements GuideRepo {
     return { head: version(withIds), guide: withIds, history }
   }
 
+  private async write(file: string, value: unknown) {
+    const to = path.join(this.dir, file)
+    await mkdir(path.dirname(to), { recursive: true })
+    await writeFile(`${to}.tmp`, formatJson(value))
+    await rename(`${to}.tmp`, to)
+  }
+
+  /** The saved tree if this folder has one, else the content source's. */
+  async readIndex(): Promise<{ head: string; index: StoredIndexNode }> {
+    const saved = (await readJson(path.join(this.dir, indexPath))) as StoredIndexNode | null
+    const index = saved ?? storedOf(await this.source().getIndex())
+    return { head: canonical(index), index }
+  }
+
+  async commitPage({ head, index, id, guide, history, message }: Parameters<PageRepo['commitPage']>[0]) {
+    if ((await this.readIndex()).head !== head) return null
+    await this.write(historyPath(id), history)
+    await this.write(guidePath(id), guide)
+    await this.write(indexPath, index)
+    console.log(`added page ${id}: ${message.headline}`)
+    return version(guide)
+  }
+
   async commit({ id, head, guide, history, message }: Parameters<GuideRepo['commit']>[0]) {
     const now = await this.read(id)
     if (now && now.head !== head) return null
-    const write = async (file: string, value: unknown) => {
-      const to = path.join(this.dir, file)
-      await mkdir(path.dirname(to), { recursive: true })
-      await writeFile(`${to}.tmp`, formatJson(value))
-      await rename(`${to}.tmp`, to)
-    }
-    await write(historyPath(id), history)
-    await write(guidePath(id), guide)
+    await this.write(historyPath(id), history)
+    await this.write(guidePath(id), guide)
     console.log(`saved ${id}: ${message.headline}`)
     return version(guide)
   }
 }
 
 let local: LocalRepo | undefined
-export const localRepo = () => (local ??= new LocalRepo(process.env.SAVES_DIR ?? '.saves', getContentSource))
+export const localRepo = () => (local ??= new LocalRepo(process.env.SAVES_DIR ?? '.saves', () => getFullContent().all))

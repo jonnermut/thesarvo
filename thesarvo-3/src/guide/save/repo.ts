@@ -1,3 +1,4 @@
+import type { StoredIndexNode } from '#/guide/content/syncFeed'
 import type { Guide } from '#/guide/model/types'
 import type { HistoryEntry } from './history'
 
@@ -13,13 +14,22 @@ export interface GuideRepo {
   commit: (c: Commit) => Promise<string | null>
 }
 
+/** What adding a page needs on top of saving guides. */
+export interface PageRepo {
+  /** The page tree as stored, and the commit it was read at. */
+  readIndex: () => Promise<{ head: string; index: StoredIndexNode }>
+  /** Writes the new tree, a new page's guide and its history in one commit on top of `head`; null when someone saved since. */
+  commitPage: (c: { head: string; index: StoredIndexNode; id: string; guide: Guide; history: HistoryEntry[]; message: Commit['message'] }) => Promise<string | null>
+}
+
+export const indexPath = 'index.json'
 export const guidePath = (id: string) => `pages/${id}/guide.json`
 export const historyPath = (id: string) => `pages/${id}/history.json`
 
-let repo: GuideRepo | null | undefined
+let repo: (GuideRepo & PageRepo) | null | undefined
 
 /** Server-only. GitHub when `CONTENT_REPO` is set, a local folder on the dev server, else none: saving is not set up. */
-export async function guideRepo(): Promise<GuideRepo | null> {
+export async function guideRepo(): Promise<(GuideRepo & PageRepo) | null> {
   repo ??= process.env.CONTENT_REPO
     ? new (await import('./github')).GitHubRepo(process.env.CONTENT_REPO, process.env.CONTENT_BRANCH ?? 'main')
     : process.env.NODE_ENV === 'development'

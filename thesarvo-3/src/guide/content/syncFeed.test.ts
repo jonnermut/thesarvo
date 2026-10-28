@@ -34,6 +34,9 @@ describe('sync feed', () => {
     const previous = node('414', [node('84'), node('9000000001'), node('12')])
     expect(withLocalPages(node('414', [node('84'), node('99')]), previous).children.map((n) => n.id)).toEqual(['84', '99', '9000000001'])
     expect(withLocalPages(node('414', [node('84')]), null).children).toHaveLength(1)
+    const nested = withLocalPages(node('414', [node('84', [node('85')]), node('99')]), node('414', [node('84', [node('85', [node('9000000002')])]), node('50', [node('9000000003')])]))
+    expect(nested.children[0].children[0].children.map((n) => n.id)).toEqual(['9000000002'])
+    expect(nested.children.map((n) => n.id)).toEqual(['84', '99', '9000000003'])
     expect([isLocalPage('9000000001'), isLocalPage('497614867'), isLocalPage('x')]).toEqual([true, false, false])
   })
 

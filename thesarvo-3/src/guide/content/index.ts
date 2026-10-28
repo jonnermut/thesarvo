@@ -1,12 +1,13 @@
-import { readFile } from 'node:fs/promises'
+import { readdir, readFile } from 'node:fs/promises'
 import path from 'node:path'
 import type { Guide } from '#/guide/model/types'
 import { DEFAULT_CONTENT_DIR } from './defaultDir'
-import { DiskContentSource, readHistory } from './disk'
+import { DiskContentSource, readHistory, toNode } from './disk'
+import type { RawIndexNode } from './disk'
 import { publicSource } from './access'
 import type { AccessMap } from './access'
 import { JsonContentSource, readAccess } from './json'
-import type { ContentSource } from './types'
+import type { ContentSource, IndexNode } from './types'
 
 let source: ContentSource | undefined
 let full: { all: ContentSource; access: () => Promise<AccessMap> } | undefined
@@ -40,6 +41,16 @@ function withSaves(s: ContentSource, dir: string) {
     const saved = await readFile(path.join(dir, 'pages', id, 'guide.json'), 'utf8').catch(() => null)
     // Written by the dev server's own saves.
     return saved ? (JSON.parse(saved) as Guide) : getGuide(id)
+  }
+  // Pages added in development (see LocalRepo.commitPage) come with a saved tree.
+  const getIndex = s.getIndex.bind(s)
+  s.getIndex = async () => {
+    const saved = await readFile(path.join(dir, 'index.json'), 'utf8').catch(() => null)
+    if (!saved) return getIndex()
+    const guides = new Set((await readdir(path.join(dir, 'pages')).catch(() => [] as string[])).map((id) => `${id}.xml`))
+    const mark = (n: IndexNode) => (n.isGuide && guides.add(`${n.id}.xml`), n.children.forEach(mark))
+    mark(await getIndex())
+    return toNode(JSON.parse(saved) as RawIndexNode, '', guides)
   }
   const getHistory = s.getHistory.bind(s)
   s.getHistory = async (id) => {

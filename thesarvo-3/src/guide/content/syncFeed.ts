@@ -36,11 +36,22 @@ export function storedIndex(node: RawIndexNode): StoredIndexNode {
 const LOCAL_ID_MIN = 9_000_000_000
 export const isLocalPage = (id: string) => /^\d+$/.test(id) && Number(id) >= LOCAL_ID_MIN
 
-/** The fresh index from Confluence, keeping the previous index's local top-level pages after its own. */
-export const withLocalPages = (fresh: StoredIndexNode, previous: StoredIndexNode | null): StoredIndexNode => ({
-  ...fresh,
-  children: [...fresh.children, ...(previous?.children.filter((n) => isLocalPage(n.id)) ?? [])],
-})
+/** The local pages of an index with the id of the page each hangs under (a local page's own local children come with it). */
+const localChildren = (node: StoredIndexNode): { parent: string; page: StoredIndexNode }[] =>
+  node.children.flatMap((c) => (isLocalPage(c.id) ? [{ parent: node.id, page: c }] : localChildren(c)))
+
+/** The fresh index from Confluence, keeping the previous index's local pages where they were (at the end of the same parent; at the end of the top level if that parent is gone). */
+export function withLocalPages(fresh: StoredIndexNode, previous: StoredIndexNode | null): StoredIndexNode {
+  const kept = previous ? localChildren(previous) : []
+  const ids = new Set<string>()
+  const collect = (n: StoredIndexNode) => (ids.add(n.id), n.children.forEach(collect))
+  collect(fresh)
+  const add = (n: StoredIndexNode, top: boolean): StoredIndexNode => ({
+    ...n,
+    children: [...n.children.map((c) => add(c, false)), ...kept.filter((k) => k.parent === n.id || (top && !ids.has(k.parent))).map((k) => k.page)],
+  })
+  return add(fresh, true)
+}
 
 /** The one place content files are formatted: two-space JSON, trailing newline, so reruns never create diffs. */
 export const formatJson = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`

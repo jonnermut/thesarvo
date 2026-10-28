@@ -14,7 +14,7 @@ vi.mock('@tanstack/react-router', () => ({
   ),
   useRouterState: ({ select }: { select: (s: { location: { pathname: string } }) => string }) => select({ location: { pathname: '/g' } }),
 }))
-vi.mock('#/guide/server', () => ({ fetchTree: async () => root }))
+vi.mock('#/guide/server', () => ({ fetchTree: async () => root, onTreeChange: () => () => {} }))
 vi.mock('./RecentGuides', () => ({ RecentGuides: () => null }))
 
 afterEach(cleanup)

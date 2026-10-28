@@ -2,6 +2,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { manifestTree, pageInfo } from './content/manifest'
 import { resolvePageBody } from './content/pageLinks'
 import type { Manifest, PageInfo } from './content/manifest'
+import type { RecentChange } from './content/recent'
 import { STATIC_SITE, GUIDE_PREFIX } from './content/paths'
 import type { ContentSource, IndexNode } from './content/types'
 import { fetchGrafts, fetchPrivatePage, isPrivateId } from './privateClient'
@@ -20,6 +21,11 @@ const serverGuide = createServerFn({ method: 'GET' })
 const serverPageBody = createServerFn({ method: 'GET' })
   .validator((id: string) => id)
   .handler(async ({ data: id }) => (await import('./content')).getContentSource().getPageBody(id))
+
+const serverRecent = createServerFn({ method: 'GET' }).handler(async () => {
+  const source = (await import('./content')).getContentSource()
+  return (await import('./content/recent')).siteRecent(source, await source.getIndex())
+})
 
 const serverSearchShards = createServerFn({ method: 'GET' }).handler(async () => (await import('./search/allShards')).allShards())
 
@@ -60,6 +66,20 @@ export function fetchManifest(): Promise<Manifest> {
     throw e
   })
   return browserManifest
+}
+
+const treeListeners = new Set<() => void>()
+
+/** Runs `listener` when the tree is fetched again (see `refreshManifest`); returns how to stop. */
+export function onTreeChange(listener: () => void): () => void {
+  treeListeners.add(listener)
+  return () => void treeListeners.delete(listener)
+}
+
+/** Forgets the fetched manifest, so the next read is fresh (a page was added), and by default tells whoever shows the tree. */
+export function refreshManifest(notify = true): void {
+  browserManifest = undefined
+  if (notify) treeListeners.forEach((l) => l())
 }
 
 const merged = new WeakMap<IndexNode, WeakMap<object, IndexNode>>()
@@ -113,6 +133,9 @@ export async function fetchSearchShards(): Promise<Shard[]> {
   ])
   return mergeShards(pack, overrides, search.removed)
 }
+
+/** The latest change to each of the most recently changed pages, for the home page. */
+export const fetchRecent = (): Promise<RecentChange[]> => (STATIC_SITE ? getJson<RecentChange[]>('recent.json', { cache: 'no-cache' }) : serverRecent())
 
 /** The static site's list holds the photos pages used at build time; the API adds later uploads when it is reachable. */
 export const fetchImageNames = async ({ data: id }: { data: string }): Promise<string[]> => {

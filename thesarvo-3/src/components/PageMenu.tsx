@@ -3,9 +3,10 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { signIn, useUser } from '#/auth/session'
 import type { PageMode } from '#/routes/g.$'
 import { rememberPlace } from '#/guide/view/place'
+import { AddPageDialog } from './AddPageDialog'
 import { useEscape } from './overlay'
 
-/** One thing to do with the page on screen. Delete, add a child page and move will join History here. */
+/** One thing to do with the page on screen. Delete and move will join History here. */
 type Action = { label: string; hint: string; mode: PageMode }
 
 /** What the page menu offers, given what the address shows now. */
@@ -26,6 +27,7 @@ export function PageMenu() {
   const match = useMatch({ from: '/g/$', shouldThrow: false })
   const user = useUser()
   const [open, setOpen] = useState(false)
+  const [adding, setAdding] = useState(false)
   const box = useRef<HTMLDivElement>(null)
   const close = useCallback(() => setOpen(false), [])
   useEscape(open, close)
@@ -40,6 +42,8 @@ export function PageMenu() {
   const mode = match.search
   const isGuide = !!match.loaderData.guide
   const editing = !!mode.edit
+  // Anyone signed in can. Under a private page is not supported yet (the server says no too).
+  const canAdd = !!user && !match.loaderData.node.private && !mode.edit
   const border = 'border border-white/40 text-sm font-medium text-white hover:bg-white/10'
 
   return (
@@ -98,8 +102,15 @@ export function PageMenu() {
               <div className="text-xs text-muted">{a.hint}</div>
             </Link>
           ))}
+          {canAdd && (
+            <button type="button" role="menuitem" className={ITEM} onClick={() => { close(); setAdding(true) }}>
+              <div className="font-medium">Add a page here</div>
+              <div className="text-xs text-muted">A new page under this one</div>
+            </button>
+          )}
         </div>
       )}
+      {adding && <AddPageDialog parent={match.loaderData.node.id} parentTitle={match.loaderData.node.title} onClose={() => setAdding(false)} />}
     </div>
   )
 }

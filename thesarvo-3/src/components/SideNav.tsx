@@ -1,7 +1,7 @@
 import { Link, useRouterState } from '@tanstack/react-router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ancestorIds, findByPath, guideUrl } from '#/guide/content/paths'
-import { fetchTree } from '#/guide/server'
+import { fetchTree, onTreeChange } from '#/guide/server'
 import type { IndexNode } from '#/guide/content/types'
 import { LockMark } from './LockMark'
 import { RecentGuides } from './RecentGuides'
@@ -91,9 +91,12 @@ export function SideNav({ local }: { local: IndexNode }) {
   // Rendered from the page's own trimmed tree, then the full current tree once the page is live.
   const [full, setFull] = useState<IndexNode>()
   useEffect(() => {
-    fetchTree().then(setFull, () => {
-      /* keep the trimmed tree */
-    })
+    const load = () =>
+      void fetchTree().then(setFull, () => {
+        /* keep the trimmed tree */
+      })
+    load()
+    return onTreeChange(load)
   }, [])
   const root = full ?? local
   const pathname = useRouterState({ select: (s) => s.location.pathname })

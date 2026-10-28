@@ -3,6 +3,7 @@ import type { IndexNode } from '#/guide/content/types'
 import { pageHead, pageDescription } from '#/guide/seo'
 import { fetchPage } from '#/guide/server'
 import { ContentsView } from '#/guide/view/ContentsView'
+import { WhatsNew } from '#/guide/view/WhatsNew'
 
 export const Route = createFileRoute('/g/')({
   loader: async () => (await fetchPage(''))!,
@@ -23,6 +24,7 @@ function Home() {
       <div className="mx-auto max-w-6xl px-4 pb-10 sm:px-6">
         <div className="max-w-4xl">
           <ContentsView node={index} />
+          <WhatsNew />
         </div>
       </div>
     </div>
