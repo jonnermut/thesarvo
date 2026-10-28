@@ -1,0 +1,19 @@
+thesarvo-3/docs/plan-mvp.md
+  s_e20d0a1ebc47aa::t_4e64aae83069b8 165-178,464
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "26eb4dde81c9d3e83a70b28758d84ad827b1b75e",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "unknown"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
