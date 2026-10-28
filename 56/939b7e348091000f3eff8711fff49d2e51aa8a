@@ -1,0 +1,47 @@
+thesarvo-3/src/guide/history/HistoryView.tsx
+  s_e20d0a1ebc47aa::t_033e06d97dc4dd 44
+thesarvo-3/src/guide/content/confluenceHistory.ts
+  s_e20d0a1ebc47aa::t_452d0aaa631290 42-44,68,94,96,110
+  s_e20d0a1ebc47aa::t_b13989fcec3e4b 54,62-64
+  s_e20d0a1ebc47aa::t_6d7c4526a6242a 72-82,90,103,109,113
+  s_e20d0a1ebc47aa::t_6034e95318cee1 1-20,25-38,41,45-53,55-57,60-61,65-67,69-71,83-89,91-93,95,97-98,100-102,104-108,111-112,114-117
+  s_e20d0a1ebc47aa::t_0406edbccb688e 21,24,58-59
+  s_e20d0a1ebc47aa::t_ee7782bc909571 22-23
+  s_e20d0a1ebc47aa::t_054ed017bd43e8 39-40,99
+thesarvo-3/src/guide/content/confluenceHistory.test.ts
+  s_e20d0a1ebc47aa::t_8ef057086802d5 39
+  s_e20d0a1ebc47aa::t_db88e2730b2e56 48-53
+  s_e20d0a1ebc47aa::t_ee7782bc909571 17
+  s_e20d0a1ebc47aa::t_c25bffdab0e3e7 1-16,18-38,40-47,54-57
+thesarvo-3/scripts/import-history.ts
+  s_e20d0a1ebc47aa::t_9e1ed776acf185 4,8,24
+  s_e20d0a1ebc47aa::t_054ed017bd43e8 78-80
+  s_e20d0a1ebc47aa::t_e25eac5b887e48 1-3,5-7,9-23,25-47,49-59,61-64,66-71,73-77,81-87
+  s_e20d0a1ebc47aa::t_71ac0253c89a56 48
+  s_e20d0a1ebc47aa::t_0406edbccb688e 60
+  s_e20d0a1ebc47aa::t_b13989fcec3e4b 65,72
+thesarvo-3/docs/plan-mvp.md
+  s_e20d0a1ebc47aa::t_033e06d97dc4dd 76-81
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_033e06d97dc4dd 60
+thesarvo-3/README.md
+  s_e20d0a1ebc47aa::t_033e06d97dc4dd 17
+thesarvo-3/package.json
+  s_e20d0a1ebc47aa::t_b13989fcec3e4b 21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "56939b7e348091000f3eff8711fff49d2e51aa8a",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
