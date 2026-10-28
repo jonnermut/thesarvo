@@ -17,7 +17,7 @@ beforeEach(() => {
     const body = url.includes('private-tree') ? grafts : { guide: { id: '3', guideStars: '', nodes: [] }, body: null, history: [], images: { 'a.jpg': 'https://signed/a.jpg' } }
     return Promise.resolve(new Response(JSON.stringify(body)))
   })
-  vi.stubEnv('SSR', '')
+  vi.stubEnv('SSR', false)
 })
 
 describe('private client', () => {
