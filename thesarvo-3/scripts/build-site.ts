@@ -163,7 +163,7 @@ if (!pkg) {
 await cp(path.join(pkg, 'client'), out, { recursive: true })
 process.env.CONTENT_DIR = dir
 const { default: renderer } = (await import(pathToFileURL(path.resolve(pkg, 'server/server.js')).href)) as { default: { fetch: (r: Request) => Promise<Response> } }
-const fixed = [GUIDE_PREFIX, `${GUIDE_PREFIX}/search`, CALLBACK_PATH, PASSWORD_PATH, ACCOUNT_PATH]
+const fixed = [GUIDE_PREFIX, `${GUIDE_PREFIX}/search`, `${GUIDE_PREFIX}/forum`, CALLBACK_PATH, PASSWORD_PATH, ACCOUNT_PATH]
 const render = partial ? pages.map(url) : [...new Set([...fixed, ...nodes.map(url)])]
 let next = 0
 await Promise.all(

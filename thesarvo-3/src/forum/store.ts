@@ -18,13 +18,13 @@ const PREFIX = 'private/forum/'
 const JSON_TYPE = { contentType: 'application/json', cacheControl: 'no-store' }
 
 /** The forum in the bucket under `private/forum/` (never served publicly); null where the bucket is not set up. */
-export function bucketForum(b: Bucket, c: Credentials): ForumStore {
+export function bucketForum(b: Bucket, c: Credentials, prefix = PREFIX): ForumStore {
   return {
     async read(name) {
-      const got = await getObjectTagged(b, c, PREFIX + name)
+      const got = await getObjectTagged(b, c, prefix + name)
       return got && { value: JSON.parse(got.body.toString('utf8')) as unknown, tag: got.etag }
     },
-    write: (name, value, tag) => putObjectIf(b, c, PREFIX + name, Buffer.from(JSON.stringify(value)), tag, JSON_TYPE),
+    write: (name, value, tag) => putObjectIf(b, c, prefix + name, Buffer.from(JSON.stringify(value)), tag, JSON_TYPE),
   }
 }
 

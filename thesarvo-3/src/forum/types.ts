@@ -1,5 +1,5 @@
-/** Who wrote something: a Cognito `sub`, or `confluence:<username>` for the old forum's posts. */
-export type Author = { sub: string; name: string }
+/** Who wrote something: a Cognito `sub`, or `confluence:<username>` for the old forum's posts. `key` is their email's avatar key (see avatars/keys.ts), set on new posts. */
+export type Author = { sub: string; name: string; key?: string }
 
 /**
  * A post's or comment's text: `html` is the allow-listed HTML the Confluence export produced, `text` is what people type here

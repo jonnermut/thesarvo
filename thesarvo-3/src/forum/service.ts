@@ -10,6 +10,8 @@ const RETRIES = 6
 /** Who is asking: `groups` decide which restricted threads they see; `admin` may hide things. */
 export type Viewer = Author & { groups: readonly string[]; admin: boolean }
 
+const authorOf = (v: Viewer): Author => ({ sub: v.sub, name: v.name, ...(v.key && { key: v.key }) })
+
 export class Refused extends Error {}
 
 const canSee = (v: Viewer, group?: string) => !group || v.groups.includes(group) || v.admin
@@ -70,7 +72,7 @@ export async function createThread(store: ForumStore, v: Viewer, input: { title?
   const t: Thread = {
     id: newId(now.getTime()),
     title: clean(input.title, TITLE_MAX, 'The title'),
-    author: { sub: v.sub, name: v.name },
+    author: authorOf(v),
     at: now.toISOString(),
     text: clean(input.text, TEXT_MAX, 'The post'),
     comments: [],
@@ -84,7 +86,7 @@ export async function addComment(store: ForumStore, v: Viewer, input: { thread?:
   const text = clean(input.text, TEXT_MAX, 'The comment')
   const id = isId(input.thread) ? input.thread : ''
   const parent = input.parent == null ? null : String(input.parent)
-  const comment: Comment = { id: newId(now.getTime()), parent, author: { sub: v.sub, name: v.name }, at: now.toISOString(), text }
+  const comment: Comment = { id: newId(now.getTime()), parent, author: authorOf(v), at: now.toISOString(), text }
   const t = await update<Thread | null>(store, threadFile(id), null, (cur) => {
     if (!cur || !canSee(v, cur.group) || cur.hidden) throw new Refused('No such post')
     if (parent !== null && !cur.comments.some((c) => c.id === parent)) throw new Refused('The comment you are replying to is gone')

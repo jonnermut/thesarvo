@@ -48,6 +48,9 @@ export function AccountMenu() {
                 <div className="truncate font-medium">{label}</div>
                 {user.name && <div className="truncate text-muted">{user.email}</div>}
               </div>
+              <Link to="/g/forum" search={{}} role="menuitem" onClick={close} className={ITEM}>
+                Forum
+              </Link>
               <Link to="/account" search={{}} role="menuitem" onClick={close} className={ITEM}>
                 Account settings
               </Link>
