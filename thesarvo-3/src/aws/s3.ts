@@ -114,7 +114,8 @@ export async function listObjects(b: Bucket, c: Credentials, prefix: string): Pr
   }
 }
 
-const encodeKey = (key: string) => key.split('/').map(encodeURIComponent).join('/')
+/** S3 signs the path with `! ' ( ) *` encoded too, which encodeURIComponent leaves (a name like "topo (rhs).jpg" would be refused). */
+const encodeKey = (key: string) => key.split('/').map((s) => encodeURIComponent(s).replace(/[!'()*]/g, (ch) => `%${ch.charCodeAt(0).toString(16).toUpperCase()}`)).join('/')
 
 export async function putObject(b: Bucket, c: Credentials, key: string, body: Buffer, o: { contentType: string; cacheControl: string }): Promise<void> {
   const url = new URL(`${bucketUrl(b)}${encodeKey(key)}`)
@@ -166,7 +167,7 @@ export async function putObjectIf(b: Bucket, c: Credentials, key: string, body: 
 }
 
 /** A link that lets anyone holding it read one object until `expiresIn` seconds pass: for photos in a prefix the bucket does not serve publicly. */
-export function presignedGet(b: Bucket, c: Credentials, key: string, expiresIn: number, now = new Date()): string {
+export function presignedGet(b: Bucket, c: Credentials, key: string, expiresIn: number, now = new Date(), contentType?: string): string {
   const date = amzDate(now)
   const scope = `${date.slice(0, 8)}/${b.region}/s3/aws4_request`
   const url = new URL(`${bucketUrl(b)}${encodeKey(key)}`)
@@ -177,6 +178,7 @@ export function presignedGet(b: Bucket, c: Credentials, key: string, expiresIn: 
     'X-Amz-Expires': String(expiresIn),
     ...(c.sessionToken && { 'X-Amz-Security-Token': c.sessionToken }),
     'X-Amz-SignedHeaders': 'host',
+    ...(contentType && { 'response-content-type': contentType }),
   }
   const enc = (v: string) => encodeURIComponent(v).replace(/[!'()*]/g, (ch) => `%${ch.charCodeAt(0).toString(16).toUpperCase()}`)
   const query = Object.entries(params).sort(([a], [b2]) => (a < b2 ? -1 : 1)).map(([k, v]) => `${enc(k)}=${enc(v)}`).join('&')

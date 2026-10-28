@@ -81,6 +81,12 @@ describe('uploads', () => {
 })
 
 describe('presignedGet', () => {
+  it('encodes the characters S3 signs encoded, and can set the content type', () => {
+    const link = new URL(presignedGet(bucket, keys, 'a/topo (rhs)!.jpg', 60, now, 'image/jpeg'))
+    expect(link.pathname).toContain('topo%20%28rhs%29%21.jpg')
+    expect(link.searchParams.get('response-content-type')).toBe('image/jpeg')
+  })
+
   const keys = { accessKeyId: 'AKIAIOSFODNN7EXAMPLE', secretAccessKey: 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY' }
   const bucket = { name: 'examplebucket', region: 'us-east-1' }
   const now = new Date('2013-05-24T00:00:00Z')
