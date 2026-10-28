@@ -1,0 +1,38 @@
+thesarvo-3/src/auth/cognitoPreToken.ts
+  s_e20d0a1ebc47aa::t_6fd6f9332f21f2 1-39
+thesarvo-3/src/auth/groups.ts
+  s_e20d0a1ebc47aa::t_9718be91283383 43-57
+  s_e20d0a1ebc47aa::t_6fd6f9332f21f2 1-42
+thesarvo-3/src/auth/cognitoLambda.ts
+  s_e20d0a1ebc47aa::t_bc0cfec5d85aa9 2-4,9,13-14,23-30,32-37
+thesarvo-3/src/auth/cognitoPreToken.test.ts
+  s_e20d0a1ebc47aa::t_6fd6f9332f21f2 1-43
+thesarvo-3/src/auth/groups.test.ts
+  s_e20d0a1ebc47aa::t_6fd6f9332f21f2 1,3-24,32-33
+  s_e20d0a1ebc47aa::t_9718be91283383 2,25-31
+thesarvo-3/package.json
+  s_e20d0a1ebc47aa::t_9718be91283383 20
+thesarvo-3/scripts/deploy-lambda.sh
+  s_e20d0a1ebc47aa::t_d87018fb0bcf64 33-34,47-48,51-53
+thesarvo-3/scripts/cognito-setup.sh
+  s_e20d0a1ebc47aa::t_4f9c04cffba10c 2-3,18-19,28-30,68,81
+thesarvo-3/scripts/import-members.ts
+  s_e20d0a1ebc47aa::t_9718be91283383 1-69,72-73,75-83
+  s_e20d0a1ebc47aa::t_25551ed310d9d3 70-71,74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "78b432f1bd7a7e4816c4ed1b06fd0805ce0435e2",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
