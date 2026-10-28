@@ -1,0 +1,29 @@
+thesarvo-3/src/guide/privateClient.ts
+  s_e20d0a1ebc47aa::t_989c0629d6be0f 1-2,4-59
+  s_e20d0a1ebc47aa::t_4ffa23df3b2c91 3
+thesarvo-3/src/guide/content/paths.ts
+  s_e20d0a1ebc47aa::t_989c0629d6be0f 49-52,58-59,61
+thesarvo-3/src/routes/g.$.tsx
+  s_e20d0a1ebc47aa::t_4ffa23df3b2c91 4,44,47-66
+  s_e20d0a1ebc47aa::t_fe4be943e4b37d 67
+thesarvo-3/src/guide/privateClient.test.ts
+  s_e20d0a1ebc47aa::t_5a7a871da93c75 1-47
+thesarvo-3/src/guide/server.ts
+  s_e20d0a1ebc47aa::t_989c0629d6be0f 7-8,65-67,72-79,86,93,101,119
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "84a3d0d05f7ed0d4be56a2b72eafc1593781ba4e",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
