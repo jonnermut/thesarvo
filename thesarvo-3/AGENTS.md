@@ -12,6 +12,8 @@ Cognito sign-in. The owner is Jon. The content lives in a separate repo, `../../
 - [docs/plan-guide.md](docs/plan-guide.md) (guide view and editor), [docs/plan-navigation.md](docs/plan-navigation.md)
   (navigation, search, contents pages) and [docs/plan-backend.md](docs/plan-backend.md) (storage, auth, save,
   publish, legacy app endpoints).
+- [docs/plan-mvp.md](docs/plan-mvp.md): everything still needed before cutover (history, restricted pages, extra pages,
+  forum, apps, avatars, add a page) and the cutover plan.
 - [docs/lambda-backend.md](docs/lambda-backend.md) (the Lambda, timings, costs),
   [docs/auth-comparison.md](docs/auth-comparison.md), [docs/live-site-differences.md](docs/live-site-differences.md),
   [docs/todo.md](docs/todo.md), [scripts/aws/README.md](scripts/aws/README.md) (the agent's AWS rights).
