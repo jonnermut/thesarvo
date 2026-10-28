@@ -23,6 +23,7 @@ import type { BuildInfo } from '../src/guide/content/incremental'
 import { publicJsonSource } from '../src/guide/content/json'
 import { buildManifest } from '../src/guide/content/manifest'
 import type { Manifest } from '../src/guide/content/manifest'
+import { robotsTxt, sitemapXml } from '../src/guide/content/sitemap'
 import { siteRecent } from '../src/guide/content/recent'
 import { flatten, GUIDE_PREFIX, guideUrl } from '../src/guide/content/paths'
 import type { IndexNode } from '../src/guide/content/types'
@@ -177,6 +178,12 @@ await Promise.all(
   }),
 )
 console.log(`Rendered ${render.length} pages`)
+
+// Crawlers: a sitemap of the public pages (when VITE_SITE_URL is set) and robots.txt.
+const siteUrl = process.env.VITE_SITE_URL
+const sitemap = sitemapXml(siteUrl, [...paths])
+if (sitemap) await writeFile(path.join(out, 'sitemap.xml'), sitemap)
+await writeFile(path.join(out, 'robots.txt'), robotsTxt(siteUrl))
 
 // The bucket's front door: / goes to the guides.
 await writeFile(

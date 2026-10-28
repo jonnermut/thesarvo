@@ -18,7 +18,7 @@ const dist = process.argv.includes('--dist') ? process.argv[process.argv.indexOf
 const bucket = { name: process.env.BUCKET ?? 'thesarvo-content', region: process.env.AWS_DEFAULT_REGION ?? 'ap-southeast-2' }
 const dry = process.argv.includes('--dry-run')
 /** The site's own prefixes: nothing else in the bucket (images/, uploads/, confluence/) is ever touched. */
-const prefixes = ['assets/', 'g/', 'g-data/', 'auth/', 'account/', 'index.html', 'favicon.svg']
+const prefixes = ['assets/', 'g/', 'g-data/', 'auth/', 'account/', 'index.html', 'favicon.svg', 'robots.txt', 'sitemap.xml']
 const PARALLEL = 16
 
 function credentials(): Credentials {
