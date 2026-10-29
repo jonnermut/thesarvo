@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatJson, guideEntries, guideIdOf, guideToStoredJson, isLocalPage, parseFeed, storedIndex, withLocalPages } from './syncFeed'
+import { formatJson, guideEntries, guideIdOf, guideToStoredJson, indexChanges, isLocalPage, parseFeed, storedIndex, withLocalPages } from './syncFeed'
 import type { StoredIndexNode } from './syncFeed'
 
 const FEED = `<?xml version="1.0"?><updates indexHash="abc" maxLastMod="42">
@@ -45,5 +45,15 @@ describe('sync feed', () => {
     expect(json.endsWith('\n')).toBe(true)
     expect(guideToStoredJson('5', '<guide guidestars="*"><text id="1" class="heading1">Hi</text></guide>')).toBe(json)
     expect(formatJson(JSON.parse(json))).toBe(json)
+  })
+})
+
+describe('indexChanges', () => {
+  const node = (id: string, title: string, children: StoredIndexNode[] = []): StoredIndexNode => ({ id, title, children })
+  it('reports new and renamed pages, not moves or extra pages of ours', () => {
+    const ours = node('1', 'Root', [node('2', 'Stuff', [node('3', 'Manual')]), node('4', 'Old name'), node('9000000001', 'Test')])
+    const live = node('1', 'Root', [node('3', 'Manual'), node('4', 'New name'), node('5', 'Fresh', [node('6', 'Child')])])
+    expect(indexChanges(live, ours)).toEqual(['new in Confluence: 5 Fresh', 'new in Confluence: 6 Child', 'renamed in Confluence: 4 Old name -> New name'])
+    expect(indexChanges(ours, ours)).toEqual([])
   })
 })

@@ -53,6 +53,25 @@ export function withLocalPages(fresh: StoredIndexNode, previous: StoredIndexNode
   return add(fresh, true)
 }
 
+/**
+ * What Confluence's index says that ours does not, once ours is kept by hand (sync.json `indexLocked`: pages moved to Stuff or the Archive, so the
+ * sync must not overwrite it). Compared by page id, only over the pages Confluence lists; where a page sits is ours to decide, so a move is not a change.
+ */
+export function indexChanges(live: StoredIndexNode, ours: StoredIndexNode): string[] {
+  const titles = (root: StoredIndexNode) => {
+    const out = new Map<string, string>()
+    const walk = (n: StoredIndexNode) => (out.set(n.id, n.title), n.children.forEach(walk))
+    walk(root)
+    return out
+  }
+  const mine = titles(ours)
+  const theirs = titles(live)
+  return [
+    ...[...theirs].filter(([id]) => !mine.has(id)).map(([id, t]) => `new in Confluence: ${id} ${t}`),
+    ...[...theirs].filter(([id, t]) => mine.has(id) && mine.get(id) !== t).map(([id, t]) => `renamed in Confluence: ${id} ${mine.get(id)} -> ${t}`),
+  ]
+}
+
 /** The one place content files are formatted: two-space JSON, trailing newline, so reruns never create diffs. */
 export const formatJson = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`
 

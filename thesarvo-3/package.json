@@ -27,6 +27,7 @@
     "package-publisher": "scripts/package-publisher.sh",
     "check-bundle": "tsx scripts/check-bundle.ts",
     "auth-import": "tsx scripts/auth-import.ts",
+    "restructure-index": "tsx scripts/restructure-index.ts",
     "build-redirects": "tsx scripts/build-redirects.ts",
     "import-forum-images": "tsx scripts/import-forum-images.ts"
   },
