@@ -1,0 +1,48 @@
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_f94efc160fbb11 197,246
+thesarvo-3/src/guide/content/classics.test.ts
+  s_e20d0a1ebc47aa::t_ca1fadcb78d5c5 1-6,8-17
+  s_e20d0a1ebc47aa::t_5c053c0f3c7f27 7
+thesarvo-3/src/guide/view/ContentsView.tsx
+  s_e20d0a1ebc47aa::t_0b1a729081929e 101
+thesarvo-3/src/guide/server.ts
+  s_e20d0a1ebc47aa::t_cfc3ca5598d7f9 144
+  s_e20d0a1ebc47aa::t_828dcd464732bd 5,31-35,143
+  s_e20d0a1ebc47aa::t_f46d56a08b09fc 145
+thesarvo-3/scripts/build-site.ts
+  s_e20d0a1ebc47aa::t_cfc3ca5598d7f9 145
+  s_e20d0a1ebc47aa::t_828dcd464732bd 27,144
+thesarvo-3/src/weather/WeatherPanel.tsx
+  s_e20d0a1ebc47aa::t_e455f39b0452f9 5,39-40,50-51,55,67,71-73,81
+  s_e20d0a1ebc47aa::t_0b1a729081929e 41-49
+thesarvo-3/src/guide/content/classics.ts
+  s_e20d0a1ebc47aa::t_ca1fadcb78d5c5 1-20
+thesarvo-3/src/guide/view/HomeCards.tsx
+  s_e20d0a1ebc47aa::t_cfc3ca5598d7f9 1-11,13-39,41-45,51-88,90-97,99,101-112
+  s_e20d0a1ebc47aa::t_d94664ee936124 12
+  s_e20d0a1ebc47aa::t_b5046dc840ab9a 40,46-50,89,98,100
+thesarvo-3/src/routes/g.index.tsx
+  s_e20d0a1ebc47aa::t_b5046dc840ab9a 8,30
+thesarvo-3/src/styles.css
+  s_e20d0a1ebc47aa::t_0b1a729081929e 160-172
+thesarvo-3/src/weather/places.ts
+  s_e20d0a1ebc47aa::t_9c3c78233def35 1-2,4,6-15,19
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_f94efc160fbb11 66,68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fc714c2d36506692e03c6664cc068112dbaf58bb",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
