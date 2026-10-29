@@ -129,7 +129,7 @@ describe('Google account linking', () => {
   type Call = [string, Record<string, unknown>]
   const table = toCognitoTable([user({})], 'pepper')
   const google = (email: string, verified = 'true'): PreSignUpEvent => ({
-    triggerSource: 'PreSignUp_ExternalProvider', userName: 'Google_123', userPoolId: 'pool', request: { userAttributes: { email, email_verified: verified } }, response: {},
+    triggerSource: 'PreSignUp_ExternalProvider', userName: 'google_123', userPoolId: 'pool', request: { userAttributes: { email, email_verified: verified } }, response: {},
   })
   const fake = (users: unknown[], fail?: string) => {
     const calls: Call[] = []

@@ -47,7 +47,7 @@ const verified = (u: PoolUser) => u.Attributes?.some((a) => a.Name === 'email_ve
  * fails the sign-in is refused, since carrying on would leave a second, empty account.
  */
 async function linkGoogle(event: PreSignUpEvent, table: CognitoTable, pepper: string, api: CognitoApi) {
-  const sub = /^Google_(.+)$/.exec(event.userName ?? '')?.[1]
+  const sub = /^google_(.+)$/i.exec(event.userName ?? '')?.[1]
   const pool = event.userPoolId
   const attrs = event.request.userAttributes
   const email = attrs.email ?? ''
