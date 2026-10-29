@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { fetchWeather } from './bom'
 import type { Day, Weather } from './bom'
 import { iconKind, WeatherIcon } from './icons'
-import { bomStationUrl, PLACES, swellUrl } from './places'
+import { bomForecastUrl, bomStationUrl, PLACES, swellUrl } from './places'
 import type { Place } from './places'
 
 const TZ = 'Australia/Hobart'
@@ -36,11 +36,23 @@ export function WeatherPanel() {
   )
 }
 
-function PlaceCard({ place }: { place: Place }) {
+/** One fetch per place for as long as the page lives, so a card that rotates back into view does not ask again. */
+const loaded = new Map<string, Promise<Weather>>()
+function loadWeather(p: Place) {
+  let w = loaded.get(p.name)
+  if (!w) {
+    w = fetchWeather(p)
+    loaded.set(p.name, w)
+    w.catch(() => loaded.delete(p.name))
+  }
+  return w
+}
+
+export function PlaceCard({ place }: { place: Place }) {
   const [state, setState] = useState<State>()
   useEffect(() => {
     let live = true
-    fetchWeather(place).then(
+    loadWeather(place).then(
       (weather) => live && setState({ weather }),
       () => live && setState({ error: true }),
     )
@@ -52,10 +64,13 @@ function PlaceCard({ place }: { place: Place }) {
   const today = weather?.days[0]
   const now = weather?.now
   return (
-    <div className="h-full border border-line bg-card p-3">
+    <div className="card h-full p-3">
       <div className="flex flex-wrap items-baseline justify-between gap-x-3">
         <h3 className="text-[17px] font-semibold text-navy">{place.name}</h3>
         <span className="flex gap-3 text-[13px]">
+          <a href={bomForecastUrl(place)} className="text-link hover:underline" title="The Bureau's forecast for this place">
+            Forecast
+          </a>
           {place.swell && (
             <a href={swellUrl(place)} className="text-link hover:underline" title="Swell and waves on Windy">
               Swell
@@ -63,7 +78,7 @@ function PlaceCard({ place }: { place: Place }) {
           )}
           {now?.stationId && (
             <a href={bomStationUrl(now.stationId)} className="text-link hover:underline" title={`${now.station} weather station, on the Bureau's site`}>
-              BOM station
+              Observations
             </a>
           )}
         </span>

@@ -5,6 +5,7 @@ import { fetchPage } from '#/guide/server'
 import { ContentsView } from '#/guide/view/ContentsView'
 import { ForumFeed } from '#/forum/ui/ForumFeed'
 import { Notices } from '#/forum/ui/Notices'
+import { HomeCards } from '#/guide/view/HomeCards'
 import { WhatsNew } from '#/guide/view/WhatsNew'
 
 export const Route = createFileRoute('/g/')({
@@ -26,6 +27,7 @@ function Home() {
       <div className="mx-auto max-w-6xl px-4 pb-10 sm:px-6">
         <div className="max-w-4xl">
           <Notices />
+          <HomeCards />
           <ContentsView node={index} />
           <WhatsNew />
           <ForumFeed />

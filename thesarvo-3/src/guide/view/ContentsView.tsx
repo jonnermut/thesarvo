@@ -98,7 +98,7 @@ function Card({ node }: { node: IndexNode }) {
   const classics = s ? s.classics.map((c) => [node, c] as const) : (sum?.classics ?? [])
   return (
     // The title link stretches over the whole card; the climb and child links sit above it.
-    <div className="relative h-full border border-line bg-card p-3 transition-colors hover:border-link/60 hover:bg-paper/60">
+    <div className="card card-link relative h-full p-3">
       <div className="flex items-baseline justify-between gap-3">
         <Link to={guideUrl(node)} className="text-[17px] font-semibold text-link after:absolute after:inset-0 hover:underline">
           {node.title}

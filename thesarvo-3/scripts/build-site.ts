@@ -24,6 +24,7 @@ import { publicJsonSource } from '../src/guide/content/json'
 import { buildManifest } from '../src/guide/content/manifest'
 import type { Manifest } from '../src/guide/content/manifest'
 import { robotsTxt, sitemapXml } from '../src/guide/content/sitemap'
+import { siteClassics } from '../src/guide/content/classics'
 import { siteRecent } from '../src/guide/content/recent'
 import { flatten, GUIDE_PREFIX, guideUrl } from '../src/guide/content/paths'
 import type { IndexNode } from '../src/guide/content/types'
@@ -140,6 +141,8 @@ const search = partial
 await writeJson('manifest.json', { ...(await buildManifest(index, guideOf)), search } satisfies Manifest)
 // What's new on the home page: every build rewrites it, from every guide's history, since any page's change belongs in it.
 await writeJson('recent.json', await siteRecent(source, index))
+// The three-star climbs the home page picks from: every build rewrites it, as any guide may have gained one.
+await writeJson('classics.json', await siteClassics({ getGuide: guideOf }, index))
 // People's pictures (`npm run import-avatars`), a small folder copied whole.
 await cp(path.join(dir, 'avatars'), path.join(data, 'avatars'), { recursive: true }).catch(() => undefined)
 await writeFile(path.join(data, 'avatars.json'), await readFile(path.join(dir, 'avatars.json'), 'utf8').catch(() => '{}'))
