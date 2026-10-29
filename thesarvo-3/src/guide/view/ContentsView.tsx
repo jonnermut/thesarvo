@@ -124,6 +124,18 @@ function Card({ node }: { node: IndexNode }) {
           ))}
         </ul>
       )}
+      {!!s?.sections && (
+        <p className="relative mt-2 text-[13px] leading-relaxed text-muted">
+          {s.sections.map(([anchor, text], i) => (
+            <span key={anchor}>
+              {i > 0 && ', '}
+              <Link to={guideUrl(node)} hash={anchor} className="text-link hover:underline">
+                {text}
+              </Link>
+            </span>
+          ))}
+        </p>
+      )}
       {node.children.length > 0 && (
         <p className="relative mt-2 text-[13px] leading-relaxed text-muted">
           {node.children.map((c, i) => (

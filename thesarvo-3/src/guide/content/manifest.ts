@@ -1,6 +1,6 @@
 import type { Climb, Guide } from '#/guide/model/types'
 import type { SearchFiles } from '#/guide/search/shard'
-import { nodeAnchors } from '#/guide/view/contents'
+import { guideContents, nodeAnchors } from '#/guide/view/contents'
 import { routeStats } from '#/guide/view/routeStats'
 import { findByPath, flatten } from './paths'
 import type { IndexNode } from './types'
@@ -21,6 +21,8 @@ export type GuideStats = {
   classics: Classic[]
   /** Where to put the crag on a map: the first GPS point, as latitude and longitude. */
   pin?: [number, number]
+  /** The headings of a guide without climbs, for its card: anchor and text. */
+  sections?: [anchor: string, text: string][]
 }
 
 export type Classic = [anchor: string, name: string, grade: string, stars: number]
@@ -57,6 +59,7 @@ export function guideStats(guide: Guide): GuideStats {
     .slice(0, CLASSICS)
   const point = guide.nodes.flatMap((n) => (n.type === 'gps' ? n.points : [])).map((p) => [Number(p.latitude), Number(p.longitude)] as [number, number])
     .find(([lat, lng]) => lat && lng && !Number.isNaN(lat) && !Number.isNaN(lng))
+  const sections = guideContents(guide.nodes).filter((e) => e.kind === 'heading' && e.anchor !== anchors[0]).map((e): [string, string] => [e.anchor, e.text])
   return {
     total: stats.total,
     problems: stats.problems,
@@ -67,6 +70,7 @@ export function guideStats(guide: Guide): GuideStats {
     gps: guide.nodes.some((n) => n.type === 'gps' && (n.points.length > 0 || n.lines.length > 0)),
     classics,
     ...(point && { pin: point }),
+    ...(!stats.total && sections.length > 0 && { sections }),
   }
 }
 

@@ -11,6 +11,8 @@ import { guideDescription, guideImage, pageDescription, pageHead } from '#/guide
 import { GuideView } from '#/guide/view/GuideView'
 import { PrevNext } from '#/guide/view/PrevNext'
 import { useFullWidth, WidthToggle, widthClass } from '#/guide/view/width'
+import { WEATHER_PAGE_ID } from '#/weather/places'
+import { WeatherPanel } from '#/weather/WeatherPanel'
 
 // The editor is its own chunk: readers never download it. The history too, until someone opens it.
 const Editor = lazy(() => import('#/guide/edit/Editor'))
@@ -121,6 +123,11 @@ function GuidePage() {
       <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
         <h1 className="border-b border-line text-[28px] font-bold text-navy">{node.title}</h1>
         {/* Cleaned and allow-listed when synced (see pageBody). */}
+        {node.id === WEATHER_PAGE_ID && (
+          <ClientOnly fallback={null}>
+            <WeatherPanel />
+          </ClientOnly>
+        )}
         {body && <div className="page-prose mt-4" dangerouslySetInnerHTML={{ __html: body }} />}
         <ContentsView node={node} />
       </div>

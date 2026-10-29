@@ -25,3 +25,12 @@ it('maps titles and ids to the new addresses, and marks guides for attachments',
     't:thesarvo/apsley edge': '/g/south-east/apsley-edge/',
   })
 })
+
+it('sends the old Contact, Contribute, Copyright and privacy pages to their sections of About', () => {
+  const root = node('414', '', false, [node('296', 'more/about-thesarvo-com', false)])
+  const out = redirectEntries(root, new Map())
+  expect(out['p:407']).toBe('/g/more/about-thesarvo-com/#contact')
+  expect(out['t:thesarvo/contribute']).toBe('/g/more/about-thesarvo-com/#contributing')
+  expect(out['p:398327814']).toBe('/g/more/about-thesarvo-com/#privacy')
+  expect(redirectEntries(node('414', '', false), new Map())['p:407']).toBeUndefined()
+})

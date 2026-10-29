@@ -26,6 +26,13 @@ describe('guideStats', () => {
     })
   })
 
+  it('lists the headings of a guide without climbs, for its card', () => {
+    const text = (id: string, cls: string, t: string) => ({ type: 'text', id, cls, text: t })
+    const guide = { id: '1', nodes: [text('1', 'heading1', 'Intro'), text('2', 'heading3', 'Crag Access'), text('3', 'text', 'Body'), text('4', 'heading3', 'Survival Skills')] } as unknown as Guide
+    expect(guideStats(guide).sections).toEqual([['t-2', 'Crag Access'], ['t-4', 'Survival Skills']])
+    expect(guideStats({ id: '1', nodes: [text('1', 'heading3', 'A'), climb('20')] } as unknown as Guide).sections).toBeUndefined()
+  })
+
   it('pins the guide at its first usable GPS point', () => {
     const gps = { type: 'gps', id: '9', lines: [], points: [{ latitude: '', longitude: '' }, { latitude: '-42.6', longitude: '147.4' }] }
     expect(guideStats({ id: '1', nodes: [gps] } as unknown as Guide).pin).toEqual([-42.6, 147.4])
