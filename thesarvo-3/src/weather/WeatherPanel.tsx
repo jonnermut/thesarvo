@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { fetchWeather } from './bom'
 import type { Day, Weather } from './bom'
-import { bomPlaceUrl, PLACES } from './places'
+import { iconKind, WeatherIcon } from './icons'
+import { bomStationUrl, PLACES, swellUrl } from './places'
 import type { Place } from './places'
 
 const TZ = 'Australia/Hobart'
@@ -54,15 +55,24 @@ function PlaceCard({ place }: { place: Place }) {
     <div className="h-full border border-line bg-card p-3">
       <div className="flex flex-wrap items-baseline justify-between gap-x-3">
         <h3 className="text-[17px] font-semibold text-navy">{place.name}</h3>
-        <a href={bomPlaceUrl(place)} className="text-[13px] text-link hover:underline">
-          BOM forecast
-        </a>
+        <span className="flex gap-3 text-[13px]">
+          {place.swell && (
+            <a href={swellUrl(place)} className="text-link hover:underline" title="Swell and waves on Windy">
+              Swell
+            </a>
+          )}
+          {now?.stationId && (
+            <a href={bomStationUrl(now.stationId)} className="text-link hover:underline" title={`${now.station} weather station, on the Bureau's site`}>
+              BOM station
+            </a>
+          )}
+        </span>
       </div>
       <p className="text-[13px] text-muted">{place.note}</p>
       {!state && <p className="mt-3 text-sm text-muted">Loading…</p>}
       {state && 'error' in state && (
         <p className="mt-3 text-sm text-muted">
-          The Bureau's forecast could not be loaded. Try its <a className="text-link hover:underline" href={bomPlaceUrl(place)}>own page</a>.
+          The Bureau's forecast could not be loaded. Try <a className="text-link hover:underline" href="https://www.bom.gov.au/tas/forecasts/map.shtml">its forecast map</a>.
         </p>
       )}
       {now && (
@@ -75,10 +85,13 @@ function PlaceCard({ place }: { place: Place }) {
         </p>
       )}
       {today && (
-        <p className="mt-2 text-sm">
-          <strong>Today:</strong> {today.text || today.short}
-          {today.rainChance !== null && <span className="text-muted"> Rain chance {today.rainChance}%.</span>}
-        </p>
+        <div className="mt-2 flex gap-2 text-sm">
+          <TodayIcon descriptor={today.icon} />
+          <p>
+            <strong>Today:</strong> {today.text || today.short}
+            {today.rainChance !== null && <span className="text-muted"> Rain chance {today.rainChance}%.</span>}
+          </p>
+        </div>
       )}
       {weather && weather.days.length > 1 && (
         <ol className="mt-3 grid grid-cols-7 gap-1 text-center text-xs" aria-label="The week ahead">
@@ -91,10 +104,17 @@ function PlaceCard({ place }: { place: Place }) {
   )
 }
 
+function TodayIcon({ descriptor }: { descriptor: string }) {
+  const kind = iconKind(descriptor)
+  return kind ? <WeatherIcon kind={kind} className="mt-0.5 size-9 shrink-0" /> : null
+}
+
 function DayCell({ day }: { day: Day }) {
+  const kind = iconKind(day.icon)
   return (
     <li className="min-w-0 rounded bg-paper px-0.5 py-1" title={`${day.short} ${day.text}`}>
       <div className="font-semibold">{weekday(day.date)}</div>
+      {kind && <WeatherIcon kind={kind} className="mx-auto my-0.5 size-6" />}
       <div>{deg(day.max)}</div>
       <div className="text-muted">{deg(day.min)}</div>
       <div className={day.rainChance !== null && day.rainChance >= 50 ? 'font-semibold text-link' : 'text-muted'}>{day.rainChance === null ? '' : `${day.rainChance}%`}</div>

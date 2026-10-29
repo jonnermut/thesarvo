@@ -3,8 +3,8 @@ import type { Place } from './places'
 
 const API = 'https://api.weather.bom.gov.au/v1/locations'
 
-export type Day = { date: string; min: number | null; max: number | null; short: string; text: string; rainChance: number | null; rainMax: number | null; fire: string }
-export type Observation = { temp: number | null; feels: number | null; wind: number | null; windDir: string; gust: number | null; rain: number | null; station: string; at: string }
+export type Day = { date: string; icon: string; min: number | null; max: number | null; short: string; text: string; rainChance: number | null; rainMax: number | null; fire: string }
+export type Observation = { temp: number | null; feels: number | null; wind: number | null; windDir: string; gust: number | null; rain: number | null; station: string; stationId: string; at: string }
 export type Weather = { days: Day[]; now: Observation | null }
 
 type Json = Record<string, unknown>
@@ -21,6 +21,7 @@ export function parseDays(body: unknown): Day[] {
     const rain = obj(day.rain)
     return {
       date: str(day.date),
+      icon: str(day.icon_descriptor),
       min: num(day.temp_min),
       max: num(day.temp_max),
       short: str(day.short_text),
@@ -44,6 +45,7 @@ export function parseObservation(body: unknown): Observation | null {
     gust: num(obj(d.gust).speed_kilometre),
     rain: num(d.rain_since_9am),
     station: str(obj(d.station).name),
+    stationId: str(obj(d.station).bom_id),
     at: str(obj(root.metadata).observation_time),
   }
 }
