@@ -1,0 +1,21 @@
+thesarvo-3/scripts/aws/README.md
+  s_e20d0a1ebc47aa::t_42507926afc413 8
+thesarvo-3/scripts/aws/agent-policy.json
+  s_e20d0a1ebc47aa::t_a769264f5cb26c 53,56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1cf192c990e7ff1375f275a55665e596a677eff2",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
