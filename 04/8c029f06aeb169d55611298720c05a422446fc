@@ -1,0 +1,22 @@
+thesarvo-3/src/guide/content/edge.test.ts
+  s_e20d0a1ebc47aa::t_eb8a32c86993ea 7,12,31-34
+  s_e20d0a1ebc47aa::t_98668decc336e6 35
+thesarvo-3/scripts/edge/viewer-request.js
+  s_e20d0a1ebc47aa::t_2e44e2035e51c2 22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "048c029f06aeb169d55611298720c05a422446fc",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
