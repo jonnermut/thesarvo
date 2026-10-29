@@ -1,0 +1,28 @@
+thesarvo-3/scripts/cognito-setup.sh
+  s_e20d0a1ebc47aa::t_67c18a46404f97 15
+thesarvo-3/scripts/edge/viewer-request.js
+  s_e20d0a1ebc47aa::t_747fad81df13ba 21-25
+thesarvo-3/scripts/cloudfront-setup.sh
+  s_e20d0a1ebc47aa::t_747fad81df13ba 76-78
+  s_e20d0a1ebc47aa::t_67c18a46404f97 118
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_4ae07ff0a02c71 50-51
+thesarvo-3/docs/plan-mvp.md
+  s_e20d0a1ebc47aa::t_69852a69e22598 17,577-580
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6b6a0401c8bd4ea909bcb7be369c7cdfb66ae46f",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
