@@ -54,7 +54,7 @@ function NoticeCard({ n }: { n: Notice }) {
             <div ref={text} style={clamped ? { maxHeight: `${CLAMP_REM}rem` } : undefined} className={clamped ? 'overflow-hidden' : undefined}>
               <Body html={n.html} text={n.text} />
             </div>
-            {clamped && <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-linear-to-t from-[#fdf3e3] to-transparent" />}
+            {clamped && <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-linear-to-t from-card to-transparent" />}
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
             {long && (
