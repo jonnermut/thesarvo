@@ -23,6 +23,15 @@ const SHOWN = 3
 
 const plural = (n: number, word: string) => `${n.toLocaleString()} ${word}${n === 1 ? '' : 's'}`
 
+/** "2,518 climbs in 57 guides" for what lies beneath a page; undefined when nothing does. The totals come with the tree. */
+export function contentsTotals(node: IndexNode) {
+  const total = (node.count ?? 0) - (node.stats?.total ?? 0)
+  if (total <= 0) return undefined
+  const below = flatten(node).slice(1).filter((n) => n.stats?.total)
+  const boulders = below.length > 0 && below.every((n) => n.stats!.problems)
+  return `${plural(total, boulders ? 'problem' : 'climb')} in ${plural((node.guides ?? 0) - (node.stats?.total ? 1 : 0), 'guide')}`
+}
+
 /**
  * What lies beneath a page, replacing Confluence's contents macro: a card per child with its
  * size, grade spread and best climbs, and a map of the crags. Rendered with the stats the page was
@@ -45,29 +54,19 @@ export function ContentsView({ node, after, bare }: { node: IndexNode; after?: R
   const below = useMemo(() => flatten(current).slice(1), [current])
   if (!current.children.length) return null
 
-  // Totals come with the tree; `below` may stop short of the deepest pages until the manifest arrives.
-  const own = current.stats?.total ? 1 : 0
-  const total = (current.count ?? 0) - (current.stats?.total ?? 0)
-  const guides = (current.guides ?? 0) - own
   const withStats = below.filter((n) => n.stats?.total)
-  const boulders = withStats.length > 0 && withStats.every((n) => n.stats!.problems)
   const legends = [...new Set(withStats.map((n) => n.stats!.problems))]
 
-  const totals = total > 0 && (
-    <p className="text-sm text-muted">
-      {plural(total, boulders ? 'problem' : 'climb')} in {plural(guides, 'guide')}
-    </p>
-  )
+  const totals = contentsTotals(current)
 
   return (
     <section aria-label="Contents" className={`space-y-4 ${bare || !current.isGuide ? 'mt-6' : 'mt-10'}`}>
       {!bare && current.isGuide && (
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 border-b border-line">
           <h2 className="text-2xl font-bold text-navy">Also here</h2>
-          {totals}
+          {totals && <p className="text-sm text-muted">{totals}</p>}
         </div>
       )}
-      {!bare && !current.isGuide && total > 0 && <div className="flex justify-end">{totals}</div>}
       <ul className="grid gap-3 sm:grid-cols-2">
         {current.children.map((child, i) => (
           <Fragment key={child.id}>

@@ -4,7 +4,7 @@ import { RequireSignIn } from '#/auth/RequireSignIn'
 import { signIn, useUser } from '#/auth/session'
 import { Breadcrumbs } from '#/components/Breadcrumbs'
 import { fetchGuide, fetchPage, fetchPageBody } from '#/guide/server'
-import { ContentsView } from '#/guide/view/ContentsView'
+import { ContentsView, contentsTotals } from '#/guide/view/ContentsView'
 import { useJustSaved } from '#/guide/justSaved'
 import { addRecent } from '#/guide/recent'
 import { guideDescription, guideImage, pageDescription, pageHead } from '#/guide/seo'
@@ -117,11 +117,15 @@ function GuidePage() {
       </>
     )
   // A page of prose, a list of what is beneath it, or both.
+  const totals = contentsTotals(node)
   return (
     <>
       <Breadcrumbs trail={trail} current={node} width="max-w-4xl px-4 sm:px-6" />
       <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
-        <h1 className="border-b border-line text-[28px] font-bold text-navy">{node.title}</h1>
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 border-b border-line">
+          <h1 className="text-[28px] font-bold text-navy">{node.title}</h1>
+          {!node.isGuide && totals && <p className="text-sm text-muted">{totals}</p>}
+        </div>
         {/* Cleaned and allow-listed when synced (see pageBody). */}
         {node.id === WEATHER_PAGE_ID && (
           <ClientOnly fallback={null}>
