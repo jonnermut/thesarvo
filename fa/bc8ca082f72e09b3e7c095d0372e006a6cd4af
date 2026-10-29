@@ -1,0 +1,29 @@
+thesarvo-3/src/guide/view/kml.test.ts
+  s_e20d0a1ebc47aa::t_fab73ee25c35b1 4,63-68
+  s_e20d0a1ebc47aa::t_cc93cf2d486f49 69-70
+thesarvo-3/src/guide/view/kml.ts
+  s_e20d0a1ebc47aa::t_fab73ee25c35b1 63-80,82-83,92-94,99
+thesarvo-3/src/guide/view/ContentsView.tsx
+  s_e20d0a1ebc47aa::t_fab73ee25c35b1 11,222-231
+thesarvo-3/src/guide/view/GpsBlock.tsx
+  s_e20d0a1ebc47aa::t_fab73ee25c35b1 4,11-12,15,20-22,65,71-78
+  s_e20d0a1ebc47aa::t_072ab4e0b21d64 79
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_c652d5a06e1747 188
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fabc8ca082f72e09b3e7c095d0372e006a6cd4af",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
