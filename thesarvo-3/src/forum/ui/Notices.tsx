@@ -5,7 +5,7 @@ import type { Notice } from '../types'
 import { Body } from './Body'
 
 /** A notice's text is cut to about this tall (rem) until "Read more" is pressed, so a long one cannot push the guides down the page. */
-const CLAMP_REM = 9
+const CLAMP_REM = 6.3
 
 /** Posts an admin marked as notices, at the top of the home page: title and text, with a link to the post and its comments. */
 export function Notices() {
@@ -42,9 +42,8 @@ function NoticeCard({ n }: { n: Notice }) {
       <div className="flex items-start gap-3">
         <span aria-hidden className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-full bg-amber text-white shadow-sm">
           <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1Z" />
-            <path d="M15.5 8.5a5 5 0 0 1 0 7" />
-            <path d="M18.5 5.5a9 9 0 0 1 0 13" />
+            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
           </svg>
         </span>
         <div className="min-w-0 flex-1">
