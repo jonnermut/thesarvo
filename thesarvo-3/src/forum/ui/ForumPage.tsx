@@ -10,25 +10,27 @@ const field = 'w-full rounded-md border border-line bg-white px-3 py-2 focus:bor
 const button = 'rounded-md bg-brand px-4 py-2 text-white disabled:opacity-50'
 const idsOf = (a: Author) => [a.sub, a.key].filter((x): x is string => !!x)
 
-function Who({ author, at }: { author: Author; at: string }) {
+function Who({ author, at, edited }: { author: Author; at: string; edited?: string }) {
   return (
     <div className="flex items-center gap-2 text-sm text-muted">
       <Avatar ids={idsOf(author)} name={author.name} className="size-6 text-xs" />
       <span className="font-medium text-ink">{author.name}</span>
       <time dateTime={at}>{when(at)}</time>
+      {edited && <span title={`Edited ${when(edited)}`}>(edited)</span>}
     </div>
   )
 }
 
 /** A text box with a button; clears itself after a successful send. */
-function Compose({ label, rows = 4, title, onSend, onCancel }: { label: string; rows?: number; title?: boolean; onSend: (text: string, title: string) => Promise<string | null>; onCancel?: () => void }) {
-  const [text, setText] = useState('')
-  const [head, setHead] = useState('')
+function Compose({ label, rows = 4, title, initial, onSend, onCancel }: { label: string; rows?: number; title?: boolean; initial?: { text: string; title?: string }; onSend: (text: string, title: string) => Promise<string | null>; onCancel?: () => void }) {
+  const [text, setText] = useState(initial?.text ?? '')
+  const [head, setHead] = useState(initial?.title ?? '')
   const [state, setState] = useState<{ busy?: boolean; error?: string }>({})
   const send = async () => {
     setState({ busy: true })
     const error = await onSend(text, head)
     if (error) setState({ error })
+    else if (initial) setState({})
     else {
       setText('')
       setHead('')
@@ -60,23 +62,49 @@ function Compose({ label, rows = 4, title, onSend, onCancel }: { label: string; 
   )
 }
 
-function CommentNode({ c, kids, depth, reply, setReply, send, admin, hide }: { c: Comment; kids: Map<string | null, Comment[]>; depth: number; reply: string | null; setReply: (id: string | null) => void; send: (parent: string | null, text: string) => Promise<string | null>; admin: boolean; hide: (c: Comment) => void }) {
+/** What the signed-in person can do to their own posts and comments. `editing` is `'post'` or a comment's id. */
+type Own = { sub: string; editing: string | null; setEditing: (id: string | null) => void; edit: (comment: string | null, text: string, title?: string) => Promise<string | null>; remove: (comment: string | null) => void }
+
+/** Edit and Delete for something the person wrote here (imported posts have no plain text to edit). */
+function OwnButtons({ id, author, plain, own }: { id: string; author: Author; plain: boolean; own: Own }) {
+  if (!plain || author.sub !== own.sub) return null
+  return (
+    <>
+      <button type="button" onClick={() => own.setEditing(own.editing === id ? null : id)} className="text-link hover:underline">
+        Edit
+      </button>
+      <button type="button" onClick={() => own.remove(id === 'post' ? null : id)} className="text-muted hover:underline">
+        Delete
+      </button>
+    </>
+  )
+}
+
+function CommentNode({ c, kids, depth, reply, setReply, send, admin, hide, own }: { c: Comment; kids: Map<string | null, Comment[]>; depth: number; reply: string | null; setReply: (id: string | null) => void; send: (parent: string | null, text: string) => Promise<string | null>; admin: boolean; hide: (c: Comment) => void; own: Own }) {
   return (
     <li className={depth ? 'mt-3 border-l-2 border-line pl-3' : 'mt-4'}>
       <div className={c.hidden ? 'opacity-50' : ''}>
-        <Who author={c.author} at={c.at} />
-        <div className="mt-1">
-          <Body html={c.html} text={c.text} />
-        </div>
+        <Who author={c.author} at={c.at} edited={c.edited} />
+        {own.editing === c.id ? (
+          <div className="mt-1">
+            <Compose label="Save" rows={3} initial={{ text: c.text ?? '' }} onSend={(t) => own.edit(c.id, t)} onCancel={() => own.setEditing(null)} />
+          </div>
+        ) : (
+          <div className="mt-1">
+            <Body html={c.html} text={c.text} />
+          </div>
+        )}
         <div className="mt-1 flex gap-3 text-sm">
           <button type="button" onClick={() => setReply(reply === c.id ? null : c.id)} className="text-link hover:underline">
             Reply
           </button>
-          {admin && (
+          <OwnButtons id={c.id} author={c.author} plain={c.text !== undefined} own={own} />
+          {admin && !c.removed && (
             <button type="button" onClick={() => hide(c)} className="text-muted hover:underline">
               {c.hidden ? 'Show' : 'Hide'}
             </button>
           )}
+          {c.removed && <span className="text-muted">Deleted by its author</span>}
         </div>
       </div>
       {reply === c.id && (
@@ -87,7 +115,7 @@ function CommentNode({ c, kids, depth, reply, setReply, send, admin, hide }: { c
       {!!kids.get(c.id)?.length && (
         <ul>
           {kids.get(c.id)!.map((k) => (
-            <CommentNode key={k.id} c={k} kids={kids} depth={Math.min(depth + 1, 4)} reply={reply} setReply={setReply} send={send} admin={admin} hide={hide} />
+            <CommentNode key={k.id} c={k} kids={kids} depth={Math.min(depth + 1, 4)} reply={reply} setReply={setReply} send={send} admin={admin} hide={hide} own={own} />
           ))}
         </ul>
       )}
@@ -152,6 +180,7 @@ function ThreadView({ id, back }: { id: string; back: () => void }) {
   const [thread, setThread] = useState<Thread | null>(null)
   const [error, setError] = useState('')
   const [reply, setReply] = useState<string | null>(null)
+  const [editing, setEditing] = useState<string | null>(null)
   useEffect(() => {
     let live = true
     void getThread(id).then((a) => live && (a.ok ? setThread(a.value) : setError(a.message)))
@@ -179,6 +208,21 @@ function ThreadView({ id, back }: { id: string; back: () => void }) {
     const a = await post({ action: 'hide', thread: id, comment: c.id, hidden: !c.hidden })
     if (a.ok) setThread(a.value)
   }
+  const edit = async (comment: string | null, text: string, title?: string) => {
+    const a = await post({ action: 'edit', thread: id, ...(comment && { comment }), ...(title !== undefined && { title }), text })
+    if (!a.ok) return a.message
+    setThread(a.value)
+    setEditing(null)
+    return null
+  }
+  const remove = async (comment: string | null) => {
+    if (!confirm(comment ? 'Delete your comment?' : 'Delete your post?')) return
+    const a = await post({ action: 'remove', thread: id, ...(comment && { comment }) })
+    if (!a.ok) return setError(a.message)
+    if (comment) setThread(a.value)
+    else back()
+  }
+  const own: Own = { sub: user?.sub ?? '', editing, setEditing, edit, remove: (c) => void remove(c) }
   return (
     <article>
       <button type="button" onClick={back} className="text-sm text-link hover:underline">
@@ -186,10 +230,19 @@ function ThreadView({ id, back }: { id: string; back: () => void }) {
       </button>
       <h1 className="mt-2 text-2xl font-bold text-navy">{thread.title}</h1>
       <div className="mt-2">
-        <Who author={thread.author} at={thread.at} />
+        <Who author={thread.author} at={thread.at} edited={thread.edited} />
       </div>
-      <div className="mt-3">
-        <Body html={thread.html} text={thread.text} />
+      {editing === 'post' ? (
+        <div className="mt-3">
+          <Compose label="Save" title rows={6} initial={{ text: thread.text ?? '', title: thread.title }} onSend={(t, h) => edit(null, t, h)} onCancel={() => setEditing(null)} />
+        </div>
+      ) : (
+        <div className="mt-3">
+          <Body html={thread.html} text={thread.text} />
+        </div>
+      )}
+      <div className="mt-2 flex gap-3 text-sm">
+        <OwnButtons id="post" author={thread.author} plain={thread.text !== undefined} own={own} />
       </div>
       {user?.admin && !thread.group && <NoticeControls thread={thread} onChange={setThread} />}
       <h2 className="mt-8 border-b border-line pb-1 text-lg font-bold text-navy">
@@ -197,7 +250,7 @@ function ThreadView({ id, back }: { id: string; back: () => void }) {
       </h2>
       <ul>
         {(kids.get(null) ?? []).map((c) => (
-          <CommentNode key={c.id} c={c} kids={kids} depth={0} reply={reply} setReply={setReply} send={send} admin={!!user?.admin} hide={hide} />
+          <CommentNode key={c.id} c={c} kids={kids} depth={0} reply={reply} setReply={setReply} send={send} admin={!!user?.admin} hide={hide} own={own} />
         ))}
       </ul>
       <div className="mt-6">

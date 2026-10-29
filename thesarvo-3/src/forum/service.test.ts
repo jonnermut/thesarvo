@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { activeNotices, addComment, createThread, listThreads, readThread, recentThreads, Refused, setHidden, setNotice } from './service'
+import { activeNotices, addComment, createThread, editPost, listThreads, readThread, recentThreads, Refused, removePost, setHidden, setNotice } from './service'
 import type { Viewer } from './service'
 import type { ForumStore } from './store'
 import type { Thread, ThreadMeta } from './types'
@@ -126,5 +126,43 @@ describe('forum', () => {
     const thread: Thread = { id: '9', title: 'CCT', author: { sub: 'c', name: 'C' }, at: '2010-01-01T00:00:00Z', text: 'x', comments: [], group: 'cct-members' }
     const store = memory({ 'threads/9.json': thread })
     await expect(setNotice(store, root, { thread: '9', until: new Date(Date.now() + 86_400_000).toISOString() })).rejects.toThrow('restricted')
+  })
+
+  it('lets people edit their own post and comments, and nobody else’s', async () => {
+    const store = memory()
+    const t = await createThread(store, ann, { title: 'Old', text: 'old text' })
+    const c = (await addComment(store, bob, { thread: t.id, text: 'mine' })).comments[0]
+    const edited = await editPost(store, ann, { thread: t.id, title: ' New ', text: 'new text' }, new Date('2026-02-01T00:00:00Z'))
+    expect(edited).toMatchObject({ title: 'New', text: 'new text', edited: '2026-02-01T00:00:00.000Z' })
+    expect((await listThreads(store, ann))[0].title).toBe('New')
+    expect((await editPost(store, bob, { thread: t.id, comment: c.id, text: 'better' })).comments[0]).toMatchObject({ text: 'better' })
+    await expect(editPost(store, bob, { thread: t.id, text: 'hijack' })).rejects.toThrow('your own posts')
+    await expect(editPost(store, ann, { thread: t.id, comment: c.id, text: 'hijack' })).rejects.toThrow('your own comments')
+    await expect(editPost(store, ann, { thread: t.id, text: ' ' })).rejects.toBeInstanceOf(Refused)
+  })
+
+  it('cannot edit an imported post', async () => {
+    const old: Thread = { id: '100', title: 'Old', author: { sub: 'confluence:jo', name: 'Jo' }, at: '2020-01-01T00:00:00Z', html: '<p>x</p>', comments: [] }
+    const store = memory({ 'threads/100.json': old })
+    await expect(editPost(store, { ...ann, sub: 'confluence:jo' }, { thread: '100', text: 'y' })).rejects.toThrow('your own posts')
+  })
+
+  it('lets people delete their own comment, and their post until others reply', async () => {
+    const store = memory()
+    const t = await createThread(store, ann, { title: 'T', text: 't' })
+    const withBob = await addComment(store, bob, { thread: t.id, text: 'hello' })
+    await expect(removePost(store, bob, { thread: t.id, comment: withBob.comments[0].id })).resolves.toBeTruthy()
+    expect((await readThread(store, ann, t.id))?.comments).toEqual([])
+    expect((await readThread(store, root, t.id))?.comments[0]).toMatchObject({ hidden: true, removed: true })
+    await expect(setHidden(store, root, { thread: t.id, comment: withBob.comments[0].id, hidden: false })).rejects.toThrow('deleted')
+    await expect(removePost(store, ann, { thread: t.id, comment: withBob.comments[0].id })).rejects.toThrow('No such comment')
+    const second = await addComment(store, bob, { thread: t.id, text: 'again' })
+    await expect(removePost(store, ann, { thread: t.id })).rejects.toThrow('Others have commented')
+    await removePost(store, bob, { thread: t.id, comment: second.comments[1].id })
+    await expect(removePost(store, bob, { thread: t.id })).rejects.toThrow('your own posts')
+    await removePost(store, ann, { thread: t.id })
+    expect(await readThread(store, ann, t.id)).toBeNull()
+    expect(await listThreads(store, ann)).toEqual([])
+    expect(await recentThreads(store)).toEqual([])
   })
 })

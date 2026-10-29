@@ -49,3 +49,34 @@ it('shows a post with its comments and sends a reply', async () => {
   expect(api.post).toHaveBeenCalledWith({ action: 'comment', thread: 'n1', parent: null, text: 'Agreed' })
   expect(screen.getByText('Agreed')).toBeTruthy()
 })
+
+it('lets you edit and delete your own comment, and nobody else’s', async () => {
+  session.user = { ...user, sub: 'b' }
+  api.getThread.mockResolvedValue({ ok: true, value: { ...thread, comments: [{ ...thread.comments[0], id: 'c1' }, { id: 'c2', parent: null, author: { sub: 'z', name: 'Zed' }, at: '2026-10-03T00:00:00Z', text: 'Not mine' }] } })
+  render(<ForumPage thread="n1" go={() => {}} />)
+  await act(async () => {})
+  expect(screen.getAllByRole('button', { name: 'Edit' })).toHaveLength(1)
+  api.post.mockResolvedValue({ ok: true, value: { ...thread, comments: [{ ...thread.comments[0], text: 'Nicer', edited: '2026-10-04T00:00:00Z' }] } })
+  fireEvent.click(screen.getByRole('button', { name: 'Edit' }))
+  fireEvent.change(screen.getByLabelText('Save'), { target: { value: 'Nicer' } })
+  await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Save' })))
+  expect(api.post).toHaveBeenCalledWith({ action: 'edit', thread: 'n1', comment: 'c1', text: 'Nicer' })
+  expect(screen.getByText('Nicer')).toBeTruthy()
+  vi.stubGlobal('confirm', () => true)
+  api.post.mockResolvedValue({ ok: true, value: { ...thread, comments: [] } })
+  await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Delete' })))
+  expect(api.post).toHaveBeenLastCalledWith({ action: 'remove', thread: 'n1', comment: 'c1' })
+  expect(screen.queryByText('Nicer')).toBeNull()
+})
+
+it('lets you delete your own post and goes back', async () => {
+  session.user = { ...user, sub: 'a' }
+  const back = vi.fn()
+  vi.stubGlobal('confirm', () => true)
+  api.post.mockResolvedValue({ ok: true, value: { ...thread, hidden: true } })
+  render(<ForumPage thread="n1" go={back} />)
+  await act(async () => {})
+  await act(async () => fireEvent.click(screen.getAllByRole('button', { name: 'Delete' })[0]))
+  expect(api.post).toHaveBeenCalledWith({ action: 'remove', thread: 'n1' })
+  expect(back).toHaveBeenCalled()
+})

@@ -1,4 +1,4 @@
-import { act, cleanup, render, screen } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, expect, it, vi } from 'vitest'
 import { Notices } from './Notices'
 
@@ -26,4 +26,23 @@ it('shows nothing without notices', async () => {
   const { container } = render(<Notices />)
   await act(async () => {})
   expect(container.textContent).toBe('')
+})
+
+it('cuts a long notice short until Read more is pressed', async () => {
+  const height = vi.spyOn(HTMLElement.prototype, 'scrollHeight', 'get').mockReturnValue(900)
+  list.mockResolvedValue([notice('n1', '2999-01-01T00:00:00Z')])
+  render(<Notices />)
+  await act(async () => {})
+  const more = screen.getByRole('button', { name: 'Read more' })
+  expect(more.getAttribute('aria-expanded')).toBe('false')
+  fireEvent.click(more)
+  expect(screen.getByRole('button', { name: 'Show less' }).getAttribute('aria-expanded')).toBe('true')
+  height.mockRestore()
+})
+
+it('has no Read more for a short notice', async () => {
+  list.mockResolvedValue([notice('n1', '2999-01-01T00:00:00Z')])
+  render(<Notices />)
+  await act(async () => {})
+  expect(screen.queryByRole('button')).toBeNull()
 })
