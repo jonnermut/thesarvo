@@ -17,7 +17,7 @@ export type GuideStats = {
   stars: [number, number, number]
   topos: number
   gps: boolean
-  /** The best few climbs (three stars, then two): anchor, name, grade, stars. */
+  /** The best climbs (three stars, then two), a longer list than a card shows so the card can rotate through them: anchor, name, grade, stars. */
   classics: Classic[]
   /** Where to put the crag on a map: the first GPS point, as latitude and longitude. */
   pin?: [number, number]
@@ -27,7 +27,7 @@ export type GuideStats = {
 
 export type Classic = [anchor: string, name: string, grade: string, stars: number]
 
-const CLASSICS = 5
+const CLASSICS = 8
 
 export type ManifestNode = { id: string; parent: string | null; title: string; path: string; isGuide: boolean; stats?: GuideStats }
 

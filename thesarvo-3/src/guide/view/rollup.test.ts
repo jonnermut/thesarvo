@@ -15,9 +15,17 @@ describe('rollup', () => {
       node('area', undefined, [node('b', stats(5, [['c-3', 'B1', '18', 2]]))]),
       node('c', stats(4, [['c-4', 'C1', '24', 3]])),
     ])
-    const r = rollup(region)!
+    const r = rollup(region, 3)!
     expect(r).toMatchObject({ total: 19, bands: [3, 6, 9, 12], sport: 3, stars: [3, 3, 3], topos: 6, guides: 3 })
     expect(r.classics.map(([g, c]) => `${g.id}:${c[1]}`)).toEqual(['a:A1', 'c:C1', 'b:B1'])
+  })
+
+  it('keeps a longer list for a card to rotate through: three stars before two', () => {
+    const region = node('region', undefined, [
+      node('a', stats(10, [['c-1', 'A1', '20', 3], ['c-5', 'A3', '22', 3], ['c-2', 'A2', '22', 2]])),
+      node('b', stats(5, [['c-3', 'B1', '18', 3]])),
+    ])
+    expect(rollup(region)!.classics.map(([g, c]) => `${g.id}:${c[1]}`)).toEqual(['a:A1', 'b:B1', 'a:A3', 'a:A2'])
   })
 
   it('counts only the kind most guides are, and nothing for an empty region', () => {

@@ -10,11 +10,15 @@ import { DownloadIcon } from './GpsBlock'
 import { treeKmlUrl } from './kml'
 import { rollup } from './rollup'
 import { PROBLEM_BANDS, ROUTE_BANDS } from './routeStats'
+import { useRotation } from './useRotation'
 
 const MapView = lazy(() => import('#/guide/islands/MapView'))
 
 /** Lowest grades lightest. */
 const BAND_COLOURS = ['bg-forest/25', 'bg-forest/50', 'bg-forest/75', 'bg-forest']
+
+/** Classics a card shows at once; it steps through its longer list. */
+const SHOWN = 3
 
 const plural = (n: number, word: string) => `${n.toLocaleString()} ${word}${n === 1 ? '' : 's'}`
 
@@ -96,9 +100,13 @@ function Card({ node }: { node: IndexNode }) {
   // A region has no climbs of its own: show its guides added up.
   const sum = useMemo(() => (s ? undefined : rollup(node)), [node, s])
   const classics = s ? s.classics.map((c) => [node, c] as const) : (sum?.classics ?? [])
+  const [seconds] = useState(() => 7 + Math.random() * 4)
+  const { at, hold } = useRotation(Math.ceil(classics.length / SHOWN), seconds)
+  // The three on show step through the longer list; wrapping fills the last page.
+  const shown = classics.length <= SHOWN ? classics : Array.from({ length: SHOWN }, (_, k) => classics[(at * SHOWN + k) % classics.length])
   return (
     // The title link stretches over the whole card; the climb and child links sit above it.
-    <div className="card card-link relative h-full p-3">
+    <div className="card card-link relative h-full p-3" {...hold}>
       <div className="flex items-baseline justify-between gap-3">
         <Link to={guideUrl(node)} className="text-[17px] font-semibold text-link after:absolute after:inset-0 hover:underline">
           {node.title}
@@ -110,7 +118,7 @@ function Card({ node }: { node: IndexNode }) {
       {sum && <Summary stats={sum} />}
       {classics.length > 0 && (
         <ul className="relative mt-2 space-y-0.5 text-[13px]">
-          {classics.slice(0, 3).map(([guide, [anchor, name, grade, stars]]) => (
+          {shown.map(([guide, [anchor, name, grade, stars]]) => (
             <li key={`${guide.id}${anchor}`}>
               <Link to={guideUrl(guide)} hash={anchor} className="flex gap-1.5 hover:text-link">
                 <span className="w-9 shrink-0 text-amber-deep">{'★'.repeat(stars)}</span>

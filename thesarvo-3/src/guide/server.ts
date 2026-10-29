@@ -2,7 +2,6 @@ import { createServerFn } from '@tanstack/react-start'
 import { manifestTree, pageInfo } from './content/manifest'
 import { resolvePageBody } from './content/pageLinks'
 import type { Manifest, PageInfo } from './content/manifest'
-import type { Classic } from './content/classics'
 import type { RecentChange } from './content/recent'
 import { STATIC_SITE, GUIDE_PREFIX } from './content/paths'
 import type { ContentSource, IndexNode } from './content/types'
@@ -26,11 +25,6 @@ const serverPageBody = createServerFn({ method: 'GET' })
 const serverRecent = createServerFn({ method: 'GET' }).handler(async () => {
   const source = (await import('./content')).getContentSource()
   return (await import('./content/recent')).siteRecent(source, await source.getIndex())
-})
-
-const serverClassics = createServerFn({ method: 'GET' }).handler(async () => {
-  const source = (await import('./content')).getContentSource()
-  return (await import('./content/classics')).siteClassics(source, await source.getIndex())
 })
 
 const serverSearchShards = createServerFn({ method: 'GET' }).handler(async () => (await import('./search/allShards')).allShards())
@@ -139,9 +133,6 @@ export async function fetchSearchShards(): Promise<Shard[]> {
   ])
   return mergeShards(pack, overrides, search.removed)
 }
-
-/** The three-star climbs, for the home page to pick from. */
-export const fetchClassics = (): Promise<Classic[]> => (STATIC_SITE ? getJson<Classic[]>('classics.json', { cache: 'no-cache' }) : serverClassics())
 
 /** The latest change to each of the most recently changed pages, for the home page. */
 export const fetchRecent = (): Promise<RecentChange[]> => (STATIC_SITE ? getJson<RecentChange[]>('recent.json', { cache: 'no-cache' }) : serverRecent())

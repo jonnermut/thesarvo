@@ -2,6 +2,9 @@ import type { Classic, GuideStats } from '#/guide/content/manifest'
 import { flatten } from '#/guide/content/paths'
 import type { IndexNode } from '#/guide/content/types'
 
+/** How many classics a region keeps for its card to rotate through. */
+const CARD_CLASSICS = 12
+
 /** A region's guides added up, for a contents card. Classics name the guide each comes from. */
 export type Rollup = Omit<GuideStats, 'classics' | 'pin' | 'gps'> & { classics: [IndexNode, Classic][]; guides: number }
 
@@ -10,7 +13,7 @@ export type Rollup = Omit<GuideStats, 'classics' | 'pin' | 'gps'> & { classics: 
  * bands differ). Classics take each guide's best in turn, so one big crag does not fill the list.
  * Undefined when nothing below has climbs.
  */
-export function rollup(node: IndexNode, classics = 3): Rollup | undefined {
+export function rollup(node: IndexNode, classics = CARD_CLASSICS): Rollup | undefined {
   const all = flatten(node).filter((n) => n.stats?.total)
   const problems = all.filter((n) => n.stats!.problems).length > all.length / 2
   const guides = all.filter((n) => n.stats!.problems === problems)
