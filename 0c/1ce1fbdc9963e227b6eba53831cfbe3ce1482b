@@ -1,0 +1,19 @@
+thesarvo-3/src/components/AppShell.tsx
+  s_e20d0a1ebc47aa::t_c100b73552c878 108-118
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0c1ce1fbdc9963e227b6eba53831cfbe3ce1482b",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
