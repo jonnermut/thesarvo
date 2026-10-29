@@ -67,13 +67,6 @@ export function ContentsView({ node, after, bare }: { node: IndexNode; after?: R
         )}
       </div>
       )}
-      {legends.length > 0 && (
-        <div className="flex flex-wrap gap-x-5 gap-y-1 text-[12px] text-muted">
-          {legends.map((problems) => (
-            <BandLegend key={String(problems)} labels={problems ? PROBLEM_BANDS : ROUTE_BANDS} />
-          ))}
-        </div>
-      )}
       <ul className="grid gap-3 sm:grid-cols-2">
         {current.children.map((child, i) => (
           <Fragment key={child.id}>
@@ -84,6 +77,13 @@ export function ContentsView({ node, after, bare }: { node: IndexNode; after?: R
           </Fragment>
         ))}
       </ul>
+      {legends.length > 0 && (
+        <div className="flex flex-wrap gap-x-5 gap-y-1 text-[12px] text-muted">
+          {legends.map((problems) => (
+            <BandLegend key={String(problems)} labels={problems ? PROBLEM_BANDS : ROUTE_BANDS} />
+          ))}
+        </div>
+      )}
       <CragMap id={current.id} nodes={below} />
     </section>
   )
