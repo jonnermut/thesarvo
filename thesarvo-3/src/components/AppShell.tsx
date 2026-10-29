@@ -105,14 +105,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <main className="min-w-0 flex-1">{children}</main>
       </div>
 
-      <footer className="no-print border-t border-black/10 bg-paper px-4 py-6 text-xs text-muted">
-        <div className="mx-auto flex max-w-5xl flex-col gap-2 sm:flex-row sm:justify-between">
-          <p>
-            © the authors of thesarvo.com, licensed under a{' '}
-            <a href="https://creativecommons.org/licenses/by-sa/2.5/au/" className="underline hover:text-navy">Creative Commons Attribution-Share Alike 2.5 Australia License</a>.{' '}
-            <Link to="/g/$" params={{ _splat: 'more/about-thesarvo-com' }} className="underline hover:text-navy">More details</Link>. Climb safely: guides are a starting point, not a guarantee.
-          </p>
-          <p>Tasmania, Australia</p>
+      <footer className="no-print border-t border-black/10 bg-paper px-4 py-6 text-xs leading-relaxed text-muted sm:px-6">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
+          <div className="max-w-3xl space-y-1">
+            <p>
+              © the authors of thesarvo.com, licensed under a{' '}
+              <a href="https://creativecommons.org/licenses/by-sa/2.5/au/" className="underline hover:text-navy">Creative Commons Attribution-Share Alike 2.5 Australia License</a>.{' '}
+              <Link to="/g/$" params={{ _splat: 'more/about-thesarvo-com' }} className="whitespace-nowrap underline hover:text-navy">More details</Link>.
+            </p>
+            <p>Climb safely: guides are a starting point, not a guarantee.</p>
+          </div>
+          <p className="shrink-0 whitespace-nowrap">Tasmania, Australia</p>
         </div>
       </footer>
     </div>
