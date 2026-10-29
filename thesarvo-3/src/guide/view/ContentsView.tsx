@@ -15,8 +15,8 @@ import { useRotation } from './useRotation'
 
 const MapView = lazy(() => import('#/guide/islands/MapView'))
 
-/** Lowest grades lightest. */
-const BAND_COLOURS = ['bg-forest/25', 'bg-forest/50', 'bg-forest/75', 'bg-forest']
+/** Easiest to hardest: green, yellow, orange, red. */
+const BAND_COLOURS = ['bg-band-1', 'bg-band-2', 'bg-band-3', 'bg-band-4']
 
 /** Classics a card shows at once; it steps through its longer list. */
 const SHOWN = 3
@@ -182,9 +182,9 @@ function Summary({ stats, gps }: { stats: Pick<GuideStats, 'problems' | 'bands' 
   return (
     <div className="mt-2 space-y-1.5">
       {graded > 0 && (
-        <div className="flex h-2 overflow-hidden rounded-full bg-paper" role="img" aria-label={labels.map((l, i) => `${l}: ${stats.bands[i]}`).join(', ')}>
+        <div className="flex h-2.5 gap-0.5 overflow-hidden rounded-full bg-paper" role="img" aria-label={labels.map((l, i) => `${l}: ${stats.bands[i]}`).join(', ')}>
           {stats.bands.map((n, i) =>
-            n ? <span key={labels[i]} title={`${labels[i]}: ${n}`} className={BAND_COLOURS[i]} style={{ width: `${(n / graded) * 100}%` }} /> : null,
+            n ? <span key={labels[i]} title={`${labels[i]}: ${n}`} className={`${BAND_COLOURS[i]} min-w-1`} style={{ width: `${(n / graded) * 100}%` }} /> : null,
           )}
         </div>
       )}
