@@ -1,0 +1,21 @@
+thesarvo-3/docs/google-signin.md
+  s_e20d0a1ebc47aa::t_6942e9a22638cc 33
+thesarvo-3/scripts/add-google.sh
+  s_e20d0a1ebc47aa::t_38493b67173c62 15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cba8927c5f7986b3ce981e62b0ac56811e303732",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
