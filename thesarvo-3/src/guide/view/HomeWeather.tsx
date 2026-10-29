@@ -21,7 +21,7 @@ function remembered() {
 
 /**
  * One place's weather as a card among the contents cards, rotating through the Weather page's places.
- * Hovering (or focusing) the card stops the rotation and opens a strip of every place, each with today's high; picking one shows it,
+ * Hovering (or focusing) the card stops the rotation and opens a strip of every place below the card (over the cards beneath, not the forecast), each with today's high; picking one shows it,
  * remembers it, and carries the rotation on from there.
  */
 export function HomeWeather() {
@@ -57,18 +57,13 @@ export function HomeWeather() {
     <li aria-label="Weather" className="relative min-w-0" {...hold}>
       <PlaceCard place={PLACES[at]} footer={footer} />
       {held && (
-        <div className="card absolute inset-x-0 bottom-0 z-10 p-2 shadow-lg">
+        <div className="card absolute inset-x-0 top-full z-10 -mt-1 p-2 shadow-lg">
           <ul className="grid grid-cols-5 gap-1">
             {PLACES.map((p, i) => (
               <Tile key={p.name} place={p} current={i === at} onPick={() => pick(i)} />
             ))}
           </ul>
-          <p className="mt-2 flex justify-between border-t border-line pt-2 text-[13px]">
-            <span className="text-muted">Pick an area to start there</span>
-            <Link to="/g/$" params={{ _splat: 'more/weather' }} className="text-link hover:underline">
-              All areas
-            </Link>
-          </p>
+          <p className="mt-1.5 text-center text-[12px] text-muted">Pick an area to start there</p>
         </div>
       )}
     </li>
