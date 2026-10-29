@@ -19,7 +19,7 @@ async function handler(event) {
   var r = event.request
   var u = r.uri
   // www.thesarvo.com is the same site: send it to the bare address, path and query kept.
-  if (r.headers.host && r.headers.host.value === 'www.thesarvo.com') {
+  if (r.headers && r.headers.host && r.headers.host.value === 'www.thesarvo.com') {
     var q = Object.keys(r.querystring).map(function (k) { var v = r.querystring[k]; return v.multiValue ? v.multiValue.map(function (m) { return k + '=' + m.value }).join('&') : v.value === '' ? k : k + '=' + v.value }).join('&')
     return redirect('https://thesarvo.com' + u + (q ? '?' + q : ''))
   }

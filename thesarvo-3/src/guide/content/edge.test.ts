@@ -4,12 +4,12 @@ import { expect, it } from 'vitest'
 type Res = { statusCode?: number; headers?: { location: { value: string } }; uri?: string }
 const entries: Record<string, string> = { 't:thesarvo/apsley edge': '/g/east/apsley-edge/', 'p:7': '/g/east/', 'a:7': '1' }
 
-async function run(uri: string, query: Record<string, { value: string }> = {}): Promise<Res> {
+async function run(uri: string, query: Record<string, { value: string }> = {}, host?: string): Promise<Res> {
   // The file is a CloudFront Function module: run it with the `cloudfront` import stubbed.
   const src = (await readFile('scripts/edge/viewer-request.js', 'utf8')).replace("import cf from 'cloudfront'", '')
   const cf = { kvs: () => ({ get: async (k: string) => entries[k] ?? Promise.reject(new Error('KeyNotFound')) }) }
   const handler = new Function('cf', `${src}\nreturn handler`)(cf) as (e: unknown) => Promise<Res>
-  return handler({ request: { uri, querystring: query } })
+  return handler({ request: { uri, querystring: query, ...(host && { headers: { host: { value: host } } }) } })
 }
 
 it('redirects old addresses to the new ones', async () => {
@@ -27,4 +27,9 @@ it('leaves the sync stubs and ordinary pages alone', async () => {
   expect((await run('/g/east/')).uri).toBe('/g/east/index.html')
   expect((await run('/g/east')).uri).toBe('/g/east/index.html')
   expect((await run('/assets/app.js')).uri).toBe('/assets/app.js')
+})
+
+it('sends www to the bare address, keeping the path and query', async () => {
+  expect((await run('/g/east/', { a: { value: '1' } }, 'www.thesarvo.com')).headers?.location.value).toBe('https://thesarvo.com/g/east/?a=1')
+  expect((await run('/g/east/', {}, 'thesarvo.com')).uri).toBe('/g/east/index.html')
 })
