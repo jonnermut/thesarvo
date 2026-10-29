@@ -1,0 +1,21 @@
+thesarvo-3/src/forum/ui/ForumFeed.tsx
+  s_e20d0a1ebc47aa::t_39a3abec64b79d 4,33-43,47-49
+thesarvo-3/src/guide/view/WhatsNew.tsx
+  s_e20d0a1ebc47aa::t_39a3abec64b79d 18,39,42,55-59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0b30e2efd615ce56eefb46425b5187f8f91660df",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
