@@ -181,8 +181,8 @@ await Promise.all(
 )
 console.log(`Rendered ${render.length} pages`)
 
-// Crawlers: a sitemap of the public pages (when VITE_SITE_URL is set) and robots.txt.
-const siteUrl = process.env.VITE_SITE_URL
+// Crawlers: a sitemap of the public pages and robots.txt, for the real address unless VITE_SITE_URL says otherwise.
+const siteUrl = process.env.VITE_SITE_URL ?? 'https://thesarvo.com'
 const sitemap = sitemapXml(siteUrl, [...paths])
 if (sitemap) await writeFile(path.join(out, 'sitemap.xml'), sitemap)
 await writeFile(path.join(out, 'robots.txt'), robotsTxt(siteUrl))

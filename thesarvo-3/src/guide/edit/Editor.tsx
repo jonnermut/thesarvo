@@ -140,13 +140,9 @@ export default function Editor({ guide }: { guide: Guide }) {
         </div>
       </div>
 
-      {saver.status.kind === 'unavailable' ? (
+      {saver.status.kind === 'unavailable' && (
         <p className="mb-4 rounded-lg border border-line bg-card p-3 text-sm text-muted">
           Saving is not switched on here yet: you can try every editing tool, but changes are only kept as a draft in this browser.
-        </p>
-      ) : (
-        <p className="mb-4 rounded-lg border border-line bg-card p-3 text-sm text-muted">
-          Edits save straight away. Until thesarvo.com switches to this site, changes made on the live site replace them.
         </p>
       )}
 

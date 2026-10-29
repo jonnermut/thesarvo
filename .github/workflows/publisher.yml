@@ -29,6 +29,8 @@ jobs:
         working-directory: thesarvo-3
       - run: scripts/package-publisher.sh
         working-directory: thesarvo-3
+        env:
+          VITE_SITE_URL: https://thesarvo.com
       - name: Attach to the publisher release
         run: |
           gh release view publisher > /dev/null 2>&1 || gh release create publisher --title publisher --notes "The latest app build for the publish Action. Replaced on every push; not a version." --prerelease
