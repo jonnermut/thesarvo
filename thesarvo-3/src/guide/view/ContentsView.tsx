@@ -28,7 +28,7 @@ const plural = (n: number, word: string) => `${n.toLocaleString()} ${word}${n ==
  * size, grade spread and best climbs, and a map of the crags. Rendered with the stats the page was
  * built with, then refreshed from the manifest, so a change to one guide needs no rebuild here.
  */
-/** `bare` leaves out the heading and totals, for the home page, whose hero says it. `after`, when given, is list items (cards) slotted in after the first child: the home page puts weather, what's new and the forum there. */
+/** `bare` leaves out the heading and totals, for the home page, whose hero says it. Only a guide's list has a heading ("Also here"): elsewhere the page's own title is above it. `after`, when given, is list items (cards) slotted in after the first child: the home page puts weather, what's new and the forum there. */
 export function ContentsView({ node, after, bare }: { node: IndexNode; after?: ReactNode; bare?: boolean }) {
   const [fresh, setFresh] = useState<IndexNode>()
   useEffect(() => {
@@ -53,20 +53,21 @@ export function ContentsView({ node, after, bare }: { node: IndexNode; after?: R
   const boulders = withStats.length > 0 && withStats.every((n) => n.stats!.problems)
   const legends = [...new Set(withStats.map((n) => n.stats!.problems))]
 
+  const totals = total > 0 && (
+    <p className="text-sm text-muted">
+      {plural(total, boulders ? 'problem' : 'climb')} in {plural(guides, 'guide')}
+    </p>
+  )
+
   return (
-    <section aria-label="Contents" className={`space-y-4 ${bare ? 'mt-6' : 'mt-10'}`}>
-      {!bare && (
-      <div className="flex flex-wrap items-baseline justify-between gap-x-4 border-b border-line">
-        <h2 className="text-2xl font-bold text-navy">
-          {current.isGuide ? 'Also here' : 'Contents'}
-        </h2>
-        {total > 0 && (
-          <p className="text-sm text-muted">
-            {plural(total, boulders ? 'problem' : 'climb')} in {plural(guides, 'guide')}
-          </p>
-        )}
-      </div>
+    <section aria-label="Contents" className={`space-y-4 ${bare || !current.isGuide ? 'mt-6' : 'mt-10'}`}>
+      {!bare && current.isGuide && (
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 border-b border-line">
+          <h2 className="text-2xl font-bold text-navy">Also here</h2>
+          {totals}
+        </div>
       )}
+      {!bare && !current.isGuide && total > 0 && <div className="flex justify-end">{totals}</div>}
       <ul className="grid gap-3 sm:grid-cols-2">
         {current.children.map((child, i) => (
           <Fragment key={child.id}>
