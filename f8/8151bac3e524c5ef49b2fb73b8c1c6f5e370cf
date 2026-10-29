@@ -1,0 +1,34 @@
+thesarvo-3/src/guide/view/ContentsView.tsx
+  s_e20d0a1ebc47aa::t_c07b3ff3fd9eab 2-3
+  s_e20d0a1ebc47aa::t_f07b0305c93b1a 31-32,81
+  s_e20d0a1ebc47aa::t_83214bd80bf7a6 76-80,82
+thesarvo-3/src/forum/ui/ForumFeed.tsx
+  s_e20d0a1ebc47aa::t_f07b0305c93b1a 6-8,11,23-44
+thesarvo-3/src/routes/g.index.tsx
+  s_e20d0a1ebc47aa::t_f07b0305c93b1a 30
+thesarvo-3/src/guide/view/WhatsNew.tsx
+  s_e20d0a1ebc47aa::t_f07b0305c93b1a 7-9,14,32-55
+thesarvo-3/src/guide/view/HomeWeather.tsx
+  s_e20d0a1ebc47aa::t_f07b0305c93b1a 12,22
+  s_e20d0a1ebc47aa::t_83214bd80bf7a6 8,14-21
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_ea8b01d75eab0d 197
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_ecdd7cd7cc84d7 68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f88151bac3e524c5ef49b2fb73b8c1c6f5e370cf",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
