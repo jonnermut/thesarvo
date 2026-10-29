@@ -4,6 +4,7 @@ import { cachedTable, preToken } from './cognitoPreToken'
 import type { PreTokenEvent } from './cognitoPreToken'
 import { migrateUser } from './cognitoMigrate'
 import type { MigrateUserEvent } from './cognitoMigrate'
+import { cognitoApi } from './cognitoApi'
 import { preSignUp } from './cognitoPreSignUp'
 import type { PreSignUpEvent } from './cognitoPreSignUp'
 import { GROUPS_KEY, parseGroups } from './groups'
@@ -18,7 +19,7 @@ const pepper = process.env.AUTH_PEPPER
 if (!pepper) throw new Error('AUTH_PEPPER is not set')
 
 const migrate = migrateUser(table, pepper)
-const signUp = preSignUp(table, pepper)
+const signUp = preSignUp(table, pepper, cognitoApi(process.env.AWS_REGION ?? 'ap-southeast-2'))
 
 const bucket = { name: process.env.GROUPS_BUCKET ?? 'thesarvo-content', region: process.env.AWS_REGION ?? 'ap-southeast-2' }
 const tokens = preToken(

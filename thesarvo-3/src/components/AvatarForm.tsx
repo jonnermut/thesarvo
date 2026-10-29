@@ -1,20 +1,7 @@
 import { useRef, useState } from 'react'
 import { call } from '#/auth/apiCall'
 import { MyAvatar, reloadAvatars } from '#/guide/avatars/Avatar'
-
-const SIZE = 128
-
-/** Crops the middle square of the picture and shrinks it to a small JPEG, so the server only ever gets a few KB. */
-async function shrink(file: File): Promise<string> {
-  const bitmap = await createImageBitmap(file)
-  const side = Math.min(bitmap.width, bitmap.height)
-  const canvas = document.createElement('canvas')
-  canvas.width = canvas.height = SIZE
-  const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('no canvas')
-  ctx.drawImage(bitmap, (bitmap.width - side) / 2, (bitmap.height - side) / 2, side, side, 0, 0, SIZE, SIZE)
-  return canvas.toDataURL('image/jpeg', 0.8)
-}
+import { shrink } from '#/guide/avatars/shrink'
 
 /** Your picture in Account settings: choose a photo (cropped to a square and shrunk here), or remove the one you uploaded. */
 export function AvatarForm() {

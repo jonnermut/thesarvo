@@ -61,23 +61,25 @@ export function presignedPost(
   return { url: bucketUrl(b), fields: { ...fields, policy, 'x-amz-signature': signature } }
 }
 
-/** The `Authorization` and `x-amz-*` headers for a request; `payload` is the SHA-256 (hex) of its body, empty by default. */
-export function signedHeaders(method: string, url: URL, region: string, c: Credentials, now = new Date(), payload = sha256('')): Record<string, string> {
+/** The `Authorization` and `x-amz-*` headers for a request; `payload` is the SHA-256 (hex) of its body, empty by default. `o` signs for another service (default s3) and adds headers to the signed set. */
+export function signedHeaders(method: string, url: URL, region: string, c: Credentials, now = new Date(), payload = sha256(''), o: { service?: string; headers?: Record<string, string> } = {}): Record<string, string> {
   const date = amzDate(now)
   const headers: Record<string, string> = {
     host: url.host,
     'x-amz-content-sha256': payload,
     'x-amz-date': date,
     ...(c.sessionToken && { 'x-amz-security-token': c.sessionToken }),
+    ...o.headers,
   }
   const names = Object.keys(headers).sort()
   const enc = (s: string) => encodeURIComponent(s).replace(/[!'()*]/g, (ch) => `%${ch.charCodeAt(0).toString(16).toUpperCase()}`)
   const query = [...url.searchParams].map(([k, v]) => `${enc(k)}=${enc(v)}`).sort().join('&')
   // Each header line ends in a newline, so the header block is followed by a blank line.
   const request = [method, url.pathname, query, names.map((n) => `${n}:${headers[n]}\n`).join(''), names.join(';'), payload].join('\n')
-  const scope = `${date.slice(0, 8)}/${region}/s3/aws4_request`
+  const service = o.service ?? 's3'
+  const scope = `${date.slice(0, 8)}/${region}/${service}/aws4_request`
   const toSign = ['AWS4-HMAC-SHA256', date, scope, sha256(request)].join('\n')
-  const signature = hmac(signingKey(c.secretAccessKey, date.slice(0, 8), region, 's3'), toSign).toString('hex')
+  const signature = hmac(signingKey(c.secretAccessKey, date.slice(0, 8), region, service), toSign).toString('hex')
   const { host: _host, ...rest } = headers
   return { ...rest, authorization: `AWS4-HMAC-SHA256 Credential=${c.accessKeyId}/${scope}, SignedHeaders=${names.join(';')}, Signature=${signature}` }
 }

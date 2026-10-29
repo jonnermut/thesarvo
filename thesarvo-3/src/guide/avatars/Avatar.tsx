@@ -14,7 +14,7 @@ const fetchMap = (url: string) =>
 type Maps = { imported: AvatarMap; uploaded: AvatarMap }
 let loaded: Promise<Maps> | undefined
 /** Fetched once per page load; empty when the site has none. */
-const avatars = () => (loaded ??= Promise.all([fetchMap(`${GUIDE_PREFIX}-data/avatars.json`), fetchMap('/avatars/uploaded.json')]).then(([imported, uploaded]) => ({ imported, uploaded })))
+export const avatars = () => (loaded ??= Promise.all([fetchMap(`${GUIDE_PREFIX}-data/avatars.json`), fetchMap('/avatars/uploaded.json')]).then(([imported, uploaded]) => ({ imported, uploaded })))
 
 /** After someone changes their picture: every avatar on the page looks again. */
 export function reloadAvatars() {

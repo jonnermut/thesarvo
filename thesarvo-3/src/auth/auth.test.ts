@@ -3,7 +3,7 @@ import { createHash, pbkdf2Sync } from 'node:crypto'
 import { describe, expect, it } from 'vitest'
 import { migrateUser } from './cognitoMigrate'
 import type { MigrateUserEvent } from './cognitoMigrate'
-import { DISPOSABLE_EMAIL, OLD_ACCOUNT, preSignUp } from './cognitoPreSignUp'
+import { DISPOSABLE_EMAIL, GOOGLE_ACCOUNT, LINK_FAILED, OLD_ACCOUNT, preSignUp } from './cognitoPreSignUp'
 import type { PreSignUpEvent } from './cognitoPreSignUp'
 import { confluenceCredential, parseConfluenceHash, toPhc, verifyConfluencePassword } from './confluenceHash'
 import type { ConfluenceUser } from './importUsers'
@@ -122,5 +122,63 @@ describe('Cognito pre-sign-up trigger', () => {
     await expect(handler(event('bob@example.com'))).resolves.toMatchObject({ response: {} })
     await expect(handler(event('alice@example.com', 'PreSignUp_AdminCreateUser'))).resolves.toBeTruthy()
     await expect(handler(event('alice@example.com', 'PreSignUp_ExternalProvider'))).resolves.toBeTruthy()
+  })
+})
+
+describe('Google account linking', () => {
+  type Call = [string, Record<string, unknown>]
+  const table = toCognitoTable([user({})], 'pepper')
+  const google = (email: string, verified = 'true'): PreSignUpEvent => ({
+    triggerSource: 'PreSignUp_ExternalProvider', userName: 'Google_123', userPoolId: 'pool', request: { userAttributes: { email, email_verified: verified } }, response: {},
+  })
+  const fake = (users: unknown[], fail?: string) => {
+    const calls: Call[] = []
+    const api = async (op: string, body: Record<string, unknown>) => {
+      calls.push([op, body])
+      if (op === fail) throw new Error('boom')
+      return op === 'ListUsers' ? { Users: users } : {}
+    }
+    return { calls, api }
+  }
+  const native = { Username: 'bob@example.com', UserStatus: 'CONFIRMED', Attributes: [{ Name: 'email_verified', Value: 'true' }] }
+  const ops = (calls: Call[]) => calls.map(([op]) => op)
+
+  it('joins a Google sign-in to the password account with the same verified email', async () => {
+    const { calls, api } = fake([native])
+    await preSignUp(table, 'pepper', api)(google('bob@example.com'))
+    expect(ops(calls)).toEqual(['ListUsers', 'AdminLinkProviderForUser'])
+    expect(calls[1][1]).toMatchObject({
+      DestinationUser: { ProviderName: 'Cognito', ProviderAttributeValue: 'bob@example.com' },
+      SourceUser: { ProviderName: 'Google', ProviderAttributeName: 'Cognito_Subject', ProviderAttributeValue: '123' },
+    })
+  })
+
+  it('creates an old Confluence account first, then joins to it', async () => {
+    const { calls, api } = fake([])
+    await preSignUp(table, 'pepper', api)(google('Alice@Example.com'))
+    expect(ops(calls)).toEqual(['ListUsers', 'ListUsers', 'AdminCreateUser', 'AdminSetUserPassword', 'AdminLinkProviderForUser'])
+    expect(calls[2][1]).toMatchObject({ Username: 'Alice@Example.com', MessageAction: 'SUPPRESS' })
+  })
+
+  it('leaves a new person, an unverified email or an unverified account alone', async () => {
+    const none = fake([])
+    await preSignUp(table, 'pepper', none.api)(google('new@example.com'))
+    expect(ops(none.calls)).not.toContain('AdminLinkProviderForUser')
+    const unverified = fake([native])
+    await preSignUp(table, 'pepper', unverified.api)(google('bob@example.com', 'false'))
+    expect(unverified.calls).toEqual([])
+    const open = fake([{ ...native, Attributes: [] }])
+    await preSignUp(table, 'pepper', open.api)(google('bob@example.com'))
+    expect(ops(open.calls)).not.toContain('AdminLinkProviderForUser')
+  })
+
+  it('refuses the sign-in when joining fails', async () => {
+    await expect(preSignUp(table, 'pepper', fake([native], 'AdminLinkProviderForUser').api)(google('bob@example.com'))).rejects.toThrow(LINK_FAILED)
+  })
+
+  it('stops the sign-up form making a second account for an email that signs in with Google', async () => {
+    const signUp: PreSignUpEvent = { triggerSource: 'PreSignUp_SignUp', userPoolId: 'pool', request: { userAttributes: { email: 'g@example.com' } }, response: {} }
+    await expect(preSignUp(table, 'pepper', fake([{ Username: 'Google_9', UserStatus: 'EXTERNAL_PROVIDER' }]).api)(signUp)).rejects.toThrow(GOOGLE_ACCOUNT)
+    await expect(preSignUp(table, 'pepper', fake([], 'ListUsers').api)(signUp)).resolves.toBeTruthy()
   })
 })

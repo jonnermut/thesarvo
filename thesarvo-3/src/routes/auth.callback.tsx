@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { ACCOUNT_PATH } from '#/auth/paths'
+import { importGooglePicture } from '#/guide/avatars/googlePicture'
 import { completeSignIn, currentUser, signIn } from '#/auth/session'
 
 /** Where Cognito's login page sends the browser back to. A static page: the sign-in finishes in the browser. */
@@ -15,7 +16,10 @@ function Callback() {
   useEffect(() => {
     completeSignIn(new URL(location.href))
       // Someone without a name (a new account) gives one first.
-      .then((to) => navigate({ href: currentUser()?.name ? to : `${ACCOUNT_PATH}?${new URLSearchParams({ then: to })}`, replace: true }))
+      .then((to) => {
+        void importGooglePicture()
+        return navigate({ href: currentUser()?.name ? to : `${ACCOUNT_PATH}?${new URLSearchParams({ then: to })}`, replace: true })
+      })
       .catch((e: unknown) => setError(e instanceof Error ? e.message : 'Sign-in failed'))
   }, [navigate])
 
