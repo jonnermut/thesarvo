@@ -1,0 +1,41 @@
+thesarvo-3/src/guide/view/useRotation.ts
+  s_e20d0a1ebc47aa::t_730fd4c209a920 1-18
+thesarvo-3/src/guide/view/rollup.test.ts
+  s_e20d0a1ebc47aa::t_25d58786e8e71a 18,23-24,26-28
+  s_e20d0a1ebc47aa::t_1b767f5fae7164 25
+  s_e20d0a1ebc47aa::t_5e508b9bf8f55a 29-30
+thesarvo-3/src/guide/content/manifest.ts
+  s_e20d0a1ebc47aa::t_730fd4c209a920 20,30
+thesarvo-3/src/guide/view/ContentsView.tsx
+  s_e20d0a1ebc47aa::t_532816a649e450 13,20-21
+  s_e20d0a1ebc47aa::t_730fd4c209a920 103-106,109,121
+  s_e20d0a1ebc47aa::t_df726229cc2cc2 22
+thesarvo-3/docs/plan-navigation.md
+  s_e20d0a1ebc47aa::t_1b767f5fae7164 124
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_1b767f5fae7164 68
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_1b767f5fae7164 197
+thesarvo-3/src/guide/view/HomeWeather.tsx
+  s_e20d0a1ebc47aa::t_730fd4c209a920 1-27
+thesarvo-3/src/routes/g.index.tsx
+  s_e20d0a1ebc47aa::t_730fd4c209a920 8,30
+thesarvo-3/src/guide/view/rollup.ts
+  s_e20d0a1ebc47aa::t_730fd4c209a920 5-7,16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "051c7ce3232d7caba5518576d1effd4255dd9d64",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
