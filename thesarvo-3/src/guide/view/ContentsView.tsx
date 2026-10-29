@@ -1,5 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
+import { Fragment, lazy, Suspense,  useEffect, useMemo, useState } from 'react'
+import type {ReactNode} from 'react';
 import type { GuideStats } from '#/guide/content/manifest'
 import { findByPath, flatten, guideUrl } from '#/guide/content/paths'
 import type { IndexNode } from '#/guide/content/types'
@@ -27,7 +28,8 @@ const plural = (n: number, word: string) => `${n.toLocaleString()} ${word}${n ==
  * size, grade spread and best climbs, and a map of the crags. Rendered with the stats the page was
  * built with, then refreshed from the manifest, so a change to one guide needs no rebuild here.
  */
-export function ContentsView({ node }: { node: IndexNode }) {
+/** `after`, when given, is list items (cards) slotted in after the first child: the home page puts weather, what's new and the forum there. */
+export function ContentsView({ node, after }: { node: IndexNode; after?: ReactNode }) {
   const [fresh, setFresh] = useState<IndexNode>()
   useEffect(() => {
     let live = true
@@ -71,10 +73,13 @@ export function ContentsView({ node }: { node: IndexNode }) {
         </div>
       )}
       <ul className="grid gap-3 sm:grid-cols-2">
-        {current.children.map((child) => (
-          <li key={child.id} className="min-w-0">
-            <Card node={child} />
-          </li>
+        {current.children.map((child, i) => (
+          <Fragment key={child.id}>
+            <li className="min-w-0">
+              <Card node={child} />
+            </li>
+            {i === 0 && after}
+          </Fragment>
         ))}
       </ul>
       <CragMap id={current.id} nodes={below} />

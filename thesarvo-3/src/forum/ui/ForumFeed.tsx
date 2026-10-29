@@ -3,9 +3,12 @@ import { useEffect, useState } from 'react'
 import { recentThreads } from '../client'
 import type { ThreadMeta } from '../types'
 
+/** Threads a card shows. */
+const SHOWN = 5
+
 const day = (iso: string) => new Date(iso).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
 
-/** The newest forum posts with their comment counts, on the home page. Anyone sees the titles; opening one needs a sign-in. */
+/** The newest forum posts with their comment counts, as a card in the home page's contents grid. Anyone sees the titles; opening one needs a sign-in. */
 export function ForumFeed() {
   const [threads, setThreads] = useState<ThreadMeta[]>([])
   useEffect(() => {
@@ -17,25 +20,27 @@ export function ForumFeed() {
   }, [])
   if (!threads.length) return null
   return (
-    <section aria-labelledby="forum-feed" className="mt-10">
-      <h2 id="forum-feed" className="border-b border-line pb-1 text-[22px] font-bold text-navy">
-        <Link to="/g/forum" search={{}} className="hover:underline">
-          Forum
-        </Link>
-      </h2>
-      <ul className="mt-3 divide-y divide-line">
-        {threads.map((t) => (
-          <li key={t.id} className="py-2">
-            <Link to="/g/forum" search={{ thread: t.id }} rel="nofollow" className="font-semibold text-link hover:underline">
-              {t.title}
-            </Link>
-            <span className="text-muted">
-              {' '}
-              · {t.author.name} · {day(t.last)} · {t.comments} {t.comments === 1 ? 'comment' : 'comments'}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </section>
+    <li className="min-w-0">
+      <section aria-labelledby="forum-feed" className="card h-full p-3">
+        <h2 id="forum-feed" className="text-[17px] font-semibold">
+          <Link to="/g/forum" search={{}} className="text-link hover:underline">
+            Forum
+          </Link>
+        </h2>
+        <ul className="mt-2 space-y-1.5 text-[13px]">
+          {threads.slice(0, SHOWN).map((t) => (
+            <li key={t.id}>
+              <Link to="/g/forum" search={{ thread: t.id }} rel="nofollow" className="font-semibold text-link hover:underline">
+                {t.title}
+              </Link>
+              <span className="text-muted">
+                {' '}
+                · {t.author.name} · {day(t.last)} · {t.comments} {t.comments === 1 ? 'comment' : 'comments'}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </li>
   )
 }

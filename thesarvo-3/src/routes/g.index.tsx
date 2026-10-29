@@ -27,10 +27,7 @@ function Home() {
       <div className="mx-auto max-w-6xl px-4 pb-10 sm:px-6">
         <div className="max-w-4xl">
           <Notices />
-          <HomeWeather />
-          <ContentsView node={index} />
-          <WhatsNew />
-          <ForumFeed />
+          <ContentsView node={index} after={<><HomeWeather /><WhatsNew /><ForumFeed /></>} />
         </div>
       </div>
     </div>
