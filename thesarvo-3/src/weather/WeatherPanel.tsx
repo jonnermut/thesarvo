@@ -1,5 +1,5 @@
-import { useEffect, useState  } from 'react'
-import type {ReactNode} from 'react';
+import { useEffect, useState } from 'react'
+import type { ReactNode } from 'react'
 import { fetchWeather } from './bom'
 import type { Day, Weather } from './bom'
 import { iconKind, WeatherIcon } from './icons'
@@ -9,7 +9,7 @@ import type { Place } from './places'
 const TZ = 'Australia/Hobart'
 const weekday = (iso: string) => new Date(iso).toLocaleDateString('en-AU', { weekday: 'short', timeZone: TZ })
 const clock = (iso: string) => new Date(iso).toLocaleTimeString('en-AU', { hour: 'numeric', minute: '2-digit', timeZone: TZ })
-const deg = (n: number | null) => (n === null ? '–' : `${Math.round(n)}°`)
+export const deg = (n: number | null) => (n === null ? '–' : `${Math.round(n)}°`)
 
 type State = { weather: Weather } | { error: true } | undefined
 
@@ -36,7 +36,7 @@ export function WeatherPanel() {
 
 /** One fetch per place for as long as the page lives, so a card that rotates back into view does not ask again. */
 const loaded = new Map<string, Promise<Weather>>()
-function loadWeather(p: Place) {
+export function loadWeather(p: Place) {
   let w = loaded.get(p.name)
   if (!w) {
     w = fetchWeather(p)

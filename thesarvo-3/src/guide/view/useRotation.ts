@@ -14,5 +14,5 @@ export function useRotation(count: number, seconds: number) {
     return () => clearInterval(t)
   }, [held, count, seconds])
   const hold = { onMouseEnter: () => setHeld(true), onMouseLeave: () => setHeld(false), onFocus: () => setHeld(true), onBlur: () => setHeld(false) }
-  return { at, hold, step: (by: number) => setAt((a) => (a + by + count) % count) }
+  return { at, held, hold, go: setAt, step: (by: number) => setAt((a) => (a + by + count) % count) }
 }

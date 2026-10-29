@@ -107,7 +107,7 @@ function Card({ node }: { node: IndexNode }) {
   // A region has no climbs of its own: show its guides added up.
   const sum = useMemo(() => (s ? undefined : rollup(node)), [node, s])
   const classics = s ? s.classics.map((c) => [node, c] as const) : (sum?.classics ?? [])
-  const [seconds] = useState(() => 7 + Math.random() * 4)
+  const [seconds] = useState(() => 5 + Math.random() * 3)
   const { at, hold } = useRotation(Math.ceil(classics.length / SHOWN), seconds)
   // The three on show step through the longer list; wrapping fills the last page.
   const shown = classics.length <= SHOWN ? classics : Array.from({ length: SHOWN }, (_, k) => classics[(at * SHOWN + k) % classics.length])
