@@ -107,7 +107,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <footer className="no-print border-t border-black/10 bg-paper px-4 py-6 text-xs text-muted">
         <div className="mx-auto flex max-w-5xl flex-col gap-2 sm:flex-row sm:justify-between">
-          <p>© thesarvo.com · Climb safely. Guides are a starting point, not a guarantee.</p>
+          <p>
+            © the authors of thesarvo.com, licensed under a{' '}
+            <a href="https://creativecommons.org/licenses/by-sa/2.5/au/" className="underline hover:text-navy">Creative Commons Attribution-Share Alike 2.5 Australia License</a>.{' '}
+            <Link to="/g/$" params={{ _splat: 'more/about-thesarvo-com' }} className="underline hover:text-navy">More details</Link>. Climb safely: guides are a starting point, not a guarantee.
+          </p>
           <p>Tasmania, Australia</p>
         </div>
       </footer>

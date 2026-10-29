@@ -54,7 +54,7 @@ export function withLocalPages(fresh: StoredIndexNode, previous: StoredIndexNode
 }
 
 /**
- * What Confluence's index says that ours does not, once ours is kept by hand (sync.json `indexLocked`: pages moved to Stuff or the Archive, so the
+ * What Confluence's index says that ours does not, once ours is kept by hand (sync.json `indexLocked`: pages moved to More or the Archive, so the
  * sync must not overwrite it). Compared by page id, only over the pages Confluence lists; where a page sits is ours to decide, so a move is not a change.
  */
 export function indexChanges(live: StoredIndexNode, ours: StoredIndexNode): string[] {
