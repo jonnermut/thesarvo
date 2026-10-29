@@ -36,7 +36,7 @@ export function PrevNext({ id, width = 'max-w-6xl' }: { id: string; width?: stri
   if (!around) return null
   const [prev, next] = around
   return (
-    <nav aria-label="Other guides" className={`no-print mx-auto grid ${width} grid-cols-2 gap-3 px-4 pb-8 sm:px-6`}>
+    <nav aria-label="Other guides" className={`no-print mx-auto grid ${width} grid-cols-2 gap-3 px-4 pb-8 pt-2 sm:px-6`}>
       <div className="max-w-sm">{prev && <Neighbour {...prev} label="← Previous" />}</div>
       <div className="ml-auto max-w-sm text-right">{next && <Neighbour {...next} label="Next →" />}</div>
     </nav>

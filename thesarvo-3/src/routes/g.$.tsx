@@ -99,14 +99,13 @@ function GuidePage() {
         </ClientOnly>
       </>
     )
-  // Breadcrumbs line up with the page body beneath them. A guide with pages below it lists them after the guide.
+  // Breadcrumbs line up with the page body beneath them. A guide with pages below it lists them after the guide, and previous and next close the page.
   if (guide)
     return (
       <>
         <Breadcrumbs trail={trail} current={node} width={`${width} px-4 sm:px-6`} end={<WidthToggle />} />
         {/* Keyed per guide: moving between guides starts afresh, so maps fit the new guide's points. */}
         <GuideView key={node.id} guide={guide} hash={hash} full={full} />
-        <PrevNext id={node.id} width={width} />
         {node.children.length > 0 && (
           <div className={`mx-auto ${width} px-4 pb-10 sm:px-6`}>
             <div className="max-w-4xl">
@@ -114,6 +113,7 @@ function GuidePage() {
             </div>
           </div>
         )}
+        <PrevNext id={node.id} width={width} />
       </>
     )
   // A page of prose, a list of what is beneath it, or both.
