@@ -1,0 +1,27 @@
+thesarvo-3/src/guide/view/ContentsView.tsx
+  s_e20d0a1ebc47aa::t_ae713abcc97f38 110
+thesarvo-3/src/guide/view/useRotation.ts
+  s_e20d0a1ebc47aa::t_ae713abcc97f38 17
+thesarvo-3/src/weather/WeatherPanel.tsx
+  s_e20d0a1ebc47aa::t_ae713abcc97f38 1-2,12,39
+thesarvo-3/src/guide/view/HomeWeather.tsx
+  s_e20d0a1ebc47aa::t_ae713abcc97f38 2-4,6-7,10-11,13-26,28-55,57-67,72-104
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_488e97cc22be1a 68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "91c8398f34fcdc9b334447f2efcd238b925e1057",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
