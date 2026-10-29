@@ -125,7 +125,10 @@ export default function Editor({ guide }: { guide: Guide }) {
         <span role="status" className={`mx-1 text-sm ${saver.status.kind === 'retrying' ? 'text-red-700' : 'text-muted'}`}>
           {statusText(saver)}
         </span>
-        <div className="ml-auto flex gap-2">
+        <div className="ml-auto flex items-center gap-3">
+          <a href="/g/more/guide-manual" target="_blank" rel="noreferrer" className="text-sm text-link hover:underline">
+            Guide manual
+          </a>
           <Button
             onClick={() => {
               rememberPlace()
