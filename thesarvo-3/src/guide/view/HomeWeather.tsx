@@ -9,16 +9,20 @@ const WEATHER_SECONDS = 12
 export function HomeWeather() {
   const { at, hold, step } = useRotation(PLACES.length, WEATHER_SECONDS)
   return (
-    <li aria-label="Weather" className="flex min-w-0 flex-col gap-1" {...hold}>
-      <PlaceCard place={PLACES[at]} />
-      <p className="flex justify-end gap-3 text-[13px]">
-        <button type="button" onClick={() => step(1)} className="text-link hover:underline">
-          Next area
-        </button>
-        <Link to="/g/$" params={{ _splat: 'more/weather' }} className="text-link hover:underline">
-          All areas
-        </Link>
-      </p>
+    <li aria-label="Weather" className="min-w-0" {...hold}>
+      <PlaceCard
+        place={PLACES[at]}
+        footer={
+          <p className="flex justify-between gap-3 border-t border-line pt-2 text-[13px]">
+            <button type="button" onClick={() => step(1)} className="text-link hover:underline">
+              Next area
+            </button>
+            <Link to="/g/$" params={{ _splat: 'more/weather' }} className="text-link hover:underline">
+              All areas
+            </Link>
+          </p>
+        }
+      />
     </li>
   )
 }

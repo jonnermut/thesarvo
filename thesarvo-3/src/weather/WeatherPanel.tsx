@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState  } from 'react'
+import type {ReactNode} from 'react';
 import { fetchWeather } from './bom'
 import type { Day, Weather } from './bom'
 import { iconKind, WeatherIcon } from './icons'
@@ -45,7 +46,8 @@ function loadWeather(p: Place) {
   return w
 }
 
-export function PlaceCard({ place }: { place: Place }) {
+/** `footer`, when given, sits along the bottom of the card. */
+export function PlaceCard({ place, footer }: { place: Place; footer?: ReactNode }) {
   const [state, setState] = useState<State>()
   useEffect(() => {
     let live = true
@@ -61,7 +63,7 @@ export function PlaceCard({ place }: { place: Place }) {
   const today = weather?.days[0]
   const now = weather?.now
   return (
-    <div className="card h-full p-3">
+    <div className="card flex h-full flex-col p-3">
       <div className="flex flex-wrap items-baseline justify-between gap-x-3">
         <h3 className="text-[17px] font-semibold text-navy">{place.name}</h3>
         <span className="flex gap-3 text-[13px]">
@@ -112,6 +114,7 @@ export function PlaceCard({ place }: { place: Place }) {
           ))}
         </ol>
       )}
+      {footer && <div className="mt-auto pt-2">{footer}</div>}
     </div>
   )
 }
