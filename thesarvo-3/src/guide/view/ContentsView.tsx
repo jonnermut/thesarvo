@@ -15,7 +15,7 @@ import { useRotation } from './useRotation'
 
 const MapView = lazy(() => import('#/guide/islands/MapView'))
 
-/** Easiest to hardest: green, yellow, orange, red. */
+/** Easiest to hardest: sky, blue, indigo, amber. */
 const BAND_COLOURS = ['bg-band-1', 'bg-band-2', 'bg-band-3', 'bg-band-4']
 
 /** Classics a card shows at once; it steps through its longer list. */

@@ -19,10 +19,10 @@
   --color-amber: #f7941e;
   --color-amber-deep: #b45f06;
   /* Grade bands, easiest to hardest. */
-  --color-band-1: #4cae7a;
-  --color-band-2: #e4b92e;
-  --color-band-3: #f0842c;
-  --color-band-4: #d6453d;
+  --color-band-1: #5bbfc9;
+  --color-band-2: #2f80d1;
+  --color-band-3: #5a45b5;
+  --color-band-4: #f7941e;
 }
 
 html {
