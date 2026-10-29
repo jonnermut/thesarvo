@@ -1,0 +1,36 @@
+thesarvo-3/src/weather/bom.test.ts
+  s_e20d0a1ebc47aa::t_b3b418afbca95e 7,13,18-19
+thesarvo-3/src/weather/bom.ts
+  s_e20d0a1ebc47aa::t_b3b418afbca95e 6-7,24,48
+thesarvo-3/src/weather/places.ts
+  s_e20d0a1ebc47aa::t_b3b418afbca95e 1-2,6,8-14,17-21
+  s_e20d0a1ebc47aa::t_2520cdf0021cdc 5,7
+thesarvo-3/src/weather/WeatherPanel.tsx
+  s_e20d0a1ebc47aa::t_fe969a2204dd64 113,117
+  s_e20d0a1ebc47aa::t_ef90e577bf1cae 4-5,58-69,75,88-94,107-109
+  s_e20d0a1ebc47aa::t_2496745de422ba 110-111
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_3d31b9904c0672 66-70
+thesarvo-3/src/weather/icons.tsx
+  s_e20d0a1ebc47aa::t_b3b418afbca95e 1-87
+thesarvo-3/src/weather/icons.test.ts
+  s_e20d0a1ebc47aa::t_b3b418afbca95e 1-20
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_5db26b7bb72c82 245
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "94574b611ea9dd4a2d7906d5fb8001ea56b5a233",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
