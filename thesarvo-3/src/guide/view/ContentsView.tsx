@@ -28,8 +28,8 @@ const plural = (n: number, word: string) => `${n.toLocaleString()} ${word}${n ==
  * size, grade spread and best climbs, and a map of the crags. Rendered with the stats the page was
  * built with, then refreshed from the manifest, so a change to one guide needs no rebuild here.
  */
-/** `after`, when given, is list items (cards) slotted in after the first child: the home page puts weather, what's new and the forum there. */
-export function ContentsView({ node, after }: { node: IndexNode; after?: ReactNode }) {
+/** `bare` leaves out the heading and totals, for the home page, whose hero says it. `after`, when given, is list items (cards) slotted in after the first child: the home page puts weather, what's new and the forum there. */
+export function ContentsView({ node, after, bare }: { node: IndexNode; after?: ReactNode; bare?: boolean }) {
   const [fresh, setFresh] = useState<IndexNode>()
   useEffect(() => {
     let live = true
@@ -54,9 +54,10 @@ export function ContentsView({ node, after }: { node: IndexNode; after?: ReactNo
   const legends = [...new Set(withStats.map((n) => n.stats!.problems))]
 
   return (
-    <section aria-labelledby="contents-title" className="mt-10 space-y-4">
+    <section aria-label="Contents" className={`space-y-4 ${bare ? 'mt-6' : 'mt-10'}`}>
+      {!bare && (
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 border-b border-line">
-        <h2 id="contents-title" className="text-2xl font-bold text-navy">
+        <h2 className="text-2xl font-bold text-navy">
           {current.isGuide ? 'Also here' : 'Contents'}
         </h2>
         {total > 0 && (
@@ -65,6 +66,7 @@ export function ContentsView({ node, after }: { node: IndexNode; after?: ReactNo
           </p>
         )}
       </div>
+      )}
       {legends.length > 0 && (
         <div className="flex flex-wrap gap-x-5 gap-y-1 text-[12px] text-muted">
           {legends.map((problems) => (
