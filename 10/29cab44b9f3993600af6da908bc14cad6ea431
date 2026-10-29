@@ -1,0 +1,23 @@
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_f110bc481ee093 195
+thesarvo-3/docs/plan-mvp.md
+  s_e20d0a1ebc47aa::t_22192f000e04e1 13-27,337-338,390,463
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_a41897d021b68c 37,64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1029cab44b9f3993600af6da908bc14cad6ea431",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
