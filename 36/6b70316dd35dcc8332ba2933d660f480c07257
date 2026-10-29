@@ -1,0 +1,51 @@
+thesarvo-3/src/guide/avatars/googlePicture.ts
+  s_e20d0a1ebc47aa::t_fa5b4752d83312 1-33
+thesarvo-3/src/guide/avatars/shrink.ts
+  s_e20d0a1ebc47aa::t_fa5b4752d83312 1-13
+thesarvo-3/src/guide/avatars/googlePicture.test.ts
+  s_e20d0a1ebc47aa::t_3b1bbc27f3b4fd 1-2,6-36
+  s_e20d0a1ebc47aa::t_e2c6a8fcd424b3 3-5
+thesarvo-3/src/auth/cognitoLambda.ts
+  s_e20d0a1ebc47aa::t_285e315e926795 7,22
+thesarvo-3/src/routes/auth.callback.tsx
+  s_e20d0a1ebc47aa::t_fa5b4752d83312 4,19-22
+thesarvo-3/src/auth/auth.test.ts
+  s_e20d0a1ebc47aa::t_ff751868c9e7e4 6,127-183
+  s_e20d0a1ebc47aa::t_e541de69ff98ab 184
+thesarvo-3/scripts/cognito-setup.sh
+  s_e20d0a1ebc47aa::t_ff751868c9e7e4 30-32
+thesarvo-3/src/guide/avatars/Avatar.tsx
+  s_e20d0a1ebc47aa::t_fa5b4752d83312 17
+thesarvo-3/src/auth/cognitoApi.ts
+  s_e20d0a1ebc47aa::t_285e315e926795 1-19
+thesarvo-3/src/auth/cognitoPreSignUp.ts
+  s_e20d0a1ebc47aa::t_285e315e926795 1-2,9-10,24-79,83-86,88,90-94,97-99
+thesarvo-3/src/aws/s3.ts
+  s_e20d0a1ebc47aa::t_312d3e72dc059c 64-65,72,79-80,82
+thesarvo-3/src/components/AvatarForm.tsx
+  s_e20d0a1ebc47aa::t_fa5b4752d83312 4
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_aaa9385093e4c1 56,105
+thesarvo-3/docs/google-signin.md
+  s_e20d0a1ebc47aa::t_bb5e1141ef7fe2 36
+thesarvo-3/docs/plan-mvp.md
+  s_e20d0a1ebc47aa::t_aea70e9fe44fdf 19,532,536-537
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_fd4eabe3b55d59 64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "366b70316dd35dcc8332ba2933d660f480c07257",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
