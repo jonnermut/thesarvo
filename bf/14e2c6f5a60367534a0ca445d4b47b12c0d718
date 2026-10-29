@@ -1,0 +1,50 @@
+thesarvo-3/src/guide/view/ContentsView.tsx
+  s_e20d0a1ebc47aa::t_2c85d3ee5b340a 127-138
+thesarvo-3/src/guide/content/redirects.ts
+  s_e20d0a1ebc47aa::t_1e9ef0863ca360 15-23,40-46
+thesarvo-3/src/routes/g.$.tsx
+  s_e20d0a1ebc47aa::t_eb77f4777a8771 14-15
+  s_e20d0a1ebc47aa::t_fbe6210866f38f 126-130
+thesarvo-3/src/weather/geohash.test.ts
+  s_e20d0a1ebc47aa::t_cc0330083f2fb5 1-10
+thesarvo-3/src/guide/content/manifest.test.ts
+  s_e20d0a1ebc47aa::t_0bdd8976e8f6df 29-35
+thesarvo-3/src/weather/WeatherPanel.tsx
+  s_e20d0a1ebc47aa::t_c1456c3525c058 1-103
+thesarvo-3/src/weather/geohash.ts
+  s_e20d0a1ebc47aa::t_cc0330083f2fb5 1-24
+thesarvo-3/src/weather/bom.ts
+  s_e20d0a1ebc47aa::t_cc0330083f2fb5 1-64
+thesarvo-3/src/guide/content/redirects.test.ts
+  s_e20d0a1ebc47aa::t_f09391baa56aa9 28-36
+thesarvo-3/src/weather/bom.test.ts
+  s_e20d0a1ebc47aa::t_cc0330083f2fb5 1-22
+thesarvo-3/src/weather/places.ts
+  s_e20d0a1ebc47aa::t_cc0330083f2fb5 1-4,6-17
+  s_e20d0a1ebc47aa::t_c1456c3525c058 5
+  s_e20d0a1ebc47aa::t_fbe6210866f38f 18-20
+thesarvo-3/src/guide/content/manifest.ts
+  s_e20d0a1ebc47aa::t_2c85d3ee5b340a 3,24-25,62,73
+thesarvo-3/docs/as-built.md
+  s_e20d0a1ebc47aa::t_dbd3045492f74e 245
+thesarvo-3/docs/plan-mvp.md
+  s_e20d0a1ebc47aa::t_d389b510896215 217
+thesarvo-3/docs/todo.md
+  s_e20d0a1ebc47aa::t_0eaac671bf9996 66,68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bf14e2c6f5a60367534a0ca445d4b47b12c0d718",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
