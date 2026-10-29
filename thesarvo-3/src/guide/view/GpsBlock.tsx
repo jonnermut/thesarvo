@@ -1,25 +1,24 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { usePresence } from '#/components/overlay'
 import type { Gps } from '#/guide/model/types'
-import { gpsToKml } from './kml'
+import { gpsToGpx, gpsToKml } from './kml'
 
 const MapView = lazy(() => import('#/guide/islands/MapView'))
 
 const mapsUrl = (lat: string, lon: string) =>
   `https://www.google.com/maps?q=${lat},${lon}`
 
-function downloadKml(name: string, gps: Gps) {
-  const url = URL.createObjectURL(
-    new Blob([gpsToKml(name, gps)], {
-      type: 'application/vnd.google-earth.kml+xml',
-    }),
-  )
+function download(name: string, ext: string, type: string, text: string) {
+  const url = URL.createObjectURL(new Blob([text], { type }))
   const a = document.createElement('a')
   a.href = url
-  a.download = `${name || 'guide'}.kml`
+  a.download = `${name || 'guide'}.${ext}`
   a.click()
   URL.revokeObjectURL(url)
 }
+
+const downloadKml = (name: string, gps: Gps) => download(name, 'kml', 'application/vnd.google-earth.kml+xml', gpsToKml(name, gps))
+const downloadGpx = (name: string, gps: Gps) => download(name, 'gpx', 'application/gpx+xml', gpsToGpx(name, gps))
 
 export const DownloadIcon = () => (
   <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -63,11 +62,20 @@ export function GpsBlock({ gps, guideName = '' }: { gps: Gps; guideName?: string
         <button
           type="button"
           onClick={() => downloadKml(guideName, gps)}
-          title="Download the points for Google Earth and other GPS apps"
+          title="Download the points for Google Earth"
           className="inline-flex items-center gap-1 text-[13px] text-muted hover:text-link"
         >
           <DownloadIcon />
           KML
+        </button>
+        <button
+          type="button"
+          onClick={() => downloadGpx(guideName, gps)}
+          title="Download the points for GPS units and apps such as Gaia"
+          className="inline-flex items-center gap-1 text-[13px] text-muted hover:text-link"
+        >
+          <DownloadIcon />
+          GPX
         </button>
         <div className="flex divide-x divide-line overflow-hidden rounded border border-line text-[13px]">
           <Toggle

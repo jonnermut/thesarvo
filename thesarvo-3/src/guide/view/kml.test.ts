@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { IndexNode } from '#/guide/content/types'
 import type { Gps, Guide } from '#/guide/model/types'
-import { gpsToKml, treeToGpx, treeToKml } from './kml'
+import { gpsToGpx, gpsToKml, treeToGpx, treeToKml } from './kml'
 
 const gps: Gps = {
   type: 'gps',
@@ -58,5 +58,13 @@ describe('treeToGpx', () => {
   })
   it('is undefined when nothing below has GPS', async () => {
     expect(await treeToGpx(node('r', 'R', [node('bare', 'Bare')], false), guideOf)).toBeUndefined()
+  })
+})
+
+describe('gpsToGpx', () => {
+  it('writes one guide with its name in each description', () => {
+    const gpx = gpsToGpx('The & Crag', gps)
+    expect(gpx).toContain('<metadata><name>The &amp; Crag</name></metadata>')
+    expect(gpx).toContain('<wpt lat="-42.1" lon="147.2"><name>Car &amp; park</name><desc>The &amp; Crag</desc></wpt>')
   })
 })

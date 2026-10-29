@@ -60,9 +60,27 @@ function latLons(l: GpsLine): string[][] {
   return a?.length === 2 && b?.length === 2 ? [[a[0], a[1]], [a[0], b[1]], [b[0], b[1]], [b[0], a[1]], [a[0], a[1]]] : pairs
 }
 
+const gpxDocument = (name: string, body: string) =>
+  `<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="thesarvo.com" xmlns="http://www.topografix.com/GPX/1/1"><metadata><name>${esc(name)}</name></metadata>${body}</gpx>\n`
+
+/** A GPS block's points as waypoints and its tracks and areas as tracks, each described by the guide it is from. */
+function gpxItems(gps: Gps, guide: string): { waypoints: string[]; tracks: string[] } {
+  const desc = `<desc>${esc(guide)}</desc>`
+  return {
+    waypoints: gps.points.map((p) => `<wpt lat="${p.latitude}" lon="${p.longitude}"><name>${esc(p.description || p.code)}</name>${desc}</wpt>`),
+    tracks: gps.lines.map((l) => `<trk><name>${esc(l.description)}</name>${desc}<trkseg>${latLons(l).map(([lat, lon]) => `<trkpt lat="${lat}" lon="${lon}"/>`).join('')}</trkseg></trk>`),
+  }
+}
+
+/** GPX of a guide's GPS block, which GPS units and apps such as Gaia read. */
+export function gpsToGpx(name: string, gps: Gps) {
+  const { waypoints, tracks } = gpxItems(gps, name)
+  return gpxDocument(name, waypoints.join('') + tracks.join(''))
+}
+
 /**
- * Every guide below `node` as GPX, which GPS units and apps such as Gaia read: points are waypoints (the guide named in the description),
- * tracks and areas are tracks. GPX has no folders, so the guide is all that tells them apart. Undefined when nothing below has GPS.
+ * Every guide below `node` as GPX. GPX has no folders, so the guide named in each description is all that tells them apart.
+ * Undefined when nothing below has GPS.
  */
 export async function treeToGpx(node: IndexNode, guideOf: (id: string) => Promise<Guide | null>): Promise<string | undefined> {
   const waypoints: string[] = []
@@ -71,14 +89,14 @@ export async function treeToGpx(node: IndexNode, guideOf: (id: string) => Promis
     const guide = n.isGuide ? await guideOf(n.id) : null
     for (const b of guide?.nodes ?? []) {
       if (b.type !== 'gps') continue
-      for (const p of b.points) waypoints.push(`<wpt lat="${p.latitude}" lon="${p.longitude}"><name>${esc(p.description || p.code)}</name><desc>${esc(n.title)}</desc></wpt>`)
-      for (const l of b.lines) tracks.push(`<trk><name>${esc(l.description)}</name><desc>${esc(n.title)}</desc><trkseg>${latLons(l).map(([lat, lon]) => `<trkpt lat="${lat}" lon="${lon}"/>`).join('')}</trkseg></trk>`)
+      const items = gpxItems(b, n.title)
+      waypoints.push(...items.waypoints)
+      tracks.push(...items.tracks)
     }
     for (const c of n.children) await visit(c)
   }
   for (const c of node.children) await visit(c)
-  if (!waypoints.length && !tracks.length) return undefined
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="thesarvo.com" xmlns="http://www.topografix.com/GPX/1/1"><metadata><name>${esc(node.title || 'thesarvo')}</name></metadata>${waypoints.join('')}${tracks.join('')}</gpx>\n`
+  return waypoints.length || tracks.length ? gpxDocument(node.title || 'thesarvo', waypoints.join('') + tracks.join('')) : undefined
 }
 
 /** Where the build puts the KML of everything below a contents page. */

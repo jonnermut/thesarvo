@@ -8,7 +8,7 @@ import type { GpsPoint } from '#/guide/model/types'
 import { fetchTree } from '#/guide/server'
 import { LockMark } from '#/components/LockMark'
 import { DownloadIcon } from './GpsBlock'
-import { treeKmlUrl } from './kml'
+import { treeGpxUrl, treeKmlUrl } from './kml'
 import { rollup } from './rollup'
 import { PROBLEM_BANDS, ROUTE_BANDS } from './routeStats'
 import { useRotation } from './useRotation'
@@ -219,15 +219,16 @@ function CragMap({ id, nodes }: { id: string; nodes: IndexNode[] }) {
         {/* Keyed on the pins so another page's map fits its own crags. */}
         <MapView key={key} points={points} lines={[]} onSelect={(path) => void navigate({ to: guideUrl({ path }) })} />
       </Suspense>
-      <a
-        href={treeKmlUrl(id)}
-        download
-        title="Every GPS point below this page, for Google Earth and other GPS apps"
-        className="mt-1 inline-flex items-center gap-1 text-[13px] text-muted hover:text-link"
-      >
-        <DownloadIcon />
-        KML of all GPS points
-      </a>
+      <p className="mt-1 flex flex-wrap gap-x-4 text-[13px] text-muted">
+        <a href={treeKmlUrl(id)} download title="Every GPS point below this page, for Google Earth" className="inline-flex items-center gap-1 hover:text-link">
+          <DownloadIcon />
+          KML of all GPS points
+        </a>
+        <a href={treeGpxUrl(id)} download title="Every GPS point below this page, for GPS units and apps such as Gaia" className="inline-flex items-center gap-1 hover:text-link">
+          <DownloadIcon />
+          GPX
+        </a>
+      </p>
     </div>
   )
 }
