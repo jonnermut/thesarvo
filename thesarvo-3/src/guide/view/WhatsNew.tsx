@@ -15,6 +15,7 @@ const day = (iso: string) => new Date(iso).toLocaleDateString('en-AU', { day: 'n
  */
 export function WhatsNew() {
   const [changes, setChanges] = useState<RecentChange[]>([])
+  const [all, setAll] = useState(false)
   useEffect(() => {
     let live = true
     fetchRecent().then(
@@ -35,10 +36,10 @@ export function WhatsNew() {
           What’s new
         </h2>
         <ul className="mt-2 space-y-1.5 text-[13px]">
-          {changes.slice(0, SHOWN).map((c) => (
+          {(all ? changes : changes.slice(0, SHOWN)).map((c) => (
             <li key={c.id} className="flex items-start gap-2">
               <Avatar ids={[c.sub]} name={c.name} className="mt-0.5 size-5 shrink-0 text-[10px]" />
-              <div className="min-w-0">
+              <div className="line-clamp-2 min-w-0">
                 <Link to="/g/$" params={{ _splat: c.path }} search={{ history: true }} hash={c.session} rel="nofollow" className="font-semibold text-link hover:underline">
                   {c.title}
                 </Link>
@@ -51,6 +52,11 @@ export function WhatsNew() {
             </li>
           ))}
         </ul>
+        {changes.length > SHOWN && (
+          <button type="button" onClick={() => setAll((a) => !a)} className="mt-2 text-[13px] text-link hover:underline">
+            {all ? 'Fewer' : 'More'}
+          </button>
+        )}
       </section>
     </li>
   )
