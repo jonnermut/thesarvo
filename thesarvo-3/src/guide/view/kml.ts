@@ -1,5 +1,5 @@
 import type { IndexNode } from '#/guide/content/types'
-import type { Gps, Guide } from '#/guide/model/types'
+import type { Gps, GpsLine, Guide } from '#/guide/model/types'
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
@@ -52,8 +52,38 @@ export async function treeToKml(node: IndexNode, guideOf: (id: string) => Promis
   return body ? kmlDocument(node.title || 'thesarvo', body) : undefined
 }
 
+/** A track's or area's "lat,lon" pairs; a rectangle's two corners become its closed ring. */
+function latLons(l: GpsLine): string[][] {
+  const pairs = l.path.split(/\s+/).filter(Boolean).map((p) => p.split(','))
+  if (l.shape !== 'rectangle') return pairs
+  const [a, b] = pairs
+  return a?.length === 2 && b?.length === 2 ? [[a[0], a[1]], [a[0], b[1]], [b[0], b[1]], [b[0], a[1]], [a[0], a[1]]] : pairs
+}
+
+/**
+ * Every guide below `node` as GPX, which GPS units and apps such as Gaia read: points are waypoints (the guide named in the description),
+ * tracks and areas are tracks. GPX has no folders, so the guide is all that tells them apart. Undefined when nothing below has GPS.
+ */
+export async function treeToGpx(node: IndexNode, guideOf: (id: string) => Promise<Guide | null>): Promise<string | undefined> {
+  const waypoints: string[] = []
+  const tracks: string[] = []
+  async function visit(n: IndexNode) {
+    const guide = n.isGuide ? await guideOf(n.id) : null
+    for (const b of guide?.nodes ?? []) {
+      if (b.type !== 'gps') continue
+      for (const p of b.points) waypoints.push(`<wpt lat="${p.latitude}" lon="${p.longitude}"><name>${esc(p.description || p.code)}</name><desc>${esc(n.title)}</desc></wpt>`)
+      for (const l of b.lines) tracks.push(`<trk><name>${esc(l.description)}</name><desc>${esc(n.title)}</desc><trkseg>${latLons(l).map(([lat, lon]) => `<trkpt lat="${lat}" lon="${lon}"/>`).join('')}</trkseg></trk>`)
+    }
+    for (const c of n.children) await visit(c)
+  }
+  for (const c of node.children) await visit(c)
+  if (!waypoints.length && !tracks.length) return undefined
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="thesarvo.com" xmlns="http://www.topografix.com/GPX/1/1"><metadata><name>${esc(node.title || 'thesarvo')}</name></metadata>${waypoints.join('')}${tracks.join('')}</gpx>\n`
+}
+
 /** Where the build puts the KML of everything below a contents page. */
 export const treeKmlUrl = (id: string) => `/g-data/kml/${id}.kml`
+export const treeGpxUrl = (id: string) => `/g-data/kml/${id}.gpx`
 
 /** The guide's name, taken from its header block. */
 export const guideTitle = (guide: Guide) => guide.nodes.find((n) => n.type === 'header')?.name ?? ''

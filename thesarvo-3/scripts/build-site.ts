@@ -28,7 +28,7 @@ import { siteRecent } from '../src/guide/content/recent'
 import { flatten, GUIDE_PREFIX, guideUrl } from '../src/guide/content/paths'
 import type { IndexNode } from '../src/guide/content/types'
 import type { Guide } from '../src/guide/model/types'
-import { treeToKml } from '../src/guide/view/kml'
+import { treeToGpx, treeToKml } from '../src/guide/view/kml'
 import { guideShard } from '../src/guide/search/shard'
 import type { Pack, SearchFiles } from '../src/guide/search/shard'
 
@@ -99,10 +99,12 @@ for (const node of pages) {
   if (history.length) await writeJson(`history/${node.id}.json`, history)
 }
 
-// Google Earth files of everything below each contents page, rewritten every build as any guide's GPS may change them.
+// Google Earth (KML) and GPS (GPX) files of everything below each contents page, rewritten every build as any guide's GPS may change them.
 for (const node of nodes.filter((n) => n.children.length)) {
   const kml = await treeToKml(node, guideOf)
   if (kml) await writeFile(path.join(data, 'kml', `${node.id}.kml`), kml)
+  const gpx = await treeToGpx(node, guideOf)
+  if (gpx) await writeFile(path.join(data, 'kml', `${node.id}.gpx`), gpx)
 }
 
 // Search data is named by its content, so browsers keep it until it changes.
