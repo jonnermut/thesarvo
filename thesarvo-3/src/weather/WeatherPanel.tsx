@@ -15,11 +15,8 @@ type State = { weather: Weather } | { error: true } | undefined
 /** Forecasts and the latest observations for where Tasmanian climbers go, straight from the Bureau of Meteorology in the browser. */
 export function WeatherPanel() {
   return (
-    <section aria-labelledby="climbing-weather" className="mt-8">
-      <h2 id="climbing-weather" className="border-b border-line pb-1 text-[22px] font-bold text-navy">
-        Weather where we climb
-      </h2>
-      <p className="mt-2 text-sm text-muted">
+    <section aria-label="Weather where we climb" className="mt-4">
+      <p className="text-sm text-muted">
         Today and the week ahead for the main climbing areas, with the latest reading from the nearest weather station. Wind is what usually decides a day, so read the text. Mountain and coastal conditions can differ a lot from the town forecast.
       </p>
       <ul className="mt-4 grid gap-4 lg:grid-cols-2">
