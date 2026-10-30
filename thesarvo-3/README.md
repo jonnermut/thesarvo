@@ -20,6 +20,7 @@ npm run import-avatars                        # Confluence profile pictures into
 npm run import-forum-images                   # photos in old forum posts into the bucket's private/forum-images/; dry run unless --apply
 npm run restructure-index                     # one-off: More and Archive in the content index, the rest to private/archive/ in the bucket; --apply writes
 npm run build-redirects                       # old /confluence/ addresses to new paths, for the CloudFront key value store; --apply stores them
+npm run archive-cct                           # the two CCT Confluence spaces (pages, posts, comments, all versions) into the bucket's private/cct-archive/; dry run unless --apply
 npm run import-history                        # Confluence's version history of each guide into pages/<id>/history.json; dry run unless --apply
 ```
 
