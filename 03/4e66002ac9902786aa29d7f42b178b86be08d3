@@ -1,0 +1,47 @@
+README.md
+  s_e20d0a1ebc47aa::t_b79d9ae137b5a9 1-11
+docs/as-built.md
+  s_e20d0a1ebc47aa::t_f6d24fed74d86e 1-224
+docs/auth-comparison.md
+  s_e20d0a1ebc47aa::t_6b94ce28891650 1-119
+docs/aws-agent-rights.md
+  s_e20d0a1ebc47aa::t_99d3c8c758fd7d 1-42
+docs/forum-archive.md
+  s_e20d0a1ebc47aa::t_66498d782d8629 1-30
+docs/google-signin.md
+  s_e20d0a1ebc47aa::t_7124b185ab6aa4 1-39
+docs/gps-missing.md
+  s_e20d0a1ebc47aa::t_3ad0647e61487a 1-123
+docs/lambda-backend.md
+  s_e20d0a1ebc47aa::t_a5cd5901899c44 1-95
+docs/live-site-differences.md
+  s_e20d0a1ebc47aa::t_7c9ba098781815 1-57
+docs/plan-backend.md
+  s_e20d0a1ebc47aa::t_529fe8ee9d4d90 1-263
+docs/plan-guide.md
+  s_e20d0a1ebc47aa::t_c3612c81ba96be 1-287
+docs/plan-mvp.md
+  s_e20d0a1ebc47aa::t_896216ccce6476 1-583
+docs/plan-navigation.md
+  s_e20d0a1ebc47aa::t_e449430d6a107c 1-230
+docs/thesarvo-3-masterplan.md
+  s_e20d0a1ebc47aa::t_ed0f36a0c1536b 1-184
+docs/todo.md
+  s_e20d0a1ebc47aa::t_bdd9384d031ce5 1-112
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "034e66002ac9902786aa29d7f42b178b86be08d3",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
