@@ -1,0 +1,25 @@
+thesarvo-3/src/guide/view/ClimbBlock.test.tsx
+  s_e20d0a1ebc47aa::t_5c5eaa804669bb 4,41-53
+  s_e20d0a1ebc47aa::t_2bebf2c96628e1 54
+thesarvo-3/src/guide/view/ClimbBlock.tsx
+  s_e20d0a1ebc47aa::t_1e7147c96239a8 24,53-54,56-63
+  s_e20d0a1ebc47aa::t_5c5eaa804669bb 21-23,25,52,71-74
+  s_e20d0a1ebc47aa::t_2d9aaeb8afe2fd 55
+  s_e20d0a1ebc47aa::t_879e2e6e8f7ce5 75-76
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "46e7a1c8fa994bd581f25ac4cb2b70bdaec212af",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
