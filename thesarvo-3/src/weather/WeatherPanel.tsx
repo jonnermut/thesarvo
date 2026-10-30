@@ -94,6 +94,8 @@ export function PlaceCard({ place, footer }: { place: Place; footer?: ReactNode 
           <strong>Now{now.temp !== null && `: ${now.temp.toFixed(0)}°`}</strong>
           {now.feels !== null && now.temp !== null && Math.abs(now.feels - now.temp) >= 3 && <span> (feels {now.feels.toFixed(0)}°)</span>}
           {now.wind !== null && <span>, wind {now.windDir} {now.wind} km/h{now.gust !== null && now.gust > now.wind ? `, gusts ${now.gust}` : ''}</span>}
+          {now.humidity !== null && <span>, humidity {Math.round(now.humidity)}%</span>}
+          {now.deltaT !== null && <span title="Air temperature minus wet-bulb temperature: under 2 is very humid, 2 to 8 comfortable for spraying, over 10 very dry" className="cursor-help">, Delta-T {now.deltaT.toFixed(1)}</span>}
           {now.rain !== null && now.rain > 0 && <span>, {now.rain} mm rain since 9 am</span>}
           <span className="block text-xs text-muted">{now.station} station{now.at && `, ${clock(now.at)}`}</span>
         </p>
@@ -104,6 +106,7 @@ export function PlaceCard({ place, footer }: { place: Place; footer?: ReactNode 
           <p>
             <strong>Today:</strong> {today.text || today.short}
             {today.rainChance !== null && <span className="text-muted"> Rain chance {today.rainChance}%.</span>}
+            {today.humMin !== null && today.humMax !== null && <span className="text-muted"> Humidity {Math.round(today.humMin)}–{Math.round(today.humMax)}%{today.deltaMax !== null && `, Delta-T up to ${today.deltaMax.toFixed(1)}`}.</span>}
           </p>
         </div>
       )}
@@ -127,7 +130,7 @@ function TodayIcon({ descriptor }: { descriptor: string }) {
 function DayCell({ day }: { day: Day }) {
   const kind = iconKind(day.icon)
   return (
-    <li className="min-w-0 rounded bg-paper px-0.5 py-1" title={`${day.short} ${day.text}`}>
+    <li className="min-w-0 rounded bg-paper px-0.5 py-1" title={`${day.short} ${day.text}${day.humMin !== null && day.humMax !== null ? ` Humidity ${Math.round(day.humMin)}–${Math.round(day.humMax)}%${day.deltaMax !== null ? `, Delta-T up to ${day.deltaMax.toFixed(1)}` : ''}.` : ''}`}>
       <div className="font-semibold">{weekday(day.date)}</div>
       {kind && <WeatherIcon kind={kind} className="mx-auto my-0.5 size-6" />}
       <div>{deg(day.max)}</div>
