@@ -35,3 +35,10 @@ it('shows the crag steward with the other header sections, when there is one', (
   expect(within(a.container).getByText('The Tasmanian Climbing Club')).toBeInTheDocument()
   expect(steward(render(<GuideView guide={guide} />).container)).toBeNull()
 })
+
+it('leaves out a topo that has no photo', () => {
+  const topo = guide.nodes.find((n) => n.type === 'image')!
+  const bare = { ...guide, nodes: [...guide.nodes, { ...topo, id: 'bare', src: '', paths: [], rects: [], otherShapes: [], legend: [] }] }
+  const count = (g: typeof guide) => render(<GuideView guide={g} />).container.querySelectorAll('figure').length
+  expect(count(bare)).toBe(count(guide))
+})
