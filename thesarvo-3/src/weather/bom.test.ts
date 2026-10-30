@@ -14,6 +14,11 @@ it('reads the daily forecast and ignores what is missing', () => {
   expect(days[1]).toMatchObject({ max: null, min: null, short: '', rainChance: null, humMin: null })
 })
 
+it('draws the last day, which has no icon from the Bureau, from its rain chance', () => {
+  const icon = (chance: number | null) => parseDays({ data: [{ date: '2026-11-05T13:00:00Z', icon_descriptor: null, rain: { chance } }] })[0].icon
+  expect([icon(60), icon(30), icon(10), icon(null)]).toEqual(['shower', 'partly_cloudy', 'mostly_sunny', ''])
+})
+
 it('reads an observation, and nothing from an error', () => {
   const now = parseObservation({ metadata: { observation_time: '2026-10-29T02:30:00Z' }, data: { temp: 19.4, wind: { speed_kilometre: 35, direction: 'NW' }, gust: { speed_kilometre: 52 }, rain_since_9am: 0, humidity: 50, station: { name: 'Hobart', bom_id: '094029' } } })
   expect(now).toMatchObject({ temp: 19.4, wind: 35, windDir: 'NW', gust: 52, rain: 0, humidity: 50, station: 'Hobart', stationId: '094029', at: '2026-10-29T02:30:00Z' })

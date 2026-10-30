@@ -23,6 +23,9 @@ export function deltaT(temp: number | null, humidity: number | null): number | n
   return Math.max(0, Math.round((temp - wet) * 10) / 10)
 }
 
+/** The Bureau gives the last day of the week no icon or text, only temperatures and a rain chance; the chance is all there is to draw from. */
+const iconFromRain = (chance: number | null) => (chance === null ? '' : chance >= 50 ? 'shower' : chance >= 25 ? 'partly_cloudy' : 'mostly_sunny')
+
 /** The Bureau's daily forecast, one entry per day (about a week). */
 export function parseDays(body: unknown): Day[] {
   const data = obj(body).data
@@ -32,7 +35,7 @@ export function parseDays(body: unknown): Day[] {
     const rain = obj(day.rain)
     return {
       date: str(day.date),
-      icon: str(day.icon_descriptor),
+      icon: str(day.icon_descriptor) || iconFromRain(num(rain.chance)),
       min: num(day.temp_min),
       max: num(day.temp_max),
       short: str(day.short_text),
