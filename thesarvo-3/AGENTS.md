@@ -70,8 +70,8 @@ CI (`.github/workflows/thesarvo-3.yml`) runs typecheck, lint, tests, build and c
 ## After a change to the site
 
 - Rebuild and redeploy the static site: `npm run build-site -- --dir ../../thesarvo-content`, then
-  `scripts/deploy-site.sh`, then invalidate CloudFront (`E1UB3F13YZEV4`). Redeploy the Lambda
-  (`scripts/deploy-lambda.sh`) when server code changes; a push to `master` does not do it, so new API actions answer "Unknown action" until you do.
+  `../../thesarvo-private/scripts/deploy-site.sh`, then invalidate CloudFront (`E1UB3F13YZEV4`). Redeploy the Lambda
+  (`../../thesarvo-private/scripts/deploy-lambda.sh`) when server code changes; a push to `master` does not do it, so new API actions answer "Unknown action" until you do.
 - Check it in the browser at https://d2duffmg4ei2rq.cloudfront.net/g, at desktop and phone widths. The dev server
   is `npm run dev` on port 47213.
 - The owner often follows along remotely: send screenshots and files rather than describing them.
