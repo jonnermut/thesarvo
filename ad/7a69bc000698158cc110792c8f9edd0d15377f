@@ -1,0 +1,30 @@
+thesarvo-3/scripts/add-google.sh
+  s_e20d0a1ebc47aa::t_d3d52e90737766 4
+CLAUDE.md
+  s_e20d0a1ebc47aa::t_4d2ff6daf6767b 3-8
+thesarvo-3/README.md
+  s_e20d0a1ebc47aa::t_d3d52e90737766 4,55
+thesarvo-3/AGENTS.md
+  s_e20d0a1ebc47aa::t_d3d52e90737766 11,13-15,17,19-21,35,59
+  s_e20d0a1ebc47aa::t_4d2ff6daf6767b 9-10,57
+thesarvo-3/scripts/gps-report.ts
+  s_e20d0a1ebc47aa::t_d3d52e90737766 2,33-34
+thesarvo-3/scripts/publish-setup.sh
+  s_e20d0a1ebc47aa::t_d3d52e90737766 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ad7a69bc000698158cc110792c8f9edd0d15377f",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
