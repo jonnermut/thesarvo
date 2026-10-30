@@ -12,7 +12,7 @@ const clock = (iso: string) => new Date(iso).toLocaleTimeString('en-AU', { hour:
 export const deg = (n: number | null) => (n === null ? '–' : `${Math.round(n)}°`)
 
 /** How quickly things dry at this Delta-T, in a word. */
-export const dryingWord = (d: number) => (d < 4 ? 'slow drying' : d < 8 ? 'drying' : 'fast drying')
+export const dryingWord = (d: number) => (d < 1 ? 'likely damp' : d < 3 ? 'marginal' : d < 4 ? 'drying' : 'good drying')
 
 type State = { weather: Weather } | { error: true } | undefined
 
@@ -106,7 +106,7 @@ export function PlaceCard({ place, footer }: { place: Place; footer?: ReactNode 
           )}
           {now.rain !== null && now.rain > 0 && <span>, {now.rain} mm rain since 9 am</span>}
           <span className="block text-xs text-muted">{now.station} station{now.at && `, ${clock(now.at)}`}</span>
-          {explain && <span className="mt-1 block text-xs text-muted">Delta-T is the air temperature minus the wet-bulb temperature, a measure of how fast things dry. Under 4 is humid and slow (wet rock stays wet); 4 to 8 is middling; over 8 is dry and quick. Over 10 is very dry.</span>}
+          {explain && <span className="mt-1 block text-xs text-muted">Delta-T is the air temperature minus the wet-bulb temperature, and it tells you how fast moisture will leave the rock. Near zero the air is saturated and cold rock sweats, so sea cliffs and overhangs stay wet. Locals read above 3 as drying and 4 or more as good conditions. The overnight trend matters too: if it sat near zero all night and is still under 1 in the morning, expect wet rock; if it is climbing through the 2s, the rock is drying. Based on climbers' experience at The Paradiso, not a scientific rule.</span>}
         </p>
       )}
       {today && (
