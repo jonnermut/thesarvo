@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import type { Climb } from '#/guide/model/types'
-import { ClimbBlock, parsePitch, splitPitches } from './ClimbBlock'
+import { ClimbBlock, parsePitch, splitPitches, withNote } from './ClimbBlock'
 
 const climb: Climb = { type: 'climb', id: '7', name: 'Farmer Henry', number: '', grade: '13', extra: '', length: '15m', stars: '', fa: '', text: '' }
 
@@ -36,5 +36,19 @@ describe('splitPitches', () => {
   it('shows the pitch numbers in their own column', () => {
     const { container } = render(<ClimbBlock climb={{ ...climb, text: 'Start. 1. 45m 18. Climb. 2. 30m 20. Traverse.<br><br>Rack: lots.' }} />)
     expect([...container.querySelectorAll('span.font-bold')].map((e) => e.textContent)).toEqual(expect.arrayContaining(['1. 45m 18', '2. 30m 20']))
+  })
+})
+
+describe('withNote', () => {
+  it('moves a bracketed note off a length or grade', () => {
+    expect(withNote('160m (approx)')).toEqual({ main: '160m', note: '(approx)' })
+    expect(withNote('25 or 22 (variant)')).toEqual({ main: '25 or 22', note: '(variant)' })
+    expect(withNote('18')).toEqual({ main: '18', note: '' })
+    expect(withNote('(approx)')).toEqual({ main: '(approx)', note: '' })
+  })
+  it('shows the note in the last column', () => {
+    const { container } = render(<ClimbBlock climb={{ ...climb, length: '160m (approx)', grade: '14', extra: '' }} />)
+    expect(container.textContent).toContain('(approx)')
+    expect(container.querySelector('span.font-bold.whitespace-nowrap')).toHaveTextContent('160m')
   })
 })

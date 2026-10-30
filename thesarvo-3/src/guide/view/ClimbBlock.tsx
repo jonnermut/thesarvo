@@ -18,6 +18,11 @@ export function ClimbBlock({ climb, highlighted, anchor }: { climb: Climb; highl
       setCopied(true)
       setTimeout(() => setCopied(false), 1500)
     }, () => {})
+  // "160m (approx)" and "25 or 22 (variant)": the bracketed note moves to the last column, where there is room, instead of wrapping in a narrow one.
+  const length = withNote(climb.length)
+  const grade = withNote(climb.grade)
+  const long = grade.main.length > 5
+  const extra = [length.note, grade.note, climb.extra.replace(/B$/, 'Þ')].filter(Boolean).join(' ')
   return (
     <article
       className={`rounded px-2 py-1.5 text-[13px] leading-snug transition-colors ${highlighted ? 'bg-amber/20' : ''}`}
@@ -44,15 +49,29 @@ export function ClimbBlock({ climb, highlighted, anchor }: { climb: Climb; highl
         <span className="text-[#0000a0]">
           <Stars stars={climb.stars} />
         </span>
-        <span className="font-bold">{climb.length}</span>
-        {/* A long grade ("25 or 22 (variant)") takes the extra column too instead of wrapping word by word in the narrow grade one. */}
-        <span className={`font-bold ${!climb.extra && climb.grade.length > 5 ? 'sm:col-span-2' : ''}`}>{climb.grade}</span>
-        {climb.extra && <span className="text-muted sm:col-auto">{climb.extra.replace(/B$/, 'Þ')}</span>}
+        <span className="font-bold whitespace-nowrap">{length.main}</span>
+        {/* A long grade ("25 or 22") would wrap word by word in the narrow grade column, so it takes the last column too, with what follows it. */}
+        {long ? (
+          <span className="sm:col-span-2 sm:whitespace-nowrap">
+            <b>{grade.main}</b> <span className="text-muted">{extra}</span>
+          </span>
+        ) : (
+          <>
+            <span className="font-bold whitespace-nowrap">{grade.main}</span>
+            {extra && <span className="text-muted sm:col-auto">{extra}</span>}
+          </>
+        )}
       </div>
       {climb.text && <Description text={climb.text} />}
       {climb.fa && <p className={`mt-0.5 text-[11px] italic text-[#808080] ${INDENT}`}>{climb.fa}</p>}
     </article>
   )
+}
+
+/** A value and the bracketed note after it: "160m (approx)" is `160m` and `(approx)`. */
+export function withNote(value: string): { main: string; note: string } {
+  const m = /^(.*?\S)\s+(\([^)]*\))$/.exec(value.trim())
+  return m ? { main: m[1], note: m[2] } : { main: value, note: '' }
 }
 
 /** Multi-pitch text ("1. 20m 18 ..." per line) gets a label column; other text is a justified paragraph. */
