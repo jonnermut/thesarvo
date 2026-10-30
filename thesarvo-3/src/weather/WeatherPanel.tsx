@@ -11,6 +11,9 @@ const weekday = (iso: string) => new Date(iso).toLocaleDateString('en-AU', { wee
 const clock = (iso: string) => new Date(iso).toLocaleTimeString('en-AU', { hour: 'numeric', minute: '2-digit', timeZone: TZ })
 export const deg = (n: number | null) => (n === null ? '–' : `${Math.round(n)}°`)
 
+/** How quickly things dry at this Delta-T, in a word. */
+export const dryingWord = (d: number) => (d < 4 ? 'slow drying' : d < 8 ? 'drying' : 'fast drying')
+
 type State = { weather: Weather } | { error: true } | undefined
 
 /** Forecasts and the latest observations for where Tasmanian climbers go, straight from the Bureau of Meteorology in the browser. */
@@ -49,6 +52,7 @@ export function loadWeather(p: Place) {
 /** `footer`, when given, sits along the bottom of the card. */
 export function PlaceCard({ place, footer }: { place: Place; footer?: ReactNode }) {
   const [state, setState] = useState<State>()
+  const [explain, setExplain] = useState(false)
   useEffect(() => {
     let live = true
     loadWeather(place).then(
@@ -95,9 +99,14 @@ export function PlaceCard({ place, footer }: { place: Place; footer?: ReactNode 
           {now.feels !== null && now.temp !== null && Math.abs(now.feels - now.temp) >= 3 && <span> (feels {now.feels.toFixed(0)}°)</span>}
           {now.wind !== null && <span>, wind {now.windDir} {now.wind} km/h{now.gust !== null && now.gust > now.wind ? `, gusts ${now.gust}` : ''}</span>}
           {now.humidity !== null && <span>, humidity {Math.round(now.humidity)}%</span>}
-          {now.deltaT !== null && <span title="Air temperature minus wet-bulb temperature: under 2 is very humid, 2 to 8 comfortable for spraying, over 10 very dry" className="cursor-help">, Delta-T {now.deltaT.toFixed(1)}</span>}
+          {now.deltaT !== null && (
+            <span>
+              , <button type="button" aria-expanded={explain} onClick={() => setExplain((e) => !e)} className="underline decoration-dotted underline-offset-2 hover:text-navy">Delta-T {now.deltaT.toFixed(1)}</button> ({dryingWord(now.deltaT)})
+            </span>
+          )}
           {now.rain !== null && now.rain > 0 && <span>, {now.rain} mm rain since 9 am</span>}
           <span className="block text-xs text-muted">{now.station} station{now.at && `, ${clock(now.at)}`}</span>
+          {explain && <span className="mt-1 block text-xs text-muted">Delta-T is the air temperature minus the wet-bulb temperature, a measure of how fast things dry. Under 4 is humid and slow (wet rock stays wet); 4 to 8 is middling; over 8 is dry and quick. Over 10 is very dry.</span>}
         </p>
       )}
       {today && (
