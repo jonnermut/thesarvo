@@ -1,0 +1,21 @@
+thesarvo-3/src/weather/bom.ts
+  s_e20d0a1ebc47aa::t_c5fa934a7ec7f0 26-28,38
+thesarvo-3/src/weather/bom.test.ts
+  s_e20d0a1ebc47aa::t_76589f503de51f 17-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ed2593b28019ebc73c8e1e7f7b754c60af874d98",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
