@@ -45,7 +45,8 @@ export function ClimbBlock({ climb, highlighted, anchor }: { climb: Climb; highl
           <Stars stars={climb.stars} />
         </span>
         <span className="font-bold">{climb.length}</span>
-        <span className="font-bold">{climb.grade}</span>
+        {/* A long grade ("25 or 22 (variant)") takes the extra column too instead of wrapping word by word in the narrow grade one. */}
+        <span className={`font-bold ${!climb.extra && climb.grade.length > 5 ? 'sm:col-span-2' : ''}`}>{climb.grade}</span>
         {climb.extra && <span className="text-muted sm:col-auto">{climb.extra.replace(/B$/, 'Þ')}</span>}
       </div>
       {climb.text && <Description text={climb.text} />}
@@ -67,8 +68,15 @@ export function parsePitch(line: string): { label: string; text: string } {
   return { label: '', text: t }
 }
 
+/** Pitches run together in one line ("... 1. 45m 18. Climb ... 2. 30m 20. Traverse ...") get a line each, so the pitch column below can show them. */
+export function splitPitches(text: string): string {
+  const mark = /(^|\s)(?=\d{1,2}\. \d{1,3} ?m\b)/g
+  if ((text.match(mark)?.length ?? 0) < 2) return text
+  return text.replace(mark, (_, lead: string, at: number) => (at === 0 ? lead : '<br>'))
+}
+
 function Description({ text }: { text: string }) {
-  const lines = splitLines(text)
+  const lines = splitLines(text).flatMap((l) => splitLines(splitPitches(l)))
   const pitches = lines.length > 1 && lines.some((l) => parsePitch(l).label)
   if (!pitches)
     return (

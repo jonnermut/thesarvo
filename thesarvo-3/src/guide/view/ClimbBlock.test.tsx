@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import type { Climb } from '#/guide/model/types'
-import { ClimbBlock, parsePitch } from './ClimbBlock'
+import { ClimbBlock, parsePitch, splitPitches } from './ClimbBlock'
 
 const climb: Climb = { type: 'climb', id: '7', name: 'Farmer Henry', number: '', grade: '13', extra: '', length: '15m', stars: '', fa: '', text: '' }
 
@@ -22,5 +22,19 @@ describe('parsePitch', () => {
   })
   it('leaves plain lines alone', () => {
     expect(parsePitch('Traverse left')).toEqual({ label: '', text: 'Traverse left' })
+  })
+})
+
+describe('splitPitches', () => {
+  it('puts each pitch of run-together text on its own line', () => {
+    expect(splitPitches('Start up the wall. 1. 45m 18. Climb cracks. Belay 2. 30m 20. Traverse R. 3. 45m 22. Step R.')).toBe('Start up the wall.<br>1. 45m 18. Climb cracks. Belay<br>2. 30m 20. Traverse R.<br>3. 45m 22. Step R.')
+  })
+  it('leaves text with one pitch or none alone', () => {
+    expect(splitPitches('Climb the crack. 1. 45m 18. Up.')).toBe('Climb the crack. 1. 45m 18. Up.')
+    expect(splitPitches('Follow the 2. 5 m ledge')).toBe('Follow the 2. 5 m ledge')
+  })
+  it('shows the pitch numbers in their own column', () => {
+    const { container } = render(<ClimbBlock climb={{ ...climb, text: 'Start. 1. 45m 18. Climb. 2. 30m 20. Traverse.<br><br>Rack: lots.' }} />)
+    expect([...container.querySelectorAll('span.font-bold')].map((e) => e.textContent)).toEqual(expect.arrayContaining(['1. 45m 18', '2. 30m 20']))
   })
 })
