@@ -6,17 +6,19 @@ Cognito sign-in. The owner is Jon. The content lives in a separate repo, `../../
 
 ## Read first
 
-- [docs/as-built.md](docs/as-built.md): what is deployed, the AWS inventory, how to operate it, and what is new
+The docs live in the **private** repo `thesarvo-private`, checked out as a peer of this one (`../../thesarvo-private` from here; clone it with `gh repo clone jonnermut/thesarvo-private` if missing). This repo is public: no docs, account details, addresses or other private information go in it.
+
+- [docs/as-built.md](../../thesarvo-private/docs/as-built.md): what is deployed, the AWS inventory, how to operate it, and what is new
   compared with the live site. Start here.
-- [docs/thesarvo-3-masterplan.md](docs/thesarvo-3-masterplan.md): why and the phases.
-- [docs/plan-guide.md](docs/plan-guide.md) (guide view and editor), [docs/plan-navigation.md](docs/plan-navigation.md)
-  (navigation, search, contents pages) and [docs/plan-backend.md](docs/plan-backend.md) (storage, auth, save,
+- [docs/thesarvo-3-masterplan.md](../../thesarvo-private/docs/thesarvo-3-masterplan.md): why and the phases.
+- [docs/plan-guide.md](../../thesarvo-private/docs/plan-guide.md) (guide view and editor), [docs/plan-navigation.md](../../thesarvo-private/docs/plan-navigation.md)
+  (navigation, search, contents pages) and [docs/plan-backend.md](../../thesarvo-private/docs/plan-backend.md) (storage, auth, save,
   publish, legacy app endpoints).
-- [docs/plan-mvp.md](docs/plan-mvp.md): everything still needed before cutover (history, restricted pages, extra pages,
+- [docs/plan-mvp.md](../../thesarvo-private/docs/plan-mvp.md): everything still needed before cutover (history, restricted pages, extra pages,
   forum, apps, avatars, add a page) and the cutover plan.
-- [docs/lambda-backend.md](docs/lambda-backend.md) (the Lambda, timings, costs),
-  [docs/auth-comparison.md](docs/auth-comparison.md), [docs/live-site-differences.md](docs/live-site-differences.md),
-  [docs/todo.md](docs/todo.md), [scripts/aws/README.md](scripts/aws/README.md) (the agent's AWS rights).
+- [docs/lambda-backend.md](../../thesarvo-private/docs/lambda-backend.md) (the Lambda, timings, costs),
+  [docs/auth-comparison.md](../../thesarvo-private/docs/auth-comparison.md), [docs/live-site-differences.md](../../thesarvo-private/docs/live-site-differences.md),
+  [docs/todo.md](../../thesarvo-private/docs/todo.md), [aws-agent-rights.md](../../thesarvo-private/docs/aws-agent-rights.md) (the agent's AWS rights).
 - [README.md](README.md): commands and source layout.
 
 ## Rules
@@ -30,7 +32,7 @@ Cognito sign-in. The owner is Jon. The content lives in a separate repo, `../../
   Cognito user, get tokens with `initiate-auth`, and delete the user afterwards. Never use the managed login page
   with test credentials.
 - **AWS as the agent:** the `claude-agent-thesarvo` profile (the scripts' default), never `grayplanning`. Its rights are
-  in [scripts/aws/README.md](scripts/aws/README.md); ask the owner when it lacks one rather than switching profile.
+  in [aws-agent-rights.md](../../thesarvo-private/docs/aws-agent-rights.md); ask the owner when it lacks one rather than switching profile.
 - **Content changes publish themselves.** Every push to `main` of `../../thesarvo-content` runs the Publish Action (about 15 s to live, with the latest `publisher` package), so editing files there directly publishes them like a save. The Action uses minutes from a 2,000 a month allowance; do not push content in bursts. See plan-backend B3.
 - **A push to `master` deploys the app.** The `publisher` workflow builds the package and releases it, which starts a full publish of the content repo (live in about 20 s). Work on a branch and merge to `master` only when it should go live; branch pushes deploy nothing. Check `typecheck`, `lint`, `test` and the build first.
 - **The content index is locked** (`sync.json` `indexLocked`): `sync-content` reports Confluence index changes and never rewrites `index.json`; edit it by hand. Page access of local pages (ids from 9,000,000,000) is kept by `sync-access`.
@@ -52,9 +54,9 @@ Cognito sign-in. The owner is Jon. The content lives in a separate repo, `../../
 
 ## Before every commit
 
-1. **Docs.** Update every doc the change affects in the same commit: [docs/as-built.md](docs/as-built.md) for
+1. **Docs.** Update every doc the change affects (in `thesarvo-private`, committed there alongside this commit): [docs/as-built.md](../../thesarvo-private/docs/as-built.md) for
    anything deployed, any infrastructure or script, and new user-visible features (its "New compared with the
-   live site" list); the matching plan doc (mark items done, record decisions); `docs/todo.md`; the README for
+   live site" list); the matching plan doc (mark items done, record decisions); `thesarvo-private/docs/todo.md`; the README for
    new commands or layout; this file for new rules.
 2. **Typecheck:** `npm run typecheck` (TS 7).
 3. **Lint:** `npm run lint` (eslint; needs TS 6, installed as `typescript`).

@@ -1,7 +1,7 @@
 # thesarvo-3
 
 Climbing guide site for thesarvo.com: TanStack Start, React 19, Tailwind 4, Vite, Vitest.
-Plans live in [`docs/`](docs/); what is deployed is in [`docs/as-built.md`](docs/as-built.md), and the working rules in [`AGENTS.md`](AGENTS.md).
+Plans live in [`thesarvo-private/docs/`](../../thesarvo-private/docs/); what is deployed is in [`thesarvo-private/docs/as-built.md`](../../thesarvo-private/docs/as-built.md), and the working rules in [`AGENTS.md`](AGENTS.md).
 
 ## Commands
 
@@ -52,7 +52,7 @@ access. Groups are roles (`admins` is the admin role); who is in a group is `pri
 - `src/aws` S3 signing (presigned uploads, listing)
 - `src/routes/g.api.*` the Lambda's API routes
 
-Editor edits save by themselves through `POST /g/api/save` (`docs/plan-backend.md` B2), with a draft in
+Editor edits save by themselves through `POST /g/api/save` (`thesarvo-private/docs/plan-backend.md` B2), with a draft in
 localStorage until each save succeeds. The dev server saves to `.saves/` (gitignored; `SAVES_DIR` overrides) and
 reads guides from there first; delete it to start again. Elsewhere saving commits to GitHub when `CONTENT_REPO`
 (`owner/name`, optional `CONTENT_BRANCH`) and `GITHUB_TOKEN` or `GITHUB_APP_ID`, `GITHUB_APP_INSTALLATION_ID` and
