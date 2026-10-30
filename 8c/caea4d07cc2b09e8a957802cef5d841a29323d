@@ -1,0 +1,23 @@
+thesarvo-3/package.json
+  s_e20d0a1ebc47aa::t_ec892f3cf2f61f 18-26,30-33
+CLAUDE.md
+  s_e20d0a1ebc47aa::t_17513e7ff9f555 6
+thesarvo-3/AGENTS.md
+  s_e20d0a1ebc47aa::t_6cacaef64b5c1a 73-74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8ccaea4d07cc2b09e8a957802cef5d841a29323d",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
