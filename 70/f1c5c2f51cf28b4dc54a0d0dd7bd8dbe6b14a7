@@ -1,0 +1,79 @@
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/SettingsView.swift
+  s_ee2ae06c4b06ab::t_1e0805334526a9 1-38
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/DownloadsView.swift
+  s_ee2ae06c4b06ab::t_1e0805334526a9 1-56
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/MenuView.swift
+  s_ee2ae06c4b06ab::t_6b3bf710ec5d92 1-71
+thesarvo_iphone_2.0/thesarvo/thesarvo/App/AppModel.swift
+  s_ee2ae06c4b06ab::t_6b3bf710ec5d92 64-65,67
+  s_ee2ae06c4b06ab::t_8378f0c2da1b67 1-63,66,68-240
+thesarvo_iphone_2.0/thesarvo/thesarvo/Sync/NetworkState.swift
+  s_ee2ae06c4b06ab::t_23064f7ad3dc91 1-43
+thesarvo-3/test-vectors/sync/expected.json
+  s_ee2ae06c4b06ab::t_e6ed1e9ffd640b 1-136
+thesarvo_iphone_2.0/thesarvo/thesarvo/Web/PathResolver.swift
+  s_ee2ae06c4b06ab::t_631d49fe8879d3 1-65
+thesarvo-3/scripts/build-app-pack.ts
+  s_ee2ae06c4b06ab::t_c355d96da7931e 1-43
+thesarvo_iphone_2.0/thesarvo/thesarvo/App/ThesarvoApp.swift
+  s_ee2ae06c4b06ab::t_1e0805334526a9 1-13
+thesarvo_iphone_2.0/thesarvo/.gitignore
+  s_ee2ae06c4b06ab::t_c4a0f744b18436 1-2
+thesarvo_iphone_2.0/thesarvo/thesarvo/Sync/Manifest.swift
+  s_ee2ae06c4b06ab::t_ed8a9bbfde1f46 1-196
+thesarvo_iphone_2.0/thesarvo/Config/Info.plist
+  s_ee2ae06c4b06ab::t_c4a0f744b18436 1-35
+thesarvo_iphone_2.0/thesarvo/thesarvo/Sync/SyncEngine.swift
+  s_ee2ae06c4b06ab::t_23064f7ad3dc91 85,103-110
+  s_ee2ae06c4b06ab::t_c97aed6f53842a 1-84,86-102,111-174
+thesarvo-3/test-vectors/sync/inputs.json
+  s_ee2ae06c4b06ab::t_94a339e4cf8372 1-465
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/KMLPoints.swift
+  s_ee2ae06c4b06ab::t_8378f0c2da1b67 1-64
+thesarvo_iphone_2.0/thesarvo/thesarvo/Store/BlobStore.swift
+  s_ee2ae06c4b06ab::t_c97aed6f53842a 1-118,130-156
+  s_ee2ae06c4b06ab::t_8378f0c2da1b67 119-129
+thesarvo-3/src/app/manifest.ts
+  s_ee2ae06c4b06ab::t_94a339e4cf8372 1-43
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/MapScreen.swift
+  s_ee2ae06c4b06ab::t_6b3bf710ec5d92 1-115
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/TreeNode.swift
+  s_ee2ae06c4b06ab::t_8378f0c2da1b67 1-60
+thesarvo_iphone_2.0/thesarvo/thesarvo/Web/SchemeHandler.swift
+  s_ee2ae06c4b06ab::t_631d49fe8879d3 1-115
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/RootView.swift
+  s_ee2ae06c4b06ab::t_6b3bf710ec5d92 1-105
+thesarvo_iphone_2.0/thesarvo/thesarvo/App/AppConfig.swift
+  s_ee2ae06c4b06ab::t_ed8a9bbfde1f46 1-22
+thesarvo_iphone_2.0/thesarvo/thesarvo/Store/Migration.swift
+  s_ee2ae06c4b06ab::t_1e0805334526a9 1-37
+thesarvo_iphone_2.0/thesarvo/thesarvo/Web/WebHost.swift
+  s_ee2ae06c4b06ab::t_dad6439f9e0d21 1-130
+thesarvo-3/package.json
+  s_ee2ae06c4b06ab::t_c355d96da7931e 28
+thesarvo-3/src/app/syncPlan.test.ts
+  s_ee2ae06c4b06ab::t_c355d96da7931e 1-5,7-30
+  s_ee2ae06c4b06ab::t_06529e945e8d33 6
+thesarvo-3/src/app/syncPlan.ts
+  s_ee2ae06c4b06ab::t_94a339e4cf8372 1-60
+thesarvo_iphone_2.0/thesarvo/thesarvo.xcodeproj/xcshareddata/xcschemes/thesarvo.xcscheme
+  s_ee2ae06c4b06ab::t_6d5a269cf8c5f4 1-25
+thesarvo_iphone_2.0/thesarvo/thesarvo.xcodeproj/project.pbxproj
+  s_ee2ae06c4b06ab::t_6d5a269cf8c5f4 6,10,12,14,20-24,27-31,33-45,52,62,65-69,73,76-77,79,82,85-86,94,96,98-100,106-107,111,114,116,118-120,125-128,132,138,141-143,145-146,148-149,153-154,160-161,165-166,172,176,180,190,197,207,209-210,215,222,224,230,234,236-237,241,248,251,253-255,260,264-266,268-271,273,276,280,284-286,288-291,293,296,300,304-309,311-312,316,320-325,327-328,335,338-339,344,347-348,353,356-357,364
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "70f1c5c2f51cf28b4dc54a0d0dd7bd8dbe6b14a7",
+  "prompts": {},
+  "sessions": {
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
