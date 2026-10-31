@@ -15,6 +15,8 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
     var onBootOK: (() -> Void)?
     var onNavigated: ((String) -> Void)?
     var presentExternal: ((URL) -> Void)?
+    var onAPI: ((BridgeRequest) async -> (status: Int, body: String))?
+    private let controller: WKUserContentController
 
     private var observers: [NSKeyValueObservation] = []
 
@@ -38,6 +40,7 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
         config.websiteDataStore = .default()
         config.allowsInlineMediaPlayback = true
         let controller = WKUserContentController()
+        self.controller = controller
         controller.addUserScript(WKUserScript(source: Self.appModeScript, injectionTime: .atDocumentStart, forMainFrameOnly: true))
         config.userContentController = controller
         webView = WKWebView(frame: .zero, configuration: config)
@@ -70,6 +73,27 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
         webView.load(URLRequest(url: url))
     }
 
+    /// Gives the page the signed-in tokens in the place the website's own session code keeps them (or removes them), now and on every load.
+    func setAuth(_ tokens: Tokens?) {
+        let js: String
+        if let tokens, let d = try? JSONEncoder().encode(tokens), let s = String(data: d, encoding: .utf8) {
+            let quoted = (try? JSONSerialization.data(withJSONObject: [s])).flatMap { String(data: $0, encoding: .utf8) } ?? "[\"\"]"
+            js = "try { localStorage.setItem('thesarvo.auth', \(quoted)[0]); } catch (e) {}"
+        } else {
+            js = "try { localStorage.removeItem('thesarvo.auth'); } catch (e) {}"
+        }
+        controller.removeAllUserScripts()
+        controller.addUserScript(WKUserScript(source: Self.appModeScript, injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        controller.addUserScript(WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        webView.evaluateJavaScript(js + " window.dispatchEvent(new StorageEvent('storage', { key: 'thesarvo.auth' }));")
+    }
+
+    /// The tokens the page holds now (it refreshes them itself), for the Keychain.
+    func pageTokens() async -> Tokens? {
+        guard let raw = try? await webView.evaluateJavaScript("localStorage.getItem('thesarvo.auth')") as? String, let d = raw.data(using: .utf8) else { return nil }
+        return try? JSONDecoder().decode(Tokens.self, from: d)
+    }
+
     func reload() { webView.reload() }
     func goBack() { webView.goBack() }
 
@@ -81,6 +105,11 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
             switch type {
             case "bootOK": self.onBootOK?()
             case "openMap": self.onOpenMap?(body["guide"] as? String)
+            case "api":
+                if let r = BridgeRequest(body), let onAPI = self.onAPI {
+                    let answer = await onAPI(r)
+                    _ = try? await self.webView.evaluateJavaScript(BridgeAPI.replyScript(id: r.id, status: answer.status, body: answer.body))
+                }
             case "openExternal": if let s = body["url"] as? String, let u = URL(string: s) { self.presentExternal?(u) }
             default: break
             }

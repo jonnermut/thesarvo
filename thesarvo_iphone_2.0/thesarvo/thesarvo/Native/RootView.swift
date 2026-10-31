@@ -15,13 +15,16 @@ struct RootView: View {
             DownloadsView()
                 .tabItem { Label("Downloads", systemImage: "arrow.down.circle") }
                 .tag(AppTab.downloads)
-            SettingsView()
+            SettingsView(auth: app.auth)
                 .tabItem { Label("Settings", systemImage: "gearshape") }
                 .tag(AppTab.settings)
         }
         .tint(Color(UIColor { $0.userInterfaceStyle == .dark ? UIColor(red: 0.62, green: 0.68, blue: 1.0, alpha: 1) : UIColor(red: 0.106, green: 0.078, blue: 0.392, alpha: 1) }))
         .sheet(item: $app.external) { SafariView(url: $0).ignoresSafeArea() }
-        .onChange(of: scenePhase) { phase in if phase == .active { app.sceneActive() } }
+        .onChange(of: scenePhase) { phase in
+            if phase == .active { app.sceneActive() }
+            if phase == .background { app.sceneBackground() }
+        }
         .task { app.start() }
         .overlay(alignment: .top) { NoticeBanner() }
     }

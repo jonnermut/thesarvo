@@ -23,6 +23,7 @@ final class AppModel: ObservableObject {
     let handler: SchemeHandler
     let engine: SyncEngine
     let web: WebModel
+    let auth = AuthSession()
 
     @Published var manifest: AppManifest?
     @Published var roots: [TreeNode] = []
@@ -94,11 +95,31 @@ final class AppModel: ObservableObject {
         started = true
         NetworkState.start { [weak self] isOnline in Task { @MainActor in self?.online = isOnline; if isOnline { self?.syncSoon() } } }
         Migration.run(model: self)
+        web.onAPI = { [weak self] r in
+            let t = await self?.auth.freshTokens()
+            return await BridgeAPI.perform(r, idToken: t?.idToken)
+        }
+        auth.onChange = { [weak self] tokens in
+            self?.web.setAuth(tokens)
+            if tokens == nil { self?.removePrivateStore() }
+        }
+        web.setAuth(auth.tokens)
         let last = UserDefaults.standard.string(forKey: "lastPath") ?? "/g/"
         web.open(path: last)
         selectionFollows(path: last)
         if let m = manifest { _ = m }
         syncNow()
+    }
+
+    /// Called when the app goes to the background: the page may have refreshed its tokens, so keep the Keychain current.
+    func sceneBackground() {
+        Task { if let t = await web.pageTokens() { auth.adopt(t) } }
+    }
+
+    /// Everything downloaded for the signed-in person's private guides; sign-out removes it (it is a separate directory, never the public store).
+    func removePrivateStore() {
+        try? FileManager.default.removeItem(at: store.root.appendingPathComponent("private", isDirectory: true))
+        notice = "Signed out"
     }
 
     func sceneActive() {
