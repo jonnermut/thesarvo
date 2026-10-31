@@ -33,7 +33,7 @@ struct FirstRunView: View {
             Button {
                 app.mode = choice
                 app.firstRunDone = true
-            } label: { Text("Continue").frame(maxWidth: .infinity).padding(.vertical, 6) }
+            } label: { Text("Continue").foregroundStyle(Color(UIColor { $0.userInterfaceStyle == .dark ? UIColor(red: 0.106, green: 0.078, blue: 0.392, alpha: 1) : .white })).frame(maxWidth: .infinity).padding(.vertical, 6) }
                 .buttonStyle(.borderedProminent)
         }
         .padding(24)
