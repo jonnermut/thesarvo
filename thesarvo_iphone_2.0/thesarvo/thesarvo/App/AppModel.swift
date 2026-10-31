@@ -176,9 +176,13 @@ final class AppModel: ObservableObject {
 
     // MARK: navigation
 
+    /// Bumped when something other than a menu row opens a page, so a collapsed split view (iPhone) shows the page.
+    @Published var revealPage = 0
+
     func open(node: TreeNode) {
         selection = node.id
         tab = .guides
+        revealPage += 1
         web.open(path: node.url)
     }
 
@@ -186,6 +190,7 @@ final class AppModel: ObservableObject {
         let enc = q.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? q
         selection = nil
         tab = .guides
+        revealPage += 1
         web.open(path: "/g/search?q=\(enc)")
     }
 

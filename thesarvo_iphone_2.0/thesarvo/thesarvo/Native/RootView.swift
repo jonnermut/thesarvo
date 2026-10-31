@@ -53,14 +53,31 @@ struct NoticeBanner: View {
 struct GuidesView: View {
     @EnvironmentObject var app: AppModel
     @State private var visibility: NavigationSplitViewVisibility = .automatic
+    // Typed as Any? on purpose: `NavigationSplitViewColumn` exists from iOS 17 only.
+    @State private var compact: Any?
 
     var body: some View {
-        NavigationSplitView(columnVisibility: $visibility) {
-            MenuView()
-        } detail: {
-            PageView()
+        content
+            .navigationSplitViewStyle(.balanced)
+            .onChange(of: app.revealPage) { _ in
+                if #available(iOS 17, *) { compact = NavigationSplitViewColumn.detail } else { visibility = .detailOnly }
+            }
+    }
+
+    @ViewBuilder private var content: some View {
+        if #available(iOS 17, *) {
+            NavigationSplitView(columnVisibility: $visibility, preferredCompactColumn: Binding(get: { (compact as? NavigationSplitViewColumn) ?? .sidebar }, set: { compact = $0 })) {
+                MenuView()
+            } detail: {
+                PageView()
+            }
+        } else {
+            NavigationSplitView(columnVisibility: $visibility) {
+                MenuView()
+            } detail: {
+                PageView()
+            }
         }
-        .navigationSplitViewStyle(.balanced)
     }
 }
 
