@@ -20,8 +20,10 @@ import { Route as GForumRouteImport } from './routes/g.forum'
 import { Route as GSearchRouteImport } from './routes/g.search'
 import { Route as GUploadRouteImport } from './routes/g.upload'
 import { Route as GApiAdminRouteImport } from './routes/g.api.admin'
+import { Route as GApiAppPrivateManifestRouteImport } from './routes/g.api.app-private-manifest'
 import { Route as GApiAvatarRouteImport } from './routes/g.api.avatar'
 import { Route as GApiCreatePageRouteImport } from './routes/g.api.create-page'
+import { Route as GApiDeleteAccountRouteImport } from './routes/g.api.delete-account'
 import { Route as GApiForumRouteImport } from './routes/g.api.forum'
 import { Route as GApiForumNoticesRouteImport } from './routes/g.api.forum-notices'
 import { Route as GApiForumRecentRouteImport } from './routes/g.api.forum-recent'
@@ -88,6 +90,11 @@ const GApiAdminRoute = GApiAdminRouteImport.update({
   path: '/g/api/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GApiAppPrivateManifestRoute = GApiAppPrivateManifestRouteImport.update({
+  id: '/g/api/app-private-manifest',
+  path: '/g/api/app-private-manifest',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GApiAvatarRoute = GApiAvatarRouteImport.update({
   id: '/g/api/avatar',
   path: '/g/api/avatar',
@@ -96,6 +103,11 @@ const GApiAvatarRoute = GApiAvatarRouteImport.update({
 const GApiCreatePageRoute = GApiCreatePageRouteImport.update({
   id: '/g/api/create-page',
   path: '/g/api/create-page',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GApiDeleteAccountRoute = GApiDeleteAccountRouteImport.update({
+  id: '/g/api/delete-account',
+  path: '/g/api/delete-account',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GApiForumRoute = GApiForumRouteImport.update({
@@ -161,8 +173,10 @@ export interface FileRoutesByFullPath {
   '/account/': typeof AccountIndexRoute
   '/g/': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
+  '/g/api/app-private-manifest': typeof GApiAppPrivateManifestRoute
   '/g/api/avatar': typeof GApiAvatarRoute
   '/g/api/create-page': typeof GApiCreatePageRoute
+  '/g/api/delete-account': typeof GApiDeleteAccountRoute
   '/g/api/forum': typeof GApiForumRoute
   '/g/api/forum-notices': typeof GApiForumNoticesRoute
   '/g/api/forum-recent': typeof GApiForumRecentRoute
@@ -186,8 +200,10 @@ export interface FileRoutesByTo {
   '/account': typeof AccountIndexRoute
   '/g': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
+  '/g/api/app-private-manifest': typeof GApiAppPrivateManifestRoute
   '/g/api/avatar': typeof GApiAvatarRoute
   '/g/api/create-page': typeof GApiCreatePageRoute
+  '/g/api/delete-account': typeof GApiDeleteAccountRoute
   '/g/api/forum': typeof GApiForumRoute
   '/g/api/forum-notices': typeof GApiForumNoticesRoute
   '/g/api/forum-recent': typeof GApiForumRecentRoute
@@ -212,8 +228,10 @@ export interface FileRoutesById {
   '/account/': typeof AccountIndexRoute
   '/g/': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
+  '/g/api/app-private-manifest': typeof GApiAppPrivateManifestRoute
   '/g/api/avatar': typeof GApiAvatarRoute
   '/g/api/create-page': typeof GApiCreatePageRoute
+  '/g/api/delete-account': typeof GApiDeleteAccountRoute
   '/g/api/forum': typeof GApiForumRoute
   '/g/api/forum-notices': typeof GApiForumNoticesRoute
   '/g/api/forum-recent': typeof GApiForumRecentRoute
@@ -239,8 +257,10 @@ export interface FileRouteTypes {
     | '/account/'
     | '/g/'
     | '/g/api/admin'
+    | '/g/api/app-private-manifest'
     | '/g/api/avatar'
     | '/g/api/create-page'
+    | '/g/api/delete-account'
     | '/g/api/forum'
     | '/g/api/forum-notices'
     | '/g/api/forum-recent'
@@ -264,8 +284,10 @@ export interface FileRouteTypes {
     | '/account'
     | '/g'
     | '/g/api/admin'
+    | '/g/api/app-private-manifest'
     | '/g/api/avatar'
     | '/g/api/create-page'
+    | '/g/api/delete-account'
     | '/g/api/forum'
     | '/g/api/forum-notices'
     | '/g/api/forum-recent'
@@ -289,8 +311,10 @@ export interface FileRouteTypes {
     | '/account/'
     | '/g/'
     | '/g/api/admin'
+    | '/g/api/app-private-manifest'
     | '/g/api/avatar'
     | '/g/api/create-page'
+    | '/g/api/delete-account'
     | '/g/api/forum'
     | '/g/api/forum-notices'
     | '/g/api/forum-recent'
@@ -315,8 +339,10 @@ export interface RootRouteChildren {
   AccountIndexRoute: typeof AccountIndexRoute
   GIndexRoute: typeof GIndexRoute
   GApiAdminRoute: typeof GApiAdminRoute
+  GApiAppPrivateManifestRoute: typeof GApiAppPrivateManifestRoute
   GApiAvatarRoute: typeof GApiAvatarRoute
   GApiCreatePageRoute: typeof GApiCreatePageRoute
+  GApiDeleteAccountRoute: typeof GApiDeleteAccountRoute
   GApiForumRoute: typeof GApiForumRoute
   GApiForumNoticesRoute: typeof GApiForumNoticesRoute
   GApiForumRecentRoute: typeof GApiForumRecentRoute
@@ -408,6 +434,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GApiAdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/g/api/app-private-manifest': {
+      id: '/g/api/app-private-manifest'
+      path: '/g/api/app-private-manifest'
+      fullPath: '/g/api/app-private-manifest'
+      preLoaderRoute: typeof GApiAppPrivateManifestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/g/api/avatar': {
       id: '/g/api/avatar'
       path: '/g/api/avatar'
@@ -420,6 +453,13 @@ declare module '@tanstack/react-router' {
       path: '/g/api/create-page'
       fullPath: '/g/api/create-page'
       preLoaderRoute: typeof GApiCreatePageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/g/api/delete-account': {
+      id: '/g/api/delete-account'
+      path: '/g/api/delete-account'
+      fullPath: '/g/api/delete-account'
+      preLoaderRoute: typeof GApiDeleteAccountRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/g/api/forum': {
@@ -507,8 +547,10 @@ const rootRouteChildren: RootRouteChildren = {
   AccountIndexRoute: AccountIndexRoute,
   GIndexRoute: GIndexRoute,
   GApiAdminRoute: GApiAdminRoute,
+  GApiAppPrivateManifestRoute: GApiAppPrivateManifestRoute,
   GApiAvatarRoute: GApiAvatarRoute,
   GApiCreatePageRoute: GApiCreatePageRoute,
+  GApiDeleteAccountRoute: GApiDeleteAccountRoute,
   GApiForumRoute: GApiForumRoute,
   GApiForumNoticesRoute: GApiForumNoticesRoute,
   GApiForumRecentRoute: GApiForumRecentRoute,

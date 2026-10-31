@@ -85,6 +85,17 @@ html.animate-layout :is(.guide-width, .side-nav) {
   }
 }
 
+/* App mode (the iOS and Android shells set `data-app` on <html> before the page runs): the shell has its own menu, so the site's header, side tree and footer go. */
+html[data-app] :is(header[data-bar], aside.side-nav, footer, button[aria-label='Close navigation']) {
+  display: none !important;
+}
+html[data-app] {
+  -webkit-text-size-adjust: 100%;
+}
+html[data-app] [data-bar].sticky {
+  top: 0;
+}
+
 @media print {
   .no-print {
     display: none !important;

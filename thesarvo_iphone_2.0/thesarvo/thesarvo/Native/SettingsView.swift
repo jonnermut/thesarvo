@@ -49,7 +49,7 @@ struct SettingsView: View {
     private func deleteAccount() async {
         deleteError = nil
         let token = await auth.freshTokens()?.idToken
-        let r = await BridgeAPI.perform(BridgeRequest(["id": 0, "method": "POST", "path": "/g/api/delete-account", "headers": ["content-type": "application/json"], "body": "{}"])!, idToken: token)
+        let r = await BridgeAPI.perform(BridgeRequest(["id": 0, "method": "POST", "path": "/g/api/delete-account", "headers": ["content-type": "application/json"], "body": "{\"confirm\":\"delete\"}"])!, idToken: token)
         if r.status == 200 { auth.signOut() } else { deleteError = r.status == 0 ? "You are offline." : "Deleting accounts is not available yet. Email the site owner to have it removed." }
     }
 }

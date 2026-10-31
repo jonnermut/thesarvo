@@ -13,6 +13,7 @@ enum SyncError: LocalizedError {
     case needsNewApp
     case server(Int)
     case changedMidDownload
+    case someFailed(Int)
 
     var errorDescription: String? {
         switch self {
@@ -20,6 +21,7 @@ enum SyncError: LocalizedError {
         case .needsNewApp: return "A newer version of the app is needed for the latest content."
         case .server(let code): return "The server answered \(code)."
         case .changedMidDownload: return "The guides changed while downloading; try again."
+        case .someFailed(let n): return "\(n) photos could not be downloaded; they will be tried again."
         }
     }
 }
@@ -29,11 +31,13 @@ enum SyncError: LocalizedError {
 actor SyncEngine {
     private let store: BlobStore
     private let session: URLSession
+    private let images: BackgroundDownloader
     private var running = false
     static let maxConcurrent = 6
 
-    init(store: BlobStore) {
+    init(store: BlobStore, images: BackgroundDownloader = .shared) {
         self.store = store
+        self.images = images
         let cfg = URLSessionConfiguration.ephemeral
         cfg.requestCachePolicy = .reloadIgnoringLocalCacheData
         cfg.timeoutIntervalForRequest = 30
@@ -91,50 +95,67 @@ actor SyncEngine {
         var progress = SyncProgress(phase: "Downloading", totalBytes: plan.downloads.reduce(0) { $0 + Int64($1.size) }, totalFiles: plan.downloads.count)
         await hooks.progress(progress)
         var switched = !isNew
-        var remainingText = plan.downloads.filter { ["shell", "data", "html"].contains($0.kind) }.count
-        if remainingText == 0 && !switched {
+        let isText = { (d: Download) in ["shell", "data", "html"].contains(d.kind) }
+        let text = plan.downloads.filter(isText)
+        // Photos go to the background session; on a cellular connection without permission they wait for the next pass.
+        let photos = plan.downloads.filter { !isText($0) && (allowCellularImages || !NetworkState.isExpensive) }
+        if text.isEmpty && !switched {
             switched = true
             await hooks.switchTo(target)
         }
         var next = 0
-        var sinceRefresh = 0
         try await withThrowingTaskGroup(of: Download.self) { group in
             func launch() {
-                while next < plan.downloads.count {
-                    let d = plan.downloads[next]
-                    next += 1
-                    let isImage = !["shell", "data", "html"].contains(d.kind)
-                    if isImage && !allowCellularImages && NetworkState.isExpensive { continue }
-                    group.addTask { try await self.fetch(d) }
-                    return
-                }
+                guard next < text.count else { return }
+                let d = text[next]
+                next += 1
+                group.addTask { try await self.fetch(d) }
             }
             for _ in 0..<Self.maxConcurrent { launch() }
             while let done = try await group.next() {
                 progress.doneBytes += Int64(done.size)
                 progress.doneFiles += 1
                 await hooks.progress(progress)
-                if ["shell", "data", "html"].contains(done.kind) {
-                    remainingText -= 1
-                    if remainingText == 0 && !switched {
-                        switched = true
-                        await hooks.switchTo(target)
-                    }
-                } else if switched {
-                    sinceRefresh += 1
-                    if sinceRefresh >= 40 {
-                        sinceRefresh = 0
-                        await hooks.refresh()
-                    }
-                }
                 launch()
             }
         }
         if !switched { await hooks.switchTo(target) }
+        var failed = 0
+        if !photos.isEmpty {
+            let sizes = Dictionary(photos.map { ($0.hash, Int64($0.size)) }, uniquingKeysWith: { a, _ in a })
+            let tally = Tally(progress)
+            failed = await images.download(photos, cellular: allowCellularImages) { hash in
+                let (snapshot, refresh) = tally.add(bytes: sizes[hash] ?? 0)
+                Task {
+                    await hooks.progress(snapshot)
+                    if refresh { await hooks.refresh() }
+                }
+            }
+            progress = tally.value
+        }
         await hooks.refresh()
+        if failed > 0 { throw SyncError.someFailed(failed) }
         await hooks.progress(SyncProgress(phase: "Up to date", doneBytes: progress.doneBytes, totalBytes: progress.totalBytes, doneFiles: progress.doneFiles, totalFiles: progress.totalFiles))
         collectGarbage(keeping: [target] + [store.loadManifest("previous")].compactMap { $0 })
         return target
+    }
+
+    /// Progress shared with the background session's callbacks.
+    private final class Tally: @unchecked Sendable {
+        private let lock = NSLock()
+        private var progress: SyncProgress
+        private var sinceRefresh = 0
+        init(_ p: SyncProgress) { progress = p }
+        var value: SyncProgress { lock.lock(); defer { lock.unlock() }; return progress }
+        func add(bytes: Int64) -> (SyncProgress, refresh: Bool) {
+            lock.lock()
+            defer { lock.unlock() }
+            progress.doneBytes += bytes
+            progress.doneFiles += 1
+            sinceRefresh += 1
+            if sinceRefresh >= 40 { sinceRefresh = 0; return (progress, true) }
+            return (progress, false)
+        }
     }
 
     private func fetch(_ d: Download) async throws -> Download {

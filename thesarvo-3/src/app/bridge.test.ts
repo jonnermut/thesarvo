@@ -5,7 +5,7 @@ type W = NonNullable<Parameters<typeof installBridge>[0]>
 type Reply = (id: number, status: number, body: string) => void
 /** A window whose native handler is `native(message, reply)`. */
 const fakeWindow = (native: (m: { id: number }, reply: Reply) => void, original = vi.fn(async () => new Response('net'))) => {
-  const w = { fetch: original, location: { href: 'thesarvo://site/g/', origin: 'thesarvo://site' } } as unknown as W
+  const w = { fetch: original, location: { href: 'thesarvo://site/g/', origin: 'thesarvo://site' }, document: { documentElement: { dataset: {} as Record<string, string> } } } as unknown as W
   w.webkit = { messageHandlers: { thesarvo: { postMessage: (m) => queueMicrotask(() => native(m as { id: number }, (id, status, body) => w.thesarvoBridge?.reply(id, status, body))) } } }
   return { w, original }
 }
@@ -15,6 +15,12 @@ describe('app bridge', () => {
     const w = { fetch: vi.fn(), location: { href: 'https://x/', origin: 'https://x' } } as unknown as W
     expect(installBridge(w)).toBe(false)
     expect(w.thesarvoBridge).toBeUndefined()
+  })
+
+  it('marks the page as app mode so the site chrome hides (styles.css)', () => {
+    const { w } = fakeWindow(() => {})
+    installBridge(w)
+    expect(w.document.documentElement.dataset.app).toBe('app')
   })
 
   it('sends our API calls to native and returns its answer', async () => {

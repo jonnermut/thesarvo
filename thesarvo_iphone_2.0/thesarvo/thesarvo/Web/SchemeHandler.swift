@@ -9,6 +9,7 @@ private final class TaskBox: @unchecked Sendable {
 /// Serves `thesarvo://site/...` from the blob store through the current generation's path index.
 final class SchemeHandler: NSObject, WKURLSchemeHandler, @unchecked Sendable {
     private let store: BlobStore
+    var privateStore: PrivateStore?
     private let lock = NSLock()
     private var index = GenerationIndex()
     private var stopped = Set<ObjectIdentifier>()
@@ -39,6 +40,16 @@ final class SchemeHandler: NSObject, WKURLSchemeHandler, @unchecked Sendable {
         let request = task.request
         guard let url = request.url else {
             finish(box, status: 400, headers: [:], body: Data())
+            return
+        }
+        if url.path.hasPrefix(PrivateStore.imagePrefix) {
+            queue.async { [self] in
+                guard let file = privateStore?.imageFile(forPath: url.path), let data = try? Data(contentsOf: file, options: .mappedIfSafe) else {
+                    finish(box, status: 404, headers: ["Content-Type": "text/plain"], body: Data("Not found".utf8))
+                    return
+                }
+                finish(box, status: 200, headers: ["Content-Type": "image/jpeg", "Cache-Control": "private, no-store"], body: data)
+            }
             return
         }
         let resolved = PathResolver.resolve(path: url.path, query: url.query, index: currentIndex())

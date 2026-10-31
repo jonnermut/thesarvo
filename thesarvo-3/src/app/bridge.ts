@@ -15,6 +15,7 @@ type Reply = { status: number; body: string }
 export function installBridge(win: BridgeWindow = window): boolean {
   const handler = win.webkit?.messageHandlers?.thesarvo
   if (!handler || win.thesarvoBridge) return !!handler
+  win.document.documentElement.dataset.app ??= 'app'
   const pending = new Map<number, (r: Reply) => void>()
   let next = 1
   win.thesarvoBridge = { reply: (id, status, body) => pending.get(id)?.({ status, body }) }

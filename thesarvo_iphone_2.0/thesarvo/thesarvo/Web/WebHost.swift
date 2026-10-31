@@ -20,15 +20,11 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
 
     private var observers: [NSKeyValueObservation] = []
 
-    /// Hides the website's own header, side tree and footer (the app has a native menu), and tells the page it runs in the app.
+    /// Tells the page it runs in the app before it starts; the site's own stylesheet hides its header, side tree and footer for `data-app`.
     private static let appModeScript = """
     (function () {
       window.thesarvoApp = { bridge: \(AppConfig.bridgeVersion), platform: 'ios' };
       document.documentElement.setAttribute('data-app', 'ios');
-      var css = 'header[data-bar], aside.side-nav, body > div > div > button[aria-label="Close navigation"], footer { display: none !important; } '
-        + 'html { -webkit-text-size-adjust: 100%; } .no-print.sticky { top: 0 !important; }';
-      var s = document.createElement('style'); s.textContent = css;
-      (document.head || document.documentElement).appendChild(s);
       var post = function (m) { try { window.webkit.messageHandlers.thesarvo.postMessage(m); } catch (e) {} };
       window.addEventListener('load', function () { post({ type: 'bootOK' }); });
     })();

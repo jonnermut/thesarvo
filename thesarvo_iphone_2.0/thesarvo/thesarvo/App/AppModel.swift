@@ -20,10 +20,12 @@ enum DownloadMode: String, CaseIterable, Identifiable {
 @MainActor
 final class AppModel: ObservableObject {
     let store = BlobStore()
+    lazy var privateStore = PrivateStore(storeRoot: store.root)
     let handler: SchemeHandler
     let engine: SyncEngine
     let web: WebModel
     let auth = AuthSession()
+    private var privateTask: Task<Void, Never>?
 
     @Published var manifest: AppManifest?
     @Published var roots: [TreeNode] = []
@@ -74,6 +76,12 @@ final class AppModel: ObservableObject {
             store.saveState(state)
             notice = "The latest update did not load, so the previous guides are back."
         }
+        if state.freshSwitch == true {
+            // A background refresh switched generations: this first launch on it is guarded like a foreground switch.
+            state.freshSwitch = nil
+            state.bootPending = true
+            store.saveState(state)
+        }
         manifest = store.loadManifest("current") ?? store.loadSeedManifest()
         web.setTextScale(textScale)
         web.onBootOK = { [weak self] in self?.bootOK() }
@@ -109,15 +117,22 @@ final class AppModel: ObservableObject {
     func start() {
         guard !started else { return }
         started = true
+        handler.privateStore = privateStore
         NetworkState.start { [weak self] isOnline in Task { @MainActor in self?.online = isOnline; if isOnline { self?.syncSoon() } } }
         Migration.run(model: self)
+        NotificationCenter.default.addObserver(forName: BackgroundRefresh.didSwitch, object: nil, queue: .main) { [weak self] _ in
+            Task { @MainActor in self?.reloadFromStore() }
+        }
         web.onAPI = { [weak self] r in
             let t = await self?.auth.freshTokens()
-            return await BridgeAPI.perform(r, idToken: t?.idToken)
+            let answer = await BridgeAPI.perform(r, idToken: t?.idToken)
+            // Offline, a signed-in person's private pages come from the private store.
+            if answer.status == 0, t != nil, r.method == "GET", let stored = self?.privateStore.offlineAnswer(path: r.path) { return stored }
+            return answer
         }
         auth.onChange = { [weak self] tokens in
             self?.web.setAuth(tokens)
-            if tokens == nil { self?.removePrivateStore() }
+            if tokens == nil { self?.removePrivateStore() } else { self?.fillPrivateStore() }
         }
         web.setAuth(auth.tokens)
         let last = UserDefaults.standard.string(forKey: "lastPath") ?? "/g/"
@@ -128,18 +143,35 @@ final class AppModel: ObservableObject {
             open(node: n)
         }
         if let m = manifest { _ = m }
+        #if DEBUG
+        if CommandLine.arguments.contains("-bgRefreshNow") { Task { notice = "Background refresh: \(await BackgroundRefresh.run() ? "ok" : "failed")" } }
+        #endif
         syncNow()
+        fillPrivateStore()
     }
 
     /// Called when the app goes to the background: the page may have refreshed its tokens, so keep the Keychain current.
     func sceneBackground() {
+        AppDelegate.schedule()
         Task { if let t = await web.pageTokens() { auth.adopt(t) } }
     }
 
     /// Everything downloaded for the signed-in person's private guides; sign-out removes it (it is a separate directory, never the public store).
     func removePrivateStore() {
-        try? FileManager.default.removeItem(at: store.root.appendingPathComponent("private", isDirectory: true))
+        privateTask?.cancel()
+        privateStore.wipe()
         notice = "Signed out"
+    }
+
+    /// Downloads the signed-in person's private pages and photos for offline use (the server decides what they may read).
+    func fillPrivateStore() {
+        guard auth.tokens != nil, privateTask == nil else { return }
+        privateTask = Task { [weak self] in
+            guard let self else { return }
+            let t = await auth.freshTokens()
+            _ = try? await PrivateSync.fill(store: privateStore, idToken: t?.idToken)
+            privateTask = nil
+        }
     }
 
     func sceneActive() {
@@ -219,6 +251,14 @@ final class AppModel: ObservableObject {
     }
 
     // MARK: sync
+
+    /// A background refresh made a newer generation current while the app was alive but suspended.
+    private func reloadFromStore() {
+        guard let m = store.loadManifest("current"), m.builtAt != manifest?.builtAt else { return }
+        manifest = m
+        rebuildIndex()
+        web.reload()
+    }
 
     func syncSoon() {
         Task { try? await Task.sleep(nanoseconds: 600_000_000); syncNow() }

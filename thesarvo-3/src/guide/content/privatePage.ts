@@ -20,9 +20,9 @@ export async function loadPrivatePage(all: ContentSource, repo: GuideRepo | null
 }
 
 /** Signed links to every photo in `private/images/<id>/`; none in development, where the folder source serves them. */
-export async function signedPhotos(id: string, env = process.env): Promise<Record<string, string>> {
+export async function signedPhotos(id: string, env = process.env, seconds = IMAGE_LINK_SECONDS): Promise<Record<string, string>> {
   const store = imageBucket(env)
   if (!store) return {}
   const names = await bucketImageNames(store.bucket, store.creds, id, true)
-  return Object.fromEntries(names.map((n) => [n, presignedGet(store.bucket, store.creds, `private/images/${id}/${n}`, IMAGE_LINK_SECONDS)]))
+  return Object.fromEntries(names.map((n) => [n, presignedGet(store.bucket, store.creds, `private/images/${id}/${n}`, seconds)]))
 }

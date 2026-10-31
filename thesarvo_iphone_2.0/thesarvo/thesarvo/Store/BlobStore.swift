@@ -140,6 +140,8 @@ final class BlobStore: @unchecked Sendable {
         var etag: String?
         var lastCheck: Date?
         var bootPending: Bool = false
+        /// A background refresh made a new generation current that no page has loaded yet: the next launch guards its first paint.
+        var freshSwitch: Bool?
     }
 
     func loadState() -> State {
