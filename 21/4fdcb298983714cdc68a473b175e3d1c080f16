@@ -1,0 +1,27 @@
+docs/plan-mobile-ios.md
+  s_e20d0a1ebc47aa::t_db70c3de20bff5 1-137
+docs/apple-signin.md
+  s_e20d0a1ebc47aa::t_f7ea366945f259 1-56
+docs/plan-mobile-apps.md
+  s_e20d0a1ebc47aa::t_d1f9846933efac 3-5,58,64-66,104-110,112,114-122,158-166,170,222-240
+docs/todo.md
+  s_e20d0a1ebc47aa::t_577dcac951a3ff 90
+scripts/add-apple.sh
+  s_e20d0a1ebc47aa::t_9e9372190272b7 1-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "214fdcb298983714cdc68a473b175e3d1c080f16",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
