@@ -1,0 +1,54 @@
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/RootView.swift
+  s_ee2ae06c4b06ab::t_52b67380b6be00 23
+thesarvo-3/src/auth/verifyToken.ts
+  s_ee2ae06c4b06ab::t_7957d91f84caa7 12,29,55
+thesarvo-3/src/auth/verifyToken.test.ts
+  s_ee2ae06c4b06ab::t_7957d91f84caa7 30-34
+thesarvo-3/src/guide/view/GuideView.tsx
+  s_ee2ae06c4b06ab::t_54865197beb259 59
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/FirstRunView.swift
+  s_ee2ae06c4b06ab::t_52b67380b6be00 1-44
+thesarvo_iphone_2.0/thesarvo/thesarvo/Web/WebHost.swift
+  s_ee2ae06c4b06ab::t_c58a157da1a418 14,107-113
+thesarvo-3/src/app/bridge.test.ts
+  s_ee2ae06c4b06ab::t_3dc5866b873498 2,48-52,55-59,61
+  s_ee2ae06c4b06ab::t_c58a157da1a418 53-54,60
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/DownloadsView.swift
+  s_ee2ae06c4b06ab::t_52b67380b6be00 18,31,45-51
+  s_ee2ae06c4b06ab::t_029af6ed1b085a 52
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/MapScreen.swift
+  s_ee2ae06c4b06ab::t_c58a157da1a418 12,25-29,78
+  s_ee2ae06c4b06ab::t_54e3eef7cb811e 89-94
+thesarvo_iphone_2.0/thesarvo/thesarvo/App/AppModel.swift
+  s_ee2ae06c4b06ab::t_c58a157da1a418 36-37,80,196-197
+  s_ee2ae06c4b06ab::t_b2c696830113d3 126-129
+  s_ee2ae06c4b06ab::t_52b67380b6be00 63,93-97
+  s_ee2ae06c4b06ab::t_094432c6f75ddd 92,103
+  s_ee2ae06c4b06ab::t_37ce79c242ce78 44,86-91,98-102,104,283-292
+  s_ee2ae06c4b06ab::t_5e5138826a17e5 293
+thesarvo-3/src/guide/view/GpsBlock.tsx
+  s_ee2ae06c4b06ab::t_54865197beb259 2,44-46,57-60,68,70-72,75,85,94,102
+  s_ee2ae06c4b06ab::t_c58a157da1a418 69
+thesarvo-3/src/app/bridge.ts
+  s_ee2ae06c4b06ab::t_54865197beb259 38-41,45,47,49-50
+  s_ee2ae06c4b06ab::t_c58a157da1a418 42-44
+  s_ee2ae06c4b06ab::t_eb2514e62118a7 46,48
+thesarvo-3/src/auth/config.ts
+  s_ee2ae06c4b06ab::t_7957d91f84caa7 5-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "124877f53fae82a2ad4eb4f81a1cec8dc93a8da0",
+  "prompts": {},
+  "sessions": {
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
