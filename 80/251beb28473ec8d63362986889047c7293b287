@@ -1,0 +1,48 @@
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/SettingsView.swift
+  s_ee2ae06c4b06ab::t_8ee52a1c40282a 5-8,15,26-28,40-42,48-78,80
+  s_ee2ae06c4b06ab::t_3e26f08e418c68 79
+thesarvo_iphone_2.0/thesarvo/thesarvo/Web/WebHost.swift
+  s_ee2ae06c4b06ab::t_b8c55e67a715a1 18,76-96,108-112
+  s_ee2ae06c4b06ab::t_ec728d7ebd40a1 19,43
+thesarvo_iphone_2.0/thesarvo/thesarvoTests/AuthTests.swift
+  s_ee2ae06c4b06ab::t_5c12a6d7a29b00 1-56
+thesarvo_iphone_2.0/thesarvo/thesarvo/Web/BridgeAPI.swift
+  s_ee2ae06c4b06ab::t_b8c55e67a715a1 1-48
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/RootView.swift
+  s_ee2ae06c4b06ab::t_8ee52a1c40282a 24-27
+  s_ee2ae06c4b06ab::t_5c12a6d7a29b00 18
+thesarvo_iphone_2.0/thesarvo/thesarvo/Auth/AuthSession.swift
+  s_ee2ae06c4b06ab::t_d2fedcb59c9889 1-206
+thesarvo_iphone_2.0/thesarvo/thesarvo/App/AppModel.swift
+  s_ee2ae06c4b06ab::t_ec728d7ebd40a1 26,98-106,114-123
+  s_ee2ae06c4b06ab::t_dea3663b9766e5 124
+thesarvo_iphone_2.0/thesarvo/Config/Info.plist
+  s_ee2ae06c4b06ab::t_c0321b7a813343 5-17
+thesarvo-3/src/app/bridge.ts
+  s_ee2ae06c4b06ab::t_3707956cdf772e 23-25
+  s_ee2ae06c4b06ab::t_1fd25358ec5de6 15
+  s_ee2ae06c4b06ab::t_7ed882f946f79f 1-14,16-22,26-37
+thesarvo-3/src/router.tsx
+  s_ee2ae06c4b06ab::t_7ed882f946f79f 2,7
+thesarvo-3/src/app/bridge.test.ts
+  s_ee2ae06c4b06ab::t_1fd25358ec5de6 4-9,22,24,34
+  s_ee2ae06c4b06ab::t_7ed882f946f79f 1-3,10-21,23,25-33,35-48
+thesarvo_iphone_2.0/thesarvo/thesarvo/Auth/Keychain.swift
+  s_ee2ae06c4b06ab::t_d2fedcb59c9889 1-30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "80251beb28473ec8d63362986889047c7293b287",
+  "prompts": {},
+  "sessions": {
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
