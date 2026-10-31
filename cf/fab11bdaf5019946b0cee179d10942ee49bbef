@@ -1,0 +1,29 @@
+docs/ios-progress.md
+  s_ee2ae06c4b06ab::t_952dd1877f6b9f 1-45
+docs/plan-mobile-ios.md
+  s_ee2ae06c4b06ab::t_cc413c0fbd9339 138-141
+docs/todo.md
+  s_ee2ae06c4b06ab::t_2480201a2763fa 118-119
+scripts/build-app-images.ts
+  s_ee2ae06c4b06ab::t_f2e98e26f7a145 1-103
+scripts/build-app-seed.mjs
+  s_ee2ae06c4b06ab::t_d1b056379f7f0d 1-35
+scripts/serve-app-local.mjs
+  s_ee2ae06c4b06ab::t_0124df4bba3bf7 1-40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cffab11bdaf5019946b0cee179d10942ee49bbef",
+  "prompts": {},
+  "sessions": {
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
