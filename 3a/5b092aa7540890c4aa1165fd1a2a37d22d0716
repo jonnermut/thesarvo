@@ -1,0 +1,23 @@
+docs/as-built.md
+  s_0fb854d6611691::t_6b24c93c58b302 59
+docs/confluence-decommission.md
+  s_0fb854d6611691::t_7965b988b2aeed 1-60
+docs/plan-mvp.md
+  s_0fb854d6611691::t_d08c374878d242 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3a5b092aa7540890c4aa1165fd1a2a37d22d0716",
+  "prompts": {},
+  "sessions": {
+    "s_0fb854d6611691": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "s_0fb854d6611691",
+        "model": "unknown"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
