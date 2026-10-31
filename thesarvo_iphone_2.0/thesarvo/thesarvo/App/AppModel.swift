@@ -20,6 +20,7 @@ enum DownloadMode: String, CaseIterable, Identifiable {
 @MainActor
 final class AppModel: ObservableObject {
     let store = BlobStore()
+    lazy var editQueue = EditQueue(storeRoot: store.root)
     lazy var privateStore = PrivateStore(storeRoot: store.root)
     let handler: SchemeHandler
     let engine: SyncEngine
@@ -40,6 +41,8 @@ final class AppModel: ObservableObject {
     @Published var storedBytes: Int64 = 0
     @Published var online = true
     @Published var notice: String?
+    @Published var waitingEdits = 0
+    private var sendingEdits = false
     @Published var external: URL?
     @Published var presentCount: [String: Int] = [:]
 
@@ -118,18 +121,12 @@ final class AppModel: ObservableObject {
         guard !started else { return }
         started = true
         handler.privateStore = privateStore
-        NetworkState.start { [weak self] isOnline in Task { @MainActor in self?.online = isOnline; if isOnline { self?.syncSoon() } } }
+        NetworkState.start { [weak self] isOnline in Task { @MainActor in self?.online = isOnline; if isOnline { self?.syncSoon(); self?.sendWaitingEditsLater() } } }
         Migration.run(model: self)
         NotificationCenter.default.addObserver(forName: BackgroundRefresh.didSwitch, object: nil, queue: .main) { [weak self] _ in
             Task { @MainActor in self?.reloadFromStore() }
         }
-        web.onAPI = { [weak self] r in
-            let t = await self?.auth.freshTokens()
-            let answer = await BridgeAPI.perform(r, idToken: t?.idToken)
-            // Offline, a signed-in person's private pages come from the private store.
-            if answer.status == 0, t != nil, r.method == "GET", let stored = self?.privateStore.offlineAnswer(path: r.path) { return stored }
-            return answer
-        }
+        web.onAPI = { [weak self] r in await self?.handleAPI(r) ?? (0, "") }
         auth.onChange = { [weak self] tokens in
             self?.web.setAuth(tokens)
             if tokens == nil { self?.removePrivateStore() } else { self?.fillPrivateStore() }
@@ -148,6 +145,51 @@ final class AppModel: ObservableObject {
         #endif
         syncNow()
         fillPrivateStore()
+        updateWaitingEdits()
+        sendWaitingEdits()
+        #if DEBUG
+        if let g = UserDefaults.standard.string(forKey: "debugQueueSave") { // simulator test: a save the page could not send, through the real path
+            Task { _ = await handleAPI(BridgeRequest(["id": 0, "method": "POST", "path": EditQueue.savePath, "headers": ["content-type": "application/json"], "body": "{\"guide\":\"\(g)\",\"session\":\"s\",\"changes\":{\"nodes\":[]}}"])!) }
+        }
+        #endif
+    }
+
+    /// The page's call to our API (see `BridgeAPI`), with what the app adds: offline answers for private pages, and the durable edit queue.
+    func handleAPI(_ r: BridgeRequest) async -> (status: Int, body: String) {
+        let t = await auth.freshTokens()
+        let answer = await BridgeAPI.perform(r, idToken: t?.idToken)
+        if answer.status == 0, t != nil, r.method == "GET", let stored = privateStore.offlineAnswer(path: r.path) { return stored }
+        if r.method == "POST", r.path == EditQueue.savePath, let guide = EditQueue.guideID(inSaveBody: r.body), let email = auth.user?.email {
+            // The page keeps retrying while it is open; the queue is for when it is not (app closed, web storage evicted).
+            if answer.status == 0 { editQueue.enqueue(guide: guide, email: email, body: r.body ?? ""); updateWaitingEdits() }
+            else if answer.status == 200 { editQueue.remove(guide: guide); updateWaitingEdits() }
+        }
+        return answer
+    }
+
+    /// On reconnect the open page gets the first go at its own retry (success removes the entry); the queue follows.
+    func sendWaitingEditsLater() {
+        Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 90_000_000_000)
+            self?.sendWaitingEdits()
+        }
+    }
+
+    func updateWaitingEdits() { waitingEdits = editQueue.pending().count }
+
+    /// Sends edits queued earlier for the signed-in person.
+    func sendWaitingEdits() {
+        guard let email = auth.user?.email, !editQueue.pending().isEmpty, sendingEdits == false else { return }
+        sendingEdits = true
+        Task { [weak self] in
+            guard let self else { return }
+            if let t = await auth.freshTokens() {
+                let n = await editQueue.replay(email: email, idToken: t.idToken)
+                if n > 0 { notice = n == 1 ? "Sent 1 edit made offline" : "Sent \(n) edits made offline" }
+            }
+            updateWaitingEdits()
+            sendingEdits = false
+        }
     }
 
     /// Called when the app goes to the background: the page may have refreshed its tokens, so keep the Keychain current.

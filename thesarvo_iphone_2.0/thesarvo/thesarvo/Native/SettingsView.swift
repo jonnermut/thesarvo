@@ -13,6 +13,12 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 AccountSection(auth: auth, confirmDelete: $confirmDelete, deleteError: deleteError)
+                if app.waitingEdits > 0 {
+                    Section {
+                        Text(app.waitingEdits == 1 ? "1 edit is waiting to be sent." : "\(app.waitingEdits) edits are waiting to be sent.")
+                        Button("Send now") { app.sendWaitingEdits() }
+                    } header: { Text("Edits") } footer: { Text("Made without a connection. They are sent when you are online, for the person who made them.") }
+                }
                 Section("Reading") {
                     VStack(alignment: .leading) {
                         Text("Text size")
