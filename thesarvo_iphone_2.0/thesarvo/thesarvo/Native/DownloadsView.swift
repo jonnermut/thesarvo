@@ -15,7 +15,7 @@ struct DownloadsView: View {
                 }
                 Section("Photos") {
                     Picker("Download", selection: $app.mode) {
-                        ForEach(DownloadMode.allCases) { Text($0.title).tag($0) }
+                        ForEach(DownloadMode.allCases) { Text("\($0.title) (\(app.sizeLabel($0)))").tag($0) }
                     }
                     .pickerStyle(.inline).labelsHidden()
                     Toggle("Use mobile data for photos", isOn: $app.cellularImages)
@@ -28,7 +28,7 @@ struct DownloadsView: View {
                             })) {
                                 VStack(alignment: .leading) {
                                     Text(g.title)
-                                    if let c = app.presentCount[g.id] { Text("\(c) photos on device").font(.caption).foregroundStyle(.secondary) }
+                                    Text(detail(g)).font(.caption).foregroundStyle(.secondary)
                                 }
                             }
                         }
@@ -41,6 +41,14 @@ struct DownloadsView: View {
             .navigationTitle("Downloads")
         }
     }
+
+    private func detail(_ g: TreeNode) -> String {
+        let size = format(sizes[g.id] ?? 0)
+        guard let c = app.presentCount[g.id] else { return size }
+        return "\(size), \(c) photos on device"
+    }
+
+    private var sizes: [String: Int64] { app.guideBytes() }
 
     private var guides: [TreeNode] { app.byID.values.filter { $0.isGuide }.sorted { $0.title < $1.title } }
 

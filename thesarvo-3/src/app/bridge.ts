@@ -35,3 +35,16 @@ export function installBridge(win: BridgeWindow = window): boolean {
   }
   return true
 }
+
+/** True inside the app's web view (set by the app's start-up script). */
+export const inApp = (win: BridgeWindow = window) => !!win.webkit?.messageHandlers?.thesarvo
+
+/** A guide's GPS point for the native map. */
+export type MapPoint = { title: string; lat: number; lon: number }
+
+/** Asks the app to show a guide's points on its native map tab. Returns false in a browser. */
+export function openNativeMap(guideId: string, points: MapPoint[] = [], win: BridgeWindow = window): boolean {
+  const handler = win.webkit?.messageHandlers?.thesarvo
+  handler?.postMessage({ type: 'openMap', guide: guideId, points })
+  return !!handler
+}

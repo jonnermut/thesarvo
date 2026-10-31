@@ -27,6 +27,11 @@ describe('verifyIdToken', () => {
   it('reads the groups', async () => {
     expect((await verifyIdToken(sign({ 'cognito:groups': ['admins'] }), opts)).groups).toEqual(['admins'])
   })
+  it('accepts any of several clients (the website and the apps)', async () => {
+    const both = { ...opts, clientId: [clientId, 'mobile'] }
+    expect((await verifyIdToken(sign({ aud: 'mobile' }), both)).sub).toBe('u1')
+    await expect(verifyIdToken(sign({ aud: 'x' }), both)).rejects.toThrow(/not for this site/)
+  })
   it.each([
     ['a bad signature', sign({}, other), /signature/],
     ['an unknown key', sign({}, privateKey, { alg: 'RS256', kid: 'k2' }), /key/],

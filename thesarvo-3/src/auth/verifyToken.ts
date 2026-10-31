@@ -9,7 +9,7 @@ import { COGNITO } from './config'
 export type Editor = { sub: string; email: string; name: string; groups: string[] }
 
 type Jwk = JsonWebKey & { kid: string }
-type Options = { issuer: string; clientId: string; keys: () => Promise<Jwk[]>; now?: () => number }
+type Options = { issuer: string; clientId: string | string[]; keys: () => Promise<Jwk[]>; now?: () => number }
 
 const part = (s: string) => JSON.parse(Buffer.from(s, 'base64url').toString('utf8')) as Record<string, unknown>
 
@@ -26,7 +26,7 @@ export async function verifyIdToken(jwt: string, o: Options): Promise<Editor> {
   const valid = createVerify('RSA-SHA256').update(`${h}.${p}`).verify(createPublicKey({ key, format: 'jwk' }), Buffer.from(sig, 'base64url'))
   if (!valid) throw new Error('Bad signature')
   const c = part(p)
-  if (c.iss !== o.issuer || c.aud !== o.clientId || c.token_use !== 'id') throw new Error('Token is not for this site')
+  if (c.iss !== o.issuer || ![o.clientId].flat().includes(String(c.aud)) || c.token_use !== 'id') throw new Error('Token is not for this site')
   if (typeof c.exp !== 'number' || c.exp * 1000 <= (o.now ?? Date.now)()) throw new Error('Token expired')
   const groups = Array.isArray(c['cognito:groups']) ? c['cognito:groups'].map(String) : []
   return { sub: String(c.sub), email: String(c.email ?? ''), name: String(c.name ?? ''), groups }
@@ -52,7 +52,7 @@ export async function requireEditor(request: Request, group?: string): Promise<E
   if (!token) return Response.json({ error: 'Please sign in' }, { status: 401 })
   let editor: Editor
   try {
-    editor = await verifyIdToken(token, { issuer: COGNITO.issuer, clientId: COGNITO.clientId, keys: cognitoKeys })
+    editor = await verifyIdToken(token, { issuer: COGNITO.issuer, clientId: [COGNITO.clientId, ...(COGNITO.mobileClientId ? [COGNITO.mobileClientId] : [])], keys: cognitoKeys })
   } catch {
     return Response.json({ error: 'Your sign-in has expired. Please sign in again.' }, { status: 401 })
   }

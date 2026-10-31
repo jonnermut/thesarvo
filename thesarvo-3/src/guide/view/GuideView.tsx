@@ -56,7 +56,7 @@ export function GuideView({ guide, hash, full = false }: { guide: Guide; hash?: 
         // A leftover topo with no photo (the old site kept some) would show as a broken picture with a stray full-screen button.
         return !node.src ? null : <TopoFigure guideId={guide.id} topo={node} climbs={climbs} active={active} onActive={setActive} redundantLegend={redundant.has(node.id)} />
       case 'gps':
-        return <GpsBlock gps={node} guideName={guideTitle(guide)} />
+        return <GpsBlock gps={node} guideName={guideTitle(guide)} guideId={guide.id} />
       case 'unknown':
         return null
     }

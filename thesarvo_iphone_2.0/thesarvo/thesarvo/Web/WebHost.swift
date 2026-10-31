@@ -11,7 +11,7 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
     @Published var canGoBack = false
     @Published var isLoading = false
 
-    var onOpenMap: ((String?) -> Void)?
+    var onOpenMap: ((String?, [CragPoint]) -> Void)?
     var onBootOK: (() -> Void)?
     var onNavigated: ((String) -> Void)?
     var presentExternal: ((URL) -> Void)?
@@ -104,7 +104,13 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
         Task { @MainActor in
             switch type {
             case "bootOK": self.onBootOK?()
-            case "openMap": self.onOpenMap?(body["guide"] as? String)
+            case "openMap":
+                let guide = body["guide"] as? String
+                let pts = (body["points"] as? [[String: Any]] ?? []).enumerated().compactMap { i, d -> CragPoint? in
+                    guard let lat = d["lat"] as? Double, let lon = d["lon"] as? Double, let g = guide else { return nil }
+                    return CragPoint(id: "page-\(g)-\(i)", guideID: g, title: d["title"] as? String ?? "", subtitle: "", latitude: lat, longitude: lon)
+                }
+                self.onOpenMap?(guide, pts)
             case "api":
                 if let r = BridgeRequest(body), let onAPI = self.onAPI {
                     let answer = await onAPI(r)

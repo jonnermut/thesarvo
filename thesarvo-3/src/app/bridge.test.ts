@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { installBridge } from './bridge'
+import { inApp, installBridge, openNativeMap } from './bridge'
 
 type W = NonNullable<Parameters<typeof installBridge>[0]>
 type Reply = (id: number, status: number, body: string) => void
@@ -44,5 +44,19 @@ describe('app bridge', () => {
     await w.fetch('/g-data/manifest.json')
     await w.fetch('https://example.com/g/api/me')
     expect(original).toHaveBeenCalledTimes(2)
+  })
+
+  it('asks the app to open its map for a guide', () => {
+    const sent: unknown[] = []
+    const { w } = fakeWindow((m) => sent.push(m))
+    expect(inApp(w)).toBe(true)
+    expect(openNativeMap('g1', [{ title: 'Car park', lat: -42.9, lon: 147.2 }], w)).toBe(true)
+    return Promise.resolve().then(() => expect(sent).toEqual([{ type: 'openMap', guide: 'g1', points: [{ title: 'Car park', lat: -42.9, lon: 147.2 }] }]))
+  })
+
+  it('has no native map in a browser', () => {
+    const w = { location: { href: 'https://x/' } } as unknown as W
+    expect(inApp(w)).toBe(false)
+    expect(openNativeMap('g1', [], w)).toBe(false)
   })
 })

@@ -20,6 +20,7 @@ struct RootView: View {
                 .tag(AppTab.settings)
         }
         .tint(Color(UIColor { $0.userInterfaceStyle == .dark ? UIColor(red: 0.62, green: 0.68, blue: 1.0, alpha: 1) : UIColor(red: 0.106, green: 0.078, blue: 0.392, alpha: 1) }))
+        .fullScreenCover(isPresented: Binding(get: { !app.firstRunDone && app.manifest != nil }, set: { _ in })) { FirstRunView() }
         .sheet(item: $app.external) { SafariView(url: $0).ignoresSafeArea() }
         .onChange(of: scenePhase) { phase in
             if phase == .active { app.sceneActive() }

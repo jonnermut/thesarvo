@@ -9,7 +9,7 @@ struct MapScreen: View {
 
     var body: some View {
         NavigationStack {
-            CragMap(points: points, focus: app.mapFocus) { guide in app.openGuide(id: guide) }
+            CragMap(points: shown, focus: app.mapFocus) { guide in app.openGuide(id: guide) }
                 .ignoresSafeArea(edges: .bottom)
                 .navigationTitle(focusTitle)
                 .navigationBarTitleDisplayMode(.inline)
@@ -20,6 +20,11 @@ struct MapScreen: View {
                 }
         }
         .task(id: app.manifest?.builtAt) { await load() }
+    }
+
+    private var shown: [CragPoint] {
+        guard let g = app.pagePoints.first?.guideID else { return points }
+        return points.filter { $0.guideID != g } + app.pagePoints
     }
 
     private var focusTitle: String {
@@ -70,7 +75,7 @@ struct CragMap: UIViewRepresentable {
 
     func updateUIView(_ map: MKMapView, context: Context) {
         context.coordinator.parent = self
-        let key = "\(points.count)"
+        let key = "\(points.count)-\(points.last?.id ?? "")"
         if context.coordinator.loadedKey != key {
             map.removeAnnotations(map.annotations.filter { $0 is CragAnnotation })
             map.addAnnotations(points.map(CragAnnotation.init))
@@ -81,7 +86,12 @@ struct CragMap: UIViewRepresentable {
             if let focus {
                 let mine = points.filter { $0.guideID == focus }
                 if !mine.isEmpty {
-                    let rect = mine.reduce(MKMapRect.null) { r, p in r.union(MKMapRect(origin: MKMapPoint(p.coordinate), size: MKMapSize(width: 1, height: 1))) }
+                    // At least about a kilometre across, so one point does not zoom past the tiles.
+                    let rect = mine.reduce(MKMapRect.null) { r, p in
+                        let pt = MKMapPoint(p.coordinate)
+                        let side = MKMapPointsPerMeterAtLatitude(p.coordinate.latitude) * 800
+                        return r.union(MKMapRect(x: pt.x - side, y: pt.y - side, width: side * 2, height: side * 2))
+                    }
                     map.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 80, left: 60, bottom: 100, right: 60), animated: true)
                 }
             } else if map.annotations.count > 1 {

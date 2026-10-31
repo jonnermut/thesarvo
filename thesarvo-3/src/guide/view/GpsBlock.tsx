@@ -1,4 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import { inApp, openNativeMap } from '#/app/bridge'
 import { usePresence } from '#/components/overlay'
 import type { Gps } from '#/guide/model/types'
 import { gpsToGpx, gpsToKml } from './kml'
@@ -40,7 +41,9 @@ function Toggle({ on, onClick, children }: { on: boolean; onClick: () => void; c
   )
 }
 
-export function GpsBlock({ gps, guideName = '' }: { gps: Gps; guideName?: string }) {
+export function GpsBlock({ gps, guideName = '', guideId }: { gps: Gps; guideName?: string; guideId?: string }) {
+  // In the app the map is the native Map tab (the web map needs a connection and the downloads need a browser).
+  const [app, setApp] = useState(false)
   // Open by default, but only after mount: Leaflet needs the browser.
   const [showMap, setShowMap] = useState(false)
   const [showPoints, setShowPoints] = useState(false)
@@ -51,7 +54,10 @@ export function GpsBlock({ gps, guideName = '' }: { gps: Gps; guideName?: string
   const mapMounted = usePresence(showMap)
   // Below an open map the list can start off screen: bring it into view as it opens, so the button visibly does something.
   const showTable = useCallback((el: HTMLDivElement | null) => el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), [])
-  useEffect(() => setShowMap(true), [])
+  useEffect(() => {
+    setApp(inApp())
+    setShowMap(!inApp())
+  }, [])
   if (!gps.points.length && !gps.lines.length) return null
   const hasCode = gps.points.some((p) => p.code)
   const hasHeight = gps.points.some((p) => p.height && p.height !== '0')
@@ -59,8 +65,14 @@ export function GpsBlock({ gps, guideName = '' }: { gps: Gps; guideName?: string
     <section className="my-6">
       <div className="flex flex-wrap items-end gap-x-4 gap-y-2 border-b border-line pb-1">
         <h2 className="flex-1 text-2xl text-navy">GPS</h2>
+        {app && guideId && (
+          <button type="button" onClick={() => openNativeMap(guideId, gps.points.map((p) => ({ title: p.description || p.code, lat: Number(p.latitude), lon: Number(p.longitude) })).filter((p) => isFinite(p.lat) && isFinite(p.lon)))} className="rounded border border-line bg-navy px-2.5 py-1 text-[13px] text-white">
+            Open in Map
+          </button>
+        )}
         <button
           type="button"
+          hidden={app}
           onClick={() => downloadKml(guideName, gps)}
           title="Download the points for Google Earth"
           className="inline-flex items-center gap-1 text-[13px] text-muted hover:text-link"
@@ -70,6 +82,7 @@ export function GpsBlock({ gps, guideName = '' }: { gps: Gps; guideName?: string
         </button>
         <button
           type="button"
+          hidden={app}
           onClick={() => downloadGpx(guideName, gps)}
           title="Download the points for GPS units and apps such as Gaia"
           className="inline-flex items-center gap-1 text-[13px] text-muted hover:text-link"
@@ -78,7 +91,7 @@ export function GpsBlock({ gps, guideName = '' }: { gps: Gps; guideName?: string
           GPX
         </button>
         <div className="flex divide-x divide-line overflow-hidden rounded border border-line text-[13px]">
-          <Toggle
+          {!app && <Toggle
             on={showMap}
             onClick={() => {
               setToggled(true)
@@ -86,7 +99,7 @@ export function GpsBlock({ gps, guideName = '' }: { gps: Gps; guideName?: string
             }}
           >
             Map
-          </Toggle>
+          </Toggle>}
           {gps.points.length > 0 && (
             <Toggle on={showPoints} onClick={() => setShowPoints((v) => !v)}>
               {gps.points.length} points <span aria-hidden>{showPoints ? '▴' : '▾'}</span>

@@ -33,12 +33,15 @@ final class AppModel: ObservableObject {
     @Published var tab: AppTab = .guides
     @Published var selection: String?
     @Published var mapFocus: String?
+    /// The GPS points a page sent with its Map button; they stand in for that guide's KML points.
+    @Published var pagePoints: [CragPoint] = []
     @Published var storedBytes: Int64 = 0
     @Published var online = true
     @Published var notice: String?
     @Published var external: URL?
     @Published var presentCount: [String: Int] = [:]
 
+    @Published var firstRunDone: Bool { didSet { UserDefaults.standard.set(firstRunDone, forKey: "firstRunDone") } }
     @Published var mode: DownloadMode { didSet { UserDefaults.standard.set(mode.rawValue, forKey: "downloadMode"); syncSoon() } }
     @Published var pinned: Set<String> { didSet { UserDefaults.standard.set(Array(pinned), forKey: "pinnedGuides"); if mode == .pinned { syncSoon() } } }
     @Published var cellularImages: Bool { didSet { UserDefaults.standard.set(cellularImages, forKey: "cellularImages") } }
@@ -57,6 +60,7 @@ final class AppModel: ObservableObject {
         mode = DownloadMode(rawValue: d.string(forKey: "downloadMode") ?? "") ?? .thumbnails
         pinned = Set(d.stringArray(forKey: "pinnedGuides") ?? [])
         cellularImages = d.bool(forKey: "cellularImages")
+        firstRunDone = d.bool(forKey: "firstRunDone")
         let scale = d.double(forKey: "textScale")
         textScale = scale > 0 ? scale : 1.0
         showClimbsInMenu = d.bool(forKey: "showClimbsInTOC")
@@ -73,19 +77,31 @@ final class AppModel: ObservableObject {
         manifest = store.loadManifest("current") ?? store.loadSeedManifest()
         web.setTextScale(textScale)
         web.onBootOK = { [weak self] in self?.bootOK() }
-        web.onOpenMap = { [weak self] g in self?.openMap(guide: g) }
+        web.onOpenMap = { [weak self] g, pts in self?.openMap(guide: g, points: pts) }
         web.presentExternal = { [weak self] u in self?.external = u }
         web.onNavigated = { [weak self] p in self?.navigated(to: p) }
         rebuildIndex()
     }
 
-    var policy: Policy {
-        switch mode {
-        case .thumbnails: return .thumbnails
-        case .pinned: return Policy(s: .all, m: .guides(pinned), l: .none)
-        case .allPhotos: return Policy(s: .all, m: .all, l: .none)
-        case .fullQuality: return Policy(s: .all, m: .all, l: .all)
-        }
+    var policy: Policy { Policy(mode: mode, pinned: pinned) }
+
+    /// What a photo mode would still download (bytes), from the current manifest and what is on the device.
+    func bytesToDownload(_ m: DownloadMode) -> Int64 {
+        guard let manifest else { return 0 }
+        let p = Policy(mode: m, pinned: pinned)
+        return SyncPlan.diff(manifest, present: store.presentHashes(), policy: p).downloads.reduce(Int64(0)) { $0 + Int64($1.size) }
+    }
+
+    func sizeLabel(_ m: DownloadMode) -> String {
+        let b = bytesToDownload(m)
+        return b == 0 ? "on this device" : ByteCountFormatter.string(fromByteCount: b, countStyle: .file)
+    }
+
+    /// Size of one guide's standard photos (all of it, present or not).
+    func guideBytes() -> [String: Int64] {
+        var out: [String: Int64] = [:]
+        for im in manifest?.images ?? [] { out[im.g, default: 0] += Int64(im.variant(.m)?.size ?? 0) }
+        return out
     }
 
     // MARK: start up
@@ -107,6 +123,10 @@ final class AppModel: ObservableObject {
         let last = UserDefaults.standard.string(forKey: "lastPath") ?? "/g/"
         web.open(path: last)
         selectionFollows(path: last)
+        if let id = Migration.pendingGuideID, let n = byID[id] {
+            Migration.pendingGuideID = nil
+            open(node: n)
+        }
         if let m = manifest { _ = m }
         syncNow()
     }
@@ -173,7 +193,8 @@ final class AppModel: ObservableObject {
         if let n = byID[id] { open(node: n) }
     }
 
-    func openMap(guide: String?) {
+    func openMap(guide: String?, points: [CragPoint] = []) {
+        pagePoints = points
         mapFocus = guide
         tab = .map
     }
@@ -257,5 +278,16 @@ final class AppModel: ObservableObject {
         manifest = store.loadSeedManifest()
         rebuildIndex()
         web.reload()
+    }
+}
+
+extension Policy {
+    init(mode: DownloadMode, pinned: Set<String>) {
+        switch mode {
+        case .thumbnails: self = .thumbnails
+        case .pinned: self = Policy(s: .all, m: .guides(pinned), l: .none)
+        case .allPhotos: self = Policy(s: .all, m: .all, l: .none)
+        case .fullQuality: self = Policy(s: .all, m: .all, l: .all)
+        }
     }
 }
