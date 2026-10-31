@@ -61,15 +61,14 @@ enum Pkce {
     }
 }
 
-/// Cognito sign-in with PKCE in `ASWebAuthenticationSession`. The Cognito mobile app client (callback `thesarvo://auth/callback`) is
-/// created by the owner; until `mobileClientId` is set the button explains that. Tokens live in the Keychain.
+/// Cognito sign-in with PKCE in `ASWebAuthenticationSession`, with the mobile app client (callback `thesarvo://auth/callback`). Tokens live in the Keychain.
 @MainActor
 final class AuthSession: NSObject, ObservableObject, ASWebAuthenticationPresentationContextProviding {
     static let callbackScheme = "thesarvo"
     static let redirect = "thesarvo://auth/callback"
     static let domain = URL(string: "https://auth.thesarvo.com")!
-    /// The Cognito mobile client id. Empty until the owner registers the `thesarvo://auth/callback` client (Settings > Server can override it).
-    static let mobileClientId = ""
+    /// The Cognito mobile client id (public, no secret; Settings > Server can override it).
+    static let mobileClientId = "7b9l6bgg8aln7jo1s877d49q8i"
 
     @Published private(set) var user: AuthUser?
     @Published var error: String?
@@ -134,9 +133,7 @@ final class AuthSession: NSObject, ObservableObject, ASWebAuthenticationPresenta
                 session = s
                 s.start()
             }
-            let items = URLComponents(url: callback, resolvingAgainstBaseURL: false)?.queryItems ?? []
-            if let e = items.first(where: { $0.name == "error" })?.value { throw AuthError.message(items.first(where: { $0.name == "error_description" })?.value ?? e) }
-            guard let code = items.first(where: { $0.name == "code" })?.value, items.first(where: { $0.name == "state" })?.value == state else { throw AuthError.message("This sign-in link has expired. Please try again.") }
+            let code = try Self.code(from: callback, state: state)
             let r = try await Self.token(["grant_type": "authorization_code", "code": code, "code_verifier": verifier, "redirect_uri": Self.redirect], clientId: clientId)
             store(Tokens(idToken: r.id_token, accessToken: r.access_token, refreshToken: r.refresh_token ?? "", expiresAt: Date().timeIntervalSince1970 * 1000 + r.expires_in * 1000))
         } catch let e as ASWebAuthenticationSessionError where e.code == .canceledLogin {
@@ -144,6 +141,14 @@ final class AuthSession: NSObject, ObservableObject, ASWebAuthenticationPresenta
         } catch {
             self.error = (error as? AuthError)?.text ?? error.localizedDescription
         }
+    }
+
+    /// The authorization code in the callback URL, or the reason there is none (an error from Cognito, or a state that is not ours).
+    nonisolated static func code(from callback: URL, state: String) throws -> String {
+        let items = URLComponents(url: callback, resolvingAgainstBaseURL: false)?.queryItems ?? []
+        if let e = items.first(where: { $0.name == "error" })?.value { throw AuthError.message(items.first(where: { $0.name == "error_description" })?.value ?? e) }
+        guard let code = items.first(where: { $0.name == "code" })?.value, items.first(where: { $0.name == "state" })?.value == state else { throw AuthError.message("This sign-in link has expired. Please try again.") }
+        return code
     }
 
     /// A current access/ID token pair, refreshed when within two minutes of expiry; nil when signed out or the refresh was refused.

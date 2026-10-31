@@ -53,4 +53,18 @@ final class AuthTests: XCTestCase {
         Keychain.delete(key)
         XCTAssertNil(Keychain.read(key))
     }
+
+    func testCallbackHandling() throws {
+        XCTAssertEqual(try AuthSession.code(from: URL(string: "thesarvo://auth/callback?code=abc&state=s1")!, state: "s1"), "abc")
+        XCTAssertThrowsError(try AuthSession.code(from: URL(string: "thesarvo://auth/callback?code=abc&state=other")!, state: "s1"))
+        XCTAssertThrowsError(try AuthSession.code(from: URL(string: "thesarvo://auth/callback?code=abc")!, state: "s1"))
+        XCTAssertThrowsError(try AuthSession.code(from: URL(string: "thesarvo://auth/callback?error=access_denied&error_description=No")!, state: "s1")) { XCTAssertEqual(($0 as? AuthError)?.text, "No") }
+    }
+
+    func testAuthorizeURLUsesTheMobileClient() throws {
+        XCTAssertEqual(AuthSession.mobileClientId, "7b9l6bgg8aln7jo1s877d49q8i")
+        let u = try XCTUnwrap(Pkce.authorizeURL(domain: AuthSession.domain, clientId: AuthSession.mobileClientId, redirect: AuthSession.redirect, state: "s", challenge: "c"))
+        XCTAssertEqual(u.host, "auth.thesarvo.com")
+        XCTAssertTrue(u.absoluteString.contains("client_id=7b9l6bgg8aln7jo1s877d49q8i"))
+    }
 }
