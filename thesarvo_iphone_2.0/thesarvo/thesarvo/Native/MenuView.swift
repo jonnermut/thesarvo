@@ -32,12 +32,21 @@ struct MenuView: View {
         .navigationTitle("Guides")
         .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search guides")
         .onSubmit(of: .search) { app.openSearch(query) }
+        .onChange(of: app.selection) { id in
+            guard let id, let n = app.byID[id], !samePage(n.url, app.web.path) else { return }
+            app.web.open(path: n.url)
+        }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button { app.selection = nil; app.web.open(path: "/g/") } label: { Image(systemName: "house") }
                     .accessibilityLabel("Home")
             }
         }
+    }
+
+    private func samePage(_ a: String, _ b: String) -> Bool {
+        func norm(_ p: String) -> String { (p.split(separator: "?").first.map(String.init) ?? p).trimmingCharacters(in: CharacterSet(charactersIn: "/")) }
+        return norm(a) == norm(b)
     }
 
     private var matches: [TreeNode] {

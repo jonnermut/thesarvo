@@ -19,7 +19,7 @@ struct RootView: View {
                 .tabItem { Label("Settings", systemImage: "gearshape") }
                 .tag(AppTab.settings)
         }
-        .tint(Color(red: 0.106, green: 0.078, blue: 0.392))
+        .tint(Color(UIColor { $0.userInterfaceStyle == .dark ? UIColor(red: 0.62, green: 0.68, blue: 1.0, alpha: 1) : UIColor(red: 0.106, green: 0.078, blue: 0.392, alpha: 1) }))
         .sheet(item: $app.external) { SafariView(url: $0).ignoresSafeArea() }
         .onChange(of: scenePhase) { phase in if phase == .active { app.sceneActive() } }
         .task { app.start() }
@@ -66,10 +66,9 @@ struct PageView: View {
     var body: some View {
         ZStack {
             WebHost(model: app.web)
-                .ignoresSafeArea(.container, edges: .bottom)
             if app.manifest == nil { EmptyStore() }
         }
-        .navigationTitle(app.web.title.isEmpty ? "thesarvo" : app.web.title)
+        .navigationTitle(app.selection.flatMap { app.byID[$0]?.title } ?? "thesarvo")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
