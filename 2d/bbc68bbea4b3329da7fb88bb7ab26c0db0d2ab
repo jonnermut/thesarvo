@@ -1,0 +1,19 @@
+scripts/add-mobile-client.sh
+  s_e20d0a1ebc47aa::t_e5c8792b83e428 4,8,14,20,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2dbbc68bbea4b3329da7fb88bb7ab26c0db0d2ab",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
