@@ -1,0 +1,136 @@
+[
+ {
+  "name": "fresh install, thumbnails only",
+  "downloads": [
+   [
+    "shell",
+    "assets/a.js",
+    10
+   ],
+   [
+    "data",
+    "g-data/guide/1.json",
+    20
+   ],
+   [
+    "html",
+    "g/east/index.html",
+    30
+   ],
+   [
+    "s",
+    "images-app/a159eaf43ba28f0de1e182d76fa2fe9a89fd1023fec920b80e5ba10824dcaf9d",
+    5
+   ],
+   [
+    "s",
+    "images-app/4bfc28283b1bceeb97d97f505a52d2213b35cc42b0832da991d4c15a1fe9be57",
+    5
+   ]
+  ],
+  "deletions": 0,
+  "textComplete": false,
+  "pathsInGeneration": 0
+ },
+ {
+  "name": "nothing changed",
+  "downloads": [],
+  "deletions": 0,
+  "textComplete": true,
+  "pathsInGeneration": 3
+ },
+ {
+  "name": "one data file changed, old blob is garbage",
+  "downloads": [
+   [
+    "data",
+    "g-data/guide/1.json",
+    21
+   ]
+  ],
+  "deletions": 1,
+  "textComplete": false,
+  "pathsInGeneration": 2
+ },
+ {
+  "name": "two paths with the same bytes download once",
+  "downloads": [
+   [
+    "shell",
+    "assets/a.js",
+    10
+   ],
+   [
+    "data",
+    "g-data/guide/1.json",
+    20
+   ],
+   [
+    "html",
+    "g/east/index.html",
+    30
+   ]
+  ],
+  "deletions": 0,
+  "textComplete": false,
+  "pathsInGeneration": 0
+ },
+ {
+  "name": "medium photos for guide 1 only",
+  "downloads": [
+   [
+    "m",
+    "images-app/86d27eddecc0e46263306f5d13c7b29e82d0fce224e7a135417fdbc820690acd",
+    50
+   ]
+  ],
+  "deletions": 0,
+  "textComplete": true,
+  "pathsInGeneration": 3
+ },
+ {
+  "name": "everything, partly present",
+  "downloads": [
+   [
+    "data",
+    "g-data/guide/1.json",
+    20
+   ],
+   [
+    "html",
+    "g/east/index.html",
+    30
+   ],
+   [
+    "s",
+    "images-app/a159eaf43ba28f0de1e182d76fa2fe9a89fd1023fec920b80e5ba10824dcaf9d",
+    5
+   ],
+   [
+    "s",
+    "images-app/4bfc28283b1bceeb97d97f505a52d2213b35cc42b0832da991d4c15a1fe9be57",
+    5
+   ],
+   [
+    "m",
+    "images-app/6eabf42984bac707c0770d29b917259cae40f662a38bcfb0f35c7e81ad698ecd",
+    50
+   ],
+   [
+    "l",
+    "images-app/525a6f3c9deda2f8d2e509461a4de40651975ea79d3b5ec609931cb96a68d417",
+    500
+   ]
+  ],
+  "deletions": 0,
+  "textComplete": false,
+  "pathsInGeneration": 1
+ },
+ {
+  "name": "removed image variant is garbage",
+  "downloads": [],
+  "deletions": 1,
+  "textComplete": true,
+  "pathsInGeneration": 3
+ }
+]

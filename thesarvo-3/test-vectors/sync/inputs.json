@@ -1,0 +1,465 @@
+[
+ {
+  "name": "fresh install, thumbnails only",
+  "manifest": {
+   "schema": 1,
+   "contentCommit": "c1",
+   "builtAt": "2026-11-01T00:00:00Z",
+   "minShell": 1,
+   "bridge": 1,
+   "files": [
+    {
+     "p": "assets/a.js",
+     "h": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+     "z": 10,
+     "c": "shell"
+    },
+    {
+     "p": "g-data/guide/1.json",
+     "h": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+     "z": 20,
+     "c": "data"
+    },
+    {
+     "p": "g/east/index.html",
+     "h": "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6",
+     "z": 30,
+     "c": "html"
+    }
+   ],
+   "images": [
+    {
+     "g": "1",
+     "n": "x.jpg",
+     "x": "jpg",
+     "s": [
+      "a159eaf43ba28f0de1e182d76fa2fe9a89fd1023fec920b80e5ba10824dcaf9d",
+      5
+     ],
+     "m": [
+      "86d27eddecc0e46263306f5d13c7b29e82d0fce224e7a135417fdbc820690acd",
+      50
+     ],
+     "l": [
+      "525a6f3c9deda2f8d2e509461a4de40651975ea79d3b5ec609931cb96a68d417",
+      500
+     ]
+    },
+    {
+     "g": "2",
+     "n": "y.jpg",
+     "x": "jpg",
+     "s": [
+      "4bfc28283b1bceeb97d97f505a52d2213b35cc42b0832da991d4c15a1fe9be57",
+      5
+     ],
+     "m": [
+      "6eabf42984bac707c0770d29b917259cae40f662a38bcfb0f35c7e81ad698ecd",
+      50
+     ]
+    }
+   ]
+  },
+  "present": [],
+  "policy": {
+   "s": true,
+   "m": false,
+   "l": false
+  }
+ },
+ {
+  "name": "nothing changed",
+  "manifest": {
+   "schema": 1,
+   "contentCommit": "c1",
+   "builtAt": "2026-11-01T00:00:00Z",
+   "minShell": 1,
+   "bridge": 1,
+   "files": [
+    {
+     "p": "assets/a.js",
+     "h": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+     "z": 10,
+     "c": "shell"
+    },
+    {
+     "p": "g-data/guide/1.json",
+     "h": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+     "z": 20,
+     "c": "data"
+    },
+    {
+     "p": "g/east/index.html",
+     "h": "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6",
+     "z": 30,
+     "c": "html"
+    }
+   ],
+   "images": [
+    {
+     "g": "1",
+     "n": "x.jpg",
+     "x": "jpg",
+     "s": [
+      "a159eaf43ba28f0de1e182d76fa2fe9a89fd1023fec920b80e5ba10824dcaf9d",
+      5
+     ],
+     "m": [
+      "86d27eddecc0e46263306f5d13c7b29e82d0fce224e7a135417fdbc820690acd",
+      50
+     ],
+     "l": [
+      "525a6f3c9deda2f8d2e509461a4de40651975ea79d3b5ec609931cb96a68d417",
+      500
+     ]
+    },
+    {
+     "g": "2",
+     "n": "y.jpg",
+     "x": "jpg",
+     "s": [
+      "4bfc28283b1bceeb97d97f505a52d2213b35cc42b0832da991d4c15a1fe9be57",
+      5
+     ],
+     "m": [
+      "6eabf42984bac707c0770d29b917259cae40f662a38bcfb0f35c7e81ad698ecd",
+      50
+     ]
+    }
+   ]
+  },
+  "present": [
+   "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+   "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6",
+   "a159eaf43ba28f0de1e182d76fa2fe9a89fd1023fec920b80e5ba10824dcaf9d",
+   "4bfc28283b1bceeb97d97f505a52d2213b35cc42b0832da991d4c15a1fe9be57"
+  ],
+  "policy": {
+   "s": true,
+   "m": false,
+   "l": false
+  }
+ },
+ {
+  "name": "one data file changed, old blob is garbage",
+  "manifest": {
+   "schema": 1,
+   "contentCommit": "c1",
+   "builtAt": "2026-11-01T00:00:00Z",
+   "minShell": 1,
+   "bridge": 1,
+   "files": [
+    {
+     "p": "assets/a.js",
+     "h": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+     "z": 10,
+     "c": "shell"
+    },
+    {
+     "p": "g-data/guide/1.json",
+     "h": "4814d92093ac8a0f4a2163ab87dee509ba306a58f5888be0edcb2fcd0712028b",
+     "z": 21,
+     "c": "data"
+    },
+    {
+     "p": "g/east/index.html",
+     "h": "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6",
+     "z": 30,
+     "c": "html"
+    }
+   ],
+   "images": [
+    {
+     "g": "1",
+     "n": "x.jpg",
+     "x": "jpg",
+     "s": [
+      "a159eaf43ba28f0de1e182d76fa2fe9a89fd1023fec920b80e5ba10824dcaf9d",
+      5
+     ],
+     "m": [
+      "86d27eddecc0e46263306f5d13c7b29e82d0fce224e7a135417fdbc820690acd",
+      50
+     ],
+     "l": [
+      "525a6f3c9deda2f8d2e509461a4de40651975ea79d3b5ec609931cb96a68d417",
+      500
+     ]
+    },
+    {
+     "g": "2",
+     "n": "y.jpg",
+     "x": "jpg",
+     "s": [
+      "4bfc28283b1bceeb97d97f505a52d2213b35cc42b0832da991d4c15a1fe9be57",
+      5
+     ],
+     "m": [
+      "6eabf42984bac707c0770d29b917259cae40f662a38bcfb0f35c7e81ad698ecd",
+      50
+     ]
+    }
+   ]
+  },
+  "present": [
+   "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+   "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6",
+   "a159eaf43ba28f0de1e182d76fa2fe9a89fd1023fec920b80e5ba10824dcaf9d",
+   "4bfc28283b1bceeb97d97f505a52d2213b35cc42b0832da991d4c15a1fe9be57"
+  ],
+  "policy": {
+   "s": true,
+   "m": false,
+   "l": false
+  }
+ },
+ {
+  "name": "two paths with the same bytes download once",
+  "manifest": {
+   "schema": 1,
+   "contentCommit": "c1",
+   "builtAt": "2026-11-01T00:00:00Z",
+   "minShell": 1,
+   "bridge": 1,
+   "files": [
+    {
+     "p": "assets/a.js",
+     "h": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+     "z": 10,
+     "c": "shell"
+    },
+    {
+     "p": "g-data/guide/1.json",
+     "h": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+     "z": 20,
+     "c": "data"
+    },
+    {
+     "p": "g-data/guide/2.json",
+     "h": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+     "z": 20,
+     "c": "data"
+    },
+    {
+     "p": "g/east/index.html",
+     "h": "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6",
+     "z": 30,
+     "c": "html"
+    }
+   ],
+   "images": []
+  },
+  "present": [],
+  "policy": {
+   "s": true,
+   "m": false,
+   "l": false
+  }
+ },
+ {
+  "name": "medium photos for guide 1 only",
+  "manifest": {
+   "schema": 1,
+   "contentCommit": "c1",
+   "builtAt": "2026-11-01T00:00:00Z",
+   "minShell": 1,
+   "bridge": 1,
+   "files": [
+    {
+     "p": "assets/a.js",
+     "h": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+     "z": 10,
+     "c": "shell"
+    },
+    {
+     "p": "g-data/guide/1.json",
+     "h": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+     "z": 20,
+     "c": "data"
+    },
+    {
+     "p": "g/east/index.html",
+     "h": "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6",
+     "z": 30,
+     "c": "html"
+    }
+   ],
+   "images": [
+    {
+     "g": "1",
+     "n": "x.jpg",
+     "x": "jpg",
+     "s": [
+      "a159eaf43ba28f0de1e182d76fa2fe9a89fd1023fec920b80e5ba10824dcaf9d",
+      5
+     ],
+     "m": [
+      "86d27eddecc0e46263306f5d13c7b29e82d0fce224e7a135417fdbc820690acd",
+      50
+     ],
+     "l": [
+      "525a6f3c9deda2f8d2e509461a4de40651975ea79d3b5ec609931cb96a68d417",
+      500
+     ]
+    },
+    {
+     "g": "2",
+     "n": "y.jpg",
+     "x": "jpg",
+     "s": [
+      "4bfc28283b1bceeb97d97f505a52d2213b35cc42b0832da991d4c15a1fe9be57",
+      5
+     ],
+     "m": [
+      "6eabf42984bac707c0770d29b917259cae40f662a38bcfb0f35c7e81ad698ecd",
+      50
+     ]
+    }
+   ]
+  },
+  "present": [
+   "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+   "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6",
+   "a159eaf43ba28f0de1e182d76fa2fe9a89fd1023fec920b80e5ba10824dcaf9d",
+   "4bfc28283b1bceeb97d97f505a52d2213b35cc42b0832da991d4c15a1fe9be57"
+  ],
+  "policy": {
+   "s": true,
+   "m": [
+    "1"
+   ],
+   "l": false
+  }
+ },
+ {
+  "name": "everything, partly present",
+  "manifest": {
+   "schema": 1,
+   "contentCommit": "c1",
+   "builtAt": "2026-11-01T00:00:00Z",
+   "minShell": 1,
+   "bridge": 1,
+   "files": [
+    {
+     "p": "assets/a.js",
+     "h": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+     "z": 10,
+     "c": "shell"
+    },
+    {
+     "p": "g-data/guide/1.json",
+     "h": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+     "z": 20,
+     "c": "data"
+    },
+    {
+     "p": "g/east/index.html",
+     "h": "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6",
+     "z": 30,
+     "c": "html"
+    }
+   ],
+   "images": [
+    {
+     "g": "1",
+     "n": "x.jpg",
+     "x": "jpg",
+     "s": [
+      "a159eaf43ba28f0de1e182d76fa2fe9a89fd1023fec920b80e5ba10824dcaf9d",
+      5
+     ],
+     "m": [
+      "86d27eddecc0e46263306f5d13c7b29e82d0fce224e7a135417fdbc820690acd",
+      50
+     ],
+     "l": [
+      "525a6f3c9deda2f8d2e509461a4de40651975ea79d3b5ec609931cb96a68d417",
+      500
+     ]
+    },
+    {
+     "g": "2",
+     "n": "y.jpg",
+     "x": "jpg",
+     "s": [
+      "4bfc28283b1bceeb97d97f505a52d2213b35cc42b0832da991d4c15a1fe9be57",
+      5
+     ],
+     "m": [
+      "6eabf42984bac707c0770d29b917259cae40f662a38bcfb0f35c7e81ad698ecd",
+      50
+     ]
+    }
+   ]
+  },
+  "present": [
+   "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "86d27eddecc0e46263306f5d13c7b29e82d0fce224e7a135417fdbc820690acd"
+  ],
+  "policy": {
+   "s": true,
+   "m": true,
+   "l": true
+  }
+ },
+ {
+  "name": "removed image variant is garbage",
+  "manifest": {
+   "schema": 1,
+   "contentCommit": "c1",
+   "builtAt": "2026-11-01T00:00:00Z",
+   "minShell": 1,
+   "bridge": 1,
+   "files": [
+    {
+     "p": "assets/a.js",
+     "h": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+     "z": 10,
+     "c": "shell"
+    },
+    {
+     "p": "g-data/guide/1.json",
+     "h": "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+     "z": 20,
+     "c": "data"
+    },
+    {
+     "p": "g/east/index.html",
+     "h": "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6",
+     "z": 30,
+     "c": "html"
+    }
+   ],
+   "images": [
+    {
+     "g": "2",
+     "n": "y.jpg",
+     "x": "jpg",
+     "s": [
+      "4bfc28283b1bceeb97d97f505a52d2213b35cc42b0832da991d4c15a1fe9be57",
+      5
+     ],
+     "m": [
+      "6eabf42984bac707c0770d29b917259cae40f662a38bcfb0f35c7e81ad698ecd",
+      50
+     ]
+    }
+   ]
+  },
+  "present": [
+   "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+   "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+   "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6",
+   "a159eaf43ba28f0de1e182d76fa2fe9a89fd1023fec920b80e5ba10824dcaf9d",
+   "4bfc28283b1bceeb97d97f505a52d2213b35cc42b0832da991d4c15a1fe9be57"
+  ],
+  "policy": {
+   "s": true,
+   "m": false,
+   "l": false
+  }
+ }
+]
