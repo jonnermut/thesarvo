@@ -6,6 +6,7 @@ import { DiskContentSource, readHistory, toNode } from './disk'
 import type { RawIndexNode } from './disk'
 import { publicSource } from './access'
 import type { AccessMap } from './access'
+import { freshSource } from './fresh'
 import { JsonContentSource, readAccess } from './json'
 import type { ContentSource, IndexNode } from './types'
 
@@ -19,7 +20,14 @@ function build() {
   const pages = process.env.PAGES_DIR ?? '../../thesarvo-content/pages'
   const all = json ? new JsonContentSource(dir) : new DiskContentSource(dir, process.env.UPLOAD_DIR ?? 'uploads', pages)
   if (process.env.NODE_ENV === 'development') withSaves(all, process.env.SAVES_DIR ?? '.saves')
-  return (full = { all, access: () => readAccess(json ? dir : path.dirname(pages)) })
+  const bundledAccess = () => readAccess(json ? dir : path.dirname(pages))
+  // On the Lambda the bundled content is as old as the last deploy; the content repo has the current index, rules and private pages.
+  if (json && process.env.CONTENT_REPO && process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    const repo = import('#/guide/save/github').then((m) => new m.GitHubRepo(process.env.CONTENT_REPO!, process.env.CONTENT_BRANCH ?? 'main'))
+    const fresh = freshSource(all, bundledAccess, async (file) => (await repo).file(file))
+    return (full = { all: fresh.source, access: fresh.access })
+  }
+  return (full = { all, access: bundledAccess })
 }
 
 /** Server-only. `CONTENT_FORMAT=json` reads a content repo checkout (as the Lambda build does) instead of the downloader folder; either way private pages are left out (access.ts). */

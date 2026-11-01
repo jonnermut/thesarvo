@@ -101,6 +101,16 @@ export class GitHubRepo implements GuideRepo, PageRepo {
     return { head: target.oid, guide: ensureIds(JSON.parse(guide) as Guide), history: history ? (JSON.parse(history) as HistoryEntry[]) : [] }
   }
 
+  /** A file's text on the branch, or null when it is not there. */
+  async file(path: string): Promise<string | null> {
+    const res = await this.fetcher(`${API}/repos/${this.repo}/contents/${path}?ref=${encodeURIComponent(this.branch)}`, {
+      headers: { authorization: `Bearer ${await this.token()}`, accept: 'application/vnd.github.raw+json' },
+    })
+    if (res.status === 404) return null
+    if (!res.ok) throw new Error(`GitHub ${path}: ${res.status}`)
+    return res.text()
+  }
+
   async readIndex(): Promise<{ head: string; index: StoredIndexNode }> {
     const { data, errors } = await this.graphql<{ repository: { ref: { target: { oid: string; index: { object: Blob } | null } } | null } | null }>(READ_INDEX, {
       owner: this.repo.split('/')[0], name: this.repo.split('/')[1], ref: `refs/heads/${this.branch}`, index: indexPath,
