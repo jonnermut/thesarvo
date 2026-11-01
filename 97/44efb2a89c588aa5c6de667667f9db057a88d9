@@ -1,0 +1,21 @@
+scripts/allow-account-delete.sh
+  s_e20d0a1ebc47aa::t_0260158ddb362b 1-7
+docs/ios-progress.md
+  s_e20d0a1ebc47aa::t_a9ed8a82bcd123 126-133
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9744efb2a89c588aa5c6de667667f9db057a88d9",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
