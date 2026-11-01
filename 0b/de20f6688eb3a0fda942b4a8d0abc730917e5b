@@ -1,0 +1,23 @@
+docs/as-built.md
+  s_fea1a6998ced76::t_4699dece293618 236-238
+docs/ios-progress.md
+  s_fea1a6998ced76::t_75e9872423a057 168-170
+docs/todo.md
+  s_fea1a6998ced76::t_e5a7fcfe9df3e7 127
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0bde20f6688eb3a0fda942b4a8d0abc730917e5b",
+  "prompts": {},
+  "sessions": {
+    "s_fea1a6998ced76": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "s_fea1a6998ced76",
+        "model": "unknown"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
