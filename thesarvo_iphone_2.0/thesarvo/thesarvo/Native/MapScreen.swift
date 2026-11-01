@@ -113,12 +113,26 @@ struct CragMap: UIViewRepresentable {
         var loadedKey = ""
         var focused: String?
         let locationManager = CLLocationManager()
+        var zoomedOut = true
         init(_ p: CragMap) { parent = p }
+
+        private func context(_ map: MKMapView) -> Bool { map.region.span.latitudeDelta > 0.06 }
+
+        /// Crossing the zoom threshold re-adds the pins, so MapKit re-evaluates which of them cluster.
+        func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+            let out = context(mapView)
+            guard out != zoomedOut else { return }
+            zoomedOut = out
+            let pins = mapView.annotations.filter { $0 is CragAnnotation }
+            mapView.removeAnnotations(pins)
+            mapView.addAnnotations(pins)
+        }
 
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             guard let a = annotation as? CragAnnotation else { return nil }
             let v = mapView.dequeueReusableAnnotationView(withIdentifier: "crag", for: a) as? MKMarkerAnnotationView
-            v?.clusteringIdentifier = "crag"
+            // Clusters only while zoomed out: close in, every crag shows on its own.
+            v?.clusteringIdentifier = context(mapView) ? "crag" : nil
             v?.canShowCallout = true
             v?.markerTintColor = UIColor(red: 0.106, green: 0.078, blue: 0.392, alpha: 1)
             v?.glyphImage = UIImage(systemName: "mountain.2.fill")

@@ -58,3 +58,16 @@ enum TreeLoader {
         return byID.values.first { $0.path == path }
     }
 }
+
+/// One line of a guide's contents, sent by the page (`openContents`).
+struct ContentsEntry: Identifiable, Hashable {
+    let anchor: String
+    let kind: String
+    let level: Int
+    let text: String
+    let number: String?
+    let grade: String?
+    let stars: String?
+    var id: String { anchor }
+    var isClimb: Bool { kind == "climb" }
+}

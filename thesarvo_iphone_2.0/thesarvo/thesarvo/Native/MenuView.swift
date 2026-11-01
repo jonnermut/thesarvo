@@ -1,23 +1,57 @@
 import SwiftUI
 
+/// The guide menu: one level at a time (tap a row with a chevron to go down, the top row to go back up), opening at the page you are on.
 struct MenuView: View {
     @EnvironmentObject var app: AppModel
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var query = ""
 
     var body: some View {
         Group {
             if query.trimmingCharacters(in: .whitespaces).isEmpty {
-                List(app.roots, children: \.children, selection: $app.selection) { node in
-                    MenuRow(node: node, showClimbs: app.showClimbsInMenu)
+                List {
+                    if let folder {
+                        Section {
+                            Button { withAnimation { app.menuFolder = parentFolder } } label: {
+                                Label(parentTitle, systemImage: "chevron.backward").foregroundStyle(.tint)
+                            }
+                            Button { app.open(node: folder) } label: { MenuRow(node: folder, title: "\(folder.title) overview", current: app.selection == folder.id) }
+                                .buttonStyle(.plain)
+                        }
+                    } else {
+                        Section {
+                            Button { app.openHome() } label: {
+                                HStack(spacing: 12) { Image(systemName: "house").foregroundStyle(.secondary).frame(width: 26); Text("Home") }
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        let recent = app.recents.compactMap { app.byID[$0] }
+                        if !recent.isEmpty {
+                            Section("Recent") {
+                                ForEach(recent) { n in
+                                    Button { app.open(node: n) } label: { MenuRow(node: n, current: app.selection == n.id) }.buttonStyle(.plain)
+                                }
+                            }
+                        }
+                    }
+                    Section {
+                        ForEach(rows) { n in
+                            Button {
+                                if n.children != nil { withAnimation { app.menuFolder = n.id } } else { app.open(node: n) }
+                            } label: {
+                                HStack {
+                                    MenuRow(node: n, showClimbs: app.showClimbsInMenu, current: app.selection == n.id)
+                                    if n.children != nil { Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(.tertiary) }
+                                }
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    } header: { if folder == nil { Text("Guides") } }
                 }
             } else {
                 List {
                     Section {
-                        Button {
-                            app.openSearch(query)
-                        } label: {
-                            Label("Search all guides for “\(query)”", systemImage: "magnifyingglass")
-                        }
+                        Button { app.openSearch(query) } label: { Label("Search all guides for “\(query)”", systemImage: "magnifyingglass") }
                     }
                     Section("Titles") {
                         ForEach(matches) { node in
@@ -28,26 +62,31 @@ struct MenuView: View {
                 }
             }
         }
-        .listStyle(.sidebar)
-        .navigationTitle("Guides")
+        .listStyle(.insetGrouped)
+        .navigationTitle(folder?.title ?? "Guides")
+        .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search guides")
         .onSubmit(of: .search) { app.openSearch(query) }
-        .onChange(of: app.selection) { id in
-            guard let id, let n = app.byID[id], !samePage(n.url, app.web.path) else { return }
-            app.web.open(path: n.url)
-        }
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button { app.selection = nil; app.web.open(path: "/g/") } label: { Image(systemName: "house") }
-                    .accessibilityLabel("Home")
+            if sizeClass != .regular {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") { app.showMenu = false }
+                }
             }
         }
     }
 
-    private func samePage(_ a: String, _ b: String) -> Bool {
-        func norm(_ p: String) -> String { (p.split(separator: "?").first.map(String.init) ?? p).trimmingCharacters(in: CharacterSet(charactersIn: "/")) }
-        return norm(a) == norm(b)
+    private var folder: TreeNode? { app.menuFolder.flatMap { app.byID[$0] } }
+
+    private var rows: [TreeNode] { (folder.map { app.byID[$0.id]?.children } ?? app.roots) ?? [] }
+
+    /// One level up: the parent when it is a menu level (it has a path), else the top.
+    private var parentFolder: String? {
+        guard let p = folder?.parent, let n = app.byID[p], !n.path.isEmpty else { return nil }
+        return n.id
     }
+
+    private var parentTitle: String { parentFolder.flatMap { app.byID[$0]?.title } ?? "Guides" }
 
     private var matches: [TreeNode] {
         let q = query.lowercased()
@@ -62,19 +101,74 @@ struct MenuView: View {
 
 struct MenuRow: View {
     let node: TreeNode
-    let showClimbs: Bool
+    var title: String?
+    var showClimbs = false
     var path: String?
+    var current = false
 
     var body: some View {
-        HStack {
-            Image(systemName: node.isGuide ? "mountain.2" : "doc.text").foregroundStyle(.secondary).frame(width: 22)
+        HStack(spacing: 12) {
+            Image(systemName: node.isGuide ? "mountain.2" : "doc.text").foregroundStyle(.secondary).frame(width: 26)
             VStack(alignment: .leading, spacing: 1) {
-                Text(node.title).lineLimit(2)
+                Text(title ?? node.title).lineLimit(2).fontWeight(current ? .semibold : .regular).foregroundStyle(current ? AnyShapeStyle(.tint) : AnyShapeStyle(.primary))
                 if let path { Text(path).font(.caption).foregroundStyle(.secondary) }
             }
             Spacer(minLength: 4)
-            if node.climbs > 0 { Text("\(node.climbs)").font(.caption).monospacedDigit().foregroundStyle(.secondary) }
+            if showClimbs, node.climbs > 0 { Text("\(node.climbs)").font(.caption).monospacedDigit().foregroundStyle(.secondary) }
         }
-        .tag(node.id)
+        .contentShape(Rectangle())
+    }
+}
+
+/// The page's Contents, natively: headings and (optionally) climbs, with a filter; choosing one scrolls the page there.
+struct ContentsList: View {
+    @EnvironmentObject var app: AppModel
+    let sheet: ContentsSheet
+    @Environment(\.dismiss) private var dismiss
+    @State private var query = ""
+    @State private var showClimbs = false
+
+    private var hasBoth: Bool { sheet.entries.contains { $0.isClimb } && sheet.entries.contains { !$0.isClimb } }
+
+    private var shown: [ContentsEntry] {
+        let q = query.trimmingCharacters(in: .whitespaces).lowercased()
+        let climbs = showClimbs || !sheet.entries.contains { !$0.isClimb } || !q.isEmpty
+        return sheet.entries.filter { e in
+            (!e.isClimb || climbs) && (q.isEmpty || e.text.lowercased().contains(q) || (e.grade ?? "").lowercased().contains(q) || (q == "**" && (e.stars ?? "").count >= 2))
+        }
+    }
+
+    var body: some View {
+        NavigationStack {
+            List(shown) { e in
+                Button {
+                    dismiss()
+                    app.web.scroll(toAnchor: e.anchor)
+                } label: {
+                    HStack(alignment: .firstTextBaseline, spacing: 8) {
+                        if e.isClimb, let n = e.number, !n.isEmpty { Text(n).font(.caption).foregroundStyle(.secondary).frame(minWidth: 22, alignment: .trailing) }
+                        Text(e.text).fontWeight(e.isClimb ? .regular : .medium).foregroundStyle(e.isClimb ? Color.primary : brandTint)
+                        Spacer(minLength: 4)
+                        if e.isClimb {
+                            if let s = e.stars, !s.isEmpty { Text(String(repeating: "★", count: s.count)).font(.caption).foregroundStyle(.orange) }
+                            if let g = e.grade { Text(g).font(.caption).foregroundStyle(.secondary) }
+                        }
+                    }
+                    .padding(.leading, e.level > 0 ? 14 : 0)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+            }
+            .listStyle(.plain)
+            .overlay { if shown.isEmpty { Text("Nothing matches").foregroundStyle(.secondary) } }
+            .navigationTitle("On this page")
+            .navigationBarTitleDisplayMode(.inline)
+            .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "Filter: name, grade, **")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) { if hasBoth { Toggle("Climbs", isOn: $showClimbs).toggleStyle(.button) } }
+                ToolbarItem(placement: .navigationBarTrailing) { Button("Done") { dismiss() } }
+            }
+        }
+        .presentationDetents([.medium, .large])
     }
 }

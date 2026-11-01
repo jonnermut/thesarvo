@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { inApp, openNativeContents } from '#/app/bridge'
 import { useEscape, usePresence, useScrollLock } from '#/components/overlay'
 import type { GuideNode } from '#/guide/model/types'
 import { guideContents, matchesQuery } from './contents'
@@ -76,13 +77,15 @@ function Row({ entry, current, onPick }: { entry: ContentsEntry; current: boolea
  * section marked as you scroll and a filter for finding a climb. A sticky column on wide
  * screens; a button and bottom sheet on smaller ones.
  */
-export function GuideContents({ nodes }: { nodes: GuideNode[] }) {
+export function GuideContents({ nodes, title = '' }: { nodes: GuideNode[]; title?: string }) {
   const entries = useMemo(() => guideContents(nodes), [nodes])
   const hasHeadings = entries.some((e) => e.kind === 'heading')
   const hasClimbs = entries.some((e) => e.kind === 'climb')
   const [showClimbs, setShowClimbs] = useState(false)
   const [query, setQuery] = useState('')
   const [sheet, setSheet] = useState(false)
+  const [app, setApp] = useState(false)
+  useEffect(() => setApp(inApp()), [])
 
   // Remembered after mount, so the built page and the first render agree.
   useEffect(() => {
@@ -133,7 +136,7 @@ export function GuideContents({ nodes }: { nodes: GuideNode[] }) {
       <div className="no-print xl:hidden">
         <button
           type="button"
-          onClick={() => setSheet(true)}
+          onClick={() => (app ? openNativeContents(title, entries) : setSheet(true))}
           className="fixed right-4 bottom-4 z-20 flex items-center gap-2 rounded-full bg-forest px-4 py-2.5 text-sm font-medium text-white shadow-lg hover:bg-forest-soft"
         >
           <svg viewBox="0 0 20 20" className="size-4" fill="currentColor" aria-hidden>

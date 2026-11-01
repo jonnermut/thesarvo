@@ -5,17 +5,18 @@ import WebKit
 enum AppTab: Hashable { case guides, map, downloads, settings }
 
 enum DownloadMode: String, CaseIterable, Identifiable {
-    case thumbnails, pinned, allPhotos, fullQuality
+    case thumbnails, allPhotos, fullQuality
     var id: String { rawValue }
     var title: String {
         switch self {
         case .thumbnails: return "Small pictures only"
-        case .pinned: return "Photos for chosen guides"
         case .allPhotos: return "All photos"
         case .fullQuality: return "All photos, full quality"
         }
     }
 }
+
+struct ContentsSheet: Identifiable { let id = UUID(); let entries: [ContentsEntry] }
 
 @MainActor
 final class AppModel: ObservableObject {
@@ -34,7 +35,14 @@ final class AppModel: ObservableObject {
     @Published var progress: SyncProgress?
     @Published var syncError: String?
     @Published var tab: AppTab = .guides
-    @Published var selection: String?
+    @Published var selection: String? { didSet { if selection != oldValue { menuFolder = folder(for: selection) } } }
+    /// The menu level shown (a node with children); nil is the top. It follows the page you are on, and you drill from there.
+    @Published var menuFolder: String?
+    @Published var showMenu = false
+    @Published var contents: ContentsSheet?
+    /// Guides opened lately, newest first (ids), kept on this device.
+    @Published var recents: [String] = UserDefaults.standard.stringArray(forKey: "recentGuides") ?? []
+    @Published var lastCheck: Date?
     @Published var mapFocus: String?
     /// The GPS points a page sent with its Map button; they stand in for that guide's KML points.
     @Published var pagePoints: [CragPoint] = []
@@ -48,7 +56,6 @@ final class AppModel: ObservableObject {
 
     @Published var firstRunDone: Bool { didSet { UserDefaults.standard.set(firstRunDone, forKey: "firstRunDone") } }
     @Published var mode: DownloadMode { didSet { UserDefaults.standard.set(mode.rawValue, forKey: "downloadMode"); syncSoon() } }
-    @Published var pinned: Set<String> { didSet { UserDefaults.standard.set(Array(pinned), forKey: "pinnedGuides"); if mode == .pinned { syncSoon() } } }
     @Published var cellularImages: Bool { didSet { UserDefaults.standard.set(cellularImages, forKey: "cellularImages") } }
     @Published var textScale: Double { didSet { UserDefaults.standard.set(textScale, forKey: "textScale"); web.setTextScale(textScale) } }
     @Published var showClimbsInMenu: Bool { didSet { UserDefaults.standard.set(showClimbsInMenu, forKey: "showClimbsInTOC") } }
@@ -63,7 +70,6 @@ final class AppModel: ObservableObject {
         engine = SyncEngine(store: store)
         web = WebModel(handler: handler)
         mode = DownloadMode(rawValue: d.string(forKey: "downloadMode") ?? "") ?? .thumbnails
-        pinned = Set(d.stringArray(forKey: "pinnedGuides") ?? [])
         cellularImages = d.bool(forKey: "cellularImages")
         firstRunDone = d.bool(forKey: "firstRunDone")
         let scale = d.double(forKey: "textScale")
@@ -88,31 +94,33 @@ final class AppModel: ObservableObject {
         manifest = store.loadManifest("current") ?? store.loadSeedManifest()
         web.setTextScale(textScale)
         web.onBootOK = { [weak self] in self?.bootOK() }
+        lastCheck = store.loadState().lastCheck
+        web.onOpenContents = { [weak self] e in self?.contents = ContentsSheet(entries: e) }
         web.onOpenMap = { [weak self] g, pts in self?.openMap(guide: g, points: pts) }
         web.presentExternal = { [weak self] u in self?.external = u }
         web.onNavigated = { [weak self] p in self?.navigated(to: p) }
         rebuildIndex()
     }
 
-    var policy: Policy { Policy(mode: mode, pinned: pinned) }
+    var policy: Policy { Policy(mode: mode) }
 
     /// What a photo mode would still download (bytes), from the current manifest and what is on the device.
     func bytesToDownload(_ m: DownloadMode) -> Int64 {
         guard let manifest else { return 0 }
-        let p = Policy(mode: m, pinned: pinned)
+        let p = Policy(mode: m)
         return SyncPlan.diff(manifest, present: store.presentHashes(), policy: p).downloads.reduce(Int64(0)) { $0 + Int64($1.size) }
+    }
+
+    /// What the current choice still has to download (files and bytes).
+    func waitingDownloads() -> (files: Int, bytes: Int64) {
+        guard let manifest else { return (0, 0) }
+        let d = SyncPlan.diff(manifest, present: store.presentHashes(), policy: policy).downloads
+        return (d.count, d.reduce(Int64(0)) { $0 + Int64($1.size) })
     }
 
     func sizeLabel(_ m: DownloadMode) -> String {
         let b = bytesToDownload(m)
         return b == 0 ? "on this device" : ByteCountFormatter.string(fromByteCount: b, countStyle: .file)
-    }
-
-    /// Size of one guide's standard photos (all of it, present or not).
-    func guideBytes() -> [String: Int64] {
-        var out: [String: Int64] = [:]
-        for im in manifest?.images ?? [] { out[im.g, default: 0] += Int64(im.variant(.m)?.size ?? 0) }
-        return out
     }
 
     // MARK: start up
@@ -253,15 +261,42 @@ final class AppModel: ObservableObject {
     /// Bumped when something other than a menu row opens a page, so a collapsed split view (iPhone) shows the page.
     @Published var revealPage = 0
 
+    /// The menu level that shows this page: the page's own children when it has some, else its parent's.
+    func folder(for id: String?) -> String? {
+        guard let id, let n = byID[id] else { return nil }
+        guard let f = n.children != nil ? n.id : n.parent, let fn = byID[f], !fn.path.isEmpty else { return nil }
+        return f
+    }
+
+    func openMenu() {
+        menuFolder = folder(for: selection)
+        showMenu = true
+    }
+
+    private func remember(_ n: TreeNode) {
+        guard n.isGuide else { return }
+        recents = Array(([n.id] + recents.filter { $0 != n.id }).prefix(6))
+        UserDefaults.standard.set(recents, forKey: "recentGuides")
+    }
+
     func open(node: TreeNode) {
+        showMenu = false
         selection = node.id
         tab = .guides
         revealPage += 1
         web.open(path: node.url)
     }
 
+    func openHome() {
+        showMenu = false
+        selection = nil
+        tab = .guides
+        web.open(path: "/g/")
+    }
+
     func openSearch(_ q: String) {
         let enc = q.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? q
+        showMenu = false
         selection = nil
         tab = .guides
         revealPage += 1
@@ -283,8 +318,11 @@ final class AppModel: ObservableObject {
         selectionFollows(path: path)
     }
 
-    private func selectionFollows(path: String) {
-        if let n = TreeLoader.node(forURLPath: path, in: byID), n.id != selection { selection = n.id }
+    func selectionFollows(path: String) {
+        if let n = TreeLoader.node(forURLPath: path, in: byID) {
+            remember(n)
+            if n.id != selection { selection = n.id }
+        }
     }
 
     func bootOK() {
@@ -326,6 +364,8 @@ final class AppModel: ObservableObject {
                 progress = nil
             }
             rebuildIndex()
+            lastCheck = store.loadState().lastCheck
+            progress = nil
             syncTask = nil
         }
     }
@@ -369,10 +409,9 @@ final class AppModel: ObservableObject {
 }
 
 extension Policy {
-    init(mode: DownloadMode, pinned: Set<String>) {
+    init(mode: DownloadMode) {
         switch mode {
         case .thumbnails: self = .thumbnails
-        case .pinned: self = Policy(s: .all, m: .guides(pinned), l: .none)
         case .allPhotos: self = Policy(s: .all, m: .all, l: .none)
         case .fullQuality: self = Policy(s: .all, m: .all, l: .all)
         }

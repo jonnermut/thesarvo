@@ -17,7 +17,7 @@ struct FirstRunView: View {
                         HStack {
                             VStack(alignment: .leading) {
                                 Text(m.title).font(.headline)
-                                Text(m == .pinned ? "You pick the guides in Downloads" : app.sizeLabel(m)).font(.subheadline).foregroundStyle(.secondary)
+                                Text(app.sizeLabel(m)).font(.subheadline).foregroundStyle(.secondary)
                             }
                             Spacer()
                             Image(systemName: choice == m ? "checkmark.circle.fill" : "circle").foregroundStyle(choice == m ? brandTint : .secondary)

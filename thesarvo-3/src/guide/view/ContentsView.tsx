@@ -6,6 +6,7 @@ import { findByPath, flatten, guideUrl } from '#/guide/content/paths'
 import type { IndexNode } from '#/guide/content/types'
 import type { GpsPoint } from '#/guide/model/types'
 import { fetchTree } from '#/guide/server'
+import { inApp, openNativeMap } from '#/app/bridge'
 import { LockMark } from '#/components/LockMark'
 import { DownloadIcon } from './GpsBlock'
 import { treeGpxUrl, treeKmlUrl } from './kml'
@@ -213,6 +214,15 @@ function CragMap({ id, nodes }: { id: string; nodes: IndexNode[] }) {
     [key],
   )
   if (points.length < 2 || !mounted) return null
+  // In the app the map is the native Map tab.
+  if (inApp())
+    return (
+      <div className="no-print pt-2">
+        <button type="button" onClick={() => openNativeMap(id, points.map((p) => ({ title: p.description, lat: Number(p.latitude), lon: Number(p.longitude) })))} className="rounded border border-line bg-navy px-2.5 py-1 text-[13px] text-white">
+          Open in Map
+        </button>
+      </div>
+    )
   return (
     <div className="no-print pt-2">
       <Suspense fallback={<div className="grid h-80 place-items-center rounded-lg bg-black/5 text-muted">Loading map…</div>}>

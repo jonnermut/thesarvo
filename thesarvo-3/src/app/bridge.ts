@@ -43,6 +43,16 @@ export const inApp = (win: BridgeWindow = window) => !!win.webkit?.messageHandle
 /** A guide's GPS point for the native map. */
 export type MapPoint = { title: string; lat: number; lon: number }
 
+/** One line of a guide's contents, for the app's native Contents sheet. */
+export type ContentsLine = { anchor: string; kind: string; level: number; text: string; number?: string; grade?: string; stars?: string }
+
+/** Asks the app to show the guide's contents natively (the app scrolls the page to the chosen anchor). Returns false in a browser. */
+export function openNativeContents(title: string, entries: ContentsLine[], win: BridgeWindow = window): boolean {
+  const handler = win.webkit?.messageHandlers?.thesarvo
+  handler?.postMessage({ type: 'openContents', title, entries })
+  return !!handler
+}
+
 /** Asks the app to show a guide's points on its native map tab. Returns false in a browser. */
 export function openNativeMap(guideId: string, points: MapPoint[] = [], win: BridgeWindow = window): boolean {
   const handler = win.webkit?.messageHandlers?.thesarvo

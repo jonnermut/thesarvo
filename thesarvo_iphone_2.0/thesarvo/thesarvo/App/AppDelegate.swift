@@ -46,7 +46,7 @@ enum BackgroundRefresh {
         let store = BlobStore()
         let d = UserDefaults.standard
         let mode = DownloadMode(rawValue: d.string(forKey: "downloadMode") ?? "") ?? .thumbnails
-        let policy = Policy(mode: mode, pinned: Set(d.stringArray(forKey: "pinnedGuides") ?? []))
+        let policy = Policy(mode: mode)
         let hooks = SyncEngine.Hooks(
             switchTo: { _ in
                 store.promoteCandidate()

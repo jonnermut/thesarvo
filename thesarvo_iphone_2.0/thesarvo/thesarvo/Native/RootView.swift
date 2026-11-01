@@ -55,55 +55,55 @@ struct NoticeBanner: View {
 
 struct GuidesView: View {
     @EnvironmentObject var app: AppModel
-    @State private var visibility: NavigationSplitViewVisibility = .automatic
-    // Typed as Any? on purpose: `NavigationSplitViewColumn` exists from iOS 17 only.
-    @State private var compact: Any?
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     var body: some View {
-        content
-            .navigationSplitViewStyle(.balanced)
-            .onChange(of: app.revealPage) { _ in
-                if #available(iOS 17, *) { compact = NavigationSplitViewColumn.detail } else { visibility = .detailOnly }
-            }
-    }
-
-    @ViewBuilder private var content: some View {
-        if #available(iOS 17, *) {
-            NavigationSplitView(columnVisibility: $visibility, preferredCompactColumn: Binding(get: { (compact as? NavigationSplitViewColumn) ?? .sidebar }, set: { compact = $0 })) {
-                MenuView()
-            } detail: {
-                PageView()
-            }
-        } else {
-            NavigationSplitView(columnVisibility: $visibility) {
-                MenuView()
-            } detail: {
-                PageView()
+        Group {
+            if sizeClass == .regular {
+                // iPad: the menu stays beside the page.
+                NavigationSplitView { MenuView() } detail: { NavigationStack { PageView(showMenuButton: false) } }
+                    .navigationSplitViewStyle(.balanced)
+            } else {
+                // iPhone: the page fills the screen; the menu is a sheet from the hamburger button.
+                NavigationStack { PageView(showMenuButton: true) }
+                    .sheet(isPresented: $app.showMenu) { NavigationStack { MenuView() } }
             }
         }
+        .sheet(item: $app.contents) { ContentsList(sheet: $0).tint(brandTint) }
     }
 }
 
 struct PageView: View {
     @EnvironmentObject var app: AppModel
+    let showMenuButton: Bool
 
     var body: some View {
         ZStack {
             WebHost(model: app.web)
             if app.manifest == nil { EmptyStore() }
         }
-        .navigationTitle(app.selection.flatMap { app.byID[$0]?.title } ?? "thesarvo")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItemGroup(placement: .navigationBarTrailing) {
-                if app.web.canGoBack {
-                    Button { app.web.goBack() } label: { Image(systemName: "arrow.uturn.backward") }
-                        .accessibilityLabel("Previous page")
+            ToolbarItem(placement: .principal) {
+                Text(title).font(.headline).lineLimit(1).minimumScaleFactor(0.8)
+            }
+            ToolbarItemGroup(placement: .navigationBarLeading) {
+                if showMenuButton {
+                    Button { app.openMenu() } label: { Image(systemName: "line.3.horizontal") }
+                        .accessibilityLabel("Menu")
                 }
+                if app.web.canGoBack {
+                    Button { app.web.goBack() } label: { Image(systemName: "chevron.backward") }
+                        .accessibilityLabel("Back")
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
                 ShareLink(item: shareURL) { Image(systemName: "square.and.arrow.up") }
             }
         }
     }
+
+    private var title: String { app.selection.flatMap { app.byID[$0]?.title } ?? "thesarvo" }
 
     private var shareURL: URL {
         URL(string: "https://thesarvo.com" + app.web.path) ?? URL(string: "https://thesarvo.com")!

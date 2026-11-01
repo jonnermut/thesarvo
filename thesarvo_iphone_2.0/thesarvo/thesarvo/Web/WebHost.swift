@@ -12,6 +12,7 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
     @Published var isLoading = false
 
     var onOpenMap: ((String?, [CragPoint]) -> Void)?
+    var onOpenContents: (([ContentsEntry]) -> Void)?
     var onBootOK: (() -> Void)?
     var onNavigated: ((String) -> Void)?
     var presentExternal: ((URL) -> Void)?
@@ -102,12 +103,18 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
         }
     }
 
-    /// Scales the page's text with the root font size, so the layout reflows to the screen (`pageZoom` leaves the layout viewport as it was and the page runs off the right edge).
+    /// Scales the page with CSS `zoom` on the root, which (unlike `pageZoom`) reflows the layout to the screen width. The site sizes most text in px, so a root font size changes nothing.
     func setTextScale(_ scale: Double) {
-        let js = "if (document.documentElement) document.documentElement.style.fontSize = '\(scale * 100)%';"
+        let js = "if (document.documentElement) document.documentElement.style.zoom = '\(scale)';"
         textScript = scale == 1 ? "" : js
         installScripts()
-        webView.evaluateJavaScript(scale == 1 ? "document.documentElement.style.fontSize = '';" : js)
+        webView.evaluateJavaScript(scale == 1 ? "document.documentElement.style.zoom = '';" : js)
+    }
+
+    /// Scrolls the page to an element (a Contents entry chosen in the native sheet).
+    func scroll(toAnchor anchor: String) {
+        let quoted = (try? JSONSerialization.data(withJSONObject: [anchor])).flatMap { String(data: $0, encoding: .utf8) } ?? "[\"\"]"
+        webView.evaluateJavaScript("(function(a){ var e = document.getElementById(a); if (e) { e.scrollIntoView({ block: 'start' }); history.replaceState(null, '', '#' + a); } })(\(quoted)[0]);")
     }
 
     nonisolated func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -122,6 +129,12 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
                     return CragPoint(id: "page-\(g)-\(i)", guideID: g, title: d["title"] as? String ?? "", subtitle: "", latitude: lat, longitude: lon)
                 }
                 self.onOpenMap?(guide, pts)
+            case "openContents":
+                let entries = (body["entries"] as? [[String: Any]] ?? []).compactMap { d -> ContentsEntry? in
+                    guard let a = d["anchor"] as? String, let t = d["text"] as? String else { return nil }
+                    return ContentsEntry(anchor: a, kind: d["kind"] as? String ?? "heading", level: d["level"] as? Int ?? 0, text: t, number: d["number"] as? String, grade: d["grade"] as? String, stars: d["stars"] as? String)
+                }
+                self.onOpenContents?(entries)
             case "api":
                 if let r = BridgeRequest(body), let onAPI = self.onAPI {
                     let answer = await onAPI(r)

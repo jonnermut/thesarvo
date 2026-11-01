@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { inApp } from '#/app/bridge'
 import { useUser } from '#/auth/session'
 import { Avatar } from '#/guide/avatars/Avatar'
 import { getThread, listThreads, post } from '../client'
@@ -327,6 +328,6 @@ function ThreadList({ open }: { open: (id: string) => void }) {
 export function ForumPage({ thread, go }: { thread?: string; go: (thread?: string) => void }) {
   const user = useUser()
   if (!user)
-    return <p className="text-muted">The forum is for signed-in members. Use the person button at the top right to sign in.</p>
+    return <p className="text-muted">The forum is for signed-in members. {inApp() ? 'Sign in from the Settings tab.' : 'Use the person button at the top right to sign in.'}</p>
   return thread ? <ThreadView id={thread} back={() => go()} /> : <ThreadList open={(id) => go(id)} />
 }
