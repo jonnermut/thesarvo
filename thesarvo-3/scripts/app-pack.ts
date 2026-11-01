@@ -63,7 +63,12 @@ const json = async <T>(key: string, fallback: T): Promise<T> => {
   const body = await getObject(bucket, c, key)
   return body ? (JSON.parse(body.toString('utf8')) as T) : fallback
 }
-const put = (key: string, body: Buffer | string, type: string, cache: string) => (dry ? Promise.resolve() : putObject(bucket, c, key, Buffer.from(body), { contentType: type, cacheControl: cache }))
+const retry = async <T>(work: () => Promise<T>): Promise<T> => {
+  for (let attempt = 1; ; attempt++) {
+    try { return await work() } catch (err) { if (attempt >= 5) throw err; await new Promise((r) => setTimeout(r, attempt * 500)) }
+  }
+}
+const put = (key: string, body: Buffer | string, type: string, cache: string) => (dry ? Promise.resolve() : retry(() => putObject(bucket, c, key, Buffer.from(body), { contentType: type, cacheControl: cache })))
 
 // ---- the files of the site
 const tree = JSON.parse(await readFile(path.join(site, 'g-data/manifest.json'), 'utf8')) as { nodes: { id: string }[]; search: { pack: string; shards: Record<string, string> } }
@@ -84,7 +89,7 @@ await inParallel(listed, 16, async ({ key, etag }) => {
     state[key] = old
   } else {
     const local = (await exists(path.join(site, key))) ? await readFile(path.join(site, key)) : null
-    bytes = local && md5(local) === etag ? local : await getObject(bucket, c, key)
+    bytes = local && md5(local) === etag ? local : await retry(() => getObject(bucket, c, key))
     if (!bytes) return
     if (bytes !== local) downloaded++
     state[key] = { m: etag, h: sha(bytes), z: bytes.length }
