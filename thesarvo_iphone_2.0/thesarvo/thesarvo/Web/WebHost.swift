@@ -78,9 +78,8 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
         } else {
             js = "try { localStorage.removeItem('thesarvo.auth'); } catch (e) {}"
         }
-        controller.removeAllUserScripts()
-        controller.addUserScript(WKUserScript(source: Self.appModeScript, injectionTime: .atDocumentStart, forMainFrameOnly: true))
-        controller.addUserScript(WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        authScript = js
+        installScripts()
         webView.evaluateJavaScript(js + " window.dispatchEvent(new StorageEvent('storage', { key: 'thesarvo.auth' }));")
     }
 
@@ -93,7 +92,23 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
     func reload() { webView.reload() }
     func goBack() { webView.goBack() }
 
-    func setTextScale(_ scale: Double) { webView.pageZoom = scale }
+    private var authScript = ""
+    private var textScript = ""
+
+    private func installScripts() {
+        controller.removeAllUserScripts()
+        for source in [Self.appModeScript, textScript, authScript] where !source.isEmpty {
+            controller.addUserScript(WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        }
+    }
+
+    /// Scales the page's text with the root font size, so the layout reflows to the screen (`pageZoom` leaves the layout viewport as it was and the page runs off the right edge).
+    func setTextScale(_ scale: Double) {
+        let js = "if (document.documentElement) document.documentElement.style.fontSize = '\(scale * 100)%';"
+        textScript = scale == 1 ? "" : js
+        installScripts()
+        webView.evaluateJavaScript(scale == 1 ? "document.documentElement.style.fontSize = '';" : js)
+    }
 
     nonisolated func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         guard let body = message.body as? [String: Any], let type = body["type"] as? String else { return }
