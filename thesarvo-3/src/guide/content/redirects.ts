@@ -17,9 +17,10 @@ const FOLDED: [id: string, title: string, section: string][] = [
   ['407', 'Contact', 'contact'],
   ['406', 'Contribute', 'contributing'],
   ['8355855', 'Copyright', 'copyright'],
-  ['398327814', 'thesarvo iOS and Android App Privacy Policy', 'privacy'],
 ]
 const ABOUT = '296'
+/** The privacy policy is its own page again (it was a section of About): old id, old title, the new page. */
+const PRIVACY: [id: string, title: string, page: string] = ['398327814', 'thesarvo iOS and Android App Privacy Policy', '9000000022']
 
 /**
  * What the edge needs to send old addresses to the new site, as key/value pairs for the `thesarvo-redirects` store (scripts/edge/viewer-request.js):
@@ -44,5 +45,10 @@ export function redirectEntries(index: IndexNode, oldUrls: ReadonlyMap<string, s
       out[`p:${id}`] = to
       out[`t:thesarvo/${title.toLowerCase()}`] = to
     }
+  const privacy = flatten(index).find((n) => n.id === PRIVACY[2])
+  if (privacy) {
+    out[`p:${PRIVACY[0]}`] = `${guideUrl(privacy)}/`
+    out[`t:thesarvo/${PRIVACY[1].toLowerCase()}`] = `${guideUrl(privacy)}/`
+  }
   return out
 }

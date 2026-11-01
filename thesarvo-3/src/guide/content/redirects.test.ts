@@ -26,11 +26,12 @@ it('maps titles and ids to the new addresses, and marks guides for attachments',
   })
 })
 
-it('sends the old Contact, Contribute, Copyright and privacy pages to their sections of About', () => {
-  const root = node('414', '', false, [node('296', 'more/about-thesarvo-com', false)])
+it('sends the old Contact, Contribute, and Copyright pages to their sections of About, and the privacy page to its own page', () => {
+  const root = node('414', '', false, [node('296', 'more/about-thesarvo-com', false), node('9000000022', 'more/app-privacy-policy', false)])
   const out = redirectEntries(root, new Map())
   expect(out['p:407']).toBe('/g/more/about-thesarvo-com/#contact')
   expect(out['t:thesarvo/contribute']).toBe('/g/more/about-thesarvo-com/#contributing')
-  expect(out['p:398327814']).toBe('/g/more/about-thesarvo-com/#privacy')
+  expect(out['p:398327814']).toBe('/g/more/app-privacy-policy/')
+  expect(out['t:thesarvo/thesarvo ios and android app privacy policy']).toBe('/g/more/app-privacy-policy/')
   expect(redirectEntries(node('414', '', false), new Map())['p:407']).toBeUndefined()
 })
