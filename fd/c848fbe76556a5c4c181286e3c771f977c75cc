@@ -1,0 +1,21 @@
+thesarvo-3/src/guide/content/redirects.test.ts
+  s_e20d0a1ebc47aa::t_15c6df3cb34059 29-30,34-35
+thesarvo-3/src/guide/content/redirects.ts
+  s_e20d0a1ebc47aa::t_0aaed63626a874 22-23,48-52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fdc848fbe76556a5c4c181286e3c771f977c75cc",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
