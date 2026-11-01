@@ -1,0 +1,31 @@
+thesarvo-3/src/app/pack.test.ts
+  s_ee2ae06c4b06ab::t_46d0a57a90c3e4 1-42
+thesarvo-3/scripts/app-pack.ts
+  s_ee2ae06c4b06ab::t_8db376317e6ff4 1-178
+thesarvo-3/scripts/package-publisher.sh
+  s_ee2ae06c4b06ab::t_509093decdce59 17
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/MapScreen.swift
+  s_ee2ae06c4b06ab::t_c10c7f8a86b188 62-63
+thesarvo-3/src/app/pack.ts
+  s_ee2ae06c4b06ab::t_46d0a57a90c3e4 1-57
+thesarvo-3/scripts/publish.sh
+  s_ee2ae06c4b06ab::t_509093decdce59 14,16,50-52
+thesarvo-3/scripts/edge/viewer-request.js
+  s_ee2ae06c4b06ab::t_0d78cc241d1a9e 46-47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8a463172fdde42f9ec0ad1ca683783b2b803e2e9",
+  "prompts": {},
+  "sessions": {
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
