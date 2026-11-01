@@ -1,0 +1,25 @@
+docs/apple-signin.md
+  s_ee2ae06c4b06ab::t_41e08ecc15985c 35
+docs/as-built.md
+  s_ee2ae06c4b06ab::t_d2dee7c3fbea04 54
+docs/ios-progress.md
+  s_ee2ae06c4b06ab::t_f7577688ad38e4 147-167
+docs/todo.md
+  s_ee2ae06c4b06ab::t_4ba37fbbeb5473 123-126
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "799d28ab0bb9bcebde59fe43b4928cce145befa6",
+  "prompts": {},
+  "sessions": {
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
