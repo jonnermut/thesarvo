@@ -1,8 +1,11 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { ForumPage } from '#/forum/ui/ForumPage'
+import { fetchPage } from '#/guide/server'
 
 /** The forum: sign-in only, all in the browser (`?thread=<id>` for one post), so the prerendered page is just a shell. */
 export const Route = createFileRoute('/g/forum')({
+  // The sidebar's tree.
+  loader: async () => (await fetchPage(''))!,
   head: () => ({ meta: [{ title: 'Forum · thesarvo' }, { name: 'robots', content: 'noindex' }] }),
   // The router reads a number-like id from the address as a number.
   validateSearch: (search: Record<string, unknown>): { thread?: string } => {

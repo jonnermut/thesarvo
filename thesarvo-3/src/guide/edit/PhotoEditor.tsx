@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import ReactCrop, { centerCrop, makeAspectCrop } from 'react-image-crop'
 import type { PercentCrop } from 'react-image-crop'
@@ -19,6 +19,8 @@ const SHAPES = [
   ['Square', 1],
 ] as const
 const MAX_TILT = 15
+/** Room left round the photo for the crop handles, in pixels. */
+const STAGE_PAD = 20
 const FULL: PercentCrop = { unit: '%', x: 0, y: 0, width: 100, height: 100 }
 
 /** The edited photo, what was done to it, and its size in pixels. */
@@ -68,6 +70,10 @@ export function PhotoEditor({
   const shown = useMemo(() => upright && preview(upright, turns, tilt), [upright, turns, tilt])
   const url = useCanvasUrl(shown)
   const ratio = shown ? shown.width / shown.height : 1
+  const [stage, stageRef] = useSize()
+  // The photo is sized here in pixels to fit the stage (less room for the handles that stick out past its edges), not by CSS
+  // percentages, which some mobile browsers resolve to the photo's own size and so push the handles off the screen.
+  const fit = shown && stage.width > 0 ? Math.min((stage.width - STAGE_PAD * 2) / shown.width, (stage.height - STAGE_PAD * 2) / shown.height) : 0
   const aspect = SHAPES[shape][1] === -1 ? ratio : SHAPES[shape][1] || undefined
 
   // The largest crop of the chosen shape, centred; the whole photo when the shape is free.
@@ -123,12 +129,11 @@ export function PhotoEditor({
           </Button>
         </div>
 
-        {/* The padding leaves room for the crop handles, which stick out past the photo's edges. */}
-        <div className="flex h-[50dvh] min-h-60 items-center justify-center overflow-hidden rounded bg-neutral-900 p-4">
-          {url ? (
-            // ReactCrop's styles give the photo the crop box's max-height (`inherit`), so the limit goes on the box: a tall photo fits whole.
-            <ReactCrop crop={crop} aspect={aspect} keepSelection ruleOfThirds minWidth={24} minHeight={24} onChange={(_, pc) => setCrop(pc)} className="max-h-[calc(50dvh-2rem)]">
-              <img src={url} alt="Photo being edited" className="block max-h-[calc(50dvh-2rem)] max-w-full" style={{ filter: toneFilter(tone) }} />
+        {/* The stage leaves room round the photo for the crop handles, which stick out past its edges. */}
+        <div ref={stageRef} className="flex h-[45dvh] min-h-60 items-center justify-center overflow-hidden rounded bg-neutral-900">
+          {url && shown && fit > 0 ? (
+            <ReactCrop crop={crop} aspect={aspect} keepSelection ruleOfThirds minWidth={24} minHeight={24} onChange={(_, pc) => setCrop(pc)} style={{ maxHeight: 'none' }}>
+              <img src={url} alt="Photo being edited" className="block max-w-none" style={{ width: Math.floor(shown.width * fit), height: Math.floor(shown.height * fit), maxHeight: 'none', filter: toneFilter(tone) }} />
             </ReactCrop>
           ) : (
             <p className="p-4 text-sm text-white/80">{error || 'Opening photo…'}</p>
@@ -150,7 +155,7 @@ export function PhotoEditor({
           ))}
         </div>
 
-        <div className="grid gap-x-4 gap-y-2 sm:grid-cols-2">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-1">
           <Slider label={`Straighten ${tilt > 0 ? '+' : ''}${tilt.toFixed(1)}°`} min={-MAX_TILT} max={MAX_TILT} step={0.1} value={tilt} onChange={setTilt} onReset={() => setTilt(0)} />
           {toneSlider('brightness', 'Brightness', 0.5, 2)}
           {toneSlider('contrast', 'Contrast', 0.5, 2)}
@@ -173,8 +178,8 @@ export function PhotoEditor({
 
 function Slider({ label, onChange, onReset, ...range }: { label: string; min: number; max: number; step: number; value: number; onChange: (v: number) => void; onReset: () => void }) {
   return (
-    <label className="block text-xs text-muted">
-      <span className="flex justify-between">
+    <label className="block min-w-0 text-xs text-muted">
+      <span className="flex justify-between gap-1">
         {label}
         <button type="button" className="text-link" onClick={onReset}>
           Reset
@@ -183,6 +188,22 @@ function Slider({ label, onChange, onReset, ...range }: { label: string; min: nu
       <input type="range" className="w-full accent-amber" {...range} onChange={(e) => onChange(Number(e.target.value))} />
     </label>
   )
+}
+
+/** The size of an element, kept up to date. */
+function useSize() {
+  const ref = useRef<HTMLDivElement>(null)
+  const [size, setSize] = useState({ width: 0, height: 0 })
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const read = () => setSize({ width: el.clientWidth, height: el.clientHeight })
+    read()
+    const watch = new ResizeObserver(read)
+    watch.observe(el)
+    return () => watch.disconnect()
+  }, [])
+  return [size, ref] as const
 }
 
 /** An object URL showing the canvas. The previous one stays up until the next is ready, so sliders don't flicker. */
