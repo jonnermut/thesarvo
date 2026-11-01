@@ -1,0 +1,23 @@
+thesarvo-3/src/components/DeleteAccountForm.test.tsx
+  s_e20d0a1ebc47aa::t_11c671e652c6b4 1-28
+thesarvo-3/src/routes/account.index.tsx
+  s_e20d0a1ebc47aa::t_11c671e652c6b4 6,58
+thesarvo-3/src/components/DeleteAccountForm.tsx
+  s_e20d0a1ebc47aa::t_11c671e652c6b4 1-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3e0f452f857f7c9b717db60e3b823b05af4e6f0f",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
