@@ -26,13 +26,15 @@ struct SettingsView: View {
                     }
                     Toggle("Show climb counts in the menu", isOn: $app.showClimbsInMenu)
                 }
-                Section("Server") {
+                #if DEBUG
+                Section("Server (debug builds only)") {
                     TextField(AppConfig.defaultBase.absoluteString, text: $syncBase)
                         .textInputAutocapitalization(.never).autocorrectionDisabled().keyboardType(.URL)
                     TextField("Sign-in client id", text: $clientId)
                         .textInputAutocapitalization(.never).autocorrectionDisabled()
                     Text("Leave both empty for the normal site.").font(.caption).foregroundStyle(.secondary)
                 }
+                #endif
                 Section("About") {
                     LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")
                     LabeledContent("Guides", value: String((app.manifest?.contentCommit ?? "").prefix(8)))
@@ -56,7 +58,7 @@ struct SettingsView: View {
         deleteError = nil
         let token = await auth.freshTokens()?.idToken
         let r = await BridgeAPI.perform(BridgeRequest(["id": 0, "method": "POST", "path": "/g/api/delete-account", "headers": ["content-type": "application/json"], "body": "{\"confirm\":\"delete\"}"])!, idToken: token)
-        if r.status == 200 { auth.signOut() } else { deleteError = r.status == 0 ? "You are offline." : "Deleting accounts is not available yet. Email the site owner to have it removed." }
+        if r.status == 200 { auth.signOut() } else { deleteError = r.status == 0 ? "You are offline." : "Could not delete the account. Try again, or email the site owner to have it removed." }
     }
 }
 

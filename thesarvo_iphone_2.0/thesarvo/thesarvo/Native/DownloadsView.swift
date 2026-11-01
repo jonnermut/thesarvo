@@ -56,9 +56,16 @@ struct DownloadsView: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(p.phase).font(.subheadline)
             ProgressView(value: Double(p.doneBytes), total: Double(max(p.totalBytes, 1)))
-            Text("\(format(p.doneBytes)) of \(format(p.totalBytes))").font(.caption).foregroundStyle(.secondary)
+            if p.totalBytes > 0 {
+                Text("\(format(p.doneBytes)) of \(format(p.totalBytes))").font(.caption).foregroundStyle(.secondary)
+            }
         }
     }
 
-    private func format(_ b: Int64) -> String { ByteCountFormatter.string(fromByteCount: b, countStyle: .file) }
+    private func format(_ b: Int64) -> String {
+        let f = ByteCountFormatter()
+        f.countStyle = .file
+        f.allowsNonnumericFormatting = false
+        return f.string(fromByteCount: b)
+    }
 }

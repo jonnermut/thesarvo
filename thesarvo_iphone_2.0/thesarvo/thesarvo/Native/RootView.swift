@@ -97,8 +97,8 @@ struct PageView: View {
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 if app.web.canGoBack {
-                    Button { app.web.goBack() } label: { Image(systemName: "chevron.backward") }
-                        .accessibilityLabel("Back")
+                    Button { app.web.goBack() } label: { Image(systemName: "arrow.uturn.backward") }
+                        .accessibilityLabel("Previous page")
                 }
                 ShareLink(item: shareURL) { Image(systemName: "square.and.arrow.up") }
             }

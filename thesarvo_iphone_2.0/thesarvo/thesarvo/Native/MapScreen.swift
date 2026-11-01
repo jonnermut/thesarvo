@@ -10,7 +10,6 @@ struct MapScreen: View {
     var body: some View {
         NavigationStack {
             CragMap(points: shown, focus: app.mapFocus) { guide in app.openGuide(id: guide) }
-                .ignoresSafeArea(edges: .bottom)
                 .navigationTitle(focusTitle)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -66,6 +65,15 @@ struct CragMap: UIViewRepresentable {
         map.delegate = context.coordinator
         map.showsUserLocation = true
         map.showsCompass = true
+        let locate = MKUserTrackingButton(mapView: map)
+        locate.translatesAutoresizingMaskIntoConstraints = false
+        locate.backgroundColor = .systemBackground.withAlphaComponent(0.9)
+        locate.layer.cornerRadius = 8
+        map.addSubview(locate)
+        NSLayoutConstraint.activate([
+            locate.trailingAnchor.constraint(equalTo: map.safeAreaLayoutGuide.trailingAnchor, constant: -12),
+            locate.bottomAnchor.constraint(equalTo: map.safeAreaLayoutGuide.bottomAnchor, constant: -24),
+        ])
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "crag")
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier)
         map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: -42.1, longitude: 146.6), span: MKCoordinateSpan(latitudeDelta: 5.2, longitudeDelta: 4.5)), animated: false)
@@ -116,6 +124,17 @@ struct CragMap: UIViewRepresentable {
             v?.glyphImage = UIImage(systemName: "mountain.2.fill")
             v?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
             return v
+        }
+
+        /// Tapping a cluster zooms to fit its crags instead of just selecting it.
+        func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+            guard let cluster = view.annotation as? MKClusterAnnotation else { return }
+            mapView.deselectAnnotation(cluster, animated: false)
+            let rect = cluster.memberAnnotations.reduce(MKMapRect.null) { r, a in
+                let pt = MKMapPoint(a.coordinate)
+                return r.union(MKMapRect(x: pt.x, y: pt.y, width: 0.1, height: 0.1))
+            }
+            mapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 80, left: 50, bottom: 80, right: 50), animated: true)
         }
 
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
