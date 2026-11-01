@@ -1,0 +1,21 @@
+scripts/cloudfront-setup.sh
+  s_ee2ae06c4b06ab::t_01835d98df3dd1 103
+scripts/publish-setup.sh
+  s_ee2ae06c4b06ab::t_94d90d1b25dd62 23,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f705639549627c412f475176af13f5b13939005a",
+  "prompts": {},
+  "sessions": {
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
