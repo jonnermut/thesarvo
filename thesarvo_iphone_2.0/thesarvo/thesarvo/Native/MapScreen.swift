@@ -59,7 +59,8 @@ final class CragAnnotation: NSObject, MKAnnotation {
     let point: CragPoint
     var coordinate: CLLocationCoordinate2D { point.coordinate }
     var title: String? { point.title }
-    var subtitle: String? { point.subtitle }
+    /// The guide or folder, then the coordinates (the old app showed them in the callout).
+    var subtitle: String? { [point.subtitle, String(format: "%.5f, %.5f", point.latitude, point.longitude)].filter { !$0.isEmpty }.joined(separator: " · ") }
     init(_ p: CragPoint) { point = p }
 }
 
