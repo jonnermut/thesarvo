@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { nextPath } from '#/auth/paths'
 import { signIn, useUser } from '#/auth/session'
 import { AvatarForm } from '#/components/AvatarForm'
+import { DeleteAccountForm } from '#/components/DeleteAccountForm'
 import { NameForm } from '#/components/NameForm'
 
 /**
@@ -54,6 +55,7 @@ function AccountSettings() {
           </Link>
         </section>
       )}
+      <DeleteAccountForm />
     </Page>
   )
 }
