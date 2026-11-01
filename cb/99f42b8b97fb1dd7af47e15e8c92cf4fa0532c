@@ -1,0 +1,27 @@
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/DownloadsView.swift
+  s_e20d0a1ebc47aa::t_5ebc117f79cd00 59-61,65-70
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/SettingsView.swift
+  s_e20d0a1ebc47aa::t_2697505015bf69 61
+  s_e20d0a1ebc47aa::t_07e2ff6082d676 29-30,37
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/RootView.swift
+  s_e20d0a1ebc47aa::t_462fc593ce58fc 100-101
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/MapScreen.swift
+  s_e20d0a1ebc47aa::t_b6f0ed078e30b6 68-76,129-137
+  s_e20d0a1ebc47aa::t_5cfce15a6bfc84 138-139
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cb99f42b8b97fb1dd7af47e15e8c92cf4fa0532c",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
