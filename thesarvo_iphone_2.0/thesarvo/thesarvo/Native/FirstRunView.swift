@@ -9,7 +9,7 @@ struct FirstRunView: View {
         VStack(alignment: .leading, spacing: 20) {
             Spacer()
             Text("Welcome to thesarvo").font(.largeTitle.bold())
-            Text("Every guide is already on this phone and works without a signal. Choose how many full-size photos to keep as well. You can change this later in Downloads.")
+            Text("Every guide is already on this device and works without a signal. Choose how many full-size photos to keep as well. You can change this later in Downloads.")
                 .foregroundStyle(.secondary)
             VStack(spacing: 10) {
                 ForEach(DownloadMode.allCases) { m in
