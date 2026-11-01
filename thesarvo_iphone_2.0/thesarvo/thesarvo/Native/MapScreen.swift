@@ -6,13 +6,23 @@ struct MapScreen: View {
     @EnvironmentObject var app: AppModel
     @State private var points: [CragPoint] = []
     @State private var loadedFor = ""
+    /// 0 standard, 1 satellite, 2 hybrid (satellite with names): hybrid until the reader chooses.
+    @AppStorage("mapType") private var mapStyle = 2
 
     var body: some View {
         NavigationStack {
-            CragMap(points: shown, focus: app.mapFocus) { guide in app.openGuide(id: guide) }
+            CragMap(points: shown, focus: app.mapFocus, style: mapStyle) { guide in app.openGuide(id: guide) }
                 .navigationTitle(focusTitle)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Picker("Map type", selection: $mapStyle) {
+                            Text("Standard").tag(0)
+                            Text("Satellite").tag(1)
+                            Text("Hybrid").tag(2)
+                        }
+                        .pickerStyle(.menu)
+                    }
                     if app.mapFocus != nil {
                         ToolbarItem(placement: .navigationBarTrailing) { Button("All crags") { app.mapFocus = nil } }
                     }
@@ -56,6 +66,7 @@ final class CragAnnotation: NSObject, MKAnnotation {
 struct CragMap: UIViewRepresentable {
     let points: [CragPoint]
     let focus: String?
+    let style: Int
     let openGuide: (String) -> Void
 
     func makeCoordinator() -> Coordinator { Coordinator(self) }
@@ -83,6 +94,8 @@ struct CragMap: UIViewRepresentable {
 
     func updateUIView(_ map: MKMapView, context: Context) {
         context.coordinator.parent = self
+        let type: MKMapType = style == 1 ? .satellite : style == 2 ? .hybrid : .standard
+        if map.mapType != type { map.mapType = type }
         let key = "\(points.count)-\(points.last?.id ?? "")"
         if context.coordinator.loadedKey != key {
             map.removeAnnotations(map.annotations.filter { $0 is CragAnnotation })

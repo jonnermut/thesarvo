@@ -98,7 +98,13 @@ struct PageView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                ShareLink(item: shareURL) { Image(systemName: "square.and.arrow.up") }
+                Menu {
+                    ShareLink(item: shareURL) { Label("Share", systemImage: "square.and.arrow.up") }
+                    if app.canEditPage {
+                        Button { app.toggleEdit() } label: { Label(app.isEditing ? "Stop editing" : "Edit this guide", systemImage: app.isEditing ? "eye" : "pencil") }
+                    }
+                } label: { Image(systemName: "ellipsis.circle") }
+                .accessibilityLabel("Page options")
             }
         }
     }

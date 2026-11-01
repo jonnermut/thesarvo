@@ -268,6 +268,21 @@ final class AppModel: ObservableObject {
         return f
     }
 
+    /// Guides (not folders) can be edited: the same editor as the website, which asks you to sign in first.
+    var canEditPage: Bool { selection.flatMap { byID[$0] }?.isGuide == true }
+
+    var isEditing: Bool { web.path.contains("edit=true") }
+
+    func toggleEdit() {
+        let base = web.path.split(separator: "?", maxSplits: 1).first.map(String.init) ?? web.path
+        if isEditing { web.open(path: base); return }
+        if auth.user != nil { web.open(path: base + "?edit=true"); return }
+        Task {
+            await auth.signIn()
+            if auth.user != nil { web.open(path: base + "?edit=true") }
+        }
+    }
+
     func openMenu() {
         menuFolder = folder(for: selection)
         showMenu = true
