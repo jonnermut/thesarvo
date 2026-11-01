@@ -1,0 +1,19 @@
+thesarvo-3/scripts/app-pack.ts
+  s_ee2ae06c4b06ab::t_823923b88535b2 66-71,92
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "98d27f760cc9c06b2ecbcb750283eff7b0038068",
+  "prompts": {},
+  "sessions": {
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
