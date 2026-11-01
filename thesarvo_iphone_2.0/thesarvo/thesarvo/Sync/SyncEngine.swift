@@ -19,7 +19,7 @@ enum SyncError: LocalizedError {
         switch self {
         case .badManifest: return "The update list could not be read."
         case .needsNewApp: return "A newer version of the app is needed for the latest content."
-        case .server(let code): return "The server answered \(code)."
+        case .server(let code): return code == 404 ? "The app's guides are not published on the server yet, so you have the ones that came with the app." : "The server answered \(code)."
         case .changedMidDownload: return "The guides changed while downloading; try again."
         case .someFailed(let n): return "\(n) photos could not be downloaded; they will be tried again."
         }

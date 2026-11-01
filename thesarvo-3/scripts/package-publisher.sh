@@ -14,7 +14,7 @@ mkdir -p "$PKG"
 mv dist/client dist/server "$PKG"/
 # The app's id: the tree of its committed code, which build-site.ts compares with what is deployed to decide on an incremental build.
 node -e "console.log(JSON.stringify({ app: process.argv[1] }))" "$(git rev-parse HEAD:./)" > "$PKG/app.json"
-npx esbuild scripts/build-site.ts scripts/deploy-changed.ts --bundle --platform=node --format=esm --target=node22 --outdir="$PKG" --out-extension:.js=.mjs \
+npx esbuild scripts/build-site.ts scripts/deploy-changed.ts scripts/app-pack.ts --bundle --platform=node --format=esm --target=node22 --outdir="$PKG" --out-extension:.js=.mjs \
   --banner:js="import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);" --log-level=warning
 cp scripts/publish.sh "$PKG"/
 tar -czf "$PKG.tgz" -C "$PKG" .

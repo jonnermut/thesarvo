@@ -6,13 +6,23 @@ struct MapScreen: View {
     @EnvironmentObject var app: AppModel
     @State private var points: [CragPoint] = []
     @State private var loadedFor = ""
+    /// 0 standard, 1 satellite, 2 hybrid (satellite with names): hybrid until the reader chooses.
+    @AppStorage("mapType") private var mapStyle = 2
 
     var body: some View {
         NavigationStack {
-            CragMap(points: shown, focus: app.mapFocus) { guide in app.openGuide(id: guide) }
+            CragMap(points: shown, focus: app.mapFocus, style: mapStyle) { guide in app.openGuide(id: guide) }
                 .navigationTitle(focusTitle)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Picker("Map type", selection: $mapStyle) {
+                            Text("Standard").tag(0)
+                            Text("Satellite").tag(1)
+                            Text("Hybrid").tag(2)
+                        }
+                        .pickerStyle(.menu)
+                    }
                     if app.mapFocus != nil {
                         ToolbarItem(placement: .navigationBarTrailing) { Button("All crags") { app.mapFocus = nil } }
                     }
@@ -49,13 +59,15 @@ final class CragAnnotation: NSObject, MKAnnotation {
     let point: CragPoint
     var coordinate: CLLocationCoordinate2D { point.coordinate }
     var title: String? { point.title }
-    var subtitle: String? { point.subtitle }
+    /// The guide or folder, then the coordinates (the old app showed them in the callout).
+    var subtitle: String? { [point.subtitle, String(format: "%.5f, %.5f", point.latitude, point.longitude)].filter { !$0.isEmpty }.joined(separator: " · ") }
     init(_ p: CragPoint) { point = p }
 }
 
 struct CragMap: UIViewRepresentable {
     let points: [CragPoint]
     let focus: String?
+    let style: Int
     let openGuide: (String) -> Void
 
     func makeCoordinator() -> Coordinator { Coordinator(self) }
@@ -83,6 +95,8 @@ struct CragMap: UIViewRepresentable {
 
     func updateUIView(_ map: MKMapView, context: Context) {
         context.coordinator.parent = self
+        let type: MKMapType = style == 1 ? .satellite : style == 2 ? .hybrid : .standard
+        if map.mapType != type { map.mapType = type }
         let key = "\(points.count)-\(points.last?.id ?? "")"
         if context.coordinator.loadedKey != key {
             map.removeAnnotations(map.annotations.filter { $0 is CragAnnotation })
@@ -113,12 +127,26 @@ struct CragMap: UIViewRepresentable {
         var loadedKey = ""
         var focused: String?
         let locationManager = CLLocationManager()
+        var zoomedOut = true
         init(_ p: CragMap) { parent = p }
+
+        private func context(_ map: MKMapView) -> Bool { map.region.span.latitudeDelta > 0.06 }
+
+        /// Crossing the zoom threshold re-adds the pins, so MapKit re-evaluates which of them cluster.
+        func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+            let out = context(mapView)
+            guard out != zoomedOut else { return }
+            zoomedOut = out
+            let pins = mapView.annotations.filter { $0 is CragAnnotation }
+            mapView.removeAnnotations(pins)
+            mapView.addAnnotations(pins)
+        }
 
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             guard let a = annotation as? CragAnnotation else { return nil }
             let v = mapView.dequeueReusableAnnotationView(withIdentifier: "crag", for: a) as? MKMarkerAnnotationView
-            v?.clusteringIdentifier = "crag"
+            // Clusters only while zoomed out: close in, every crag shows on its own.
+            v?.clusteringIdentifier = context(mapView) ? "crag" : nil
             v?.canShowCallout = true
             v?.markerTintColor = UIColor(red: 0.106, green: 0.078, blue: 0.392, alpha: 1)
             v?.glyphImage = UIImage(systemName: "mountain.2.fill")

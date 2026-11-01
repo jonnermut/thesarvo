@@ -11,9 +11,9 @@ CONTENT=${1:-../../thesarvo-content}
 HERE=$(cd "$(dirname "$0")" && pwd)
 OUT=${OUT:-dist/site}
 if [ -f "$HERE/build-site.mjs" ]; then
-  build=(node "$HERE/build-site.mjs" --package "$HERE"); deploy=(node "$HERE/deploy-changed.mjs")
+  build=(node "$HERE/build-site.mjs" --package "$HERE"); deploy=(node "$HERE/deploy-changed.mjs"); pack=(node "$HERE/app-pack.mjs")
 else
-  build=(npx tsx scripts/build-site.ts); deploy=(npx tsx scripts/deploy-changed.ts)
+  build=(npx tsx scripts/build-site.ts); deploy=(npx tsx scripts/deploy-changed.ts); pack=(npx tsx scripts/app-pack.ts)
 fi
 SITE=${SITE:-https://d2duffmg4ei2rq.cloudfront.net}
 DISTRIBUTION=${DISTRIBUTION:-E1UB3F13YZEV4}
@@ -47,3 +47,6 @@ if live; then lap visible; else
   for _ in $(seq 150); do live && break || sleep 2; done
   live && lap visible || { lap "not visible after 5 minutes"; exit 1; }
 fi
+# The apps' pack: small versions of new photos and the manifest of every file. Last, so it lists only what is live.
+"${pack[@]}" --site "$OUT" --content "$CONTENT"
+lap "app pack"

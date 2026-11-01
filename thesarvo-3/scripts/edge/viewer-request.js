@@ -43,6 +43,8 @@ async function handler(event) {
     if (a && (await find('a:' + a[1]))) return redirect('/images/' + a[1] + '/' + a[2])
     return redirect('/g/')
   }
+  // The apps' photo variants are named by hash, with no extension: not pages.
+  if (u.indexOf('/images-app/') === 0) return r
   if (u.endsWith('/')) r.uri += 'index.html'
   else if (u.split('/').pop().indexOf('.') === -1) r.uri += '/index.html'
   return r
