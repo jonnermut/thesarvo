@@ -1,0 +1,38 @@
+thesarvo-3/src/app/bridge.test.ts
+  s_ee2ae06c4b06ab::t_e81f1d5ac60860 2,68-74
+  s_ee2ae06c4b06ab::t_0b7221527feb4c 75
+thesarvo_iphone_2.0/thesarvo/thesarvo/App/AppModel.swift
+  s_ee2ae06c4b06ab::t_ac00b97dc397fc 43,101
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/Directions.swift
+  s_ee2ae06c4b06ab::t_ac00b97dc397fc 1-10,12-38
+  s_ee2ae06c4b06ab::t_bc506ffe79d09b 11
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/MapScreen.swift
+  s_ee2ae06c4b06ab::t_ac00b97dc397fc 154-158,174-191
+thesarvo-3/src/guide/view/GpsBlock.tsx
+  s_ee2ae06c4b06ab::t_f3cc4fbddc7d57 2,13
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/RootView.swift
+  s_ee2ae06c4b06ab::t_ac00b97dc397fc 27,136-141
+  s_ee2ae06c4b06ab::t_d83c77cf3e2cd7 142
+thesarvo-3/src/app/bridge.ts
+  s_ee2ae06c4b06ab::t_f3cc4fbddc7d57 56-62
+thesarvo_iphone_2.0/thesarvo/thesarvo/Web/WebHost.swift
+  s_ee2ae06c4b06ab::t_ac00b97dc397fc 18,144
+thesarvo_iphone_2.0/thesarvo/thesarvoTests/MenuTests.swift
+  s_ee2ae06c4b06ab::t_ac00b97dc397fc 30-45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5f61d98cb08fbc85ca6d39cf8fb8428990a934c5",
+  "prompts": {},
+  "sessions": {
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
