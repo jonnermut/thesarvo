@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { inApp, openNativeContents } from '#/app/bridge'
+import { inApp, offerContents, openNativeContents } from '#/app/bridge'
 import { useEscape, usePresence, useScrollLock } from '#/components/overlay'
 import type { GuideNode } from '#/guide/model/types'
 import { guideContents, matchesQuery } from './contents'
@@ -114,7 +114,11 @@ export function GuideContents({ nodes, title = '' }: { nodes: GuideNode[]; title
   useEscape(sheet, closeSheet)
   useScrollLock(sheet)
 
-  if (entries.length < 3) return null
+  // In the app the Contents button is native, in the top bar: the page just answers when asked.
+  const enough = entries.length >= 3
+  useEffect(() => (enough && app ? offerContents(() => openNativeContents(title, entries)) : undefined), [enough, app, title, entries])
+
+  if (!enough) return null
 
   const panel = (onPick?: () => void) => (
     <Panel
@@ -134,16 +138,16 @@ export function GuideContents({ nodes, title = '' }: { nodes: GuideNode[]; title
       </aside>
 
       <div className="no-print xl:hidden">
-        <button
+        {!app && <button
           type="button"
-          onClick={() => (app ? openNativeContents(title, entries) : setSheet(true))}
+          onClick={() => setSheet(true)}
           className="fixed right-4 bottom-4 z-20 flex items-center gap-2 rounded-full bg-forest px-4 py-2.5 text-sm font-medium text-white shadow-lg hover:bg-forest-soft"
         >
           <svg viewBox="0 0 20 20" className="size-4" fill="currentColor" aria-hidden>
             <path d="M3 5h14v2H3zm0 4h10v2H3zm0 4h14v2H3z" />
           </svg>
           Contents
-        </button>
+        </button>}
         {sheetMounted && (
           <>
             <button

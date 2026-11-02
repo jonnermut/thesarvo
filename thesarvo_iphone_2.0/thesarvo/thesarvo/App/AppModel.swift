@@ -40,6 +40,8 @@ final class AppModel: ObservableObject {
     @Published var menuFolder: String?
     @Published var showMenu = false
     @Published var contents: ContentsSheet?
+    /// The page has a contents list, so the top bar shows a Contents button.
+    @Published var hasContents = false
     @Published var sharedFile: SharedFile?
     /// Guides opened lately, newest first (ids), kept on this device.
     @Published var recents: [String] = UserDefaults.standard.stringArray(forKey: "recentGuides") ?? []
@@ -96,6 +98,7 @@ final class AppModel: ObservableObject {
         web.setTextScale(textScale)
         web.onBootOK = { [weak self] in self?.bootOK() }
         lastCheck = store.loadState().lastCheck
+        web.onContentsAvailable = { [weak self] on in self?.hasContents = on }
         web.onOpenContents = { [weak self] e in self?.contents = ContentsSheet(entries: e) }
         web.onOpenMap = { [weak self] g, pts in self?.openMap(guide: g, points: pts) }
         web.onShareFile = { [weak self] n, t in self?.sharedFile = SharedFile.make(name: n, text: t) }

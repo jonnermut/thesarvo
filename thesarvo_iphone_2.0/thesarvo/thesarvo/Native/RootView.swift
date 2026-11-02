@@ -98,7 +98,11 @@ struct PageView: View {
                         .accessibilityLabel("Back")
                 }
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                if app.hasContents {
+                    Button { app.web.requestContents() } label: { Image(systemName: "list.bullet") }
+                        .accessibilityLabel("Contents")
+                }
                 Menu {
                     ShareLink(item: shareURL) { Label("Share", systemImage: "square.and.arrow.up") }
                     if app.canEditPage {

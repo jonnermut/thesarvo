@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { inApp, installBridge, openNativeMap, shareFileNative } from './bridge'
+import { inApp, installBridge, offerContents, openNativeMap, shareFileNative } from './bridge'
 
 type W = NonNullable<Parameters<typeof installBridge>[0]>
 type Reply = (id: number, status: number, body: string) => void
@@ -72,5 +72,17 @@ describe('app bridge', () => {
     expect(shareFileNative('Eldon.gpx', 'application/gpx+xml', '<gpx/>', w)).toBe(true)
     expect(shareFileNative('x.gpx', 'application/gpx+xml', '', { location: { href: 'https://x/' } } as unknown as W)).toBe(false)
     return Promise.resolve().then(() => expect(sent).toEqual([{ type: 'shareFile', name: 'Eldon.gpx', mime: 'application/gpx+xml', text: '<gpx/>' }]))
+  })
+
+  it('offers the contents to the app and withdraws them', () => {
+    const sent: unknown[] = []
+    const { w } = fakeWindow((m) => sent.push(m))
+    const open = () => {}
+    const off = offerContents(open, w)
+    expect(w.thesarvoContents).toBe(open)
+    off()
+    expect(w.thesarvoContents).toBeUndefined()
+    expect(offerContents(open, { location: { href: 'https://x/' } } as unknown as W)()).toBeUndefined()
+    return Promise.resolve().then(() => expect(sent).toEqual([{ type: 'contentsAvailable', available: true }, { type: 'contentsAvailable', available: false }]))
   })
 })

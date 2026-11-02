@@ -7,7 +7,7 @@ import { GUIDE_PREFIX } from '#/guide/content/paths'
  */
 
 type Handler = { postMessage: (message: unknown) => void }
-type BridgeWindow = Window & typeof globalThis & { webkit?: { messageHandlers?: { thesarvo?: Handler } }; thesarvoBridge?: { reply: (id: number, status: number, body: string) => void } }
+type BridgeWindow = Window & typeof globalThis & { webkit?: { messageHandlers?: { thesarvo?: Handler } }; thesarvoBridge?: { reply: (id: number, status: number, body: string) => void }; thesarvoContents?: () => void }
 
 type Reply = { status: number; body: string }
 
@@ -51,6 +51,21 @@ export function openNativeContents(title: string, entries: ContentsLine[], win: 
   const handler = win.webkit?.messageHandlers?.thesarvo
   handler?.postMessage({ type: 'openContents', title, entries })
   return !!handler
+}
+
+/**
+ * Tells the app whether the page has a contents list, so it can show its own Contents button in the top bar, and lets the app ask
+ * for the list (`window.thesarvoContents()`, which the page answers with `openContents`). Returns a function that undoes both.
+ */
+export function offerContents(open: () => void, win: BridgeWindow = window): () => void {
+  const handler = win.webkit?.messageHandlers?.thesarvo
+  if (!handler) return () => {}
+  win.thesarvoContents = open
+  handler.postMessage({ type: 'contentsAvailable', available: true })
+  return () => {
+    if (win.thesarvoContents === open) delete win.thesarvoContents
+    handler.postMessage({ type: 'contentsAvailable', available: false })
+  }
 }
 
 /** Hands a generated file (GPX, KML) to the app's share sheet: the web view cannot save downloads. Returns false in a browser. */
