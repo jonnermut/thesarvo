@@ -4,6 +4,7 @@ import { imageUrl } from '#/guide/content/paths'
 import type { Climb, ImageTopo, LineStyle, Point, RectStyle } from '#/guide/model/types'
 import { Callout, Route } from '#/guide/view/Topo'
 import { labelSpots } from '#/guide/view/labelSpot'
+import { isMarkerKind } from '#/guide/view/markers'
 import { RECT_STYLES } from '#/guide/view/topoStyles'
 import { AreaField, Button, CheckField, CommitNumberField, DeleteButton, NumberField, SelectField, TextField } from './fields'
 import { ClimbDialog, CragMarks, STARS } from './NodeForms'
@@ -32,6 +33,8 @@ type Props = {
 }
 
 const LINE_STYLES = [['solid', 'Solid'], ['dashed', 'Dashed'], ['dotted', 'Dotted']] as const
+/** The marker select shows only marker kinds; a number point ('label') reads as none. */
+const markerKind = (kind = '') => (isMarkerKind(kind) ? kind : '')
 const END_MARKERS = [['', 'None'], ['belay', 'Belay'], ['lower', 'Lower-off'], ['lower-left', 'Lower-off left'], ['lower-right', 'Lower-off right']] as const
 const ARROWS = [
   ['', 'None'], ['north', 'North'], ['north_east', 'North-east'], ['east', 'East'], ['south_east', 'South-east'],
@@ -367,10 +370,10 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
               )}
               <SelectField label="Line" value={selectedPath.lineStyle} options={LINE_STYLES} onChange={(lineStyle: LineStyle) => onChange((t) => ops.updatePath(t, selectedPath.id, { lineStyle }))} />
               <SelectField
-                label="End marker"
-                value={selectedPath.points.at(-1)?.kind ?? ''}
+                label={pointIndex === null ? 'End marker' : 'Marker at selected point'}
+                value={markerKind(selectedPath.points[pointIndex ?? selectedPath.points.length - 1]?.kind)}
                 options={END_MARKERS}
-                onChange={(marker) => onChange((t) => ops.setEndMarker(t, selectedPath.id, marker))}
+                onChange={(marker) => onChange((t) => ops.setPointKind(t, selectedPath.id, pointIndex ?? selectedPath.points.length - 1, marker))}
               />
               <CheckField label="Arrow head" checked={selectedPath.arrow} onChange={(arrow) => onChange((t) => ops.updatePath(t, selectedPath.id, { arrow }))} />
               <TextField label="Label" value={selectedPath.labelText} onChange={(labelText) => onChange((t) => ops.updatePath(t, selectedPath.id, { labelText }), `label-${selectedPath.id}`)} />

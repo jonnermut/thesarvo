@@ -48,6 +48,11 @@ describe('topo ops', () => {
     const marked = setPointKind(topo, 'p1', 1, 'label')
     expect(marked.paths[0].points.map((p) => p.kind)).toEqual(['', 'label', ''])
   })
+
+  it('puts a mid-route belay or lower-off on a middle point and leaves the others', () => {
+    const marked = setPointKind(setPointKind(topo, 'p1', 1, 'belay'), 'p1', 0, 'lower-left')
+    expect(marked.paths[0].points.map((p) => p.kind)).toEqual(['lower-left', 'belay', ''])
+  })
 })
 
 describe('resize', () => {
