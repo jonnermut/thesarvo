@@ -43,6 +43,14 @@ final class MenuTests: XCTestCase {
         XCTAssertEqual(ClusterName.label(for: many + [["West", "Z"]]), "East")
     }
 
+    func testPointOpensThePageNamedByItsFolder() throws {
+        let app = try model()
+        app.openGuide(id: "a", place: "coles")
+        XCTAssertEqual(app.selection, "b", "the folder 'Coles' is the page below East")
+        app.openGuide(id: "a", place: "Nowhere")
+        XCTAssertEqual(app.selection, "a", "no such page: the guide itself")
+    }
+
     func testDownloadsBadgeShowsPercentWhileWorking() throws {
         let app = try model()
         XCTAssertNil(app.downloading)

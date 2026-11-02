@@ -11,7 +11,7 @@ struct MapScreen: View {
 
     var body: some View {
         NavigationStack {
-            CragMap(points: shown, focus: focus, style: mapStyle, areas: { app.areaNames(for: $0) }) { guide in app.openGuide(id: guide) }
+            CragMap(points: shown, focus: focus, style: mapStyle, areas: { app.areaNames(for: $0) }) { guide, place in app.openGuide(id: guide, place: place) }
                 .navigationTitle(focusTitle)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -86,7 +86,7 @@ struct CragMap: UIViewRepresentable {
     let style: Int
     /// A guide's area names, widest first (region, then sub-area), for naming clusters.
     let areas: (String) -> [String]
-    let openGuide: (String) -> Void
+    let openGuide: (String, String) -> Void
 
     func makeCoordinator() -> Coordinator { Coordinator(self) }
 
@@ -104,6 +104,23 @@ struct CragMap: UIViewRepresentable {
             locate.trailingAnchor.constraint(equalTo: map.safeAreaLayoutGuide.trailingAnchor, constant: -12),
             locate.bottomAnchor.constraint(equalTo: map.safeAreaLayoutGuide.bottomAnchor, constant: -24),
         ])
+        let back = UIButton(type: .system)
+        back.setImage(UIImage(systemName: "arrow.uturn.backward"), for: .normal)
+        back.accessibilityLabel = "Back to the previous view"
+        back.translatesAutoresizingMaskIntoConstraints = false
+        back.backgroundColor = .systemBackground.withAlphaComponent(0.9)
+        back.layer.cornerRadius = 8
+        back.isHidden = true
+        back.addTarget(context.coordinator, action: #selector(Coordinator.goBack), for: .touchUpInside)
+        map.addSubview(back)
+        NSLayoutConstraint.activate([
+            back.leadingAnchor.constraint(equalTo: map.safeAreaLayoutGuide.leadingAnchor, constant: 12),
+            back.topAnchor.constraint(equalTo: map.safeAreaLayoutGuide.topAnchor, constant: 12),
+            back.widthAnchor.constraint(equalToConstant: 44),
+            back.heightAnchor.constraint(equalToConstant: 44),
+        ])
+        context.coordinator.backButton = back
+        context.coordinator.map = map
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "crag")
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier)
         map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: -42.1, longitude: 146.6), span: MKCoordinateSpan(latitudeDelta: 5.2, longitudeDelta: 4.5)), animated: false)
@@ -123,6 +140,8 @@ struct CragMap: UIViewRepresentable {
         }
         if context.coordinator.focused != focus {
             context.coordinator.focused = focus
+            context.coordinator.previous = []
+            context.coordinator.backButton?.isHidden = true
             if let focus {
                 let mine = points.filter { $0.guideID == focus }
                 if !mine.isEmpty {
@@ -146,6 +165,16 @@ struct CragMap: UIViewRepresentable {
         var focused: String?
         let locationManager = CLLocationManager()
         var zoomedOut = true
+        /// The views left behind by zooming into clusters, newest last, for the back button.
+        var previous: [MKMapRect] = []
+        weak var backButton: UIButton?
+        weak var map: MKMapView?
+
+        @objc func goBack() {
+            guard let rect = previous.popLast() else { return }
+            map?.setVisibleMapRect(rect, edgePadding: .zero, animated: true)
+            backButton?.isHidden = previous.isEmpty
+        }
         init(_ p: CragMap) { parent = p }
 
         private func context(_ map: MKMapView) -> Bool { map.region.span.latitudeDelta > 0.06 }
@@ -201,6 +230,8 @@ struct CragMap: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
             guard let cluster = view.annotation as? MKClusterAnnotation else { return }
             mapView.deselectAnnotation(cluster, animated: false)
+            previous.append(mapView.visibleMapRect)
+            backButton?.isHidden = false
             let rect = cluster.memberAnnotations.reduce(MKMapRect.null) { r, a in
                 let pt = MKMapPoint(a.coordinate)
                 return r.union(MKMapRect(x: pt.x, y: pt.y, width: 0.1, height: 0.1))
@@ -211,7 +242,7 @@ struct CragMap: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
             guard let a = view.annotation as? CragAnnotation else { return }
             if control === view.leftCalloutAccessoryView { chooseDirections(for: a.point); return }
-            parent.openGuide(a.point.guideID)
+            parent.openGuide(a.point.guideID, a.point.subtitle)
         }
 
         /// Asks which app to navigate with, then opens it at the point.

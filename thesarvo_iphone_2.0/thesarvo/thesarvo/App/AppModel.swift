@@ -344,8 +344,14 @@ final class AppModel: ObservableObject {
         return out
     }
 
-    func openGuide(id: String) {
-        if let n = byID[id] { open(node: n) }
+    /// Opens a guide; a point's `place` (its KML folder) opens the page of that name below the guide when there is one ("Gerny Hill" under "Clear Hill Road").
+    func openGuide(id: String, place: String = "") {
+        guard let n = byID[id] else { return }
+        func find(_ node: TreeNode) -> TreeNode? {
+            for c in node.children ?? [] { if c.title.caseInsensitiveCompare(place) == .orderedSame { return c }; if let d = find(c) { return d } }
+            return nil
+        }
+        open(node: place.isEmpty ? n : find(n) ?? n)
     }
 
     func openMap(guide: String?, points: [CragPoint] = []) {
