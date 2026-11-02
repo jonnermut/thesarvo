@@ -12,6 +12,7 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
     @Published var isLoading = false
 
     var onOpenMap: ((String?, [CragPoint]) -> Void)?
+    var onContentsAvailable: ((Bool) -> Void)?
     var onOpenContents: (([ContentsEntry]) -> Void)?
     var onBootOK: (() -> Void)?
     var onNavigated: ((String) -> Void)?
@@ -112,6 +113,9 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
         webView.evaluateJavaScript(scale == 1 ? "document.documentElement.style.zoom = '';" : js)
     }
 
+    /// Asks the page for its contents list (it answers with `openContents`).
+    func requestContents() { webView.evaluateJavaScript("window.thesarvoContents && window.thesarvoContents();") }
+
     /// Scrolls the page to an element (a Contents entry chosen in the native sheet).
     func scroll(toAnchor anchor: String) {
         let quoted = (try? JSONSerialization.data(withJSONObject: [anchor])).flatMap { String(data: $0, encoding: .utf8) } ?? "[\"\"]"
@@ -130,6 +134,7 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
                     return CragPoint(id: "page-\(g)-\(i)", guideID: g, title: d["title"] as? String ?? "", subtitle: "", latitude: lat, longitude: lon)
                 }
                 self.onOpenMap?(guide, pts)
+            case "contentsAvailable": self.onContentsAvailable?(body["available"] as? Bool ?? false)
             case "openContents":
                 let entries = (body["entries"] as? [[String: Any]] ?? []).compactMap { d -> ContentsEntry? in
                     guard let a = d["anchor"] as? String, let t = d["text"] as? String else { return nil }
