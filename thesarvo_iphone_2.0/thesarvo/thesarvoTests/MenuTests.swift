@@ -36,6 +36,10 @@ final class MenuTests: XCTestCase {
         XCTAssertEqual(ClusterName.label(for: [["East", "Coles"], ["East", "Coles"]]), "Coles")
         XCTAssertEqual(ClusterName.label(for: [["East", "A"], ["East", "B"], ["West", "C"]]), "East")
         XCTAssertNil(ClusterName.label(for: [[]]))
+        XCTAssertEqual(ClusterName.label(for: [["Bouldering", "Hobart", "Taroona"], ["Bouldering", "Hobart", "Risdon"]]), "Hobart bouldering")
+        XCTAssertEqual(ClusterName.label(for: [["Bouldering", "Hobart", "Taroona"], ["Bouldering", "South", "Eldon"]]), "Hobart bouldering")
+        XCTAssertEqual(ClusterName.label(for: [["Bouldering", "Hobart", "Taroona"], ["East", "Coles"]]), "East")
+        XCTAssertEqual(ClusterName.label(for: [["Bouldering", "Hobart", "A"], ["Bouldering", "Hobart", "B"], ["East", "Coles"]]), "Hobart bouldering")
     }
 
     func testDownloadsBadgeShowsPercentWhileWorking() throws {

@@ -212,7 +212,10 @@ struct CragMap: UIViewRepresentable {
 enum ClusterName {
     /// The deepest area all the chains share, else the most common widest area; nil when none are known.
     static func label(for chains: [[String]]) -> String? {
-        let chains = chains.filter { !$0.isEmpty }
+        // "Bouldering" is a section holding regions (Hobart, North...), so name those instead: "Hobart bouldering".
+        let chains = chains.filter { !$0.isEmpty }.map { c in
+            c.count > 1 && c[0] == "Bouldering" ? ["\(c[1]) bouldering"] + c.dropFirst(2) : c
+        }
         guard var common = chains.first else { return nil }
         for c in chains.dropFirst() { common = Array(zip(common, c).prefix { $0 == $1 }.map(\.0)) }
         if let last = common.last { return last }
