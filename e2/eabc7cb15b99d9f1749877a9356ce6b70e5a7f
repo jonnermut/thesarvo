@@ -1,0 +1,33 @@
+thesarvo-3/src/guide/view/ClimbBlock.tsx
+  s_e20d0a1ebc47aa::t_a501c09b4c579d 82
+thesarvo-3/src/guide/view/credit.test.tsx
+  s_e20d0a1ebc47aa::t_a501c09b4c579d 32,37
+thesarvo-3/src/guide/view/credit.tsx
+  s_e20d0a1ebc47aa::t_a501c09b4c579d 26,30,46
+thesarvo_iphone_2.0/thesarvo/thesarvo.xcodeproj/project.pbxproj
+  s_ee2ae06c4b06ab::t_e971a0ec4c364d 9-12,161,273-276,296-299
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e2eabc7cb15b99d9f1749877a9356ce6b70e5a7f",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    },
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
