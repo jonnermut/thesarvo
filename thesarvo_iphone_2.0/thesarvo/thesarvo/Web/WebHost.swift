@@ -113,6 +113,9 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
         webView.evaluateJavaScript(scale == 1 ? "document.documentElement.style.zoom = '';" : js)
     }
 
+    /// Asks the page for its GPS points (it answers with `openMap`, if the guide has any).
+    func requestMapPoints() { webView.evaluateJavaScript("window.thesarvoMapPoints && window.thesarvoMapPoints();") }
+
     /// Asks the page for its contents list (it answers with `openContents`).
     func requestContents() { webView.evaluateJavaScript("window.thesarvoContents && window.thesarvoContents();") }
 

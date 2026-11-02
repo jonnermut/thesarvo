@@ -22,7 +22,7 @@ struct SettingsView: View {
                 Section("Reading") {
                     VStack(alignment: .leading) {
                         Text("Text size")
-                        Slider(value: $app.textScale, in: 0.8...1.6, step: 0.05)
+                        Slider(value: $app.textScale, in: 0.8...2.0, step: 0.05)
                     }
                     Toggle("Show climb counts in the menu", isOn: $app.showClimbsInMenu)
                 }

@@ -1,5 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
-import { inApp, openNativeMap, shareFileNative } from '#/app/bridge'
+import { inApp, offerMapPoints, openNativeMap, shareFileNative } from '#/app/bridge'
 import { usePresence } from '#/components/overlay'
 import type { Gps } from '#/guide/model/types'
 import { gpsToGpx, gpsToKml } from './kml'
@@ -59,6 +59,12 @@ export function GpsBlock({ gps, guideName = '', guideId }: { gps: Gps; guideName
     setApp(inApp())
     setShowMap(!inApp())
   }, [])
+  const nativePoints = useCallback(
+    () => gps.points.map((p) => ({ title: p.description || p.code, lat: Number(p.latitude), lon: Number(p.longitude) })).filter((p) => isFinite(p.lat) && isFinite(p.lon)),
+    [gps.points],
+  )
+  // The Map tab asks for the page's points, so it can open on this guide.
+  useEffect(() => (app && guideId ? offerMapPoints(() => openNativeMap(guideId, nativePoints())) : undefined), [app, guideId, nativePoints])
   if (!gps.points.length && !gps.lines.length) return null
   const hasCode = gps.points.some((p) => p.code)
   const hasHeight = gps.points.some((p) => p.height && p.height !== '0')
@@ -67,7 +73,7 @@ export function GpsBlock({ gps, guideName = '', guideId }: { gps: Gps; guideName
       <div className="flex flex-wrap items-end gap-x-4 gap-y-2 border-b border-line pb-1">
         <h2 className="flex-1 text-2xl text-navy">GPS</h2>
         {app && guideId && (
-          <button type="button" onClick={() => openNativeMap(guideId, gps.points.map((p) => ({ title: p.description || p.code, lat: Number(p.latitude), lon: Number(p.longitude) })).filter((p) => isFinite(p.lat) && isFinite(p.lon)))} className="rounded border border-line bg-navy px-2.5 py-1 text-[13px] text-white">
+          <button type="button" onClick={() => openNativeMap(guideId, nativePoints())} className="rounded border border-line bg-navy px-2.5 py-1 text-[13px] text-white">
             Open in Map
           </button>
         )}

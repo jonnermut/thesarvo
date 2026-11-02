@@ -7,7 +7,7 @@ import { GUIDE_PREFIX } from '#/guide/content/paths'
  */
 
 type Handler = { postMessage: (message: unknown) => void }
-type BridgeWindow = Window & typeof globalThis & { webkit?: { messageHandlers?: { thesarvo?: Handler } }; thesarvoBridge?: { reply: (id: number, status: number, body: string) => void }; thesarvoContents?: () => void }
+type BridgeWindow = Window & typeof globalThis & { webkit?: { messageHandlers?: { thesarvo?: Handler } }; thesarvoBridge?: { reply: (id: number, status: number, body: string) => void }; thesarvoContents?: () => void; thesarvoMapPoints?: () => void }
 
 type Reply = { status: number; body: string }
 
@@ -65,6 +65,15 @@ export function offerContents(open: () => void, win: BridgeWindow = window): () 
   return () => {
     if (win.thesarvoContents === open) delete win.thesarvoContents
     handler.postMessage({ type: 'contentsAvailable', available: false })
+  }
+}
+
+/** Lets the app ask the page for its GPS points when the reader switches to the Map tab (the page answers with `openMap`). Returns a function that undoes it. */
+export function offerMapPoints(open: () => void, win: BridgeWindow = window): () => void {
+  if (!win.webkit?.messageHandlers?.thesarvo) return () => {}
+  win.thesarvoMapPoints = open
+  return () => {
+    if (win.thesarvoMapPoints === open) delete win.thesarvoMapPoints
   }
 }
 
