@@ -151,6 +151,12 @@ struct CragMap: UIViewRepresentable {
         }
 
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+            if annotation is MKClusterAnnotation {
+                let c = mapView.dequeueReusableAnnotationView(withIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier, for: annotation) as? MKMarkerAnnotationView
+                c?.subtitleVisibility = .hidden
+                c?.displayPriority = .defaultHigh
+                return c
+            }
             guard let a = annotation as? CragAnnotation else { return nil }
             let v = mapView.dequeueReusableAnnotationView(withIdentifier: "crag", for: a) as? MKMarkerAnnotationView
             // Clusters only while zoomed out: close in, every crag shows on its own.
@@ -171,7 +177,6 @@ struct CragMap: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, clusterAnnotationForMemberAnnotations members: [MKAnnotation]) -> MKClusterAnnotation {
             let cluster = MKClusterAnnotation(memberAnnotations: members)
             cluster.title = ClusterName.label(for: members.compactMap { ($0 as? CragAnnotation).map { parent.areas($0.point.guideID) } })
-            cluster.subtitle = "\(members.count) points"
             return cluster
         }
 
@@ -215,6 +220,11 @@ enum ClusterName {
         // "Bouldering" is a section holding regions (Hobart, North...), so name those instead: "Hobart bouldering".
         let chains = chains.filter { !$0.isEmpty }.map { c in
             c.count > 1 && c[0] == "Bouldering" ? ["\(c[1]) bouldering"] + c.dropFirst(2) : c
+        }
+        // A few guides: the biggest one's name, "Eldon +2". Many: the area they share, below.
+        let counts0 = Dictionary(grouping: chains, by: { $0 }).mapValues(\.count)
+        if counts0.count <= 4, let top = counts0.max(by: { ($0.value, $1.key.last ?? "") < ($1.value, $0.key.last ?? "") })?.key.last {
+            return counts0.count == 1 ? top : "\(top) +\(counts0.count - 1)"
         }
         guard var common = chains.first else { return nil }
         for c in chains.dropFirst() { common = Array(zip(common, c).prefix { $0 == $1 }.map(\.0)) }
