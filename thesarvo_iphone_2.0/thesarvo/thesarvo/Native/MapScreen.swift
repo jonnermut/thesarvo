@@ -138,19 +138,23 @@ struct CragMap: UIViewRepresentable {
             map.addAnnotations(points.map(CragAnnotation.init))
             context.coordinator.loadedKey = key
         }
-        if context.coordinator.focused != focus {
+        let focusCount = focus.map { f in points.filter { $0.guideID == f }.count } ?? 0
+        if context.coordinator.focused != focus || context.coordinator.focusedCount != focusCount {
             context.coordinator.focused = focus
+            context.coordinator.focusedCount = focusCount
             context.coordinator.previous = []
             context.coordinator.backButton?.isHidden = true
             if let focus {
                 let mine = points.filter { $0.guideID == focus }
                 if !mine.isEmpty {
-                    // At least about a kilometre across, so one point does not zoom past the tiles.
-                    let rect = mine.reduce(MKMapRect.null) { r, p in
+                    // Fit the points, but at least about 100 m across so one point does not zoom past the tiles.
+                    var rect = mine.reduce(MKMapRect.null) { r, p in
                         let pt = MKMapPoint(p.coordinate)
-                        let side = MKMapPointsPerMeterAtLatitude(p.coordinate.latitude) * 800
-                        return r.union(MKMapRect(x: pt.x - side, y: pt.y - side, width: side * 2, height: side * 2))
+                        return r.union(MKMapRect(x: pt.x, y: pt.y, width: 0.1, height: 0.1))
                     }
+                    let minSide = MKMapPointsPerMeterAtLatitude(mine[0].coordinate.latitude) * 100
+                    if rect.width < minSide { rect = rect.insetBy(dx: (rect.width - minSide) / 2, dy: 0) }
+                    if rect.height < minSide { rect = rect.insetBy(dx: 0, dy: (rect.height - minSide) / 2) }
                     map.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 80, left: 60, bottom: 100, right: 60), animated: true)
                 }
             } else if map.annotations.count > 1 {
@@ -163,6 +167,7 @@ struct CragMap: UIViewRepresentable {
         var parent: CragMap
         var loadedKey = ""
         var focused: String?
+        var focusedCount = 0
         let locationManager = CLLocationManager()
         var zoomedOut = true
         /// The views left behind by zooming into clusters, newest last, for the back button.
