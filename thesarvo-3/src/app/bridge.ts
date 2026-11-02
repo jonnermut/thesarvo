@@ -53,6 +53,13 @@ export function openNativeContents(title: string, entries: ContentsLine[], win: 
   return !!handler
 }
 
+/** Hands a generated file (GPX, KML) to the app's share sheet: the web view cannot save downloads. Returns false in a browser. */
+export function shareFileNative(name: string, type: string, text: string, win: BridgeWindow = window): boolean {
+  const handler = win.webkit?.messageHandlers?.thesarvo
+  handler?.postMessage({ type: 'shareFile', name, mime: type, text })
+  return !!handler
+}
+
 /** Asks the app to show a guide's points on its native map tab. Returns false in a browser. */
 export function openNativeMap(guideId: string, points: MapPoint[] = [], win: BridgeWindow = window): boolean {
   const handler = win.webkit?.messageHandlers?.thesarvo

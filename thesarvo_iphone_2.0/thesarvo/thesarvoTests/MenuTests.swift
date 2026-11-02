@@ -27,3 +27,19 @@ final class MenuTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: "recentGuides")
     }
 }
+
+final class ShareTests: XCTestCase {
+    func testDirectionsOfferAppleGoogleAndWaze() {
+        let t = DirectionsTarget.all(latitude: -42.8821, longitude: 147.3272, title: "Car park & track")
+        XCTAssertEqual(t.map(\.name), ["Apple Maps", "Google Maps", "Waze"])
+        XCTAssertTrue(t[1].url.absoluteString.contains("destination=-42.882100,147.327200"))
+        XCTAssertTrue(t[0].url.absoluteString.contains("q=Car%20park%20%26%20track"))
+    }
+
+    func testSharedFileNameStaysInsideTheTemporaryFolder() throws {
+        let f = try XCTUnwrap(SharedFile.make(name: "../../Eldon: south.gpx", text: "<gpx/>"))
+        XCTAssertFalse(f.url.lastPathComponent.contains("/"))
+        XCTAssertTrue(f.url.path.hasPrefix(FileManager.default.temporaryDirectory.path))
+        XCTAssertEqual(try String(contentsOf: f.url), "<gpx/>")
+    }
+}

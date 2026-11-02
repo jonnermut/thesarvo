@@ -1,5 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
-import { inApp, openNativeMap } from '#/app/bridge'
+import { inApp, openNativeMap, shareFileNative } from '#/app/bridge'
 import { usePresence } from '#/components/overlay'
 import type { Gps } from '#/guide/model/types'
 import { gpsToGpx, gpsToKml } from './kml'
@@ -10,6 +10,7 @@ const mapsUrl = (lat: string, lon: string) =>
   `https://www.google.com/maps?q=${lat},${lon}`
 
 function download(name: string, ext: string, type: string, text: string) {
+  if (shareFileNative(`${name || 'guide'}.${ext}`, type, text)) return
   const url = URL.createObjectURL(new Blob([text], { type }))
   const a = document.createElement('a')
   a.href = url
@@ -72,7 +73,6 @@ export function GpsBlock({ gps, guideName = '', guideId }: { gps: Gps; guideName
         )}
         <button
           type="button"
-          hidden={app}
           onClick={() => downloadKml(guideName, gps)}
           title="Download the points for Google Earth"
           className="inline-flex items-center gap-1 text-[13px] text-muted hover:text-link"
@@ -82,7 +82,6 @@ export function GpsBlock({ gps, guideName = '', guideId }: { gps: Gps; guideName
         </button>
         <button
           type="button"
-          hidden={app}
           onClick={() => downloadGpx(guideName, gps)}
           title="Download the points for GPS units and apps such as Gaia"
           className="inline-flex items-center gap-1 text-[13px] text-muted hover:text-link"

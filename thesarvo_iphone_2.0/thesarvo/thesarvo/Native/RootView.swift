@@ -24,6 +24,7 @@ struct RootView: View {
         }
         .tint(brandTint)
         .fullScreenCover(isPresented: Binding(get: { !app.firstRunDone && app.manifest != nil }, set: { _ in })) { FirstRunView().tint(brandTint) }
+        .sheet(item: $app.sharedFile) { ActivityView(url: $0.url).ignoresSafeArea() }
         .sheet(item: $app.external) { SafariView(url: $0).ignoresSafeArea() }
         .onChange(of: scenePhase) { phase in
             if phase == .active { app.sceneActive() }
@@ -131,4 +132,11 @@ struct EmptyStore: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
     }
+}
+
+/// The system share sheet for one file (AirDrop, Files, Gaia GPS, Organic Maps and other apps that open it).
+struct ActivityView: UIViewControllerRepresentable {
+    let url: URL
+    func makeUIViewController(context: Context) -> UIActivityViewController { UIActivityViewController(activityItems: [url], applicationActivities: nil) }
+    func updateUIViewController(_ controller: UIActivityViewController, context: Context) {}
 }
