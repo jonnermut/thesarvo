@@ -1,0 +1,23 @@
+thesarvo-3/src/guide/edit/TopoEditor.tsx
+  s_87ca1d31a6da0d::t_fdc0c830a187fc 7
+  s_87ca1d31a6da0d::t_55e9896ec37cd8 36-37,374
+  s_87ca1d31a6da0d::t_2f5c39e382c767 373,376
+thesarvo-3/src/guide/edit/topoOps.test.ts
+  s_87ca1d31a6da0d::t_fdc0c830a187fc 51-55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d9c938840e3c17ab8d235dc6062d115357e1a878",
+  "prompts": {},
+  "sessions": {
+    "s_87ca1d31a6da0d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c66fa5b6-0ee4-49cd-80f7-8061efe9f8a2",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
