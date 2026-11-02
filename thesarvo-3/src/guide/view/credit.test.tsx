@@ -1,8 +1,8 @@
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import type { Climb, Header } from '#/guide/model/types'
+import type { Climb, Guide, Header } from '#/guide/model/types'
 import { ClimbBlock } from './ClimbBlock'
-import { credited, thecragContent, TopoCredit, withoutMark } from './credit'
+import { credited, guideHasCragMarks, thecragContent, TopoCredit, withoutMark } from './credit'
 import { HeaderBlock } from './HeaderBlock'
 
 const climb: Climb = { type: 'climb', id: '7', name: 'Moss Monster', number: '1.', grade: '18', extra: '', length: '20m', stars: '', fa: '', text: 'Climb the arete.' }
@@ -52,4 +52,14 @@ it('credits only the header sections that came from theCrag', () => {
   const sections = [...container.querySelectorAll('section')]
   expect(sections.find((s) => s.textContent?.includes('Shady'))?.querySelector('a[href*="thecrag"]')).not.toBeNull()
   expect(sections.find((s) => s.textContent?.includes('Track'))?.querySelector('a[href*="thecrag"]')).toBeNull()
+})
+
+describe('guideHasCragMarks', () => {
+  const guide = (nodes: Guide['nodes']): Guide => ({ id: '1', guideStars: '', nodes })
+  it('is true only when a node carries a theCrag mark', () => {
+    expect(guideHasCragMarks(guide([climb]))).toBe(false)
+    expect(guideHasCragMarks(guide([{ ...climb, other: { thecrag: '5', thecragContent: 'text' } }]))).toBe(true)
+    expect(guideHasCragMarks(guide([{ ...climb, other: { thecrag: '5' } }]))).toBe(false)
+    expect(guideHasCragMarks(null)).toBe(false)
+  })
 })

@@ -6,7 +6,8 @@ import { PageMenu } from './PageMenu'
 import { animateLayout, useEscape, useScrollLock } from './overlay'
 import { SearchBox } from './SearchBox'
 import { SideNav } from './SideNav'
-import { THECRAG_LICENCE_URL } from '#/guide/view/credit'
+import type { Guide } from '#/guide/model/types'
+import { THECRAG_LICENCE_URL, guideHasCragMarks } from '#/guide/view/credit'
 
 const STORAGE_KEY = 'thesarvo.sidebar'
 
@@ -25,6 +26,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   // Each page's loader brings a tree trimmed to its surroundings; the sidebar fills in the rest.
   const tree = useMatches({
     select: (matches) => matches.map((m) => m.loaderData as { tree?: IndexNode } | undefined).find((d) => d?.tree)?.tree,
+  })
+  const hasCrag = useMatches({
+    select: (matches) => matches.some((m) => guideHasCragMarks((m.loaderData as { guide?: Guide | null } | undefined)?.guide)),
   })
   // Desktop: sidebar is open unless collapsed (remembered). Mobile: a drawer, closed by default.
   const [collapsed, setCollapsed] = useState(false)
@@ -114,11 +118,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <a href="https://creativecommons.org/licenses/by-sa/2.5/au/" className="underline hover:text-navy">Creative Commons Attribution-Share Alike 2.5 Australia License</a>.{' '}
               <Link to="/g/$" params={{ _splat: 'more/about-thesarvo-com' }} className="whitespace-nowrap underline hover:text-navy">More details</Link>.
             </p>
-            <p>
-              Material marked theCrag is © its{' '}
-              <a href="https://www.thecrag.com" className="underline hover:text-navy">theCrag</a> contributors, licensed under a{' '}
-              <a href={THECRAG_LICENCE_URL} className="underline hover:text-navy">Creative Commons Attribution-NonCommercial-Share Alike 3.0 Australia License</a>.
-            </p>
+            {hasCrag && (
+              <p>
+                Material marked theCrag is © its{' '}
+                <a href="https://www.thecrag.com" className="underline hover:text-navy">theCrag</a> contributors, licensed under a{' '}
+                <a href={THECRAG_LICENCE_URL} className="underline hover:text-navy">Creative Commons Attribution-NonCommercial-Share Alike 3.0 Australia License</a>.
+              </p>
+            )}
             <p>Climb safely: guides are a starting point, not a guarantee.</p>
           </div>
           <p className="shrink-0 whitespace-nowrap">Tasmania, Australia</p>

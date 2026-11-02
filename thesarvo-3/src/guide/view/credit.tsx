@@ -1,4 +1,4 @@
-import type { Other } from '#/guide/model/types'
+import type { Guide, Other } from '#/guide/model/types'
 
 /**
  * Credit for material taken from theCrag (https://www.thecrag.com), which is CC BY-NC-SA while the rest of the site is CC BY-SA.
@@ -15,6 +15,9 @@ export const thecragContent = (other?: Other): string[] =>
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean)
+
+/** Whether anything on the page came from theCrag, for the footer's licence line. */
+export const guideHasCragMarks = (guide?: Guide | null) => Boolean(guide?.nodes.some((n) => n.type !== 'unknown' && credited(n.other, thecragContent(n.other)[0] ?? '')))
 
 /** The node without the mark for `key` (or all marks), for an editor who has replaced the material with their own. */
 export function withoutMark(other: Other | undefined, key?: string): Other {
