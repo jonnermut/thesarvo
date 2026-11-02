@@ -36,6 +36,7 @@ The docs live in the **private** repo `thesarvo-private`, checked out as a peer 
 - **Content changes publish themselves.** Every push to `main` of `../../thesarvo-content` runs the Publish Action (about 15 s to live, with the latest `publisher` package), so editing files there directly publishes them like a save. The Action uses minutes from a 2,000 a month allowance; do not push content in bursts. See plan-backend B3.
 - **A push to `master` deploys the app.** The `publisher` workflow builds the package and releases it, which starts a full publish of the content repo (live in about 20 s). Work on a branch and merge to `master` only when it should go live; branch pushes deploy nothing. Check `typecheck`, `lint`, `test` and the build first.
 - **The content index is locked** (`sync.json` `indexLocked`): `sync-content` reports Confluence index changes and never rewrites `index.json`; edit it by hand. Page access of local pages (ids from 9,000,000,000) is kept by `sync-access`.
+- **Never deploy the site from a stale content checkout.** Every save through the site is committed straight to GitHub, so `../../thesarvo-content` falls behind within hours (it was once 1150 commits behind). `build-site` and `deploy-site.sh` use whatever is on disk: deploying an old checkout puts old pages live and wipes recent edits. Before any `build-site` that will be deployed, `git -C ../../thesarvo-content pull --ff-only` and check `git status`; `deploy-site.sh` refuses when the checkout is behind `origin/main` or has local edits. Content normally publishes itself through the Action, so only deploy the site by hand for an app change, and say so first.
 - **Never push** unless asked. Commit on the current branch.
 - Keep `PublicRead` and website hosting on the bucket until the owner says the beta tester has moved to the
   https address.
@@ -70,7 +71,7 @@ CI (`.github/workflows/thesarvo-3.yml`) runs typecheck, lint, tests, build and c
 
 ## After a change to the site
 
-- Rebuild and redeploy the static site: `npm run build-site -- --dir ../../thesarvo-content`, then
+- Pull the content repo first (`git -C ../../thesarvo-content pull --ff-only`), then rebuild and redeploy the static site: `npm run build-site -- --dir ../../thesarvo-content`, then
   `../../thesarvo-private/scripts/deploy-site.sh`, then invalidate CloudFront (`E1UB3F13YZEV4`). Redeploy the Lambda
   (`../../thesarvo-private/scripts/deploy-lambda.sh`) when server code changes; a push to `master` does not do it, so new API actions answer "Unknown action" until you do.
 - Check it in the browser at https://d2duffmg4ei2rq.cloudfront.net/g, at desktop and phone widths. The dev server
