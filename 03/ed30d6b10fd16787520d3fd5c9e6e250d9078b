@@ -1,0 +1,22 @@
+docs/plan-thecrag-sync.md
+  s_e20d0a1ebc47aa::t_50f3521693f1b6 16-25
+  s_e20d0a1ebc47aa::t_93d54e3d360668 34
+docs/todo.md
+  s_e20d0a1ebc47aa::t_c9625e3a009684 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "03ed30d6b10fd16787520d3fd5c9e6e250d9078b",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
