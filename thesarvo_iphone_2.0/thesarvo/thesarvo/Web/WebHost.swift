@@ -15,6 +15,7 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
     var onOpenContents: (([ContentsEntry]) -> Void)?
     var onBootOK: (() -> Void)?
     var onNavigated: ((String) -> Void)?
+    var onShareFile: ((String, String) -> Void)?
     var presentExternal: ((URL) -> Void)?
     var onAPI: ((BridgeRequest) async -> (status: Int, body: String))?
     private let controller: WKUserContentController
@@ -140,6 +141,7 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
                     let answer = await onAPI(r)
                     _ = try? await self.webView.evaluateJavaScript(BridgeAPI.replyScript(id: r.id, status: answer.status, body: answer.body))
                 }
+            case "shareFile": if let n = body["name"] as? String, let t = body["text"] as? String { self.onShareFile?(n, t) }
             case "openExternal": if let s = body["url"] as? String, let u = URL(string: s) { self.presentExternal?(u) }
             default: break
             }

@@ -151,6 +151,11 @@ struct CragMap: UIViewRepresentable {
             v?.markerTintColor = UIColor(red: 0.106, green: 0.078, blue: 0.392, alpha: 1)
             v?.glyphImage = UIImage(systemName: "mountain.2.fill")
             v?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+            let go = UIButton(type: .system)
+            go.setImage(UIImage(systemName: "car.fill"), for: .normal)
+            go.accessibilityLabel = "Directions"
+            go.frame = CGRect(x: 0, y: 0, width: 36, height: 36)
+            v?.leftCalloutAccessoryView = go
             return v
         }
 
@@ -166,7 +171,24 @@ struct CragMap: UIViewRepresentable {
         }
 
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-            if let a = view.annotation as? CragAnnotation { parent.openGuide(a.point.guideID) }
+            guard let a = view.annotation as? CragAnnotation else { return }
+            if control === view.leftCalloutAccessoryView { chooseDirections(for: a.point); return }
+            parent.openGuide(a.point.guideID)
+        }
+
+        /// Asks which app to navigate with, then opens it at the point.
+        private func chooseDirections(for p: CragPoint) {
+            let sheet = UIAlertController(title: "Directions to \(p.title)", message: nil, preferredStyle: .actionSheet)
+            for t in DirectionsTarget.all(latitude: p.latitude, longitude: p.longitude, title: p.title) {
+                sheet.addAction(UIAlertAction(title: t.name, style: .default) { _ in UIApplication.shared.open(t.url) })
+            }
+            sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            let top = UIApplication.shared.connectedScenes.compactMap { ($0 as? UIWindowScene)?.keyWindow }.first?.rootViewController
+            var presenter = top
+            while let next = presenter?.presentedViewController { presenter = next }
+            sheet.popoverPresentationController?.sourceView = presenter?.view
+            sheet.popoverPresentationController?.sourceRect = CGRect(x: presenter?.view.bounds.midX ?? 0, y: presenter?.view.bounds.midY ?? 0, width: 1, height: 1)
+            presenter?.present(sheet, animated: true)
         }
     }
 }

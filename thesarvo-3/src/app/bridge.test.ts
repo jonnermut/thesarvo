@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { inApp, installBridge, openNativeMap } from './bridge'
+import { inApp, installBridge, openNativeMap, shareFileNative } from './bridge'
 
 type W = NonNullable<Parameters<typeof installBridge>[0]>
 type Reply = (id: number, status: number, body: string) => void
@@ -64,5 +64,13 @@ describe('app bridge', () => {
     const w = { location: { href: 'https://x/' } } as unknown as W
     expect(inApp(w)).toBe(false)
     expect(openNativeMap('g1', [], w)).toBe(false)
+  })
+
+  it('hands a generated file to the share sheet, and does nothing in a browser', () => {
+    const sent: unknown[] = []
+    const { w } = fakeWindow((m) => sent.push(m))
+    expect(shareFileNative('Eldon.gpx', 'application/gpx+xml', '<gpx/>', w)).toBe(true)
+    expect(shareFileNative('x.gpx', 'application/gpx+xml', '', { location: { href: 'https://x/' } } as unknown as W)).toBe(false)
+    return Promise.resolve().then(() => expect(sent).toEqual([{ type: 'shareFile', name: 'Eldon.gpx', mime: 'application/gpx+xml', text: '<gpx/>' }]))
   })
 })

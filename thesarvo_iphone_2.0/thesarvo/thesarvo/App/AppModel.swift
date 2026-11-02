@@ -40,6 +40,7 @@ final class AppModel: ObservableObject {
     @Published var menuFolder: String?
     @Published var showMenu = false
     @Published var contents: ContentsSheet?
+    @Published var sharedFile: SharedFile?
     /// Guides opened lately, newest first (ids), kept on this device.
     @Published var recents: [String] = UserDefaults.standard.stringArray(forKey: "recentGuides") ?? []
     @Published var lastCheck: Date?
@@ -97,6 +98,7 @@ final class AppModel: ObservableObject {
         lastCheck = store.loadState().lastCheck
         web.onOpenContents = { [weak self] e in self?.contents = ContentsSheet(entries: e) }
         web.onOpenMap = { [weak self] g, pts in self?.openMap(guide: g, points: pts) }
+        web.onShareFile = { [weak self] n, t in self?.sharedFile = SharedFile.make(name: n, text: t) }
         web.presentExternal = { [weak self] u in self?.external = u }
         web.onNavigated = { [weak self] p in self?.navigated(to: p) }
         rebuildIndex()
