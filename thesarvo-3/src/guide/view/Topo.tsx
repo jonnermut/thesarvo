@@ -6,6 +6,7 @@ import { LABEL_SIZE, labelSpots } from './labelSpot'
 import { DASH, MARKER_NAVY, RECT_STYLES, ROUTE_COLOUR } from './topoStyles'
 import { splitLines } from './text'
 import { isSport } from './routeStats'
+import { markerPoints } from './markers'
 
 const SPORT_RED = '#c8102e'
 
@@ -45,7 +46,8 @@ export function Route({
   const last = path.points.at(-1)
   const at = labelAt ?? path.points[0]
   const prev = path.points.findLast((p) => last && (p.x !== last.x || p.y !== last.y))
-  const endMarker = last?.kind === 'belay' || last?.kind.startsWith('lower')
+  const markers = markerPoints(path.points)
+  const endMarker = last !== undefined && markers.includes(last)
   const dimmed = active !== null && active !== path.linkedTo
   const label = numberLabel(climb)
   const d = path.d || pathData(path.points)
@@ -79,7 +81,9 @@ export function Route({
           transform={`translate(${last.x} ${last.y}) rotate(${((Math.atan2(last.y - prev.y, last.x - prev.x) * 180) / Math.PI).toFixed(2)}) scale(${scale})`}
         />
       )}
-      {last && endMarker && <EndMarker kind={last.kind} x={last.x} y={last.y} scale={scale} />}
+      {markers.map((m, i) => (
+        <EndMarker key={i} kind={m.kind} x={m.x} y={m.y} scale={scale} />
+      ))}
       {at && label && (
         <>
           <circle cx={at.x} cy={at.y} r={(LABEL_SIZE / 2) * scale} fill={climb && isSport(climb.extra) ? SPORT_RED : '#000'} />
@@ -92,7 +96,7 @@ export function Route({
   )
 }
 
-/** Belay dot, or the legacy "lower off" pin (a ring on a stem with a down arrow), tilted for lower-left/right. */
+/** Belay dot (at the end of a route or a mid-route belay), or the legacy "lower off" pin (a ring on a stem with a down arrow), tilted for lower-left/right. */
 const LOWER_PIN = 'M4,20h12l-16,20l-16,-20h12v-12.55c-8.239,-2.7,-14,-9.76,-14,-18.179c0,-9.94,8.05,-17.99,18,-17.99c9.939,0,18,8.05,18,18.57c0,8.88,-6.419,16.25,-14.859,17.73v12.55z'
 const LOWER_TILT: Record<string, number> = { lower: 0, 'lower-left': 30, 'lower-right': -30 }
 
