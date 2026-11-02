@@ -161,7 +161,7 @@ struct ContentsList: View {
             }
             .listStyle(.plain)
             .overlay { if shown.isEmpty { Text("Nothing matches").foregroundStyle(.secondary) } }
-            .navigationTitle("On this page")
+            .navigationTitle("Contents")
             .navigationBarTitleDisplayMode(.inline)
             .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "Filter: name, grade, **")
             .toolbar {

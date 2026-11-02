@@ -11,7 +11,7 @@ struct MapScreen: View {
 
     var body: some View {
         NavigationStack {
-            CragMap(points: shown, focus: app.mapFocus, style: mapStyle) { guide in app.openGuide(id: guide) }
+            CragMap(points: shown, focus: focus, style: mapStyle, areas: { app.areaNames(for: $0) }) { guide in app.openGuide(id: guide) }
                 .navigationTitle(focusTitle)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -23,7 +23,7 @@ struct MapScreen: View {
                         }
                         .pickerStyle(.menu)
                     }
-                    if app.mapFocus != nil {
+                    if focus != nil {
                         ToolbarItem(placement: .navigationBarTrailing) { Button("All crags") { app.mapFocus = nil } }
                     }
                 }
@@ -36,8 +36,14 @@ struct MapScreen: View {
         return points.filter { $0.guideID != g } + app.pagePoints
     }
 
+    /// The guide being looked at, once it is known to have points (a page without any shows every crag).
+    private var focus: String? {
+        guard let f = app.mapFocus, app.byID[f]?.isGuide == true else { return nil }
+        return points.isEmpty || shown.contains { $0.guideID == f } ? f : nil
+    }
+
     private var focusTitle: String {
-        if let f = app.mapFocus, let n = app.byID[f] { return n.title }
+        if let f = focus, let n = app.byID[f] { return n.title }
         return "Map"
     }
 
@@ -68,6 +74,8 @@ struct CragMap: UIViewRepresentable {
     let points: [CragPoint]
     let focus: String?
     let style: Int
+    /// A guide's area names, widest first (region, then sub-area), for naming clusters.
+    let areas: (String) -> [String]
     let openGuide: (String) -> Void
 
     func makeCoordinator() -> Coordinator { Coordinator(self) }
@@ -159,6 +167,14 @@ struct CragMap: UIViewRepresentable {
             return v
         }
 
+        /// A cluster is named for the area its crags share (not for one of its crags), with how many there are.
+        func mapView(_ mapView: MKMapView, clusterAnnotationForMemberAnnotations members: [MKAnnotation]) -> MKClusterAnnotation {
+            let cluster = MKClusterAnnotation(memberAnnotations: members)
+            cluster.title = ClusterName.label(for: members.compactMap { ($0 as? CragAnnotation).map { parent.areas($0.point.guideID) } })
+            cluster.subtitle = "\(members.count) points"
+            return cluster
+        }
+
         /// Tapping a cluster zooms to fit its crags instead of just selecting it.
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
             guard let cluster = view.annotation as? MKClusterAnnotation else { return }
@@ -190,5 +206,17 @@ struct CragMap: UIViewRepresentable {
             sheet.popoverPresentationController?.sourceRect = CGRect(x: presenter?.view.bounds.midX ?? 0, y: presenter?.view.bounds.midY ?? 0, width: 1, height: 1)
             presenter?.present(sheet, animated: true)
         }
+    }
+}
+
+enum ClusterName {
+    /// The deepest area all the chains share, else the most common widest area; nil when none are known.
+    static func label(for chains: [[String]]) -> String? {
+        let chains = chains.filter { !$0.isEmpty }
+        guard var common = chains.first else { return nil }
+        for c in chains.dropFirst() { common = Array(zip(common, c).prefix { $0 == $1 }.map(\.0)) }
+        if let last = common.last { return last }
+        let counts = Dictionary(grouping: chains.map { $0[0] }, by: { $0 }).mapValues(\.count)
+        return counts.max { ($0.value, $1.key) < ($1.value, $0.key) }?.key
     }
 }

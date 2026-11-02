@@ -33,8 +33,21 @@ final class AppModel: ObservableObject {
     @Published var roots: [TreeNode] = []
     @Published var byID: [String: TreeNode] = [:]
     @Published var progress: SyncProgress?
+    /// While something is downloading: the percentage (or an ellipsis before the size is known), for the Downloads tab's badge.
+    var downloading: String? {
+        guard let p = progress, p.phase != "Up to date" else { return nil }
+        return p.totalBytes > 0 ? "\(min(99, Int(p.doneBytes * 100 / p.totalBytes)))%" : "…"
+    }
     @Published var syncError: String?
-    @Published var tab: AppTab = .guides
+    @Published var tab: AppTab = .guides {
+        didSet {
+            guard tab == .map, oldValue != .map else { return }
+            // Straight to the map from the tab bar: show the page's own points (the map drops the focus when the guide has none).
+            if mapRequested { mapRequested = false } else { pagePoints = []; mapFocus = selection; web.requestMapPoints() }
+        }
+    }
+    /// `openMap` sets the focus itself, so the tab change that follows must not replace it.
+    private var mapRequested = false
     @Published var selection: String? { didSet { if selection != oldValue { menuFolder = folder(for: selection) } } }
     /// The menu level shown (a node with children); nil is the top. It follows the page you are on, and you drill from there.
     @Published var menuFolder: String?
@@ -323,6 +336,14 @@ final class AppModel: ObservableObject {
         web.open(path: "/g/search?q=\(enc)")
     }
 
+    /// The names of a node's ancestors below the top (widest first), then its own: "South East", "Eldon".
+    func areaNames(for id: String) -> [String] {
+        var out: [String] = []
+        var n = byID[id]
+        while let node = n, !node.path.isEmpty { out.insert(node.title, at: 0); n = node.parent.flatMap { byID[$0] } }
+        return out
+    }
+
     func openGuide(id: String) {
         if let n = byID[id] { open(node: n) }
     }
@@ -330,6 +351,7 @@ final class AppModel: ObservableObject {
     func openMap(guide: String?, points: [CragPoint] = []) {
         pagePoints = points
         mapFocus = guide
+        mapRequested = tab != .map
         tab = .map
     }
 

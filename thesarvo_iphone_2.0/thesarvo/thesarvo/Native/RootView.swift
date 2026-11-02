@@ -16,7 +16,8 @@ struct RootView: View {
                 .tabItem { Label("Map", systemImage: "map") }
                 .tag(AppTab.map)
             DownloadsView()
-                .tabItem { Label("Downloads", systemImage: "arrow.down.circle") }
+                .tabItem { Label("Downloads", systemImage: app.downloading == nil ? "arrow.down.circle" : "arrow.down.circle.fill") }
+                .badge(app.downloading.map { Text($0) })
                 .tag(AppTab.downloads)
             SettingsView(auth: app.auth)
                 .tabItem { Label("Settings", systemImage: "gearshape") }

@@ -19,6 +19,34 @@ final class MenuTests: XCTestCase {
         XCTAssertNil(app.folder(for: nil))
     }
 
+    func testMapTabFocusesThePageButOpenMapKeepsItsOwnFocus() throws {
+        let app = try model()
+        app.selection = "b"
+        app.tab = .map
+        XCTAssertEqual(app.mapFocus, "b", "the tab bar shows the page's guide")
+        app.tab = .guides
+        app.openMap(guide: "c")
+        XCTAssertEqual(app.mapFocus, "c", "Open in Map keeps the guide it asked for")
+    }
+
+    func testClusterNamesTheSharedArea() throws {
+        let app = try model()
+        XCTAssertEqual(app.areaNames(for: "b"), ["East", "Coles"])
+        XCTAssertEqual(ClusterName.label(for: [["East", "Coles"], ["East", "Eldon"]]), "East")
+        XCTAssertEqual(ClusterName.label(for: [["East", "Coles"], ["East", "Coles"]]), "Coles")
+        XCTAssertEqual(ClusterName.label(for: [["East", "A"], ["East", "B"], ["West", "C"]]), "East")
+        XCTAssertNil(ClusterName.label(for: [[]]))
+    }
+
+    func testDownloadsBadgeShowsPercentWhileWorking() throws {
+        let app = try model()
+        XCTAssertNil(app.downloading)
+        app.progress = SyncProgress(phase: "Photos", doneBytes: 25, totalBytes: 100)
+        XCTAssertEqual(app.downloading, "25%")
+        app.progress = SyncProgress(phase: "Up to date")
+        XCTAssertNil(app.downloading)
+    }
+
     func testRecentsKeepGuidesOnlyNewestFirst() throws {
         let app = try model()
         app.recents = []
