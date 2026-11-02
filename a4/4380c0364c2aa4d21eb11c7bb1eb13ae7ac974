@@ -1,0 +1,49 @@
+thesarvo-3/src/guide/edit/TopoEditor.tsx
+  s_e20d0a1ebc47aa::t_eaa1fcdb71efd1 425
+  s_e20d0a1ebc47aa::t_088fcf8227642a 9
+thesarvo-3/src/guide/view/TopoFigure.tsx
+  s_e20d0a1ebc47aa::t_e8e8cb5c8f19fc 8,173
+thesarvo-3/src/components/AppShell.tsx
+  s_e20d0a1ebc47aa::t_ab011639be8229 117-121
+  s_e20d0a1ebc47aa::t_eaa1fcdb71efd1 9
+thesarvo-3/src/guide/edit/NodeForms.tsx
+  s_e20d0a1ebc47aa::t_eaa1fcdb71efd1 6,13-16,18-34,48,70,108
+  s_e20d0a1ebc47aa::t_088fcf8227642a 5,17
+thesarvo-3/src/guide/view/credit.tsx
+  s_e20d0a1ebc47aa::t_425483fce9597e 35-37,39-40,45-46
+  s_e20d0a1ebc47aa::t_3d048234deabb7 1-20,22-34,38,41
+  s_e20d0a1ebc47aa::t_fd960b2b9a7be3 21
+  s_e20d0a1ebc47aa::t_e8e8cb5c8f19fc 42-44,47-57
+thesarvo-3/src/guide/view/credit.test.tsx
+  s_e20d0a1ebc47aa::t_46ca8cd9b45d0b 1-2
+  s_e20d0a1ebc47aa::t_ed4f212e765f8a 3-55
+thesarvo-3/src/guide/edit/NodeForms.test.tsx
+  s_e20d0a1ebc47aa::t_e3da88b1a55b46 4,24-34
+thesarvo-3/src/guide/view/ClimbBlock.tsx
+  s_e20d0a1ebc47aa::t_fd960b2b9a7be3 67,72-73,75-79,85
+  s_e20d0a1ebc47aa::t_425483fce9597e 5,74,80-84
+  s_e20d0a1ebc47aa::t_e7ec016d7e5239 86-88
+thesarvo-3/src/guide/view/HeaderBlock.tsx
+  s_e20d0a1ebc47aa::t_e8e8cb5c8f19fc 6,46
+thesarvo-3/src/guide/view/TextBlock.tsx
+  s_e20d0a1ebc47aa::t_e8e8cb5c8f19fc 3,24
+  s_e20d0a1ebc47aa::t_fd960b2b9a7be3 21-23,25-26
+thesarvo-3/AGENTS.md
+  s_e20d0a1ebc47aa::t_1ca1e86c90efdb 53
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a44380c0364c2aa4d21eb11c7bb1eb13ae7ac974",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
