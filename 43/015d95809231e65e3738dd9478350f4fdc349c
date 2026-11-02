@@ -1,0 +1,31 @@
+docs/plan-thecrag-sync.md
+  s_e20d0a1ebc47aa::t_b7b382da6c49a2 100,208-247,250-252,268-271
+docs/todo.md
+  s_e20d0a1ebc47aa::t_a05af1c55688ba 12-13
+scripts/thecrag/cli.ts
+  s_e20d0a1ebc47aa::t_7444b20fe95acd 12-13,16-17,36,55,58,135,140,147-157
+scripts/thecrag/convert.ts
+  s_e20d0a1ebc47aa::t_d2c5d210368d9d 27-28,32
+scripts/thecrag/merge.ts
+  s_e20d0a1ebc47aa::t_2b35a7bba696bc 23-24,51,58,86
+scripts/thecrag/split.ts
+  s_e20d0a1ebc47aa::t_3e29a0e887b551 1-17
+scripts/thecrag/thecrag.test.ts
+  s_e20d0a1ebc47aa::t_7e811730c1cf5d 7,13,265-281
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "43015d95809231e65e3738dd9478350f4fdc349c",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
