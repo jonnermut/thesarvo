@@ -1,0 +1,21 @@
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/MapScreen.swift
+  s_ee2ae06c4b06ab::t_a02e74d574dc18 151,153,156-157
+  s_ee2ae06c4b06ab::t_182c5aed4be512 141-142,144,170
+  s_ee2ae06c4b06ab::t_75ecd46e3b3411 150,155
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6a40e60621d4d002255269d8788e77187d8e10de",
+  "prompts": {},
+  "sessions": {
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
