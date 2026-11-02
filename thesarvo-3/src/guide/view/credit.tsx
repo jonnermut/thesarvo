@@ -23,11 +23,11 @@ export function withoutMark(other: Other | undefined, key?: string): Other {
   return left.length ? { ...rest, thecragContent: left.join(',') } : rest
 }
 
-/** "theCrag ↗" linking to the node on theCrag, titled with what it is and the licence. */
+/** "theCrag" linking to the node on theCrag, titled with what it is and the licence. */
 export function CragLink({ node, what }: { node: string; what: string }) {
   return (
     <a href={thecragUrl(node)} target="_blank" rel="noreferrer" title={`${what} by theCrag contributors, CC BY-NC-SA 3.0`} className="underline hover:text-navy">
-      theCrag ↗
+      theCrag
     </a>
   )
 }
@@ -43,7 +43,7 @@ export function Credit({ other, part, what }: { other?: Other; part: string; wha
 /** The credit after running text (a header section, a text block): small and grey, as the first ascent line. */
 export function InlineCredit(props: { other?: Other; part: string; what: string }) {
   if (!credited(props.other, props.part)) return null
-  return <span className="ml-1 text-[11px] italic text-[#808080]">· <Credit {...props} /></span>
+  return <span className="ml-1 text-[11px] italic text-[#808080]">· From: <Credit {...props} /></span>
 }
 
 /** Under a topo drawn by theCrag contributors, linked to the area it is of. */

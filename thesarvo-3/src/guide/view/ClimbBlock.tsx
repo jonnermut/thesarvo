@@ -79,7 +79,7 @@ function Credits({ climb }: { climb: Climb }) {
       {climb.fa && credit && ' · '}
       {credit && (
         <>
-          Description: <Credit other={climb.other} part="text" what="Description" />
+          From: <Credit other={climb.other} part="text" what="Description" />
         </>
       )}
     </p>

@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A10000000000000000000040 /* Seed in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000004 /* Seed */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		A10000000000000000000020 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -36,10 +40,6 @@
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
-
-/* Begin PBXBuildFile section */
-		A10000000000000000000040 /* Seed in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000004 /* Seed */; };
-/* End PBXBuildFile section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A10000000000000000000011 /* Frameworks */ = {
@@ -158,6 +158,7 @@
 				Base,
 			);
 			mainGroup = A10000000000000000000007;
+			preferredProjectObjectVersion = 77;
 			productRefGroup = A10000000000000000000009 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -269,7 +270,10 @@
 				INFOPLIST_FILE = Config/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = thesarvo;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesarvo.guide;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -289,7 +293,10 @@
 				INFOPLIST_FILE = Config/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = thesarvo;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thesarvo.guide;
 				PRODUCT_NAME = "$(TARGET_NAME)";

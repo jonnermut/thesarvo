@@ -29,12 +29,12 @@ describe('climb credit', () => {
     const link = container.querySelector('a[href="https://www.thecrag.com/node/500"]')
     expect(link).toHaveTextContent('theCrag')
     expect(link).toHaveAttribute('title', expect.stringContaining('CC BY-NC-SA 3.0'))
-    expect(container.textContent).toContain('A. Climber, 2001 · Description: theCrag')
+    expect(container.textContent).toContain('A. Climber, 2001 · From: theCrag')
   })
   it('shows no credit for a climb that was only matched', () => {
     const { container } = render(<ClimbBlock climb={{ ...climb, fa: 'A. Climber', other: { thecrag: '500' } }} />)
     expect(container.querySelector('a[href*="thecrag"]')).toBeNull()
-    expect(container.textContent).not.toContain('Description:')
+    expect(container.textContent).not.toContain('From:')
   })
 })
 
