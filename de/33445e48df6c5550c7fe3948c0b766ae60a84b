@@ -1,0 +1,21 @@
+docs/as-built.md
+  s_87ca1d31a6da0d::t_bbb46b57126174 252
+docs/todo.md
+  s_87ca1d31a6da0d::t_5409338565d0fc 16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "de33445e48df6c5550c7fe3948c0b766ae60a84b",
+  "prompts": {},
+  "sessions": {
+    "s_87ca1d31a6da0d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c66fa5b6-0ee4-49cd-80f7-8061efe9f8a2",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
