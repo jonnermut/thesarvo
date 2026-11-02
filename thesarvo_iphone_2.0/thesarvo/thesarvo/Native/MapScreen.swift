@@ -56,7 +56,17 @@ struct MapScreen: View {
             return (id, d)
         }
         let all = await Task.detached { items.flatMap { KMLPoints.parse($0.1, guideID: $0.0) } }.value
-        points = all
+        // A folder's file repeats the points of everything under it: keep each one under its most specific guide.
+        var best: [String: CragPoint] = [:]
+        var depth: [String: Int] = [:]
+        for p in all {
+            let key = String(format: "%.4f,%.4f", p.latitude, p.longitude)
+            let d = depth[p.guideID] ?? app.areaNames(for: p.guideID).count
+            depth[p.guideID] = d
+            if let old = best[key], (depth[old.guideID] ?? 0) >= d { continue }
+            best[key] = p
+        }
+        points = all.filter { best[String(format: "%.4f,%.4f", $0.latitude, $0.longitude)]?.id == $0.id }
         loadedFor = stamp
     }
 }
@@ -173,10 +183,17 @@ struct CragMap: UIViewRepresentable {
             return v
         }
 
+        /// A point's areas, then the KML folder it sits in when that is a place of its own (a region's file has folders for each crag).
+        private func chain(_ a: CragAnnotation) -> [String] {
+            let areas = parent.areas(a.point.guideID)
+            let folder = a.point.subtitle
+            return folder.isEmpty || folder == areas.last ? areas : areas + [folder]
+        }
+
         /// A cluster is named for the area its crags share (not for one of its crags), with how many there are.
         func mapView(_ mapView: MKMapView, clusterAnnotationForMemberAnnotations members: [MKAnnotation]) -> MKClusterAnnotation {
             let cluster = MKClusterAnnotation(memberAnnotations: members)
-            cluster.title = ClusterName.label(for: members.compactMap { ($0 as? CragAnnotation).map { parent.areas($0.point.guideID) } })
+            cluster.title = ClusterName.label(for: members.compactMap { ($0 as? CragAnnotation).map(chain) })
             return cluster
         }
 
