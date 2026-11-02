@@ -1,0 +1,32 @@
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/RootView.swift
+  s_ee2ae06c4b06ab::t_7db7a57ca50958 101-105
+thesarvo-3/src/app/bridge.ts
+  s_ee2ae06c4b06ab::t_7db7a57ca50958 10,56-68
+  s_ee2ae06c4b06ab::t_79527d850530c4 69-70
+thesarvo-3/src/app/bridge.test.ts
+  s_ee2ae06c4b06ab::t_d7eadd6669f64f 2,76-85
+  s_ee2ae06c4b06ab::t_6e483231e68a28 86
+  s_ee2ae06c4b06ab::t_9e111ab70b2f38 87
+thesarvo-3/src/guide/view/GuideContents.tsx
+  s_ee2ae06c4b06ab::t_7db7a57ca50958 2,117-121,141,143,150
+thesarvo_iphone_2.0/thesarvo/thesarvo/Web/WebHost.swift
+  s_ee2ae06c4b06ab::t_7db7a57ca50958 15,116-118,137
+thesarvo_iphone_2.0/thesarvo/thesarvo/App/AppModel.swift
+  s_ee2ae06c4b06ab::t_7db7a57ca50958 43-44,101
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1f0342cb443eae8a93c41b99104945a2d0d7a95a",
+  "prompts": {},
+  "sessions": {
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
