@@ -1,4 +1,5 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { useState } from 'react'
 import { afterEach, expect, it, vi } from 'vitest'
 import type { ImageTopo } from '#/guide/model/types'
 import { newTopo } from './newNodes'
@@ -38,4 +39,43 @@ it('throws the route away on Clear points', () => {
   fireEvent.click(screen.getByRole('button', { name: 'Clear points' }))
   fireEvent.click(screen.getByRole('button', { name: 'Done' }))
   expect(topo().paths).toEqual([])
+})
+
+it('sets a belay on a selected middle point, and the end marker on the last when none is selected', () => {
+  vi.spyOn(SVGSVGElement.prototype, 'getScreenCTM').mockReturnValue(new DOMMatrix())
+  let latest: ImageTopo = newTopo('t', 'a.jpg', 400, 300)
+  function Harness() {
+    const [topo, setTopo] = useState(latest)
+    return (
+      <TopoEditor
+        guideId="g"
+        topo={topo}
+        climbs={[]}
+        newId={() => 'p1'}
+        onChange={(update) => {
+          latest = update(latest)
+          setTopo(latest)
+        }}
+        kind="problem"
+        onAddClimb={() => {}}
+        onEditClimb={() => {}}
+      />
+    )
+  }
+  const { container } = render(<Harness />)
+  fireEvent.click(screen.getByRole('button', { name: 'Draw route' }))
+  const svg = container.querySelector('svg[viewBox]')!
+  for (const [x, y] of [[10, 200], [50, 100], [90, 20]]) fireEvent.click(svg, { clientX: x, clientY: y })
+  fireEvent.click(screen.getByRole('button', { name: 'Done' }))
+  expect(screen.getByLabelText('End marker')).toBeInTheDocument()
+
+  fireEvent.change(screen.getByLabelText('End marker'), { target: { value: 'lower' } })
+  expect(latest.paths[0].points.map((p) => p.kind)).toEqual(['', '', 'lower'])
+
+  const handles = container.querySelectorAll('circle.cursor-grab')
+  expect(handles).toHaveLength(3)
+  fireEvent.pointerDown(handles[1])
+  fireEvent.pointerUp(handles[1])
+  fireEvent.change(screen.getByLabelText('Marker at selected point'), { target: { value: 'belay' } })
+  expect(latest.paths[0].points.map((p) => p.kind)).toEqual(['', 'belay', 'lower'])
 })
