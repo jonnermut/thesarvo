@@ -2,6 +2,7 @@ import type { Climb } from '#/guide/model/types'
 import { Fragment, useState } from 'react'
 import { Lines, splitLines } from './text'
 import { Stars } from './Stars'
+import { credited, Credit } from './credit'
 
 /** Shared by the editor form so the fields sit where the display puts them: number, name, stars, length, grade, extra. */
 export const ROW = 'flex flex-wrap items-baseline gap-x-4 gap-y-0.5 sm:grid sm:grid-cols-[2rem_13rem_3.5rem_3rem_2.5rem_1fr] sm:gap-x-3'
@@ -63,8 +64,25 @@ export function ClimbBlock({ climb, highlighted, anchor }: { climb: Climb; highl
         )}
       </div>
       {climb.text && <Description text={climb.text} />}
-      {climb.fa && <p className={`mt-0.5 text-[11px] italic text-[#808080] ${INDENT}`}>{climb.fa}</p>}
+      <Credits climb={climb} />
     </article>
+  )
+}
+
+/** The first ascent, and where the description came from when it was taken from theCrag, in one quiet line. */
+function Credits({ climb }: { climb: Climb }) {
+  const credit = credited(climb.other, 'text')
+  if (!climb.fa && !credit) return null
+  return (
+    <p className={`mt-0.5 text-[11px] italic text-[#808080] ${INDENT}`}>
+      {climb.fa}
+      {climb.fa && credit && ' · '}
+      {credit && (
+        <>
+          Description: <Credit other={climb.other} part="text" what="Description" />
+        </>
+      )}
+    </p>
   )
 }
 

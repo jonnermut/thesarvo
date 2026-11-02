@@ -2,12 +2,35 @@ import { lazy, Suspense, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useEscape, useScrollLock } from '#/components/overlay'
 import { latLonToUtm, parseZone, utmToLatLon } from '#/guide/model/utm'
-import type { Climb, Gps, GpsLine, GpsPoint, Header, TextBlock } from '#/guide/model/types'
+import type { Climb, Gps, GpsLine, GpsPoint, Header, Other, TextBlock } from '#/guide/model/types'
+import { thecragContent, withoutMark } from '#/guide/view/credit'
 import { AreaField, Button, CheckField, SelectField, TextField } from './fields'
 
 const MapView = lazy(() => import('#/guide/islands/MapView'))
 
 type Change<T> = (patch: Partial<T>) => void
+
+/**
+ * Says which parts of a node came from theCrag (CC BY-NC-SA, credited on the page), with a way to drop the mark for
+ * a part the editor has since rewritten. Shows nothing for a node with no marks.
+ */
+export function CragMarks({ other, onChange }: { other?: Other; onChange: (other: Other) => void }) {
+  const parts = thecragContent(other)
+  if (!parts.length) return null
+  return (
+    <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
+      From theCrag (CC BY-NC-SA 3.0), credited on the page:
+      {parts.map((part) => (
+        <span key={part} className="inline-flex items-center gap-1">
+          {part}
+          <button type="button" className="underline hover:text-navy" onClick={() => onChange(withoutMark(other, part))}>
+            It is my own now
+          </button>
+        </span>
+      ))}
+    </p>
+  )
+}
 
 export function HeaderForm({ node, onChange }: { node: Header; onChange: Change<Header> }) {
   return (
@@ -22,6 +45,7 @@ export function HeaderForm({ node, onChange }: { node: Header; onChange: Change<
       <AreaField label="Access" value={node.access} onChange={(access) => onChange({ access })} className="sm:col-span-2" />
       <AreaField label="Camping" value={node.camping} onChange={(camping) => onChange({ camping })} rows={3} className="sm:col-span-2" />
       <AreaField label="Crag Steward" value={node.steward ?? ''} onChange={(steward) => onChange({ steward })} rows={2} className="sm:col-span-2" />
+      <CragMarks other={node.other} onChange={(other) => onChange({ other })} />
       <CheckField label="Auto number climbs" checked={node.autonumber === 'true'} onChange={(on) => onChange({ autonumber: String(on) })} />
     </div>
   )
@@ -43,6 +67,7 @@ export function ClimbForm({ node, onChange }: { node: Climb; onChange: Change<Cl
       </div>
       <AreaField label="Description" value={node.text} onChange={(text) => onChange({ text })} />
       <TextField label="First ascent" value={node.fa} onChange={(fa) => onChange({ fa })} />
+      <CragMarks other={node.other} onChange={(other) => onChange({ other })} />
     </div>
   )
 }
@@ -80,6 +105,7 @@ export function TextForm({ node, onChange }: { node: TextBlock; onChange: Change
     <div className="grid gap-3">
       <SelectField label="Style" value={node.cls} options={options} onChange={(cls) => onChange({ cls })} className="max-w-xs" />
       <AreaField label="Text" value={node.text} onChange={(text) => onChange({ text })} rows={5} />
+      <CragMarks other={node.other} onChange={(other) => onChange({ other })} />
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { RockIcon, SunIcon, WalkIcon } from './FactIcons'
 import { RoutesChart } from './RoutesChart'
 import type { RouteStats } from './routeStats'
 import { Lines } from './text'
+import { InlineCredit } from './credit'
 
 const FACTS = [
   [WalkIcon, 'walk'],
@@ -42,6 +43,7 @@ export function HeaderBlock({ header, stats }: { header: Header; stats: RouteSta
             <h2 className="mb-1 h-fit border-b border-line text-xl font-bold text-navy wrap-normal sm:mb-0">{label}</h2>
             <p className="text-[13px] leading-snug break-words">
               <Lines text={header[key] ?? ''} />
+              <InlineCredit other={header.other} part={key} what={label} />
             </p>
           </section>
         ))}

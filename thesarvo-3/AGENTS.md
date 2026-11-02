@@ -50,6 +50,7 @@ The docs live in the **private** repo `thesarvo-private`, checked out as a peer 
 - API routes must never answer 404: CloudFront turns every 404 into the guide home page. Use 400 for bad input.
 - **Private pages:** anything that reads content for the public (build, static source, `getContentSource`) goes through `publicSource` (`src/guide/content/access.ts`); `getFullContent()` is only for code that has checked `canRead` first (`src/auth/pageGuard.ts`). Run `src/guide/content/leak.test.ts` after touching a source or the build. Never put group members or private photos under a public bucket prefix; `private/` is not public.
 - **The forum is members-only:** its threads live in the bucket's `private/forum/` (never public) and are served only by `/g/api/forum` after sign-in; only `forum-recent` (titles and counts) is public. Never put forum text in `g-data/` or the site build, and keep `forum/` in the content repo out of the build. CCT threads carry `group: cct-members`.
+- **theCrag material is marked:** copyright material taken from theCrag (CC BY-NC-SA; the site is CC BY-SA) carries `other.thecragContent` and is credited on the page (`src/guide/view/credit.tsx`). Anything that copies descriptions or topos from theCrag must set the mark, and publisher topos are never copied. See the private plan-thecrag-sync.md.
 - Readers must never download the editor: `npm run check-bundle` guards it.
 
 ## Before every commit

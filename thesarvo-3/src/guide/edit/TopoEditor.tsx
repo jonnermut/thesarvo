@@ -6,7 +6,7 @@ import { Callout, Route } from '#/guide/view/Topo'
 import { labelSpots } from '#/guide/view/labelSpot'
 import { RECT_STYLES } from '#/guide/view/topoStyles'
 import { AreaField, Button, CheckField, CommitNumberField, DeleteButton, NumberField, SelectField, TextField } from './fields'
-import { ClimbDialog, STARS } from './NodeForms'
+import { ClimbDialog, CragMarks, STARS } from './NodeForms'
 import { editedPoint } from './photoEdit'
 import { PhotoEditor } from './PhotoEditor'
 import type { EditedPhoto } from './PhotoEditor'
@@ -422,6 +422,7 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
               <CheckField label="Always on the photo (otherwise left off when the climbs follow straight after)" checked={ops.legendOnPhoto(topo)} onChange={(on) => onChange((t) => ops.setLegendOnPhoto(t, on))} />
               <TextField label="Title" value={topo.legendTitle} onChange={(legendTitle) => onChange((t) => ({ ...t, legendTitle }), 'legend-title')} />
               <TextField label="Footer" value={topo.legendFooter} onChange={(legendFooter) => onChange((t) => ({ ...t, legendFooter }), 'legend-footer')} />
+              <CragMarks other={topo.other} onChange={(other) => onChange((t) => ({ ...t, other }), 'crag-mark')} />
               <div className="grid grid-cols-2 gap-2">
                 <NumberField label="Legend x" value={topo.legendX} onChange={(legendX) => onChange((t) => ({ ...t, legendX }), 'legend-x')} />
                 <NumberField label="Legend y" value={topo.legendY} onChange={(legendY) => onChange((t) => ({ ...t, legendY }), 'legend-y')} />

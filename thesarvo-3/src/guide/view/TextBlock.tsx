@@ -1,5 +1,6 @@
 import type { TextBlock as TextBlockModel } from '#/guide/model/types'
 import { Lines } from './text'
+import { InlineCredit } from './credit'
 
 const BODY = 'text-[13px] leading-snug break-words sm:text-justify'
 
@@ -17,7 +18,12 @@ function Linkified({ text }: { text: string }) {
 }
 
 export function TextBlock({ block }: { block: TextBlockModel }) {
-  const content = <Lines text={block.text} />
+  const content = (
+    <>
+      <Lines text={block.text} />
+      <InlineCredit other={block.other} part="text" what="Text" />
+    </>
+  )
   switch (block.cls) {
     case 'heading1':
       return <h2 className="border-b border-line pt-4 text-[28px] font-bold text-navy">{content}</h2>

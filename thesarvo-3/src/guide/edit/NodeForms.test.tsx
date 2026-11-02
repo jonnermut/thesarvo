@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, expect, it, vi } from 'vitest'
 import type { Climb } from '#/guide/model/types'
-import { ClimbDialog } from './NodeForms'
+import { ClimbDialog, CragMarks } from './NodeForms'
 
 afterEach(cleanup)
 
@@ -20,4 +20,15 @@ it('edits every field of the climb in a popup, stars from a list, and closes on 
   fireEvent.keyDown(window, { key: 'Escape' })
   fireEvent.click(screen.getByRole('button', { name: 'Done' }))
   expect(onClose).toHaveBeenCalledTimes(2)
+})
+
+it('lets an editor drop a theCrag mark once the text is their own', () => {
+  const onChange = vi.fn()
+  render(<CragMarks other={{ thecrag: '5', thecragContent: 'text' }} onChange={onChange} />)
+  fireEvent.click(screen.getByText('It is my own now'))
+  expect(onChange).toHaveBeenCalledWith({ thecrag: '5' })
+})
+
+it('shows no theCrag marks for a node without any', () => {
+  expect(render(<CragMarks other={{ thecrag: '5' }} onChange={() => {}} />).container).toBeEmptyDOMElement()
 })

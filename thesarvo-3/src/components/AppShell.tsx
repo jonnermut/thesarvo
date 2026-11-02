@@ -6,6 +6,7 @@ import { PageMenu } from './PageMenu'
 import { animateLayout, useEscape, useScrollLock } from './overlay'
 import { SearchBox } from './SearchBox'
 import { SideNav } from './SideNav'
+import { THECRAG_LICENCE_URL } from '#/guide/view/credit'
 
 const STORAGE_KEY = 'thesarvo.sidebar'
 
@@ -112,6 +113,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               © the authors of thesarvo.com, licensed under a{' '}
               <a href="https://creativecommons.org/licenses/by-sa/2.5/au/" className="underline hover:text-navy">Creative Commons Attribution-Share Alike 2.5 Australia License</a>.{' '}
               <Link to="/g/$" params={{ _splat: 'more/about-thesarvo-com' }} className="whitespace-nowrap underline hover:text-navy">More details</Link>.
+            </p>
+            <p>
+              Material marked theCrag is © its{' '}
+              <a href="https://www.thecrag.com" className="underline hover:text-navy">theCrag</a> contributors, licensed under a{' '}
+              <a href={THECRAG_LICENCE_URL} className="underline hover:text-navy">Creative Commons Attribution-NonCommercial-Share Alike 3.0 Australia License</a>.
             </p>
             <p>Climb safely: guides are a starting point, not a guarantee.</p>
           </div>

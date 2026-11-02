@@ -5,6 +5,7 @@ import type { Climb, ImageTopo } from '#/guide/model/types'
 import { ClimbBlock } from './ClimbBlock'
 import { showNode } from './place'
 import { legendOnPhoto } from './section'
+import { TopoCredit } from './credit'
 import { Stars } from './Stars'
 import { Topo } from './Topo'
 import { TopoViewer } from './TopoViewer'
@@ -169,6 +170,7 @@ export function TopoFigure({ topo: stored, redundantLegend, ...rest }: Props) {
         </figcaption>
       )}
       {topo.legendFooter && <p className="mt-1 text-[11px] text-muted">{topo.legendFooter}</p>}
+      <TopoCredit other={topo.other} />
       <TopoViewer width={topo.width} height={topo.height} open={open} onClose={closeViewer}>
         {(shownWidth) => <TopoCanvas {...props} onOpen={setPopup} legend={legend} rows={rows} displayWidth={shownWidth} />}
       </TopoViewer>
