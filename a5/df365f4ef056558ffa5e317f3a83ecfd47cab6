@@ -1,0 +1,23 @@
+thesarvo_iphone_2.0/thesarvo/thesarvoTests/MenuTests.swift
+  s_ee2ae06c4b06ab::t_ea5c174308b68f 35,37,39-43
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/MapScreen.swift
+  s_ee2ae06c4b06ab::t_0ac3c232ffd1f0 154-155,158-159,224-227
+  s_ee2ae06c4b06ab::t_799a98eedb8055 156-157
+  s_ee2ae06c4b06ab::t_81ea33906fe4c7 228
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a5df365f4ef056558ffa5e317f3a83ecfd47cab6",
+  "prompts": {},
+  "sessions": {
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
