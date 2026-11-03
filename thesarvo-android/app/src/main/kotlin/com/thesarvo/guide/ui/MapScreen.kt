@@ -1,6 +1,8 @@
 package com.thesarvo.guide.ui
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -170,7 +172,7 @@ fun MapScreen(model: AppModel) {
     LaunchedEffect(located, style) {
         val m = map ?: return@LaunchedEffect
         val st = style ?: return@LaunchedEffect
-        if (located) runCatching { m.locationComponent.apply { activateLocationComponent(LocationComponentActivationOptions.builder(context, st).build()); @Suppress("MissingPermission") isLocationComponentEnabled = true } }
+        if (located) runCatching { enableLocation(m, context, st) }
     }
     val itemsNow by rememberUpdatedState(items)
 
@@ -268,6 +270,12 @@ fun MapScreen(model: AppModel) {
 private fun chainOf(model: AppModel, p: CragPoint): List<String> {
     val areas = model.areaNames(p.guideId)
     return if (p.subtitle.isEmpty() || p.subtitle == areas.lastOrNull()) areas else areas + p.subtitle
+}
+
+@SuppressLint("MissingPermission")
+private fun enableLocation(m: MapLibreMap, context: Context, st: Style) {
+    m.locationComponent.activateLocationComponent(LocationComponentActivationOptions.builder(context, st).build())
+    m.locationComponent.isLocationComponentEnabled = true
 }
 
 private fun disc(size: Int, fill: Int, text: String?): Bitmap {

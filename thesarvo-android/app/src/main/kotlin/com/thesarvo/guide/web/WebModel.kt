@@ -65,6 +65,7 @@ class WebModel(private val app: Application, private val site: SiteClient) {
     /** Attaches an activity so dialogs and pickers the page opens have a window (and drops it again with [detach]). */
     fun attach(activity: Context) { context.baseContext = activity }
     fun detach() { context.baseContext = app }
+    fun isAttachedTo(activity: Context) = context.baseContext === activity
 
     val supported: Boolean
         get() = WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER) && WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT)

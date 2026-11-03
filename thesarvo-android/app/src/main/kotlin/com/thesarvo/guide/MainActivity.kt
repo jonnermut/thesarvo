@@ -83,9 +83,12 @@ class MainActivity : ComponentActivity() {
     override fun onStop() { model.onStop(); super.onStop() }
 
     override fun onDestroy() {
-        model.web.detach()
-        (model.web.webView.parent as? android.view.ViewGroup)?.removeView(model.web.webView)
-        model.web.onFileChooser = null
+        // A replaced instance (after an app update, or a task restored beside a new one) is destroyed after its successor attached: leave the shared web view alone then.
+        if (model.web.isAttachedTo(this)) {
+            model.web.detach()
+            (model.web.webView.parent as? android.view.ViewGroup)?.removeView(model.web.webView)
+            model.web.onFileChooser = null
+        }
         super.onDestroy()
     }
 }
