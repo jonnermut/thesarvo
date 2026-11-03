@@ -47,6 +47,8 @@ android {
     // A debug build can carry a seed in its assets (a universal APK needs no asset pack): -PseedDir=<folder holding seed/>.
     (findProperty("seedDir") as String?)?.let { sourceSets.getByName("debug").assets.directories.add(it) }
 
+    assetPacks += listOf(":seed")
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
@@ -67,6 +69,7 @@ dependencies {
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.activity.compose)
     implementation(libs.core.ktx)
+    implementation(libs.fragment)
     implementation(libs.core.splashscreen)
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.webkit)

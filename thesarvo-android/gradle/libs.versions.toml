@@ -1,4 +1,5 @@
 [versions]
+fragment = "1.8.9"
 agp = "9.5.0"
 kotlin = "2.4.21"
 composeBom = "2026.09.00"
@@ -20,6 +21,7 @@ androidxTestRunner = "1.7.0"
 androidxTestExt = "1.3.0"
 
 [libraries]
+fragment = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 compose-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
