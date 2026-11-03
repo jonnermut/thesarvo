@@ -121,7 +121,7 @@ object PrivateSync {
             todo.map { p ->
                 async(Dispatchers.IO) {
                     gate.withPermit {
-                        val temp = File.createTempFile("pv", ".tmp", store.root.also { it.mkdirs() })
+                        val temp = File.createTempFile("pv_", ".tmp", store.root.also { it.mkdirs() })
                         try {
                             Http.client.newCall(Request.Builder().url(p.url).build()).await().use { r ->
                                 if (r.code == 200) {

@@ -72,7 +72,7 @@ class BlobStore(val root: File, private val assets: AssetManager? = null) {
         if (!temp.renameTo(dest)) { temp.copyTo(dest, overwrite = true); temp.delete() }
     }
 
-    fun newTemp(): File = File.createTempFile("dl", ".tmp", File(root, "tmp").also { it.mkdirs() })
+    fun newTemp(): File = File.createTempFile("dl_", ".tmp", File(root, "tmp").also { it.mkdirs() })
 
     fun remove(hashes: Iterable<String>) { for (h in hashes) storeFile(h).delete() }
 

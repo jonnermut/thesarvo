@@ -38,7 +38,6 @@ import org.json.JSONObject
 class WebModel(private val app: Application, private val site: SiteClient) {
     private val context = MutableContextWrapper(app)
 
-    var webView: WebView by mutableStateOf(build()); private set
     var title by mutableStateOf("")
         private set
     var path by mutableStateOf("/g/")
@@ -60,6 +59,8 @@ class WebModel(private val app: Application, private val site: SiteClient) {
     private var textSource = ""
     private var handlers = emptyList<ScriptHandler>()
     private val json = Json { ignoreUnknownKeys = true }
+
+    var webView: WebView by mutableStateOf(build()); private set
 
     /** Attaches an activity so dialogs and pickers the page opens have a window (and drops it again with [detach]). */
     fun attach(activity: Context) { context.baseContext = activity }
