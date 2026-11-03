@@ -1,0 +1,21 @@
+docs/plan-mobile-apps.md
+  s_e20d0a1ebc47aa::t_598b803ce1b571 3,245-257
+docs/plan-mobile-ios.md
+  s_e20d0a1ebc47aa::t_37a08b4428a93e 3,139-159
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "844252c222f84d9257d47a09281f07f24075f4cf",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "unknown"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
