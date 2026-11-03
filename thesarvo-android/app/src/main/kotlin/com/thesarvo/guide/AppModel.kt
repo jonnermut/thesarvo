@@ -31,6 +31,8 @@ import com.thesarvo.guide.sync.NetworkState
 import com.thesarvo.guide.sync.SyncEngine
 import com.thesarvo.guide.sync.SyncHooks
 import com.thesarvo.guide.sync.SyncProgress
+import com.thesarvo.guide.sync.SyncResult
+import com.thesarvo.guide.work.Workers
 import com.thesarvo.guide.web.SiteClient
 import com.thesarvo.guide.web.WebModel
 import java.io.File
@@ -217,7 +219,12 @@ class AppModel(val app: Application) {
     }
 
     /** The app is going to the background: the page may have refreshed its tokens, so keep the vault current. */
-    fun onStop() { if (started) web.pageTokens { t -> if (t != null) auth.adopt(t) } }
+    fun onStop() {
+        if (!started) return
+        web.pageTokens { t -> if (t != null) auth.adopt(t) }
+        // A download in progress carries on in the background, as a foreground service with a notification.
+        if (syncJob?.isActive == true) { syncJob?.cancel(); Workers.startPhotos(app) }
+    }
 
     fun onStart() {
         if (!started) return
@@ -225,7 +232,7 @@ class AppModel(val app: Application) {
         if (last == null || System.currentTimeMillis() - last >= 4 * 3600_000L) syncNow()
         // A background refresh may have switched generations while the app was alive but stopped.
         val cur = store.loadManifest("current")
-        if (cur != null && cur.builtAt != manifest?.builtAt) { manifest = cur; rebuildIndex(); web.reload() }
+        if (cur != null && cur.builtAt != manifest?.builtAt) scope.launch { switchTo(cur) }
     }
 
     fun onAuthRedirect(uri: Uri) {
@@ -373,6 +380,18 @@ class AppModel(val app: Application) {
     fun bootOK() { store.updateState { it.copy(bootPending = false) } }
 
     // sync
+
+    /** One slice of a sync with no screen: the refresh worker and the photo service. A new generation waits for the app to open before the page switches to it. */
+    suspend fun backgroundSync(deadlineMs: Long, onProgress: (SyncProgress) -> Unit): SyncResult {
+        val hooks = object : SyncHooks {
+            override suspend fun switchTo(manifest: AppManifest) = withContext(Dispatchers.Main) { store.promoteCandidate(); this@AppModel.manifest = manifest; rebuildIndex() }
+            override suspend fun refresh() = withContext(Dispatchers.Main) { rebuildIndex() }
+            override suspend fun progress(p: SyncProgress) = onProgress(p)
+        }
+        val r = withContext(Dispatchers.IO) { engine.run(manifest, policy, cellularImages, hooks, deadlineMs) }
+        withContext(Dispatchers.Main) { lastCheck = store.loadState().lastCheck }
+        return r
+    }
 
     fun syncSoon() { scope.launch { delay(600); syncNow() } }
 
