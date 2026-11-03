@@ -10,6 +10,21 @@ const fakeWindow = (native: (m: { id: number }, reply: Reply) => void, original 
   return { w, original }
 }
 
+describe('app bridge on Android', () => {
+  it('posts JSON strings through thesarvoHost and takes replies', async () => {
+    const sent: string[] = []
+    const w = { fetch: vi.fn(), location: { href: 'https://app.thesarvo.invalid/g/' }, document: { documentElement: { dataset: { app: 'android' } as Record<string, string> } } } as unknown as W
+    w.thesarvoHost = { postMessage: (m) => { sent.push(m); const o = JSON.parse(m) as { type: string; id: number }; if (o.type === 'api') queueMicrotask(() => w.thesarvoBridge?.reply(o.id, 200, '{"ok":true}')) } }
+    expect(inApp(w)).toBe(true)
+    expect(installBridge(w)).toBe(true)
+    expect(w.document.documentElement.dataset.app).toBe('android')
+    const res = await w.fetch('/g/api/me')
+    expect(await res.json()).toEqual({ ok: true })
+    expect(openNativeMap('g1', [], w)).toBe(true)
+    expect(JSON.parse(sent[1])).toEqual({ type: 'openMap', guide: 'g1', points: [] })
+  })
+})
+
 describe('app bridge', () => {
   it('does nothing in a browser', () => {
     const w = { fetch: vi.fn(), location: { href: 'https://x/', origin: 'https://x' } } as unknown as W

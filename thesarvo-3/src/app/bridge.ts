@@ -1,19 +1,27 @@
 import { GUIDE_PREFIX } from '#/guide/content/paths'
 
 /**
- * The page's side of the app bridge (specified in plan-mobile-ios.md section 4). In the iOS app the page is served from a custom
+ * The page's side of the app bridge (specified in plan-mobile-ios.md section 4). In the iOS and Android apps the page is served from a custom
  * origin, so calls to our own API go through native `URLSession`, which adds the bearer token and answers `offline` (status 0)
  * when there is no network. In a browser there is no handler and nothing changes.
  */
 
 type Handler = { postMessage: (message: unknown) => void }
-type BridgeWindow = Window & typeof globalThis & { webkit?: { messageHandlers?: { thesarvo?: Handler } }; thesarvoBridge?: { reply: (id: number, status: number, body: string) => void }; thesarvoContents?: () => void; thesarvoMapPoints?: () => void }
+type BridgeWindow = Window & typeof globalThis & { webkit?: { messageHandlers?: { thesarvo?: Handler } }; thesarvoHost?: { postMessage: (message: string) => void }; thesarvoBridge?: { reply: (id: number, status: number, body: string) => void }; thesarvoContents?: () => void; thesarvoMapPoints?: () => void }
 
 type Reply = { status: number; body: string }
 
+/** The native handler: `webkit.messageHandlers.thesarvo` on iOS (structured messages), `thesarvoHost` on Android (JSON strings). */
+function nativeHandler(win: BridgeWindow): Handler | undefined {
+  const ios = win.webkit?.messageHandlers?.thesarvo
+  if (ios) return ios
+  const host = win.thesarvoHost
+  return host ? { postMessage: (message) => host.postMessage(JSON.stringify(message)) } : undefined
+}
+
 /** Routes `fetch('/g/api/…')` through the native handler. Returns false when not running in the app. */
 export function installBridge(win: BridgeWindow = window): boolean {
-  const handler = win.webkit?.messageHandlers?.thesarvo
+  const handler = nativeHandler(win)
   if (!handler || win.thesarvoBridge) return !!handler
   win.document.documentElement.dataset.app ??= 'app'
   const pending = new Map<number, (r: Reply) => void>()
@@ -38,7 +46,7 @@ export function installBridge(win: BridgeWindow = window): boolean {
 }
 
 /** True inside the app's web view (set by the app's start-up script). */
-export const inApp = (win: BridgeWindow = window) => !!win.webkit?.messageHandlers?.thesarvo
+export const inApp = (win: BridgeWindow = window) => !!nativeHandler(win)
 
 /** A guide's GPS point for the native map. */
 export type MapPoint = { title: string; lat: number; lon: number }
@@ -48,7 +56,7 @@ export type ContentsLine = { anchor: string; kind: string; level: number; text: 
 
 /** Asks the app to show the guide's contents natively (the app scrolls the page to the chosen anchor). Returns false in a browser. */
 export function openNativeContents(title: string, entries: ContentsLine[], win: BridgeWindow = window): boolean {
-  const handler = win.webkit?.messageHandlers?.thesarvo
+  const handler = nativeHandler(win)
   handler?.postMessage({ type: 'openContents', title, entries })
   return !!handler
 }
@@ -58,7 +66,7 @@ export function openNativeContents(title: string, entries: ContentsLine[], win: 
  * for the list (`window.thesarvoContents()`, which the page answers with `openContents`). Returns a function that undoes both.
  */
 export function offerContents(open: () => void, win: BridgeWindow = window): () => void {
-  const handler = win.webkit?.messageHandlers?.thesarvo
+  const handler = nativeHandler(win)
   if (!handler) return () => {}
   win.thesarvoContents = open
   handler.postMessage({ type: 'contentsAvailable', available: true })
@@ -70,7 +78,7 @@ export function offerContents(open: () => void, win: BridgeWindow = window): () 
 
 /** Lets the app ask the page for its GPS points when the reader switches to the Map tab (the page answers with `openMap`). Returns a function that undoes it. */
 export function offerMapPoints(open: () => void, win: BridgeWindow = window): () => void {
-  if (!win.webkit?.messageHandlers?.thesarvo) return () => {}
+  if (!nativeHandler(win)) return () => {}
   win.thesarvoMapPoints = open
   return () => {
     if (win.thesarvoMapPoints === open) delete win.thesarvoMapPoints
@@ -79,14 +87,14 @@ export function offerMapPoints(open: () => void, win: BridgeWindow = window): ()
 
 /** Hands a generated file (GPX, KML) to the app's share sheet: the web view cannot save downloads. Returns false in a browser. */
 export function shareFileNative(name: string, type: string, text: string, win: BridgeWindow = window): boolean {
-  const handler = win.webkit?.messageHandlers?.thesarvo
+  const handler = nativeHandler(win)
   handler?.postMessage({ type: 'shareFile', name, mime: type, text })
   return !!handler
 }
 
 /** Asks the app to show a guide's points on its native map tab. Returns false in a browser. */
 export function openNativeMap(guideId: string, points: MapPoint[] = [], win: BridgeWindow = window): boolean {
-  const handler = win.webkit?.messageHandlers?.thesarvo
+  const handler = nativeHandler(win)
   handler?.postMessage({ type: 'openMap', guide: guideId, points })
   return !!handler
 }
