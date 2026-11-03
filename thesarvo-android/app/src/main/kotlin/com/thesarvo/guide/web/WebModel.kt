@@ -111,7 +111,8 @@ class WebModel(private val app: Application, private val site: SiteClient) {
 
     fun open(path: String) { webView.loadUrl(AppConfig.ORIGIN + path) }
 
-    fun reload() { webView.reload() }
+    /** A load, not `WebView.reload()`: a document that was a 404 (the store was empty) is not fetched again by a reload. */
+    fun reload() { webView.loadUrl(webView.url?.takeIf { it.startsWith(AppConfig.ORIGIN) } ?: (AppConfig.ORIGIN + "/g")) }
 
     fun goBack() { webView.goBack() }
 
