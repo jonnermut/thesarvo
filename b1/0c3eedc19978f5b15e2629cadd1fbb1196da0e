@@ -1,0 +1,21 @@
+thesarvo-3/src/app/bridge.test.ts
+  s_e9cd55a1f49583::t_ae0416e637d178 13-27
+thesarvo-3/src/app/bridge.ts
+  s_e9cd55a1f49583::t_ae0416e637d178 4,10,14-21,24,49,59,69,81,90,97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b10c3eedc19978f5b15e2629cadd1fbb1196da0e",
+  "prompts": {},
+  "sessions": {
+    "s_e9cd55a1f49583": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1c2638e6-8c6a-42c3-85d9-4cd938b67512",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
