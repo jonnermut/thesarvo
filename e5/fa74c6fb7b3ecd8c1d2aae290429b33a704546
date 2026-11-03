@@ -1,0 +1,21 @@
+docs/app-store-connect.md
+  s_ee2ae06c4b06ab::t_cee2b23872aae3 1-27
+scripts/asc-api.mjs
+  s_ee2ae06c4b06ab::t_02539bd9f68391 1-30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e5fa74c6fb7b3ecd8c1d2aae290429b33a704546",
+  "prompts": {},
+  "sessions": {
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
