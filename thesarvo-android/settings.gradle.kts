@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "thesarvo-android"
-include(":core")
+include(":core", ":app")
