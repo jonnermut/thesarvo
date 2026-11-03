@@ -1,0 +1,21 @@
+docs/as-built.md
+  s_e20d0a1ebc47aa::t_940e0c246a328a 215
+scripts/backfill-history-keys.ts
+  s_e20d0a1ebc47aa::t_70c509e2d6f632 1-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cf8393e7137acdfe41175ea5e4d9f8fda105b8da",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
