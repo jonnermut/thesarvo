@@ -1,0 +1,21 @@
+docs/plan-mobile-android.md
+  s_e9cd55a1f49583::t_73c75936c46248 470,472-480
+docs/todo.md
+  s_e9cd55a1f49583::t_5bfa353a300202 108
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "290af0ec54d38f9457b9265a6d7d0381e0a12794",
+  "prompts": {},
+  "sessions": {
+    "s_e9cd55a1f49583": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1c2638e6-8c6a-42c3-85d9-4cd938b67512",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
