@@ -74,7 +74,7 @@ function Entry({ entry, latest, open: opened, guide, history }: { entry: History
     <li ref={box} id={entry.session} className="scroll-mt-20 rounded-lg border border-black/10 bg-card p-4">
       <div className="font-medium">{capital(entry.description)}</div>
       <div className="mt-0.5 flex items-center gap-1.5 text-sm text-muted">
-        <Avatar ids={[entry.user.sub]} name={entry.user.name} className="size-5 text-[10px]" />
+        <Avatar ids={[entry.user.sub, entry.user.key].filter((x): x is string => !!x)} name={entry.user.name} className="size-5 text-[10px]" />
         <span>
           {entry.user.name || 'Someone'} · <time dateTime={entry.end}>{span}</time>
         </span>

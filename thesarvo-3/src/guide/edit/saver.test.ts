@@ -6,6 +6,8 @@ import { SAVE_DEBOUNCE_MS, Saver } from './saver'
 import type { SaveApi } from './saver'
 
 vi.mock('#/auth/session', () => ({ getIdToken: () => Promise.resolve('t') }))
+// The real one hashes with WebCrypto, which fake timers do not wait for.
+vi.mock('#/guide/avatars/keys', () => ({ emailKey: () => Promise.resolve('email:test') }))
 
 const text = (id: string, t = ''): TextBlock => ({ type: 'text', id, cls: 'text', text: t })
 const guide = (...nodes: GuideNode[]): Guide => ({ id: '7', guideStars: '', nodes })

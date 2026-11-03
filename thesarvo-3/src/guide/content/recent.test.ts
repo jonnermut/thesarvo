@@ -16,6 +16,11 @@ describe('recentChanges', () => {
     expect(recentChanges(pages).map((c) => [c.id, c.session])).toEqual([['1', 'b'], ['2', 'c']])
     expect(recentChanges(pages, 1)).toHaveLength(1)
   })
+  it('carries the editor’s email key, which finds their picture', () => {
+    const keyed: HistoryEntry = { ...entry('a', '2026-01-01T00:00:00Z'), user: { sub: 'u1', name: 'Ann', key: 'email:aa243d065e79166e' } }
+    expect(recentChanges([{ node: node('1'), history: [keyed] }])).toMatchObject([{ sub: 'u1', key: 'email:aa243d065e79166e' }])
+    expect(recentChanges([{ node: node('1'), history: [entry('b', '2026-01-01T00:00:00Z')] }])[0]).not.toHaveProperty('key')
+  })
   it('skips sums of old edits and unreadable versions, and hides an unknown editor', () => {
     const pages = [
       { node: node('1'), history: [entry('a', '2020-01-01T00:00:00Z'), entry('b', '2021-01-01T00:00:00Z', 'Earlier editors'), entry('c', '2022-01-01T00:00:00Z', 'Bob', 'a version could not be read')] },

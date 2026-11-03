@@ -3,9 +3,12 @@ import { nodesByKey, same } from './changes'
 import type { Changes } from './changes'
 
 /** One editing session on a guide: everything one person changed in it, net, and what that was in words. */
+/** Who saved: their sub, name and, when known, the hash of their email (`emailKey`), which finds their imported picture. */
+export type HistoryUser = { sub: string; name: string; key?: string }
+
 export type HistoryEntry = {
   session: string
-  user: { sub: string; name: string }
+  user: HistoryUser
   /** ISO times of the session's first and last save. */
   start: string
   end: string
@@ -22,7 +25,7 @@ export type HistoryEntry = {
 }
 
 /** `guide` is the guide after the save, to name blocks that only moved. */
-export type SaveInfo = { session: string; user: { sub: string; name: string }; at: string; changes: Changes; guide: Guide; note?: string }
+export type SaveInfo = { session: string; user: HistoryUser; at: string; changes: Changes; guide: Guide; note?: string }
 
 /** The history with a save folded into its session's entry (a new entry for a new session). Newest last. */
 export function updateHistory(history: HistoryEntry[], save: SaveInfo): HistoryEntry[] {
@@ -48,7 +51,7 @@ export function updateHistory(history: HistoryEntry[], save: SaveInfo): HistoryE
   if (!Object.keys(nodes).length && !order && !guideStars) return rest
   const entry: HistoryEntry = {
     session: save.session,
-    user: { sub: save.user.sub, name: save.user.name || old?.user.name || '' },
+    user: { sub: save.user.sub, name: save.user.name || old?.user.name || '', ...((save.user.key || old?.user.key) && { key: save.user.key || old?.user.key }) },
     start: old?.start ?? save.at,
     end: save.at,
     saves: (old?.saves ?? 0) + 1,
