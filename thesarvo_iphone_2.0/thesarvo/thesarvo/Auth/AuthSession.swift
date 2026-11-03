@@ -129,7 +129,8 @@ final class AuthSession: NSObject, ObservableObject, ASWebAuthenticationPresenta
                     if let url { cont.resume(returning: url) } else { cont.resume(throwing: err ?? URLError(.cancelled)) }
                 }
                 s.presentationContextProvider = self
-                s.prefersEphemeralWebBrowserSession = false
+                // Fresh each time: a kept Cognito cookie signs straight back in as the last user (a deleted or merged account gives "refused").
+                s.prefersEphemeralWebBrowserSession = true
                 session = s
                 s.start()
             }
