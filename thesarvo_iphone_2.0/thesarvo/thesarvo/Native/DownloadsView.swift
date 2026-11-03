@@ -25,6 +25,7 @@ struct DownloadsView: View {
                 }
             }
             .navigationTitle("Downloads")
+            .darkBar()
         }
     }
 

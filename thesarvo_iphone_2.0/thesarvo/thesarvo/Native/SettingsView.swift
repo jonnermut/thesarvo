@@ -45,6 +45,7 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("Settings")
+            .darkBar()
             .confirmationDialog("Delete your thesarvo account? This cannot be undone.", isPresented: $confirmDelete, titleVisibility: .visible) {
                 Button("Delete account", role: .destructive) { Task { await deleteAccount() } }
             }

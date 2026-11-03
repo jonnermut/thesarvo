@@ -13,6 +13,7 @@ struct MapScreen: View {
         NavigationStack {
             CragMap(points: shown, focus: focus, style: mapStyle, areas: { app.areaNames(for: $0) }) { guide, place in app.openGuide(id: guide, place: place) }
                 .navigationTitle(focusTitle)
+                .darkBar()
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
@@ -21,10 +22,10 @@ struct MapScreen: View {
                             Text("Satellite").tag(1)
                             Text("Hybrid").tag(2)
                         }
-                        .pickerStyle(.menu)
+                        .pickerStyle(.menu).tint(.white)
                     }
                     if focus != nil {
-                        ToolbarItem(placement: .navigationBarTrailing) { Button("All crags") { app.mapFocus = nil } }
+                        ToolbarItem(placement: .navigationBarTrailing) { Button("All crags") { app.mapFocus = nil }.tint(.white) }
                     }
                 }
         }

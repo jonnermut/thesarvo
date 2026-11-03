@@ -3,6 +3,51 @@ import SwiftUI
 /// The app's accent: navy in light mode, a light periwinkle in dark.
 let brandTint = Color(UIColor { $0.userInterfaceStyle == .dark ? UIColor(red: 0.62, green: 0.68, blue: 1.0, alpha: 1) : UIColor(red: 0.106, green: 0.078, blue: 0.392, alpha: 1) })
 
+/// The bars and the menu are dark navy with light text, as in the earlier app, whatever the page below them looks like.
+enum Chrome {
+    static let bar = UIColor(red: 0.082, green: 0.063, blue: 0.298, alpha: 1)
+    static let menu = UIColor(red: 0.047, green: 0.039, blue: 0.176, alpha: 1)
+    static let light = UIColor(white: 1, alpha: 1)
+    static let dim = UIColor(white: 1, alpha: 0.6)
+
+    static func apply() {
+        let nav = UINavigationBarAppearance()
+        nav.configureWithOpaqueBackground()
+        nav.backgroundColor = bar
+        nav.titleTextAttributes = [.foregroundColor: light]
+        nav.largeTitleTextAttributes = [.foregroundColor: light]
+        let item = UIBarButtonItemAppearance()
+        item.normal.titleTextAttributes = [.foregroundColor: light]
+        nav.buttonAppearance = item
+        nav.doneButtonAppearance = item
+        let bar = UINavigationBar.appearance()
+        bar.standardAppearance = nav
+        bar.scrollEdgeAppearance = nav
+        bar.compactAppearance = nav
+        bar.tintColor = light
+        bar.overrideUserInterfaceStyle = .dark
+
+        let tab = UITabBarAppearance()
+        tab.configureWithOpaqueBackground()
+        tab.backgroundColor = Self.bar
+        for l in [tab.stackedLayoutAppearance, tab.inlineLayoutAppearance, tab.compactInlineLayoutAppearance] {
+            l.normal.iconColor = dim
+            l.normal.titleTextAttributes = [.foregroundColor: dim]
+            l.selected.iconColor = light
+            l.selected.titleTextAttributes = [.foregroundColor: light]
+        }
+        UITabBar.appearance().standardAppearance = tab
+        UITabBar.appearance().scrollEdgeAppearance = tab
+    }
+}
+
+extension View {
+    /// A navy navigation bar with white title and buttons (the UIKit appearance sets the colours; this makes SwiftUI's own toolbar items light too).
+    func darkBar() -> some View {
+        toolbarBackground(Color(Chrome.bar), for: .navigationBar).toolbarBackground(.visible, for: .navigationBar).toolbarColorScheme(.dark, for: .navigationBar)
+    }
+}
+
 struct RootView: View {
     @EnvironmentObject var app: AppModel
     @Environment(\.scenePhase) private var scenePhase
@@ -85,23 +130,24 @@ struct PageView: View {
             if app.manifest == nil { EmptyStore() }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .darkBar()
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Text(title).font(.headline).lineLimit(1).minimumScaleFactor(0.8)
+                Text(title).font(.headline).lineLimit(1).minimumScaleFactor(0.8).foregroundStyle(.white)
             }
             ToolbarItemGroup(placement: .navigationBarLeading) {
                 if showMenuButton {
-                    Button { app.openMenu() } label: { Image(systemName: "line.3.horizontal") }
+                    Button { app.openMenu() } label: { Image(systemName: "line.3.horizontal").foregroundStyle(.white) }
                         .accessibilityLabel("Menu")
                 }
                 if app.web.canGoBack {
-                    Button { app.web.goBack() } label: { Image(systemName: "chevron.backward") }
+                    Button { app.web.goBack() } label: { Image(systemName: "chevron.backward").foregroundStyle(.white) }
                         .accessibilityLabel("Back")
                 }
             }
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 if app.hasContents {
-                    Button { app.web.requestContents() } label: { Image(systemName: "list.bullet") }
+                    Button { app.web.requestContents() } label: { Image(systemName: "list.bullet").foregroundStyle(.white) }
                         .accessibilityLabel("Contents")
                 }
                 Menu {
@@ -109,7 +155,7 @@ struct PageView: View {
                     if app.canEditPage {
                         Button { app.toggleEdit() } label: { Label(app.isEditing ? "Stop editing" : "Edit this guide", systemImage: app.isEditing ? "eye" : "pencil") }
                     }
-                } label: { Image(systemName: "ellipsis.circle") }
+                } label: { Image(systemName: "ellipsis.circle").foregroundStyle(.white) }
                 .accessibilityLabel("Page options")
             }
         }

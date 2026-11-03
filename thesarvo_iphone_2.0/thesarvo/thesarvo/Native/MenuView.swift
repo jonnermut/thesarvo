@@ -63,14 +63,19 @@ struct MenuView: View {
             }
         }
         .listStyle(.insetGrouped)
+        .scrollContentBackground(.hidden)
+        .background(Color(Chrome.menu))
+        .listRowBackground(Color.white.opacity(0.07))
+        .environment(\.colorScheme, .dark)
         .navigationTitle(folder?.title ?? "Guides")
+        .darkBar()
         .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search guides")
         .onSubmit(of: .search) { app.openSearch(query) }
         .toolbar {
             if sizeClass != .regular {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") { app.showMenu = false }
+                    Button("Done") { app.showMenu = false }.tint(.white)
                 }
             }
         }
@@ -162,11 +167,12 @@ struct ContentsList: View {
             .listStyle(.plain)
             .overlay { if shown.isEmpty { Text("Nothing matches").foregroundStyle(.secondary) } }
             .navigationTitle("Contents")
+            .darkBar()
             .navigationBarTitleDisplayMode(.inline)
             .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "Filter: name, grade, **")
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) { if hasBoth { Toggle("Climbs", isOn: $showClimbs).toggleStyle(.button) } }
-                ToolbarItem(placement: .navigationBarTrailing) { Button("Done") { dismiss() } }
+                ToolbarItem(placement: .navigationBarLeading) { if hasBoth { Toggle("Climbs", isOn: $showClimbs).toggleStyle(.button).tint(.white) } }
+                ToolbarItem(placement: .navigationBarTrailing) { Button("Done") { dismiss() }.tint(.white) }
             }
         }
         .presentationDetents([.medium, .large])
