@@ -482,8 +482,4 @@ class AppModel(val app: Application) {
         e.getString("startTab")?.let { s -> selectTab(AppTab.entries.firstOrNull { it.name.equals(s, true) } ?: AppTab.Guides) }
     }
 
-    /** Moves the map camera to show [b] with a margin (a cluster's crags, or the view before). */
-    fun zoomTo(camera: com.google.maps.android.compose.CameraPositionState, b: com.google.android.gms.maps.model.LatLngBounds, padding: Int = 100) {
-        scope.launch { camera.animate(com.google.android.gms.maps.CameraUpdateFactory.newLatLngBounds(b, padding)) }
-    }
 }

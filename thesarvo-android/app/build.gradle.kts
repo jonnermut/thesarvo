@@ -6,8 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-// The Maps key and the upload key live outside git: local.properties and keystore.properties (both ignored).
-val local = Properties().apply { rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use { load(it) } }
+// The upload key lives outside git: keystore.properties (ignored).
 val signing = Properties().apply { rootProject.file("keystore.properties").takeIf { it.exists() }?.inputStream()?.use { load(it) } }
 
 android {
@@ -21,7 +20,6 @@ android {
         versionCode = 300
         versionName = "3.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders["MAPS_API_KEY"] = (local.getProperty("MAPS_API_KEY") ?: System.getenv("MAPS_API_KEY") ?: "")
     }
 
     signingConfigs {
@@ -78,8 +76,7 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.serialization.json)
     implementation(libs.coroutines.android)
-    implementation(libs.maps.compose)
-    implementation(libs.play.services.maps)
+    implementation(libs.maplibre)
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
 
