@@ -1,0 +1,48 @@
+thesarvo-android/core/src/main/kotlin/com/thesarvo/core/Manifest.kt
+  s_e9cd55a1f49583::t_7cf0cc7f98a975 1-164
+thesarvo-android/core/src/test/kotlin/com/thesarvo/core/VectorsTest.kt
+  s_e9cd55a1f49583::t_aa3ca93522a59f 1-48
+thesarvo-android/settings.gradle.kts
+  s_e9cd55a1f49583::t_37112d4fb99119 1-15
+  s_e9cd55a1f49583::t_0168393a6cb22a 16
+thesarvo-android/core/src/main/kotlin/com/thesarvo/core/Queue.kt
+  s_e9cd55a1f49583::t_992966125b9f55 1-97
+thesarvo-android/build.gradle.kts
+  s_e9cd55a1f49583::t_37112d4fb99119 1-7
+thesarvo-android/core/src/test/kotlin/com/thesarvo/core/CoreTest.kt
+  s_e9cd55a1f49583::t_aa3ca93522a59f 1-276
+thesarvo-android/core/src/main/kotlin/com/thesarvo/core/Pkce.kt
+  s_e9cd55a1f49583::t_7cf0cc7f98a975 1-96
+thesarvo-android/gradle/wrapper/gradle-wrapper.properties
+  s_e9cd55a1f49583::t_37112d4fb99119 3-5
+thesarvo-android/core/build.gradle.kts
+  s_e9cd55a1f49583::t_37112d4fb99119 1-17
+thesarvo-android/core/src/main/kotlin/com/thesarvo/core/Map.kt
+  s_e9cd55a1f49583::t_992966125b9f55 1-131
+thesarvo-android/.gitignore
+  s_e9cd55a1f49583::t_37112d4fb99119 5-14
+thesarvo-android/gradle/libs.versions.toml
+  s_e9cd55a1f49583::t_37112d4fb99119 1-56
+thesarvo-android/core/src/main/kotlin/com/thesarvo/core/PathResolver.kt
+  s_e9cd55a1f49583::t_7cf0cc7f98a975 1-66
+thesarvo-android/gradle.properties
+  s_e9cd55a1f49583::t_37112d4fb99119 1-3,5
+thesarvo-android/core/src/main/kotlin/com/thesarvo/core/Tree.kt
+  s_e9cd55a1f49583::t_992966125b9f55 1-114
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "52a56810e08b6c846c22e52c2d618229a0c75575",
+  "prompts": {},
+  "sessions": {
+    "s_e9cd55a1f49583": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1c2638e6-8c6a-42c3-85d9-4cd938b67512",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
