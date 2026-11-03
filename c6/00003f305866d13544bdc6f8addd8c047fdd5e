@@ -1,0 +1,26 @@
+thesarvo-android/app/src/main/kotlin/com/thesarvo/guide/work/Workers.kt
+  s_e9cd55a1f49583::t_5751c5b444cb0b 1-84
+thesarvo-android/app/src/main/kotlin/com/thesarvo/guide/AppModel.kt
+  s_e9cd55a1f49583::t_11eb4c3d2995b2 34-35
+  s_e9cd55a1f49583::t_5751c5b444cb0b 222-225,227,235,384-394
+  s_e9cd55a1f49583::t_555ce9a1e2cb21 226
+  s_e9cd55a1f49583::t_ae2f5e6c0dcaa2 395
+thesarvo-android/app/src/main/kotlin/com/thesarvo/guide/ThesarvoApp.kt
+  s_e9cd55a1f49583::t_5751c5b444cb0b 4,8-9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c600003f305866d13544bdc6f8addd8c047fdd5e",
+  "prompts": {},
+  "sessions": {
+    "s_e9cd55a1f49583": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1c2638e6-8c6a-42c3-85d9-4cd938b67512",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
