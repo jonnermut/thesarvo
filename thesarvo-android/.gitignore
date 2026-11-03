@@ -2,3 +2,13 @@
 /local.properties
 /.idea/workspace.xml
 .DS_Store
+build/
+.gradle/
+local.properties
+keystore.properties
+*.jks
+*.keystore
+seed/src/main/assets/
+.idea/
+.DS_Store
+.kotlin/
