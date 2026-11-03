@@ -1,0 +1,19 @@
+docs/app-review-demo-account.md
+  s_7a07b82eeeaa94::t_007263590d15aa 1-16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "883a265051b95526408e5e85d9b725c7bc4ee51d",
+  "prompts": {},
+  "sessions": {
+    "s_7a07b82eeeaa94": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "s_7a07b82eeeaa94",
+        "model": "unknown"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
