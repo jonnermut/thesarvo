@@ -9,6 +9,15 @@ final class AuthTests: XCTestCase {
         XCTAssertFalse(v.contains("=") || v.contains("+") || v.contains("/"))
     }
 
+    func testLogoutURLEndsTheCognitoSessionAndReturnsToTheApp() throws {
+        let u = try XCTUnwrap(Pkce.logoutURL(domain: AuthSession.domain, clientId: "abc", redirect: AuthSession.signedOut))
+        XCTAssertEqual(u.host, "auth.thesarvo.com")
+        XCTAssertEqual(u.path, "/logout")
+        let q = Dictionary(uniqueKeysWithValues: (URLComponents(url: u, resolvingAgainstBaseURL: false)?.queryItems ?? []).map { ($0.name, $0.value ?? "") })
+        XCTAssertEqual(q["client_id"], "abc")
+        XCTAssertEqual(q["logout_uri"], "thesarvo://auth/signout")
+    }
+
     func testAuthorizeURL() throws {
         let u = try XCTUnwrap(Pkce.authorizeURL(domain: AuthSession.domain, clientId: "abc", redirect: "thesarvo://auth/callback", state: "s", challenge: "c"))
         let q = Dictionary(uniqueKeysWithValues: (URLComponents(url: u, resolvingAgainstBaseURL: false)?.queryItems ?? []).map { ($0.name, $0.value ?? "") })

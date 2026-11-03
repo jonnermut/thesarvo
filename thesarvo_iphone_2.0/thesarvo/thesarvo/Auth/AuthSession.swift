@@ -31,6 +31,13 @@ enum Pkce {
         base64url(Data(SHA256.hash(data: Data(verifier.utf8))))
     }
 
+    /// Cognito's logout page, which clears its cookie and returns to `redirect` (a logout URL registered on the client).
+    static func logoutURL(domain: URL, clientId: String, redirect: String) -> URL? {
+        var c = URLComponents(url: domain.appendingPathComponent("logout"), resolvingAgainstBaseURL: false)
+        c?.queryItems = [.init(name: "client_id", value: clientId), .init(name: "logout_uri", value: redirect)]
+        return c?.url
+    }
+
     static func authorizeURL(domain: URL, clientId: String, redirect: String, state: String, challenge: String) -> URL? {
         var c = URLComponents(url: domain.appendingPathComponent("oauth2/authorize"), resolvingAgainstBaseURL: false)
         c?.queryItems = [
@@ -66,6 +73,7 @@ enum Pkce {
 final class AuthSession: NSObject, ObservableObject, ASWebAuthenticationPresentationContextProviding {
     static let callbackScheme = "thesarvo"
     static let redirect = "thesarvo://auth/callback"
+    static let signedOut = "thesarvo://auth/signout"
     static let domain = URL(string: "https://auth.thesarvo.com")!
     /// The Cognito mobile client id (public, no secret; Settings > Server can override it).
     static let mobileClientId = "7b9l6bgg8aln7jo1s877d49q8i"
@@ -113,7 +121,15 @@ final class AuthSession: NSObject, ObservableObject, ASWebAuthenticationPresenta
         store(next)
     }
 
-    func signOut() { store(nil) }
+    /// Forgets the tokens and ends the Cognito login in the shared browser, so the next sign-in can be another person (or account).
+    func signOut() {
+        store(nil)
+        guard let url = Pkce.logoutURL(domain: Self.domain, clientId: clientId, redirect: Self.signedOut) else { return }
+        let s = ASWebAuthenticationSession(url: url, callbackURLScheme: Self.callbackScheme) { [weak self] _, _ in self?.session = nil }
+        s.presentationContextProvider = self
+        session = s
+        s.start()
+    }
 
     func signIn() async {
         guard configured else { error = "Sign-in on the phone is not set up yet."; return }
