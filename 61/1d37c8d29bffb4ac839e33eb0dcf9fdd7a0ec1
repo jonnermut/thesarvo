@@ -1,0 +1,19 @@
+docs/plan-mobile-android.md
+  s_ef5a5de81255eb::t_b745c2413dc3db 280,307,388,390
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "611d37c8d29bffb4ac839e33eb0dcf9fdd7a0ec1",
+  "prompts": {},
+  "sessions": {
+    "s_ef5a5de81255eb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "s_ef5a5de81255eb",
+        "model": "unknown"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
