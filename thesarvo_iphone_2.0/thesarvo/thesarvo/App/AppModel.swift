@@ -168,6 +168,11 @@ final class AppModel: ObservableObject {
         if let m = manifest { _ = m }
         #if DEBUG
         if CommandLine.arguments.contains("-bgRefreshNow") { Task { notice = "Background refresh: \(await BackgroundRefresh.run() ? "ok" : "failed")" } }
+        // For screenshots: -startTab map|downloads|settings opens that tab, -showMenu opens the menu.
+        if let i = CommandLine.arguments.firstIndex(of: "-startTab"), i + 1 < CommandLine.arguments.count {
+            tab = ["map": .map, "downloads": .downloads, "settings": .settings][CommandLine.arguments[i + 1]] ?? .guides
+        }
+        if CommandLine.arguments.contains("-showMenu") { showMenu = true }
         #endif
         syncNow()
         fillPrivateStore()

@@ -94,7 +94,11 @@ struct CragMap: UIViewRepresentable {
     func makeUIView(context: Context) -> MKMapView {
         let map = MKMapView()
         map.delegate = context.coordinator
+        #if DEBUG
+        map.showsUserLocation = !CommandLine.arguments.contains("-noLocationPrompt")
+        #else
         map.showsUserLocation = true
+        #endif
         map.showsCompass = true
         let locate = MKUserTrackingButton(mapView: map)
         locate.translatesAutoresizingMaskIntoConstraints = false
@@ -125,7 +129,12 @@ struct CragMap: UIViewRepresentable {
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "crag")
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier)
         map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: -42.1, longitude: 146.6), span: MKCoordinateSpan(latitudeDelta: 5.2, longitudeDelta: 4.5)), animated: false)
-        context.coordinator.locationManager.requestWhenInUseAuthorization()
+        #if DEBUG
+        let screenshots = CommandLine.arguments.contains("-noLocationPrompt")
+        #else
+        let screenshots = false
+        #endif
+        if !screenshots { context.coordinator.locationManager.requestWhenInUseAuthorization() }
         return map
     }
 
