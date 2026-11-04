@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { climb, distance, formatDistance, pathLength, sample } from './measure'
+import { climb, climbOverContours, crossings, distance, formatDistance, pathLength, sample } from './measure'
 
 describe('measure', () => {
   it('measures great-circle distance', () => {
@@ -29,5 +29,18 @@ describe('measure', () => {
     expect(formatDistance(850.4)).toBe('850 m')
     expect(formatDistance(1840)).toBe('1.84 km')
     expect(formatDistance(12500)).toBe('12.5 km')
+  })
+
+  it('counts climb from the contours a path crosses, in order', () => {
+    // A path running north along lng 147; contours are east-west lines every 0.001 degree of latitude (about 110 m).
+    const path = [{ lat: -42, lng: 147 }, { lat: -42.005, lng: 147 }]
+    const line = (lat: number, elevation: number) => ({ elevation, paths: [[[146.99, lat], [147.01, lat]]] })
+    // Going south: 100, 110, 120 (up), then a ridge: 120 touched again lower, 110, 100.
+    const contours = [line(-42.0005, 100), line(-42.0015, 110), line(-42.0025, 120), line(-42.0035, 110), line(-42.0045, 100)]
+    const c = crossings(path, contours)
+    expect(c.map((x) => x.elevation)).toEqual([100, 110, 120, 110, 100])
+    expect(c[0].at).toBeCloseTo(55, -1)
+    expect(climbOverContours(path, contours)).toEqual({ up: 20, down: 20 })
+    expect(climbOverContours(path, [])).toEqual({ up: 0, down: 0 })
   })
 })

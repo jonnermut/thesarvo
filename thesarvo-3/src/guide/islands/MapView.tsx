@@ -5,7 +5,7 @@ import { useEscape, useScrollLock } from '#/components/overlay'
 import type { GpsLine, GpsPoint, GpsShape } from '#/guide/model/types'
 import { CLUSTER_SPAN, clusterPins, dedupe } from './cluster'
 import type { Pin } from './cluster'
-import { climb, elevations, formatDistance, pathLength, sample } from './measure'
+import { climb, climbOverContours, elevations, fetchContours, formatDistance, MAX_CONTOUR_PATH, pathLength, sample } from './measure'
 
 /** Tasmania's own basemaps from theLIST: Web Mercator tiles, no key. Topographic is CC BY; the aerial photos and Tasmap scans are CC BY-NC-ND, which allows showing them unaltered. */
 const list = (service: string, maxNativeZoom: number, licence: string) =>
@@ -131,7 +131,7 @@ export default function MapView({ points, lines, selected, onSelect, edit, clust
   // Measuring: points clicked along a path, with its length at once and its climb and descent once the heights arrive.
   const [measuring, setMeasuring] = useState(false)
   const [route, setRoute] = useState<L.LatLng[]>([])
-  const [heights, setHeights] = useState<{ up: number; down: number } | 'loading' | 'failed' | null>(null)
+  const [heights, setHeights] = useState<{ up: number; down: number; from: 'contours' | 'grid' } | 'loading' | 'failed' | null>(null)
   const measuringRef = useRef(measuring)
   measuringRef.current = measuring
   const routeRef = useRef(route)
@@ -280,11 +280,19 @@ export default function MapView({ points, lines, selected, onSelect, edit, clust
     setHeights('loading')
     const ctl = new AbortController()
     const t = setTimeout(() => {
-      const pts = sample(route.map((p) => ({ lat: p.lat, lng: p.lng })))
-      elevations(pts, ctl.signal).then(
-        (h) => setHeights(climb(h)),
-        () => !ctl.signal.aborted && setHeights('failed'),
-      )
+      const path = route.map((p) => ({ lat: p.lat, lng: p.lng }))
+      // theLIST's contours first; the coarser grid when they are too many or do not answer.
+      const grid = () =>
+        elevations(sample(path), ctl.signal).then(
+          (h) => setHeights({ ...climb(h), from: 'grid' }),
+          () => !ctl.signal.aborted && setHeights('failed'),
+        )
+      if (pathLength(path) > MAX_CONTOUR_PATH) void grid()
+      else
+        fetchContours(path, ctl.signal).then(
+          (c) => setHeights({ ...climbOverContours(path, c), from: 'contours' }),
+          () => !ctl.signal.aborted && void grid(),
+        )
     }, 500)
     return () => {
       clearTimeout(t)
@@ -487,7 +495,7 @@ export default function MapView({ points, lines, selected, onSelect, edit, clust
                 <span>
                   {heights === 'loading' && 'Heights…'}
                   {heights === 'failed' && 'Heights not available.'}
-                  {heights && typeof heights === 'object' && `↑ ${Math.round(heights.up)} m  ↓ ${Math.round(heights.down)} m (approx.)`}
+                  {heights && typeof heights === 'object' && `↑ ${Math.round(heights.up)} m  ↓ ${Math.round(heights.down)} m ${heights.from === 'contours' ? '(10 m contours, theLIST)' : '(approx., 90 m grid)'}`}
                 </span>
               </>
             )}
