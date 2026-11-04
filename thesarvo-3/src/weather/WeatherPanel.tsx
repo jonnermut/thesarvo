@@ -125,7 +125,7 @@ export function PlaceCard({ place, footer }: { place: Place; footer?: ReactNode 
           <div>
             <p className="font-semibold">
               Today {deg(today.min)}–{deg(today.max)}
-              {today.rainChance !== null && <span className={`ml-2 ${tone(today.rainChance, 50, 80) || 'font-normal text-muted'}`}>{today.rainChance}% rain</span>}
+              {today.rainChance !== null && <span className={`ml-2 ${chanceTone(today.rainChance, today.rainMax) || 'font-normal text-muted'}`}>{today.rainChance}% rain</span>}
             </p>
             <p>{today.text || today.short}</p>
             {today.humMin !== null && today.humMax !== null && <p className="text-xs text-muted">Humidity {Math.round(today.humMin)}–{Math.round(today.humMax)}%{today.deltaMax !== null && <>, <span className={dryingTone(today.deltaMax)}>Delta-T up to {today.deltaMax.toFixed(1)}</span></>}</p>}
@@ -172,9 +172,16 @@ export function RainLine({ today, yesterday, forecast = null }: { today: number 
   )
 }
 
-/** One warning scale for everything on the card: nothing, amber (take care), red (serious), and a red tile for the worst. `cuts` are the values where each step starts. */
-const TONES = ['', 'text-amber-deep', 'text-red-700', 'bg-red-50 text-red-900']
+/** One warning scale for everything on the card, kept calm: nothing, amber (take care), bold amber (serious), and a red tile only for the worst. `cuts` are the values where each step starts. */
+const TONES = ['', 'text-amber-deep', 'font-bold text-amber-deep', 'bg-red-50 text-red-900']
 export const tone = (v: number | null, ...cuts: number[]) => (v === null ? '' : TONES[cuts.filter((c) => v >= c).length])
+
+/** A rain chance only matters with rain behind it: it takes the milder of its own tone and the tone of the amount forecast (a certain 0-1 mm is nothing; no amount known counts as amber at most). */
+export const chanceTone = (chance: number | null, mm: number | null) => {
+  const own = TONES.indexOf(tone(chance, 50, 80))
+  const amount = mm === null ? 1 : TONES.indexOf(tone(mm, 1, 10)) || 0
+  return TONES[Math.min(own, amount)]
+}
 
 /** A sea cliff swell that matters: amber from 2 m, red from 3 m, a red tile from 4 m. */
 export const swellTone = (m: number) => tone(m, 2, 3, 4)
@@ -210,7 +217,7 @@ function DayCell({ day }: { day: Day }) {
       {kind && <WeatherIcon kind={kind} className="mx-auto my-0.5 size-6" />}
       <div>{deg(day.max)}</div>
       <div className="text-muted">{deg(day.min)}</div>
-      <div className={tone(day.rainChance, 50, 80) ? `font-semibold ${tone(day.rainChance, 50, 80)}` : 'text-muted'}>{day.rainChance === null ? '' : `${day.rainChance}%`}</div>
+      <div className={chanceTone(day.rainChance, day.rainMax) ? `font-semibold ${chanceTone(day.rainChance, day.rainMax)}` : 'text-muted'}>{day.rainChance === null ? '' : `${day.rainChance}%`}</div>
     </li>
   )
 }

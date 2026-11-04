@@ -1,6 +1,6 @@
 import { cleanup, render, screen } from '@testing-library/react'
 import { expect, it } from 'vitest'
-import { dryingTone, RainLine, swellTone, tone } from './WeatherPanel'
+import { chanceTone, dryingTone, RainLine, swellTone, tone } from './WeatherPanel'
 
 it('shows rain since 9 am, yesterday and the forecast as separate figures, and says so when there is no reading', () => {
   const { unmount } = render(<RainLine today={0} yesterday={2.94} />)
@@ -15,12 +15,20 @@ it('shows rain since 9 am, yesterday and the forecast as separate figures, and s
 })
 
 it('colours swell from 2 m, 3 m and 4 m', () => {
-  expect([1.9, 2, 3, 4.2].map(swellTone)).toEqual(['', 'text-amber-deep', 'text-red-700', 'bg-red-50 text-red-900'])
+  expect([1.9, 2, 3, 4.2].map(swellTone)).toEqual(['', 'text-amber-deep', 'font-bold text-amber-deep', 'bg-red-50 text-red-900'])
 })
 
 it('uses one warning scale: none, amber, red, red tile', () => {
-  expect([0.9, 1, 10].map((mm) => tone(mm, 1, 10))).toEqual(['', 'text-amber-deep', 'text-red-700'])
-  expect([39, 40, 60].map((g) => tone(g, 40, 60))).toEqual(['', 'text-amber-deep', 'text-red-700'])
+  expect([0.9, 1, 10].map((mm) => tone(mm, 1, 10))).toEqual(['', 'text-amber-deep', 'font-bold text-amber-deep'])
+  expect([39, 40, 60].map((g) => tone(g, 40, 60))).toEqual(['', 'text-amber-deep', 'font-bold text-amber-deep'])
   expect(tone(null, 1)).toBe('')
-  expect([0.5, 2, 5].map(dryingTone)).toEqual(['text-red-700', 'text-amber-deep', ''])
+  expect([0.5, 2, 5].map(dryingTone)).toEqual(['font-bold text-amber-deep', 'text-amber-deep', ''])
+})
+
+it('discounts a rain chance by the amount forecast', () => {
+  expect(chanceTone(100, 0.5)).toBe('')
+  expect(chanceTone(100, 4)).toBe('text-amber-deep')
+  expect(chanceTone(90, 15)).toBe('font-bold text-amber-deep')
+  expect(chanceTone(40, 15)).toBe('')
+  expect(chanceTone(90, null)).toBe('text-amber-deep')
 })
