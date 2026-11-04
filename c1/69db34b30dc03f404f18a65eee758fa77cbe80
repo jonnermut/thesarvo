@@ -1,0 +1,21 @@
+thesarvo-3/src/weather/WeatherPanel.test.tsx
+  s_e20d0a1ebc47aa::t_d240a8a9067701 1,7,9-11
+thesarvo-3/src/weather/WeatherPanel.tsx
+  s_e20d0a1ebc47aa::t_d240a8a9067701 108,134-137,139,141-142
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c169db34b30dc03f404f18a65eee758fa77cbe80",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
