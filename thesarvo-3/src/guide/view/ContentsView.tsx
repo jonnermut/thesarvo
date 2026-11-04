@@ -1,5 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { Fragment, lazy, Suspense,  useEffect, useMemo, useState } from 'react'
+import { Fragment, lazy, Suspense,  useEffect, useMemo, useRef, useState } from 'react'
 import type {ReactNode} from 'react';
 import type { GuideStats } from '#/guide/content/manifest'
 import { findByPath, flatten, guideUrl } from '#/guide/content/paths'
@@ -108,13 +108,31 @@ function Card({ node }: { node: IndexNode }) {
   // A region has no climbs of its own: show its guides added up.
   const sum = useMemo(() => (s ? undefined : rollup(node)), [node, s])
   const classics = s ? s.classics.map((c) => [node, c] as const) : (sum?.classics ?? [])
+  const card = useRef<HTMLDivElement>(null)
+  const slot = useRef<HTMLDivElement>(null)
+  const measure = useRef<HTMLUListElement>(null)
+  const [bullets, setBullets] = useState(false)
+  useEffect(() => {
+    const el = card.current
+    if (!el || !s?.sections) return
+    const fit = () => {
+      let below = 0
+      for (let n = slot.current?.nextElementSibling; n; n = n.nextElementSibling) below += (n as HTMLElement).offsetHeight
+      const room = el.clientHeight - (slot.current?.offsetTop ?? 0) - below - Number.parseFloat(getComputedStyle(el).paddingBottom)
+      setBullets((measure.current?.offsetHeight ?? Infinity) <= room)
+    }
+    fit()
+    const ro = new ResizeObserver(fit)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [s?.sections])
   const [seconds] = useState(() => 5 + Math.random() * 3)
   const { at, hold } = useRotation(Math.ceil(classics.length / SHOWN), seconds)
   // The three on show step through the longer list; wrapping fills the last page.
   const shown = classics.length <= SHOWN ? classics : Array.from({ length: SHOWN }, (_, k) => classics[(at * SHOWN + k) % classics.length])
   return (
     // The title link stretches over the whole card; the climb and child links sit above it.
-    <div className="card card-link @container relative h-full p-3" {...hold}>
+    <div ref={card} className="card card-link relative h-full p-3" {...hold}>
       <div className="flex items-baseline justify-between gap-3">
         <Link to={guideUrl(node)} className="text-[17px] font-semibold text-link after:absolute after:inset-0 hover:underline">
           {node.title}
@@ -141,28 +159,36 @@ function Card({ node }: { node: IndexNode }) {
         </ul>
       )}
       {!!s?.sections && (
-        <>
-          {/* Run together in a narrow card; a bulleted list, in two columns when wider still, where there is room. */}
-          <p className="relative mt-2 text-[13px] leading-relaxed text-muted @sm:hidden">
-            {s.sections.map(([anchor, text], i) => (
-              <span key={anchor}>
-                {i > 0 && ', '}
-                <Link to={guideUrl(node)} hash={anchor} className="text-link hover:underline">
-                  {text}
-                </Link>
-              </span>
-            ))}
-          </p>
-          <ul className="relative mt-2 hidden list-disc gap-x-6 pl-5 text-[13px] leading-relaxed text-muted marker:text-muted @sm:block @xl:columns-2">
+        // Bullets when the card has the height for them (beside a taller card, say); run together otherwise. The hidden copy measures the list.
+        <div ref={slot} className="relative mt-2 text-[13px] leading-relaxed text-muted">
+          <ul ref={measure} aria-hidden className="pointer-events-none invisible absolute inset-x-0 top-0 list-disc pl-5">
             {s.sections.map(([anchor, text]) => (
-              <li key={anchor} className="break-inside-avoid">
-                <Link to={guideUrl(node)} hash={anchor} className="text-link hover:underline">
-                  {text}
-                </Link>
-              </li>
+              <li key={anchor}>{text}</li>
             ))}
           </ul>
-        </>
+          {bullets ? (
+            <ul className="list-disc pl-5 marker:text-muted">
+              {s.sections.map(([anchor, text]) => (
+                <li key={anchor}>
+                  <Link to={guideUrl(node)} hash={anchor} className="text-link hover:underline">
+                    {text}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>
+              {s.sections.map(([anchor, text], i) => (
+                <span key={anchor}>
+                  {i > 0 && ', '}
+                  <Link to={guideUrl(node)} hash={anchor} className="text-link hover:underline">
+                    {text}
+                  </Link>
+                </span>
+              ))}
+            </p>
+          )}
+        </div>
       )}
       {node.children.length > 0 && (
         <p className="relative mt-2 text-[13px] leading-relaxed text-muted">

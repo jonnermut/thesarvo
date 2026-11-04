@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { Weather } from '#/weather/bom'
 import { iconKind, WeatherIcon } from '#/weather/icons'
 import { PLACES } from '#/weather/places'
@@ -9,6 +9,8 @@ import { useRotation } from './useRotation'
 
 const WEATHER_SECONDS = 8
 const KEY = 'thesarvo.weather'
+/** Where the card's last height is kept, for the wide layout and the narrow one apart. */
+const heightKey = () => `${KEY}.height.${window.innerWidth >= 1024 ? 'wide' : 'narrow'}`
 
 /** The place a reader last picked, if any: the rotation starts there on their next visit. */
 function remembered() {
@@ -37,6 +39,27 @@ export function HomeWeather() {
     const t = setTimeout(() => setAll(true), 1500)
     return () => clearTimeout(t)
   }, [])
+  // The card is small until the Bureau answers: keep the height it reached last time, so the cards beside and below do not jump (a different width reserves a little wrongly; the card still grows or shrinks to its content).
+  const grid = useRef<HTMLDivElement>(null)
+  const [reserved, setReserved] = useState<number>()
+  useEffect(() => {
+    const el = grid.current
+    if (!el) return
+    try {
+      setReserved(Number(localStorage.getItem(heightKey())) || undefined)
+    } catch {
+      /* storage unavailable: nothing is reserved */
+    }
+    const ro = new ResizeObserver(() => {
+      try {
+        if (el.offsetHeight > 200) localStorage.setItem(heightKey(), String(el.offsetHeight))
+      } catch {
+        /* storage unavailable: no height is kept */
+      }
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
   const pick = (i: number) => {
     go(i)
     try {
@@ -62,7 +85,7 @@ export function HomeWeather() {
   )
   return (
     <li aria-label="Weather" className="relative min-w-0" {...hold}>
-      <div className="grid">
+      <div ref={grid} className="grid lg:min-h-[39rem]" style={{ minHeight: reserved }}>
         {PLACES.map((p, i) => (
           (all || i === at) && (
             <div key={p.name} className={`col-start-1 row-start-1 ${i === at ? '' : 'invisible'}`} aria-hidden={i !== at} inert={i !== at}>
