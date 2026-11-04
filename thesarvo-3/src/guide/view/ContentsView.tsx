@@ -114,7 +114,7 @@ function Card({ node }: { node: IndexNode }) {
   const shown = classics.length <= SHOWN ? classics : Array.from({ length: SHOWN }, (_, k) => classics[(at * SHOWN + k) % classics.length])
   return (
     // The title link stretches over the whole card; the climb and child links sit above it.
-    <div className="card card-link relative h-full p-3" {...hold}>
+    <div className="card card-link @container relative h-full p-3" {...hold}>
       <div className="flex items-baseline justify-between gap-3">
         <Link to={guideUrl(node)} className="text-[17px] font-semibold text-link after:absolute after:inset-0 hover:underline">
           {node.title}
@@ -141,16 +141,28 @@ function Card({ node }: { node: IndexNode }) {
         </ul>
       )}
       {!!s?.sections && (
-        <p className="relative mt-2 text-[13px] leading-relaxed text-muted">
-          {s.sections.map(([anchor, text], i) => (
-            <span key={anchor}>
-              {i > 0 && ', '}
-              <Link to={guideUrl(node)} hash={anchor} className="text-link hover:underline">
-                {text}
-              </Link>
-            </span>
-          ))}
-        </p>
+        <>
+          {/* Run together in a narrow card; a bulleted list, in two columns when wider still, where there is room. */}
+          <p className="relative mt-2 text-[13px] leading-relaxed text-muted @sm:hidden">
+            {s.sections.map(([anchor, text], i) => (
+              <span key={anchor}>
+                {i > 0 && ', '}
+                <Link to={guideUrl(node)} hash={anchor} className="text-link hover:underline">
+                  {text}
+                </Link>
+              </span>
+            ))}
+          </p>
+          <ul className="relative mt-2 hidden list-disc gap-x-6 pl-5 text-[13px] leading-relaxed text-muted marker:text-muted @sm:block @xl:columns-2">
+            {s.sections.map(([anchor, text]) => (
+              <li key={anchor} className="break-inside-avoid">
+                <Link to={guideUrl(node)} hash={anchor} className="text-link hover:underline">
+                  {text}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
       {node.children.length > 0 && (
         <p className="relative mt-2 text-[13px] leading-relaxed text-muted">
