@@ -1,0 +1,21 @@
+thesarvo-android/app/src/main/kotlin/com/thesarvo/guide/ui/Root.kt
+  s_e9cd55a1f49583::t_3b2a51f89834d2 94,102,129
+thesarvo-android/app/src/main/kotlin/com/thesarvo/guide/ui/Screens.kt
+  s_e9cd55a1f49583::t_635e0496b378e9 78,100,104-105
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ffabbe403c9e36ebb39150b949b86880d92b6a0c",
+  "prompts": {},
+  "sessions": {
+    "s_e9cd55a1f49583": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1c2638e6-8c6a-42c3-85d9-4cd938b67512",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
