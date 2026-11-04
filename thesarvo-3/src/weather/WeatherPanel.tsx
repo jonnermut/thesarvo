@@ -98,11 +98,11 @@ export function PlaceCard({ place, footer }: { place: Place; footer?: ReactNode 
       {now && (
         <div className="mt-3">
           <dl className="grid grid-cols-4 gap-1.5 text-center">
-            <Stat label="Now" value={now.temp !== null ? `${now.temp.toFixed(0)}°` : '–'} sub={now.feels !== null && now.temp !== null && Math.abs(now.feels - now.temp) >= 3 ? `feels ${now.feels.toFixed(0)}°` : ''} />
-            <Stat label={`Wind ${now.windDir}`.trim()} value={now.wind !== null ? `${now.wind}` : '–'} sub={now.gust !== null && now.wind !== null && now.gust > now.wind ? `gusts ${now.gust}` : 'km/h'} />
+            <Stat label="Now" value={now.temp !== null ? `${now.temp.toFixed(0)}°` : '–'} sub={now.feels !== null && now.temp !== null && Math.abs(now.feels - now.temp) >= 3 ? `feels ${now.feels.toFixed(0)}°` : ''} subTone={now.feels !== null && now.temp !== null ? tone(now.temp - now.feels, 6, 10) : ''} />
+            <Stat label={`Wind ${now.windDir}`.trim()} value={now.wind !== null ? `${now.wind}` : '–'} sub={now.gust !== null && now.wind !== null && now.gust > now.wind ? `gusts ${now.gust}` : 'km/h'} subTone={tone(now.gust, 40, 60)} />
             <Stat label="Humidity" value={now.humidity !== null ? `${Math.round(now.humidity)}%` : '–'} sub="" />
             {now.deltaT !== null ? (
-              <Stat label="Delta-T" value={now.deltaT.toFixed(1)} sub={dryingWord(now.deltaT)} tone={dryingTone(now.deltaT)} onClick={() => setExplain((e) => !e)} expanded={explain} />
+              <Stat label="Delta-T" value={now.deltaT.toFixed(1)} sub={dryingWord(now.deltaT)} subTone={dryingTone(now.deltaT)} onClick={() => setExplain((e) => !e)} expanded={explain} />
             ) : (
               <Stat label="Delta-T" value="–" sub="" />
             )}
@@ -125,10 +125,10 @@ export function PlaceCard({ place, footer }: { place: Place; footer?: ReactNode 
           <div>
             <p className="font-semibold">
               Today {deg(today.min)}–{deg(today.max)}
-              {today.rainChance !== null && <span className={`ml-2 ${today.rainChance >= 50 ? 'text-link' : 'font-normal text-muted'}`}>{today.rainChance}% rain</span>}
+              {today.rainChance !== null && <span className={`ml-2 ${tone(today.rainChance, 50, 80) || 'font-normal text-muted'}`}>{today.rainChance}% rain</span>}
             </p>
             <p>{today.text || today.short}</p>
-            {today.humMin !== null && today.humMax !== null && <p className="text-xs text-muted">Humidity {Math.round(today.humMin)}–{Math.round(today.humMax)}%{today.deltaMax !== null && `, Delta-T up to ${today.deltaMax.toFixed(1)}`}</p>}
+            {today.humMin !== null && today.humMax !== null && <p className="text-xs text-muted">Humidity {Math.round(today.humMin)}–{Math.round(today.humMax)}%{today.deltaMax !== null && <>, <span className={dryingTone(today.deltaMax)}>Delta-T up to {today.deltaMax.toFixed(1)}</span></>}</p>}
           </div>
         </div>
       )}
@@ -152,9 +152,9 @@ const RAIN_TIMEFRAMES = "Since 9 am: the station's rain gauge from 9 am today (t
 export function RainLine({ today, yesterday, forecast = null }: { today: number | null; yesterday: number | null; forecast?: number | null }) {
   const mm = (n: number) => (n < 0.1 ? 'none' : `${n.toFixed(n < 10 ? 1 : 0)} mm`)
   const items = [
-    today !== null && { label: 'Since 9 am', text: mm(today), wet: today >= 1 },
-    yesterday !== null && { label: 'Yesterday', text: mm(yesterday), wet: yesterday >= 1 },
-    forecast !== null && forecast > 0 && { label: 'Forecast today', text: `≤ ${mm(forecast)}`, wet: forecast >= 1 },
+    today !== null && { label: 'Since 9 am', text: mm(today), level: tone(today, 1, 10) },
+    yesterday !== null && { label: 'Yesterday', text: mm(yesterday), level: tone(yesterday, 1, 10) },
+    forecast !== null && forecast > 0 && { label: 'Forecast today', text: `≤ ${mm(forecast)}`, level: tone(forecast, 1, 10) },
   ].filter((x) => x !== false)
   if (!items.length) return <p className="mt-2 text-[13px] text-muted">Rain: no reading</p>
   return (
@@ -164,7 +164,7 @@ export function RainLine({ today, yesterday, forecast = null }: { today: number 
         {items.map((i) => (
           <span key={i.label} className="rounded bg-paper px-1 py-1">
             <span className="block text-[11px] leading-tight text-muted">{i.label}</span>
-            <span className={`whitespace-nowrap font-semibold ${i.wet ? 'text-link' : ''}`}>{i.text}</span>
+            <span className={`whitespace-nowrap font-semibold ${i.level}`}>{i.text}</span>
           </span>
         ))}
       </div>
@@ -172,24 +172,28 @@ export function RainLine({ today, yesterday, forecast = null }: { today: number 
   )
 }
 
-/** Colour for a swell that matters on a sea cliff: amber from 2 m, red from 3 m, and a red tile from 4 m. */
-export const swellTone = (m: number) => (m >= 4 ? 'bg-red-50 text-red-900' : m >= 3 ? 'text-red-700' : m >= 2 ? 'text-amber-deep' : '')
+/** One warning scale for everything on the card: nothing, amber (take care), red (serious), and a red tile for the worst. `cuts` are the values where each step starts. */
+const TONES = ['', 'text-amber-deep', 'text-red-700', 'bg-red-50 text-red-900']
+export const tone = (v: number | null, ...cuts: number[]) => (v === null ? '' : TONES[cuts.filter((c) => v >= c).length])
 
-const dryingTone = (d: number) => (d < 1 ? 'text-red-700' : d < 3 ? 'text-amber-deep' : 'text-link')
+/** A sea cliff swell that matters: amber from 2 m, red from 3 m, a red tile from 4 m. */
+export const swellTone = (m: number) => tone(m, 2, 3, 4)
+/** Delta-T is a warning when low: under 1 the rock stays wet, under 3 it dries slowly. */
+export const dryingTone = (d: number) => (d < 1 ? TONES[2] : d < 3 ? TONES[1] : '')
 
 /** One figure in the strip of current conditions: a small label, the value large, and a line of detail. */
-function Stat({ label, value, sub, tone = '', onClick, expanded }: { label: string; value: string; sub: string; tone?: string; onClick?: () => void; expanded?: boolean }) {
+function Stat({ label, value, sub, subTone = '', onClick, expanded }: { label: string; value: string; sub: string; subTone?: string; onClick?: () => void; expanded?: boolean }) {
   const body = (
     <>
       <dt className="text-[11px] leading-tight text-muted">{label}</dt>
       <dd className="m-0 text-[17px] font-semibold leading-snug">{value}</dd>
-      <dd className={`m-0 min-h-4 text-[11px] leading-tight ${tone || 'text-muted'}`}>{sub}</dd>
+      <dd className={`m-0 min-h-4 text-[11px] leading-tight ${subTone || 'text-muted'}`}>{sub}</dd>
     </>
   )
   return onClick ? (
     <div className="rounded bg-paper"><button type="button" aria-expanded={expanded} title="What is Delta-T?" onClick={onClick} className="block w-full px-1 py-1 hover:text-navy">{body}</button></div>
   ) : (
-    <div className={`rounded bg-paper px-1 py-1`}>{body}</div>
+    <div className="rounded bg-paper px-1 py-1">{body}</div>
   )
 }
 
@@ -206,7 +210,7 @@ function DayCell({ day }: { day: Day }) {
       {kind && <WeatherIcon kind={kind} className="mx-auto my-0.5 size-6" />}
       <div>{deg(day.max)}</div>
       <div className="text-muted">{deg(day.min)}</div>
-      <div className={day.rainChance !== null && day.rainChance >= 50 ? 'font-semibold text-link' : 'text-muted'}>{day.rainChance === null ? '' : `${day.rainChance}%`}</div>
+      <div className={tone(day.rainChance, 50, 80) ? `font-semibold ${tone(day.rainChance, 50, 80)}` : 'text-muted'}>{day.rainChance === null ? '' : `${day.rainChance}%`}</div>
     </li>
   )
 }
