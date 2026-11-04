@@ -5,6 +5,7 @@ import { useEscape, useScrollLock } from '#/components/overlay'
 import type { GpsLine, GpsPoint, GpsShape } from '#/guide/model/types'
 import { CLUSTER_SPAN, clusterPins, dedupe } from './cluster'
 import type { Pin } from './cluster'
+import { climb, elevations, formatDistance, pathLength, sample } from './measure'
 
 /** Tasmania's own basemaps from theLIST: Web Mercator tiles, no key. Topographic is CC BY; the aerial photos and Tasmap scans are CC BY-NC-ND, which allows showing them unaltered. */
 const list = (service: string, maxNativeZoom: number, licence: string) =>
@@ -89,6 +90,8 @@ const handleIcon = (cls: string) => L.divIcon({ className: '', html: `<div class
 const POINT_HANDLE = handleIcon('size-[18px] rounded-full border-2 border-white bg-amber shadow')
 const VERTEX_HANDLE = handleIcon('size-[14px] m-[2px] border-2 border-white bg-fill shadow')
 
+const mapButton = 'rounded border-2 border-wash/20 bg-card px-2 py-1 text-[13px] text-navy shadow hover:bg-paper disabled:opacity-50'
+
 const TOOLS: [MapTool, string][] = [
   ['point', 'Add point'],
   ['polyline', 'Draw track'],
@@ -125,6 +128,21 @@ export default function MapView({ points, lines, selected, onSelect, edit, clust
   toolRef.current = tool
   const drawnRef = useRef(drawn)
   drawnRef.current = drawn
+  // Measuring: points clicked along a path, with its length at once and its climb and descent once the heights arrive.
+  const [measuring, setMeasuring] = useState(false)
+  const [route, setRoute] = useState<L.LatLng[]>([])
+  const [heights, setHeights] = useState<{ up: number; down: number } | 'loading' | 'failed' | null>(null)
+  const measuringRef = useRef(measuring)
+  measuringRef.current = measuring
+  const routeRef = useRef(route)
+  routeRef.current = route
+  const routeLayer = useRef<L.LayerGroup | null>(null)
+  // Where the person is, when they ask (the browser prompts the first time).
+  const [watching, setWatching] = useState(false)
+  const [here, setHere] = useState<{ latlng: L.LatLng; accuracy: number } | null>(null)
+  const [locError, setLocError] = useState('')
+  const hereLayer = useRef<L.LayerGroup | null>(null)
+  const centred = useRef(false)
 
   const finish = (shape: GpsShape, latlngs: L.LatLng[]) => {
     editRef.current?.onAddLine(shape, pathText(latlngs))
@@ -171,7 +189,13 @@ export default function MapView({ points, lines, selected, onSelect, edit, clust
     L.control.scale({ imperial: false }).addTo(m)
     m.setView([-42, 147], 7)
     m.on('moveend', () => (shown.current = m.getBounds()))
+    routeLayer.current = L.layerGroup().addTo(m)
+    hereLayer.current = L.layerGroup().addTo(m)
     m.on('click', (e: L.LeafletMouseEvent) => {
+      if (measuringRef.current) {
+        setRoute([...routeRef.current, e.latlng])
+        return
+      }
       const t = toolRef.current
       if (t === 'point') {
         editRef.current?.onAddPoint(e.latlng.lat, e.latlng.lng)
@@ -189,6 +213,8 @@ export default function MapView({ points, lines, selected, onSelect, edit, clust
       map.current = null
       layer.current = null
       pins.current = null
+      routeLayer.current = null
+      hereLayer.current = null
       fitted.current = false
     }
   }, [])
@@ -231,6 +257,77 @@ export default function MapView({ points, lines, selected, onSelect, edit, clust
     draft.current = drawn.length ? L.polyline(drawn, { color: '#f7941e', weight: 3, dashArray: '6 6' }).addTo(m) : null
     m.getContainer().style.cursor = tool === 'none' ? '' : 'crosshair'
   }, [drawn, tool])
+
+  // The measured path.
+  useEffect(() => {
+    const group = routeLayer.current
+    if (!group) return
+    group.clearLayers()
+    if (route.length > 1) L.polyline(route, { color: '#2563eb', weight: 4 }).addTo(group)
+    route.forEach((p) => L.circleMarker(p, { radius: 4, color: '#2563eb', weight: 2, fillColor: '#fff', fillOpacity: 1, interactive: false }).addTo(group))
+  }, [route])
+  useEffect(() => {
+    const m = map.current
+    if (m) m.getContainer().style.cursor = measuring ? 'crosshair' : ''
+    if (!measuring) setRoute([])
+  }, [measuring])
+  // Heights once the path stops changing for a moment.
+  useEffect(() => {
+    if (route.length < 2) {
+      setHeights(null)
+      return
+    }
+    setHeights('loading')
+    const ctl = new AbortController()
+    const t = setTimeout(() => {
+      const pts = sample(route.map((p) => ({ lat: p.lat, lng: p.lng })))
+      elevations(pts, ctl.signal).then(
+        (h) => setHeights(climb(h)),
+        () => !ctl.signal.aborted && setHeights('failed'),
+      )
+    }, 500)
+    return () => {
+      clearTimeout(t)
+      ctl.abort()
+    }
+  }, [route])
+  // The person's position, kept up to date while it is on.
+  useEffect(() => {
+    if (!watching) {
+      hereLayer.current?.clearLayers()
+      setHere(null)
+      centred.current = false
+      return
+    }
+    if (!navigator.geolocation) {
+      setLocError('This browser cannot tell where you are.')
+      setWatching(false)
+      return
+    }
+    setLocError('')
+    const id = navigator.geolocation.watchPosition(
+      (pos) => setHere({ latlng: L.latLng(pos.coords.latitude, pos.coords.longitude), accuracy: pos.coords.accuracy }),
+      (err) => {
+        setLocError(err.code === err.PERMISSION_DENIED ? 'Location is blocked: allow it for this site in the browser to show where you are.' : 'Your position is not available just now.')
+        setWatching(false)
+      },
+      { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 },
+    )
+    return () => navigator.geolocation.clearWatch(id)
+  }, [watching])
+  useEffect(() => {
+    const m = map.current
+    const group = hereLayer.current
+    if (!m || !group || !here) return
+    group.clearLayers()
+    L.circle(here.latlng, { radius: here.accuracy, color: '#2563eb', weight: 1, fillOpacity: 0.1, interactive: false }).addTo(group)
+    L.circleMarker(here.latlng, { radius: 7, color: '#fff', weight: 2, fillColor: '#2563eb', fillOpacity: 1, interactive: false }).addTo(group)
+    // The first fix brings it into view; after that the map stays where the person has put it.
+    if (!centred.current) {
+      centred.current = true
+      if (!m.getBounds().contains(here.latlng)) m.flyTo(here.latlng, Math.max(m.getZoom(), 15), { duration: 0.6 })
+    }
+  }, [here])
 
   useEffect(() => {
     const m = map.current
@@ -345,7 +442,7 @@ export default function MapView({ points, lines, selected, onSelect, edit, clust
       {edit && (
         <div className="mb-2 flex flex-wrap items-center gap-2">
           {TOOLS.map(([id, label]) => (
-            <button key={id} type="button" className={`${btn} ${tool === id ? 'border-amber bg-amber/20' : ''}`} onClick={() => { setDrawn([]); setTool(tool === id ? 'none' : id) }}>
+            <button key={id} type="button" className={`${btn} ${tool === id ? 'border-amber bg-amber/20' : ''}`} onClick={() => { setDrawn([]); setMeasuring(false); setTool(tool === id ? 'none' : id) }}>
               {label}
             </button>
           ))}
@@ -366,6 +463,41 @@ export default function MapView({ points, lines, selected, onSelect, edit, clust
         className={full ? 'fixed inset-0 z-50 isolate h-dvh w-full animate-[overlay-in_180ms_ease-out]' : 'relative isolate h-96 w-full border border-line sm:h-[28rem]'}
       >
         <div ref={el} className="size-full" />
+        <div className="absolute bottom-7 right-[10px] z-[1000] flex flex-col items-end gap-1.5">
+          {locError && <p role="status" className="max-w-56 rounded bg-card px-2 py-1 text-[12px] text-navy shadow">{locError}</p>}
+          {edit && (
+            <button type="button" className={mapButton} disabled={!here} title={here ? 'Add a point where you are' : 'Turn on My location first'} onClick={() => here && edit.onAddPoint(here.latlng.lat, here.latlng.lng)}>
+              Point here
+            </button>
+          )}
+          <button type="button" aria-pressed={measuring} className={`${mapButton} ${measuring ? 'border-fill bg-fill text-white' : ''}`} onClick={() => { setTool('none'); setDrawn([]); setMeasuring((v) => !v) }}>
+            Measure
+          </button>
+          <button type="button" aria-pressed={watching} className={`${mapButton} ${watching ? 'border-fill bg-fill text-white' : ''}`} onClick={() => setWatching((v) => !v)}>
+            My location
+          </button>
+        </div>
+        {measuring && (
+          <div className="absolute bottom-7 left-[10px] z-[1000] flex max-w-[calc(100%-9rem)] flex-col gap-1 rounded bg-card px-2.5 py-1.5 text-[13px] text-navy shadow">
+            {route.length < 2 ? (
+              <span>Click the map to trace a path.</span>
+            ) : (
+              <>
+                <b>{formatDistance(pathLength(route))}</b>
+                <span>
+                  {heights === 'loading' && 'Heights…'}
+                  {heights === 'failed' && 'Heights not available.'}
+                  {heights && typeof heights === 'object' && `↑ ${Math.round(heights.up)} m  ↓ ${Math.round(heights.down)} m (approx.)`}
+                </span>
+              </>
+            )}
+            <span className="flex flex-wrap gap-x-3">
+              <button type="button" className="text-link hover:underline" disabled={!route.length} onClick={() => setRoute(route.slice(0, -1))}>Undo</button>
+              <button type="button" className="text-link hover:underline" disabled={!route.length} onClick={() => setRoute([])}>Clear</button>
+              <button type="button" className="text-link hover:underline disabled:opacity-40" disabled={!here} title={here ? '' : 'Turn on My location first'} onClick={() => here && setRoute([...route, here.latlng])}>Add my position</button>
+            </span>
+          </div>
+        )}
         {trail.length > 0 && (
           <button
             type="button"
