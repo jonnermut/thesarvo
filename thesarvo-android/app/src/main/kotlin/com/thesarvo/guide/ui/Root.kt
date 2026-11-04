@@ -91,7 +91,7 @@ fun Root(model: AppModel, requestNotifications: () -> Unit) {
         when {
             model.webUpdateNeeded -> WebViewUpdate()
             !model.firstRunDone && model.manifest != null -> FirstRun(model, requestNotifications)
-            else -> Shell(model, wide)
+            else -> Shell(model, wide, requestNotifications)
         }
         Notice(model)
     }
@@ -99,7 +99,7 @@ fun Root(model: AppModel, requestNotifications: () -> Unit) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun Shell(model: AppModel, wide: Boolean) {
+private fun Shell(model: AppModel, wide: Boolean, requestNotifications: () -> Unit) {
     val ime = WindowInsets.isImeVisible
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -126,7 +126,7 @@ private fun Shell(model: AppModel, wide: Boolean) {
             when (model.tab) {
                 AppTab.Guides -> GuidesScreen(model, wide)
                 AppTab.Map -> MapScreen(model)
-                AppTab.Downloads -> DownloadsScreen(model)
+                AppTab.Downloads -> DownloadsScreen(model, requestNotifications)
                 AppTab.Settings -> SettingsScreen(model)
             }
         }

@@ -75,7 +75,7 @@ private fun Labeled(label: String, value: String) {
 }
 
 @Composable
-fun DownloadsScreen(model: AppModel) {
+fun DownloadsScreen(model: AppModel, requestNotifications: () -> Unit) {
     Column(Modifier.fillMaxSize()) {
         NavyBar("Downloads")
         Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).widthIn(max = 720.dp)) {
@@ -97,12 +97,12 @@ fun DownloadsScreen(model: AppModel) {
                     model.lastCheck?.let { Labeled("Last checked", DateUtils.getRelativeTimeSpanString(it, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS).toString()) }
                 }
                 model.syncError?.let { Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall) }
-                OutlinedButton(onClick = { model.syncNow() }) { Text("Check for updates") }
+                OutlinedButton(onClick = { model.syncNow(); requestNotifications() }) { Text("Check for updates") }
             }
             Section("Photos") {
                 for (m in DownloadMode.entries) {
-                    Row(Modifier.fillMaxWidth().clickable { model.changeMode(m) }, verticalAlignment = Alignment.CenterVertically) {
-                        RadioButton(selected = model.mode == m, onClick = { model.changeMode(m) })
+                    Row(Modifier.fillMaxWidth().clickable { model.changeMode(m); requestNotifications() }, verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(selected = model.mode == m, onClick = { model.changeMode(m); requestNotifications() })
                         Text("${m.title} (${model.sizeLabel(m)})")
                     }
                 }
