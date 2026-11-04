@@ -1,7 +1,8 @@
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import type { Climb, Guide, Header } from '#/guide/model/types'
 import { ClimbBlock } from './ClimbBlock'
+import { TopoViewer } from './TopoViewer'
 import { credited, guideHasCragMarks, thecragContent, TopoCredit, withoutMark } from './credit'
 import { HeaderBlock } from './HeaderBlock'
 
@@ -26,7 +27,7 @@ describe('thecragContent', () => {
 describe('climb credit', () => {
   it('links the description to theCrag after the first ascent', () => {
     const { container } = render(<ClimbBlock climb={{ ...climb, fa: 'A. Climber, 2001', other: { thecrag: '500', thecragContent: 'text' } }} />)
-    const link = container.querySelector('a[href="https://www.thecrag.com/node/500"]')
+    const link = container.querySelector('a[href="https://www.thecrag.com/en/climbing/australia/route/500"]')
     expect(link).toHaveTextContent('theCrag')
     expect(link).toHaveAttribute('title', expect.stringContaining('CC BY-NC-SA 3.0'))
     expect(container.textContent).toContain('A. Climber, 2001 · From: theCrag')
@@ -40,7 +41,7 @@ describe('climb credit', () => {
 
 it('credits a topo and links the licence and the area', () => {
   const { container } = render(<TopoCredit other={{ thecrag: '900', thecragArea: '300', thecragContent: 'topo' }} />)
-  expect(container.querySelector('a[href="https://www.thecrag.com/node/300"]')).not.toBeNull()
+  expect(container.querySelector('a[href="https://www.thecrag.com/en/climbing/australia/area/300"]')).not.toBeNull()
   expect(container.querySelector('a[href*="creativecommons.org/licenses/by-nc-sa"]')).not.toBeNull()
   expect(render(<TopoCredit other={{ thecrag: '900' }} />).container).toBeEmptyDOMElement()
 })
@@ -62,4 +63,13 @@ describe('guideHasCragMarks', () => {
     expect(guideHasCragMarks(guide([{ ...climb, other: { thecrag: '5' } }]))).toBe(false)
     expect(guideHasCragMarks(null)).toBe(false)
   })
+})
+
+it('keeps the topo credit in the full-screen viewer', () => {
+  render(
+    <TopoViewer width={100} height={100} open onClose={() => {}} credit={<TopoCredit other={{ thecrag: '900', thecragArea: '300', thecragContent: 'topo' }} />}>
+      {() => null}
+    </TopoViewer>,
+  )
+  expect(screen.getByRole('dialog')).toHaveTextContent('Topo: theCrag contributors, CC BY-NC-SA 3.0, theCrag')
 })

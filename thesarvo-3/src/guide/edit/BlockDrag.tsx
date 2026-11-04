@@ -87,7 +87,7 @@ export function DragHandle({ onPointerDown, onMove }: { onPointerDown: (e: React
         e.preventDefault()
         onMove(e.key === 'ArrowUp' ? -1 : 1)
       }}
-      className="-my-1 -ml-1 grid h-7 w-6 cursor-grab touch-none place-items-center rounded text-muted hover:bg-black/5 hover:text-ink active:cursor-grabbing"
+      className="-my-1 -ml-1 grid h-7 w-6 cursor-grab touch-none place-items-center rounded text-muted hover:bg-wash/5 hover:text-ink active:cursor-grabbing"
     >
       <svg viewBox="0 0 10 16" className="h-4 w-2.5" fill="currentColor" aria-hidden>
         {[2, 8, 14].flatMap((cy) => [2, 8].map((cx) => <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="1.5" />))}

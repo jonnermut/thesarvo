@@ -1,15 +1,15 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { Fragment, lazy, Suspense,  useEffect, useMemo, useState } from 'react'
+import { Fragment, lazy, Suspense,  useEffect, useMemo, useRef, useState } from 'react'
 import type {ReactNode} from 'react';
 import type { GuideStats } from '#/guide/content/manifest'
 import { findByPath, flatten, guideUrl } from '#/guide/content/paths'
 import type { IndexNode } from '#/guide/content/types'
-import type { GpsPoint } from '#/guide/model/types'
+import type { MapPoint } from '#/guide/islands/MapView'
 import { fetchTree } from '#/guide/server'
 import { inApp, openNativeMap } from '#/app/bridge'
 import { LockMark } from '#/components/LockMark'
 import { DownloadIcon } from './GpsBlock'
-import { treeGpxUrl, treeKmlUrl } from './kml'
+import { kmlPoints, treeGpxUrl, treeKmlUrl } from './kml'
 import { rollup } from './rollup'
 import { PROBLEM_BANDS, ROUTE_BANDS } from './routeStats'
 import { useRotation } from './useRotation'
@@ -85,7 +85,7 @@ export function ContentsView({ node, after, bare }: { node: IndexNode; after?: R
           ))}
         </div>
       )}
-      <CragMap id={current.id} nodes={below} />
+      <CragMap id={current.id} nodes={below} chains={areaChains(current)} />
     </section>
   )
 }
@@ -108,13 +108,31 @@ function Card({ node }: { node: IndexNode }) {
   // A region has no climbs of its own: show its guides added up.
   const sum = useMemo(() => (s ? undefined : rollup(node)), [node, s])
   const classics = s ? s.classics.map((c) => [node, c] as const) : (sum?.classics ?? [])
+  const card = useRef<HTMLDivElement>(null)
+  const slot = useRef<HTMLDivElement>(null)
+  const measure = useRef<HTMLUListElement>(null)
+  const [bullets, setBullets] = useState(false)
+  useEffect(() => {
+    const el = card.current
+    if (!el || !s?.sections) return
+    const fit = () => {
+      let below = 0
+      for (let n = slot.current?.nextElementSibling; n; n = n.nextElementSibling) below += (n as HTMLElement).offsetHeight
+      const room = el.clientHeight - (slot.current?.offsetTop ?? 0) - below - Number.parseFloat(getComputedStyle(el).paddingBottom)
+      setBullets((measure.current?.offsetHeight ?? Infinity) <= room)
+    }
+    fit()
+    const ro = new ResizeObserver(fit)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [s?.sections])
   const [seconds] = useState(() => 5 + Math.random() * 3)
   const { at, hold } = useRotation(Math.ceil(classics.length / SHOWN), seconds)
   // The three on show step through the longer list; wrapping fills the last page.
   const shown = classics.length <= SHOWN ? classics : Array.from({ length: SHOWN }, (_, k) => classics[(at * SHOWN + k) % classics.length])
   return (
     // The title link stretches over the whole card; the climb and child links sit above it.
-    <div className="card card-link relative h-full p-3" {...hold}>
+    <div ref={card} className="card card-link relative h-full p-3" {...hold}>
       <div className="flex items-baseline justify-between gap-3">
         <Link to={guideUrl(node)} className="text-[17px] font-semibold text-link after:absolute after:inset-0 hover:underline">
           {node.title}
@@ -141,16 +159,36 @@ function Card({ node }: { node: IndexNode }) {
         </ul>
       )}
       {!!s?.sections && (
-        <p className="relative mt-2 text-[13px] leading-relaxed text-muted">
-          {s.sections.map(([anchor, text], i) => (
-            <span key={anchor}>
-              {i > 0 && ', '}
-              <Link to={guideUrl(node)} hash={anchor} className="text-link hover:underline">
-                {text}
-              </Link>
-            </span>
-          ))}
-        </p>
+        // Bullets when the card has the height for them (beside a taller card, say); run together otherwise. The hidden copy measures the list.
+        <div ref={slot} className="relative mt-2 text-[13px] leading-relaxed text-muted">
+          <ul ref={measure} aria-hidden className="pointer-events-none invisible absolute inset-x-0 top-0 list-disc pl-5">
+            {s.sections.map(([anchor, text]) => (
+              <li key={anchor}>{text}</li>
+            ))}
+          </ul>
+          {bullets ? (
+            <ul className="list-disc pl-5 marker:text-muted">
+              {s.sections.map(([anchor, text]) => (
+                <li key={anchor}>
+                  <Link to={guideUrl(node)} hash={anchor} className="text-link hover:underline">
+                    {text}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>
+              {s.sections.map(([anchor, text], i) => (
+                <span key={anchor}>
+                  {i > 0 && ', '}
+                  <Link to={guideUrl(node)} hash={anchor} className="text-link hover:underline">
+                    {text}
+                  </Link>
+                </span>
+              ))}
+            </p>
+          )}
+        </div>
       )}
       {node.children.length > 0 && (
         <p className="relative mt-2 text-[13px] leading-relaxed text-muted">
@@ -194,40 +232,61 @@ function Summary({ stats, gps }: { stats: Pick<GuideStats, 'problems' | 'bands' 
   )
 }
 
+/** Each page below `node` by path, with the titles from the first page below it down to the page itself: where a pin is, for naming the groups it falls into on a zoomed-out map. */
+function areaChains(node: IndexNode, chain: string[] = [], out = new Map<string, string[]>()) {
+  for (const child of node.children) {
+    const here = [...chain, child.title]
+    out.set(child.path, here)
+    areaChains(child, here, out)
+  }
+  return out
+}
+
 /**
  * One pin per guide that has GPS; clicking a pin opens that guide. Only in the browser. The build
  * writes every point below as one KML file, as the old site's recursive export did.
  */
-function CragMap({ id, nodes }: { id: string; nodes: IndexNode[] }) {
+function CragMap({ id, nodes, chains }: { id: string; nodes: IndexNode[]; chains: Map<string, string[]> }) {
   const navigate = useNavigate()
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
   const key = nodes.map((n) => n.stats?.pin && `${n.path}@${n.stats.pin.join(',')}`).filter(Boolean).join(' ')
-  const points = useMemo(
-    (): GpsPoint[] =>
+  const first = useMemo(
+    (): MapPoint[] =>
       nodes.flatMap((n) => {
         const pin = n.stats?.pin
         return pin
-          ? [{ pid: n.path, code: '', description: n.title, zone: '', easting: '', northing: '', latitude: String(pin[0]), longitude: String(pin[1]), height: '' }]
+          ? [{ pid: n.path, code: '', description: n.title, zone: '', easting: '', northing: '', latitude: String(pin[0]), longitude: String(pin[1]), height: '', area: chains.get(n.path) ?? [n.title] }]
           : []
       }),
     [key],
   )
+  // The manifest holds one pin per guide; the tree's KML has every point, which is what the iOS map shows.
+  const [all, setAll] = useState<MapPoint[] | null>(null)
+  useEffect(() => {
+    if (inApp()) return
+    const byTitle = new Map(nodes.map((n) => [n.title, n.path]))
+    fetch(treeKmlUrl(id))
+      .then((r) => (r.ok ? r.text() : ''))
+      .then((text) => setAll(kmlPoints(text, byTitle, chains)))
+      .catch(() => {})
+  }, [id, key])
+  const points = all?.length ? all : first
   if (points.length < 2 || !mounted) return null
   // In the app the map is the native Map tab.
   if (inApp())
     return (
       <div className="no-print pt-2">
-        <button type="button" onClick={() => openNativeMap(id, points.map((p) => ({ title: p.description, lat: Number(p.latitude), lon: Number(p.longitude) })))} className="rounded border border-line bg-navy px-2.5 py-1 text-[13px] text-white">
+        <button type="button" onClick={() => openNativeMap(id, points.map((p) => ({ title: p.description, lat: Number(p.latitude), lon: Number(p.longitude) })))} className="rounded border border-line bg-fill px-2.5 py-1 text-[13px] text-white">
           Open in Map
         </button>
       </div>
     )
   return (
     <div className="no-print pt-2">
-      <Suspense fallback={<div className="grid h-80 place-items-center rounded-lg bg-black/5 text-muted">Loading map…</div>}>
+      <Suspense fallback={<div className="grid h-80 place-items-center rounded-lg bg-wash/5 text-muted">Loading map…</div>}>
         {/* Keyed on the pins so another page's map fits its own crags. */}
-        <MapView key={key} points={points} lines={[]} onSelect={(path) => void navigate({ to: guideUrl({ path }) })} />
+        <MapView key={key} points={points} lines={[]} cluster onSelect={(pid) => void navigate({ to: guideUrl({ path: pid.split('#')[0] ?? pid }) })} />
       </Suspense>
       <p className="mt-1 flex flex-wrap gap-x-4 text-[13px] text-muted">
         <a href={treeKmlUrl(id)} download title="Every GPS point below this page, for Google Earth" className="inline-flex items-center gap-1 hover:text-link">

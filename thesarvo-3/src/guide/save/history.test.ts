@@ -12,6 +12,7 @@ const climb = (id: string, name = '', more: Partial<Climb> = {}): Climb => ({
 const header: Header = { type: 'header', id: 'h', name: 'Crag', rock: '', sun: '', walk: '', access: '', camping: '', acknowledgement: '', intro: '', history: '', autonumber: '' }
 const guide = (...nodes: GuideNode[]): Guide => ({ id: '1', guideStars: '', nodes })
 const jon = { sub: 's1', name: 'Jon' }
+const keyed = { ...jon, key: 'email:aa243d065e79166e' }
 
 /** The description of going from `a` to `b`. */
 const said = (a: Guide, b: Guide) => {
@@ -66,6 +67,14 @@ describe('updateHistory', () => {
     expect(h).toHaveLength(1)
     expect(h[0]).toMatchObject({ saves: 2, start: '2026-10-27T01:00:00Z', end: '2026-10-27T01:05:00Z', description: 'added the climb Bat and edited the climb Albatros' })
     expect(h[0].nodes['1'].before).toEqual(climb('1', 'Albatros'))
+  })
+
+  it('keeps the editor’s email key through the session, and leaves it out when there is none', () => {
+    const g1 = guide(header, climb('1', 'Albatros', { text: 'x' }))
+    const g2 = guide(header, climb('1', 'Albatros', { text: 'y' }))
+    const h = updateHistory(updateHistory([], save(base, g1, 'a', keyed)), save(g1, g2, 'a', keyed, '2026-10-27T01:05:00Z'))
+    expect(h[0].user).toEqual(keyed)
+    expect(updateHistory([], save(base, g1))[0].user).toEqual(jon)
   })
 
   it('leaves out climbs only renumbered by autonumbering', () => {

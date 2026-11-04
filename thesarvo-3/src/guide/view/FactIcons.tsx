@@ -5,7 +5,7 @@ import walk from './icons/walk.svg'
 
 const icon = (src: string, label: string) =>
   function Icon() {
-    return <img src={src} alt={label} width={64} height={64} className="size-8 shrink-0 sm:size-16" />
+    return <img src={src} alt={label} width={64} height={64} className="size-8 shrink-0 rounded-md bg-(--fact-icon-bg) sm:size-16" />
   }
 
 export const WalkIcon = icon(walk, 'Walk')

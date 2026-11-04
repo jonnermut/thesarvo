@@ -30,7 +30,7 @@ const urlFor = ({ imported, uploaded }: Maps, ids: readonly string[]) => {
 }
 
 /** A round picture for someone, or their initial when they have none. `ids` are tried in order. */
-export function Avatar({ ids, name, className = 'size-6 text-xs', tone = 'bg-black/10 text-muted' }: { ids: readonly string[]; name: string; className?: string; tone?: string }) {
+export function Avatar({ ids, name, className = 'size-6 text-xs', tone = 'bg-wash/10 text-muted' }: { ids: readonly string[]; name: string; className?: string; tone?: string }) {
   const [src, setSrc] = useState<string>()
   const key = ids.join('|')
   useEffect(() => {

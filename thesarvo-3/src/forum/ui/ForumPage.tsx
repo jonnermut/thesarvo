@@ -7,7 +7,7 @@ import type { Author, Comment, Thread, ThreadMeta } from '../types'
 import { Body } from './Body'
 
 const when = (iso: string) => new Date(iso).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
-const field = 'w-full rounded-md border border-line bg-white px-3 py-2 focus:border-link focus:outline-none'
+const field = 'w-full rounded-md border border-line bg-card px-3 py-2 focus:border-link focus:outline-none'
 const button = 'rounded-md bg-brand px-4 py-2 text-white disabled:opacity-50'
 const idsOf = (a: Author) => [a.sub, a.key].filter((x): x is string => !!x)
 
@@ -158,7 +158,7 @@ function NoticeControls({ thread, onChange }: { thread: Thread; onChange: (t: Th
         <>
           <label>
             Show as a notice for{' '}
-            <select value={days} onChange={(e) => setDays(Number(e.target.value))} className="rounded border border-line bg-white px-1 py-0.5">
+            <select value={days} onChange={(e) => setDays(Number(e.target.value))} className="rounded border border-line bg-card px-1 py-0.5">
               {DURATIONS.map(([label, d]) => (
                 <option key={d} value={d}>
                   {label}

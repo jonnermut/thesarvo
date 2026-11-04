@@ -5,7 +5,8 @@ const API = 'https://api.weather.bom.gov.au/v1/locations'
 
 export type Day = { date: string; icon: string; min: number | null; max: number | null; short: string; text: string; rainChance: number | null; rainMax: number | null; fire: string; humMin: number | null; humMax: number | null; deltaMax: number | null }
 export type Observation = { temp: number | null; feels: number | null; wind: number | null; windDir: string; gust: number | null; rain: number | null; humidity: number | null; deltaT: number | null; station: string; stationId: string; at: string }
-export type Weather = { days: Day[]; now: Observation | null }
+export type Swell = { height: number; period: number | null; dir: string }
+export type Weather = { days: Day[]; now: Observation | null; rainYesterday: number | null; swell: Swell | null }
 
 type Json = Record<string, unknown>
 const obj = (v: unknown): Json => (typeof v === 'object' && v !== null ? (v as Json) : {})
@@ -90,6 +91,27 @@ export function parseObservation(body: unknown): Observation | null {
   }
 }
 
+/**
+ * Yesterday's rain in mm at the place, from Open-Meteo's daily total (the Bureau's API only has rain since 9 am today); null when it has no figure.
+ * It is a model of the finished day (rounded to a tenth), not a gauge reading, so the page says so.
+ */
+export function parseYesterdayRain(body: unknown): number | null {
+  const daily = obj(obj(body).daily)
+  const rain = daily.precipitation_sum
+  return Array.isArray(rain) ? num(rain[0]) : null
+}
+
+const COMPASS = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW']
+
+/** The swell now, from Open-Meteo's marine model: height in metres, period in seconds and the compass point it comes from; null without a height. */
+export function parseSwell(body: unknown): Swell | null {
+  const cur = obj(obj(body).current)
+  const height = num(cur.swell_wave_height) ?? num(cur.wave_height)
+  if (height === null) return null
+  const deg = num(cur.swell_wave_direction) ?? num(cur.wave_direction)
+  return { height, period: num(cur.swell_wave_period) ?? num(cur.wave_period), dir: deg === null ? '' : COMPASS[Math.round(deg / 22.5) % 16] }
+}
+
 async function get(url: string): Promise<unknown> {
   const res = await fetch(url)
   if (!res.ok) throw new Error(`${res.status} ${url}`)
@@ -98,11 +120,13 @@ async function get(url: string): Promise<unknown> {
 
 /** Straight from the Bureau's own API in the browser (it allows that), so nothing passes through our servers. */
 export async function fetchWeather(p: Place): Promise<Weather> {
-  const [days, now, hourly] = await Promise.all([
+  const [days, now, hourly, past, sea] = await Promise.all([
     get(`${API}/${geohash(p.lat, p.lng, 7)}/forecasts/daily`),
     get(`${API}/${geohash(p.lat, p.lng, 6)}/observations`).catch(() => null),
     get(`${API}/${geohash(p.lat, p.lng, 6)}/forecasts/hourly`).catch(() => null),
+    get(`https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lng}&daily=precipitation_sum&past_days=1&forecast_days=1&timezone=${encodeURIComponent(TZ)}`).catch(() => null),
+    p.sea ? get(`https://marine-api.open-meteo.com/v1/marine?latitude=${p.sea.lat}&longitude=${p.sea.lng}&current=wave_height,wave_period,wave_direction,swell_wave_height,swell_wave_period,swell_wave_direction&timezone=${encodeURIComponent(TZ)}`).catch(() => null) : null,
   ])
   const byDay = parseHourly(hourly)
-  return { days: parseDays(days).map((d) => ({ ...d, ...byDay.get(localDay(d.date)) })), now: parseObservation(now) }
+  return { days: parseDays(days).map((d) => ({ ...d, ...byDay.get(localDay(d.date)) })), now: parseObservation(now), rainYesterday: parseYesterdayRain(past), swell: parseSwell(sea) }
 }

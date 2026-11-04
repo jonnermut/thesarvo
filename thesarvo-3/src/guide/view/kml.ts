@@ -1,4 +1,5 @@
 import type { IndexNode } from '#/guide/content/types'
+import type { MapPoint } from '#/guide/islands/MapView'
 import type { Gps, GpsLine, Guide } from '#/guide/model/types'
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -105,3 +106,19 @@ export const treeGpxUrl = (id: string) => `/g-data/kml/${id}.gpx`
 
 /** The guide's name, taken from its header block. */
 export const guideTitle = (guide: Guide) => guide.nodes.find((n) => n.type === 'header')?.name ?? ''
+
+/** The points of a tree KML as map points, each opening the guide whose folder holds it (`byTitle`: folder name to guide path). */
+export function kmlPoints(text: string, byTitle: Map<string, string>, chains: Map<string, string[]>): MapPoint[] {
+  if (!text) return []
+  const doc = new DOMParser().parseFromString(text, 'application/xml')
+  return [...doc.getElementsByTagName('Placemark')].flatMap((m, i): MapPoint[] => {
+    const coords = m.getElementsByTagName('Point')[0]?.getElementsByTagName('coordinates')[0]?.textContent?.trim()
+    const [lon, lat] = coords?.split(',') ?? []
+    if (!lon || !lat) return []
+    let path: string | undefined
+    for (let f = m.parentElement; f && !path; f = f.parentElement) path = f.tagName === 'Folder' ? byTitle.get(f.getElementsByTagName('name')[0]?.textContent ?? '') : undefined
+    if (!path) return []
+    const description = m.getElementsByTagName('name')[0]?.textContent ?? ''
+    return [{ pid: `${path}#${i}`, code: '', description, zone: '', easting: '', northing: '', latitude: lat, longitude: lon, height: '', area: chains.get(path) ?? [] }]
+  })
+}

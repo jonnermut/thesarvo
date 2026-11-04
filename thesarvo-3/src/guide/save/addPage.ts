@@ -5,7 +5,7 @@ import { newNode } from '#/guide/edit/newNodes'
 import type { Guide } from '#/guide/model/types'
 import { diffGuides } from './changes'
 import { updateHistory } from './history'
-import { editorName } from './save'
+import { editorWho } from './save'
 import type { PageRepo } from './repo'
 import { Invalid, oneOf, str } from './validate'
 
@@ -60,7 +60,7 @@ const ATTEMPTS = 5
 
 /** Adds a page as the last child of `request.parent`: its place in the index, an empty guide and a "created" history entry, in one commit. */
 export async function addPage(repo: PageRepo, editor: Editor, request: AddPageRequest, now = () => new Date()): Promise<AddPageResult> {
-  const who = { sub: editor.sub, name: editorName(editor) }
+  const who = await editorWho(editor)
   for (let attempt = 1; ; attempt++) {
     const { head, index } = await repo.readIndex()
     const id = nextPageId(index)

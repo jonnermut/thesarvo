@@ -26,6 +26,20 @@ describe('app bridge on Android', () => {
 })
 
 describe('app bridge', () => {
+  it('puts data-app back when the page replaces <html> or drops the attribute', () => {
+    const { w } = fakeWindow(() => {})
+    const callbacks: (() => void)[] = []
+    const observed: unknown[] = []
+    w.MutationObserver = class { constructor(cb: () => void) { callbacks.push(cb) } observe(target: unknown) { observed.push(target) } } as unknown as typeof MutationObserver
+    installBridge(w)
+    expect(observed).toEqual([w.document, w.document.documentElement])
+    const fresh = { dataset: {} as Record<string, string> }
+    ;(w.document as { documentElement: unknown }).documentElement = fresh
+    callbacks[0]()
+    expect(fresh.dataset.app).toBe('app')
+    expect(observed.at(-1)).toBe(fresh)
+  })
+
   it('does nothing in a browser', () => {
     const w = { fetch: vi.fn(), location: { href: 'https://x/', origin: 'https://x' } } as unknown as W
     expect(installBridge(w)).toBe(false)

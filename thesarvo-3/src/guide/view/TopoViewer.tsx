@@ -20,9 +20,9 @@ const dist = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.y - b.y)
  * Full-screen topo that opens with the whole photo filling the screen. Drag to pan, pinch, scroll
  * or the buttons to zoom about the fingers, cursor or centre, double-tap to zoom in or back out.
  * `children` draws the photo at its own pixel size; it is told how wide it is on screen, so its
- * markers can stay legible.
+ * markers can stay legible. `credit` is shown over the photo's bottom corner.
  */
-export function TopoViewer({ width, height, open, onClose, children }: { width: number; height: number; open: boolean; onClose: () => void; children: (shownWidth: number) => React.ReactNode }) {
+export function TopoViewer({ width, height, open, onClose, credit, children }: { width: number; height: number; open: boolean; onClose: () => void; credit?: React.ReactNode; children: (shownWidth: number) => React.ReactNode }) {
   const mounted = usePresence(open)
   useScrollLock(open)
   useEscape(open, onClose)
@@ -37,6 +37,7 @@ export function TopoViewer({ width, height, open, onClose, children }: { width: 
       <Surface width={width} height={height} onClose={onClose}>
         {children}
       </Surface>
+      {credit && <div className="absolute bottom-[max(0.5rem,env(safe-area-inset-bottom))] left-2 right-2 rounded bg-black/60 px-2 py-1 text-white [&_a]:text-white">{credit}</div>}
     </div>,
     document.body,
   )

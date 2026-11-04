@@ -20,6 +20,9 @@ struct SettingsView: View {
                     } header: { Text("Edits") } footer: { Text("Made without a connection. They are sent when you are online, for the person who made them.") }
                 }
                 Section("Reading") {
+                    Picker("Appearance", selection: $app.appearance) {
+                        ForEach(Appearance.allCases) { Text($0.title).tag($0) }
+                    }
                     VStack(alignment: .leading) {
                         Text("Text size")
                         Slider(value: $app.textScale, in: 0.8...2.0, step: 0.05)

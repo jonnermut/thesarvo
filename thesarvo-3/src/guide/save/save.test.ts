@@ -8,6 +8,7 @@ import { diffGuides } from './changes'
 import { GitHubRepo, appJwt } from './github'
 import { LocalRepo } from './local'
 import type { Commit, GuideRepo, Stored } from './repo'
+import { emailKey } from '#/guide/avatars/keys'
 import { saveGuide } from './save'
 
 const header: Header = { type: 'header', id: 'h', name: 'Bruny', rock: '', sun: '', walk: '', access: '', camping: '', acknowledgement: '', intro: '', history: '', autonumber: '' }
@@ -39,7 +40,8 @@ describe('saveGuide', () => {
     expect(result).toMatchObject({ status: 'saved', head: 'c1', guide: mine })
     expect(repo.commits[0].message.headline).toBe('Bruny: Jon edited a text block')
     expect(repo.commits[0].message.body).toContain('Edit-Session: a\nEdit-User: Jon <s1>\nEdit-Nodes: 1')
-    expect(repo.stored.history).toMatchObject([{ session: 'a', user: { sub: 's1', name: 'Jon' }, saves: 1, description: 'edited a text block' }])
+    expect(repo.stored.history).toMatchObject([{ session: 'a', user: { sub: 's1', name: 'Jon', key: await emailKey('jon@example.com') }, saves: 1, description: 'edited a text block' }])
+    expect(repo.stored.history[0].user.key).toMatch(/^email:[0-9a-f]{16}$/)
   })
 
   it('merges again when someone committed in between', async () => {

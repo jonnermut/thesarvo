@@ -71,10 +71,10 @@ function Entry({ entry, latest, open: opened, guide, history }: { entry: History
   }, [opened])
   const span = day(entry.start) === day(entry.end) ? when(entry.end) : `${day(entry.start)} – ${when(entry.end)}`
   return (
-    <li ref={box} id={entry.session} className="scroll-mt-20 rounded-lg border border-black/10 bg-card p-4">
+    <li ref={box} id={entry.session} className="scroll-mt-20 rounded-lg border border-wash/10 bg-card p-4">
       <div className="font-medium">{capital(entry.description)}</div>
       <div className="mt-0.5 flex items-center gap-1.5 text-sm text-muted">
-        <Avatar ids={[entry.user.sub]} name={entry.user.name} className="size-5 text-[10px]" />
+        <Avatar ids={[entry.user.sub, entry.user.key].filter((x): x is string => !!x)} name={entry.user.name} className="size-5 text-[10px]" />
         <span>
           {entry.user.name || 'Someone'} · <time dateTime={entry.end}>{span}</time>
         </span>
@@ -107,7 +107,7 @@ function Entry({ entry, latest, open: opened, guide, history }: { entry: History
 function ChangeList({ changes, guideId, climbs, names }: { changes: Pick<HistoryEntry, 'nodes' | 'order' | 'guideStars'>; guideId: string; climbs: Map<string, Climb>; names?: Map<string, GuideNode> }) {
   const moved = changes.order ? movedIds(changes.order.before, changes.order.after).flatMap((id) => changes.nodes[id]?.after ?? names?.get(id) ?? []) : []
   return (
-    <div className="mt-3 space-y-3 border-t border-black/10 pt-3">
+    <div className="mt-3 space-y-3 border-t border-wash/10 pt-3">
       {changes.guideStars && <Row field="Guide stars" before={changes.guideStars.before} after={changes.guideStars.after} long={false} />}
       {Object.entries(changes.nodes).map(([id, { before, after }]) => (
         <Block key={id} before={before} after={after} guideId={guideId} climbs={climbs} />
@@ -120,7 +120,7 @@ function ChangeList({ changes, guideId, climbs, names }: { changes: Pick<History
 function Block({ before, after, guideId, climbs }: { before: GuideNode | null; after: GuideNode | null; guideId: string; climbs: Map<string, Climb> }) {
   const node = after ?? before
   if (!node) return null
-  const [tag, colour] = !before ? ['Added', 'bg-green-100 text-green-900'] : !after ? ['Deleted', 'bg-red-100 text-red-900'] : ['Changed', 'bg-black/5 text-ink']
+  const [tag, colour] = !before ? ['Added', 'bg-green-100 text-green-900'] : !after ? ['Deleted', 'bg-red-100 text-red-900'] : ['Changed', 'bg-wash/5 text-ink']
   const fields = fieldDiffs(before, after)
   // Only the legend's words changed: one picture says it.
   const redrawn = fields.some((f) => ['Image', 'Lines', 'Labels', 'Drawing'].includes(f.field))
@@ -223,7 +223,7 @@ function AdminAction({ kind, entry, guide, history, onClose }: { kind: 'revert' 
     <div className="mt-3 rounded-md border border-amber/60 bg-amber/5 p-3 text-sm">
       <div className="flex items-center justify-between gap-2">
         <h3 className="font-semibold">{title}</h3>
-        <button type="button" onClick={onClose} className="rounded px-2 py-1 text-link hover:bg-black/5">
+        <button type="button" onClick={onClose} className="rounded px-2 py-1 text-link hover:bg-wash/5">
           Close
         </button>
       </div>
@@ -255,7 +255,7 @@ function AdminAction({ kind, entry, guide, history, onClose }: { kind: 'revert' 
                 type="button"
                 disabled={step.kind === 'saving'}
                 onClick={() => void save(step.plan)}
-                className="mt-3 rounded-md bg-navy px-3 py-1.5 font-medium text-white hover:bg-navy/90 disabled:opacity-60"
+                className="mt-3 rounded-md bg-fill px-3 py-1.5 font-medium text-white hover:bg-fill/90 disabled:opacity-60"
               >
                 {step.kind === 'saving' ? 'Saving…' : title}
               </button>

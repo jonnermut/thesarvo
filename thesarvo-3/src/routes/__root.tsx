@@ -1,6 +1,7 @@
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
 import { AppShell } from '#/components/AppShell'
 import appCss from '../styles.css?url'
+import { THEME_SCRIPT } from '#/theme'
 import touchIcon from '#/brand/apple-touch-icon.png'
 
 export const Route = createRootRoute({
@@ -11,7 +12,9 @@ export const Route = createRootRoute({
       { title: 'thesarvo · Tasmanian climbing guides' },
       { name: 'description', content: 'Climbing guides to Tasmanian crags and bouldering: topos, grades, access and GPS.' },
       { name: 'theme-color', content: '#1b1464' },
+      { name: 'color-scheme', content: 'light dark' },
     ],
+    scripts: [{ children: THEME_SCRIPT }],
     links: [
       { rel: 'stylesheet', href: appCss },
       { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
@@ -32,7 +35,7 @@ function Layout() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>

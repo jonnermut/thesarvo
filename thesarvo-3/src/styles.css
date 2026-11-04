@@ -13,6 +13,15 @@
   --color-muted: #6b778c;
   --color-paper: #f4f5f7;
   --color-card: #ffffff;
+  --color-page: #ffffff;
+  /* The blue of grades, stars and pitch numbers in a climb's heading. */
+  --color-grade: #0000a0;
+  /* Solid fills that carry white text (buttons, the chosen tab); navy as a text colour turns light in the dark theme, so the fill is its own token. */
+  --color-fill: #172b4d;
+  /* A veil for hovers and quiet surfaces: black on light, white on dark. */
+  --color-wash: #000000;
+  /* The walk, sun and rock icons are drawn in near-black for a white page: a pale tile behind them in the dark theme. */
+  --fact-icon-bg: transparent;
   --color-line: #c0c0c0;
   --color-forest: #0049b0;
   --color-forest-soft: #0052cc;
@@ -25,8 +34,67 @@
   --color-band-4: #f7941e;
 }
 
+/*
+ * The dark theme: the browser's setting by default (`prefers-color-scheme`), or the reader's own choice, which sets `data-theme` on <html> (see src/theme.ts; the head script
+ * applies it before first paint). The tokens above are the light values; these replace them, so every utility that uses a token follows. Photos and the topo drawings on them are left alone.
+ * The two blocks must stay identical: one for "system" while dark, one for an explicit choice.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --color-ink: #e8ebf1;
+    --color-navy: #d3def2;
+    --color-link: #7db0ff;
+    --color-muted: #9ba7bc;
+    --color-paper: #161c28;
+    --color-card: #1d2431;
+    --color-page: #11161f;
+    --color-grade: #93abff;
+    --color-line: #3b465a;
+    --color-fill: #2f4c8c;
+    --color-wash: #ffffff;
+    --fact-icon-bg: #eef0f3;
+    --color-amber-deep: #ffb55a;
+    --color-band-2: #5aa2ec;
+    --color-band-3: #8f7ee6;
+    --color-red-50: #3a1d22;
+    --color-red-700: #ff8a8a;
+    --color-red-100: #4a2328;
+    --color-red-900: #ffc9c9;
+    --color-green-100: #1d3a2a;
+    --color-green-900: #b5f0c9;
+    --color-amber-800: #ffcc80;
+  }
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-ink: #e8ebf1;
+  --color-navy: #d3def2;
+  --color-link: #7db0ff;
+  --color-muted: #9ba7bc;
+  --color-paper: #161c28;
+  --color-card: #1d2431;
+  --color-page: #11161f;
+  --color-grade: #93abff;
+  --color-line: #3b465a;
+  --color-fill: #2f4c8c;
+  --color-wash: #ffffff;
+  --fact-icon-bg: #eef0f3;
+  --color-amber-deep: #ffb55a;
+  --color-band-2: #5aa2ec;
+  --color-band-3: #8f7ee6;
+  --color-red-50: #3a1d22;
+  --color-red-700: #ff8a8a;
+  --color-red-100: #4a2328;
+  --color-red-900: #ffc9c9;
+  --color-green-100: #1d3a2a;
+  --color-green-900: #b5f0c9;
+  --color-amber-800: #ffcc80;
+}
+
 html {
-  background: #fff;
+  color-scheme: light;
+  background: var(--color-page);
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;

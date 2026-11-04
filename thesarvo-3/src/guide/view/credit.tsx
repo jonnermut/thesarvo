@@ -7,7 +7,8 @@ import type { Guide, Other } from '#/guide/model/types'
  */
 export const THECRAG_LICENCE_URL = 'https://creativecommons.org/licenses/by-nc-sa/3.0/au/'
 
-export const thecragUrl = (nodeId: string) => `https://www.thecrag.com/node/${nodeId}`
+/** theCrag's page for an area or a route. It has no page for a bare node id (`/node/<id>` is a 404); the country in the path is enough for it to find the rest. */
+export const thecragUrl = (nodeId: string, kind: 'area' | 'route' = 'area') => `https://www.thecrag.com/en/climbing/australia/${kind}/${nodeId}`
 
 /** What on the node came from theCrag. */
 export const thecragContent = (other?: Other): string[] =>
@@ -27,9 +28,9 @@ export function withoutMark(other: Other | undefined, key?: string): Other {
 }
 
 /** "theCrag" linking to the node on theCrag, titled with what it is and the licence. */
-export function CragLink({ node, what }: { node: string; what: string }) {
+export function CragLink({ node, what, route }: { node: string; what: string; route?: boolean }) {
   return (
-    <a href={thecragUrl(node)} target="_blank" rel="noreferrer" title={`${what} by theCrag contributors, CC BY-NC-SA 3.0`} className="underline hover:text-navy">
+    <a href={thecragUrl(node, route ? 'route' : 'area')} target="_blank" rel="noreferrer" title={`${what} by theCrag contributors, CC BY-NC-SA 3.0`} className="underline hover:text-navy">
       theCrag
     </a>
   )
@@ -39,21 +40,21 @@ export function CragLink({ node, what }: { node: string; what: string }) {
 export const credited = (other: Other | undefined, part: string) => Boolean(other?.thecrag) && thecragContent(other).includes(part)
 
 /** The credit for one kind of content on a node, or nothing when the node has none from theCrag. */
-export function Credit({ other, part, what }: { other?: Other; part: string; what: string }) {
-  return credited(other, part) ? <CragLink node={other?.thecrag ?? ''} what={what} /> : null
+export function Credit({ other, part, what, route }: { other?: Other; part: string; what: string; route?: boolean }) {
+  return credited(other, part) ? <CragLink node={other?.thecrag ?? ''} what={what} route={route} /> : null
 }
 
 /** The credit after running text (a header section, a text block): small and grey, as the first ascent line. */
-export function InlineCredit(props: { other?: Other; part: string; what: string }) {
+export function InlineCredit(props: { other?: Other; part: string; what: string; route?: boolean }) {
   if (!credited(props.other, props.part)) return null
   return <span className="ml-1 text-[11px] italic text-[#808080]">· From: <Credit {...props} /></span>
 }
 
 /** Under a topo drawn by theCrag contributors, linked to the area it is of. */
-export function TopoCredit({ other }: { other?: Other }) {
+export function TopoCredit({ other, className = 'mt-1 text-[#808080]' }: { other?: Other; className?: string }) {
   if (!other?.thecragArea || !thecragContent(other).includes('topo')) return null
   return (
-    <p className="mt-1 text-[11px] italic text-[#808080]">
+    <p className={`text-[11px] italic ${className}`}>
       Topo: theCrag contributors, <a href={THECRAG_LICENCE_URL} target="_blank" rel="noreferrer" className="underline hover:text-navy">CC BY-NC-SA 3.0</a>, <CragLink node={other.thecragArea} what="Topo" />
     </p>
   )

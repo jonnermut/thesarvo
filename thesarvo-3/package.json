@@ -21,6 +21,7 @@
     "archive-cct": "tsx ../../thesarvo-private/scripts/archive-cct.ts",
     "import-history": "tsx ../../thesarvo-private/scripts/import-history.ts",
     "import-avatars": "tsx ../../thesarvo-private/scripts/import-avatars.ts",
+    "backfill-history-keys": "tsx ../../thesarvo-private/scripts/backfill-history-keys.ts",
     "export-forum": "tsx ../../thesarvo-private/scripts/export-forum.ts",
     "seed-forum": "../../thesarvo-private/scripts/seed-forum.sh",
     "build-images": "tsx ../../thesarvo-private/scripts/build-images.ts",

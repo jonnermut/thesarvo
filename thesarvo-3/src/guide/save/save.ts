@@ -1,8 +1,10 @@
 import type { Editor } from '#/auth/verifyToken'
+import { emailKey } from '#/guide/avatars/keys'
 import type { Guide } from '#/guide/model/types'
 import { diffGuides, isEmpty, mergeChanges } from './changes'
 import type { Changes, Conflict } from './changes'
 import { describe, updateHistory } from './history'
+import type { HistoryUser } from './history'
 import type { GuideRepo } from './repo'
 import type { SaveRequest } from './validate'
 
@@ -16,6 +18,9 @@ export type SaveResult =
 const ATTEMPTS = 5
 
 export const editorName = (e: Pick<Editor, 'name' | 'email'>) => e.name || e.email.split('@')[0] || 'Someone'
+
+/** The editor as history records them: sub, name and the email hash that finds their picture. */
+export const editorWho = async (e: Editor): Promise<HistoryUser> => ({ sub: e.sub, name: editorName(e), ...(e.email && { key: await emailKey(e.email) }) })
 
 /** "Bruny Island: Jon edited the climb Albatros", then trailers that tie the commit to its session and editor. */
 export function commitMessage(guide: Guide, changes: Changes, who: { sub: string; name: string }, session: string) {
@@ -31,7 +36,7 @@ export function commitMessage(guide: Guide, changes: Changes, who: { sub: string
  * history entry and commits both. Retries when someone committed in between; commits nothing on a conflict.
  */
 export async function saveGuide(repo: GuideRepo, editor: Editor, request: SaveRequest, now = () => new Date()): Promise<SaveResult> {
-  const who = { sub: editor.sub, name: editorName(editor) }
+  const who = await editorWho(editor)
   for (let attempt = 1; ; attempt++) {
     const stored = await repo.read(request.guide)
     if (!stored) return { status: 'missing' }
