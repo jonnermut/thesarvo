@@ -92,6 +92,7 @@ class AppModel(val app: Application) {
     var mode by mutableStateOf(prefs.downloadMode)
     var cellularImages by mutableStateOf(prefs.cellularImages)
     var textScale by mutableStateOf(prefs.textScale)
+    var appearance by mutableStateOf(prefs.appearance)
     var showClimbsInMenu by mutableStateOf(prefs.showClimbsInMenu)
 
     private var generation = GenerationIndex()
@@ -146,6 +147,7 @@ class AppModel(val app: Application) {
             }
         }
         web.setTextScale(textScale)
+        web.setTheme(appearance)
         web.setAuth(auth.tokens)
         web.open(prefs.lastPath)
         selectionFollows(prefs.lastPath)
@@ -306,6 +308,7 @@ class AppModel(val app: Application) {
     fun changeMode(m: DownloadMode) { mode = m; prefs.downloadMode = m; syncSoon() }
     fun setCellular(on: Boolean) { cellularImages = on; prefs.cellularImages = on }
     fun changeTextScale(s: Float) { textScale = s; prefs.textScale = s; web.setTextScale(s) }
+    fun changeAppearance(a: Appearance) { appearance = a; prefs.appearance = a; web.setTheme(a) }
     fun setShowClimbs(on: Boolean) { showClimbsInMenu = on; prefs.showClimbsInMenu = on }
     fun finishFirstRun(m: DownloadMode) { mode = m; prefs.downloadMode = m; firstRunDone = true; prefs.firstRunDone = true; syncNow() }
 

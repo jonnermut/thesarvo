@@ -47,6 +47,9 @@ class Prefs(context: Context) {
     var textScale: Float
         get() = sp.getFloat("textScale", 1f).takeIf { it > 0 } ?: 1f
         set(v) = sp.edit().putFloat("textScale", v).apply()
+    var appearance: Appearance
+        get() = Appearance.of(sp.getString("appearance", null))
+        set(v) = sp.edit().putString("appearance", v.key).apply()
     var showClimbsInMenu: Boolean
         get() = sp.getBoolean("showClimbsInTOC", false)
         set(v) = sp.edit().putBoolean("showClimbsInTOC", v).apply()
@@ -74,4 +77,10 @@ class Prefs(context: Context) {
 
     val baseUrl: String get() = (syncBase ?: AppConfig.DEFAULT_BASE).trimEnd('/')
     val apiUrl: String get() = (apiBase ?: AppConfig.DEFAULT_BASE).trimEnd('/')
+}
+
+/** The reader's colour choice for the whole app, including the guide pages: System follows the device, the others override it. */
+enum class Appearance(val key: String, val label: String) {
+    System("system", "System"), Light("light", "Light"), Dark("dark", "Dark");
+    companion object { fun of(key: String?) = entries.firstOrNull { it.key == key } ?: System }
 }

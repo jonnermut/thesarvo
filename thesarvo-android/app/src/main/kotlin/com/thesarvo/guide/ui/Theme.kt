@@ -7,6 +7,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.thesarvo.guide.Appearance
 
 /** The bars and the menu are dark navy with light text whatever the page below them looks like; the accent is navy in light mode and a light periwinkle in dark. */
 object Chrome {
@@ -22,6 +23,7 @@ private val Light: ColorScheme = lightColorScheme(primary = Chrome.navy, onPrima
 private val Dark: ColorScheme = darkColorScheme(primary = Chrome.periwinkle, onPrimary = Chrome.navy, secondaryContainer = Color(0.2f, 0.2f, 0.45f), onSecondaryContainer = Color.White)
 
 @Composable
-fun ThesarvoTheme(content: @Composable () -> Unit) {
-    MaterialTheme(colorScheme = if (isSystemInDarkTheme()) Dark else Light, content = content)
+fun ThesarvoTheme(appearance: Appearance = Appearance.System, content: @Composable () -> Unit) {
+    val dark = when (appearance) { Appearance.System -> isSystemInDarkTheme(); Appearance.Light -> false; Appearance.Dark -> true }
+    MaterialTheme(colorScheme = if (dark) Dark else Light, content = content)
 }

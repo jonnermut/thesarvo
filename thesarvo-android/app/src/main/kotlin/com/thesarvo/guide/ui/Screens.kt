@@ -29,6 +29,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -44,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.thesarvo.guide.AppModel
+import com.thesarvo.guide.Appearance
 import com.thesarvo.guide.BuildConfig
 import com.thesarvo.guide.DownloadMode
 
@@ -142,6 +146,13 @@ fun SettingsScreen(model: AppModel) {
             if (model.waitingEdits > 0) Section("Edits", "Made without a connection. They are sent when you are online, for the person who made them.") {
                 Text(if (model.waitingEdits == 1) "1 edit is waiting to be sent." else "${model.waitingEdits} edits are waiting to be sent.")
                 OutlinedButton(onClick = { model.sendWaitingEdits() }) { Text("Send now") }
+            }
+            Section("Appearance") {
+                SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+                    Appearance.entries.forEachIndexed { i, a ->
+                        SegmentedButton(selected = model.appearance == a, onClick = { model.changeAppearance(a) }, shape = SegmentedButtonDefaults.itemShape(i, Appearance.entries.size)) { Text(a.label) }
+                    }
+                }
             }
             Section("Reading") {
                 Text("Text size")

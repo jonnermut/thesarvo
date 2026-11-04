@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
         model = (application as ThesarvoApp).model
         model.web.attach(this)
         model.web.onFileChooser = { params, callback -> openChooser(params, callback) }
-        setContent { ThesarvoTheme { Root(model) { askForNotifications() } } }
+        setContent { ThesarvoTheme(model.appearance) { Root(model) { askForNotifications() } } }
         model.start()
         handleIntent(intent, first = true)
     }

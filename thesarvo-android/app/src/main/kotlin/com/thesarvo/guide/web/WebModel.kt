@@ -30,6 +30,7 @@ import androidx.webkit.WebViewFeature
 import com.thesarvo.core.BridgeMessage
 import com.thesarvo.core.Tokens
 import com.thesarvo.guide.AppConfig
+import com.thesarvo.guide.Appearance
 import com.thesarvo.guide.BuildConfig
 import kotlinx.serialization.json.Json
 import org.json.JSONObject
@@ -57,6 +58,7 @@ class WebModel(private val app: Application, private val site: SiteClient) {
 
     private var authSource = ""
     private var textSource = ""
+    private var themeSource = ""
     private var handlers = emptyList<ScriptHandler>()
     private val json = Json { ignoreUnknownKeys = true }
 
@@ -107,7 +109,7 @@ class WebModel(private val app: Application, private val site: SiteClient) {
     private fun installScripts(w: WebView = webView) {
         if (!supported) return
         handlers.forEach { it.remove() }
-        handlers = listOf(APP_MODE_SCRIPT, textSource, authSource).filter { it.isNotEmpty() }.map { WebViewCompat.addDocumentStartJavaScript(w, it, setOf(AppConfig.ORIGIN)) }
+        handlers = listOf(APP_MODE_SCRIPT, textSource, themeSource, authSource).filter { it.isNotEmpty() }.map { WebViewCompat.addDocumentStartJavaScript(w, it, setOf(AppConfig.ORIGIN)) }
     }
 
     fun open(path: String) { webView.loadUrl(AppConfig.ORIGIN + path) }
@@ -139,6 +141,15 @@ class WebModel(private val app: Application, private val site: SiteClient) {
         textSource = if (scale == 1f) "" else js
         installScripts()
         webView.evaluateJavascript(if (scale == 1f) "document.documentElement.style.zoom = '';" else js, null)
+    }
+
+    /** The app's Appearance choice, in the place the site keeps its own (`thesarvo.theme`, and `data-theme` on the root), now and before every load's first paint; System removes both so the page follows the device. */
+    fun setTheme(a: Appearance) {
+        val js = if (a == Appearance.System) "try { localStorage.removeItem('thesarvo.theme'); } catch (e) {} if (document.documentElement) delete document.documentElement.dataset.theme;"
+        else "try { localStorage.setItem('thesarvo.theme', '${a.key}'); } catch (e) {} if (document.documentElement) document.documentElement.dataset.theme = '${a.key}';"
+        themeSource = js
+        installScripts()
+        webView.evaluateJavascript(js, null)
     }
 
     fun requestMapPoints() { webView.evaluateJavascript("window.thesarvoMapPoints && window.thesarvoMapPoints();", null) }
