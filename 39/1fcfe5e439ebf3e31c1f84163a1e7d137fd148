@@ -1,0 +1,31 @@
+thesarvo-3/src/guide/view/TopoViewer.tsx
+  s_e20d0a1ebc47aa::t_57c6c6eb506aff 23,25,40
+thesarvo-3/src/guide/view/TopoFigure.tsx
+  s_e20d0a1ebc47aa::t_57c6c6eb506aff 174
+thesarvo-3/src/guide/view/credit.test.tsx
+  s_e20d0a1ebc47aa::t_3c1d7f7064a174 5,67-74
+  s_e20d0a1ebc47aa::t_60ad7574e82191 30,44
+  s_e20d0a1ebc47aa::t_8461956fc2762c 1
+  s_e20d0a1ebc47aa::t_96a6d257f68723 75
+thesarvo-3/src/guide/view/credit.tsx
+  s_e20d0a1ebc47aa::t_57c6c6eb506aff 54,57
+  s_e20d0a1ebc47aa::t_60ad7574e82191 10-11,31,33,43-44,48
+thesarvo-3/src/guide/view/ClimbBlock.tsx
+  s_e20d0a1ebc47aa::t_60ad7574e82191 82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "391fcfe5e439ebf3e31c1f84163a1e7d137fd148",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
