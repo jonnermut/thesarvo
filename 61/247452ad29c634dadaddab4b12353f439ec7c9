@@ -1,0 +1,24 @@
+thesarvo-3/src/guide/islands/measure.ts
+  s_e20d0a1ebc47aa::t_8ffec2ca52fce9 1-62
+thesarvo-3/src/guide/islands/MapView.tsx
+  s_e20d0a1ebc47aa::t_4766fdb6d11c36 8,93-94,131-145,192-193,195-198,216-217,261-331,445,466-500
+thesarvo-3/src/guide/islands/measure.test.ts
+  s_e20d0a1ebc47aa::t_775b8112ef4038 24
+  s_e20d0a1ebc47aa::t_8ffec2ca52fce9 1-23,25-33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "61247452ad29c634dadaddab4b12353f439ec7c9",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
