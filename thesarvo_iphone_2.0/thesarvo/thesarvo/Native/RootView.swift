@@ -10,6 +10,12 @@ enum Chrome {
     static let light = UIColor(white: 1, alpha: 1)
     static let dim = UIColor(white: 1, alpha: 0.6)
 
+    /// The reader's Appearance choice, on every window, so sheets and the page's web view follow it. (SwiftUI's `preferredColorScheme` also turns the status text black over the navy bar in Light.)
+    static func setAppearance(_ a: Appearance) {
+        let style: UIUserInterfaceStyle = a == .light ? .light : a == .dark ? .dark : .unspecified
+        for scene in UIApplication.shared.connectedScenes { for window in (scene as? UIWindowScene)?.windows ?? [] { window.overrideUserInterfaceStyle = style } }
+    }
+
     static func apply() {
         let nav = UINavigationBarAppearance()
         nav.configureWithOpaqueBackground()
@@ -69,6 +75,8 @@ struct RootView: View {
                 .tag(AppTab.settings)
         }
         .tint(brandTint)
+        .onChange(of: app.appearance) { Chrome.setAppearance($0) }
+        .onAppear { Chrome.setAppearance(app.appearance) }
         .fullScreenCover(isPresented: Binding(get: { !app.firstRunDone && app.manifest != nil }, set: { _ in })) { FirstRunView().tint(brandTint) }
         .sheet(item: $app.sharedFile) { ActivityView(url: $0.url).ignoresSafeArea() }
         .sheet(item: $app.external) { SafariView(url: $0).ignoresSafeArea() }

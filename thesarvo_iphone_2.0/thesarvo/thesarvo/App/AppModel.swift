@@ -4,6 +4,13 @@ import WebKit
 
 enum AppTab: Hashable { case guides, map, downloads, settings }
 
+/// The app's light or dark look: the phone's setting unless the reader picks one. The pages follow it too, through the web view's colour scheme.
+enum Appearance: String, CaseIterable, Identifiable {
+    case system, light, dark
+    var id: String { rawValue }
+    var title: String { switch self { case .system: "System"; case .light: "Light"; case .dark: "Dark" } }
+}
+
 enum DownloadMode: String, CaseIterable, Identifiable {
     case thumbnails, allPhotos, fullQuality
     var id: String { rawValue }
@@ -73,6 +80,7 @@ final class AppModel: ObservableObject {
     @Published var firstRunDone: Bool { didSet { UserDefaults.standard.set(firstRunDone, forKey: "firstRunDone") } }
     @Published var mode: DownloadMode { didSet { UserDefaults.standard.set(mode.rawValue, forKey: "downloadMode"); syncSoon() } }
     @Published var cellularImages: Bool { didSet { UserDefaults.standard.set(cellularImages, forKey: "cellularImages") } }
+    @Published var appearance: Appearance { didSet { UserDefaults.standard.set(appearance.rawValue, forKey: "appearance") } }
     @Published var textScale: Double { didSet { UserDefaults.standard.set(textScale, forKey: "textScale"); web.setTextScale(textScale) } }
     @Published var showClimbsInMenu: Bool { didSet { UserDefaults.standard.set(showClimbsInMenu, forKey: "showClimbsInTOC") } }
 
@@ -87,6 +95,7 @@ final class AppModel: ObservableObject {
         web = WebModel(handler: handler)
         mode = DownloadMode(rawValue: d.string(forKey: "downloadMode") ?? "") ?? .thumbnails
         cellularImages = d.bool(forKey: "cellularImages")
+        appearance = Appearance(rawValue: d.string(forKey: "appearance") ?? "") ?? .system
         firstRunDone = d.bool(forKey: "firstRunDone")
         let scale = d.double(forKey: "textScale")
         textScale = scale > 0 ? scale : 1.0
