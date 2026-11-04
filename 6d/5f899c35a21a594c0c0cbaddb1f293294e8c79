@@ -1,0 +1,31 @@
+thesarvo-android/app/src/main/kotlin/com/thesarvo/guide/AppModel.kt
+  s_e9cd55a1f49583::t_e924930bc5ed60 95,150,311
+thesarvo-android/app/src/main/kotlin/com/thesarvo/guide/Config.kt
+  s_e9cd55a1f49583::t_5f41e8ed817f04 50-52,81-86
+thesarvo-android/app/src/main/kotlin/com/thesarvo/guide/MainActivity.kt
+  s_e9cd55a1f49583::t_db76eb9c8d1f36 42
+thesarvo-android/app/src/main/kotlin/com/thesarvo/guide/ui/Screens.kt
+  s_e9cd55a1f49583::t_0946f4f17f1c8e 32-34,50,150-156
+thesarvo-android/app/src/main/kotlin/com/thesarvo/guide/ui/Theme.kt
+  s_e9cd55a1f49583::t_834bc613a67df2 10,26-28
+thesarvo-android/app/src/main/kotlin/com/thesarvo/guide/web/WebModel.kt
+  s_e9cd55a1f49583::t_5b44de0678cd18 33,61,112,145-153
+thesarvo-android/app/src/test/kotlin/com/thesarvo/guide/AppearanceTest.kt
+  s_e9cd55a1f49583::t_f0f404fda4497e 1-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6d5f899c35a21a594c0c0cbaddb1f293294e8c79",
+  "prompts": {},
+  "sessions": {
+    "s_e9cd55a1f49583": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1c2638e6-8c6a-42c3-85d9-4cd938b67512",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
