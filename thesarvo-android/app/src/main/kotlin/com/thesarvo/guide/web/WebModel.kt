@@ -7,6 +7,7 @@ import android.content.ContextWrapper
 import android.content.MutableContextWrapper
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Message
 import android.view.View
 import android.webkit.GeolocationPermissions
@@ -93,6 +94,8 @@ class WebModel(private val app: Application, private val site: SiteClient) {
         if (WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) WebSettingsCompat.setAlgorithmicDarkeningAllowed(w.settings, false)
         w.setBackgroundColor(android.graphics.Color.TRANSPARENT)
         w.overScrollMode = View.OVER_SCROLL_NEVER
+        // The emulator's software GL (SwiftShader) leaves stale tiles painted over the page, so there the page is drawn in software; phones keep the GPU.
+        if (Build.HARDWARE == "ranchu" || Build.HARDWARE == "goldfish") w.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         w.webViewClient = Client()
         w.webChromeClient = Chrome()
         w.setDownloadListener { url, _, _, _, _ -> if (url.startsWith("http")) presentExternal?.invoke(Uri.parse(url)) }
