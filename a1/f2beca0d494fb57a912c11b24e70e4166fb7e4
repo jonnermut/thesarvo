@@ -1,0 +1,32 @@
+thesarvo-3/src/weather/WeatherPanel.test.tsx
+  s_e9cd55a1f49583::t_0565bf34a13579 11
+  s_e20d0a1ebc47aa::t_295c71ef2a3bad 5,7-8
+thesarvo-3/src/weather/WeatherPanel.tsx
+  s_e20d0a1ebc47aa::t_3f3bc95665f4e0 146,150-159
+  s_e20d0a1ebc47aa::t_295c71ef2a3bad 97-99,101-108,110-111,116-123,140,143-145,147-148,160-163,165-178
+  s_e20d0a1ebc47aa::t_e2b384908df781 100,164
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a1f2beca0d494fb57a912c11b24e70e4166fb7e4",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    },
+    "s_e9cd55a1f49583": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1c2638e6-8c6a-42c3-85d9-4cd938b67512",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
