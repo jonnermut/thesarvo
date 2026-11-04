@@ -1,0 +1,31 @@
+thesarvo-3/src/guide/islands/cluster.ts
+  s_e20d0a1ebc47aa::t_6df8b9942f2d67 40-45
+  s_e20d0a1ebc47aa::t_a5397993b88ab2 39,46
+  s_e20d0a1ebc47aa::t_1d575472b9973f 1-38,47-67
+thesarvo-3/src/guide/islands/MapView.tsx
+  s_e20d0a1ebc47aa::t_65f0a0cff793ff 143
+  s_e20d0a1ebc47aa::t_c2420ab5cc772e 186-187
+  s_e20d0a1ebc47aa::t_6df8b9942f2d67 291-293,297,306,321
+  s_e20d0a1ebc47aa::t_dda72c78d19ef7 6-7,71-73,75-77,100,111-114,142,191,270,273-275,289-290,294-296,298-305,307-320,322-324,332,366,369-381
+  s_e20d0a1ebc47aa::t_a5397993b88ab2 276,286
+thesarvo-3/src/guide/islands/cluster.test.ts
+  s_e20d0a1ebc47aa::t_1d575472b9973f 1-35
+thesarvo-3/src/guide/view/ContentsView.tsx
+  s_e20d0a1ebc47aa::t_65f0a0cff793ff 7,88,197-206,211,217,221,240
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "99f91d5b0bb3d6306f87ac175f9cc1eb8e6a3510",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
