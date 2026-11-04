@@ -1,0 +1,83 @@
+thesarvo-3/src/components/ThemeSwitch.tsx
+  s_e20d0a1ebc47aa::t_9f3e7727874e9a 1-27
+thesarvo-3/src/components/AccountMenu.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 7,44,47
+thesarvo-3/src/guide/view/ContentsView.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 231,238
+thesarvo-3/src/components/PageMenu.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 20,90
+thesarvo-3/src/components/SideNav.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 37,155,164,185
+thesarvo-3/src/components/AddPageDialog.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 8,50
+thesarvo-3/src/guide/avatars/Avatar.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 33
+thesarvo-3/src/theme.test.ts
+  s_e20d0a1ebc47aa::t_f6f87f8bc3ef0b 1-24
+thesarvo-3/src/guide/view/FactIcons.tsx
+  s_e20d0a1ebc47aa::t_405bdcc9a8d6a5 8
+thesarvo-3/src/guide/view/ClimbBlock.tsx
+  s_e20d0a1ebc47aa::t_7c2cf194df4da7 32,50,130
+thesarvo-3/src/guide/edit/BlockDrag.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 90
+thesarvo-3/src/guide/islands/MapView.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 90,342,372
+  s_e20d0a1ebc47aa::t_01d379b63f1ad2 313
+thesarvo-3/src/guide/view/GpsBlock.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 38,76,120
+thesarvo-3/src/routes/account.password.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 14
+thesarvo-3/src/guide/edit/TopoEditor.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 254,442
+thesarvo-3/src/guide/view/GuideContents.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 162,164,219
+thesarvo-3/src/forum/ui/ForumPage.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 10,161
+thesarvo-3/src/guide/view/RoutesChart.tsx
+  s_e20d0a1ebc47aa::t_405bdcc9a8d6a5 23,43,66,86-87,90
+thesarvo-3/src/components/SearchBox.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 135,165
+thesarvo-3/src/components/AppShell.tsx
+  s_e20d0a1ebc47aa::t_9f3e7727874e9a 9
+  s_e20d0a1ebc47aa::t_031460bc976e72 102,114
+  s_e20d0a1ebc47aa::t_f6f87f8bc3ef0b 131-134
+thesarvo-3/src/guide/history/HistoryView.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 74,110,123,226,258
+thesarvo-3/src/routes/__root.tsx
+  s_e20d0a1ebc47aa::t_f6f87f8bc3ef0b 4,15,17,38
+thesarvo-3/src/components/NameForm.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 4
+thesarvo-3/src/guide/edit/NodeForms.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 81,173,218
+thesarvo-3/src/theme.ts
+  s_e20d0a1ebc47aa::t_f6f87f8bc3ef0b 1-41
+thesarvo-3/src/guide/view/Topo.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 190
+thesarvo-3/src/guide/edit/PhotoEditor.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 122
+thesarvo-3/src/guide/edit/fields.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 4,97
+thesarvo-3/src/components/RecentGuides.tsx
+  s_e20d0a1ebc47aa::t_031460bc976e72 15
+thesarvo-3/src/styles.css
+  s_e20d0a1ebc47aa::t_f6f87f8bc3ef0b 96
+  s_e20d0a1ebc47aa::t_405bdcc9a8d6a5 23-24,56,82
+  s_e20d0a1ebc47aa::t_7c2cf194df4da7 17-18,52,78
+  s_e20d0a1ebc47aa::t_01d379b63f1ad2 16,19-22,37-51,53-55,57-77,79-81,83-94,97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "286fa5925d16bf155b16e4f28433e366ab183720",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
