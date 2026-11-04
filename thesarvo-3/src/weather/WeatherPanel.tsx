@@ -139,7 +139,7 @@ export function RainLine({ today, yesterday, forecast = null }: { today: number 
   const parts = [today !== null && `since 9 am ${mm(today)}`, yesterday !== null && `yesterday ${mm(yesterday)}`, forecast !== null && forecast > 0 && `forecast today up to ${mm(forecast)}`].filter((x): x is string => !!x)
   return (
     <span className="mt-1 block text-[13px]" title={RAIN_TIMEFRAMES}>
-      {parts.length ? <><strong>Rain</strong> {parts.join(', ')}{yesterday !== null && <span className="text-muted"> (yesterday modelled)</span>}<span aria-hidden className="ml-1 cursor-help text-muted">ⓘ</span></> : <span className="text-muted">Rain: no reading</span>}
+      {parts.length ? <><strong>Rain</strong> {parts.join(', ')}<span aria-hidden className="ml-1 cursor-help text-muted">ⓘ</span></> : <span className="text-muted">Rain: no reading</span>}
     </span>
   )
 }
