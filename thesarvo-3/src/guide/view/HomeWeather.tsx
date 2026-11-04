@@ -21,6 +21,8 @@ function remembered() {
 
 /**
  * One place's weather as a card among the contents cards, rotating through the Weather page's places.
+ * Every place's card sits in the same grid cell (the ones not showing invisible), so the card is always as tall as the tallest and the grid does not jump as it rotates;
+ * the others mount a moment after the first, so the page does not ask the Bureau about ten places before showing one.
  * Hovering (or focusing) the card stops the rotation and opens a strip of every place below the card (over the cards beneath, not the forecast), each with today's high; picking one shows it,
  * remembers it, and carries the rotation on from there.
  */
@@ -30,6 +32,11 @@ export function HomeWeather() {
     const i = remembered()
     if (i >= 0) go(i)
   }, [go])
+  const [all, setAll] = useState(false)
+  useEffect(() => {
+    const t = setTimeout(() => setAll(true), 1500)
+    return () => clearTimeout(t)
+  }, [])
   const pick = (i: number) => {
     go(i)
     try {
@@ -55,7 +62,15 @@ export function HomeWeather() {
   )
   return (
     <li aria-label="Weather" className="relative min-w-0" {...hold}>
-      <PlaceCard place={PLACES[at]} footer={footer} />
+      <div className="grid">
+        {PLACES.map((p, i) => (
+          (all || i === at) && (
+            <div key={p.name} className={`col-start-1 row-start-1 ${i === at ? '' : 'invisible'}`} aria-hidden={i !== at} inert={i !== at}>
+              <PlaceCard place={p} footer={footer} />
+            </div>
+          )
+        ))}
+      </div>
       {held && (
         <div className="card absolute inset-x-0 top-full z-10 -mt-1 p-2 shadow-lg">
           <ul className="grid grid-cols-5 gap-1">

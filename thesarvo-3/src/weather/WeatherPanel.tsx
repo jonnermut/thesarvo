@@ -31,7 +31,7 @@ export function WeatherPanel() {
         ))}
       </ul>
       <p className="mt-4 text-xs text-muted">
-        Forecasts and observations © Commonwealth of Australia, Bureau of Meteorology, loaded in your browser from <a className="underline hover:text-navy" href="https://www.bom.gov.au/tas/">bom.gov.au</a>. Times are Tasmanian time.
+        Forecasts and observations © Commonwealth of Australia, Bureau of Meteorology, loaded in your browser from <a className="underline hover:text-navy" href="https://www.bom.gov.au/tas/">bom.gov.au</a>; yesterday's rain from <a className="underline hover:text-navy" href="https://open-meteo.com/">Open-Meteo</a>. Times are Tasmanian time.
       </p>
     </section>
   )
@@ -104,8 +104,8 @@ export function PlaceCard({ place, footer }: { place: Place; footer?: ReactNode 
               , <button type="button" aria-expanded={explain} onClick={() => setExplain((e) => !e)} className="underline decoration-dotted underline-offset-2 hover:text-navy">Delta-T {now.deltaT.toFixed(1)}</button> ({dryingWord(now.deltaT)})
             </span>
           )}
-          {now.rain !== null && now.rain > 0 && <span>, {now.rain} mm rain since 9 am</span>}
           <span className="block text-xs text-muted">{now.station} station{now.at && `, ${clock(now.at)}`}</span>
+          <RainLine today={now.rain} yesterday={weather?.rainYesterday ?? null} />
           {explain && <span className="mt-1 block text-xs text-muted">Delta-T is the air temperature minus the wet-bulb temperature, and it tells you how fast moisture will leave the rock. Near zero the air is saturated and cold rock sweats, so sea cliffs and overhangs stay wet. Locals read above 3 as drying and 4 or more as good conditions. The overnight trend matters too: if it sat near zero all night and is still under 1 in the morning, expect wet rock; if it is climbing through the 2s, the rock is drying. Based on climbers' experience at The Paradiso, not a scientific rule.</span>}
         </p>
       )}
@@ -128,6 +128,17 @@ export function PlaceCard({ place, footer }: { place: Place; footer?: ReactNode 
       )}
       {footer && <div className="mt-auto pt-2">{footer}</div>}
     </div>
+  )
+}
+
+/** Rain already fallen, since recent rain is what decides whether rock is wet: the station's gauge since 9 am today, and yesterday's total (modelled). Always one line, so the card keeps its height. */
+export function RainLine({ today, yesterday }: { today: number | null; yesterday: number | null }) {
+  const mm = (n: number) => (n < 0.1 ? 'none' : `${n.toFixed(n < 10 ? 1 : 0)} mm`)
+  const parts = [today !== null && `Rain since 9 am ${mm(today)}`, yesterday !== null && `yesterday ${mm(yesterday)}`].filter((x): x is string => !!x)
+  return (
+    <span className="mt-1 block text-[13px]" title={yesterday !== null ? "Today is the station's gauge since 9 am; yesterday is Open-Meteo's modelled total for the day." : undefined}>
+      {parts.length ? <>{parts.join(', ')}{yesterday !== null && <span className="text-muted"> (yesterday modelled)</span>}</> : <span className="text-muted">Rain: no reading</span>}
+    </span>
   )
 }
 

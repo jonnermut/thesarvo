@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { deltaT, parseDays, parseHourly, parseObservation } from './bom'
+import { deltaT, parseDays, parseHourly, parseObservation, parseYesterdayRain } from './bom'
 
 it('reads the daily forecast and ignores what is missing', () => {
   const days = parseDays({
@@ -46,4 +46,10 @@ it('folds the hourly forecast into a humidity range and the highest delta-T for 
   expect([...days.keys()]).toEqual(['2026-10-30'])
   expect(days.get('2026-10-30')).toMatchObject({ humMin: 35, humMax: 80, deltaMax: deltaT(22, 35) })
   expect(parseHourly(null).size).toBe(0)
+})
+
+it('reads yesterday\'s rain, the first day of the Open-Meteo series, and nothing from rubbish', () => {
+  expect(parseYesterdayRain({ daily: { time: ['2026-11-03', '2026-11-04'], precipitation_sum: [0.1, 6.2] } })).toBe(0.1)
+  expect(parseYesterdayRain({ daily: { precipitation_sum: [null] } })).toBeNull()
+  expect(parseYesterdayRain('nonsense')).toBeNull()
 })
