@@ -1,0 +1,24 @@
+thesarvo_iphone_2.0/thesarvo/thesarvo/Web/WebHost.swift
+  s_ee2ae06c4b06ab::t_fc1d67fe40a6e0 27
+  s_ee2ae06c4b06ab::t_014a51dfe40b2d 32-36
+thesarvo-3/src/app/bridge.ts
+  s_ee2ae06c4b06ab::t_fc1d67fe40a6e0 22-41,47
+thesarvo-3/src/app/bridge.test.ts
+  s_ee2ae06c4b06ab::t_0dcd3877fb7562 29-42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "776f32c7207efd07b5b16e11ec1e6f66860f2c6b",
+  "prompts": {},
+  "sessions": {
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
