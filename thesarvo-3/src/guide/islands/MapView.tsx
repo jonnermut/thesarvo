@@ -3,6 +3,8 @@ import 'leaflet/dist/leaflet.css'
 import { useEffect, useRef, useState } from 'react'
 import { useEscape, useScrollLock } from '#/components/overlay'
 import type { GpsLine, GpsPoint, GpsShape } from '#/guide/model/types'
+import { CLUSTER_SPAN, clusterPins, dedupe } from './cluster'
+import type { Pin } from './cluster'
 
 /** Tasmania's own basemaps from theLIST: Web Mercator tiles, no key. Topographic is CC BY; the aerial photos and Tasmap scans are CC BY-NC-ND, which allows showing them unaltered. */
 const list = (service: string, maxNativeZoom: number, licence: string) =>
@@ -66,8 +68,13 @@ export type MapEdit = {
   onMoveLine: (index: number, path: string) => void
 }
 
+/** A point with the guide's area chain (top of the tree down to the crag), which names the clusters it falls into. */
+export type MapPoint = GpsPoint & { area?: string[] }
+
 type Props = {
-  points: GpsPoint[]
+  points: MapPoint[]
+  /** Group the points when zoomed out (read-only maps with many crags): each group is named for where it covers, and zooms to fit when clicked. */
+  cluster?: boolean
   lines: GpsLine[]
   /** `pid` of the point to highlight, e.g. the table row last clicked. */
   selected?: string | null
@@ -90,7 +97,7 @@ const TOOLS: [MapTool, string][] = [
 ]
 
 /** Leaflet map of GPS points and tracks. Loaded lazily and only in the browser. */
-export default function MapView({ points, lines, selected, onSelect, edit }: Props) {
+export default function MapView({ points, lines, selected, onSelect, edit, cluster }: Props) {
   const el = useRef<HTMLDivElement>(null)
   const map = useRef<L.Map | null>(null)
   const layer = useRef<L.LayerGroup | null>(null)
@@ -101,6 +108,10 @@ export default function MapView({ points, lines, selected, onSelect, edit }: Pro
   select.current = onSelect
   const editRef = useRef(edit)
   editRef.current = edit
+  const pins = useRef<L.LayerGroup | null>(null)
+  const redraw = useRef<() => void>(() => {})
+  // Views left by zooming into a cluster, so Back can undo them one at a time.
+  const [trail, setTrail] = useState<L.LatLngBounds[]>([])
   const [tool, setTool] = useState<MapTool>('none')
   const [full, setFull] = useState(false)
   const fullButton = useRef<HTMLAnchorElement | null>(null)
@@ -128,6 +139,8 @@ export default function MapView({ points, lines, selected, onSelect, edit }: Pro
     const m = L.map(el.current, { scrollWheelZoom: false, attributionControl: false, layers: [savedBasemap(bases)] })
     map.current = m
     layer.current = L.layerGroup().addTo(m)
+    pins.current = L.layerGroup().addTo(m)
+    m.on('zoomend resize', () => redraw.current())
     L.control.layers(bases, undefined, { position: 'topright' }).addTo(m)
     m.on('baselayerchange', (e: L.LayersControlEvent) => {
       try {
@@ -170,9 +183,12 @@ export default function MapView({ points, lines, selected, onSelect, edit }: Pro
       } else if (t !== 'none') setDrawn([...drawnRef.current, e.latlng])
     })
     return () => {
+      redraw.current = () => {}
+      m.off()
       m.remove()
       map.current = null
       layer.current = null
+      pins.current = null
       fitted.current = false
     }
   }, [])
@@ -251,11 +267,13 @@ export default function MapView({ points, lines, selected, onSelect, edit }: Pro
           .on('dragend', () => editRef.current?.onMoveLine(index, pathText(handles.map((x) => x.getLatLng())))),
       )
     })
-    for (const p of points) {
+    const spots = points.flatMap((p) => {
       const lat = Number.parseFloat(p.latitude)
       const lon = Number.parseFloat(p.longitude)
-      if (Number.isNaN(lat) || Number.isNaN(lon)) continue
-      bounds.extend([lat, lon])
+      return Number.isNaN(lat) || Number.isNaN(lon) ? [] : [{ p, lat, lon }]
+    })
+    spots.forEach(({ lat, lon }) => bounds.extend([lat, lon]))
+    const draw = (p: MapPoint, lat: number, lon: number, into: L.LayerGroup) => {
       const marker = editing
         ? L.marker([lat, lon], { icon: POINT_HANDLE, draggable: true }).on('dragend', (e) => {
             const at = (e.target as L.Marker).getLatLng()
@@ -265,9 +283,45 @@ export default function MapView({ points, lines, selected, onSelect, edit }: Pro
       marker
         .bindTooltip(p.description || p.code, { direction: 'top' })
         .on('click', () => select.current?.(p.pid))
-        .addTo(group)
+        .addTo(into)
       markers.current.set(p.pid, marker)
     }
+    // Pins are drawn again at every zoom: alone when close in, grouped and named when the map shows a wide area.
+    redraw.current = () => {
+      const into = pins.current
+      if (!into) return
+      into.clearLayers()
+      markers.current.clear()
+      const view = m.getBounds()
+      if (!cluster || editing || view.getNorth() - view.getSouth() <= CLUSTER_SPAN) {
+        for (const { p, lat, lon } of spots) draw(p, lat, lon, into)
+        return
+      }
+      const byId = new Map(spots.map((x) => [x.p.pid, x.p]))
+      const all: Pin[] = dedupe(spots.map(({ p, lat, lon }): Pin => ({ id: p.pid, lat, lng: lon, area: [...(p.area ?? []), ...(p.area?.length ? [] : [p.description])] })))
+      for (const c of clusterPins(all, (q) => m.project([q.lat, q.lng]), 56)) {
+        if (c.pins.length === 1) {
+          const q = c.pins[0]
+          const p = byId.get(q.id)
+          if (p) draw(p, q.lat, q.lng, into)
+          continue
+        }
+        const at = L.latLngBounds(c.pins.map((q) => [q.lat, q.lng] as L.LatLngTuple))
+        L.marker([c.lat, c.lng], {
+          icon: L.divIcon({
+            className: '',
+            html: `<div class="relative"><div class="grid size-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-white bg-amber text-[13px] font-bold text-white shadow">${c.pins.length}</div><div class="absolute left-0 top-[18px] w-0 -translate-x-1/2"><span class="block w-max max-w-40 -translate-x-1/2 truncate rounded bg-white/85 px-1 text-[11px] font-semibold text-navy shadow-sm">${c.name.replace(/[&<>"]/g, (ch) => `&#${ch.charCodeAt(0)};`)}</span></div></div>`,
+            iconSize: [0, 0],
+          }),
+        })
+          .on('click', () => {
+            setTrail((t) => [...t, m.getBounds()])
+            m.fitBounds(at, { padding: [50, 50], maxZoom: 17 })
+          })
+          .addTo(into)
+      }
+    }
+    redraw.current()
     // Fit once: after that the view is the user's, even while they edit.
     if (!fitted.current && bounds.isValid()) {
       // The container may have been laid out since the map was made; fit to its real size.
@@ -275,7 +329,7 @@ export default function MapView({ points, lines, selected, onSelect, edit }: Pro
       m.fitBounds(bounds, { padding: [30, 30], maxZoom: 17 })
       fitted.current = true
     }
-  }, [points, lines, activeLine])
+  }, [points, lines, activeLine, cluster])
 
   // Move to the selected point and open its label.
   useEffect(() => {
@@ -309,9 +363,22 @@ export default function MapView({ points, lines, selected, onSelect, edit }: Pro
       {/* `isolate` keeps Leaflet's own z-indexes (400 and up) below the sticky page header. The map
           element's classes belong to Leaflet, so full screen styles a wrapper around it. */}
       <div
-        className={full ? 'fixed inset-0 z-50 isolate h-dvh w-full animate-[overlay-in_180ms_ease-out]' : 'isolate h-96 w-full border border-line sm:h-[28rem]'}
+        className={full ? 'fixed inset-0 z-50 isolate h-dvh w-full animate-[overlay-in_180ms_ease-out]' : 'relative isolate h-96 w-full border border-line sm:h-[28rem]'}
       >
         <div ref={el} className="size-full" />
+        {trail.length > 0 && (
+          <button
+            type="button"
+            className="absolute left-[10px] top-[84px] z-[1000] rounded border-2 border-black/20 bg-white px-2 py-1 text-[13px] text-navy shadow hover:bg-gray-100"
+            onClick={() => {
+              const last = trail[trail.length - 1]
+              setTrail(trail.slice(0, -1))
+              map.current?.fitBounds(last, { animate: true })
+            }}
+          >
+            ← Back
+          </button>
+        )}
       </div>
     </>
   )

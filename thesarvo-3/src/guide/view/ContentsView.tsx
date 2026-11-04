@@ -4,7 +4,7 @@ import type {ReactNode} from 'react';
 import type { GuideStats } from '#/guide/content/manifest'
 import { findByPath, flatten, guideUrl } from '#/guide/content/paths'
 import type { IndexNode } from '#/guide/content/types'
-import type { GpsPoint } from '#/guide/model/types'
+import type { MapPoint } from '#/guide/islands/MapView'
 import { fetchTree } from '#/guide/server'
 import { inApp, openNativeMap } from '#/app/bridge'
 import { LockMark } from '#/components/LockMark'
@@ -85,7 +85,7 @@ export function ContentsView({ node, after, bare }: { node: IndexNode; after?: R
           ))}
         </div>
       )}
-      <CragMap id={current.id} nodes={below} />
+      <CragMap id={current.id} nodes={below} chains={areaChains(current)} />
     </section>
   )
 }
@@ -194,21 +194,31 @@ function Summary({ stats, gps }: { stats: Pick<GuideStats, 'problems' | 'bands' 
   )
 }
 
+/** Each page below `node` by path, with the titles from the first page below it down to the page itself: where a pin is, for naming the groups it falls into on a zoomed-out map. */
+function areaChains(node: IndexNode, chain: string[] = [], out = new Map<string, string[]>()) {
+  for (const child of node.children) {
+    const here = [...chain, child.title]
+    out.set(child.path, here)
+    areaChains(child, here, out)
+  }
+  return out
+}
+
 /**
  * One pin per guide that has GPS; clicking a pin opens that guide. Only in the browser. The build
  * writes every point below as one KML file, as the old site's recursive export did.
  */
-function CragMap({ id, nodes }: { id: string; nodes: IndexNode[] }) {
+function CragMap({ id, nodes, chains }: { id: string; nodes: IndexNode[]; chains: Map<string, string[]> }) {
   const navigate = useNavigate()
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
   const key = nodes.map((n) => n.stats?.pin && `${n.path}@${n.stats.pin.join(',')}`).filter(Boolean).join(' ')
   const points = useMemo(
-    (): GpsPoint[] =>
+    (): MapPoint[] =>
       nodes.flatMap((n) => {
         const pin = n.stats?.pin
         return pin
-          ? [{ pid: n.path, code: '', description: n.title, zone: '', easting: '', northing: '', latitude: String(pin[0]), longitude: String(pin[1]), height: '' }]
+          ? [{ pid: n.path, code: '', description: n.title, zone: '', easting: '', northing: '', latitude: String(pin[0]), longitude: String(pin[1]), height: '', area: chains.get(n.path) ?? [n.title] }]
           : []
       }),
     [key],
@@ -227,7 +237,7 @@ function CragMap({ id, nodes }: { id: string; nodes: IndexNode[] }) {
     <div className="no-print pt-2">
       <Suspense fallback={<div className="grid h-80 place-items-center rounded-lg bg-black/5 text-muted">Loading map…</div>}>
         {/* Keyed on the pins so another page's map fits its own crags. */}
-        <MapView key={key} points={points} lines={[]} onSelect={(path) => void navigate({ to: guideUrl({ path }) })} />
+        <MapView key={key} points={points} lines={[]} cluster onSelect={(path) => void navigate({ to: guideUrl({ path }) })} />
       </Suspense>
       <p className="mt-1 flex flex-wrap gap-x-4 text-[13px] text-muted">
         <a href={treeKmlUrl(id)} download title="Every GPS point below this page, for Google Earth" className="inline-flex items-center gap-1 hover:text-link">
