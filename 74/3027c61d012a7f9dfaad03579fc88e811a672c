@@ -1,0 +1,19 @@
+docs/as-built.md
+  s_d7a95d4f494600::t_9874855a346e03 192
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "743027c61d012a7f9dfaad03579fc88e811a672c",
+  "prompts": {},
+  "sessions": {
+    "s_d7a95d4f494600": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "s_d7a95d4f494600",
+        "model": "unknown"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}

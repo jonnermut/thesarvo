@@ -1,0 +1,21 @@
+docs/apple-signin.md
+  s_ee2ae06c4b06ab::t_380e6e35e4e0e9 35-36,52
+docs/ios-progress.md
+  s_ee2ae06c4b06ab::t_4e3567f68a863b 85,102-108
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e958d90a4c5b7ef4cc62cac858de5be38216b9be",
+  "prompts": {},
+  "sessions": {
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}

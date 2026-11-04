@@ -1,0 +1,57 @@
+README.md
+  s_e20d0a1ebc47aa::t_16193ecb7cc3fb 6,11-18
+scripts/archive-cct.ts
+  s_e20d0a1ebc47aa::t_eedfafb524cc32 20
+scripts/auth-import.ts
+  s_e20d0a1ebc47aa::t_5c22ec8bbbfaaf 10
+scripts/build-images.ts
+  s_e20d0a1ebc47aa::t_f193c1e48839db 18-20
+scripts/build-redirects.ts
+  s_e20d0a1ebc47aa::t_73f48572cf2d39 13-14
+scripts/check-confluence-password.ts
+  s_e20d0a1ebc47aa::t_e56e7c0d299783 7
+scripts/cloudfront-setup.sh
+  s_e20d0a1ebc47aa::t_64b6f138d003d1 27,30
+scripts/cognito-branding.sh
+  s_e20d0a1ebc47aa::t_ff797f5df28516 7
+scripts/cognito-setup.sh
+  s_e20d0a1ebc47aa::t_ad0015e062e79a 43
+scripts/deploy-lambda.sh
+  s_e20d0a1ebc47aa::t_74ee0d81541f57 10-11,31
+scripts/export-forum.ts
+  s_e20d0a1ebc47aa::t_64e63bd05ca3f0 12-17,24
+scripts/gps-report.ts
+  s_e20d0a1ebc47aa::t_de82a90a12628f 8
+scripts/import-avatars.ts
+  s_e20d0a1ebc47aa::t_caa0046acb38b3 14-17,38
+scripts/import-forum-images.ts
+  s_e20d0a1ebc47aa::t_73a99d98075e3a 12-15,36
+scripts/import-history.ts
+  s_e20d0a1ebc47aa::t_d14139653225e9 13-15,28
+scripts/import-members.ts
+  s_e20d0a1ebc47aa::t_2f4c803f79dcda 16-18,28
+scripts/restructure-index.ts
+  s_e20d0a1ebc47aa::t_e3acb3971ac9ef 17-18
+scripts/seed-forum.sh
+  s_e20d0a1ebc47aa::t_362f6a9bbfb5af 6
+scripts/sync-access.ts
+  s_e20d0a1ebc47aa::t_de0372b56a5541 10-15,20
+scripts/sync-content.ts
+  s_e20d0a1ebc47aa::t_5a4cc55e30b544 20-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c1696487cd67fa088781c74df674dcc62f2bab58",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}

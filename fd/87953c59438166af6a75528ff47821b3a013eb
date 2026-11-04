@@ -1,0 +1,23 @@
+scripts/thecrag/convert.ts
+  s_e20d0a1ebc47aa::t_4faa8767b5a2e4 27-31,34
+scripts/thecrag/html.ts
+  s_e20d0a1ebc47aa::t_b85259110afaef 34-37,43-48,144,155-156,177-181
+scripts/thecrag/thecrag.test.ts
+  s_e20d0a1ebc47aa::t_d02fbb983bb519 234-263
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fd87953c59438166af6a75528ff47821b3a013eb",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+docs/ios-progress.md
+  s_3947f085b340d6::t_1c4fc0f5d40430 46-61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8f310ac998d37d21a5d5ef93f403458fe6e82207",
+  "prompts": {},
+  "sessions": {
+    "s_3947f085b340d6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "s_3947f085b340d6",
+        "model": "unknown"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}

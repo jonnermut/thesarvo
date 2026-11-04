@@ -1,0 +1,60 @@
+scripts/thecrag/report.ts
+  s_e20d0a1ebc47aa::t_2de881eab1e44c 1-60
+scripts/thecrag/convert.ts
+  s_e20d0a1ebc47aa::t_d54fde76f492b2 1-54,57,68,70,73,75-79,82-90,92-109,111-140,142-147,150-155,164-174,183
+  s_e20d0a1ebc47aa::t_7549840717a6d5 66-67
+  s_e20d0a1ebc47aa::t_6ae26e5acac17d 55-56
+  s_e20d0a1ebc47aa::t_343953f778f86d 58-60,63-65
+  s_e20d0a1ebc47aa::t_ccf04063bd71c2 69
+  s_e20d0a1ebc47aa::t_5b06ffdbf25f10 71-72
+  s_e20d0a1ebc47aa::t_156ce5732bc77e 74
+  s_e20d0a1ebc47aa::t_2859061234295d 80-81
+  s_e20d0a1ebc47aa::t_8057251c6163ac 91
+  s_e20d0a1ebc47aa::t_cfd500baaae7d3 110
+  s_e20d0a1ebc47aa::t_d21d2cf8acd580 141
+  s_e20d0a1ebc47aa::t_a86869e8edf76f 148-149
+  s_e20d0a1ebc47aa::t_b001ba1f04aa84 156-158,161-163
+  s_e20d0a1ebc47aa::t_327e4cab9a6a9f 175-177,180-182
+  s_e20d0a1ebc47aa::t_5b0509f79fc34e 61-62,159-160,178-179
+scripts/thecrag/html.ts
+  s_e20d0a1ebc47aa::t_e48515db997254 1-196,200-201,203,210-211,213-215
+  s_e20d0a1ebc47aa::t_1d7f7bc5d5c744 197-199,202
+  s_e20d0a1ebc47aa::t_dad21a0fc9b67e 204-209
+  s_e20d0a1ebc47aa::t_d56fe26a1a6843 212
+scripts/thecrag/survey.ts
+  s_e20d0a1ebc47aa::t_0c418f29364430 1-60
+scripts/thecrag/api.ts
+  s_e20d0a1ebc47aa::t_10ae2711564335 1-115
+scripts/thecrag/merge.ts
+  s_e20d0a1ebc47aa::t_0bbd2fcc5245ef 1-238
+  s_e20d0a1ebc47aa::t_a6ac4a90a68c8a 239
+scripts/thecrag/cli.ts
+  s_e20d0a1ebc47aa::t_6d4a791da2e603 1-135,138-153
+  s_e20d0a1ebc47aa::t_dfef97f0b165f4 136-137
+scripts/thecrag/model.ts
+  s_e20d0a1ebc47aa::t_e366364606f3c0 1-86,92-95,100-104,115-117
+  s_e20d0a1ebc47aa::t_7a3c720ea4e84a 87-91,96-97,99,105-114
+  s_e20d0a1ebc47aa::t_f2e8bc710158f3 98
+scripts/thecrag/match.ts
+  s_e20d0a1ebc47aa::t_5198a21042982d 1-100
+scripts/thecrag/thecrag.test.ts
+  s_e20d0a1ebc47aa::t_3cfd374f9128fc 1-221
+docs/plan-thecrag-sync.md
+  s_e20d0a1ebc47aa::t_e53f1d8979d342 1-173
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "aa2d0fc1832bc79948dda945702e8112034ef392",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+docs/ios-progress.md
+  s_ee2ae06c4b06ab::t_4ce58ee12ec800 62-75
+scripts/add-mobile-client.sh
+  s_ee2ae06c4b06ab::t_80ab711a7f3778 1-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "aa4fd0f92d67027f2f17d0eae0601e889f55e8bb",
+  "prompts": {},
+  "sessions": {
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}

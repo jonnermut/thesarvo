@@ -1,0 +1,21 @@
+docs/as-built.md
+  s_e20d0a1ebc47aa::t_1ae9e68607de1c 259-260
+docs/plan-mvp.md
+  s_e20d0a1ebc47aa::t_524caf593d370f 20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "eb4f51f42bd2513b3d05140abc2135314186e4ca",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}

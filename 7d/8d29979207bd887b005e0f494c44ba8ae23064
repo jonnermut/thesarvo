@@ -1,0 +1,23 @@
+docs/apple-signin.md
+  s_ee2ae06c4b06ab::t_d0bb8b04ad7f29 3,22
+docs/as-built.md
+  s_ee2ae06c4b06ab::t_7557ea11f74654 206
+scripts/add-apple.sh
+  s_ee2ae06c4b06ab::t_df58dd645b5525 2,13-18,21,23,27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7d8d29979207bd887b005e0f494c44ba8ae23064",
+  "prompts": {},
+  "sessions": {
+    "s_ee2ae06c4b06ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91764e5e-1382-48ad-9b2e-439b697c59f5",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}

@@ -1,0 +1,85 @@
+scripts/add-google.sh
+  s_e20d0a1ebc47aa::t_e3bca019ecd1ee 1-32
+scripts/archive-cct.ts
+  s_e20d0a1ebc47aa::t_31978c2d5ccf3d 1-64
+scripts/auth-import.ts
+  s_e20d0a1ebc47aa::t_dc83a0bb514cab 1-29
+scripts/aws/agent-policy.json
+  s_e20d0a1ebc47aa::t_6fd7b0149c2914 1-116
+scripts/aws/boundary-policy.json
+  s_e20d0a1ebc47aa::t_baee700a16a16b 1-53
+scripts/build-images.ts
+  s_e20d0a1ebc47aa::t_20059768357a19 1-90
+scripts/build-logo.ts
+  s_e20d0a1ebc47aa::t_0615220721c982 1-26
+scripts/build-redirects.ts
+  s_e20d0a1ebc47aa::t_2ccda0d16ae06d 1-46
+scripts/check-confluence-password.ts
+  s_e20d0a1ebc47aa::t_82b0a5197660c3 1-14
+scripts/cloudfront-redirect-au.sh
+  s_e20d0a1ebc47aa::t_187004ba1a4371 1-36
+scripts/cloudfront-setup.sh
+  s_e20d0a1ebc47aa::t_5a538d4c2c30ba 1-123
+scripts/cognito-branding.sh
+  s_e20d0a1ebc47aa::t_e33262b70ed066 1-62
+scripts/cognito-setup.sh
+  s_e20d0a1ebc47aa::t_72e105c4080596 1-151
+scripts/confluence-query.sh
+  s_e20d0a1ebc47aa::t_3e07e8b44a9b48 1-27
+scripts/deploy-lambda.sh
+  s_e20d0a1ebc47aa::t_6be4395e2139e8 1-100
+scripts/deploy-site.sh
+  s_e20d0a1ebc47aa::t_18a7455037e412 1-33
+scripts/edge/redirect-au.js
+  s_e20d0a1ebc47aa::t_3d248c732721ee 1-9
+scripts/export-attachments.sh
+  s_e20d0a1ebc47aa::t_0684d346bb9208 1-22
+scripts/export-forum.ts
+  s_e20d0a1ebc47aa::t_71b7fac75b0426 1-52
+scripts/export-users.sh
+  s_e20d0a1ebc47aa::t_de5ed7dd3d2019 1-31
+scripts/gps-report.ts
+  s_e20d0a1ebc47aa::t_0a9c1bcbff8ce8 1-34
+scripts/import-avatars.ts
+  s_e20d0a1ebc47aa::t_0d8ddd4c249e02 1-88
+scripts/import-forum-images.ts
+  s_e20d0a1ebc47aa::t_c7fcabc4a97968 1-63
+scripts/import-history.ts
+  s_e20d0a1ebc47aa::t_bdccf59e0236cb 1-87
+scripts/import-members.ts
+  s_e20d0a1ebc47aa::t_b1277cf9f1bb22 1-83
+scripts/lambda/gate.mjs
+  s_e20d0a1ebc47aa::t_d8940343aba0ff 1-18
+scripts/legacy-app/index.json
+  s_e20d0a1ebc47aa::t_1d925d693390aa 1
+scripts/legacy-app/sync.xml
+  s_e20d0a1ebc47aa::t_5fe5c5c2950261 1-2
+scripts/publish-setup.sh
+  s_e20d0a1ebc47aa::t_1b4f3afdc87839 1-37
+scripts/restructure-index.ts
+  s_e20d0a1ebc47aa::t_e6b080c4c1d54f 1-185
+scripts/seed-forum.sh
+  s_e20d0a1ebc47aa::t_27b99cfaa6f2f5 1-14
+scripts/sync-access.ts
+  s_e20d0a1ebc47aa::t_64a888e2df44f0 1-37
+scripts/sync-attachments-to-s3.sh
+  s_e20d0a1ebc47aa::t_a70ce877c382fb 1-34
+scripts/sync-content.ts
+  s_e20d0a1ebc47aa::t_2a33e7971a8bba 1-134
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8c8b9dd7b490ec67074d1528388bd7ec81c71126",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+docs/as-built.md
+  s_e20d0a1ebc47aa::t_9076b123725c0a 246
+docs/plan-thecrag-sync.md
+  s_e20d0a1ebc47aa::t_77c948998975b2 110
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "75b78b55db79184b5f9900a9538bd2f85bc2e565",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
