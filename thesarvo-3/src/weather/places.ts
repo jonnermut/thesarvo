@@ -1,15 +1,15 @@
-/** `bom` is the name of the place on the Bureau's site (bom.gov.au/places/tas/<bom>/forecast/), `swell` marks coast with a swell worth reading. */
-export type Place = { name: string; note: string; bom: string; lat: number; lng: number; swell?: boolean }
+/** `bom` is the name of the place on the Bureau's site (bom.gov.au/places/tas/<bom>/forecast/), `swell` marks coast with a swell worth reading, read at `sea`: a point offshore, since the wave model has no value on land. */
+export type Place = { name: string; note: string; bom: string; lat: number; lng: number; swell?: boolean; sea?: { lat: number; lng: number } }
 
 /** Where climbers go, in the order of the guide's regions: south east, west, east, north east. */
 export const PLACES: Place[] = [
   { name: 'Hobart', note: 'Southern crags', bom: 'hobart', lat: -42.8826, lng: 147.3257 },
   { name: 'Kunanyi / Mt Wellington', note: 'The Organ Pipes, Sphinx, Lost World', bom: 'wellington-park', lat: -42.8957, lng: 147.2371 },
-  { name: 'Tasman Peninsula', note: 'Fortescue Bay, Cape Raoul, Cape Pillar and Mt Brown', bom: 'cape-pillar', lat: -43.237, lng: 148, swell: true },
+  { name: 'Tasman Peninsula', note: 'Fortescue Bay, Cape Raoul, Cape Pillar and Mt Brown', bom: 'cape-pillar', lat: -43.237, lng: 148, swell: true, sea: { lat: -43.25, lng: 148.1 } },
   { name: 'Southwest', note: 'Adamsfield, Frenchmans Cap, Federation Peak, Gordon Gorge', bom: 'strathgordon', lat: -42.7677, lng: 146.0461 },
   { name: 'Strahan', note: 'The west coast', bom: 'strahan', lat: -42.1558, lng: 145.3267 },
   { name: 'Sand River', note: 'Sand River, near Buckland', bom: 'buckland', lat: -42.607, lng: 147.7174 },
-  { name: 'Freycinet', note: 'Whitewater Wall, the Hazards, Bicheno', bom: 'coles-bay', lat: -42.1207, lng: 148.2406, swell: true },
+  { name: 'Freycinet', note: 'Whitewater Wall, the Hazards, Bicheno', bom: 'coles-bay', lat: -42.1207, lng: 148.2406, swell: true, sea: { lat: -42.15, lng: 148.35 } },
   { name: 'Launceston', note: 'Cataract Gorge, Duck Reach, Hillwood', bom: 'launceston', lat: -41.4376, lng: 147.135 },
   { name: 'Ben Lomond', note: 'Frews Flutes, Stacks Bluff', bom: 'ben-lomond', lat: -41.5594, lng: 147.6819 },
   { name: 'Flinders Island', note: 'Killiecrankie, Strzelecki', bom: 'whitemark', lat: -40.12, lng: 148.0154 },

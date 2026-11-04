@@ -31,7 +31,7 @@ export function WeatherPanel() {
         ))}
       </ul>
       <p className="mt-4 text-xs text-muted">
-        Forecasts and observations © Commonwealth of Australia, Bureau of Meteorology, loaded in your browser from <a className="underline hover:text-navy" href="https://www.bom.gov.au/tas/">bom.gov.au</a>; yesterday's rain from <a className="underline hover:text-navy" href="https://open-meteo.com/">Open-Meteo</a>. Times are Tasmanian time.
+        Forecasts and observations © Commonwealth of Australia, Bureau of Meteorology, loaded in your browser from <a className="underline hover:text-navy" href="https://www.bom.gov.au/tas/">bom.gov.au</a>; yesterday's rain and the swell from <a className="underline hover:text-navy" href="https://open-meteo.com/">Open-Meteo</a>. Times are Tasmanian time.
       </p>
     </section>
   )
@@ -66,6 +66,8 @@ export function PlaceCard({ place, footer }: { place: Place; footer?: ReactNode 
   const weather = state && 'weather' in state ? state.weather : undefined
   const today = weather?.days[0]
   const now = weather?.now
+  // The Bureau's last day is often only a minimum temperature: nothing to read, so it is left out.
+  const week = (weather?.days.slice(1, 8) ?? []).filter((d) => d.max !== null || d.icon || d.rainChance !== null)
   return (
     <div className="card flex h-full flex-col p-3">
       <div className="flex flex-wrap items-baseline justify-between gap-x-3">
@@ -104,6 +106,13 @@ export function PlaceCard({ place, footer }: { place: Place; footer?: ReactNode 
             ) : (
               <Stat label="Delta-T" value="–" sub="" />
             )}
+            {weather?.swell && (
+              <div className="col-span-4 flex items-baseline justify-center gap-2 rounded bg-paper px-1 py-1" title="Swell now, modelled by Open-Meteo for the open sea off this coast">
+                <dt className="text-[11px] text-muted">Swell</dt>
+                <dd className="m-0 text-[17px] font-semibold leading-snug">{weather.swell.height.toFixed(1)} m</dd>
+                <dd className="m-0 text-[11px] text-muted">{[weather.swell.dir, weather.swell.period !== null && `${Math.round(weather.swell.period)} s`].filter(Boolean).join(' · ')}</dd>
+              </div>
+            )}
           </dl>
           {explain && <p className="mt-1 text-xs text-muted">Delta-T is the air temperature minus the wet-bulb temperature, and it tells you how fast moisture will leave the rock. Near zero the air is saturated and cold rock sweats, so sea cliffs and overhangs stay wet. Locals read above 3 as drying and 4 or more as good conditions. The overnight trend matters too: if it sat near zero all night and is still under 1 in the morning, expect wet rock; if it is climbing through the 2s, the rock is drying. Based on climbers' experience at The Paradiso, not a scientific rule.</p>}
           <RainLine today={now.rain} yesterday={weather?.rainYesterday ?? null} forecast={today?.rainMax ?? null} />
@@ -123,14 +132,16 @@ export function PlaceCard({ place, footer }: { place: Place; footer?: ReactNode 
           </div>
         </div>
       )}
-      {weather && weather.days.length > 1 && (
-        <ol className="mt-3 grid grid-cols-7 gap-1 text-center text-xs" aria-label="The week ahead">
-          {weather.days.slice(1, 8).map((d) => (
-            <DayCell key={d.date} day={d} />
-          ))}
-        </ol>
-      )}
-      {footer && <div className="mt-auto pt-2">{footer}</div>}
+      <div className="mt-auto">
+        {week.length > 0 && (
+          <ol className="mt-3 grid gap-1 text-center text-xs" style={{ gridTemplateColumns: `repeat(${week.length}, minmax(0, 1fr))` }} aria-label="The week ahead">
+            {week.map((d) => (
+              <DayCell key={d.date} day={d} />
+            ))}
+          </ol>
+        )}
+        {footer && <div className="pt-2">{footer}</div>}
+      </div>
     </div>
   )
 }
@@ -175,7 +186,7 @@ function Stat({ label, value, sub, tone = '', onClick, expanded }: { label: stri
   return onClick ? (
     <div className="rounded bg-paper"><button type="button" aria-expanded={expanded} title="What is Delta-T?" onClick={onClick} className="block w-full px-1 py-1 hover:text-navy">{body}</button></div>
   ) : (
-    <div className="rounded bg-paper px-1 py-1">{body}</div>
+    <div className={`rounded bg-paper px-1 py-1`}>{body}</div>
   )
 }
 

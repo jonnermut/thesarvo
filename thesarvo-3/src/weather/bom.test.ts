@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { deltaT, parseDays, parseHourly, parseObservation, parseYesterdayRain } from './bom'
+import { deltaT, parseDays, parseHourly, parseObservation, parseSwell, parseYesterdayRain } from './bom'
 
 it('reads the daily forecast and ignores what is missing', () => {
   const days = parseDays({
@@ -52,4 +52,10 @@ it('reads yesterday\'s rain, the first day of the Open-Meteo series, and nothing
   expect(parseYesterdayRain({ daily: { time: ['2026-11-03', '2026-11-04'], precipitation_sum: [0.1, 6.2] } })).toBe(0.1)
   expect(parseYesterdayRain({ daily: { precipitation_sum: [null] } })).toBeNull()
   expect(parseYesterdayRain('nonsense')).toBeNull()
+})
+
+it('reads the current swell: height, period and the compass point it comes from', () => {
+  expect(parseSwell({ current: { swell_wave_height: 0.82, swell_wave_period: 7.95, swell_wave_direction: 219, wave_height: 1.1 } })).toEqual({ height: 0.82, period: 7.95, dir: 'SW' })
+  expect(parseSwell({ current: { wave_height: 1.1, wave_direction: 355 } })).toEqual({ height: 1.1, period: null, dir: 'N' })
+  expect(parseSwell({})).toBeNull()
 })
