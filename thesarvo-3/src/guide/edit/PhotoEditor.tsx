@@ -119,7 +119,7 @@ export function PhotoEditor({
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 sm:items-center sm:p-4">
-      <div role="dialog" aria-modal="true" aria-label="Edit photo" className="flex max-h-dvh w-full max-w-4xl flex-col gap-3 overflow-y-auto bg-white p-3 shadow-xl sm:rounded-lg sm:p-4">
+      <div role="dialog" aria-modal="true" aria-label="Edit photo" className="flex max-h-dvh w-full max-w-4xl flex-col gap-3 overflow-y-auto bg-card p-3 shadow-xl sm:rounded-lg sm:p-4">
         <div className="flex flex-wrap items-center gap-2">
           <h3 className="mr-auto font-semibold">Edit photo</h3>
           <Button onClick={onCancel}>Cancel</Button>

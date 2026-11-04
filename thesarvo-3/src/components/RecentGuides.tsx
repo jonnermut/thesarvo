@@ -12,7 +12,7 @@ export function RecentGuides({ current, onPick, className = '' }: { current?: st
       <ul className="mt-1 flex flex-wrap gap-1.5">
         {recent.map((r) => (
           <li key={r.path}>
-            <Link to={guideUrl(r)} onClick={onPick} className="block rounded-full border border-line bg-white px-2.5 py-0.5 text-[13px] text-navy hover:border-link hover:text-link">
+            <Link to={guideUrl(r)} onClick={onPick} className="block rounded-full border border-line bg-card px-2.5 py-0.5 text-[13px] text-navy hover:border-link hover:text-link">
               {r.title}
             </Link>
           </li>

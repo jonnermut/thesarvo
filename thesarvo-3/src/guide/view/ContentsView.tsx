@@ -228,14 +228,14 @@ function CragMap({ id, nodes, chains }: { id: string; nodes: IndexNode[]; chains
   if (inApp())
     return (
       <div className="no-print pt-2">
-        <button type="button" onClick={() => openNativeMap(id, points.map((p) => ({ title: p.description, lat: Number(p.latitude), lon: Number(p.longitude) })))} className="rounded border border-line bg-navy px-2.5 py-1 text-[13px] text-white">
+        <button type="button" onClick={() => openNativeMap(id, points.map((p) => ({ title: p.description, lat: Number(p.latitude), lon: Number(p.longitude) })))} className="rounded border border-line bg-fill px-2.5 py-1 text-[13px] text-white">
           Open in Map
         </button>
       </div>
     )
   return (
     <div className="no-print pt-2">
-      <Suspense fallback={<div className="grid h-80 place-items-center rounded-lg bg-black/5 text-muted">Loading map…</div>}>
+      <Suspense fallback={<div className="grid h-80 place-items-center rounded-lg bg-wash/5 text-muted">Loading map…</div>}>
         {/* Keyed on the pins so another page's map fits its own crags. */}
         <MapView key={key} points={points} lines={[]} cluster onSelect={(path) => void navigate({ to: guideUrl({ path }) })} />
       </Suspense>

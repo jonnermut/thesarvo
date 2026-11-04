@@ -6,6 +6,7 @@ import { PageMenu } from './PageMenu'
 import { animateLayout, useEscape, useScrollLock } from './overlay'
 import { SearchBox } from './SearchBox'
 import { SideNav } from './SideNav'
+import { ThemeSwitch } from './ThemeSwitch'
 import type { Guide } from '#/guide/model/types'
 import { THECRAG_LICENCE_URL, guideHasCragMarks } from '#/guide/view/credit'
 
@@ -98,7 +99,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         />
         {/* Phones: a drawer that slides in. Desktop: a column that slides away (see animateLayout), hidden from tabbing when shut. */}
         <aside
-          className={`side-nav no-print fixed inset-y-14 left-0 z-20 w-72 overscroll-contain border-r border-black/10 bg-paper max-lg:transition-[translate,visibility] max-lg:duration-180 max-lg:ease-out lg:sticky lg:top-14 lg:h-[calc(100dvh-3.5rem)] lg:shrink-0 lg:translate-x-0 ${
+          className={`side-nav no-print fixed inset-y-14 left-0 z-20 w-72 overscroll-contain border-r border-wash/10 bg-paper max-lg:transition-[translate,visibility] max-lg:duration-180 max-lg:ease-out lg:sticky lg:top-14 lg:h-[calc(100dvh-3.5rem)] lg:shrink-0 lg:translate-x-0 ${
             drawer ? '' : '-translate-x-full invisible'
           } ${collapsed ? 'lg:invisible lg:-ml-72' : 'lg:visible'}`}
           onClick={(e) => {
@@ -110,7 +111,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <main className="min-w-0 flex-1">{children}</main>
       </div>
 
-      <footer className="no-print border-t border-black/10 bg-paper px-4 py-6 text-xs leading-relaxed text-muted sm:px-6">
+      <footer className="no-print border-t border-wash/10 bg-paper px-4 py-6 text-xs leading-relaxed text-muted sm:px-6">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
           <div className="max-w-3xl space-y-1">
             <p>
@@ -127,7 +128,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             )}
             <p>Climb safely: guides are a starting point, not a guarantee.</p>
           </div>
-          <p className="shrink-0 whitespace-nowrap">Tasmania, Australia</p>
+          <div className="flex shrink-0 flex-col gap-1 sm:items-end">
+            <ThemeSwitch />
+            <p className="whitespace-nowrap">Tasmania, Australia</p>
+          </div>
         </div>
       </footer>
     </div>

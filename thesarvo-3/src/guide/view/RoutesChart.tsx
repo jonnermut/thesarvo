@@ -20,7 +20,7 @@ export function RoutesChart({ stats }: { stats: RouteStats }) {
       viewBox={`0 0 ${W} ${H}`}
       role="img"
       aria-label={`${stats.total} ${stats.problems ? 'problems' : 'routes'} by grade`}
-      className="w-full max-w-72 text-[11px]"
+      className="w-full max-w-72 fill-ink text-[11px]"
     >
       <text
         x={W / 2}
@@ -40,7 +40,7 @@ export function RoutesChart({ stats }: { stats: RouteStats }) {
             x2={W - PLOT.right}
             y1={y(t)}
             y2={y(t)}
-            stroke="#000"
+            stroke="var(--color-ink)"
             strokeOpacity={0.12}
           />
           <text
@@ -63,7 +63,7 @@ export function RoutesChart({ stats }: { stats: RouteStats }) {
               y={y(b.trad)}
               width={w}
               height={y(0) - y(b.trad)}
-              fill="#000"
+              fill="var(--color-ink)"
             />
             <rect
               x={x}
@@ -83,11 +83,11 @@ export function RoutesChart({ stats }: { stats: RouteStats }) {
           <rect
             width={96}
             height={16}
-            fill="#fff"
-            stroke="#000"
+            fill="var(--color-card)"
+            stroke="var(--color-ink)"
             strokeOpacity={0.3}
           />
-          <rect x={6} y={4} width={8} height={8} fill="#000" />
+          <rect x={6} y={4} width={8} height={8} fill="var(--color-ink)" />
           <text x={17} y={8} dominantBaseline="central">
             Trad
           </text>

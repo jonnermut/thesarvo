@@ -5,7 +5,7 @@ import { useEscape, useScrollLock } from './overlay'
 
 type PageKind = 'guide' | 'html'
 
-const field = 'mt-1 w-full rounded-md border border-line bg-white px-3 py-2 focus:border-link focus:outline-none'
+const field = 'mt-1 w-full rounded-md border border-line bg-card px-3 py-2 focus:border-link focus:outline-none'
 const TITLE_MAX = 80
 
 /** Page types. HTML pages (prose) come with their own editor later. */
@@ -47,7 +47,7 @@ export function AddPageDialog({ parent, parentTitle, onClose }: { parent: string
         role="dialog"
         aria-modal="true"
         aria-label="Add a page"
-        className="w-full max-w-md space-y-4 rounded-t-lg bg-white p-5 shadow-xl sm:rounded-lg"
+        className="w-full max-w-md space-y-4 rounded-t-lg bg-card p-5 shadow-xl sm:rounded-lg"
         onSubmit={(e) => {
           e.preventDefault()
           void submit()

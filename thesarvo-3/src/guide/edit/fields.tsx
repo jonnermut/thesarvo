@@ -1,7 +1,7 @@
 import { useEffect, useId, useState } from 'react'
 
 const INPUT =
-  'w-full rounded-md border border-line bg-white px-2.5 py-1.5 text-sm focus:border-amber focus:outline-none focus:ring-2 focus:ring-amber/30'
+  'w-full rounded-md border border-line bg-card px-2.5 py-1.5 text-sm focus:border-amber focus:outline-none focus:ring-2 focus:ring-amber/30'
 
 type FieldProps = { label: string; className?: string; children: (id: string) => React.ReactNode }
 
@@ -94,7 +94,7 @@ export function Button({
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'plain' | 'primary' | 'danger' }) {
   const styles = {
-    plain: 'border-transparent bg-black/[.04] text-ink hover:bg-black/10',
+    plain: 'border-transparent bg-black/[.04] text-ink hover:bg-wash/10',
     primary: 'border-transparent bg-forest text-white hover:bg-forest-soft',
     danger: 'border-transparent text-red-700 hover:bg-red-50',
   }

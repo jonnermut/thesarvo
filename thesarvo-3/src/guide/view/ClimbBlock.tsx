@@ -29,7 +29,7 @@ export function ClimbBlock({ climb, highlighted, anchor }: { climb: Climb; highl
       className={`rounded px-2 py-1.5 text-[13px] leading-snug transition-colors ${highlighted ? 'bg-amber/20' : ''}`}
     >
       <div className={ROW}>
-        <span className="w-7 text-right font-bold tabular-nums text-[#0000a0] sm:w-auto">
+        <span className="w-7 text-right font-bold tabular-nums text-grade sm:w-auto">
           {/* An unnumbered climb shows nothing here: a stand-in "#" read as a number. */}
           {anchor && climb.number ? (
             <a href={`#${anchor}`} onClick={copy} title="Link to this climb" className="hover:underline">
@@ -47,7 +47,7 @@ export function ClimbBlock({ climb, highlighted, anchor }: { climb: Climb; highl
             </span>
           )}
         </h3>
-        <span className="text-[#0000a0]">
+        <span className="text-grade">
           <Stars stars={climb.stars} />
         </span>
         <span className="font-bold whitespace-nowrap">{length.main}</span>
@@ -127,7 +127,7 @@ function Description({ text }: { text: string }) {
         const p = parsePitch(line)
         return p.label ? (
           <Fragment key={i}>
-            <span className="font-bold text-[#0000a0]">{p.label}</span>
+            <span className="font-bold text-grade">{p.label}</span>
             <span>{p.text}</span>
           </Fragment>
         ) : (

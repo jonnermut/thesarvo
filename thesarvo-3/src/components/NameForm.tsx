@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { NAME_MAX, nameProblem, setName, useUser } from '#/auth/session'
 
-const input = 'mt-1 w-full rounded-md border border-line bg-white px-3 py-2 focus:border-link focus:outline-none'
+const input = 'mt-1 w-full rounded-md border border-line bg-card px-3 py-2 focus:border-link focus:outline-none'
 
 /** The signed-in user's name, saved to their Cognito account. Problems show once they try to save. */
 export function NameForm({ submit = 'Save', onSaved }: { submit?: string; onSaved: () => void }) {

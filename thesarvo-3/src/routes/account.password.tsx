@@ -11,7 +11,7 @@ export const Route = createFileRoute('/account/password')({
   component: ChangePassword,
 })
 
-const input = 'mt-1 w-full rounded-md border border-line bg-white px-3 py-2 focus:border-link focus:outline-none'
+const input = 'mt-1 w-full rounded-md border border-line bg-card px-3 py-2 focus:border-link focus:outline-none'
 
 function ChangePassword() {
   const user = useUser()

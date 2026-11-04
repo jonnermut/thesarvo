@@ -132,7 +132,7 @@ export function SearchBox() {
               className={
                 sheetMounted
                   ? 'w-full rounded-md border border-line py-2 pr-2 pl-8 text-base outline-none focus:border-link'
-                  : 'w-52 rounded-md bg-white/15 py-1.5 pr-2 pl-8 text-sm text-white placeholder:text-white/60 outline-none focus:bg-white focus:text-ink focus:placeholder:text-muted md:w-72'
+                  : 'w-52 rounded-md bg-white/15 py-1.5 pr-2 pl-8 text-sm text-white placeholder:text-white/60 outline-none focus:bg-card focus:text-ink focus:placeholder:text-muted md:w-72'
               }
             />
           </label>
@@ -162,7 +162,7 @@ export function SearchBox() {
                       setScope(s)
                       input.current?.focus()
                     }}
-                    className={`rounded-full px-2.5 py-0.5 ${scope === s ? 'bg-navy text-white' : 'text-link hover:bg-paper'}`}
+                    className={`rounded-full px-2.5 py-0.5 ${scope === s ? 'bg-fill text-white' : 'text-link hover:bg-paper'}`}
                   >
                     {s === 'all' ? 'Everywhere' : guide.title}
                   </button>

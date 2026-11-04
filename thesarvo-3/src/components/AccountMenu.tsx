@@ -4,7 +4,7 @@ import { signIn, signOut, signUp, useUser } from '#/auth/session'
 import { MyAvatar } from '#/guide/avatars/Avatar'
 import { useEscape } from './overlay'
 
-const ITEM = 'block w-full rounded-md px-3 py-2 text-left hover:bg-black/5'
+const ITEM = 'block w-full rounded-md px-3 py-2 text-left hover:bg-wash/5'
 
 /** One round button opening a small menu: the user's initial, or a person for a visitor, with sign in and create account. Decided after hydration, in the browser. */
 export function AccountMenu() {
@@ -41,10 +41,10 @@ export function AccountMenu() {
         )}
       </button>
       {open && (
-        <div role="menu" className="absolute right-0 z-30 mt-2 w-64 rounded-lg border border-black/10 bg-paper p-1 text-sm shadow-lg">
+        <div role="menu" className="absolute right-0 z-30 mt-2 w-64 rounded-lg border border-wash/10 bg-paper p-1 text-sm shadow-lg">
           {user ? (
             <>
-              <div className="border-b border-black/10 px-3 py-2">
+              <div className="border-b border-wash/10 px-3 py-2">
                 <div className="truncate font-medium">{label}</div>
                 {user.name && <div className="truncate text-muted">{user.email}</div>}
               </div>

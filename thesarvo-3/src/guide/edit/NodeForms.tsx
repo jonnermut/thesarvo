@@ -78,7 +78,7 @@ export function ClimbDialog({ node, onChange, onClose }: { node: Climb; onChange
   useEscape(true, onClose)
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center sm:p-4" onPointerDown={(e) => e.target === e.currentTarget && onClose()}>
-      <div role="dialog" aria-modal="true" aria-label={`${node.type === 'problem' ? 'Problem' : 'Climb'} details`} className="max-h-[90dvh] w-full max-w-3xl overflow-y-auto rounded-t-lg bg-white p-4 shadow-xl sm:rounded-lg">
+      <div role="dialog" aria-modal="true" aria-label={`${node.type === 'problem' ? 'Problem' : 'Climb'} details`} className="max-h-[90dvh] w-full max-w-3xl overflow-y-auto rounded-t-lg bg-card p-4 shadow-xl sm:rounded-lg">
         <div className="mb-3 flex items-center justify-between gap-2">
           <h3 className="font-semibold">{`${node.number} ${node.name}`.trim() || (node.type === 'problem' ? 'Problem' : 'Climb')}</h3>
           <Button onClick={onClose}>Done</Button>
@@ -170,7 +170,7 @@ export function GpsForm({ node, onChange }: { node: Gps; onChange: Change<Gps> }
 
   return (
     <div className="space-y-3">
-      <Suspense fallback={<div className="grid h-80 place-items-center rounded-lg bg-black/5 text-muted">Loading map…</div>}>
+      <Suspense fallback={<div className="grid h-80 place-items-center rounded-lg bg-wash/5 text-muted">Loading map…</div>}>
         <MapView
           points={node.points}
           lines={node.lines}
@@ -215,7 +215,7 @@ export function GpsForm({ node, onChange }: { node: Gps; onChange: Change<Gps> }
       ))}
       <div className="flex flex-wrap items-center gap-2">
         <Button onClick={() => onChange({ points: [...node.points, emptyPoint(nextPid)] })}>Add point</Button>
-        <label className="cursor-pointer rounded border border-line bg-paper px-3 py-1.5 text-sm hover:bg-black/5">
+        <label className="cursor-pointer rounded border border-line bg-paper px-3 py-1.5 text-sm hover:bg-wash/5">
           Import GPX…
           <input type="file" accept=".gpx,application/gpx+xml,text/xml" hidden onChange={(e) => { void importGpx(e.target.files?.[0]); e.target.value = '' }} />
         </label>

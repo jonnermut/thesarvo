@@ -17,7 +17,7 @@ export function pageActions(mode: PageMode): Action[] {
   ]
 }
 
-const ITEM = 'block w-full rounded-md px-3 py-2 text-left hover:bg-black/5'
+const ITEM = 'block w-full rounded-md px-3 py-2 text-left hover:bg-wash/5'
 
 /**
  * The page's actions in the header: "Edit this Guide" (or "View" while editing) with a ▾ beside it opening the
@@ -87,7 +87,7 @@ export function PageMenu() {
         </svg>
       </button>
       {open && (
-        <div role="menu" className="absolute top-full right-0 z-30 mt-2 w-60 rounded-lg border border-black/10 bg-paper p-1 text-sm shadow-lg">
+        <div role="menu" className="absolute top-full right-0 z-30 mt-2 w-60 rounded-lg border border-wash/10 bg-paper p-1 text-sm shadow-lg">
           {pageActions(mode).map((a) => (
             <Link key={a.label} role="menuitem" to="/g/$" params={{ _splat: splat }} search={a.mode}
               rel="nofollow"

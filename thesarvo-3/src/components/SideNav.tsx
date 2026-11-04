@@ -34,7 +34,7 @@ function NavItem({
     <li>
       <div
         data-active={active || undefined}
-        className={`flex items-center rounded-md hover:bg-black/5 ${active ? 'bg-amber/15' : ''}`}
+        className={`flex items-center rounded-md hover:bg-wash/5 ${active ? 'bg-amber/15' : ''}`}
         style={{ paddingLeft: depth * 12 }}
       >
         {node.children.length || node.more ? (
@@ -152,7 +152,7 @@ export function SideNav({ local }: { local: IndexNode }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Find a crag…"
-          className="w-full rounded-md border border-line bg-white px-3 py-1.5 text-sm placeholder:text-muted focus:border-link focus:outline-none"
+          className="w-full rounded-md border border-line bg-card px-3 py-1.5 text-sm placeholder:text-muted focus:border-link focus:outline-none"
         />
         {!query && <RecentGuides current={currentPath} className="mt-3" />}
       </div>
@@ -161,7 +161,7 @@ export function SideNav({ local }: { local: IndexNode }) {
           <ul>
             {matches.map(({ node, parent }) => (
               <li key={node.id}>
-                <Link to={guideUrl(node)} className="block truncate rounded-md px-3 py-1.5 text-sm text-navy hover:bg-black/5">
+                <Link to={guideUrl(node)} className="block truncate rounded-md px-3 py-1.5 text-sm text-navy hover:bg-wash/5">
                   {node.private && <LockMark className="mr-1.5 align-[-1px]" />}
                   {node.title}
                   {parent && <span className="ml-1.5 text-xs text-muted">{parent}</span>}
@@ -182,7 +182,7 @@ export function SideNav({ local }: { local: IndexNode }) {
         <Link
           to="/g/forum"
           aria-current={forum ? 'page' : undefined}
-          className={`block rounded-md px-3 py-1.5 text-sm hover:bg-black/5 ${forum ? 'bg-amber/15 font-semibold text-link' : 'text-navy'}`}
+          className={`block rounded-md px-3 py-1.5 text-sm hover:bg-wash/5 ${forum ? 'bg-amber/15 font-semibold text-link' : 'text-navy'}`}
         >
           Forum
         </Link>

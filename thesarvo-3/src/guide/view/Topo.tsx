@@ -187,7 +187,7 @@ export function Topo({ guideId, topo, climbs, active, onActive, onOpen, displayW
   const spots = useMemo(() => labelSpots(topo.paths, topo.width, topo.height, scale), [topo.paths, topo.width, topo.height, scale])
 
   return (
-    <div ref={box} className="relative overflow-hidden bg-black/5">
+    <div ref={box} className="relative overflow-hidden bg-wash/5">
       <img
         src={imageUrl(guideId, topo.src)}
         alt={topo.legendTitle || topo.src}

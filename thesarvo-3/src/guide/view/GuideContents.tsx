@@ -159,9 +159,9 @@ export function GuideContents({ nodes, title = '' }: { nodes: GuideNode[]; title
             <div
               role="dialog"
               aria-label="On this page"
-              className={`fixed inset-x-0 bottom-0 z-40 flex max-h-[75dvh] flex-col overscroll-contain rounded-t-2xl bg-white pt-2 shadow-2xl transition-[translate] duration-180 ease-out starting:translate-y-full ${sheet ? '' : 'translate-y-full'}`}
+              className={`fixed inset-x-0 bottom-0 z-40 flex max-h-[75dvh] flex-col overscroll-contain rounded-t-2xl bg-card pt-2 shadow-2xl transition-[translate] duration-180 ease-out starting:translate-y-full ${sheet ? '' : 'translate-y-full'}`}
             >
-              <div className="mx-auto mb-1 h-1 w-10 rounded-full bg-black/15" aria-hidden />
+              <div className="mx-auto mb-1 h-1 w-10 rounded-full bg-wash/15" aria-hidden />
               {panel(closeSheet)}
             </div>
           </>
@@ -216,7 +216,7 @@ function Panel({
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Filter: name, grade, **"
           aria-label="Filter this guide"
-          className="w-full rounded-md border border-line bg-white px-2.5 py-1 text-[13px] placeholder:text-muted focus:border-link focus:outline-none"
+          className="w-full rounded-md border border-line bg-card px-2.5 py-1 text-[13px] placeholder:text-muted focus:border-link focus:outline-none"
         />
       </div>
       <ul ref={list} className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-3">

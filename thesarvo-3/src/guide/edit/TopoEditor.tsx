@@ -251,7 +251,7 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
       )}
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_20rem]">
-        <ZoomBox width={topo.width} height={topo.height} panOnDrag={tool === 'select'} className={`w-full rounded-lg bg-black/5 shadow-md ${tool === 'select' ? '' : 'ring-2 ring-amber'}`}>
+        <ZoomBox width={topo.width} height={topo.height} panOnDrag={tool === 'select'} className={`w-full rounded-lg bg-wash/5 shadow-md ${tool === 'select' ? '' : 'ring-2 ring-amber'}`}>
           {(scale) => {
           // Handles keep one size on screen however far the photo is zoomed.
           zoom.current = scale
@@ -439,7 +439,7 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
               <ul className="space-y-0.5">
                 {climbs.map((c) => (
                   <li key={c.id}>
-                    <label className="flex cursor-pointer items-center gap-2 rounded px-1 py-0.5 text-sm hover:bg-white">
+                    <label className="flex cursor-pointer items-center gap-2 rounded px-1 py-0.5 text-sm hover:bg-card">
                       <input type="checkbox" checked={topo.legend.includes(c.id)} onChange={() => onChange((t) => ops.toggleLegend(t, c.id))} />
                       <span className="w-7 text-right text-muted">{c.number}</span>
                       <span className="truncate">{c.name || c.id}</span>

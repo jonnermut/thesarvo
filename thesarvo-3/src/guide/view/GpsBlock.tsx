@@ -35,7 +35,7 @@ function Toggle({ on, onClick, children }: { on: boolean; onClick: () => void; c
       type="button"
       aria-pressed={on}
       onClick={onClick}
-      className={`px-2.5 py-1 first:rounded-l last:rounded-r ${on ? 'bg-navy text-white' : 'bg-paper text-navy hover:bg-black/5'}`}
+      className={`px-2.5 py-1 first:rounded-l last:rounded-r ${on ? 'bg-fill text-white' : 'bg-paper text-navy hover:bg-wash/5'}`}
     >
       {children}
     </button>
@@ -73,7 +73,7 @@ export function GpsBlock({ gps, guideName = '', guideId }: { gps: Gps; guideName
       <div className="flex flex-wrap items-end gap-x-4 gap-y-2 border-b border-line pb-1">
         <h2 className="flex-1 text-2xl text-navy">GPS</h2>
         {app && guideId && (
-          <button type="button" onClick={() => openNativeMap(guideId, nativePoints())} className="rounded border border-line bg-navy px-2.5 py-1 text-[13px] text-white">
+          <button type="button" onClick={() => openNativeMap(guideId, nativePoints())} className="rounded border border-line bg-fill px-2.5 py-1 text-[13px] text-white">
             Open in Map
           </button>
         )}
@@ -117,7 +117,7 @@ export function GpsBlock({ gps, guideName = '', guideId }: { gps: Gps; guideName
           className={`grid transition-[grid-template-rows,opacity] duration-180 ease-out ${toggled ? 'starting:grid-rows-[0fr] starting:opacity-0' : ''} ${showMap ? 'grid-rows-[1fr]' : 'grid-rows-[0fr] opacity-0'}`}
         >
           <div ref={mapBox} className="mt-3 min-h-0 scroll-mt-20 overflow-hidden">
-            <Suspense fallback={<div className="grid h-80 place-items-center rounded-lg bg-black/5 text-muted">Loading map…</div>}>
+            <Suspense fallback={<div className="grid h-80 place-items-center rounded-lg bg-wash/5 text-muted">Loading map…</div>}>
               <MapView points={gps.points} lines={gps.lines} selected={selected} onSelect={setSelected} />
             </Suspense>
           </div>

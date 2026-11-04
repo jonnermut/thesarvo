@@ -87,7 +87,7 @@ const pathText = (latlngs: L.LatLng[]) => latlngs.map((p) => `${p.lat.toFixed(6)
 
 const handleIcon = (cls: string) => L.divIcon({ className: '', html: `<div class="${cls}"></div>`, iconSize: [18, 18] })
 const POINT_HANDLE = handleIcon('size-[18px] rounded-full border-2 border-white bg-amber shadow')
-const VERTEX_HANDLE = handleIcon('size-[14px] m-[2px] border-2 border-white bg-navy shadow')
+const VERTEX_HANDLE = handleIcon('size-[14px] m-[2px] border-2 border-white bg-fill shadow')
 
 const TOOLS: [MapTool, string][] = [
   ['point', 'Add point'],
@@ -310,7 +310,7 @@ export default function MapView({ points, lines, selected, onSelect, edit, clust
         L.marker([c.lat, c.lng], {
           icon: L.divIcon({
             className: '',
-            html: `<div class="relative"><div class="grid size-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-white bg-amber text-[13px] font-bold text-white shadow">${c.pins.length}</div><div class="absolute left-0 top-[18px] w-0 -translate-x-1/2"><span class="block w-max max-w-40 -translate-x-1/2 truncate rounded bg-white/85 px-1 text-[11px] font-semibold text-navy shadow-sm">${c.name.replace(/[&<>"]/g, (ch) => `&#${ch.charCodeAt(0)};`)}</span></div></div>`,
+            html: `<div class="relative"><div class="grid size-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-white bg-amber text-[13px] font-bold text-white shadow">${c.pins.length}</div><div class="absolute left-0 top-[18px] w-0 -translate-x-1/2"><span class="block w-max max-w-40 -translate-x-1/2 truncate rounded bg-card/85 px-1 text-[11px] font-semibold text-navy shadow-sm">${c.name.replace(/[&<>"]/g, (ch) => `&#${ch.charCodeAt(0)};`)}</span></div></div>`,
             iconSize: [0, 0],
           }),
         })
@@ -339,7 +339,7 @@ export default function MapView({ points, lines, selected, onSelect, edit, clust
     marker.openTooltip()
   }, [selected])
 
-  const btn = 'rounded border border-line bg-paper px-2.5 py-1 text-[13px] hover:bg-black/5'
+  const btn = 'rounded border border-line bg-paper px-2.5 py-1 text-[13px] hover:bg-wash/5'
   return (
     <>
       {edit && (
@@ -369,7 +369,7 @@ export default function MapView({ points, lines, selected, onSelect, edit, clust
         {trail.length > 0 && (
           <button
             type="button"
-            className="absolute left-[10px] top-[84px] z-[1000] rounded border-2 border-black/20 bg-white px-2 py-1 text-[13px] text-navy shadow hover:bg-gray-100"
+            className="absolute left-[10px] top-[84px] z-[1000] rounded border-2 border-wash/20 bg-card px-2 py-1 text-[13px] text-navy shadow hover:bg-paper"
             onClick={() => {
               const last = trail[trail.length - 1]
               setTrail(trail.slice(0, -1))
