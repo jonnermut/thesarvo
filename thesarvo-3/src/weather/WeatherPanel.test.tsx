@@ -1,6 +1,6 @@
 import { cleanup, render, screen } from '@testing-library/react'
 import { expect, it } from 'vitest'
-import { RainLine } from './WeatherPanel'
+import { RainLine, swellTone } from './WeatherPanel'
 
 it('shows rain since 9 am, yesterday and the forecast as separate figures, and says so when there is no reading', () => {
   const { unmount } = render(<RainLine today={0} yesterday={2.94} />)
@@ -12,4 +12,8 @@ it('shows rain since 9 am, yesterday and the forecast as separate figures, and s
   cleanup()
   render(<RainLine today={null} yesterday={null} />)
   expect(screen.getByText('Rain: no reading')).toBeTruthy()
+})
+
+it('colours swell from 2 m, 3 m and 4 m', () => {
+  expect([1.9, 2, 3, 4.2].map(swellTone)).toEqual(['', 'text-amber-deep', 'text-red-700', 'bg-red-50 text-red-900'])
 })

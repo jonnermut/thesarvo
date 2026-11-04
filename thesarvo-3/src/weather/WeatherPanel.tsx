@@ -107,10 +107,10 @@ export function PlaceCard({ place, footer }: { place: Place; footer?: ReactNode 
               <Stat label="Delta-T" value="–" sub="" />
             )}
             {weather?.swell && (
-              <div className="col-span-4 flex items-baseline justify-center gap-2 rounded bg-paper px-1 py-1" title="Swell now, modelled by Open-Meteo for the open sea off this coast">
-                <dt className="text-[11px] text-muted">Swell</dt>
-                <dd className="m-0 text-[17px] font-semibold leading-snug">{weather.swell.height.toFixed(1)} m</dd>
-                <dd className="m-0 text-[11px] text-muted">{[weather.swell.dir, weather.swell.period !== null && `${Math.round(weather.swell.period)} s`].filter(Boolean).join(' · ')}</dd>
+              <div className={`col-span-4 flex items-baseline justify-center gap-2 rounded px-1 py-1 ${swellTone(weather.swell.height) || 'bg-paper'}`} title="Swell now, modelled by Open-Meteo for the open sea off this coast">
+                <dt className="text-[11px]">Swell</dt>
+                <dd className="m-0 text-[17px] font-bold leading-snug">{weather.swell.height.toFixed(1)} m</dd>
+                <dd className="m-0 text-[11px]">{[weather.swell.dir, weather.swell.period !== null && `${Math.round(weather.swell.period)} s`].filter(Boolean).join(' · ')}</dd>
               </div>
             )}
           </dl>
@@ -171,6 +171,9 @@ export function RainLine({ today, yesterday, forecast = null }: { today: number 
     </div>
   )
 }
+
+/** Colour for a swell that matters on a sea cliff: amber from 2 m, red from 3 m, and a red tile from 4 m. */
+export const swellTone = (m: number) => (m >= 4 ? 'bg-red-50 text-red-900' : m >= 3 ? 'text-red-700' : m >= 2 ? 'text-amber-deep' : '')
 
 const dryingTone = (d: number) => (d < 1 ? 'text-red-700' : d < 3 ? 'text-amber-deep' : 'text-link')
 
