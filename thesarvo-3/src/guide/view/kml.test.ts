@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { IndexNode } from '#/guide/content/types'
 import type { Gps, Guide } from '#/guide/model/types'
-import { gpsToGpx, gpsToKml, treeToGpx, treeToKml } from './kml'
+import { gpsToGpx, gpsToKml, kmlPoints, treeToGpx, treeToKml } from './kml'
 
 const gps: Gps = {
   type: 'gps',
@@ -66,5 +66,14 @@ describe('gpsToGpx', () => {
     const gpx = gpsToGpx('The & Crag', gps)
     expect(gpx).toContain('<metadata><name>The &amp; Crag</name></metadata>')
     expect(gpx).toContain('<wpt lat="-42.1" lon="147.2"><name>Car &amp; park</name><desc>The &amp; Crag</desc></wpt>')
+  })
+})
+
+describe('kmlPoints', () => {
+  it('gives every point of a guide folder, opening that guide', () => {
+    const kml = '<kml><Document><Folder><name>Tasmania</name><Folder><name>Gordon Gorge</name><Placemark><name>A</name><Point><coordinates>146.1,-42.2</coordinates></Point></Placemark><Placemark><name>B</name><Point><coordinates>146.2,-42.3</coordinates></Point></Placemark></Folder></Folder></Document></kml>'
+    const pts = kmlPoints(kml, new Map([['Gordon Gorge', 'g/1']]), new Map([['g/1', ['Tasmania', 'Gordon Gorge']]]))
+    expect(pts.map((p) => [p.pid, p.description, p.latitude, p.longitude])).toEqual([['g/1#0', 'A', '-42.2', '146.1'], ['g/1#1', 'B', '-42.3', '146.2']])
+    expect(pts[0].area).toEqual(['Tasmania', 'Gordon Gorge'])
   })
 })

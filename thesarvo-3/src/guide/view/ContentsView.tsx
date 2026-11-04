@@ -9,7 +9,7 @@ import { fetchTree } from '#/guide/server'
 import { inApp, openNativeMap } from '#/app/bridge'
 import { LockMark } from '#/components/LockMark'
 import { DownloadIcon } from './GpsBlock'
-import { treeGpxUrl, treeKmlUrl } from './kml'
+import { kmlPoints, treeGpxUrl, treeKmlUrl } from './kml'
 import { rollup } from './rollup'
 import { PROBLEM_BANDS, ROUTE_BANDS } from './routeStats'
 import { useRotation } from './useRotation'
@@ -213,7 +213,7 @@ function CragMap({ id, nodes, chains }: { id: string; nodes: IndexNode[]; chains
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
   const key = nodes.map((n) => n.stats?.pin && `${n.path}@${n.stats.pin.join(',')}`).filter(Boolean).join(' ')
-  const points = useMemo(
+  const first = useMemo(
     (): MapPoint[] =>
       nodes.flatMap((n) => {
         const pin = n.stats?.pin
@@ -223,6 +223,17 @@ function CragMap({ id, nodes, chains }: { id: string; nodes: IndexNode[]; chains
       }),
     [key],
   )
+  // The manifest holds one pin per guide; the tree's KML has every point, which is what the iOS map shows.
+  const [all, setAll] = useState<MapPoint[] | null>(null)
+  useEffect(() => {
+    if (inApp()) return
+    const byTitle = new Map(nodes.map((n) => [n.title, n.path]))
+    fetch(treeKmlUrl(id))
+      .then((r) => (r.ok ? r.text() : ''))
+      .then((text) => setAll(kmlPoints(text, byTitle, chains)))
+      .catch(() => {})
+  }, [id, key])
+  const points = all?.length ? all : first
   if (points.length < 2 || !mounted) return null
   // In the app the map is the native Map tab.
   if (inApp())
@@ -237,7 +248,7 @@ function CragMap({ id, nodes, chains }: { id: string; nodes: IndexNode[]; chains
     <div className="no-print pt-2">
       <Suspense fallback={<div className="grid h-80 place-items-center rounded-lg bg-wash/5 text-muted">Loading map…</div>}>
         {/* Keyed on the pins so another page's map fits its own crags. */}
-        <MapView key={key} points={points} lines={[]} cluster onSelect={(path) => void navigate({ to: guideUrl({ path }) })} />
+        <MapView key={key} points={points} lines={[]} cluster onSelect={(pid) => void navigate({ to: guideUrl({ path: pid.split('#')[0] ?? pid }) })} />
       </Suspense>
       <p className="mt-1 flex flex-wrap gap-x-4 text-[13px] text-muted">
         <a href={treeKmlUrl(id)} download title="Every GPS point below this page, for Google Earth" className="inline-flex items-center gap-1 hover:text-link">
