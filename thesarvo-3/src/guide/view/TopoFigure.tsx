@@ -171,7 +171,7 @@ export function TopoFigure({ topo: stored, redundantLegend, ...rest }: Props) {
       )}
       {topo.legendFooter && <p className="mt-1 text-[11px] text-muted">{topo.legendFooter}</p>}
       <TopoCredit other={topo.other} />
-      <TopoViewer width={topo.width} height={topo.height} open={open} onClose={closeViewer}>
+      <TopoViewer width={topo.width} height={topo.height} open={open} onClose={closeViewer} credit={<TopoCredit other={topo.other} className="text-white/90" />}>
         {(shownWidth) => <TopoCanvas {...props} onOpen={setPopup} legend={legend} rows={rows} displayWidth={shownWidth} />}
       </TopoViewer>
       {popupMounted && shownClimb && <ClimbPopup climb={shownClimb} open={!!popupClimb} onClose={closePopup} />}
