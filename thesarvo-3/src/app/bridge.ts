@@ -19,11 +19,32 @@ function nativeHandler(win: BridgeWindow): Handler | undefined {
   return host ? { postMessage: (message) => host.postMessage(JSON.stringify(message)) } : undefined
 }
 
+/** The app's start-up script keeps `data-app` too, but a pack served before that build ships still needs it: a client-rendered page (a path that was not prerendered, such as a members-only page seen signed out) replaces `<html>`, which brings the site's own header back under the app's bar. */
+function keepAppMode(win: BridgeWindow) {
+  if (typeof win.MutationObserver !== 'function') return
+  const doc = win.document
+  const mode = doc.documentElement.dataset.app ?? 'app'
+  let watched: Element | null = null
+  const keep: MutationObserver = new win.MutationObserver(() => {
+    const html = doc.documentElement
+    if (html.dataset.app !== mode) html.dataset.app = mode
+    watch()
+  })
+  const watch = () => {
+    if (doc.documentElement === watched) return
+    watched = doc.documentElement
+    keep.observe(watched, { attributes: true, attributeFilter: ['data-app'] })
+  }
+  keep.observe(doc, { childList: true })
+  watch()
+}
+
 /** Routes `fetch('/g/api/…')` through the native handler. Returns false when not running in the app. */
 export function installBridge(win: BridgeWindow = window): boolean {
   const handler = nativeHandler(win)
   if (!handler || win.thesarvoBridge) return !!handler
   win.document.documentElement.dataset.app ??= 'app'
+  keepAppMode(win)
   const pending = new Map<number, (r: Reply) => void>()
   let next = 1
   win.thesarvoBridge = { reply: (id, status, body) => pending.get(id)?.({ status, body }) }

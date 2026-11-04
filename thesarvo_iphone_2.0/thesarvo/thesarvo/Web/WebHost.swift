@@ -24,10 +24,16 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
     private var observers: [NSKeyValueObservation] = []
 
     /// Tells the page it runs in the app before it starts; the site's own stylesheet hides its header, side tree and footer for `data-app`.
+    /// A page that is client-rendered rather than prerendered (a path not in the pack, such as a members-only page seen signed out) has `<html>` replaced and the attribute lost, so it is put back.
     private static let appModeScript = """
     (function () {
       window.thesarvoApp = { bridge: \(AppConfig.bridgeVersion), platform: 'ios' };
       document.documentElement.setAttribute('data-app', 'ios');
+      var keep = new MutationObserver(function () { var e = document.documentElement; if (e.getAttribute('data-app') !== 'ios') e.setAttribute('data-app', 'ios'); watch(); });
+      var watched = null;
+      var watch = function () { var e = document.documentElement; if (e !== watched) { watched = e; keep.observe(e, { attributes: true, attributeFilter: ['data-app'] }); } };
+      keep.observe(document, { childList: true });
+      watch();
       var post = function (m) { try { window.webkit.messageHandlers.thesarvo.postMessage(m); } catch (e) {} };
       window.addEventListener('load', function () { post({ type: 'bootOK' }); });
     })();
