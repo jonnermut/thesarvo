@@ -1,0 +1,24 @@
+thesarvo-3/src/guide/view/ContentsView.tsx
+  s_e20d0a1ebc47aa::t_5fd27f650d45fb 111-118,122-128,135,162-164,166,169-191
+  s_e20d0a1ebc47aa::t_ea97bfcd0fad79 2,119-121
+thesarvo-3/src/guide/view/HomeWeather.tsx
+  s_e20d0a1ebc47aa::t_620fe9d3f284af 2,12-13,44,48-52,55
+  s_e20d0a1ebc47aa::t_79aa991733cf3c 42-43,45-47,53-54,56-62
+  s_e20d0a1ebc47aa::t_3408feb30c5a4c 88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "67b268d8d237e2bb5ded321b979255c8d3709e78",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
