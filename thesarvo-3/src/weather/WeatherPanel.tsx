@@ -105,7 +105,7 @@ export function PlaceCard({ place, footer }: { place: Place; footer?: ReactNode 
             </span>
           )}
           <span className="block text-xs text-muted">{now.station} station{now.at && `, ${clock(now.at)}`}</span>
-          <RainLine today={now.rain} yesterday={weather?.rainYesterday ?? null} />
+          <RainLine today={now.rain} yesterday={weather?.rainYesterday ?? null} forecast={today?.rainMax ?? null} />
           {explain && <span className="mt-1 block text-xs text-muted">Delta-T is the air temperature minus the wet-bulb temperature, and it tells you how fast moisture will leave the rock. Near zero the air is saturated and cold rock sweats, so sea cliffs and overhangs stay wet. Locals read above 3 as drying and 4 or more as good conditions. The overnight trend matters too: if it sat near zero all night and is still under 1 in the morning, expect wet rock; if it is climbing through the 2s, the rock is drying. Based on climbers' experience at The Paradiso, not a scientific rule.</span>}
         </p>
       )}
@@ -131,13 +131,15 @@ export function PlaceCard({ place, footer }: { place: Place; footer?: ReactNode 
   )
 }
 
-/** Rain already fallen, since recent rain is what decides whether rock is wet: the station's gauge since 9 am today, and yesterday's total (modelled). Always one line, so the card keeps its height. */
-export function RainLine({ today, yesterday }: { today: number | null; yesterday: number | null }) {
+const RAIN_TIMEFRAMES = "Since 9 am: the station's rain gauge from 9 am today (the Bureau's rain day starts at 9 am, so early in the morning this is still last night's rain). Yesterday: the whole of yesterday, midnight to midnight, as modelled by Open-Meteo, not a gauge reading. Forecast: the Bureau's expected total for today."
+
+/** Rain already fallen, since recent rain is what decides whether rock is wet: the station's gauge since 9 am today, yesterday's total (modelled) and what is forecast for today. Always one line, so the card keeps its height; hover for what each timeframe means. */
+export function RainLine({ today, yesterday, forecast = null }: { today: number | null; yesterday: number | null; forecast?: number | null }) {
   const mm = (n: number) => (n < 0.1 ? 'none' : `${n.toFixed(n < 10 ? 1 : 0)} mm`)
-  const parts = [today !== null && `Rain since 9 am ${mm(today)}`, yesterday !== null && `yesterday ${mm(yesterday)}`].filter((x): x is string => !!x)
+  const parts = [today !== null && `since 9 am ${mm(today)}`, yesterday !== null && `yesterday ${mm(yesterday)}`, forecast !== null && forecast > 0 && `forecast today up to ${mm(forecast)}`].filter((x): x is string => !!x)
   return (
-    <span className="mt-1 block text-[13px]" title={yesterday !== null ? "Today is the station's gauge since 9 am; yesterday is Open-Meteo's modelled total for the day." : undefined}>
-      {parts.length ? <>{parts.join(', ')}{yesterday !== null && <span className="text-muted"> (yesterday modelled)</span>}</> : <span className="text-muted">Rain: no reading</span>}
+    <span className="mt-1 block text-[13px]" title={RAIN_TIMEFRAMES}>
+      {parts.length ? <><strong>Rain</strong> {parts.join(', ')}{yesterday !== null && <span className="text-muted"> (yesterday modelled)</span>}<span aria-hidden className="ml-1 cursor-help text-muted">ⓘ</span></> : <span className="text-muted">Rain: no reading</span>}
     </span>
   )
 }
