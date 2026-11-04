@@ -1,0 +1,21 @@
+scripts/migrate-crag-steward.py
+  s_e20d0a1ebc47aa::t_9fe01dbd3c8b0e 1-30
+docs/as-built.md
+  s_e20d0a1ebc47aa::t_49799ae43056b4 257-258
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c5b6f23e463f8be7a4883b51fbce6b5cf8b022f6",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
