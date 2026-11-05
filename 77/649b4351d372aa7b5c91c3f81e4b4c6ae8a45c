@@ -1,0 +1,63 @@
+thesarvo-3/src/routes/g.api.forum.tsx
+  s_e20d0a1ebc47aa::t_c1d7358c3be6fe 13
+thesarvo-3/src/forum/ui/ForumPage.test.tsx
+  s_e20d0a1ebc47aa::t_d0d9a30b601200 83-95
+thesarvo-3/src/guide/save/addPage.test.ts
+  s_e20d0a1ebc47aa::t_d1954ab76c105c 23
+thesarvo-3/src/guide/save/save.test.ts
+  s_e20d0a1ebc47aa::t_d1954ab76c105c 132-138
+thesarvo-3/src/components/DeletePageDialog.tsx
+  s_e20d0a1ebc47aa::t_fad8a028d3a320 1-62
+thesarvo-3/src/components/PageMenu.tsx
+  s_e20d0a1ebc47aa::t_fad8a028d3a320 6,8,11,33,50-51,116-121,124-130
+  s_e20d0a1ebc47aa::t_8fcda061d3f748 131
+thesarvo-3/src/guide/save/github.ts
+  s_e20d0a1ebc47aa::t_242a60c86d852e 133-136
+thesarvo-3/src/guide/save/deletePage.test.ts
+  s_e20d0a1ebc47aa::t_d1954ab76c105c 1-72
+thesarvo-3/src/app/bridge.ts
+  s_e20d0a1ebc47aa::t_038832eb385c2d 22-26,31,35,37,43
+thesarvo-3/src/guide/edit/deletePage.ts
+  s_e20d0a1ebc47aa::t_fad8a028d3a320 1-25
+thesarvo-3/src/forum/ui/ForumPage.tsx
+  s_e20d0a1ebc47aa::t_1c819a504f86c4 67,69-72,75-84,89-90,109,115,227,233,253-254
+thesarvo-3/src/components/DeletePageDialog.test.tsx
+  s_e20d0a1ebc47aa::t_e2001dcdd22489 1-51
+thesarvo-3/src/forum/service.ts
+  s_e20d0a1ebc47aa::t_c1d7358c3be6fe 162-163,167,169,171-173,176-178,192,197
+thesarvo-3/src/guide/save/local.ts
+  s_e20d0a1ebc47aa::t_242a60c86d852e 73-80
+thesarvo-3/src/forum/types.ts
+  s_e20d0a1ebc47aa::t_c1d7358c3be6fe 10-11,14
+thesarvo-3/src/components/PageMenu.delete.test.tsx
+  s_e20d0a1ebc47aa::t_41eef37e461b72 6
+  s_e20d0a1ebc47aa::t_591f712658d171 1-5,7-50
+thesarvo-3/src/guide/save/repo.ts
+  s_e20d0a1ebc47aa::t_242a60c86d852e 17,23-24
+thesarvo-3/src/app/bridge.test.ts
+  s_e20d0a1ebc47aa::t_cc1ff627c2ab8e 43-62
+thesarvo-3/src/guide/save/deletePage.ts
+  s_e20d0a1ebc47aa::t_242a60c86d852e 1-57
+thesarvo-3/src/routeTree.gen.ts
+  s_e20d0a1ebc47aa::t_242a60c86d852e 27,114-118,186,214,243,273,301,329,358,478-484,574
+thesarvo-3/src/forum/service.test.ts
+  s_e20d0a1ebc47aa::t_12719081bb8eb7 168-186
+thesarvo-3/src/routes/g.api.delete-page.tsx
+  s_e20d0a1ebc47aa::t_242a60c86d852e 1-43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "77649b4351d372aa7b5c91c3f81e4b4c6ae8a45c",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@showpad.com>"
+    }
+  }
+}
