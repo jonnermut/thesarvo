@@ -129,6 +129,13 @@ describe('GitHubRepo', () => {
       variables: { input: { expectedHeadOid: 'abc', fileChanges: { additions: [{ path: 'index.json' }, { path: 'pages/9000000002/guide.json' }, { path: 'pages/9000000002/history.json' }] } } },
     })
   })
+
+  it('commits the page tree alone', async () => {
+    const tree = { id: '1', title: 'Guides', children: [] }
+    const { repo, calls } = github([{ data: { createCommitOnBranch: { commit: { oid: 'def' } } } }])
+    expect(await repo.commitIndex({ head: 'abc', index: tree, message: { headline: 'h', body: 'b' } })).toBe('def')
+    expect(calls[0].body).toMatchObject({ variables: { input: { expectedHeadOid: 'abc', fileChanges: { additions: [{ path: 'index.json' }] } } } })
+  })
 })
 
 describe('appJwt', () => {

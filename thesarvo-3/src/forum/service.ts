@@ -159,22 +159,23 @@ export async function editPost(store: ForumStore, v: Viewer, input: { thread?: u
 }
 
 /**
- * The author deletes their own comment, or their own post when nobody else has commented on it. The text stays in the file
- * (hidden and marked removed), so a mistaken delete can be put right by hand; nobody but an admin reading the file sees it.
+ * The author deletes their own comment, or their own post when nobody else has commented on it; an admin deletes anyone's comment or post (with its comments). The text stays in the file
+ * (hidden and marked removed, `removedBy: 'admin'` when an admin did it), so a mistaken delete can be put right by hand; nobody but an admin reading the file sees it.
  */
 export async function removePost(store: ForumStore, v: Viewer, input: { thread?: unknown; comment?: unknown }): Promise<Thread> {
   const id = isId(input.thread) ? input.thread : ''
+  const by = v.admin ? ({ removedBy: 'admin' } as const) : {}
   const t = await update<Thread | null>(store, threadFile(id), null, (cur) => {
-    if (!cur || !canSee(v, cur.group) || cur.hidden) throw new Refused('No such post')
+    if (!cur || !canSee(v, cur.group) || (cur.hidden && !v.admin) || cur.removed) throw new Refused('No such post')
     if (input.comment == null) {
-      if (cur.author.sub !== v.sub) throw new Refused('You can only delete your own posts')
-      if (cur.comments.some((c) => !c.hidden && c.author.sub !== v.sub)) throw new Refused('Others have commented on this post, so only an admin can remove it')
-      return { ...cur, hidden: true, removed: true, notice: undefined }
+      if (!v.admin && cur.author.sub !== v.sub) throw new Refused('You can only delete your own posts')
+      if (!v.admin && cur.comments.some((c) => !c.hidden && c.author.sub !== v.sub)) throw new Refused('Others have commented on this post, so only an admin can remove it')
+      return { ...cur, hidden: true, removed: true, ...by, notice: undefined }
     }
     const c = cur.comments.find((x) => x.id === input.comment)
-    if (!c || c.hidden) throw new Refused('No such comment')
-    if (c.author.sub !== v.sub) throw new Refused('You can only delete your own comments')
-    return { ...cur, comments: cur.comments.map((x) => (x === c ? { ...c, hidden: true, removed: true } : x)) }
+    if (!c || (c.hidden && !v.admin) || c.removed) throw new Refused('No such comment')
+    if (!v.admin && c.author.sub !== v.sub) throw new Refused('You can only delete your own comments')
+    return { ...cur, comments: cur.comments.map((x) => (x === c ? { ...c, hidden: true, removed: true, ...by } : x)) }
   })
   if (!t) throw new Refused('No such post')
   await reindex(store, t)
@@ -188,12 +189,12 @@ export async function setHidden(store: ForumStore, v: Viewer, input: { thread?: 
   const hidden = input.hidden === true
   const t = await update<Thread | null>(store, threadFile(id), null, (cur) => {
     if (!cur) throw new Refused('No such post')
-    if (cur.removed && input.comment == null) throw new Refused('The author deleted this post')
+    if (cur.removed && input.comment == null) throw new Refused('This post was deleted')
     // A cleared flag is `undefined`, which JSON leaves out.
     const flag = hidden ? true : undefined
     if (input.comment == null) return { ...cur, hidden: flag }
     if (!cur.comments.some((c) => c.id === input.comment)) throw new Refused('No such comment')
-    if (cur.comments.some((c) => c.id === input.comment && c.removed)) throw new Refused('The author deleted this comment')
+    if (cur.comments.some((c) => c.id === input.comment && c.removed)) throw new Refused('This comment was deleted')
     return { ...cur, comments: cur.comments.map((c) => (c.id === input.comment ? { ...c, hidden: flag } : c)) }
   })
   if (!t) throw new Refused('No such post')

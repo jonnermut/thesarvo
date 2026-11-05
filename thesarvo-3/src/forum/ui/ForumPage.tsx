@@ -64,22 +64,29 @@ function Compose({ label, rows = 4, title, initial, onSend, onCancel }: { label:
 }
 
 /** What the signed-in person can do to their own posts and comments. `editing` is `'post'` or a comment's id. */
-type Own = { sub: string; editing: string | null; setEditing: (id: string | null) => void; edit: (comment: string | null, text: string, title?: string) => Promise<string | null>; remove: (comment: string | null) => void }
+type Own = { sub: string; admin: boolean; editing: string | null; setEditing: (id: string | null) => void; edit: (comment: string | null, text: string, title?: string) => Promise<string | null>; remove: (comment: string | null) => void }
 
-/** Edit and Delete for something the person wrote here (imported posts have no plain text to edit). */
-function OwnButtons({ id, author, plain, own }: { id: string; author: Author; plain: boolean; own: Own }) {
-  if (!plain || author.sub !== own.sub) return null
+/** Edit and Delete for something the person wrote here (imported posts have no plain text to edit); an admin can Delete anyone's. */
+function OwnButtons({ id, author, plain, removed, own }: { id: string; author: Author; plain: boolean; removed?: boolean; own: Own }) {
+  if (removed) return null
+  const mine = plain && author.sub === own.sub
   return (
     <>
-      <button type="button" onClick={() => own.setEditing(own.editing === id ? null : id)} className="text-link hover:underline">
-        Edit
-      </button>
-      <button type="button" onClick={() => own.remove(id === 'post' ? null : id)} className="text-muted hover:underline">
-        Delete
-      </button>
+      {mine && (
+        <button type="button" onClick={() => own.setEditing(own.editing === id ? null : id)} className="text-link hover:underline">
+          Edit
+        </button>
+      )}
+      {(mine || own.admin) && (
+        <button type="button" onClick={() => own.remove(id === 'post' ? null : id)} className="text-muted hover:underline">
+          Delete
+        </button>
+      )}
     </>
   )
 }
+
+const deletedBy = (x: { removedBy?: 'admin' }) => (x.removedBy ? 'Deleted by an admin' : 'Deleted by its author')
 
 function CommentNode({ c, kids, depth, reply, setReply, send, admin, hide, own }: { c: Comment; kids: Map<string | null, Comment[]>; depth: number; reply: string | null; setReply: (id: string | null) => void; send: (parent: string | null, text: string) => Promise<string | null>; admin: boolean; hide: (c: Comment) => void; own: Own }) {
   return (
@@ -99,13 +106,13 @@ function CommentNode({ c, kids, depth, reply, setReply, send, admin, hide, own }
           <button type="button" onClick={() => setReply(reply === c.id ? null : c.id)} className="text-link hover:underline">
             Reply
           </button>
-          <OwnButtons id={c.id} author={c.author} plain={c.text !== undefined} own={own} />
+          <OwnButtons id={c.id} author={c.author} plain={c.text !== undefined} removed={c.removed} own={own} />
           {admin && !c.removed && (
             <button type="button" onClick={() => hide(c)} className="text-muted hover:underline">
               {c.hidden ? 'Show' : 'Hide'}
             </button>
           )}
-          {c.removed && <span className="text-muted">Deleted by its author</span>}
+          {c.removed && <span className="text-muted">{deletedBy(c)}</span>}
         </div>
       </div>
       {reply === c.id && (
@@ -217,13 +224,13 @@ function ThreadView({ id, back }: { id: string; back: () => void }) {
     return null
   }
   const remove = async (comment: string | null) => {
-    if (!confirm(comment ? 'Delete your comment?' : 'Delete your post?')) return
+    if (!confirm(`Delete ${user?.admin ? 'this' : 'your'} ${comment ? 'comment' : 'post'}?`)) return
     const a = await post({ action: 'remove', thread: id, ...(comment && { comment }) })
     if (!a.ok) return setError(a.message)
     if (comment) setThread(a.value)
     else back()
   }
-  const own: Own = { sub: user?.sub ?? '', editing, setEditing, edit, remove: (c) => void remove(c) }
+  const own: Own = { sub: user?.sub ?? '', admin: !!user?.admin, editing, setEditing, edit, remove: (c) => void remove(c) }
   return (
     <article>
       <button type="button" onClick={back} className="text-sm text-link hover:underline">
@@ -243,7 +250,8 @@ function ThreadView({ id, back }: { id: string; back: () => void }) {
         </div>
       )}
       <div className="mt-2 flex gap-3 text-sm">
-        <OwnButtons id="post" author={thread.author} plain={thread.text !== undefined} own={own} />
+        <OwnButtons id="post" author={thread.author} plain={thread.text !== undefined} removed={thread.removed} own={own} />
+        {thread.removed && <span className="text-muted">{deletedBy(thread)}</span>}
       </div>
       {user?.admin && !thread.group && <NoticeControls thread={thread} onChange={setThread} />}
       <h2 className="mt-8 border-b border-line pb-1 text-lg font-bold text-navy">

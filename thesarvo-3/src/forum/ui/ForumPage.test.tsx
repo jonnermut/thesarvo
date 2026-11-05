@@ -80,3 +80,16 @@ it('lets you delete your own post and goes back', async () => {
   expect(api.post).toHaveBeenCalledWith({ action: 'remove', thread: 'n1' })
   expect(back).toHaveBeenCalled()
 })
+
+it('lets an admin delete anyone’s comment or post, and says an admin did', async () => {
+  session.user = { ...user, admin: true }
+  vi.stubGlobal('confirm', () => true)
+  render(<ForumPage thread="n1" go={() => {}} />)
+  await act(async () => {})
+  expect(screen.queryByRole('button', { name: 'Edit' })).toBeNull()
+  expect(screen.getAllByRole('button', { name: 'Delete' })).toHaveLength(2)
+  api.post.mockResolvedValue({ ok: true, value: { ...thread, comments: [{ ...thread.comments[0], hidden: true, removed: true, removedBy: 'admin' }] } })
+  await act(async () => fireEvent.click(screen.getAllByRole('button', { name: 'Delete' })[1]))
+  expect(api.post).toHaveBeenCalledWith({ action: 'remove', thread: 'n1', comment: 'c1' })
+  expect(screen.getByText('Deleted by an admin')).toBeTruthy()
+})

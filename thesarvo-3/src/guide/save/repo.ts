@@ -14,12 +14,14 @@ export interface GuideRepo {
   commit: (c: Commit) => Promise<string | null>
 }
 
-/** What adding a page needs on top of saving guides. */
+/** What adding or deleting a page needs on top of saving guides. */
 export interface PageRepo {
   /** The page tree as stored, and the commit it was read at. */
   readIndex: () => Promise<{ head: string; index: StoredIndexNode }>
   /** Writes the new tree, a new page's guide and its history in one commit on top of `head`; null when someone saved since. */
   commitPage: (c: { head: string; index: StoredIndexNode; id: string; guide: Guide; history: HistoryEntry[]; message: Commit['message'] }) => Promise<string | null>
+  /** Writes the changed tree alone (a page taken out) in one commit on top of `head`; null when someone saved since. */
+  commitIndex: (c: { head: string; index: StoredIndexNode; message: Commit['message'] }) => Promise<string | null>
 }
 
 export const indexPath = 'index.json'

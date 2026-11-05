@@ -7,11 +7,11 @@ export type Author = { sub: string; name: string; key?: string }
  */
 type Text = { html?: string; text?: string }
 
-/** `edited`: when the author last changed the text. `removed`: the author deleted it (hidden too, and an admin cannot bring it back). */
-export type Comment = Text & { id: string; parent: string | null; author: Author; at: string; hidden?: boolean; removed?: boolean; edited?: string }
+/** `edited`: when the author last changed the text. `removed`: it was deleted, by its author or (`removedBy: 'admin'`) by an admin (hidden too, and an admin cannot bring it back). */
+export type Comment = Text & { id: string; parent: string | null; author: Author; at: string; hidden?: boolean; removed?: boolean; removedBy?: 'admin'; edited?: string }
 
 /** `group`: set on a thread only that Cognito group may read (the CCT forum). `notice`: when an admin made it a notice, the time it stops being one (ISO). */
-export type Thread = Text & { id: string; title: string; author: Author; at: string; comments: Comment[]; group?: string; hidden?: boolean; removed?: boolean; edited?: string; notice?: string }
+export type Thread = Text & { id: string; title: string; author: Author; at: string; comments: Comment[]; group?: string; hidden?: boolean; removed?: boolean; removedBy?: 'admin'; edited?: string; notice?: string }
 
 /** A thread an admin marked as a notice: shown with its text (not its comments) at the top of the home page and the forum until `until`. Public, so never a restricted thread. */
 export type Notice = Text & { id: string; title: string; author: Author; at: string; until: string }

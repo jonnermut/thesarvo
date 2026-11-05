@@ -19,21 +19,28 @@ function nativeHandler(win: BridgeWindow): Handler | undefined {
   return host ? { postMessage: (message) => host.postMessage(JSON.stringify(message)) } : undefined
 }
 
-/** The app's start-up script keeps `data-app` too, but a pack served before that build ships still needs it: a client-rendered page (a path that was not prerendered, such as a members-only page seen signed out) replaces `<html>`, which brings the site's own header back under the app's bar. */
+/**
+ * The app's start-up script keeps `data-app` (and the Appearance setting's `data-theme`) too, but a pack served before that build ships still needs it: a client-rendered page (a path that was not prerendered,
+ * such as a members-only page seen signed out) replaces `<html>`, which brings the site's own header back under the app's bar and drops the chosen theme.
+ * `data-app` is always put back; `data-theme` only onto a replaced `<html>`, so the page's own Auto/Light/Dark switch (which removes it for Auto) still works.
+ */
 function keepAppMode(win: BridgeWindow) {
   if (typeof win.MutationObserver !== 'function') return
   const doc = win.document
   const mode = doc.documentElement.dataset.app ?? 'app'
+  let theme = doc.documentElement.dataset.theme
   let watched: Element | null = null
   const keep: MutationObserver = new win.MutationObserver(() => {
     const html = doc.documentElement
+    if (html !== watched && theme && !html.dataset.theme) html.dataset.theme = theme
     if (html.dataset.app !== mode) html.dataset.app = mode
+    theme = html.dataset.theme
     watch()
   })
   const watch = () => {
     if (doc.documentElement === watched) return
     watched = doc.documentElement
-    keep.observe(watched, { attributes: true, attributeFilter: ['data-app'] })
+    keep.observe(watched, { attributes: true, attributeFilter: ['data-app', 'data-theme'] })
   }
   keep.observe(doc, { childList: true })
   watch()
