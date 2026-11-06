@@ -95,6 +95,13 @@ const TEXT_CLASSES = [
   ['heading1', 'Heading 1'],
   ['heading2', 'Heading 2'],
   ['heading3', 'Heading 3'],
+  ['indentedHeader', 'Side heading (Heading: text)'],
+  ['intro', 'Introduction'],
+  ['access', 'Access'],
+  ['description', 'Description'],
+  ['Discussion', 'Discussion'],
+  ['DiscussionNoIndents', 'Discussion, no indents'],
+  ['noPrint', 'Not printed'],
   ['pagebreak', 'Page break'],
 ] as const
 

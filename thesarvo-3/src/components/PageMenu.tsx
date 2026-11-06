@@ -3,10 +3,12 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { signIn, useUser } from '#/auth/session'
 import type { PageMode } from '#/routes/g.$'
 import { rememberPlace } from '#/guide/view/place'
+import { flatten } from '#/guide/content/paths'
 import { AddPageDialog } from './AddPageDialog'
+import { DeletePageDialog } from './DeletePageDialog'
 import { useEscape } from './overlay'
 
-/** One thing to do with the page on screen. Delete and move will join History here. */
+/** One thing to do with the page on screen. Move will join History here. */
 type Action = { label: string; hint: string; mode: PageMode }
 
 /** What the page menu offers, given what the address shows now. */
@@ -28,6 +30,7 @@ export function PageMenu() {
   const user = useUser()
   const [open, setOpen] = useState(false)
   const [adding, setAdding] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const box = useRef<HTMLDivElement>(null)
   const close = useCallback(() => setOpen(false), [])
   useEscape(open, close)
@@ -44,6 +47,8 @@ export function PageMenu() {
   const editing = !!mode.edit
   // Anyone signed in can. Under a private page is not supported yet (the server says no too).
   const canAdd = !!user && !match.loaderData.node.private && !mode.edit
+  // Admins only (the server checks too), and never the top of the tree.
+  const canDelete = !!user?.admin && !mode.edit && match.loaderData.trail.length > 0
   const border = 'border border-white/40 text-sm font-medium text-white hover:bg-white/10'
 
   return (
@@ -108,7 +113,21 @@ export function PageMenu() {
               <div className="text-xs text-muted">A new page under this one</div>
             </button>
           )}
+          {canDelete && (
+            <button type="button" role="menuitem" className={ITEM} onClick={() => { close(); setDeleting(true) }}>
+              <div className="font-medium text-red-700">Delete this page</div>
+              <div className="text-xs text-muted">Admins only. Takes it and the pages under it off the site</div>
+            </button>
+          )}
         </div>
+      )}
+      {deleting && (
+        <DeletePageDialog
+          page={match.loaderData.node}
+          below={flatten(match.loaderData.node).length - 1}
+          parentPath={match.loaderData.trail.at(-1)?.path ?? ''}
+          onClose={() => setDeleting(false)}
+        />
       )}
       {adding && <AddPageDialog parent={match.loaderData.node.id} parentTitle={match.loaderData.node.title} onClose={() => setAdding(false)} />}
     </div>

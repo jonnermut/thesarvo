@@ -130,6 +130,10 @@ export class GitHubRepo implements GuideRepo, PageRepo {
     return this.write(head, [[indexPath, index], [guidePath(id), guide], [historyPath(id), history]], message)
   }
 
+  commitIndex({ head, index, message }: Parameters<PageRepo['commitIndex']>[0]): Promise<string | null> {
+    return this.write(head, [[indexPath, index]], message)
+  }
+
   private async write(head: string, files: [string, unknown][], message: Commit['message']): Promise<string | null> {
     const file = ([path, value]: [string, unknown]) => ({ path, contents: Buffer.from(formatJson(value)).toString('base64') })
     const { data, errors } = await this.graphql<{ createCommitOnBranch: { commit: { oid: string } } }>(COMMIT, {

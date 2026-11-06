@@ -20,6 +20,7 @@ class MemoryRepo implements PageRepo {
     this.index = c.index
     return Promise.resolve(`c${this.commits.length}`)
   }
+  commitIndex = () => Promise.resolve(null)
 }
 
 describe('parseAddPage', () => {

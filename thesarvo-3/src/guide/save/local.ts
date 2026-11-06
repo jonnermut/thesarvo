@@ -70,6 +70,14 @@ export class LocalRepo implements GuideRepo, PageRepo {
     return version(guide)
   }
 
+  async commitIndex({ head, index, message }: Parameters<PageRepo['commitIndex']>[0]) {
+    const now = await this.readIndex()
+    if (now.head !== head) return null
+    await this.write(indexPath, index)
+    console.log(`changed the page tree: ${message.headline}`)
+    return canonical(index)
+  }
+
   async commit({ id, head, guide, history, message }: Parameters<GuideRepo['commit']>[0]) {
     const now = await this.read(id)
     if (now && now.head !== head) return null

@@ -40,6 +40,26 @@ describe('app bridge', () => {
     expect(observed.at(-1)).toBe(fresh)
   })
 
+  it('carries the chosen theme onto a replaced <html>, but lets the page switch back to Auto', () => {
+    const { w } = fakeWindow(() => {})
+    const callbacks: (() => void)[] = []
+    w.MutationObserver = class { constructor(cb: () => void) { callbacks.push(cb) } observe() {} } as unknown as typeof MutationObserver
+    const html = w.document.documentElement as unknown as { dataset: Record<string, string> }
+    html.dataset.theme = 'dark'
+    installBridge(w)
+    const fresh = { dataset: {} as Record<string, string> }
+    ;(w.document as { documentElement: unknown }).documentElement = fresh
+    callbacks[0]()
+    expect(fresh.dataset).toEqual({ app: 'app', theme: 'dark' })
+    delete fresh.dataset.theme // the Auto switch on the page
+    callbacks[0]()
+    expect(fresh.dataset.theme).toBeUndefined()
+    const later = { dataset: {} as Record<string, string> }
+    ;(w.document as { documentElement: unknown }).documentElement = later
+    callbacks[0]()
+    expect(later.dataset.theme).toBeUndefined()
+  })
+
   it('does nothing in a browser', () => {
     const w = { fetch: vi.fn(), location: { href: 'https://x/', origin: 'https://x' } } as unknown as W
     expect(installBridge(w)).toBe(false)

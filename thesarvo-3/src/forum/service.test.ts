@@ -165,4 +165,23 @@ describe('forum', () => {
     expect(await listThreads(store, ann)).toEqual([])
     expect(await recentThreads(store)).toEqual([])
   })
+
+  it('lets an admin delete anyone\'s comment or post, marked as an admin\'s', async () => {
+    const store = memory()
+    const t = await createThread(store, ann, { title: 'T', text: 't' })
+    const withBob = await addComment(store, bob, { thread: t.id, text: 'rude' })
+    const cid = withBob.comments[0].id
+    await expect(removePost(store, ann, { thread: t.id, comment: cid })).rejects.toThrow('your own comments')
+    await removePost(store, root, { thread: t.id, comment: cid })
+    expect((await readThread(store, ann, t.id))?.comments).toEqual([])
+    expect((await readThread(store, root, t.id))?.comments[0]).toMatchObject({ hidden: true, removed: true, removedBy: 'admin' })
+    await expect(removePost(store, root, { thread: t.id, comment: cid })).rejects.toThrow('No such comment')
+    await addComment(store, bob, { thread: t.id, text: 'more' })
+    await expect(removePost(store, bob, { thread: t.id })).rejects.toThrow('your own posts')
+    await removePost(store, root, { thread: t.id })
+    expect(await readThread(store, ann, t.id)).toBeNull()
+    expect(await listThreads(store, ann)).toEqual([])
+    expect(await readThread(store, root, t.id)).toMatchObject({ hidden: true, removed: true, removedBy: 'admin' })
+    await expect(removePost(store, root, { thread: t.id })).rejects.toThrow('No such post')
+  })
 })
