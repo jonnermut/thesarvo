@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, expect, it, vi } from 'vitest'
-import type { Climb } from '#/guide/model/types'
-import { ClimbDialog, CragMarks } from './NodeForms'
+import type { Climb, TextBlock } from '#/guide/model/types'
+import { ClimbDialog, CragMarks, TextForm } from './NodeForms'
 
 afterEach(cleanup)
 
@@ -31,4 +31,16 @@ it('lets an editor drop a theCrag mark once the text is their own', () => {
 
 it('shows no theCrag marks for a node without any', () => {
   expect(render(<CragMarks other={{ thecrag: '5' }} onChange={() => {}} />).container).toBeEmptyDOMElement()
+})
+
+it('offers the side heading and the other legacy text styles, keeping the block on its own', () => {
+  const onChange = vi.fn()
+  const node: TextBlock = { type: 'text', id: 't', cls: 'indentedHeader', text: 'Access: walk in', other: {} }
+  render(<TextForm node={node} onChange={onChange} />)
+  const select = screen.getByLabelText<HTMLSelectElement>('Style')
+  const values = Array.from(select.options).map((o) => o.value)
+  expect(values).toEqual(['text', 'heading1', 'heading2', 'heading3', 'indentedHeader', 'intro', 'access', 'description', 'Discussion', 'DiscussionNoIndents', 'noPrint', 'pagebreak'])
+  expect(select.value).toBe('indentedHeader')
+  fireEvent.change(select, { target: { value: 'heading2' } })
+  expect(onChange).toHaveBeenCalledWith({ cls: 'heading2' })
 })
