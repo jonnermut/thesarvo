@@ -1,8 +1,12 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { inApp } from '#/app/bridge'
 import { useUser } from '#/auth/session'
 import { Avatar } from '#/guide/avatars/Avatar'
+import { LazyRichEditor } from '#/rte/LazyRichEditor'
+import { clearRichDraft, loadRichDraft, saveRichDraft } from '#/rte/drafts'
+import { isBlank, textToHtml } from '#/rte/html'
 import { getThread, listThreads, post } from '../client'
+import { newId } from '../ids'
 import type { Author, Comment, Thread, ThreadMeta } from '../types'
 import { Body } from './Body'
 
@@ -22,19 +26,46 @@ function Who({ author, at, edited }: { author: Author; at: string; edited?: stri
   )
 }
 
-/** A text box with a button; clears itself after a successful send. */
-function Compose({ label, rows = 4, title, initial, onSend, onCancel }: { label: string; rows?: number; title?: boolean; initial?: { text: string; title?: string }; onSend: (text: string, title: string) => Promise<string | null>; onCancel?: () => void }) {
-  const [text, setText] = useState(initial?.text ?? '')
-  const [head, setHead] = useState(initial?.title ?? '')
+/**
+ * The rich text box with a button; clears itself after a successful send. What is typed is kept in the browser as a draft (`draftKey`)
+ * until it is sent or cancelled. `scope` is the id of the post its pictures belong to.
+ */
+function Compose({ label, title, compact, scope, draftKey, initial, onSend, onCancel }: { label: string; title?: boolean; compact?: boolean; scope: string; draftKey: string; initial?: { html: string; title?: string }; onSend: (html: string, title: string) => Promise<string | null>; onCancel?: () => void }) {
+  const base = initial?.html ?? ''
+  const [draft, setDraft] = useState(() => loadRichDraft(draftKey, base))
+  const [start, setStart] = useState(draft?.html ?? base)
+  const [html, setHtml] = useState(start)
+  const [head, setHead] = useState(draft?.title ?? initial?.title ?? '')
+  const [gen, setGen] = useState(0)
   const [state, setState] = useState<{ busy?: boolean; error?: string }>({})
+  const pictures = useRef(new Map<string, string>())
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (isBlank(html) && !head.trim()) clearRichDraft(draftKey)
+      else if (html !== base || head !== (initial?.title ?? '')) saveRichDraft(draftKey, { html, title: head, base })
+    }, 500)
+    return () => clearTimeout(t)
+  }, [html, head, draftKey, base, initial?.title])
+  const upload = async (file: File, onProgress: (fraction: number) => void) => {
+    const name = await (await import('#/guide/edit/upload')).uploadImage(`forum:${scope}`, file, onProgress)
+    pictures.current.set(name, URL.createObjectURL(file))
+    return name
+  }
+  const reset = (nextHtml: string, nextHead: string) => {
+    clearRichDraft(draftKey)
+    setDraft(null)
+    setStart(nextHtml)
+    setHtml(nextHtml)
+    setHead(nextHead)
+    setGen((g) => g + 1)
+  }
   const send = async () => {
     setState({ busy: true })
-    const error = await onSend(text, head)
+    const error = await onSend(html, head)
     if (error) setState({ error })
-    else if (initial) setState({})
     else {
-      setText('')
-      setHead('')
+      clearRichDraft(draftKey)
+      if (!initial) reset('', '')
       setState({})
     }
   }
@@ -47,14 +78,29 @@ function Compose({ label, rows = 4, title, initial, onSend, onCancel }: { label:
       className="space-y-2"
     >
       {title && <input value={head} onChange={(e) => setHead(e.target.value)} placeholder="Title" aria-label="Title" maxLength={120} className={field} />}
-      <textarea value={text} onChange={(e) => setText(e.target.value)} rows={rows} aria-label={label} placeholder={label} className={field} />
+      {draft && (
+        <p role="status" className="text-sm text-muted">
+          Your unsent draft from {when(new Date(draft.savedAt).toISOString())} is back.{' '}
+          <button type="button" onClick={() => reset(base, initial?.title ?? '')} className="text-link hover:underline">
+            Discard it
+          </button>
+        </p>
+      )}
+      <LazyRichEditor key={gen} initial={start} onChange={setHtml} upload={upload} resolveFile={(n) => pictures.current.get(n) ?? ''} label={label} placeholder={label} compact={compact} />
       {state.error && <p role="alert" className="text-sm text-red-700">{state.error}</p>}
       <div className="flex gap-2">
-        <button type="submit" disabled={state.busy || !text.trim() || (title === true && !head.trim())} className={button}>
+        <button type="submit" disabled={state.busy || isBlank(html) || (title === true && !head.trim())} className={button}>
           {state.busy ? 'Sending…' : label}
         </button>
         {onCancel && (
-          <button type="button" onClick={onCancel} className="px-3 py-2 text-muted hover:underline">
+          <button
+            type="button"
+            onClick={() => {
+              clearRichDraft(draftKey)
+              onCancel()
+            }}
+            className="px-3 py-2 text-muted hover:underline"
+          >
             Cancel
           </button>
         )}
@@ -64,12 +110,12 @@ function Compose({ label, rows = 4, title, initial, onSend, onCancel }: { label:
 }
 
 /** What the signed-in person can do to their own posts and comments. `editing` is `'post'` or a comment's id. */
-type Own = { sub: string; admin: boolean; editing: string | null; setEditing: (id: string | null) => void; edit: (comment: string | null, text: string, title?: string) => Promise<string | null>; remove: (comment: string | null) => void }
+type Own = { sub: string; admin: boolean; editing: string | null; setEditing: (id: string | null) => void; edit: (comment: string | null, html: string, title?: string) => Promise<string | null>; remove: (comment: string | null) => void }
 
-/** Edit and Delete for something the person wrote here (imported posts have no plain text to edit); an admin can Delete anyone's. */
-function OwnButtons({ id, author, plain, removed, own }: { id: string; author: Author; plain: boolean; removed?: boolean; own: Own }) {
+/** Edit and Delete for something the person wrote here (imported posts belong to no signed-in member); an admin can Delete anyone's. */
+function OwnButtons({ id, author, removed, own }: { id: string; author: Author; removed?: boolean; own: Own }) {
   if (removed) return null
-  const mine = plain && author.sub === own.sub
+  const mine = author.sub === own.sub
   return (
     <>
       {mine && (
@@ -88,14 +134,14 @@ function OwnButtons({ id, author, plain, removed, own }: { id: string; author: A
 
 const deletedBy = (x: { removedBy?: 'admin' }) => (x.removedBy ? 'Deleted by an admin' : 'Deleted by its author')
 
-function CommentNode({ c, kids, depth, reply, setReply, send, admin, hide, own }: { c: Comment; kids: Map<string | null, Comment[]>; depth: number; reply: string | null; setReply: (id: string | null) => void; send: (parent: string | null, text: string) => Promise<string | null>; admin: boolean; hide: (c: Comment) => void; own: Own }) {
+function CommentNode({ c, kids, depth, reply, setReply, send, thread, admin, hide, own }: { c: Comment; kids: Map<string | null, Comment[]>; depth: number; reply: string | null; setReply: (id: string | null) => void; send: (parent: string | null, html: string) => Promise<string | null>; thread: string; admin: boolean; hide: (c: Comment) => void; own: Own }) {
   return (
     <li className={depth ? 'mt-3 border-l-2 border-line pl-3' : 'mt-4'}>
       <div className={c.hidden ? 'opacity-50' : ''}>
         <Who author={c.author} at={c.at} edited={c.edited} />
         {own.editing === c.id ? (
           <div className="mt-1">
-            <Compose label="Save" rows={3} initial={{ text: c.text ?? '' }} onSend={(t) => own.edit(c.id, t)} onCancel={() => own.setEditing(null)} />
+            <Compose label="Save" compact scope={thread} draftKey={`${thread}.${c.id}`} initial={{ html: c.html ?? textToHtml(c.text ?? '') }} onSend={(h) => own.edit(c.id, h)} onCancel={() => own.setEditing(null)} />
           </div>
         ) : (
           <div className="mt-1">
@@ -106,7 +152,7 @@ function CommentNode({ c, kids, depth, reply, setReply, send, admin, hide, own }
           <button type="button" onClick={() => setReply(reply === c.id ? null : c.id)} className="text-link hover:underline">
             Reply
           </button>
-          <OwnButtons id={c.id} author={c.author} plain={c.text !== undefined} removed={c.removed} own={own} />
+          <OwnButtons id={c.id} author={c.author} removed={c.removed} own={own} />
           {admin && !c.removed && (
             <button type="button" onClick={() => hide(c)} className="text-muted hover:underline">
               {c.hidden ? 'Show' : 'Hide'}
@@ -117,13 +163,13 @@ function CommentNode({ c, kids, depth, reply, setReply, send, admin, hide, own }
       </div>
       {reply === c.id && (
         <div className="mt-2">
-          <Compose label="Reply" rows={3} onSend={(t) => send(c.id, t)} onCancel={() => setReply(null)} />
+          <Compose label="Reply" compact scope={thread} draftKey={`${thread}.reply.${c.id}`} onSend={(h) => send(c.id, h)} onCancel={() => setReply(null)} />
         </div>
       )}
       {!!kids.get(c.id)?.length && (
         <ul>
           {kids.get(c.id)!.map((k) => (
-            <CommentNode key={k.id} c={k} kids={kids} depth={Math.min(depth + 1, 4)} reply={reply} setReply={setReply} send={send} admin={admin} hide={hide} own={own} />
+            <CommentNode key={k.id} c={k} kids={kids} depth={Math.min(depth + 1, 4)} reply={reply} setReply={setReply} send={send} thread={thread} admin={admin} hide={hide} own={own} />
           ))}
         </ul>
       )}
@@ -205,8 +251,8 @@ function ThreadView({ id, back }: { id: string; back: () => void }) {
   }, [thread])
   if (error) return <p role="alert">{error}</p>
   if (!thread) return <p className="text-muted">Loading…</p>
-  const send = async (parent: string | null, text: string) => {
-    const a = await post({ action: 'comment', thread: id, parent, text })
+  const send = async (parent: string | null, html: string) => {
+    const a = await post({ action: 'comment', thread: id, parent, html })
     if (!a.ok) return a.message
     setThread(a.value)
     setReply(null)
@@ -216,8 +262,8 @@ function ThreadView({ id, back }: { id: string; back: () => void }) {
     const a = await post({ action: 'hide', thread: id, comment: c.id, hidden: !c.hidden })
     if (a.ok) setThread(a.value)
   }
-  const edit = async (comment: string | null, text: string, title?: string) => {
-    const a = await post({ action: 'edit', thread: id, ...(comment && { comment }), ...(title !== undefined && { title }), text })
+  const edit = async (comment: string | null, html: string, title?: string) => {
+    const a = await post({ action: 'edit', thread: id, ...(comment && { comment }), ...(title !== undefined && { title }), html })
     if (!a.ok) return a.message
     setThread(a.value)
     setEditing(null)
@@ -242,7 +288,7 @@ function ThreadView({ id, back }: { id: string; back: () => void }) {
       </div>
       {editing === 'post' ? (
         <div className="mt-3">
-          <Compose label="Save" title rows={6} initial={{ text: thread.text ?? '', title: thread.title }} onSend={(t, h) => edit(null, t, h)} onCancel={() => setEditing(null)} />
+          <Compose label="Save" title scope={id} draftKey={`${id}.post`} initial={{ html: thread.html ?? textToHtml(thread.text ?? ''), title: thread.title }} onSend={(h, t) => edit(null, h, t)} onCancel={() => setEditing(null)} />
         </div>
       ) : (
         <div className="mt-3">
@@ -250,7 +296,7 @@ function ThreadView({ id, back }: { id: string; back: () => void }) {
         </div>
       )}
       <div className="mt-2 flex gap-3 text-sm">
-        <OwnButtons id="post" author={thread.author} plain={thread.text !== undefined} removed={thread.removed} own={own} />
+        <OwnButtons id="post" author={thread.author} removed={thread.removed} own={own} />
         {thread.removed && <span className="text-muted">{deletedBy(thread)}</span>}
       </div>
       {user?.admin && !thread.group && <NoticeControls thread={thread} onChange={setThread} />}
@@ -259,11 +305,11 @@ function ThreadView({ id, back }: { id: string; back: () => void }) {
       </h2>
       <ul>
         {(kids.get(null) ?? []).map((c) => (
-          <CommentNode key={c.id} c={c} kids={kids} depth={0} reply={reply} setReply={setReply} send={send} admin={!!user?.admin} hide={hide} own={own} />
+          <CommentNode key={c.id} c={c} kids={kids} depth={0} reply={reply} setReply={setReply} send={send} thread={id} admin={!!user?.admin} hide={hide} own={own} />
         ))}
       </ul>
       <div className="mt-6">
-        <Compose label="Comment" onSend={(t) => send(null, t)} />
+        <Compose label="Comment" compact scope={id} draftKey={`${id}.comment`} onSend={(h) => send(null, h)} />
       </div>
     </article>
   )
@@ -277,6 +323,7 @@ function ThreadList({ open }: { open: (id: string) => void }) {
   const [error, setError] = useState('')
   const [shown, setShown] = useState(PAGE)
   const [composing, setComposing] = useState(false)
+  const [fresh] = useState(newId)
   useEffect(() => {
     let live = true
     void listThreads().then((a) => live && (a.ok ? setThreads(a.value) : setError(a.message)))
@@ -284,8 +331,8 @@ function ThreadList({ open }: { open: (id: string) => void }) {
       live = false
     }
   }, [])
-  const create = async (text: string, title: string) => {
-    const a = await post({ action: 'thread', title, text })
+  const create = async (html: string, title: string) => {
+    const a = await post({ action: 'thread', id: fresh, title, html })
     if (!a.ok) return a.message
     open(a.value.id)
     return null
@@ -300,7 +347,7 @@ function ThreadList({ open }: { open: (id: string) => void }) {
       </div>
       {composing && (
         <div className="mt-4 rounded-lg border border-line bg-card p-4">
-          <Compose label="Post" title rows={6} onSend={create} onCancel={() => setComposing(false)} />
+          <Compose label="Post" title scope={fresh} draftKey="new" onSend={create} onCancel={() => setComposing(false)} />
         </div>
       )}
       {error && <p role="alert" className="mt-4">{error}</p>}

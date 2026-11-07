@@ -8,6 +8,10 @@ vi.mock('#/auth/session', () => ({ useUser: () => session.user }))
 vi.mock('#/guide/avatars/Avatar', () => ({ Avatar: () => null }))
 const api = vi.hoisted(() => ({ listThreads: vi.fn(), getThread: vi.fn(), post: vi.fn() }))
 vi.mock('../client', () => api)
+// The rich text box is lazy loaded and tested on its own; a plain box that reports its text as a paragraph stands in for it here.
+vi.mock('#/rte/LazyRichEditor', () => ({
+  LazyRichEditor: (p: { label: string; initial: string; onChange: (html: string) => void }) => <textarea aria-label={p.label} defaultValue={p.initial.replace(/<\/?p>/g, '')} onChange={(e) => p.onChange(`<p>${e.target.value}</p>`)} />,
+}))
 
 const user: User = { sub: 'u', email: 'u@x.com', name: 'Una', hasPassword: true, admin: false }
 const meta = { id: 'n1', title: 'New routes', author: { sub: 'a', name: 'Ann' }, at: '2026-10-01T00:00:00Z', last: '2026-10-01T00:00:00Z', comments: 1 }
@@ -46,7 +50,7 @@ it('shows a post with its comments and sends a reply', async () => {
   api.post.mockResolvedValue({ ok: true, value: { ...thread, comments: [...thread.comments, { id: 'c2', parent: null, author: { sub: 'u', name: 'Una' }, at: '2026-10-03T00:00:00Z', text: 'Agreed' }] } })
   fireEvent.change(screen.getByLabelText('Comment'), { target: { value: 'Agreed' } })
   await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Comment' })))
-  expect(api.post).toHaveBeenCalledWith({ action: 'comment', thread: 'n1', parent: null, text: 'Agreed' })
+  expect(api.post).toHaveBeenCalledWith({ action: 'comment', thread: 'n1', parent: null, html: '<p>Agreed</p>' })
   expect(screen.getByText('Agreed')).toBeTruthy()
 })
 
@@ -60,7 +64,7 @@ it('lets you edit and delete your own comment, and nobody else’s', async () =>
   fireEvent.click(screen.getByRole('button', { name: 'Edit' }))
   fireEvent.change(screen.getByLabelText('Save'), { target: { value: 'Nicer' } })
   await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Save' })))
-  expect(api.post).toHaveBeenCalledWith({ action: 'edit', thread: 'n1', comment: 'c1', text: 'Nicer' })
+  expect(api.post).toHaveBeenCalledWith({ action: 'edit', thread: 'n1', comment: 'c1', html: '<p>Nicer</p>' })
   expect(screen.getByText('Nicer')).toBeTruthy()
   vi.stubGlobal('confirm', () => true)
   api.post.mockResolvedValue({ ok: true, value: { ...thread, comments: [] } })

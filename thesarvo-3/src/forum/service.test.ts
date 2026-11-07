@@ -28,6 +28,35 @@ const ann: Viewer = { sub: 'a', name: 'Ann', groups: [], admin: false }
 const bob: Viewer = { sub: 'b', name: 'Bob', groups: ['cct-members'], admin: false }
 const root: Viewer = { sub: 'r', name: 'Root', groups: ['admins'], admin: true }
 
+describe('forum with rich text', () => {
+  it('stores allow-listed html for a post and its comments', async () => {
+    const store = memory()
+    const t = await createThread(store, ann, { title: 'Hi', html: '<p onclick="x()">Hello <strong>all</strong><script>1</script></p>' })
+    expect(t).toMatchObject({ html: '<p>Hello <strong>all</strong></p>' })
+    expect(t.text).toBeUndefined()
+    const c = await addComment(store, ann, { thread: t.id, html: '<p>Nice <a href="javascript:x">one</a></p>' })
+    expect(c.comments[0]).toMatchObject({ html: '<p>Nice one</p>' })
+  })
+
+  it('refuses an emptied editor and takes the id the editor chose, once', async () => {
+    const store = memory()
+    await expect(createThread(store, ann, { title: 'Hi', html: '<p></p>' })).rejects.toThrow(Refused)
+    const t = await createThread(store, ann, { id: 'nabc123def', title: 'Hi', html: '<p>x</p>' })
+    expect(t.id).toBe('nabc123def')
+    await expect(createThread(store, bob, { id: 'nabc123def', title: 'Again', html: '<p>y</p>' })).rejects.toThrow()
+    expect((await createThread(store, ann, { id: '../evil', title: 'Hi', html: '<p>x</p>' })).id).not.toBe('../evil')
+  })
+
+  it('lets an author edit a rich post (and swap a plain one to rich), but not another person', async () => {
+    const store = memory()
+    const plain = await createThread(store, ann, { title: 'Hi', text: 'plain' })
+    const edited = await editPost(store, ann, { thread: plain.id, html: '<p>now <em>rich</em></p>' })
+    expect(edited).toMatchObject({ html: '<p>now <em>rich</em></p>' })
+    expect(edited.text).toBeUndefined()
+    await expect(editPost(store, bob, { thread: plain.id, html: '<p>mine</p>' })).rejects.toThrow(Refused)
+  })
+})
+
 describe('forum', () => {
   it('creates a thread, lists it first and puts it in the home feed', async () => {
     const store = memory()

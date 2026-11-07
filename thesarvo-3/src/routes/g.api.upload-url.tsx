@@ -2,13 +2,13 @@ import { createFileRoute } from '@tanstack/react-router'
 import { guardPage, pageAccess } from '#/auth/pageGuard'
 import { requireEditor } from '#/auth/verifyToken'
 import { getFullContent } from '#/guide/content'
-import { imageBucket, uploadTicket } from '#/guide/content/bucketImages'
+import { forumUploadTicket, imageBucket, uploadTicket } from '#/guide/content/bucketImages'
 
 const json = (body: unknown, status = 200) => Response.json(body, { status })
 
 /**
  * `POST /g/api/upload-url` with `{ guide, name, size }`: a presigned form the browser posts one photo
- * to, straight into the bucket. Any signed-in user; the guide must exist.
+ * to, straight into the bucket. Any signed-in user; the guide (or prose page) must exist. `guide: 'forum:<thread>'` is for a forum post's pictures (members only, never public).
  */
 export const Route = createFileRoute('/g/api/upload-url')({
   server: {
@@ -21,7 +21,18 @@ export const Route = createFileRoute('/g/api/upload-url')({
         if (!store) return json({ error: 'Uploads are not set up here' }, 501)
         const body = (await request.json().catch(() => ({}))) as { guide?: unknown; name?: unknown; size?: unknown }
         const guide = String(body.guide ?? '')
-        if (!/^\d+$/.test(guide) || !(await getFullContent().all.getGuide(guide))) return json({ error: 'No such guide' }, 400)
+        const forum = /^forum:([\w-]{1,40})$/.exec(guide)?.[1]
+        if (forum) {
+          try {
+            const ticket = await forumUploadTicket(store.bucket, store.creds, forum, String(body.name ?? ''), Number(body.size))
+            console.log(JSON.stringify({ upload: `forum/${forum}/${ticket.name}`, by: editor.email }))
+            return json(ticket)
+          } catch (e) {
+            return json({ error: e instanceof Error ? e.message : 'Upload failed' }, 400)
+          }
+        }
+        const all = getFullContent().all
+        if (!/^\d+$/.test(guide) || !((await all.getGuide(guide)) || (await all.getPageBody(guide)))) return json({ error: 'No such guide' }, 400)
         const denied = await guardPage(editor, guide)
         if (denied) return denied
         try {

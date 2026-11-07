@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { bucketImageNames, imageBucket, uploadTicket } from './bucketImages'
+import { bucketImageNames, forumUploadTicket, imageBucket, uploadTicket } from './bucketImages'
 import { freeName } from './paths'
 
 const bucket = { name: 'thesarvo-content', region: 'ap-southeast-2' }
@@ -47,5 +47,14 @@ describe('bucket images', () => {
     await expect(uploadTicket(bucket, creds, '../x', 'a.jpg', 10)).rejects.toThrow('Not a supported image')
     await expect(uploadTicket(bucket, creds, '123', 'a.jpg', 26 * 1024 * 1024)).rejects.toThrow('over 25 MB')
     await expect(uploadTicket(bucket, creds, '123', 'a.jpg', 0)).rejects.toThrow('over 25 MB')
+  })
+
+  it('keeps a forum post’s photos under private/, apart from the public ones', async () => {
+    listing('private/forum-images/nabc123/a.jpg')
+    const t = await forumUploadTicket(bucket, creds, 'nabc123', 'a.jpg', 1000)
+    expect(t.name).toBe('a-2.jpg')
+    expect(t.fields.key).toBe('private/forum-images/nabc123/a-2.jpg')
+    await expect(forumUploadTicket(bucket, creds, '../x', 'a.jpg', 10)).rejects.toThrow('Not a forum post')
+    await expect(forumUploadTicket(bucket, creds, 'nabc123', 'notes.txt', 10)).rejects.toThrow('Not a supported image')
   })
 })

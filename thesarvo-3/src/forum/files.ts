@@ -24,3 +24,16 @@ export function withFileLinks(t: Thread, env = process.env): Thread {
   const fix = <T extends { html?: string }>(x: T): T => (x.html?.includes('data-file=') ? { ...x, html: linkFiles(x.html, sign) } : x)
   return { ...fix(t), comments: t.comments.map(fix) }
 }
+
+const FORUM_FILE = /<img([^>]*?) src="[^"]*\/private\/forum-images\/[^/"]+\/([^"?]+)\?[^"]*"(?: loading="[^"]*")?/g
+
+/** The reverse of `withFileLinks` for text coming back from the editor: a picture shown through a signed link goes back to its file name, so a link that expires is never stored. */
+export function unlinkFiles(html: string): string {
+  return html.replace(FORUM_FILE, (_, rest: string, name: string) => {
+    try {
+      return `<img data-file="${escape(decodeURIComponent(name))}"${rest}`
+    } catch {
+      return _
+    }
+  })
+}

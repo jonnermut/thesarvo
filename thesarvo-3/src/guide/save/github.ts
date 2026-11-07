@@ -4,8 +4,8 @@ import { formatJson } from '#/guide/content/syncFeed'
 import { ensureIds } from './changes'
 import type { HistoryEntry } from './history'
 import type { StoredIndexNode } from '#/guide/content/syncFeed'
-import { guidePath, historyPath, indexPath } from './repo'
-import type { Commit, GuideRepo, PageRepo, Stored } from './repo'
+import { bodyPath, guidePath, historyPath, indexPath } from './repo'
+import type { BodyRepo, Commit, GuideRepo, PageRepo, Stored, StoredBody } from './repo'
 
 const API = 'https://api.github.com'
 
@@ -59,7 +59,7 @@ const READ_INDEX = `query($owner: String!, $name: String!, $ref: String!, $index
 const COMMIT = `mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid } } }`
 
 /** Saves as commits on a branch of the content repo, through GitHub's API: no checkout, so it runs in the Lambda. */
-export class GitHubRepo implements GuideRepo, PageRepo {
+export class GitHubRepo implements GuideRepo, PageRepo, BodyRepo {
   constructor(
     private readonly repo: string,
     private readonly branch: string,
@@ -101,6 +101,22 @@ export class GitHubRepo implements GuideRepo, PageRepo {
     return { head: target.oid, guide: ensureIds(JSON.parse(guide) as Guide), history: history ? (JSON.parse(history) as HistoryEntry[]) : [] }
   }
 
+  async readBody(id: string): Promise<StoredBody | null> {
+    const { data, errors } = await this.graphql<ReadResult>(READ, {
+      owner: this.repo.split('/')[0], name: this.repo.split('/')[1], ref: `refs/heads/${this.branch}`, guide: bodyPath(id), history: historyPath(id),
+    })
+    const target = data?.repository?.ref?.target
+    if (!target) throw new Error(`GitHub: ${errors?.[0]?.message ?? `no branch ${this.branch}`}`)
+    const html = await this.text(target.guide, bodyPath(id), target.oid)
+    if (html === null) return null
+    const history = await this.text(target.history, historyPath(id), target.oid)
+    return { head: target.oid, html, history: history ? (JSON.parse(history) as HistoryEntry[]) : [] }
+  }
+
+  commitBody({ id, head, html, history, message }: Parameters<BodyRepo['commitBody']>[0]): Promise<string | null> {
+    return this.write(head, [[bodyPath(id), html], [historyPath(id), history]], message)
+  }
+
   /** A file's text on the branch, or null when it is not there. */
   async file(path: string): Promise<string | null> {
     const res = await this.fetcher(`${API}/repos/${this.repo}/contents/${path}?ref=${encodeURIComponent(this.branch)}`, {
@@ -135,7 +151,7 @@ export class GitHubRepo implements GuideRepo, PageRepo {
   }
 
   private async write(head: string, files: [string, unknown][], message: Commit['message']): Promise<string | null> {
-    const file = ([path, value]: [string, unknown]) => ({ path, contents: Buffer.from(formatJson(value)).toString('base64') })
+    const file = ([path, value]: [string, unknown]) => ({ path, contents: Buffer.from(typeof value === 'string' ? value : formatJson(value)).toString('base64') })
     const { data, errors } = await this.graphql<{ createCommitOnBranch: { commit: { oid: string } } }>(COMMIT, {
       input: {
         branch: { repositoryNameWithOwner: this.repo, branchName: this.branch },

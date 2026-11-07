@@ -1,4 +1,4 @@
-import { ClientOnly, createFileRoute, notFound, useLocation } from '@tanstack/react-router'
+import { ClientOnly, createFileRoute, notFound, useLocation, useNavigate } from '@tanstack/react-router'
 import { lazy, Suspense, useEffect } from 'react'
 import { RequireSignIn } from '#/auth/RequireSignIn'
 import { signIn, useUser } from '#/auth/session'
@@ -16,6 +16,7 @@ import { WeatherPanel } from '#/weather/WeatherPanel'
 
 // The editor is its own chunk: readers never download it. The history too, until someone opens it.
 const Editor = lazy(() => import('#/guide/edit/Editor'))
+const PageBodyEditor = lazy(() => import('#/rte/PageBodyEditor'))
 const HistoryView = lazy(() => import('#/guide/history/HistoryView'))
 
 /** What the address shows of a page: the page, `?edit` the editor, `?history` its history. */
@@ -72,6 +73,7 @@ function GuidePage() {
   const guide = useJustSaved(published)
   const { edit, history } = Route.useSearch()
   const hash = useLocation({ select: (l) => l.hash })
+  const navigate = useNavigate()
   const full = useFullWidth()
   const width = widthClass(full)
   useEffect(() => {
@@ -84,6 +86,16 @@ function GuidePage() {
         <RequireSignIn what="edit this guide">
           <Suspense fallback={<p className="p-8 text-muted">Loading editor…</p>}>
             <Editor guide={guide} />
+          </Suspense>
+        </RequireSignIn>
+      </ClientOnly>
+    )
+  if (!guide && body && edit)
+    return (
+      <ClientOnly fallback={<p className="p-8 text-muted">Loading editor…</p>}>
+        <RequireSignIn what="edit this page">
+          <Suspense fallback={<p className="p-8 text-muted">Loading editor…</p>}>
+            <PageBodyEditor id={node.id} title={node.title} done={() => void navigate({ to: '/g/$', params: { _splat: node.path }, search: {} })} />
           </Suspense>
         </RequireSignIn>
       </ClientOnly>

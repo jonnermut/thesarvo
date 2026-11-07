@@ -44,6 +44,8 @@ export function PageMenu() {
   const splat = match.params._splat
   const mode = match.search
   const isGuide = !!match.loaderData.guide
+  // Prose pages are edited in the rich text box; a contents-only page has no text yet to edit.
+  const canEdit = isGuide || !!match.loaderData.body
   const editing = !!mode.edit
   // Anyone signed in can. Under a private page is not supported yet (the server says no too).
   const canAdd = !!user && !match.loaderData.node.private && !mode.edit
@@ -53,7 +55,7 @@ export function PageMenu() {
 
   return (
     <div ref={box} className="relative flex">
-      {isGuide && (
+      {canEdit && (
         <Link
           to="/g/$"
           params={{ _splat: splat }}
@@ -73,7 +75,7 @@ export function PageMenu() {
             'View'
           ) : (
             <>
-              Edit<span className="hidden sm:inline"> this Guide</span>
+              Edit<span className="hidden sm:inline"> this {isGuide ? 'Guide' : 'Page'}</span>
             </>
           )}
         </Link>
@@ -84,9 +86,9 @@ export function PageMenu() {
         aria-label="Page menu"
         aria-haspopup="menu"
         aria-expanded={open}
-        className={`${border} flex items-center gap-1 py-1.5 ${isGuide ? 'rounded-r-md border-l-0 px-2' : 'rounded-md px-3'}`}
+        className={`${border} flex items-center gap-1 py-1.5 ${canEdit ? 'rounded-r-md border-l-0 px-2' : 'rounded-md px-3'}`}
       >
-        {!isGuide && 'Page'}
+        {!canEdit && 'Page'}
         <svg viewBox="0 0 12 12" className="size-3" aria-hidden>
           <path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
         </svg>

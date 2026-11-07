@@ -67,7 +67,7 @@ describe('saveGuide', () => {
 describe('LocalRepo', () => {
   it('reads from the content source until saved, and refuses a stale head', async () => {
     const dir = await mkdtemp(path.join(tmpdir(), 'saves-'))
-    const source = { getGuide: (id: string) => Promise.resolve(id === '7' ? guide(header, text('', 'no id')) : null), getIndex: () => Promise.reject(new Error('no index')) }
+    const source = { getGuide: (id: string) => Promise.resolve(id === '7' ? guide(header, text('', 'no id')) : null), getIndex: () => Promise.reject(new Error('no index')), getPageBody: (id: string) => Promise.resolve(id === '8' ? '<p>from the source</p>' : null) }
     const repo = new LocalRepo(dir, () => source)
     const first = await repo.read('7')
     expect(first?.guide.nodes[1]).toEqual(text('1', 'no id'))

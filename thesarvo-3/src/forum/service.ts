@@ -1,9 +1,14 @@
+import { newId } from './ids'
+import { hasContent, sanitizeHtml } from '#/rte/sanitize'
+import { unlinkFiles } from './files'
 import { metaOf, noticeOf } from './types'
 import type { Author, Comment, Notice, Thread, ThreadMeta } from './types'
 import type { ForumStore } from './store'
 
 export const TITLE_MAX = 120
 export const TEXT_MAX = 10_000
+/** What the rich text box may send: HTML is longer than the words in it. */
+export const HTML_MAX = 60_000
 export const RECENT_COUNT = 8
 /** A notice lasts at most this long. */
 export const NOTICE_MAX_DAYS = 366
@@ -16,6 +21,8 @@ const authorOf = (v: Viewer): Author => ({ sub: v.sub, name: v.name, ...(v.key &
 
 export class Refused extends Error {}
 
+/** Imported posts (authors `confluence:<name>`) are Confluence's HTML and are never edited here. */
+const isOwn = (v: Viewer, a: Author) => a.sub === v.sub && !a.sub.startsWith('confluence:')
 const canSee = (v: Viewer, group?: string) => !group || v.groups.includes(group) || v.admin
 const clean = (s: unknown, max: number, what: string) => {
   const t = typeof s === 'string' ? s.replace(/\r\n?/g, '\n').trim() : ''
@@ -24,9 +31,19 @@ const clean = (s: unknown, max: number, what: string) => {
   return t
 }
 
-/** A new id: sortable by time, and unlike Confluence's numbers it never collides with an imported thread. */
-export const newId = (now = Date.now(), rand = Math.random()) => `n${now.toString(36)}${Math.floor(rand * 36 ** 3).toString(36).padStart(3, '0')}`
+/** What a post or comment says: allow-listed `html` from the editor, or `text` from the plain box (older clients). */
+function content(input: { html?: unknown; text?: unknown }, what: string): { html?: string; text?: string } {
+  if (typeof input.html !== 'string') return { text: clean(input.text, TEXT_MAX, what) }
+  if (input.html.length > HTML_MAX) throw new Refused(`${what} is too long`)
+  const html = sanitizeHtml(unlinkFiles(input.html))
+  if (!hasContent(html)) throw new Refused(`${what} is empty`)
+  if (html.length > HTML_MAX) throw new Refused(`${what} is too long`)
+  return { html }
+}
 
+export { newId } from './ids'
+
+const NEW_ID = /^n[0-9a-z]{6,20}$/
 const threadFile = (id: string) => `threads/${id}.json`
 const isId = (id: unknown): id is string => typeof id === 'string' && /^[\w-]{1,40}$/.test(id)
 
@@ -102,13 +119,14 @@ export async function setNotice(store: ForumStore, v: Viewer, input: { thread?: 
   return t
 }
 
-export async function createThread(store: ForumStore, v: Viewer, input: { title?: unknown; text?: unknown }, now = new Date()): Promise<Thread> {
+export async function createThread(store: ForumStore, v: Viewer, input: { id?: unknown; title?: unknown; text?: unknown; html?: unknown }, now = new Date()): Promise<Thread> {
   const t: Thread = {
-    id: newId(now.getTime()),
+    // The editor picks the id first when the post has pictures, so they can be stored under it; a taken id fails the write below.
+    id: typeof input.id === 'string' && NEW_ID.test(input.id) ? input.id : newId(now.getTime()),
     title: clean(input.title, TITLE_MAX, 'The title'),
     author: authorOf(v),
     at: now.toISOString(),
-    text: clean(input.text, TEXT_MAX, 'The post'),
+    ...content(input, 'The post'),
     comments: [],
   }
   if (!(await store.write(threadFile(t.id), t, null))) throw new Error('Could not save the post')
@@ -116,16 +134,16 @@ export async function createThread(store: ForumStore, v: Viewer, input: { title?
   return t
 }
 
-export async function addComment(store: ForumStore, v: Viewer, input: { thread?: unknown; parent?: unknown; text?: unknown }, now = new Date()): Promise<Thread> {
-  const text = clean(input.text, TEXT_MAX, 'The comment')
+export async function addComment(store: ForumStore, v: Viewer, input: { thread?: unknown; parent?: unknown; text?: unknown; html?: unknown }, now = new Date()): Promise<Thread> {
+  const body = content(input, 'The comment')
   const id = isId(input.thread) ? input.thread : ''
   const parent = input.parent == null ? null : String(input.parent)
-  const comment: Comment = { id: newId(now.getTime()), parent, author: authorOf(v), at: now.toISOString(), text }
+  const comment: Comment = { id: newId(now.getTime()), parent, author: authorOf(v), at: now.toISOString(), ...body }
   const t = await update<Thread | null>(store, threadFile(id), null, (cur) => {
     if (!cur || !canSee(v, cur.group) || cur.hidden) throw new Refused('No such post')
     if (parent !== null && !cur.comments.some((c) => c.id === parent)) throw new Refused('The comment you are replying to is gone')
     const last = cur.comments.at(-1)
-    if (last && last.author.sub === v.sub && last.text === text) return cur // a double click
+    if (last && last.author.sub === v.sub && last.text === body.text && last.html === body.html) return cur // a double click
     return { ...cur, comments: [...cur.comments, comment] }
   })
   if (!t) throw new Refused('No such post')
@@ -133,25 +151,31 @@ export async function addComment(store: ForumStore, v: Viewer, input: { thread?:
   return t
 }
 
+/** The post or comment with its words replaced, whichever form (`html` or `text`) it and the new words are in. */
+function withBody<T extends { html?: string; text?: string }>(x: T, body: { html?: string; text?: string }): T {
+  const { html: _html, text: _text, ...rest } = x
+  return { ...rest, ...body } as T
+}
+
 /**
  * The author changes the text of their own comment, or (with no `comment`) of their own post, whose title may change too.
- * Only text written here can be edited: imported posts are HTML from Confluence, and their authors are not Cognito users anyway.
+ * Imported posts are HTML from Confluence, but their authors are not Cognito users, so only posts written here can be edited.
  */
-export async function editPost(store: ForumStore, v: Viewer, input: { thread?: unknown; comment?: unknown; title?: unknown; text?: unknown }, now = new Date()): Promise<Thread> {
-  const text = clean(input.text, TEXT_MAX, input.comment == null ? 'The post' : 'The comment')
+export async function editPost(store: ForumStore, v: Viewer, input: { thread?: unknown; comment?: unknown; title?: unknown; text?: unknown; html?: unknown }, now = new Date()): Promise<Thread> {
+  const body = content(input, input.comment == null ? 'The post' : 'The comment')
   const title = input.comment == null && input.title !== undefined ? clean(input.title, TITLE_MAX, 'The title') : undefined
   const id = isId(input.thread) ? input.thread : ''
   const at = now.toISOString()
   const t = await update<Thread | null>(store, threadFile(id), null, (cur) => {
     if (!cur || !canSee(v, cur.group) || cur.hidden) throw new Refused('No such post')
     if (input.comment == null) {
-      if (cur.author.sub !== v.sub || cur.text === undefined) throw new Refused('You can only edit your own posts')
-      return { ...cur, ...(title && { title }), text, edited: at }
+      if (!isOwn(v, cur.author)) throw new Refused('You can only edit your own posts')
+      return { ...withBody(cur, body), ...(title && { title }), edited: at }
     }
     const c = cur.comments.find((x) => x.id === input.comment)
     if (!c || c.hidden) throw new Refused('No such comment')
-    if (c.author.sub !== v.sub || c.text === undefined) throw new Refused('You can only edit your own comments')
-    return { ...cur, comments: cur.comments.map((x) => (x === c ? { ...c, text, edited: at } : x)) }
+    if (!isOwn(v, c.author)) throw new Refused('You can only edit your own comments')
+    return { ...cur, comments: cur.comments.map((x) => (x === c ? { ...withBody(c, body), edited: at } : x)) }
   })
   if (!t) throw new Refused('No such post')
   await reindex(store, t)

@@ -24,14 +24,25 @@ export interface PageRepo {
   commitIndex: (c: { head: string; index: StoredIndexNode; message: Commit['message'] }) => Promise<string | null>
 }
 
+/** A prose page's HTML as saved, with the commit it was read at and its edit history. */
+export type StoredBody = { head: string; html: string; history: HistoryEntry[] }
+
+/** What saving a prose page (`pages/<id>/page.html`) needs. */
+export interface BodyRepo {
+  readBody: (id: string) => Promise<StoredBody | null>
+  /** Writes the HTML and the history in one commit on top of `head`; null when someone saved since. */
+  commitBody: (c: { id: string; head: string; html: string; history: HistoryEntry[]; message: Commit['message'] }) => Promise<string | null>
+}
+
 export const indexPath = 'index.json'
 export const guidePath = (id: string) => `pages/${id}/guide.json`
+export const bodyPath = (id: string) => `pages/${id}/page.html`
 export const historyPath = (id: string) => `pages/${id}/history.json`
 
-let repo: (GuideRepo & PageRepo) | null | undefined
+let repo: (GuideRepo & PageRepo & BodyRepo) | null | undefined
 
 /** Server-only. GitHub when `CONTENT_REPO` is set, a local folder on the dev server, else none: saving is not set up. */
-export async function guideRepo(): Promise<(GuideRepo & PageRepo) | null> {
+export async function guideRepo(): Promise<(GuideRepo & PageRepo & BodyRepo) | null> {
   repo ??= process.env.CONTENT_REPO
     ? new (await import('./github')).GitHubRepo(process.env.CONTENT_REPO, process.env.CONTENT_BRANCH ?? 'main')
     : process.env.NODE_ENV === 'development'
