@@ -26,6 +26,9 @@ it('leaves the sync stubs and ordinary pages alone', async () => {
   expect((await run('/confluence/plugins/servlet/guide/sync/1/2')).uri).toBe('/legacy-app/sync.xml')
   expect((await run('/g/east/')).uri).toBe('/g/east/index.html')
   expect((await run('/g/east')).uri).toBe('/g/east/index.html')
+  // Photos attached with no extension are still files.
+  expect((await run('/images/333053984/Connies Mordor')).uri).toBe('/images/333053984/Connies Mordor')
+  expect((await run('/uploads/abc/photo')).uri).toBe('/uploads/abc/photo')
   expect((await run('/assets/app.js')).uri).toBe('/assets/app.js')
 })
 
