@@ -89,6 +89,8 @@ const pathText = (latlngs: L.LatLng[]) => latlngs.map((p) => `${p.lat.toFixed(6)
 const handleIcon = (cls: string) => L.divIcon({ className: '', html: `<div class="${cls}"></div>`, iconSize: [18, 18] })
 const POINT_HANDLE = handleIcon('size-[18px] rounded-full border-2 border-white bg-amber shadow')
 const VERTEX_HANDLE = handleIcon('size-[14px] m-[2px] border-2 border-white bg-fill shadow')
+/** A point of the measured path: drag it to move it. */
+const ROUTE_HANDLE = handleIcon('size-[14px] m-[2px] rounded-full border-2 border-[#2563eb] bg-white shadow')
 
 const mapButton = 'rounded border-2 border-wash/20 bg-card text-[13px] text-navy shadow hover:bg-paper disabled:opacity-50'
 
@@ -272,8 +274,18 @@ export default function MapView({ points, lines, selected, onSelect, edit, clust
     const group = routeLayer.current
     if (!group) return
     group.clearLayers()
-    if (route.length > 1) L.polyline(route, { color: '#2563eb', weight: 4 }).addTo(group)
-    route.forEach((p) => L.circleMarker(p, { radius: 4, color: '#2563eb', weight: 2, fillColor: '#fff', fillOpacity: 1, interactive: false }).addTo(group))
+    // The points are draggable: the line follows live and the path is set on release (which redraws it).
+    const moved = [...route]
+    const line = route.length > 1 ? L.polyline(route, { color: '#2563eb', weight: 4, interactive: false }).addTo(group) : undefined
+    route.forEach((p, i) =>
+      L.marker(p, { icon: ROUTE_HANDLE, draggable: true })
+        .on('drag', (e) => {
+          moved[i] = (e.target as L.Marker).getLatLng()
+          line?.setLatLngs(moved)
+        })
+        .on('dragend', () => setRoute([...moved]))
+        .addTo(group),
+    )
   }, [route])
   useEffect(() => {
     const m = map.current
