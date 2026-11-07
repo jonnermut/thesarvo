@@ -74,7 +74,7 @@ function TopoCanvas({ legend, rows, ...props }: Props & { legend: Climb[]; rows:
   )
 }
 
-/** The climb behind a route or legend row, as a popup like the legacy topo's route popover. */
+/** The climb behind a route or legend row, as a popup like the legacy topo's route popover. Its height limit is a percentage of the overlay, not `dvh`: in the Android app the popup collapsed to its padding and close button, which is what a 0 height limit gives. */
 function ClimbPopup({ climb, open, onClose }: { climb: Climb; open: boolean; onClose: () => void }) {
   useEscape(open, onClose)
   useScrollLock(open)
@@ -86,7 +86,7 @@ function ClimbPopup({ climb, open, onClose }: { climb: Climb; open: boolean; onC
       <div
         role="dialog"
         aria-label={climb.name}
-        className={`relative max-h-[80dvh] w-full max-w-lg overflow-auto overscroll-contain rounded-lg bg-card p-3 pr-8 shadow-xl transition-[translate] duration-180 ease-out starting:translate-y-3 ${open ? '' : 'translate-y-3'}`}
+        className={`relative max-h-[80%] w-full max-w-lg overflow-auto overscroll-contain rounded-lg bg-card p-3 pr-8 shadow-xl transition-[translate] duration-180 ease-out starting:translate-y-3 ${open ? '' : 'translate-y-3'}`}
         onClick={(e) => e.stopPropagation()}
       >
         <button type="button" aria-label="Close" onClick={onClose} className="absolute right-2 top-1 text-2xl leading-none text-muted hover:text-navy">×</button>
