@@ -1,0 +1,21 @@
+thesarvo-android/app/build.gradle.kts
+  s_e9cd55a1f49583::t_c75a12f3ba1ec2 20-21
+thesarvo-android/app/src/main/kotlin/com/thesarvo/guide/ui/Root.kt
+  s_e9cd55a1f49583::t_d9e3c94468fa31 144-145
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1f5d53e1aa4a7c4becef8f8af9be28e62bec6dd0",
+  "prompts": {},
+  "sessions": {
+    "s_e9cd55a1f49583": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1c2638e6-8c6a-42c3-85d9-4cd938b67512",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
