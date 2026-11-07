@@ -92,8 +92,8 @@ const VERTEX_HANDLE = handleIcon('size-[14px] m-[2px] border-2 border-white bg-f
 
 const mapButton = 'rounded border-2 border-wash/20 bg-card text-[13px] text-navy shadow hover:bg-paper disabled:opacity-50'
 
-/** The Measure and My location buttons are icons: the same square size as Leaflet's own controls. */
-const iconButton = 'grid size-[34px] place-items-center'
+/** The Measure and My location buttons are icons that look like Leaflet's own controls (white, black icon, flat border), lit blue while on. */
+const iconButton = (on: boolean) => `grid size-[34px] place-items-center rounded border-2 ${on ? 'border-fill bg-fill text-white' : 'border-black/20 bg-white text-black hover:bg-[#f4f4f4]'}`
 const textButton = 'px-2 py-1'
 const Icon = ({ children }: { children: React.ReactNode }) => (
   <svg viewBox="0 0 20 20" width="20" height="20" className="block" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -487,13 +487,13 @@ export default function MapView({ points, lines, selected, onSelect, edit, clust
               Point here
             </button>
           )}
-          <button type="button" aria-pressed={measuring} aria-label="Measure" title="Measure" className={`${mapButton} ${iconButton} ${measuring ? 'border-fill bg-fill text-white' : ''}`} onClick={() => { setTool('none'); setDrawn([]); setMeasuring((v) => !v) }}>
+          <button type="button" aria-pressed={measuring} aria-label="Measure" title="Measure" className={iconButton(measuring)} onClick={() => { setTool('none'); setDrawn([]); setMeasuring((v) => !v) }}>
             <Icon>
               <path d="M2.5 13.5 13.5 2.5l4 4-11 11z" />
               <path d="m5.5 10.5 2 2M8 8l1.5 1.5M10.5 5.5l2 2" />
             </Icon>
           </button>
-          <button type="button" aria-pressed={watching} aria-label="My location" title="My location" className={`${mapButton} ${iconButton} ${watching ? 'border-fill bg-fill text-white' : ''}`} onClick={() => setWatching((v) => !v)}>
+          <button type="button" aria-pressed={watching} aria-label="My location" title="My location" className={iconButton(watching)} onClick={() => setWatching((v) => !v)}>
             <Icon>
               <circle cx="10" cy="10" r="3.5" />
               <path d="M10 1.5v3.5M10 15v3.5M1.5 10H5M15 10h3.5" />
