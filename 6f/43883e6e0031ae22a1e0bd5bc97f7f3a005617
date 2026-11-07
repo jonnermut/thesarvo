@@ -1,0 +1,19 @@
+thesarvo-android/app/src/main/kotlin/com/thesarvo/guide/web/WebModel.kt
+  s_e9cd55a1f49583::t_5ab294590f71a5 13,96-97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6f43883e6e0031ae22a1e0bd5bc97f7f3a005617",
+  "prompts": {},
+  "sessions": {
+    "s_e9cd55a1f49583": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1c2638e6-8c6a-42c3-85d9-4cd938b67512",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
