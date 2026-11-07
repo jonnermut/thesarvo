@@ -141,7 +141,8 @@ private fun GuidesScreen(model: AppModel, wide: Boolean) {
         val drawer = rememberDrawerState(DrawerValue.Closed)
         LaunchedEffect(model.showMenu) { if (model.showMenu) drawer.open() else drawer.close() }
         LaunchedEffect(drawer.currentValue) { if (drawer.currentValue == DrawerValue.Closed && model.showMenu) model.showMenu = false else if (drawer.currentValue == DrawerValue.Open) model.showMenu = true }
-        ModalNavigationDrawer(drawerState = drawer, drawerContent = { ModalDrawerSheet(drawerContainerColor = Chrome.menu, drawerContentColor = Chrome.light) { MenuContent(model, showDone = true) } }) { PageScreen(model, showMenuButton = true) }
+        // Swipes only close the menu: while it is closed the drawer's drag detector would take any sideways finger movement from the web view (stalled scrolling, photos that cannot pan), so it opens from the menu button.
+        ModalNavigationDrawer(drawerState = drawer, gesturesEnabled = drawer.targetValue == DrawerValue.Open, drawerContent = { ModalDrawerSheet(drawerContainerColor = Chrome.menu, drawerContentColor = Chrome.light) { MenuContent(model, showDone = true) } }) { PageScreen(model, showMenuButton = true) }
     }
     model.contents?.let { ContentsSheetUi(model, it) }
 }
