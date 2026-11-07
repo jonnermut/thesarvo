@@ -90,12 +90,13 @@ const handleIcon = (cls: string) => L.divIcon({ className: '', html: `<div class
 const POINT_HANDLE = handleIcon('size-[18px] rounded-full border-2 border-white bg-amber shadow')
 const VERTEX_HANDLE = handleIcon('size-[14px] m-[2px] border-2 border-white bg-fill shadow')
 
-const mapButton = 'rounded border-2 border-wash/20 bg-card px-2 py-1 text-[13px] text-navy shadow hover:bg-paper disabled:opacity-50'
+const mapButton = 'rounded border-2 border-wash/20 bg-card text-[13px] text-navy shadow hover:bg-paper disabled:opacity-50'
 
 /** The Measure and My location buttons are icons: the same square size as Leaflet's own controls. */
-const iconButton = 'grid size-[34px] place-items-center p-0'
+const iconButton = 'grid size-[34px] place-items-center'
+const textButton = 'px-2 py-1'
 const Icon = ({ children }: { children: React.ReactNode }) => (
-  <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg viewBox="0 0 20 20" width="20" height="20" className="block" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     {children}
   </svg>
 )
@@ -482,7 +483,7 @@ export default function MapView({ points, lines, selected, onSelect, edit, clust
         <div className="absolute bottom-7 right-[10px] z-[1000] flex flex-col items-end gap-1.5">
           {locError && <p role="status" className="max-w-56 rounded bg-card px-2 py-1 text-[12px] text-navy shadow">{locError}</p>}
           {edit && (
-            <button type="button" className={mapButton} disabled={!here} title={here ? 'Add a point where you are' : 'Turn on My location first'} onClick={() => here && edit.onAddPoint(here.latlng.lat, here.latlng.lng)}>
+            <button type="button" className={`${mapButton} ${textButton}`} disabled={!here} title={here ? 'Add a point where you are' : 'Turn on My location first'} onClick={() => here && edit.onAddPoint(here.latlng.lat, here.latlng.lng)}>
               Point here
             </button>
           )}
