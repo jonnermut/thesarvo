@@ -1,0 +1,19 @@
+thesarvo_iphone_2.0/thesarvo/thesarvo.xcodeproj/project.pbxproj
+  s_e20d0a1ebc47aa::t_54f4690ed7a726 267,277,290,300,312,315,328,331
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dc7d010559354a5be8205567acd2480c3ee14961",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
