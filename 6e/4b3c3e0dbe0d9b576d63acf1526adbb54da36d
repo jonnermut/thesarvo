@@ -1,0 +1,19 @@
+thesarvo-3/src/guide/view/TopoFigure.tsx
+  s_e9cd55a1f49583::t_6e143b4bd2bc32 77,89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6e4b3c3e0dbe0d9b576d63acf1526adbb54da36d",
+  "prompts": {},
+  "sessions": {
+    "s_e9cd55a1f49583": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1c2638e6-8c6a-42c3-85d9-4cd938b67512",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
