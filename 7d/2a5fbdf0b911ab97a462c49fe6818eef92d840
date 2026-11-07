@@ -1,0 +1,21 @@
+thesarvo-android/app/build.gradle.kts
+  s_e9cd55a1f49583::t_7e00b446b7f97e 20-21
+thesarvo-android/app/src/main/kotlin/com/thesarvo/guide/ui/MapScreen.kt
+  s_e9cd55a1f49583::t_b1ed5972c4fc05 107-114,160,233
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7d2a5fbdf0b911ab97a462c49fe6818eef92d840",
+  "prompts": {},
+  "sessions": {
+    "s_e9cd55a1f49583": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1c2638e6-8c6a-42c3-85d9-4cd938b67512",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
