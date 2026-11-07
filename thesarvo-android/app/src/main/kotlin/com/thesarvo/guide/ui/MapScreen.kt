@@ -104,6 +104,14 @@ private fun styleJson(b: Basemap) = JSONObject()
     .put("layers", JSONArray().put(JSONObject().put("id", "base").put("type", "raster").put("source", "base")))
     .toString()
 
+/** The box round some points, always at least about 100 m across: the builder throws for a single point, as a crag with one location is. */
+private fun boundsOf(points: List<CragPoint>, m: Double = 0.0005): LatLngBounds {
+    val b = LatLngBounds.Builder()
+    points.forEach { b.include(LatLng(it.latitude, it.longitude)) }
+    val c = points.first()
+    return b.include(LatLng(c.latitude - m, c.longitude - m)).include(LatLng(c.latitude + m, c.longitude + m)).build()
+}
+
 private fun LatLngBounds.padded(m: Double = 0.0005): LatLngBounds {
     val c = center
     return LatLngBounds.Builder().include(southWest).include(northEast).include(LatLng(c.latitude - m, c.longitude - m)).include(LatLng(c.latitude + m, c.longitude + m)).build()
@@ -149,7 +157,7 @@ fun MapScreen(model: AppModel) {
         previous.clear(); selected = null
         val mine = if (focus == null) emptyList() else shown.filter { it.guideId == focus }
         if (mine.isNotEmpty()) {
-            val b = LatLngBounds.Builder().also { bb -> mine.forEach { bb.include(LatLng(it.latitude, it.longitude)) } }.build()
+            val b = boundsOf(mine)
             m.animateCamera(CameraUpdateFactory.newLatLngBounds(b.padded(), 120))
         } else if (shown.size > 1) m.animateCamera(CameraUpdateFactory.newLatLngZoom(Tasmania, 6.2))
     }
@@ -222,7 +230,7 @@ fun MapScreen(model: AppModel) {
                             is MapItem.Cluster -> {
                                 selected = null
                                 previous.add(m.projection.visibleRegion.latLngBounds)
-                                val b = LatLngBounds.Builder().also { bb -> item.points.forEach { bb.include(LatLng(it.latitude, it.longitude)) } }.build()
+                                val b = boundsOf(item.points)
                                 m.animateCamera(CameraUpdateFactory.newLatLngBounds(b.padded(), 100))
                             }
                             null -> selected = null
