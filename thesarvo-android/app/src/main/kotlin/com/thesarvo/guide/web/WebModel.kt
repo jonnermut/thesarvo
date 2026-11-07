@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Message
 import android.view.View
+import android.view.ViewGroup
 import android.webkit.GeolocationPermissions
 import android.webkit.RenderProcessGoneDetail
 import android.webkit.ValueCallback
@@ -92,6 +93,8 @@ class WebModel(private val app: Application, private val site: SiteClient) {
         }
         // The site decides its own colours: no forced or algorithmic darkening of its pages.
         if (WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) WebSettingsCompat.setAlgorithmicDarkeningAllowed(w.settings, false)
+        // Fill the parent: a web view left at wrap_content is given a zero layout height, so vh and dvh measure 0 px in the page (a popup limited to 80dvh collapsed to its padding).
+        w.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         w.setBackgroundColor(android.graphics.Color.TRANSPARENT)
         w.overScrollMode = View.OVER_SCROLL_NEVER
         // The emulator's software GL (SwiftShader) leaves stale tiles painted over the page, so there the page is drawn in software; phones keep the GPU.
