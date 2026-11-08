@@ -1,0 +1,45 @@
+thesarvo-3/src/guide/save/addPage.ts
+  s_bec7aeac916bc2::t_d610bfbdb11382 66
+  s_bec7aeac916bc2::t_2bbe64ca8282b6 39,45
+  s_bec7aeac916bc2::t_6e547bd56f8391 10
+thesarvo-3/src/guide/save/addPage.test.ts
+  s_bec7aeac916bc2::t_7bfc7d3b015990 45-52
+  s_bec7aeac916bc2::t_f39e910927cd0c 68,84
+thesarvo-3/src/guide/tree/api.ts
+  s_bec7aeac916bc2::t_9decf5fffd39be 13
+thesarvo-3/src/guide/save/moveTree.test.ts
+  s_bec7aeac916bc2::t_2abdab72316b0e 4
+  s_bec7aeac916bc2::t_e6ef3805f8dcc5 94-119
+thesarvo-3/src/guide/save/treeOps.ts
+  s_bec7aeac916bc2::t_9cc550130f611a 68-93
+thesarvo-3/src/guide/tree/TreeEditor.test.tsx
+  s_bec7aeac916bc2::t_34d612c144058f 9,64-73
+  s_bec7aeac916bc2::t_a378d71e46fd03 74
+thesarvo-3/src/guide/save/moveTree.ts
+  s_bec7aeac916bc2::t_3de08e42aec1e9 8
+  s_bec7aeac916bc2::t_701be16f822c88 48-49,53
+  s_bec7aeac916bc2::t_7c3dae5a103265 22-23
+  s_bec7aeac916bc2::t_06e1c77d95caa3 82-85
+  s_bec7aeac916bc2::t_2de6ba4e15c17b 92
+thesarvo-3/src/guide/tree/TreeEditor.tsx
+  s_bec7aeac916bc2::t_b2efd2d069014e 3
+  s_bec7aeac916bc2::t_d8210a36a15d8e 5
+  s_bec7aeac916bc2::t_3bf72c419360ae 82-86
+  s_bec7aeac916bc2::t_bbeb3656b97068 169-173
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "92ea3faf276ea09515580f2699653e82f1723e0f",
+  "prompts": {},
+  "sessions": {
+    "s_bec7aeac916bc2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "75c69653-dbd6-469c-9011-4b7a9e749c1d",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
