@@ -1,0 +1,25 @@
+thesarvo-3/src/guide/tree/TreeEditor.tsx
+  s_bec7aeac916bc2::t_57b3d548489d96 152
+  s_bec7aeac916bc2::t_8b2226b6522286 165
+  s_bec7aeac916bc2::t_8428dcfd24216c 48-50
+  s_bec7aeac916bc2::t_52b383f5bc8b75 164,166-168
+thesarvo-3/src/routes/g.tree.tsx
+  s_bec7aeac916bc2::t_93d87b1cbf5b67 11-12
+  s_bec7aeac916bc2::t_52b383f5bc8b75 5,13-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "59e82b7d4dbb9a24b143c25f5b4094f17f07cae1",
+  "prompts": {},
+  "sessions": {
+    "s_bec7aeac916bc2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "75c69653-dbd6-469c-9011-4b7a9e749c1d",
+        "model": "unknown"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
