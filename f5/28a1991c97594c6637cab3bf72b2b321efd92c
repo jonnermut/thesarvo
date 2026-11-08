@@ -1,0 +1,19 @@
+thesarvo-3/src/guide/tree/TreeEditor.test.tsx
+  s_bec7aeac916bc2::t_f426fcadb838eb 7,39,42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f528a1991c97594c6637cab3bf72b2b321efd92c",
+  "prompts": {},
+  "sessions": {
+    "s_bec7aeac916bc2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "75c69653-dbd6-469c-9011-4b7a9e749c1d",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
