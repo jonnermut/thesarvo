@@ -45,7 +45,9 @@ export default function TreeEditor({ selected }: { selected?: string }) {
       setOpen(new Set([r.value.index.id, ...(selected ? (ancestorsOf(r.value.index, selected) ?? []) : [])]))
     })
   }, [selected])
-  useEffect(() => row.current?.scrollIntoView({ block: 'center' }), [index === undefined, current])
+  useEffect(() => {
+    row.current?.scrollIntoView({ block: 'center' })
+  }, [index === undefined, current])
 
   const paths = useMemo(() => (index ? pathsOf(index) : new Map<string, string>()), [index])
 
@@ -147,7 +149,7 @@ export default function TreeEditor({ selected }: { selected?: string }) {
           ) : (
             <span className="min-w-0 flex-1 cursor-grab truncate py-1.5 pr-2 text-sm" onDoubleClick={() => !busy && setRenaming(node.id)}>
               {node.title}
-              <span className="ml-2 text-xs text-muted">/{paths.get(node.id)}</span>
+              <span className="block truncate text-xs text-muted sm:ml-2 sm:inline">{paths.has(node.id) ? `/${paths.get(node.id)}` : 'not on the site'}</span>
             </span>
           )}
           {here && !top && renaming !== node.id && (
@@ -159,9 +161,11 @@ export default function TreeEditor({ selected }: { selected?: string }) {
               <button type="button" className={BUTTON} disabled={busy || !place('in')} onClick={() => move(node.id, place('in'))} aria-label="Move in, under the page above" title="In, under the page above">→</button>
             </span>
           )}
-          <Link to="/g/$" params={{ _splat: paths.get(node.id) ?? '' }} className="shrink-0 px-2 text-xs text-link hover:underline" aria-label={`Open ${node.title}`}>
-            Open
-          </Link>
+          {paths.has(node.id) && (
+            <Link {...(top ? { to: '/g' } : { to: '/g/$', params: { _splat: paths.get(node.id) ?? '' } })} className={`shrink-0 px-2 text-xs text-link hover:underline ${here ? 'hidden sm:block' : ''}`} aria-label={`Open ${node.title}`}>
+              Open
+            </Link>
+          )}
         </div>
         {isOpen && node.children.length > 0 && (
           <ul>

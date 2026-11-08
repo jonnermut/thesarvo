@@ -2,12 +2,16 @@ import { ClientOnly, createFileRoute } from '@tanstack/react-router'
 import { lazy, Suspense } from 'react'
 import { RequireSignIn } from '#/auth/RequireSignIn'
 import { useUser } from '#/auth/session'
+import { fetchPage } from '#/guide/server'
 
 // Its own chunk: readers never download it.
 const TreeEditor = lazy(() => import('#/guide/tree/TreeEditor'))
 
 export const Route = createFileRoute('/g/tree')({
-  validateSearch: (search: Record<string, unknown>): { page?: string } => (typeof search.page === 'string' && /^\d+$/.test(search.page) ? { page: search.page } : {}),
+  // The router parses the address's JSON, so ?page=168 arrives as a number.
+  validateSearch: (search: Record<string, unknown>): { page?: string } => (typeof search.page !== 'object' && /^\d+$/.test(String(search.page)) ? { page: String(search.page) } : {}),
+  // The sidebar's tree.
+  loader: async () => (await fetchPage(''))!,
   head: () => ({ meta: [{ title: 'Arrange pages · thesarvo' }, { name: 'robots', content: 'noindex' }] }),
   component: TreePage,
 })
