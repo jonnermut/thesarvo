@@ -1,5 +1,6 @@
 import { Link, useMatch } from '@tanstack/react-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { inApp } from '#/app/bridge'
 import { signIn, useUser } from '#/auth/session'
 import type { PageMode } from '#/routes/g.$'
 import { rememberPlace } from '#/guide/view/place'
@@ -8,7 +9,7 @@ import { AddPageDialog } from './AddPageDialog'
 import { DeletePageDialog } from './DeletePageDialog'
 import { useEscape } from './overlay'
 
-/** One thing to do with the page on screen. Move will join History here. */
+/** One thing to do with the page on screen. */
 type Action = { label: string; hint: string; mode: PageMode }
 
 /** What the page menu offers, given what the address shows now. */
@@ -51,6 +52,8 @@ export function PageMenu() {
   const canAdd = !!user && !match.loaderData.node.private && !mode.edit
   // Admins only (the server checks too), and never the top of the tree.
   const canDelete = !!user?.admin && !mode.edit && match.loaderData.trail.length > 0
+  // Admins only (the API checks too), and on the web only: the apps have their own menus.
+  const canArrange = !!user?.admin && !mode.edit && !inApp()
   const border = 'border border-white/40 text-sm font-medium text-white hover:bg-white/10'
 
   return (
@@ -114,6 +117,12 @@ export function PageMenu() {
               <div className="font-medium">Add a page here</div>
               <div className="text-xs text-muted">A new page under this one</div>
             </button>
+          )}
+          {canArrange && (
+            <Link role="menuitem" to="/g/tree" search={{ page: match.loaderData.node.id }} rel="nofollow" onClick={close} className={ITEM}>
+              <div className="font-medium">Rename or move</div>
+              <div className="text-xs text-muted">Admins only. Arrange the pages in the tree</div>
+            </Link>
           )}
           {canDelete && (
             <button type="button" role="menuitem" className={ITEM} onClick={() => { close(); setDeleting(true) }}>

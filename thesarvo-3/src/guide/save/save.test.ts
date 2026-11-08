@@ -122,7 +122,7 @@ describe('GitHubRepo', () => {
       { data: { repository: { ref: { target: { oid: 'abc', index: { object: { text: JSON.stringify(tree), isTruncated: false } } } } } } },
       { data: { createCommitOnBranch: { commit: { oid: 'def' } } } },
     ])
-    expect(await repo.readIndex()).toEqual({ head: 'abc', index: tree })
+    expect(await repo.readIndex()).toEqual({ head: 'abc', index: tree, moved: {} })
     const message = { headline: 'h', body: 'b' }
     expect(await repo.commitPage({ head: 'abc', index: tree, id: '9000000002', content: { guide: guide(header) }, history: [], message })).toBe('def')
     expect(calls[1].body).toMatchObject({

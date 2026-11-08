@@ -1,10 +1,10 @@
 import { ClientOnly, createFileRoute, notFound, useLocation, useNavigate } from '@tanstack/react-router'
-import { lazy, Suspense, useEffect } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { RequireSignIn } from '#/auth/RequireSignIn'
 import { offerPageEdit } from '#/app/bridge'
 import { signIn, useUser } from '#/auth/session'
 import { Breadcrumbs } from '#/components/Breadcrumbs'
-import { fetchGuide, fetchPage, fetchPageBody } from '#/guide/server'
+import { fetchGuide, fetchPage, fetchPageBody, movedTo } from '#/guide/server'
 import { ContentsView, contentsTotals } from '#/guide/view/ContentsView'
 import { useJustSaved } from '#/guide/justSaved'
 import { addRecent } from '#/guide/recent'
@@ -51,6 +51,15 @@ export const Route = createFileRoute('/g/$')({
 /** A path that is not in the tree: for someone signed out it may be a private page, which only shows once they sign in. */
 function NotFound() {
   const user = useUser()
+  const navigate = useNavigate()
+  const pathname = useLocation({ select: (l) => l.pathname })
+  const [gone, setGone] = useState(false)
+  // A page that was renamed or moved keeps its old address (`moved.json`, old path to page id): go to where it is now.
+  useEffect(() => {
+    const old = decodeURIComponent(pathname).replace(/^\/g\//, '').replace(/\/$/, '')
+    void movedTo(old).then((path) => (path === null ? setGone(true) : navigate({ to: '/g/$', params: { _splat: path }, hash: location.hash.slice(1), replace: true })))
+  }, [pathname, navigate])
+  if (!gone) return <div className="p-8 text-muted">Looking for the page…</div>
   return (
     <div className="p-8">
       <p>Page not found.</p>

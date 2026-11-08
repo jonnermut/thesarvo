@@ -9,7 +9,7 @@ const jon = { sub: 's1', email: 'jon@example.com', name: 'Jon', groups: [] }
 class MemoryRepo implements PageRepo {
   commits: Parameters<PageRepo['commitPage']>[0][] = []
   constructor(public index: StoredIndexNode, public staleOnce = false) {}
-  readIndex = () => Promise.resolve({ head: `c${this.commits.length}`, index: this.index })
+  readIndex = () => Promise.resolve({ head: `c${this.commits.length}`, index: this.index, moved: {} })
   commitPage = (c: Parameters<PageRepo['commitPage']>[0]) => {
     if (this.staleOnce) {
       this.staleOnce = false

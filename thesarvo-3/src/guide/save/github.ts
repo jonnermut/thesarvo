@@ -4,7 +4,8 @@ import { formatJson } from '#/guide/content/syncFeed'
 import { ensureIds } from './changes'
 import type { HistoryEntry } from './history'
 import type { StoredIndexNode } from '#/guide/content/syncFeed'
-import { bodyPath, guidePath, historyPath, indexPath } from './repo'
+import { bodyPath, guidePath, historyPath, indexPath, movedPath } from './repo'
+import type { Moved } from './treeOps'
 import type { BodyRepo, Commit, GuideRepo, PageRepo, Stored, StoredBody } from './repo'
 
 const API = 'https://api.github.com'
@@ -50,9 +51,10 @@ const READ = `query($owner: String!, $name: String!, $ref: String!, $guide: Stri
   } } } }
 }`
 
-const READ_INDEX = `query($owner: String!, $name: String!, $ref: String!, $index: String!) {
+const READ_INDEX = `query($owner: String!, $name: String!, $ref: String!, $index: String!, $moved: String!) {
   repository(owner: $owner, name: $name) { ref(qualifiedName: $ref) { target { oid ... on Commit {
     index: file(path: $index) { object { ... on Blob { text isTruncated } } }
+    moved: file(path: $moved) { object { ... on Blob { text isTruncated } } }
   } } } }
 }`
 
@@ -127,15 +129,16 @@ export class GitHubRepo implements GuideRepo, PageRepo, BodyRepo {
     return res.text()
   }
 
-  async readIndex(): Promise<{ head: string; index: StoredIndexNode }> {
-    const { data, errors } = await this.graphql<{ repository: { ref: { target: { oid: string; index: { object: Blob } | null } } | null } | null }>(READ_INDEX, {
-      owner: this.repo.split('/')[0], name: this.repo.split('/')[1], ref: `refs/heads/${this.branch}`, index: indexPath,
+  async readIndex(): Promise<{ head: string; index: StoredIndexNode; moved: Moved }> {
+    const { data, errors } = await this.graphql<{ repository: { ref: { target: { oid: string; index: { object: Blob } | null; moved: { object: Blob } | null } } | null } | null }>(READ_INDEX, {
+      owner: this.repo.split('/')[0], name: this.repo.split('/')[1], ref: `refs/heads/${this.branch}`, index: indexPath, moved: movedPath,
     })
     const target = data?.repository?.ref?.target
     if (!target) throw new Error(`GitHub: ${errors?.[0]?.message ?? `no branch ${this.branch}`}`)
     const text = await this.text(target.index, indexPath, target.oid)
     if (text === null) throw new Error('GitHub: the content repo has no index.json')
-    return { head: target.oid, index: JSON.parse(text) as StoredIndexNode }
+    const moved = await this.text(target.moved, movedPath, target.oid)
+    return { head: target.oid, index: JSON.parse(text) as StoredIndexNode, moved: moved ? (JSON.parse(moved) as Moved) : {} }
   }
 
   commit(c: Commit): Promise<string | null> {
@@ -147,8 +150,8 @@ export class GitHubRepo implements GuideRepo, PageRepo, BodyRepo {
     return this.write(head, [[indexPath, index], page, [historyPath(id), history]], message)
   }
 
-  commitIndex({ head, index, message }: Parameters<PageRepo['commitIndex']>[0]): Promise<string | null> {
-    return this.write(head, [[indexPath, index]], message)
+  commitIndex({ head, index, moved, message }: Parameters<PageRepo['commitIndex']>[0]): Promise<string | null> {
+    return this.write(head, moved ? [[indexPath, index], [movedPath, moved]] : [[indexPath, index]], message)
   }
 
   private async write(head: string, files: [string, unknown][], message: Commit['message']): Promise<string | null> {

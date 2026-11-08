@@ -18,10 +18,12 @@ import { Route as GSplatRouteImport } from './routes/g.$'
 import { Route as GContentRouteImport } from './routes/g.content'
 import { Route as GForumRouteImport } from './routes/g.forum'
 import { Route as GSearchRouteImport } from './routes/g.search'
+import { Route as GTreeRouteImport } from './routes/g.tree'
 import { Route as GUploadRouteImport } from './routes/g.upload'
 import { Route as GApiAdminRouteImport } from './routes/g.api.admin'
 import { Route as GApiAppPrivateManifestRouteImport } from './routes/g.api.app-private-manifest'
 import { Route as GApiAvatarRouteImport } from './routes/g.api.avatar'
+import { Route as GApiChangeTreeRouteImport } from './routes/g.api.change-tree'
 import { Route as GApiCreatePageRouteImport } from './routes/g.api.create-page'
 import { Route as GApiDeleteAccountRouteImport } from './routes/g.api.delete-account'
 import { Route as GApiDeletePageRouteImport } from './routes/g.api.delete-page'
@@ -82,6 +84,11 @@ const GSearchRoute = GSearchRouteImport.update({
   path: '/g/search',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GTreeRoute = GTreeRouteImport.update({
+  id: '/g/tree',
+  path: '/g/tree',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GUploadRoute = GUploadRouteImport.update({
   id: '/g/upload',
   path: '/g/upload',
@@ -100,6 +107,11 @@ const GApiAppPrivateManifestRoute = GApiAppPrivateManifestRouteImport.update({
 const GApiAvatarRoute = GApiAvatarRouteImport.update({
   id: '/g/api/avatar',
   path: '/g/api/avatar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GApiChangeTreeRoute = GApiChangeTreeRouteImport.update({
+  id: '/g/api/change-tree',
+  path: '/g/api/change-tree',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GApiCreatePageRoute = GApiCreatePageRouteImport.update({
@@ -181,12 +193,14 @@ export interface FileRoutesByFullPath {
   '/g/content': typeof GContentRoute
   '/g/forum': typeof GForumRoute
   '/g/search': typeof GSearchRoute
+  '/g/tree': typeof GTreeRoute
   '/g/upload': typeof GUploadRoute
   '/account/': typeof AccountIndexRoute
   '/g/': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
   '/g/api/app-private-manifest': typeof GApiAppPrivateManifestRoute
   '/g/api/avatar': typeof GApiAvatarRoute
+  '/g/api/change-tree': typeof GApiChangeTreeRoute
   '/g/api/create-page': typeof GApiCreatePageRoute
   '/g/api/delete-account': typeof GApiDeleteAccountRoute
   '/g/api/delete-page': typeof GApiDeletePageRoute
@@ -210,12 +224,14 @@ export interface FileRoutesByTo {
   '/g/content': typeof GContentRoute
   '/g/forum': typeof GForumRoute
   '/g/search': typeof GSearchRoute
+  '/g/tree': typeof GTreeRoute
   '/g/upload': typeof GUploadRoute
   '/account': typeof AccountIndexRoute
   '/g': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
   '/g/api/app-private-manifest': typeof GApiAppPrivateManifestRoute
   '/g/api/avatar': typeof GApiAvatarRoute
+  '/g/api/change-tree': typeof GApiChangeTreeRoute
   '/g/api/create-page': typeof GApiCreatePageRoute
   '/g/api/delete-account': typeof GApiDeleteAccountRoute
   '/g/api/delete-page': typeof GApiDeletePageRoute
@@ -240,12 +256,14 @@ export interface FileRoutesById {
   '/g/content': typeof GContentRoute
   '/g/forum': typeof GForumRoute
   '/g/search': typeof GSearchRoute
+  '/g/tree': typeof GTreeRoute
   '/g/upload': typeof GUploadRoute
   '/account/': typeof AccountIndexRoute
   '/g/': typeof GIndexRoute
   '/g/api/admin': typeof GApiAdminRoute
   '/g/api/app-private-manifest': typeof GApiAppPrivateManifestRoute
   '/g/api/avatar': typeof GApiAvatarRoute
+  '/g/api/change-tree': typeof GApiChangeTreeRoute
   '/g/api/create-page': typeof GApiCreatePageRoute
   '/g/api/delete-account': typeof GApiDeleteAccountRoute
   '/g/api/delete-page': typeof GApiDeletePageRoute
@@ -271,12 +289,14 @@ export interface FileRouteTypes {
     | '/g/content'
     | '/g/forum'
     | '/g/search'
+    | '/g/tree'
     | '/g/upload'
     | '/account/'
     | '/g/'
     | '/g/api/admin'
     | '/g/api/app-private-manifest'
     | '/g/api/avatar'
+    | '/g/api/change-tree'
     | '/g/api/create-page'
     | '/g/api/delete-account'
     | '/g/api/delete-page'
@@ -300,12 +320,14 @@ export interface FileRouteTypes {
     | '/g/content'
     | '/g/forum'
     | '/g/search'
+    | '/g/tree'
     | '/g/upload'
     | '/account'
     | '/g'
     | '/g/api/admin'
     | '/g/api/app-private-manifest'
     | '/g/api/avatar'
+    | '/g/api/change-tree'
     | '/g/api/create-page'
     | '/g/api/delete-account'
     | '/g/api/delete-page'
@@ -329,12 +351,14 @@ export interface FileRouteTypes {
     | '/g/content'
     | '/g/forum'
     | '/g/search'
+    | '/g/tree'
     | '/g/upload'
     | '/account/'
     | '/g/'
     | '/g/api/admin'
     | '/g/api/app-private-manifest'
     | '/g/api/avatar'
+    | '/g/api/change-tree'
     | '/g/api/create-page'
     | '/g/api/delete-account'
     | '/g/api/delete-page'
@@ -359,12 +383,14 @@ export interface RootRouteChildren {
   GContentRoute: typeof GContentRoute
   GForumRoute: typeof GForumRoute
   GSearchRoute: typeof GSearchRoute
+  GTreeRoute: typeof GTreeRoute
   GUploadRoute: typeof GUploadRoute
   AccountIndexRoute: typeof AccountIndexRoute
   GIndexRoute: typeof GIndexRoute
   GApiAdminRoute: typeof GApiAdminRoute
   GApiAppPrivateManifestRoute: typeof GApiAppPrivateManifestRoute
   GApiAvatarRoute: typeof GApiAvatarRoute
+  GApiChangeTreeRoute: typeof GApiChangeTreeRoute
   GApiCreatePageRoute: typeof GApiCreatePageRoute
   GApiDeleteAccountRoute: typeof GApiDeleteAccountRoute
   GApiDeletePageRoute: typeof GApiDeletePageRoute
@@ -446,6 +472,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GSearchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/g/tree': {
+      id: '/g/tree'
+      path: '/g/tree'
+      fullPath: '/g/tree'
+      preLoaderRoute: typeof GTreeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/g/upload': {
       id: '/g/upload'
       path: '/g/upload'
@@ -472,6 +505,13 @@ declare module '@tanstack/react-router' {
       path: '/g/api/avatar'
       fullPath: '/g/api/avatar'
       preLoaderRoute: typeof GApiAvatarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/g/api/change-tree': {
+      id: '/g/api/change-tree'
+      path: '/g/api/change-tree'
+      fullPath: '/g/api/change-tree'
+      preLoaderRoute: typeof GApiChangeTreeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/g/api/create-page': {
@@ -583,12 +623,14 @@ const rootRouteChildren: RootRouteChildren = {
   GContentRoute: GContentRoute,
   GForumRoute: GForumRoute,
   GSearchRoute: GSearchRoute,
+  GTreeRoute: GTreeRoute,
   GUploadRoute: GUploadRoute,
   AccountIndexRoute: AccountIndexRoute,
   GIndexRoute: GIndexRoute,
   GApiAdminRoute: GApiAdminRoute,
   GApiAppPrivateManifestRoute: GApiAppPrivateManifestRoute,
   GApiAvatarRoute: GApiAvatarRoute,
+  GApiChangeTreeRoute: GApiChangeTreeRoute,
   GApiCreatePageRoute: GApiCreatePageRoute,
   GApiDeleteAccountRoute: GApiDeleteAccountRoute,
   GApiDeletePageRoute: GApiDeletePageRoute,
