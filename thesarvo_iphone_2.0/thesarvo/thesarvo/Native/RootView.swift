@@ -159,9 +159,13 @@ struct PageView: View {
                         .accessibilityLabel("Contents")
                 }
                 Menu {
+                    Button { app.openForum() } label: { Label("Forum", systemImage: "bubble.left.and.bubble.right") }
                     ShareLink(item: shareURL) { Label("Share", systemImage: "square.and.arrow.up") }
+                    if !app.isEditing {
+                        Button { app.addPage() } label: { Label("Add a page here", systemImage: "plus.square") }
+                    }
                     if app.canEditPage {
-                        Button { app.toggleEdit() } label: { Label(app.isEditing ? "Stop editing" : "Edit this guide", systemImage: app.isEditing ? "eye" : "pencil") }
+                        Button { app.toggleEdit() } label: { Label(app.isEditing ? "Stop editing" : app.editLabel, systemImage: app.isEditing ? "eye" : "pencil") }
                     }
                 } label: { Image(systemName: "ellipsis.circle").foregroundStyle(.white) }
                 .accessibilityLabel("Page options")

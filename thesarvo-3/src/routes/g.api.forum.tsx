@@ -9,8 +9,8 @@ const json = (body: unknown, status = 200) => Response.json(body, { status, head
 
 /**
  * The forum, for signed-in users only. `GET /g/api/forum` lists the threads they may read; `?thread=<id>` gives one with its comments.
- * `POST` with `{ action: 'thread', title, text }`, `{ action: 'comment', thread, parent?, text }` or (admins) `{ action: 'hide', thread, comment?,
- * hidden }` or (the author) `{ action: 'edit', thread, comment?, title?, text }` or `{ action: 'remove', thread, comment? }` (the author; an admin may remove anyone's) or (admins) `{ action: 'notice', thread, until }` (an ISO time, or null to end it) answers with the thread. 400 for anything wrong (never 404: CloudFront turns those into the home page).
+ * `POST` with `{ action: 'thread', id?, title, html | text }`, `{ action: 'comment', thread, parent?, html | text }` or (admins) `{ action: 'hide', thread, comment?,
+ * hidden }` or (the author) `{ action: 'edit', thread, comment?, title?, html | text }` or `{ action: 'remove', thread, comment? }` (the author; an admin may remove anyone's) or (admins) `{ action: 'notice', thread, until }` (an ISO time, or null to end it) answers with the thread (pictures linked, as in a read). 400 for anything wrong (never 404: CloudFront turns those into the home page).
  */
 export const Route = createFileRoute('/g/api/forum')({
   server: {
@@ -34,12 +34,12 @@ export const Route = createFileRoute('/g/api/forum')({
         const viewer = await viewerOf(editor)
         const body = (await request.json().catch(() => null)) as Record<string, unknown> | null
         try {
-          if (body?.action === 'thread') return json(await createThread(store, viewer, body))
-          if (body?.action === 'comment') return json(await addComment(store, viewer, body))
-          if (body?.action === 'edit') return json(await editPost(store, viewer, body))
-          if (body?.action === 'remove') return json(await removePost(store, viewer, body))
-          if (body?.action === 'hide') return json(await setHidden(store, viewer, body))
-          if (body?.action === 'notice') return json(await setNotice(store, viewer, body))
+          if (body?.action === 'thread') return json(withFileLinks(await createThread(store, viewer, body)))
+          if (body?.action === 'comment') return json(withFileLinks(await addComment(store, viewer, body)))
+          if (body?.action === 'edit') return json(withFileLinks(await editPost(store, viewer, body)))
+          if (body?.action === 'remove') return json(withFileLinks(await removePost(store, viewer, body)))
+          if (body?.action === 'hide') return json(withFileLinks(await setHidden(store, viewer, body)))
+          if (body?.action === 'notice') return json(withFileLinks(await setNotice(store, viewer, body)))
           return json({ error: 'Unknown action' }, 400)
         } catch (e) {
           if (e instanceof Refused) return json({ error: e.message }, 400)

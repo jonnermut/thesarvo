@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { getContentSource } from '#/guide/content'
-import { MAX_IMAGE_BYTES } from '#/guide/content/paths'
+import { freeName, MAX_IMAGE_BYTES, uploadName } from '#/guide/content/paths'
+import { mkdir, readdir, writeFile } from 'node:fs/promises'
 import { requireEditor } from '#/auth/verifyToken'
 
 const json = (body: unknown, status = 200) => Response.json(body, { status })
@@ -19,6 +20,17 @@ export const Route = createFileRoute('/g/upload')({
         const file = (await request.formData()).get('file')
         if (!(file instanceof File)) return json({ error: 'No file' }, 400)
         if (file.size > MAX_IMAGE_BYTES) return json({ error: 'Image is over 25 MB' }, 413)
+        const forum = /^forum:([\w-]{1,40})$/.exec(guide)?.[1]
+        if (forum) {
+          // Development stand-in for the bucket's private/forum-images/.
+          const name = uploadName(file.name)
+          if (!name) return json({ error: 'Not a supported image (JPEG, PNG or GIF)' }, 400)
+          const dir = `.saves/private/forum-images/${forum}`
+          await mkdir(dir, { recursive: true })
+          const stored = freeName(name, new Set((await readdir(dir)).map((n) => n.toLowerCase())))
+          await writeFile(`${dir}/${stored}`, new Uint8Array(await file.arrayBuffer()))
+          return json({ name: stored })
+        }
         try {
           const name = await getContentSource().saveImage(guide, file.name, new Uint8Array(await file.arrayBuffer()))
           return json({ name })

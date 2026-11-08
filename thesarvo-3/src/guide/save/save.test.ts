@@ -67,7 +67,7 @@ describe('saveGuide', () => {
 describe('LocalRepo', () => {
   it('reads from the content source until saved, and refuses a stale head', async () => {
     const dir = await mkdtemp(path.join(tmpdir(), 'saves-'))
-    const source = { getGuide: (id: string) => Promise.resolve(id === '7' ? guide(header, text('', 'no id')) : null), getIndex: () => Promise.reject(new Error('no index')) }
+    const source = { getGuide: (id: string) => Promise.resolve(id === '7' ? guide(header, text('', 'no id')) : null), getIndex: () => Promise.reject(new Error('no index')), getPageBody: (id: string) => Promise.resolve(id === '8' ? '<p>from the source</p>' : null) }
     const repo = new LocalRepo(dir, () => source)
     const first = await repo.read('7')
     expect(first?.guide.nodes[1]).toEqual(text('1', 'no id'))
@@ -124,7 +124,7 @@ describe('GitHubRepo', () => {
     ])
     expect(await repo.readIndex()).toEqual({ head: 'abc', index: tree })
     const message = { headline: 'h', body: 'b' }
-    expect(await repo.commitPage({ head: 'abc', index: tree, id: '9000000002', guide: guide(header), history: [], message })).toBe('def')
+    expect(await repo.commitPage({ head: 'abc', index: tree, id: '9000000002', content: { guide: guide(header) }, history: [], message })).toBe('def')
     expect(calls[1].body).toMatchObject({
       variables: { input: { expectedHeadOid: 'abc', fileChanges: { additions: [{ path: 'index.json' }, { path: 'pages/9000000002/guide.json' }, { path: 'pages/9000000002/history.json' }] } } },
     })

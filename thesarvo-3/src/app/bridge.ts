@@ -7,7 +7,7 @@ import { GUIDE_PREFIX } from '#/guide/content/paths'
  */
 
 type Handler = { postMessage: (message: unknown) => void }
-type BridgeWindow = Window & typeof globalThis & { webkit?: { messageHandlers?: { thesarvo?: Handler } }; thesarvoHost?: { postMessage: (message: string) => void }; thesarvoBridge?: { reply: (id: number, status: number, body: string) => void }; thesarvoContents?: () => void; thesarvoMapPoints?: () => void }
+type BridgeWindow = Window & typeof globalThis & { webkit?: { messageHandlers?: { thesarvo?: Handler } }; thesarvoHost?: { postMessage: (message: string) => void }; thesarvoBridge?: { reply: (id: number, status: number, body: string) => void }; thesarvoContents?: () => void; thesarvoMapPoints?: () => void; thesarvoAddPage?: () => void }
 
 type Reply = { status: number; body: string }
 
@@ -101,6 +101,23 @@ export function offerContents(open: () => void, win: BridgeWindow = window): () 
   return () => {
     if (win.thesarvoContents === open) delete win.thesarvoContents
     handler.postMessage({ type: 'contentsAvailable', available: false })
+  }
+}
+
+/** Tells the app the page on screen is a prose page the rich text editor can open, so its page menu offers "Edit this page" (guides it already knows). Returns a function that undoes it. */
+export function offerPageEdit(win: BridgeWindow = window): () => void {
+  const handler = nativeHandler(win)
+  if (!handler) return () => {}
+  handler.postMessage({ type: 'pageEditable', available: true })
+  return () => handler.postMessage({ type: 'pageEditable', available: false })
+}
+
+/** Lets the app's menu open the page's Add a page dialog (`window.thesarvoAddPage()`). Returns a function that undoes it. */
+export function offerAddPage(open: () => void, win: BridgeWindow = window): () => void {
+  if (!nativeHandler(win)) return () => {}
+  win.thesarvoAddPage = open
+  return () => {
+    if (win.thesarvoAddPage === open) delete win.thesarvoAddPage
   }
 }
 

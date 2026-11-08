@@ -1,5 +1,6 @@
 import type { Gps, GuideNode, ImageTopo } from '#/guide/model/types'
 import { headerFields } from '#/guide/save/history'
+import { isRichCls } from '#/guide/view/richText'
 
 /** A run of words both versions share, or that only the new (add) or old (del) one has. */
 export type Piece = { op: 'same' | 'add' | 'del'; text: string }
@@ -60,17 +61,56 @@ export function wordDiff(before: string, after: string): Piece[] {
   return pieces
 }
 
-/** Guide text as a reader sees it: line breaks kept, tags dropped, the usual entities decoded. */
-export function readable(html: string): string {
-  const entities: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', '#39': "'" }
-  return html
-    .replace(/<br\s*\/?>|<\/(p|div|li|h\d)>/gi, '\n')
-    .replace(/<[^>]*>/g, '')
+const entities: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', '#39': "'" }
+
+/** Decoded entities and tidy spacing: what is left once tags are gone. */
+const tidy = (text: string) =>
+  text
     .replace(/&(\w+|#39);/g, (m, name: string) => entities[name] ?? m)
     .replace(/[ \t]+/g, ' ')
     .replace(/ ?\n ?/g, '\n')
     .replace(/\n{3,}/g, '\n\n')
     .trim()
+
+/** Guide text as a reader sees it: line breaks kept, tags dropped, the usual entities decoded. */
+export function readable(html: string): string {
+  return tidy(html.replace(/<br\s*\/?>|<\/(p|div|li|h\d)>/gi, '\n').replace(/<[^>]*>/g, ''))
+}
+
+/** Formatted guide text with its formatting spelled out, so a change that only bolds a word, adds a link or makes a list still shows in the history: `**bold**`, `*italic*`, `[words](address)`, `• ` and `1. ` list items. */
+export function marked(html: string): string {
+  const lists: { ordered: boolean; n: number }[] = []
+  const links: string[] = []
+  const text = html.replace(/<(\/?)(strong|b|em|i|ul|ol|li|p|br|a)\b([^>]*)>|<[^>]*>/gi, (_m, close: string | undefined, tag: string | undefined, attrs: string | undefined) => {
+    if (!tag) return ''
+    switch (tag.toLowerCase()) {
+      case 'strong':
+      case 'b':
+        return '**'
+      case 'em':
+      case 'i':
+        return '*'
+      case 'br':
+        return '\n'
+      case 'p':
+        return close ? '\n' : ''
+      case 'ul':
+      case 'ol':
+        if (close) lists.pop()
+        else lists.push({ ordered: tag.toLowerCase() === 'ol', n: Number(/\bstart="(\d+)"/.exec(attrs ?? '')?.[1] ?? 1) })
+        return '\n'
+      case 'li': {
+        if (close) return '\n'
+        const list = lists.at(-1)
+        return list?.ordered ? `${list.n++}. ` : '• '
+      }
+      default: // a
+        if (close) return `](${links.pop() ?? ''})`
+        links.push(/\b(?:href|data-page|data-file)="([^"]*)"/.exec(attrs ?? '')?.[1] ?? '')
+        return '['
+    }
+  })
+  return tidy(text)
 }
 
 /** One field of a block that differs: `long` ones (prose) show word by word, short ones as old → new. */
@@ -109,6 +149,8 @@ const topoFields = (n: ImageTopo): Field[] => [
   { field: 'Drawing', value: JSON.stringify([n.paths.map((p) => [p.d, p.linkedTo, p.lineStyle, p.labelText, p.arrow]), n.rects, n.legendX, n.legendY, n.width, n.height]) },
 ]
 
+const STYLES: Record<string, string> = { rich: 'Formatted text', note: 'Note', warning: 'Warning' }
+
 function fields(n: GuideNode): Field[] {
   switch (n.type) {
     case 'climb':
@@ -117,13 +159,14 @@ function fields(n: GuideNode): Field[] {
     case 'header':
       return headerFields.map(([k, words]) => {
         const v = n[k]
-        const value = typeof v !== 'string' ? '' : k === 'autonumber' ? (v === 'true' ? 'on' : '') : readable(v)
+        const text = n.rich?.some((f) => f === k) ? marked : readable
+        const value = k === 'notices' ? (n.notices ?? []).map((x) => `${x.kind === 'warning' ? 'Warning' : 'Note'}: ${marked(x.html)}`).join('\n\n') : typeof v !== 'string' ? '' : k === 'autonumber' ? (v === 'true' ? 'on' : '') : text(v)
         return { field: capital(words), value, long: true }
       })
     case 'text':
       return [
-        { field: 'Style', value: n.cls.startsWith('heading') ? `Heading ${n.cls.slice(7) || ''}`.trim() : n.cls === 'text' ? '' : n.cls },
-        { field: 'Text', value: readable(n.text), long: true },
+        { field: 'Style', value: n.cls.startsWith('heading') ? `Heading ${n.cls.slice(7) || ''}`.trim() : n.cls === 'text' ? '' : (STYLES[n.cls] ?? n.cls) },
+        { field: 'Text', value: (isRichCls(n.cls) ? marked : readable)(n.text), long: true },
       ]
     case 'image':
       return topoFields(n)

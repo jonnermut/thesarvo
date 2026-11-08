@@ -45,7 +45,8 @@ access. Groups are roles (`admins` is the admin role); who is in a group is `pri
 - `src/guide/view` read view (topo overlay, climbs, GPS)
 - `src/guide/islands` lazy Leaflet map
 - `src/guide/edit` editor: reducer with undo/redo, topo operations, local drafts, the saver
-- `src/guide/save` saving on the server: per-node merge, edit-session history, validation, the GitHub and local repos
+- `src/rte` the rich text editor (lazy TipTap chunk), the server-side sanitiser, drafts, and the prose page editor
+- `src/guide/save` saving on the server: per-node merge, edit-session history, validation, the GitHub and local repos; `saveBody.ts` saves a prose page's HTML
 - `src/guide/history` the history page (`?history`): word and field diffs, revert and restore worked out from `history.json`
 
 - `src/auth` Cognito sign-in in the browser, token checks on the server, the Confluence user migration

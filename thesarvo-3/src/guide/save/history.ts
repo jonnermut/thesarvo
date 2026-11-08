@@ -64,6 +64,27 @@ export function updateHistory(history: HistoryEntry[], save: SaveInfo): HistoryE
   return at >= 0 ? history.toSpliced(at, 1, entry) : [...history, entry]
 }
 
+/** A prose page's HTML saved: folded into the editor's session entry (its `before` stays the first one), or dropped when the session ended where it began. */
+export function updateBodyHistory(history: HistoryEntry[], save: { session: string; user: HistoryUser; at: string; before: string; after: string; note?: string }): HistoryEntry[] {
+  const at = history.findLastIndex((e) => e.session === save.session && e.user.sub === save.user.sub && e.body)
+  const old = at >= 0 ? history[at] : undefined
+  const before = old?.body?.before ?? save.before
+  const rest = history.filter((_, i) => i !== at)
+  if (before === save.after) return rest
+  const entry: HistoryEntry = {
+    session: save.session,
+    user: { sub: save.user.sub, name: save.user.name || old?.user.name || '', ...((save.user.key || old?.user.key) && { key: save.user.key || old?.user.key }) },
+    start: old?.start ?? save.at,
+    end: save.at,
+    saves: (old?.saves ?? 0) + 1,
+    nodes: {},
+    body: { before, after: save.after },
+    description: 'edited the page',
+    ...((save.note || old?.note) && { note: save.note || old?.note }),
+  }
+  return at >= 0 ? history.toSpliced(at, 1, entry) : [...history, entry]
+}
+
 /** Nodes in both lists, minus the longest run they keep in the same order: the ones that moved. */
 export function movedIds(before: string[], after: string[]): string[] {
   const inAfter = new Set(after)
@@ -136,6 +157,8 @@ export const headerFields: [keyof Header, string][] = [
   ['history', 'the history'],
   ['access', 'the access notes'],
   ['steward', 'the crag steward'],
+  ['stewardEmail', 'the crag steward email'],
+  ['notices', 'the notices'],
   ['camping', 'the camping notes'],
   ['walk', 'the walk'],
   ['sun', 'the sun'],

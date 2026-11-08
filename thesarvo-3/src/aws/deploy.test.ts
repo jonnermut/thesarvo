@@ -12,7 +12,7 @@ it('uploads only what is new or different', () => {
 })
 
 it('removes what a full build no longer has, but keeps old bundles and search files', () => {
-  const remote = [there('g/gone/index.html'), there('g-data/guide/9.json'), there('assets/old.js'), there('g-data/search/old.json'), there('g/a/index.html')]
+  const remote = [there('g/gone/index.html'), there('g-data/guide/9.json'), there('assets/old.js'), there('g-data/search/old.json'), there('g-data/forum-recent.json'), there('g/a/index.html')]
   expect(plan([file('g/a/index.html')], remote, null).remove).toEqual(['g/gone/index.html', 'g-data/guide/9.json'])
 })
 

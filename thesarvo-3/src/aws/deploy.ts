@@ -26,8 +26,8 @@ export const contentType = (key: string) => (TYPES[key.slice(key.lastIndexOf('.'
 /** Hashed bundles and search files never change under one name, so they cache for a year; pages and data are checked every time. */
 export const cacheControl = (key: string) => (key.startsWith('assets/') || key.startsWith('g-data/search/') ? 'public, max-age=31536000, immutable' : 'no-cache')
 
-/** Old bundles and search files are kept so pages built earlier keep working. */
-const kept = (key: string) => key.startsWith('assets/') || key.startsWith('g-data/search/')
+/** Old bundles and search files are kept so pages built earlier keep working; the forum's home feeds are written by the Lambda when a post changes (see forum/store.ts), not by the build. */
+const kept = (key: string) => key.startsWith('assets/') || key.startsWith('g-data/search/') || key.startsWith('g-data/forum-')
 
 /**
  * What to upload (new or different) and what to remove. A full build removes what the build no longer has

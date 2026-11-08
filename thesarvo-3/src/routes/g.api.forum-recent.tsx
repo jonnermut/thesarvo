@@ -4,7 +4,7 @@ import { forumStore } from '#/forum/store'
 
 /**
  * `GET /g/api/forum-recent`: the newest few threads (title, author, time, comment count; none of the text) for the home page,
- * for anyone. Cached for a minute by browsers and CloudFront so the front page costs the Lambda almost nothing.
+ * for anyone. Not called by the home page, which reads the static `g-data/forum-recent.json` (a public page never runs the Lambda); kept for development and older apps.
  */
 export const Route = createFileRoute('/g/api/forum-recent')({
   server: {

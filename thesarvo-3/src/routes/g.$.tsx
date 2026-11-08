@@ -1,6 +1,7 @@
-import { ClientOnly, createFileRoute, notFound, useLocation } from '@tanstack/react-router'
+import { ClientOnly, createFileRoute, notFound, useLocation, useNavigate } from '@tanstack/react-router'
 import { lazy, Suspense, useEffect } from 'react'
 import { RequireSignIn } from '#/auth/RequireSignIn'
+import { offerPageEdit } from '#/app/bridge'
 import { signIn, useUser } from '#/auth/session'
 import { Breadcrumbs } from '#/components/Breadcrumbs'
 import { fetchGuide, fetchPage, fetchPageBody } from '#/guide/server'
@@ -8,6 +9,7 @@ import { ContentsView, contentsTotals } from '#/guide/view/ContentsView'
 import { useJustSaved } from '#/guide/justSaved'
 import { addRecent } from '#/guide/recent'
 import { guideDescription, guideImage, pageDescription, pageHead } from '#/guide/seo'
+import { AppAddPage } from '#/components/AppAddPage'
 import { GuideView } from '#/guide/view/GuideView'
 import { PrevNext } from '#/guide/view/PrevNext'
 import { useFullWidth, WidthToggle, widthClass } from '#/guide/view/width'
@@ -16,6 +18,7 @@ import { WeatherPanel } from '#/weather/WeatherPanel'
 
 // The editor is its own chunk: readers never download it. The history too, until someone opens it.
 const Editor = lazy(() => import('#/guide/edit/Editor'))
+const PageBodyEditor = lazy(() => import('#/rte/PageBodyEditor'))
 const HistoryView = lazy(() => import('#/guide/history/HistoryView'))
 
 /** What the address shows of a page: the page, `?edit` the editor, `?history` its history. */
@@ -42,7 +45,7 @@ export const Route = createFileRoute('/g/$')({
       image: guide ? guideImage(guide) : undefined,
     })
   },
-  component: GuidePage,
+  component: GuidePageWithAdd,
   notFoundComponent: NotFound,
 })
 
@@ -67,16 +70,29 @@ function NotFound() {
   )
 }
 
+function GuidePageWithAdd() {
+  const { node } = Route.useLoaderData()
+  return (
+    <>
+      <GuidePage />
+      {!node.private && <AppAddPage parent={node.id} parentTitle={node.title} />}
+    </>
+  )
+}
+
 function GuidePage() {
   const { node, trail, guide: published, body } = Route.useLoaderData()
   const guide = useJustSaved(published)
   const { edit, history } = Route.useSearch()
   const hash = useLocation({ select: (l) => l.hash })
+  const navigate = useNavigate()
   const full = useFullWidth()
   const width = widthClass(full)
   useEffect(() => {
     if (guide) addRecent({ path: node.path, title: node.title })
   }, [guide, node.path, node.title])
+  const prose = !guide && !!body
+  useEffect(() => (prose ? offerPageEdit() : undefined), [prose])
   if (guide && edit)
     return (
       <ClientOnly fallback={<p className="p-8 text-muted">Loading editor…</p>}>
@@ -84,6 +100,16 @@ function GuidePage() {
         <RequireSignIn what="edit this guide">
           <Suspense fallback={<p className="p-8 text-muted">Loading editor…</p>}>
             <Editor guide={guide} />
+          </Suspense>
+        </RequireSignIn>
+      </ClientOnly>
+    )
+  if (!guide && body && edit)
+    return (
+      <ClientOnly fallback={<p className="p-8 text-muted">Loading editor…</p>}>
+        <RequireSignIn what="edit this page">
+          <Suspense fallback={<p className="p-8 text-muted">Loading editor…</p>}>
+            <PageBodyEditor id={node.id} title={node.title} done={() => void navigate({ to: '/g/$', params: { _splat: node.path }, search: {} })} />
           </Suspense>
         </RequireSignIn>
       </ClientOnly>

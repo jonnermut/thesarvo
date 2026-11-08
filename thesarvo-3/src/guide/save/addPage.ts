@@ -4,13 +4,14 @@ import type { StoredIndexNode } from '#/guide/content/syncFeed'
 import { newNode } from '#/guide/edit/newNodes'
 import type { Guide } from '#/guide/model/types'
 import { diffGuides } from './changes'
-import { updateHistory } from './history'
+import { updateBodyHistory, updateHistory } from './history'
+import type { HistoryEntry } from './history'
 import { editorWho } from './save'
 import type { PageRepo } from './repo'
 import { Invalid, oneOf, str } from './validate'
 
-/** What can be added today. Prose (HTML) pages come with their editor. */
-export const PAGE_KINDS = ['guide'] as const
+/** What can be added: a guide, or a prose (HTML) page. */
+export const PAGE_KINDS = ['guide', 'html'] as const
 export type AddPageRequest = { parent: string; title: string; kind: (typeof PAGE_KINDS)[number] }
 
 export const TITLE_MAX = 80
@@ -54,11 +55,14 @@ export function newGuide(id: string, title: string): Guide {
   return { id, guideStars: '', nodes: [header.type === 'header' ? { ...header, name: title } : header] }
 }
 
+/** A new prose page: one empty paragraph, so the page is not taken for a missing body (an editor that is emptied saves ''). */
+export const EMPTY_BODY = '<p></p>'
+
 export type AddPageResult = { status: 'added'; id: string } | { status: 'missing' }
 
 const ATTEMPTS = 5
 
-/** Adds a page as the last child of `request.parent`: its place in the index, an empty guide and a "created" history entry, in one commit. */
+/** Adds a page as the last child of `request.parent`: its place in the index, an empty guide (or empty prose page) and a "created" history entry, in one commit. */
 export async function addPage(repo: PageRepo, editor: Editor, request: AddPageRequest, now = () => new Date()): Promise<AddPageResult> {
   const who = await editorWho(editor)
   for (let attempt = 1; ; attempt++) {
@@ -66,11 +70,20 @@ export async function addPage(repo: PageRepo, editor: Editor, request: AddPageRe
     const id = nextPageId(index)
     const next = withChild(index, request.parent, { id, title: request.title, children: [] })
     if (!next) return { status: 'missing' }
-    const guide = newGuide(id, request.title)
-    const [entry] = updateHistory([], { session: `created-${id}`, user: who, at: now().toISOString(), changes: diffGuides({ id, guideStars: '', nodes: [] }, guide), guide })
+    const at = now().toISOString()
+    let content: { guide: Guide } | { html: string }
+    let entry: HistoryEntry | undefined
+    if (request.kind === 'html') {
+      content = { html: EMPTY_BODY }
+      ;[entry] = updateBodyHistory([], { session: `created-${id}`, user: who, at, before: '', after: EMPTY_BODY })
+    } else {
+      const guide = newGuide(id, request.title)
+      content = { guide }
+      ;[entry] = updateHistory([], { session: `created-${id}`, user: who, at, changes: diffGuides({ id, guideStars: '', nodes: [] }, guide), guide })
+    }
     const history = entry ? [{ ...entry, description: 'created the page' }] : []
     const message = { headline: `${request.title}: ${who.name} created the page`, body: `Edit-User: ${who.name} <${who.sub}>\nAdd-Page: ${id} under ${request.parent}` }
-    if (await repo.commitPage({ head, index: next, id, guide, history, message })) return { status: 'added', id }
+    if (await repo.commitPage({ head, index: next, id, content, history, message })) return { status: 'added', id }
     if (attempt === ATTEMPTS) throw new Error('The site is busy: too many changes at once')
   }
 }

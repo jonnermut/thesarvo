@@ -69,9 +69,10 @@ export default function Editor({ guide }: { guide: Guide }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== 'z') return
+      // Text boxes and the rich text editors have their own undo.
       if (
         e.target instanceof HTMLElement &&
-        ['INPUT', 'TEXTAREA'].includes(e.target.tagName)
+        (['INPUT', 'TEXTAREA'].includes(e.target.tagName) || e.target.isContentEditable)
       )
         return
       e.preventDefault()

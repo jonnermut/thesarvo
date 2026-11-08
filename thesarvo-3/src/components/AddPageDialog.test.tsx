@@ -14,10 +14,10 @@ afterEach(() => {
 
 const type = (name: string) => fireEvent.change(screen.getByPlaceholderText(/Fossil Cove/), { target: { value: name } })
 
-it('offers guide now and HTML later, and asks for a name', () => {
+it('offers a guide or a text page, and asks for a name', () => {
   render(<AddPageDialog parent="5" parentTitle="Sand River" onClose={() => {}} />)
   expect(screen.getByText('Add a page under Sand River')).toBeTruthy()
-  expect(screen.getByRole<HTMLOptionElement>('option', { name: /HTML page/ }).disabled).toBe(true)
+  expect(screen.getByRole<HTMLOptionElement>('option', { name: /^Page/ }).disabled).toBe(false)
   type('   ')
   fireEvent.submit(screen.getByRole('dialog'))
   expect(screen.getByRole('alert').textContent).toBe('Give the page a name')
@@ -34,6 +34,18 @@ it('creates the page, then opens it in the editor', async () => {
   })
   expect(createPage).toHaveBeenCalledWith('5', 'Fossil Cove', 'guide')
   expect(onClose).toHaveBeenCalled()
+  expect(navigate).toHaveBeenCalledWith({ to: '/g/$', params: { _splat: 'south-east/fossil-cove' }, search: { edit: true } })
+})
+
+it('creates a text page when asked, and opens it in the editor', async () => {
+  createPage.mockResolvedValue({ ok: true, value: { id: '9000000003' } })
+  render(<AddPageDialog parent="5" parentTitle="Sand River" onClose={() => {}} />)
+  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'html' } })
+  type('Access notes')
+  await act(async () => {
+    fireEvent.submit(screen.getByRole('dialog'))
+  })
+  expect(createPage).toHaveBeenCalledWith('5', 'Access notes', 'html')
   expect(navigate).toHaveBeenCalledWith({ to: '/g/$', params: { _splat: 'south-east/fossil-cove' }, search: { edit: true } })
 })
 

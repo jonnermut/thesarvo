@@ -24,13 +24,26 @@ export type UploadTicket = PresignedPost & { name: string }
 
 /** A one-off form for uploading `fileName` under a name no other photo of the guide has. Throws a message for the user. */
 export async function uploadTicket(b: Bucket, c: Credentials, guideId: string, fileName: string, size: number, hidden = false): Promise<UploadTicket> {
+  if (!/^\d+$/.test(guideId)) throw new Error('Not a supported image (JPEG, PNG or GIF)')
+  return ticketIn(b, c, prefix(guideId, hidden), fileName, size, hidden)
+}
+
+/** A forum post's pictures are in `private/forum-images/<thread>/`, never public; they are shown through signed links (see forum/files.ts). */
+export const forumPrefix = (thread: string) => `private/forum-images/${thread}/`
+
+export async function forumUploadTicket(b: Bucket, c: Credentials, thread: string, fileName: string, size: number): Promise<UploadTicket> {
+  if (!/^[\w-]{1,40}$/.test(thread)) throw new Error('Not a forum post')
+  return ticketIn(b, c, forumPrefix(thread), fileName, size, true)
+}
+
+async function ticketIn(b: Bucket, c: Credentials, folder: string, fileName: string, size: number, hidden: boolean): Promise<UploadTicket> {
   const name = uploadName(fileName)
-  if (!/^\d+$/.test(guideId) || !name) throw new Error('Not a supported image (JPEG, PNG or GIF)')
+  if (!name) throw new Error('Not a supported image (JPEG, PNG or GIF)')
   if (!(size > 0 && size <= MAX_IMAGE_BYTES)) throw new Error('Image is over 25 MB')
-  const taken = new Set((await bucketImageNames(b, c, guideId, hidden)).map((n) => n.toLowerCase()))
+  const taken = new Set((await listKeys(b, c, folder)).map((k) => k.slice(folder.length).toLowerCase()))
   const stored = freeName(name, taken)
   const post = presignedPost(b, c, {
-    key: prefix(guideId, hidden) + stored,
+    key: folder + stored,
     maxBytes: MAX_IMAGE_BYTES,
     typePrefix: 'image/',
     expiresIn: 600,

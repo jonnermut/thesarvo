@@ -19,6 +19,12 @@ export type Guide = {
 
 export type GuideNode = Header | Climb | TextBlock | ImageTopo | Gps | UnknownNode
 
+/** The header fields that can hold HTML. */
+export const RICH_FIELDS = ['acknowledgement', 'intro', 'history', 'access', 'camping', 'steward'] as const
+export type RichField = (typeof RICH_FIELDS)[number]
+
+export type Notice = { kind: 'note' | 'warning'; /** HTML of the guide profile. */ html: string }
+
 /** Text fields may contain `<br/>` for line breaks; see `splitLines`. */
 export type Header = {
   type: 'header'
@@ -31,6 +37,12 @@ export type Header = {
   camping: string
   /** Who looks after the crag, shown with the access notes. Absent from guides saved before it existed. */
   steward?: string
+  /** The crag steward's address. The standard steward text around it is fixed (`StewardNote`); `steward` stays for a crag with its own wording. */
+  stewardEmail?: string
+  /** Names of the text fields above that hold HTML (the guide profile of `sanitizeHtml`) rather than text with `<br/>`. Absent: all text. */
+  rich?: RichField[]
+  /** Banners shown at the top of the guide: a closure, a warning, a note. */
+  notices?: Notice[]
   acknowledgement: string
   intro: string
   history: string
@@ -57,7 +69,7 @@ export type Climb = {
 export type TextBlock = {
   type: 'text'
   id: string
-  /** e.g. "text", "heading2", "heading3". */
+  /** e.g. "text", "heading2", "heading3"; "rich", "note" and "warning" hold HTML (see `isRichCls`). */
   cls: string
   text: string
   other?: Other

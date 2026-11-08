@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import type { Climb, Header, ImageTopo } from '#/guide/model/types'
-import { fieldDiffs, readable, wordDiff } from './diff'
+import type { Climb, GuideNode, Header, ImageTopo } from '#/guide/model/types'
+import { fieldDiffs, marked, readable, wordDiff } from './diff'
 
 const climb = (more: Partial<Climb> = {}): Climb => ({
   type: 'climb', id: '1', name: 'Albatros', number: '1', grade: '20', extra: '', length: '25m', stars: '', fa: '', text: '', ...more,
@@ -38,6 +38,37 @@ describe('wordDiff', () => {
 describe('readable', () => {
   it('keeps line breaks and drops tags', () => {
     expect(readable('One<br/>two &amp; <b>three</b>')).toBe('One\ntwo & three')
+  })
+})
+
+describe('marked', () => {
+  it('spells out bold, italic, links and lists, so formatting changes show', () => {
+    expect(marked('<p>A <strong>big</strong> and <em>small</em> <a href="https://x.org/a" rel="noopener">link</a>.</p><ul><li>one</li><li>two &amp; three</li></ul><ol start="3"><li>x</li><li>y</li></ol>')).toBe(
+      'A **big** and *small* [link](https://x.org/a).\n\n• one\n• two & three\n\n3. x\n4. y',
+    )
+  })
+  it('names a page link by its title and a mailto by its address', () => {
+    expect(marked('<p><a data-page="Tyndall Range">Tyndall</a> <a href="mailto:a@b.org">mail</a></p>')).toBe('[Tyndall](Tyndall Range) [mail](mailto:a@b.org)')
+  })
+})
+
+describe('fieldDiffs for formatted text', () => {
+  const text = (cls: string, html: string): GuideNode => ({ type: 'text', id: 't', cls, text: html })
+  it('shows a change that only adds formatting', () => {
+    expect(fieldDiffs(text('rich', '<p>Take care</p>'), text('rich', '<p>Take <strong>care</strong></p>'))).toEqual([{ field: 'Text', before: 'Take care', after: 'Take **care**', long: true }])
+  })
+  it('names the block styles, and shows a restyle', () => {
+    expect(fieldDiffs(text('text', 'Hi'), text('warning', '<p>Hi</p>'))).toEqual([{ field: 'Style', before: '', after: 'Warning', long: false }])
+  })
+  it('marks up the header fields listed as rich, and the notices', () => {
+    const was: Header = { ...header, intro: '<p>Sunny</p>', rich: ['intro'] }
+    expect(fieldDiffs(was, { ...was, intro: '<p>Sunny and <a href="https://x.org">warm</a></p>', notices: [{ kind: 'note', html: '<p>Closed <em>May</em></p>' }] })).toEqual([
+      { field: 'Intro', before: 'Sunny', after: 'Sunny and [warm](https://x.org)', long: true },
+      { field: 'Notices', before: '', after: 'Note: Closed *May*', long: true },
+    ])
+  })
+  it('leaves plain fields alone: asterisks there are just text', () => {
+    expect(fieldDiffs(header, { ...header, intro: 'a *b* c' })).toEqual([{ field: 'Intro', before: '', after: 'a *b* c', long: true }])
   })
 })
 

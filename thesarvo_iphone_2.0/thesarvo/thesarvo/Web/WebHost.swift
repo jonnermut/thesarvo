@@ -13,6 +13,7 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
 
     var onOpenMap: ((String?, [CragPoint]) -> Void)?
     var onContentsAvailable: ((Bool) -> Void)?
+    var onPageEditable: ((Bool) -> Void)?
     var onOpenContents: (([ContentsEntry]) -> Void)?
     var onBootOK: (() -> Void)?
     var onNavigated: ((String) -> Void)?
@@ -123,6 +124,7 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
     func requestMapPoints() { webView.evaluateJavaScript("window.thesarvoMapPoints && window.thesarvoMapPoints();") }
 
     /// Asks the page for its contents list (it answers with `openContents`).
+    func requestAddPage() { webView.evaluateJavaScript("window.thesarvoAddPage && window.thesarvoAddPage();") }
     func requestContents() { webView.evaluateJavaScript("window.thesarvoContents && window.thesarvoContents();") }
 
     /// Scrolls the page to an element (a Contents entry chosen in the native sheet).
@@ -144,6 +146,7 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
                 }
                 self.onOpenMap?(guide, pts)
             case "contentsAvailable": self.onContentsAvailable?(body["available"] as? Bool ?? false)
+            case "pageEditable": self.onPageEditable?(body["available"] as? Bool ?? false)
             case "openContents":
                 let entries = (body["entries"] as? [[String: Any]] ?? []).compactMap { d -> ContentsEntry? in
                     guard let a = d["anchor"] as? String, let t = d["text"] as? String else { return nil }

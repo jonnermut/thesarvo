@@ -9,7 +9,7 @@ describe('currentFiles', () => {
   const now = { assets: new Set(['assets/new.js']), search: new Set(['g-data/search/pack.2.json']), nodes: new Set(['100']) }
 
   it('drops old bundles and search files, and data of pages that are gone', () => {
-    const remote = l('assets/old.js', 'assets/new.js', 'g-data/search/pack.1.json', 'g-data/search/pack.2.json', 'g-data/guide/100.json', 'g-data/guide/999.json', 'g-data/kml/100.kml', 'g-data/kml/999.gpx', 'g-data/manifest.json', 'g/index.html', 'index.html')
+    const remote = l('assets/old.js', 'assets/new.js', 'g-data/search/pack.1.json', 'g-data/search/pack.2.json', 'g-data/guide/100.json', 'g-data/guide/999.json', 'g-data/kml/100.kml', 'g-data/kml/999.gpx', 'g-data/manifest.json', 'g-data/forum-recent.json', 'g/index.html', 'index.html')
     expect(keys(currentFiles(remote, now))).toEqual(['assets/new.js', 'g-data/search/pack.2.json', 'g-data/guide/100.json', 'g-data/kml/100.kml', 'g-data/manifest.json', 'g/index.html', 'index.html'])
   })
 })

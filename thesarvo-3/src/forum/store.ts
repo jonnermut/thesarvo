@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto'
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises'
 import path from 'node:path'
-import { getObjectTagged, putObjectIf } from '#/aws/s3'
+import { getObjectTagged, putObject, putObjectIf } from '#/aws/s3'
 import type { Bucket, Credentials } from '#/aws/s3'
 import { imageBucket } from '#/guide/content/bucketImages'
 
@@ -12,6 +12,8 @@ import { imageBucket } from '#/guide/content/bucketImages'
 export type ForumStore = {
   read: (name: string) => Promise<{ value: unknown; tag: string } | null>
   write: (name: string, value: unknown, tag: string | null) => Promise<boolean>
+  /** Puts a public copy of a home feed (`forum-recent.json`, `forum-notices.json`: titles, counts and admin notices only) where the static site serves it, so a home page view never runs the Lambda. */
+  publish?: (name: string, value: unknown) => Promise<void>
 }
 
 const PREFIX = 'private/forum/'
@@ -25,6 +27,8 @@ export function bucketForum(b: Bucket, c: Credentials, prefix = PREFIX, cacheCon
       return got && { value: JSON.parse(got.body.toString('utf8')) as unknown, tag: got.etag }
     },
     write: (name, value, tag) => putObjectIf(b, c, prefix + name, Buffer.from(JSON.stringify(value)), tag, type),
+    // Public, checked again after a minute (CloudFront keeps it that long); the deploy leaves `g-data/forum-*` alone.
+    publish: (name, value) => putObject(b, c, `g-data/${name}`, Buffer.from(JSON.stringify(value)), { contentType: 'application/json', cacheControl: 'public, max-age=60' }),
   }
 }
 
