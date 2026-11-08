@@ -197,15 +197,23 @@ export default function TreeEditor({ selected }: { selected?: string }) {
         <button type="button" onClick={undoLast} disabled={busy || !undo.length} className="rounded-md border border-line px-3 py-1.5 disabled:opacity-40">
           Undo{undo.length ? ` (${undo.length})` : ''}
         </button>
-        {busy && <span role="status" className="text-muted">Saving…</span>}
         {error && <span role="alert" className="text-red-700">{error}</span>}
       </div>
       {index ? (
-        <ul className="mt-4" onDragLeave={(e) => e.currentTarget.contains(e.relatedTarget as Node) || setOver(undefined)}>
+        <ul className="mt-4" inert={busy} aria-busy={busy} onDragLeave={(e) => e.currentTarget.contains(e.relatedTarget as Node) || setOver(undefined)}>
           {renderRow(index, 0)}
         </ul>
       ) : (
         !error && <p className="mt-4 text-muted">Loading…</p>
+      )}
+      {busy && (
+        // Covers the page so nothing else can be started until the change is saved (a saved change takes a moment).
+        <div role="status" className="fixed inset-0 z-50 grid cursor-progress place-items-center bg-black/30">
+          <div className="flex items-center gap-3 rounded-lg bg-card text-navy px-5 py-3 text-sm shadow-lg">
+            <span className="size-5 animate-spin rounded-full border-2 border-link border-t-transparent" aria-hidden />
+            Saving…
+          </div>
+        </div>
       )}
     </div>
   )

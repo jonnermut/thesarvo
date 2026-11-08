@@ -72,3 +72,16 @@ it('offers Sort A–Z only where the open page\'s children are out of order, and
   expect(api.sortPages).toHaveBeenCalledWith('1')
   expect(screen.queryByRole('button', { name: 'Sort A–Z' })).toBeNull()
 })
+
+it('shows a spinner and locks the tree until the change is saved', async () => {
+  let done: (v: unknown) => void = () => undefined
+  api.movePage.mockReturnValue(new Promise((r) => (done = r)))
+  render(<TreeEditor selected="5" />)
+  await screen.findByText('Tessellated')
+  await act(async () => void fireEvent.click(screen.getByRole('button', { name: 'Move up' })))
+  expect(screen.getByRole('status').textContent).toContain('Saving')
+  expect(document.querySelector('ul[inert]')).toBeTruthy()
+  await act(async () => done({ ok: true, value: { before: tree() } }))
+  expect(screen.queryByRole('status')).toBeNull()
+  expect(document.querySelector('ul[inert]')).toBeNull()
+})
