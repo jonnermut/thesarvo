@@ -1,0 +1,73 @@
+thesarvo-3/src/guide/save/local.ts
+  s_e20d0a1ebc47aa::t_bbf738b7855e85 81,84,87
+thesarvo-3/src/guide/save/save.test.ts
+  s_e20d0a1ebc47aa::t_1180a98b7a41a4 127
+thesarvo-3/src/forum/files.ts
+  s_e20d0a1ebc47aa::t_3878fd38fe7734 23-26
+  s_e20d0a1ebc47aa::t_8d5a0c184d7dd6 22,27
+thesarvo-3/src/rte/PageBodyEditor.tsx
+  s_e20d0a1ebc47aa::t_fb95d3ac323e27 35,38,43-44,47,62,89-96,105-118
+thesarvo-3/src/guide/save/repo.ts
+  s_e20d0a1ebc47aa::t_bbf738b7855e85 21-22
+thesarvo-3/src/guide/save/addPage.ts
+  s_e20d0a1ebc47aa::t_a6a3be991c0a5c 7-8,13-14,58-60,65,73-83,86
+thesarvo-3/src/components/AddPageDialog.tsx
+  s_e20d0a1ebc47aa::t_e8a72050608c17 11-14,61
+thesarvo-3/src/guide/edit/createPage.ts
+  s_e20d0a1ebc47aa::t_98366c7713407f 2,17,25
+thesarvo-3/src/guide/edit/createPage.test.ts
+  s_e20d0a1ebc47aa::t_2c48194bb2e8d0 1,3-34
+  s_e20d0a1ebc47aa::t_8e217f56f51f0d 2
+thesarvo-3/src/routes/g.upload.tsx
+  s_e20d0a1ebc47aa::t_3878fd38fe7734 3-4,23-27,29-33
+  s_e20d0a1ebc47aa::t_8d5a0c184d7dd6 28
+thesarvo-3/src/routes/g.$.tsx
+  s_e20d0a1ebc47aa::t_1c2e4259bdbcbd 83-84
+  s_e20d0a1ebc47aa::t_79d09d784978c7 4
+thesarvo-3/src/components/AddPageDialog.test.tsx
+  s_e20d0a1ebc47aa::t_e7051aeebe35bc 17,20,40-48
+  s_e20d0a1ebc47aa::t_bcc88fa7a27ff1 49-51
+thesarvo-3/src/guide/save/addPage.test.ts
+  s_e20d0a1ebc47aa::t_a6a3be991c0a5c 3,29,52-54,61,66-72
+thesarvo-3/src/app/bridge.ts
+  s_e20d0a1ebc47aa::t_1c2e4259bdbcbd 107-114
+thesarvo-3/src/app/bridge.test.ts
+  s_e20d0a1ebc47aa::t_0c4cc061e8c20c 2,138-144
+  s_e20d0a1ebc47aa::t_6ca6cf0cefb9aa 145-146
+thesarvo-3/src/rte/drafts.ts
+  s_e20d0a1ebc47aa::t_fb95d3ac323e27 1,3,7,11
+thesarvo-3/src/forum/files.test.ts
+  s_e20d0a1ebc47aa::t_c07ea8d5707b13 2
+  s_e20d0a1ebc47aa::t_719e61439535b0 3,16-22
+  s_e20d0a1ebc47aa::t_3973a73c5bdb06 23
+thesarvo-3/src/forum/ui/ForumPage.tsx
+  s_e20d0a1ebc47aa::t_c07ea8d5707b13 35-38
+thesarvo-3/src/guide/save/github.ts
+  s_e20d0a1ebc47aa::t_bbf738b7855e85 145-147
+thesarvo-3/src/routes/g.api.forum.tsx
+  s_e20d0a1ebc47aa::t_f900f8e66a1a66 13,37-42
+thesarvo_iphone_2.0/thesarvo/thesarvo/App/AppModel.swift
+  s_e20d0a1ebc47aa::t_4ce2fb7f68bfd5 65-66,125,306-310,343-350
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/MenuView.swift
+  s_e20d0a1ebc47aa::t_3650a7bb65f32b 27-30
+thesarvo_iphone_2.0/thesarvo/thesarvo/Native/RootView.swift
+  s_e20d0a1ebc47aa::t_5856a503b07f2b 162,165
+thesarvo_iphone_2.0/thesarvo/thesarvo/Web/WebHost.swift
+  s_e20d0a1ebc47aa::t_c69d38d7288e4e 16,148
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7f5bf60c08705384e68ffdcfa02e3fe8750dcfa1",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
