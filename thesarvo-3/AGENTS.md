@@ -4,6 +4,15 @@ The new thesarvo.com: Tasmanian climbing guides moving off Confluence to a TanSt
 Tailwind 4, TypeScript, Vite, Vitest), served as a static site on S3 and CloudFront, with a small Lambda API and
 Cognito sign-in. The owner is Jon. The content lives in a separate repo, `../../thesarvo-content`.
 
+## The inviolate rule: the public site is static
+
+**Nothing a public (signed-out) visitor does may run the Lambda.** Public pages, guides, images, data, feeds and the home page are
+static files in S3 served by CloudFront, and a page view costs nothing but CloudFront. The Lambda (`/g/api/*`, `/g/upload`, `/_serverFn/*`)
+is only for signed-in actions: saving, uploading, the forum, private pages. Do not add a public `GET` API route that a page calls; if public
+data changes at run time, the Lambda writes it as a static file when it changes (see `publishFeeds` for the forum's home feeds), and the
+page reads the file. Before adding a `fetch` to a page, ask: does this run the Lambda for someone who is not signed in? If yes, redesign it.
+The owner treats this as non-negotiable (8 Nov 2026, after the forum home feeds were found running the Lambda on every home view).
+
 ## Read first
 
 The docs live in the **private** repo `thesarvo-private`, checked out as a peer of this one (`../../thesarvo-private` from here; clone it with `gh repo clone jonnermut/thesarvo-private` if missing). This repo is public: no docs, account details, addresses or other private information go in it.
