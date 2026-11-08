@@ -21,6 +21,7 @@ export function currentFiles(remote: Listed[], now: { assets: Set<string>; searc
   return remote.filter(({ key }) => {
     if (key.startsWith('assets/')) return now.assets.has(key)
     if (key.startsWith('g-data/search/')) return now.search.has(key)
+    if (key.startsWith('g-data/forum-')) return false // the home feeds change with every post and are not offline content
     const own = /^g-data\/(?:guide|page|images|kml|history)\/([^/.]+)\./.exec(key)
     return own ? now.nodes.has(own[1]) : true
   })

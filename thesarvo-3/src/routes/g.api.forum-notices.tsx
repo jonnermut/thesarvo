@@ -4,7 +4,7 @@ import { forumStore } from '#/forum/store'
 
 /**
  * `GET /g/api/forum-notices`: the forum posts an admin marked as notices (title and text, not the comments) that have not run out,
- * for the home page, for anyone. Cached for a minute like the recent feed.
+ * for the home page, for anyone. Not called by the home page, which reads the static `g-data/forum-notices.json`; kept for development and older apps.
  */
 export const Route = createFileRoute('/g/api/forum-notices')({
   server: {

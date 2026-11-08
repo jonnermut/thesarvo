@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { activeNotices, addComment, createThread, editPost, listThreads, readThread, recentThreads, Refused, removePost, setHidden, setNotice } from './service'
 import type { Viewer } from './service'
 import type { ForumStore } from './store'
@@ -7,8 +7,13 @@ import type { Thread, ThreadMeta } from './types'
 /** An in-memory store with the same tag rules as S3's conditional writes. */
 function memory(seed: Record<string, unknown> = {}) {
   const files = new Map<string, { text: string; n: number }>(Object.entries(seed).map(([k, v]) => [k, { text: JSON.stringify(v), n: 1 }]))
-  const store: ForumStore & { files: typeof files; beforeWrite?: () => void } = {
+  const published = new Map<string, unknown>()
+  const store: ForumStore & { files: typeof files; published: typeof published; beforeWrite?: () => void } = {
     files,
+    published,
+    async publish(name, value) {
+      published.set(name, value)
+    },
     async read(name) {
       const f = files.get(name)
       return f ? { value: JSON.parse(f.text) as unknown, tag: String(f.n) } : null
@@ -65,6 +70,27 @@ describe('forum', () => {
     expect((await listThreads(store, ann)).map((m) => m.id)).toEqual([t.id])
     expect(await recentThreads(store)).toMatchObject([{ id: t.id, comments: 0 }])
     expect(JSON.stringify(await recentThreads(store))).not.toContain('First')
+  })
+
+  it('publishes the home feeds to the static site on every change, titles and counts only', async () => {
+    const store = memory()
+    const t = await createThread(store, ann, { title: 'Hello', text: 'Secret words' })
+    expect(store.published.get('forum-recent.json')).toMatchObject([{ id: t.id, title: 'Hello', comments: 0 }])
+    expect(store.published.get('forum-notices.json')).toEqual([])
+    await addComment(store, bob, { thread: t.id, text: 'More secret words' })
+    expect(store.published.get('forum-recent.json')).toMatchObject([{ id: t.id, comments: 1 }])
+    await setNotice(store, root, { thread: t.id, until: new Date(Date.now() + 86_400_000).toISOString() })
+    expect(store.published.get('forum-notices.json')).toMatchObject([{ id: t.id, title: 'Hello', text: 'Secret words' }])
+    expect(JSON.stringify(store.published.get('forum-recent.json'))).not.toContain('secret')
+  })
+
+  it('a failed publish does not fail the post', async () => {
+    const store = memory()
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    store.publish = () => Promise.reject(new Error('denied'))
+    await expect(createThread(store, ann, { title: 'Hello', text: 'x' })).resolves.toBeTruthy()
+    expect(spy).toHaveBeenCalled()
+    spy.mockRestore()
   })
 
   it('refuses empty and over-long input', async () => {

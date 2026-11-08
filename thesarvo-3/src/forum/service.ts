@@ -90,6 +90,20 @@ async function reindex(store: ForumStore, t: Thread) {
     const rest = list.filter((n) => n.id !== t.id)
     return notice ? [notice, ...rest] : rest.length === list.length ? null : rest
   })
+  await publishFeeds(store)
+}
+
+/** Copies the home feeds out to the static site (see `ForumStore.publish`). A failure is logged (and answered true), never the poster's problem: the next change, or `scripts/publish-forum-feeds.ts`, puts it right. */
+export async function publishFeeds(store: ForumStore): Promise<boolean> {
+  if (!store.publish) return false
+  try {
+    const [recent, notices] = await Promise.all([store.read('recent.json'), store.read('notices.json')])
+    await Promise.all([store.publish('forum-recent.json', recent?.value ?? []), store.publish('forum-notices.json', notices?.value ?? [])])
+    return false
+  } catch (e) {
+    console.error('Could not publish the forum home feeds', e)
+    return true
+  }
 }
 
 /** The notices that have not run out, for the home page (public: they are the texts an admin chose to show everyone). */
