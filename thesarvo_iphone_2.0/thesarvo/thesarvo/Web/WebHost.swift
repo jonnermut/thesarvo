@@ -13,6 +13,7 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
 
     var onOpenMap: ((String?, [CragPoint]) -> Void)?
     var onContentsAvailable: ((Bool) -> Void)?
+    var onPageEditable: ((Bool) -> Void)?
     var onOpenContents: (([ContentsEntry]) -> Void)?
     var onBootOK: (() -> Void)?
     var onNavigated: ((String) -> Void)?
@@ -144,6 +145,7 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
                 }
                 self.onOpenMap?(guide, pts)
             case "contentsAvailable": self.onContentsAvailable?(body["available"] as? Bool ?? false)
+            case "pageEditable": self.onPageEditable?(body["available"] as? Bool ?? false)
             case "openContents":
                 let entries = (body["entries"] as? [[String: Any]] ?? []).compactMap { d -> ContentsEntry? in
                     guard let a = d["anchor"] as? String, let t = d["text"] as? String else { return nil }

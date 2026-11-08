@@ -8,10 +8,10 @@ type PageKind = 'guide' | 'html'
 const field = 'mt-1 w-full rounded-md border border-line bg-card px-3 py-2 focus:border-link focus:outline-none'
 const TITLE_MAX = 80
 
-/** Page types. HTML pages (prose) come with their own editor later. */
-const KINDS: { kind: PageKind; label: string; ready: boolean }[] = [
-  { kind: 'guide', label: 'Guide', ready: true },
-  { kind: 'html', label: 'HTML page (coming later)', ready: false },
+/** Page types: a climbing guide, or a prose (HTML) page edited in the rich text editor. */
+const KINDS: { kind: PageKind; label: string }[] = [
+  { kind: 'guide', label: 'Guide' },
+  { kind: 'html', label: 'Page (text, pictures and links)' },
 ]
 
 /**
@@ -58,7 +58,7 @@ export function AddPageDialog({ parent, parentTitle, onClose }: { parent: string
           <span className="text-sm font-medium">Type of page</span>
           <select className={field} value={kind} disabled={state.busy} onChange={(e) => setKind(e.target.value === 'html' ? 'html' : 'guide')}>
             {KINDS.map((k) => (
-              <option key={k.kind} value={k.kind} disabled={!k.ready}>
+              <option key={k.kind} value={k.kind}>
                 {k.label}
               </option>
             ))}

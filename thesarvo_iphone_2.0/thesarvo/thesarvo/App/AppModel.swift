@@ -62,6 +62,8 @@ final class AppModel: ObservableObject {
     @Published var contents: ContentsSheet?
     /// The page has a contents list, so the top bar shows a Contents button.
     @Published var hasContents = false
+    /// The page on screen is a prose page the rich text editor can open (it says so; guides are known from the tree).
+    @Published var pageEditable = false
     @Published var sharedFile: SharedFile?
     /// Guides opened lately, newest first (ids), kept on this device.
     @Published var recents: [String] = UserDefaults.standard.stringArray(forKey: "recentGuides") ?? []
@@ -120,6 +122,7 @@ final class AppModel: ObservableObject {
         web.setTextScale(textScale)
         web.onBootOK = { [weak self] in self?.bootOK() }
         lastCheck = store.loadState().lastCheck
+        web.onPageEditable = { [weak self] on in self?.pageEditable = on }
         web.onContentsAvailable = { [weak self] on in self?.hasContents = on }
         web.onOpenContents = { [weak self] e in self?.contents = ContentsSheet(entries: e) }
         web.onOpenMap = { [weak self] g, pts in self?.openMap(guide: g, points: pts) }
@@ -300,8 +303,11 @@ final class AppModel: ObservableObject {
         return f
     }
 
-    /// Guides (not folders) can be edited: the same editor as the website, which asks you to sign in first.
-    var canEditPage: Bool { selection.flatMap { byID[$0] }?.isGuide == true }
+    /// Guides and prose pages can be edited: the same editors as the website, which asks you to sign in first.
+    var canEditPage: Bool { selection.flatMap { byID[$0] }?.isGuide == true || pageEditable }
+
+    /// "Edit this guide" or "Edit this page", for the page menu.
+    var editLabel: String { selection.flatMap { byID[$0] }?.isGuide == true ? "Edit this guide" : "Edit this page" }
 
     var isEditing: Bool { web.path.contains("edit=true") }
 
@@ -332,6 +338,14 @@ final class AppModel: ObservableObject {
         tab = .guides
         revealPage += 1
         web.open(path: node.url)
+    }
+
+    /// The members' forum (a page of the site, signed in from the Settings tab).
+    func openForum() {
+        showMenu = false
+        selection = nil
+        tab = .guides
+        web.open(path: "/g/forum/")
     }
 
     func openHome() {

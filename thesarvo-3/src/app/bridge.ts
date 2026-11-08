@@ -104,6 +104,14 @@ export function offerContents(open: () => void, win: BridgeWindow = window): () 
   }
 }
 
+/** Tells the app the page on screen is a prose page the rich text editor can open, so its page menu offers "Edit this page" (guides it already knows). Returns a function that undoes it. */
+export function offerPageEdit(win: BridgeWindow = window): () => void {
+  const handler = nativeHandler(win)
+  if (!handler) return () => {}
+  handler.postMessage({ type: 'pageEditable', available: true })
+  return () => handler.postMessage({ type: 'pageEditable', available: false })
+}
+
 /** Lets the app ask the page for its GPS points when the reader switches to the Map tab (the page answers with `openMap`). Returns a function that undoes it. */
 export function offerMapPoints(open: () => void, win: BridgeWindow = window): () => void {
   if (!nativeHandler(win)) return () => {}

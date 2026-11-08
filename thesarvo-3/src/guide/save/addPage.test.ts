@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { StoredIndexNode } from '#/guide/content/syncFeed'
-import { addPage, FIRST_LOCAL_ID, newGuide, nextPageId, parseAddPage, withChild } from './addPage'
+import { addPage, EMPTY_BODY, FIRST_LOCAL_ID, newGuide, nextPageId, parseAddPage, withChild } from './addPage'
 import type { PageRepo } from './repo'
 
 const node = (id: string, children: StoredIndexNode[] = []): StoredIndexNode => ({ id, title: `T${id}`, children })
@@ -26,7 +26,7 @@ class MemoryRepo implements PageRepo {
 describe('parseAddPage', () => {
   it('tidies the title and checks the rest', () => {
     expect(parseAddPage({ parent: '5', title: '  Fresh   Crag ', kind: 'guide' })).toEqual({ parent: '5', title: 'Fresh Crag', kind: 'guide' })
-    for (const bad of [null, {}, { parent: '5', title: '', kind: 'guide' }, { parent: '5', title: 'x'.repeat(81), kind: 'guide' }, { parent: 'a', title: 'x', kind: 'guide' }, { parent: '5', title: '<b>', kind: 'guide' }, { parent: '5', title: 'x', kind: 'html' }])
+    for (const bad of [null, {}, { parent: '5', title: '', kind: 'guide' }, { parent: '5', title: 'x'.repeat(81), kind: 'guide' }, { parent: 'a', title: 'x', kind: 'guide' }, { parent: '5', title: '<b>', kind: 'guide' }, { parent: '5', title: 'x', kind: 'wiki' }])
       expect(() => parseAddPage(bad)).toThrow()
   })
 })
@@ -49,16 +49,26 @@ describe('the new page', () => {
 
 describe('addPage', () => {
   const request = { parent: '1', title: 'Fresh Crag', kind: 'guide' as const }
+  it('accepts the html kind', () => {
+    expect(parseAddPage({ parent: '5', title: 'Notes', kind: 'html' }).kind).toBe('html')
+  })
   it('commits the tree, the guide and a created entry together', async () => {
     const repo = new MemoryRepo(node('1', [node('2')]))
     const result = await addPage(repo, jon, request, () => new Date('2026-10-29T01:00:00Z'))
     expect(result).toEqual({ status: 'added', id: String(FIRST_LOCAL_ID) })
     const [c] = repo.commits
     expect(c.index.children.map((n) => [n.id, n.title])).toEqual([['2', 'T2'], [String(FIRST_LOCAL_ID), 'Fresh Crag']])
-    expect(c.guide.nodes[0]).toMatchObject({ type: 'header', name: 'Fresh Crag' })
+    expect('guide' in c.content && c.content.guide.nodes[0]).toMatchObject({ type: 'header', name: 'Fresh Crag' })
     expect(c.history).toHaveLength(1)
     expect(c.history[0]).toMatchObject({ description: 'created the page', user: { sub: 's1', name: 'Jon' }, start: '2026-10-29T01:00:00.000Z' })
     expect(c.message.headline).toBe('Fresh Crag: Jon created the page')
+  })
+  it('adds a prose page with an empty body and no guide', async () => {
+    const repo = new MemoryRepo(node('1'))
+    expect(await addPage(repo, jon, { ...request, kind: 'html' }, () => new Date('2026-10-29T01:00:00Z'))).toEqual({ status: 'added', id: String(FIRST_LOCAL_ID) })
+    const [c] = repo.commits
+    expect(c.content).toEqual({ html: EMPTY_BODY })
+    expect(c.history[0]).toMatchObject({ description: 'created the page', user: { sub: 's1' } })
   })
   it('tries again on the newer tree when someone saved in between, taking the next id', async () => {
     const repo = new MemoryRepo(node('1'), true)

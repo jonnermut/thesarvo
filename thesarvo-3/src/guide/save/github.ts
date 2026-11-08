@@ -142,8 +142,9 @@ export class GitHubRepo implements GuideRepo, PageRepo, BodyRepo {
     return this.write(c.head, [[guidePath(c.id), c.guide], [historyPath(c.id), c.history]], c.message)
   }
 
-  commitPage({ head, index, id, guide, history, message }: Parameters<PageRepo['commitPage']>[0]): Promise<string | null> {
-    return this.write(head, [[indexPath, index], [guidePath(id), guide], [historyPath(id), history]], message)
+  commitPage({ head, index, id, content, history, message }: Parameters<PageRepo['commitPage']>[0]): Promise<string | null> {
+    const page: [string, unknown] = 'guide' in content ? [guidePath(id), content.guide] : [bodyPath(id), content.html]
+    return this.write(head, [[indexPath, index], page, [historyPath(id), history]], message)
   }
 
   commitIndex({ head, index, message }: Parameters<PageRepo['commitIndex']>[0]): Promise<string | null> {

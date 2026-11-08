@@ -32,7 +32,10 @@ function Who({ author, at, edited }: { author: Author; at: string; edited?: stri
  */
 function Compose({ label, title, compact, scope, draftKey, initial, onSend, onCancel }: { label: string; title?: boolean; compact?: boolean; scope: string; draftKey: string; initial?: { html: string; title?: string }; onSend: (html: string, title: string) => Promise<string | null>; onCancel?: () => void }) {
   const base = initial?.html ?? ''
-  const [draft, setDraft] = useState(() => loadRichDraft(draftKey, base))
+  const [draft, setDraft] = useState(() => {
+    const d = loadRichDraft(draftKey, base)
+    return d && !d.stale ? d : null
+  })
   const [start, setStart] = useState(draft?.html ?? base)
   const [html, setHtml] = useState(start)
   const [head, setHead] = useState(draft?.title ?? initial?.title ?? '')

@@ -32,18 +32,19 @@ function Loaded({ id, title, done, stored }: { id: string; title: string; done: 
   const key = `page.${id}`
   const [base, setBase] = useState(stored)
   const [draft, setDraft] = useState(() => loadRichDraft(key, stored))
-  const [start, setStart] = useState(draft?.html ?? stored)
+  const [start, setStart] = useState(draft && !draft.stale ? draft.html : stored)
   const [gen, setGen] = useState(0)
   const [html, setHtml] = useState(start)
-  const [dirty, setDirty] = useState(!!draft)
+  const [dirty, setDirty] = useState(!!draft && !draft.stale)
   const [state, setState] = useState<{ busy?: boolean; error?: string; saved?: string }>({})
   const sessionId = useRef(session())
 
   useEffect(() => {
-    if (!dirty) return
+    // An old draft waits for the writer's choice (below); typing meanwhile is not drafted over it.
+    if (!dirty || draft?.stale) return
     const t = setTimeout(() => saveRichDraft(key, { html, base }), 500)
     return () => clearTimeout(t)
-  }, [dirty, html, base, key])
+  }, [dirty, draft, html, base, key])
   useEffect(() => {
     if (!dirty) return
     const warn = (e: BeforeUnloadEvent) => e.preventDefault()
@@ -58,7 +59,7 @@ function Loaded({ id, title, done, stored }: { id: string; title: string; done: 
     const a = await call<SaveAnswer>('page', { method: 'POST', body: JSON.stringify({ page: id, session: sessionId.current, base, html, title }) })
     if (!a.ok) return setState({ error: a.unavailable ? 'Saving is not set up here.' : a.message })
     const r = a.value
-    if (r.status === 'conflict') return setState({ error: 'Someone else saved this page since you opened it. Your text is kept here as a draft; copy what you need, then reload the page to see theirs.' })
+    if (r.status === 'conflict') return setState({ error: 'Someone else saved this page since you opened it. Your text is kept here as a draft: reload the page to see theirs, and your draft is offered again.' })
     if (r.status === 'missing') return setState({ error: 'This page no longer exists.' })
     clearRichDraft(key)
     setDraft(null)
@@ -85,6 +86,14 @@ function Loaded({ id, title, done, stored }: { id: string; title: string; done: 
     setDirty(false)
     setGen((g) => g + 1)
   }
+  const useOld = () => {
+    if (!draft) return
+    setDraft({ ...draft, stale: false })
+    setStart(draft.html)
+    setHtml(draft.html)
+    setDirty(true)
+    setGen((g) => g + 1)
+  }
   const leave = () => {
     if (dirty && !confirm('Leave without saving? Your changes stay here as a draft.')) return
     done()
@@ -93,7 +102,20 @@ function Loaded({ id, title, done, stored }: { id: string; title: string; done: 
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
       <h1 className="border-b border-line pb-1 text-[28px] font-bold text-navy">{title}</h1>
-      {draft && (
+      {draft?.stale && (
+        <p role="status" className="mt-3 text-sm text-muted">
+          You have an unsaved draft from {new Date(draft.savedAt).toLocaleString('en-AU', { dateStyle: 'medium', timeStyle: 'short' })}, made before this page was changed by someone else.{' '}
+          <button type="button" onClick={useOld} className="text-link hover:underline">
+            Open it
+          </button>{' '}
+          (saving it replaces their version) or{' '}
+          <button type="button" onClick={discard} className="text-link hover:underline">
+            discard it
+          </button>
+          .
+        </p>
+      )}
+      {draft && !draft.stale && (
         <p role="status" className="mt-3 text-sm text-muted">
           Your unsaved draft from {new Date(draft.savedAt).toLocaleString('en-AU', { dateStyle: 'medium', timeStyle: 'short' })} is back.{' '}
           <button type="button" onClick={discard} className="text-link hover:underline">

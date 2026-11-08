@@ -78,13 +78,13 @@ export class LocalRepo implements GuideRepo, PageRepo, BodyRepo {
     return { head: canonical(index), index }
   }
 
-  async commitPage({ head, index, id, guide, history, message }: Parameters<PageRepo['commitPage']>[0]) {
+  async commitPage({ head, index, id, content, history, message }: Parameters<PageRepo['commitPage']>[0]) {
     if ((await this.readIndex()).head !== head) return null
     await this.write(historyPath(id), history)
-    await this.write(guidePath(id), guide)
+    await this.write('guide' in content ? guidePath(id) : bodyPath(id), 'guide' in content ? content.guide : content.html)
     await this.write(indexPath, index)
     console.log(`added page ${id}: ${message.headline}`)
-    return version(guide)
+    return 'guide' in content ? version(content.guide) : textVersion(content.html)
   }
 
   async commitIndex({ head, index, message }: Parameters<PageRepo['commitIndex']>[0]) {

@@ -1,6 +1,7 @@
 import { ClientOnly, createFileRoute, notFound, useLocation, useNavigate } from '@tanstack/react-router'
 import { lazy, Suspense, useEffect } from 'react'
 import { RequireSignIn } from '#/auth/RequireSignIn'
+import { offerPageEdit } from '#/app/bridge'
 import { signIn, useUser } from '#/auth/session'
 import { Breadcrumbs } from '#/components/Breadcrumbs'
 import { fetchGuide, fetchPage, fetchPageBody } from '#/guide/server'
@@ -79,6 +80,8 @@ function GuidePage() {
   useEffect(() => {
     if (guide) addRecent({ path: node.path, title: node.title })
   }, [guide, node.path, node.title])
+  const prose = !guide && !!body
+  useEffect(() => (prose ? offerPageEdit() : undefined), [prose])
   if (guide && edit)
     return (
       <ClientOnly fallback={<p className="p-8 text-muted">Loading editor…</p>}>

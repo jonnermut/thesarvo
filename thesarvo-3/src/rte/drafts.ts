@@ -1,13 +1,14 @@
-/** Text not saved yet, kept in the browser until it is. `base` is what the text started from, so a draft of something that has since changed is not offered. */
+/** Text not saved yet, kept in the browser until it is. `base` is what the text started from: a draft of something that has since changed (`stale`) is not put in the editor unasked. */
 export type RichDraft = { html: string; title?: string; base: string; savedAt: number }
+export type LoadedDraft = RichDraft & { stale: boolean }
 
 const key = (k: string) => `thesarvo.rte.${k}`
 
-export function loadRichDraft(k: string, base: string): RichDraft | null {
+export function loadRichDraft(k: string, base: string): LoadedDraft | null {
   try {
     const raw = localStorage.getItem(key(k))
     const d = raw ? (JSON.parse(raw) as RichDraft) : null
-    return d && d.base === base ? d : null
+    return d && { ...d, stale: d.base !== base }
   } catch {
     return null
   }

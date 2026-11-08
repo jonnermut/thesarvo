@@ -124,7 +124,7 @@ describe('GitHubRepo', () => {
     ])
     expect(await repo.readIndex()).toEqual({ head: 'abc', index: tree })
     const message = { headline: 'h', body: 'b' }
-    expect(await repo.commitPage({ head: 'abc', index: tree, id: '9000000002', guide: guide(header), history: [], message })).toBe('def')
+    expect(await repo.commitPage({ head: 'abc', index: tree, id: '9000000002', content: { guide: guide(header) }, history: [], message })).toBe('def')
     expect(calls[1].body).toMatchObject({
       variables: { input: { expectedHeadOid: 'abc', fileChanges: { additions: [{ path: 'index.json' }, { path: 'pages/9000000002/guide.json' }, { path: 'pages/9000000002/history.json' }] } } },
     })

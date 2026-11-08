@@ -24,6 +24,10 @@ struct MenuView: View {
                                 HStack(spacing: 12) { Image(systemName: "house").foregroundStyle(.secondary).frame(width: 26); Text("Home") }
                             }
                             .buttonStyle(.plain)
+                            Button { app.openForum() } label: {
+                                HStack(spacing: 12) { Image(systemName: "bubble.left.and.bubble.right").foregroundStyle(.secondary).frame(width: 26); Text("Forum") }
+                            }
+                            .buttonStyle(.plain)
                         }
                         let recent = app.recents.compactMap { app.byID[$0] }
                         if !recent.isEmpty {
