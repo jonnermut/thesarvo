@@ -65,6 +65,32 @@ export function withMovedPage(index: StoredIndexNode, id: string, parent: string
   return walk(index)
 }
 
+/** Alphanumeric order of titles: ignores case, and numbers count by value ("Crag 2" before "Crag 10"). */
+export const byTitle = (a: StoredIndexNode, b: StoredIndexNode) => a.title.localeCompare(b.title, 'en', { numeric: true, sensitivity: 'base' })
+
+export const isSorted = (children: StoredIndexNode[]) => children.every((c, i) => i === 0 || byTitle(children[i - 1], c) <= 0)
+
+/** The index with the pages directly under `parent` in alphanumeric order (pages under them keep their order); null when there is no such page. */
+export function withSortedChildren(index: StoredIndexNode, parent: string): StoredIndexNode | null {
+  let found = false
+  const walk = (n: StoredIndexNode): StoredIndexNode => {
+    if (n.id === parent) {
+      found = true
+      return { ...n, children: [...n.children].sort(byTitle) }
+    }
+    return { ...n, children: n.children.map(walk) }
+  }
+  const next = walk(index)
+  return found ? next : null
+}
+
+/** Where a new page called `title` goes among `children`: its alphanumeric place when they are in order, else last. */
+export function newPagePosition(children: StoredIndexNode[], title: string): number {
+  if (!isSorted(children)) return children.length
+  const at = children.findIndex((c) => byTitle(c, { id: '', title, children: [] }) > 0)
+  return at < 0 ? children.length : at
+}
+
 /** Whether two trees hold the same pages (what undo needs: pages added or deleted since must not be lost). */
 export const sameIds = (a: StoredIndexNode, b: StoredIndexNode) => {
   const ids = (n: StoredIndexNode) => flat(n).map((x) => x.id).sort().join(',')

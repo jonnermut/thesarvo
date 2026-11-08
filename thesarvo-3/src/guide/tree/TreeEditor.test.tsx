@@ -6,7 +6,7 @@ import TreeEditor from './TreeEditor'
 
 vi.mock('@tanstack/react-router', () => ({ Link: ({ children }: { children: ReactNode }) => <a>{children}</a> }))
 vi.mock('#/guide/server', () => ({ refreshManifest: vi.fn() }))
-const api = vi.hoisted(() => ({ readTree: vi.fn(), movePage: vi.fn(), renamePage: vi.fn(), restoreTree: vi.fn() }))
+const api = vi.hoisted(() => ({ readTree: vi.fn(), movePage: vi.fn(), renamePage: vi.fn(), restoreTree: vi.fn(), sortPages: vi.fn() }))
 vi.mock('./api', () => api)
 
 const n = (id: string, title: string, children: StoredIndexNode[] = []): StoredIndexNode => ({ id, title, children })
@@ -60,4 +60,15 @@ it('shows what the server refused', async () => {
   await screen.findByText('North')
   await act(async () => void fireEvent.click(screen.getByRole('button', { name: 'Move up' })))
   expect((await screen.findByRole('alert')).textContent).toBe('Cannot do that')
+})
+
+it('offers Sort A–Z only where the open page\'s children are out of order, and puts them in order', async () => {
+  api.sortPages.mockResolvedValue({ ok: true, value: { before: tree() } })
+  render(<TreeEditor selected="3" />)
+  await screen.findByText('Fossil Cove')
+  const buttons = screen.getAllByRole('button', { name: 'Sort A–Z' })
+  expect(buttons).toHaveLength(1) // Home (South, North) is out of order; South (Fossil Cove, Tessellated) is not
+  await act(async () => void fireEvent.click(buttons[0]))
+  expect(api.sortPages).toHaveBeenCalledWith('1')
+  expect(screen.queryByRole('button', { name: 'Sort A–Z' })).toBeNull()
 })

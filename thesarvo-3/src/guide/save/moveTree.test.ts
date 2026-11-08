@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { StoredIndexNode } from '#/guide/content/syncFeed'
 import { changeTree, parseTreeChange } from './moveTree'
-import { pathsOf, sameIds, withMoved, withMovedPage, withTitle } from './treeOps'
+import { isSorted, pathsOf, sameIds, withMoved, withMovedPage, withSortedChildren, withTitle } from './treeOps'
 import type { Moved } from './treeOps'
 import type { PageRepo } from './repo'
 
@@ -88,6 +88,32 @@ describe('withMoved', () => {
   })
   it('drops redirects to pages that are gone', () => {
     expect(withMoved({ gone: '99' }, tree(), tree())).toEqual({})
+  })
+})
+
+describe('sorting', () => {
+  const t = () => node('1', [node('2', [], 'b 10'), node('3', [node('7', [], 'z'), node('8', [], 'y')], 'a'), node('4', [], 'B 2')], 'Home')
+  it('puts the children of one page in alphanumeric order, leaving the pages under them alone', () => {
+    const s = withSortedChildren(t(), '1')!
+    expect(s.children.map((n) => n.id)).toEqual(['3', '4', '2'])
+    expect(s.children[0].children.map((n) => n.id)).toEqual(['7', '8'])
+    expect(withSortedChildren(t(), '9')).toBeNull()
+    expect(isSorted(s.children)).toBe(true)
+    expect(isSorted(t().children)).toBe(false)
+  })
+  it('is one admin-only commit that keeps the old addresses', async () => {
+    const repo = new MemoryRepo(t())
+    expect(await changeTree(repo, { ...admin, groups: [] }, { action: 'sort', parent: '1' })).toEqual({ status: 'forbidden' })
+    const r = await changeTree(repo, admin, { action: 'sort', parent: '1' })
+    expect(r.status).toBe('done')
+    expect(repo.commits).toHaveLength(1)
+    expect(repo.commits[0].message.body).toContain('Sort-Pages: 1')
+    expect(repo.index.children.map((n) => n.id)).toEqual(['3', '4', '2'])
+    if (r.status === 'done') expect((await changeTree(repo, admin, { action: 'restore', index: r.before })).status).toBe('done')
+    expect(repo.index.children.map((n) => n.id)).toEqual(['2', '3', '4'])
+    expect((await changeTree(repo, admin, { action: 'sort', parent: '99' })).status).toBe('invalid')
+    expect(parseTreeChange({ action: 'sort', parent: '1' })).toEqual({ action: 'sort', parent: '1' })
+    expect(() => parseTreeChange({ action: 'sort' })).toThrow()
   })
 })
 

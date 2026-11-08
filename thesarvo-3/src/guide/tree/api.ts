@@ -10,5 +10,6 @@ const post = (body: unknown): Promise<Answer<{ before: StoredIndexNode }>> => ca
 
 export const renamePage = (page: string, title: string) => post({ action: 'rename', page, title })
 export const movePage = (page: string, parent: string, position: number) => post({ action: 'move', page, parent, position })
+export const sortPages = (parent: string) => post({ action: 'sort', parent })
 /** Undo: puts back a tree the server handed back as `before`. */
 export const restoreTree = (index: StoredIndexNode) => post({ action: 'restore', index })

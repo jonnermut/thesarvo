@@ -7,6 +7,7 @@ import { diffGuides } from './changes'
 import { updateBodyHistory, updateHistory } from './history'
 import type { HistoryEntry } from './history'
 import { editorWho } from './save'
+import { newPagePosition } from './treeOps'
 import type { PageRepo } from './repo'
 import { Invalid, oneOf, str } from './validate'
 
@@ -35,13 +36,13 @@ const flat = (n: StoredIndexNode): StoredIndexNode[] => [n, ...n.children.flatMa
 export const nextPageId = (index: StoredIndexNode) =>
   String(Math.max(FIRST_LOCAL_ID - 1, ...flat(index).filter((n) => isLocalPage(n.id)).map((n) => Number(n.id))) + 1)
 
-/** The index with a new last child under `parent`; null when there is no such page. */
+/** The index with a new child under `parent`, in its alphanumeric place when the pages there are in order, else last; null when there is no such page. */
 export function withChild(index: StoredIndexNode, parent: string, child: StoredIndexNode): StoredIndexNode | null {
   let found = false
   const walk = (n: StoredIndexNode): StoredIndexNode => {
     if (n.id === parent) {
       found = true
-      return { ...n, children: [...n.children, child] }
+      return { ...n, children: n.children.toSpliced(newPagePosition(n.children, child.title), 0, child) }
     }
     return { ...n, children: n.children.map(walk) }
   }
@@ -62,7 +63,7 @@ export type AddPageResult = { status: 'added'; id: string } | { status: 'missing
 
 const ATTEMPTS = 5
 
-/** Adds a page as the last child of `request.parent`: its place in the index, an empty guide (or empty prose page) and a "created" history entry, in one commit. */
+/** Adds a page under `request.parent` (see `withChild` for where): its place in the index, an empty guide (or empty prose page) and a "created" history entry, in one commit. */
 export async function addPage(repo: PageRepo, editor: Editor, request: AddPageRequest, now = () => new Date()): Promise<AddPageResult> {
   const who = await editorWho(editor)
   for (let attempt = 1; ; attempt++) {

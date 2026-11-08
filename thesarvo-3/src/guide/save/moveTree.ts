@@ -5,7 +5,7 @@ import { isAdmin } from './deletePage'
 import { editorWho } from './save'
 import type { PageRepo } from './repo'
 import { Invalid, str } from './validate'
-import { flat, sameIds, withMoved, withMovedPage, withTitle } from './treeOps'
+import { flat, sameIds, withMoved, withMovedPage, withSortedChildren, withTitle } from './treeOps'
 import type { Moved } from './treeOps'
 
 export type { Moved }
@@ -19,6 +19,8 @@ const pageId = (v: unknown, name: string) => {
 export type TreeChange =
   | { action: 'rename'; page: string; title: string }
   | { action: 'move'; page: string; parent: string; position: number }
+  /** Puts the pages directly under `parent` in alphanumeric order. */
+  | { action: 'sort'; parent: string }
   /** Puts back the tree as it was (undo): the same pages, in their old places and with their old titles. */
   | { action: 'restore'; index: StoredIndexNode }
 
@@ -43,10 +45,12 @@ export function parseTreeChange(body: unknown): TreeChange {
       if (!Number.isInteger(b.position) || (b.position as number) < 0) throw new Invalid('position: expected a whole number from 0')
       return { action: 'move', page: pageId(b.page, 'page'), parent: pageId(b.parent, 'parent'), position: b.position as number }
     }
+    case 'sort':
+      return { action: 'sort', parent: pageId(b.parent, 'parent') }
     case 'restore':
       return { action: 'restore', index: parseNode(b.index) }
     default:
-      throw new Invalid('action: expected rename, move or restore')
+      throw new Invalid('action: expected rename, move, sort or restore')
   }
 }
 
@@ -75,13 +79,17 @@ export async function changeTree(repo: PageRepo, editor: Editor, change: TreeCha
       next = withMovedPage(index, change.page, change.parent, change.position)
       what = `moved the page under ${title(change.parent)}`
       trailer = `Move-Page: ${change.page} under ${change.parent} at ${change.position}`
+    } else if (change.action === 'sort') {
+      next = withSortedChildren(index, change.parent)
+      what = 'put the pages under it in alphabetical order'
+      trailer = `Sort-Pages: ${change.parent}`
     } else {
       next = sameIds(index, change.index) ? change.index : null
       what = 'undid a change to the page tree'
       trailer = 'Restore-Tree: undo'
     }
     if (!next) return { status: 'invalid', error: change.action === 'restore' ? 'Pages were added or deleted since, so that change can no longer be undone' : 'Cannot do that: no such page, or into itself' }
-    const message = { headline: `${change.action === 'restore' ? 'Page tree' : title('page' in change ? change.page : '')}: ${who.name} ${what}`, body: `Edit-User: ${who.name} <${who.sub}>\n${trailer}` }
+    const message = { headline: `${change.action === 'restore' ? 'Page tree' : title('page' in change ? change.page : change.parent)}: ${who.name} ${what}`, body: `Edit-User: ${who.name} <${who.sub}>\n${trailer}` }
     const nextMoved = withMoved(moved, index, next)
     if (await repo.commitIndex({ head, index: next, moved: nextMoved, message })) return { status: 'done', before: index, index: next, moved: nextMoved }
     if (attempt === ATTEMPTS) throw new Error('The site is busy: too many changes at once')

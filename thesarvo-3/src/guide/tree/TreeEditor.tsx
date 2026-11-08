@@ -1,8 +1,8 @@
 import { Link } from '@tanstack/react-router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { movePage, readTree, renamePage, restoreTree } from './api'
+import { movePage, readTree, renamePage, restoreTree, sortPages } from './api'
 import type { StoredIndexNode } from '#/guide/content/syncFeed'
-import { flat, pathsOf, withMovedPage, withTitle } from '#/guide/save/treeOps'
+import { flat, isSorted, pathsOf, withMovedPage, withSortedChildren, withTitle } from '#/guide/save/treeOps'
 import { refreshManifest } from '#/guide/server'
 import { dropPlace, stepPlace, zoneAt } from './drop'
 import type { Zone } from './drop'
@@ -77,6 +77,11 @@ export default function TreeEditor({ selected }: { selected?: string }) {
     const next = index && clean && withTitle(index, id, clean)
     if (!next || !index || flat(index).find((n) => n.id === id)?.title === clean) return
     void run(next, renamePage(id, clean), (before) => setUndo((u) => [...u, before]))
+  }
+
+  const sort = (parent: string) => {
+    const next = index && !busy && withSortedChildren(index, parent)
+    if (next) void run(next, sortPages(parent), (before) => setUndo((u) => [...u, before]))
   }
 
   const undoLast = () => {
@@ -160,6 +165,11 @@ export default function TreeEditor({ selected }: { selected?: string }) {
               <button type="button" className={BUTTON} disabled={busy || !place('out')} onClick={() => move(node.id, place('out'))} aria-label="Move out, to the level above" title="Out one level">←</button>
               <button type="button" className={BUTTON} disabled={busy || !place('in')} onClick={() => move(node.id, place('in'))} aria-label="Move in, under the page above" title="In, under the page above">→</button>
             </span>
+          )}
+          {isOpen && !isSorted(node.children) && (
+            <button type="button" disabled={busy} onClick={() => sort(node.id)} title="Put the pages under this one in alphabetical order" className="shrink-0 rounded border border-line px-2 py-0.5 text-xs text-muted hover:text-navy disabled:opacity-40">
+              Sort A–Z
+            </button>
           )}
           {paths.has(node.id) && (
             <Link {...(top ? { to: '/g' } : { to: '/g/$', params: { _splat: paths.get(node.id) ?? '' } })} className={`shrink-0 px-2 text-xs text-link hover:underline ${here ? 'hidden sm:block' : ''}`} aria-label={`Open ${node.title}`}>
