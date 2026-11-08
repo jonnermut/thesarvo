@@ -7,7 +7,7 @@ import { GUIDE_PREFIX } from '#/guide/content/paths'
  */
 
 type Handler = { postMessage: (message: unknown) => void }
-type BridgeWindow = Window & typeof globalThis & { webkit?: { messageHandlers?: { thesarvo?: Handler } }; thesarvoHost?: { postMessage: (message: string) => void }; thesarvoBridge?: { reply: (id: number, status: number, body: string) => void }; thesarvoContents?: () => void; thesarvoMapPoints?: () => void }
+type BridgeWindow = Window & typeof globalThis & { webkit?: { messageHandlers?: { thesarvo?: Handler } }; thesarvoHost?: { postMessage: (message: string) => void }; thesarvoBridge?: { reply: (id: number, status: number, body: string) => void }; thesarvoContents?: () => void; thesarvoMapPoints?: () => void; thesarvoAddPage?: () => void }
 
 type Reply = { status: number; body: string }
 
@@ -110,6 +110,15 @@ export function offerPageEdit(win: BridgeWindow = window): () => void {
   if (!handler) return () => {}
   handler.postMessage({ type: 'pageEditable', available: true })
   return () => handler.postMessage({ type: 'pageEditable', available: false })
+}
+
+/** Lets the app's menu open the page's Add a page dialog (`window.thesarvoAddPage()`). Returns a function that undoes it. */
+export function offerAddPage(open: () => void, win: BridgeWindow = window): () => void {
+  if (!nativeHandler(win)) return () => {}
+  win.thesarvoAddPage = open
+  return () => {
+    if (win.thesarvoAddPage === open) delete win.thesarvoAddPage
+  }
 }
 
 /** Lets the app ask the page for its GPS points when the reader switches to the Map tab (the page answers with `openMap`). Returns a function that undoes it. */

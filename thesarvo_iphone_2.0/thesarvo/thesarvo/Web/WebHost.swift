@@ -124,6 +124,7 @@ final class WebModel: NSObject, ObservableObject, WKNavigationDelegate, WKScript
     func requestMapPoints() { webView.evaluateJavaScript("window.thesarvoMapPoints && window.thesarvoMapPoints();") }
 
     /// Asks the page for its contents list (it answers with `openContents`).
+    func requestAddPage() { webView.evaluateJavaScript("window.thesarvoAddPage && window.thesarvoAddPage();") }
     func requestContents() { webView.evaluateJavaScript("window.thesarvoContents && window.thesarvoContents();") }
 
     /// Scrolls the page to an element (a Contents entry chosen in the native sheet).

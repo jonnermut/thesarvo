@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { inApp, installBridge, offerContents, offerMapPoints, offerPageEdit, openNativeMap, shareFileNative } from './bridge'
+import { inApp, installBridge, offerContents, offerMapPoints, offerAddPage, offerPageEdit, openNativeMap, shareFileNative } from './bridge'
 
 type W = NonNullable<Parameters<typeof installBridge>[0]>
 type Reply = (id: number, status: number, body: string) => void
@@ -142,6 +142,15 @@ describe('app bridge', () => {
     off()
     expect(offerPageEdit({ location: { href: 'https://x/' } } as unknown as W)()).toBeUndefined()
     return Promise.resolve().then(() => expect(sent).toEqual([{ type: 'pageEditable', available: true }, { type: 'pageEditable', available: false }]))
+  })
+
+  it('lets the app open the Add a page dialog, and withdraws it', () => {
+    const { w } = fakeWindow(() => {})
+    const open = () => {}
+    const off = offerAddPage(open, w)
+    expect(w.thesarvoAddPage).toBe(open)
+    off()
+    expect(w.thesarvoAddPage).toBeUndefined()
   })
 
   it('lets the app ask for the map points, and withdraws them', () => {

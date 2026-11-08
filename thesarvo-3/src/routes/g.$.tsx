@@ -9,6 +9,7 @@ import { ContentsView, contentsTotals } from '#/guide/view/ContentsView'
 import { useJustSaved } from '#/guide/justSaved'
 import { addRecent } from '#/guide/recent'
 import { guideDescription, guideImage, pageDescription, pageHead } from '#/guide/seo'
+import { AppAddPage } from '#/components/AppAddPage'
 import { GuideView } from '#/guide/view/GuideView'
 import { PrevNext } from '#/guide/view/PrevNext'
 import { useFullWidth, WidthToggle, widthClass } from '#/guide/view/width'
@@ -44,7 +45,7 @@ export const Route = createFileRoute('/g/$')({
       image: guide ? guideImage(guide) : undefined,
     })
   },
-  component: GuidePage,
+  component: GuidePageWithAdd,
   notFoundComponent: NotFound,
 })
 
@@ -66,6 +67,16 @@ function NotFound() {
         </p>
       )}
     </div>
+  )
+}
+
+function GuidePageWithAdd() {
+  const { node } = Route.useLoaderData()
+  return (
+    <>
+      <GuidePage />
+      {!node.private && <AppAddPage parent={node.id} parentTitle={node.title} />}
+    </>
   )
 }
 

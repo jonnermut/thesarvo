@@ -321,6 +321,15 @@ final class AppModel: ObservableObject {
         }
     }
 
+    /// Opens the page's Add a page dialog (the website's), signing in first: anyone with an account may add a page.
+    func addPage() {
+        if auth.user != nil { web.requestAddPage(); return }
+        Task {
+            await auth.signIn()
+            if auth.user != nil { web.requestAddPage() }
+        }
+    }
+
     func openMenu() {
         menuFolder = folder(for: selection)
         showMenu = true
