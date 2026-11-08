@@ -4,7 +4,7 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import type { StoredIndexNode } from '#/guide/content/syncFeed'
 import TreeEditor from './TreeEditor'
 
-vi.mock('@tanstack/react-router', () => ({ Link: ({ children, ...p }: { children: ReactNode }) => <a {...(p as object)}>{children}</a> }))
+vi.mock('@tanstack/react-router', () => ({ Link: ({ children }: { children: ReactNode }) => <a>{children}</a> }))
 vi.mock('#/guide/server', () => ({ refreshManifest: vi.fn() }))
 const api = vi.hoisted(() => ({ readTree: vi.fn(), movePage: vi.fn(), renamePage: vi.fn(), restoreTree: vi.fn() }))
 vi.mock('./api', () => api)
@@ -36,10 +36,10 @@ it('moves a page with the arrow buttons and undoes it with the tree the server h
   await screen.findByText('Tessellated')
   await act(async () => void fireEvent.click(screen.getByRole('button', { name: 'Move up' })))
   expect(api.movePage).toHaveBeenCalledWith('5', '2', 0)
-  await waitFor(() => expect((screen.getByRole('button', { name: /Undo/ }) as HTMLButtonElement).disabled).toBe(false))
+  await waitFor(() => expect(screen.getByRole<HTMLButtonElement>('button', { name: /Undo/ }).disabled).toBe(false))
   await act(async () => void fireEvent.click(screen.getByRole('button', { name: /Undo/ })))
   expect(api.restoreTree).toHaveBeenCalledWith(tree())
-  expect((screen.getByRole('button', { name: /Undo/ }) as HTMLButtonElement).disabled).toBe(true)
+  expect(screen.getByRole<HTMLButtonElement>('button', { name: /Undo/ }).disabled).toBe(true)
 })
 
 it('renames, and shows the new address', async () => {
