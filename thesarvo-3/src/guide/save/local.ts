@@ -7,7 +7,8 @@ import type { ContentSource, IndexNode } from '#/guide/content/types'
 import { canonical, ensureIds } from './changes'
 import type { HistoryEntry } from './history'
 import type { StoredIndexNode } from '#/guide/content/syncFeed'
-import { bodyPath, guidePath, historyPath, indexPath } from './repo'
+import { bodyPath, guidePath, historyPath, indexPath, movedPath } from './repo'
+import type { Moved } from './treeOps'
 import type { BodyRepo, GuideRepo, PageRepo, Stored, StoredBody } from './repo'
 
 const storedOf = (n: IndexNode): StoredIndexNode => ({ id: n.id, title: n.title, children: n.children.map(storedOf) })
@@ -72,10 +73,11 @@ export class LocalRepo implements GuideRepo, PageRepo, BodyRepo {
   }
 
   /** The saved tree if this folder has one, else the content source's. */
-  async readIndex(): Promise<{ head: string; index: StoredIndexNode }> {
+  async readIndex(): Promise<{ head: string; index: StoredIndexNode; moved: Moved }> {
     const saved = (await readJson(path.join(this.dir, indexPath))) as StoredIndexNode | null
     const index = saved ?? storedOf(await this.source().getIndex())
-    return { head: canonical(index), index }
+    const moved = ((await readJson(path.join(this.dir, movedPath))) as Moved | null) ?? {}
+    return { head: canonical(index), index, moved }
   }
 
   async commitPage({ head, index, id, content, history, message }: Parameters<PageRepo['commitPage']>[0]) {
@@ -87,10 +89,11 @@ export class LocalRepo implements GuideRepo, PageRepo, BodyRepo {
     return 'guide' in content ? version(content.guide) : textVersion(content.html)
   }
 
-  async commitIndex({ head, index, message }: Parameters<PageRepo['commitIndex']>[0]) {
+  async commitIndex({ head, index, moved, message }: Parameters<PageRepo['commitIndex']>[0]) {
     const now = await this.readIndex()
     if (now.head !== head) return null
     await this.write(indexPath, index)
+    if (moved) await this.write(movedPath, moved)
     console.log(`changed the page tree: ${message.headline}`)
     return canonical(index)
   }

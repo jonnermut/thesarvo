@@ -10,7 +10,7 @@ const member = { ...admin, groups: ['cct-members'] }
 class MemoryRepo implements PageRepo {
   commits: Parameters<PageRepo['commitIndex']>[0][] = []
   constructor(public index: StoredIndexNode, public staleOnce = false) {}
-  readIndex = () => Promise.resolve({ head: `c${this.commits.length}`, index: this.index })
+  readIndex = () => Promise.resolve({ head: `c${this.commits.length}`, index: this.index, moved: {} })
   commitPage = () => Promise.resolve(null)
   commitIndex = (c: Parameters<PageRepo['commitIndex']>[0]) => {
     if (this.staleOnce) {

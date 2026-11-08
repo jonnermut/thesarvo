@@ -3,7 +3,7 @@ import { manifestTree, pageInfo } from './content/manifest'
 import { resolvePageBody } from './content/pageLinks'
 import type { Manifest, PageInfo } from './content/manifest'
 import type { RecentChange } from './content/recent'
-import { STATIC_SITE, GUIDE_PREFIX } from './content/paths'
+import { STATIC_SITE, GUIDE_PREFIX, flatten } from './content/paths'
 import type { ContentSource, IndexNode } from './content/types'
 import { fetchGrafts, fetchPrivatePage, isPrivateId } from './privateClient'
 import { withGrafts } from './content/privateSite'
@@ -148,4 +148,15 @@ export const fetchImageNames = async ({ data: id }: { data: string }): Promise<s
       .catch(() => []),
   ])
   return [...new Set([...built, ...stored])].sort()
+}
+
+/** Where the page that used to be at `old` (a path without the /g prefix) is now, or null when it never was there (or this is not the static site, which has no `moved.json`). */
+export async function movedTo(old: string): Promise<string | null> {
+  if (!STATIC_SITE) return null
+  try {
+    const id = (await getJson<Record<string, string>>('moved.json'))[old]
+    return id ? ((await fetchTree().then((t) => flatten(t).find((n) => n.id === id)))?.path ?? null) : null
+  } catch {
+    return null
+  }
 }

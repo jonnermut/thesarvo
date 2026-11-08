@@ -9,7 +9,7 @@ const jon = { sub: 's1', email: 'jon@example.com', name: 'Jon', groups: [] }
 class MemoryRepo implements PageRepo {
   commits: Parameters<PageRepo['commitPage']>[0][] = []
   constructor(public index: StoredIndexNode, public staleOnce = false) {}
-  readIndex = () => Promise.resolve({ head: `c${this.commits.length}`, index: this.index })
+  readIndex = () => Promise.resolve({ head: `c${this.commits.length}`, index: this.index, moved: {} })
   commitPage = (c: Parameters<PageRepo['commitPage']>[0]) => {
     if (this.staleOnce) {
       this.staleOnce = false
@@ -42,6 +42,14 @@ describe('the new page', () => {
     expect(withChild(tree, '1', node('9'))?.children.map((n) => n.id)).toEqual(['2', '4', '9'])
     expect(withChild(tree, '77', node('9'))).toBeNull()
   })
+  it('goes in its alphanumeric place when the pages under its parent are in order', () => {
+    const t = (id: string, title: string): StoredIndexNode => ({ id, title, children: [] })
+    const sorted = node('1', [t('2', 'Apple'), t('3', 'crag 2'), t('4', 'Crag 10'), t('5', 'Zed')])
+    expect(withChild(sorted, '1', t('9', 'crag 3'))?.children.map((n) => n.id)).toEqual(['2', '3', '9', '4', '5'])
+    expect(withChild(sorted, '1', t('9', 'Aardvark'))?.children[0].id).toBe('9')
+    expect(withChild(sorted, '1', t('9', 'Zulu'))?.children.at(-1)?.id).toBe('9')
+    expect(withChild(node('1', [t('2', 'Zed'), t('3', 'Apple')]), '1', t('9', 'Mid'))?.children.map((n) => n.id)).toEqual(['2', '3', '9'])
+  })
   it('starts as a guide with a header named for it', () => {
     expect(newGuide('9000000002', 'Fresh Crag')).toMatchObject({ id: '9000000002', nodes: [{ type: 'header', name: 'Fresh Crag' }] })
   })
@@ -57,7 +65,7 @@ describe('addPage', () => {
     const result = await addPage(repo, jon, request, () => new Date('2026-10-29T01:00:00Z'))
     expect(result).toEqual({ status: 'added', id: String(FIRST_LOCAL_ID) })
     const [c] = repo.commits
-    expect(c.index.children.map((n) => [n.id, n.title])).toEqual([['2', 'T2'], [String(FIRST_LOCAL_ID), 'Fresh Crag']])
+    expect(c.index.children.map((n) => [n.id, n.title])).toEqual([[String(FIRST_LOCAL_ID), 'Fresh Crag'], ['2', 'T2']]) // in order, so alphabetical
     expect('guide' in c.content && c.content.guide.nodes[0]).toMatchObject({ type: 'header', name: 'Fresh Crag' })
     expect(c.history).toHaveLength(1)
     expect(c.history[0]).toMatchObject({ description: 'created the page', user: { sub: 's1', name: 'Jon' }, start: '2026-10-29T01:00:00.000Z' })
@@ -73,7 +81,7 @@ describe('addPage', () => {
   it('tries again on the newer tree when someone saved in between, taking the next id', async () => {
     const repo = new MemoryRepo(node('1'), true)
     expect(await addPage(repo, jon, request)).toEqual({ status: 'added', id: '9000000010' })
-    expect(repo.index.children.map((n) => n.id)).toEqual(['9000000009', '9000000010'])
+    expect(repo.index.children.map((n) => n.id)).toEqual(['9000000010', '9000000009']) // 'Fresh Crag' sorts before 'T9000000009'
   })
   it('says so when the parent is not there, committing nothing', async () => {
     const repo = new MemoryRepo(node('1'))

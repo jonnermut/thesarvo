@@ -88,6 +88,10 @@ const data = path.join(out, 'g-data')
 await rm(out, { recursive: true, force: true })
 for (const sub of ['guide', 'history', 'images', 'kml', 'page', 'search']) await mkdir(path.join(data, sub), { recursive: true })
 const writeJson = (file: string, value: unknown) => writeFile(path.join(data, file), JSON.stringify(value))
+// Old addresses of renamed and moved pages, to the page's id (written by the tree page's changes): the not-found page reads it to send readers on. Only public pages' are kept.
+const movedAll = JSON.parse(await readFile(path.join(dir, 'moved.json'), 'utf8').catch(() => '{}')) as Record<string, string>
+const publicIds = new Set(nodes.map((n) => n.id))
+await writeFile(path.join(data, 'moved.json'), JSON.stringify(Object.fromEntries(Object.entries(movedAll).filter(([, id]) => publicIds.has(id)))))
 
 for (const node of pages) {
   if (node.isGuide) {
@@ -166,7 +170,7 @@ if (!pkg) {
 await cp(path.join(pkg, 'client'), out, { recursive: true })
 process.env.CONTENT_DIR = dir
 const { default: renderer } = (await import(pathToFileURL(path.resolve(pkg, 'server/server.js')).href)) as { default: { fetch: (r: Request) => Promise<Response> } }
-const fixed = [GUIDE_PREFIX, `${GUIDE_PREFIX}/search`, `${GUIDE_PREFIX}/forum`, CALLBACK_PATH, PASSWORD_PATH, ACCOUNT_PATH]
+const fixed = [GUIDE_PREFIX, `${GUIDE_PREFIX}/search`, `${GUIDE_PREFIX}/forum`, `${GUIDE_PREFIX}/tree`, CALLBACK_PATH, PASSWORD_PATH, ACCOUNT_PATH]
 const render = partial ? pages.map(url) : [...new Set([...fixed, ...nodes.map(url)])]
 let next = 0
 await Promise.all(
