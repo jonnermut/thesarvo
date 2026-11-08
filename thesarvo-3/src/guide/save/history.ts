@@ -157,6 +157,8 @@ export const headerFields: [keyof Header, string][] = [
   ['history', 'the history'],
   ['access', 'the access notes'],
   ['steward', 'the crag steward'],
+  ['stewardEmail', 'the crag steward email'],
+  ['notices', 'the notices'],
   ['camping', 'the camping notes'],
   ['walk', 'the walk'],
   ['sun', 'the sun'],

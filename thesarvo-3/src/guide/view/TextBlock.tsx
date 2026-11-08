@@ -1,6 +1,7 @@
 import type { TextBlock as TextBlockModel } from '#/guide/model/types'
 import { Lines } from './text'
 import { InlineCredit } from './credit'
+import { Callout, RichHtml } from './RichHtml'
 
 const BODY = 'text-[13px] leading-snug break-words sm:text-justify'
 
@@ -25,6 +26,20 @@ export function TextBlock({ block }: { block: TextBlockModel }) {
     </>
   )
   switch (block.cls) {
+    case 'rich':
+      return (
+        <div className={BODY}>
+          <RichHtml html={block.text} />
+          <InlineCredit other={block.other} part="text" what="Text" />
+        </div>
+      )
+    case 'note':
+    case 'warning':
+      return (
+        <Callout kind={block.cls}>
+          <RichHtml html={block.text} />
+        </Callout>
+      )
     case 'heading1':
       return <h2 className="border-b border-line pt-4 text-[28px] font-bold text-navy">{content}</h2>
     case 'heading2':

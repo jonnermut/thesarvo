@@ -4,6 +4,9 @@ import { RoutesChart } from './RoutesChart'
 import type { RouteStats } from './routeStats'
 import { Lines } from './text'
 import { InlineCredit } from './credit'
+import { Callout, RichHtml } from './RichHtml'
+import { isRich, stripTags } from './richText'
+import { StewardNote } from './StewardNote'
 
 const FACTS = [
   [WalkIcon, 'walk'],
@@ -35,16 +38,33 @@ export function HeaderBlock({ header, stats }: { header: Header; stats: RouteSta
           ))}
         </ul>
       </div>
+      {header.notices?.some((n) => stripTags(n.html)) && (
+        <div className="mt-4 space-y-2">
+          {header.notices.filter((n) => stripTags(n.html)).map((n, i) => (
+            <Callout key={i} kind={n.kind}>
+              <RichHtml html={n.html} />
+            </Callout>
+          ))}
+        </div>
+      )}
       <div className="mt-6 space-y-5">
-        {SECTIONS.filter(([, key]) => header[key]).map(([label, key]) => (
+        {SECTIONS.filter(([, key]) => header[key] || (key === 'steward' && header.stewardEmail)).map(([label, key]) => (
           // Live site: label column on the left; stacked on phones.
           // Labels are single words: never broken inside one ("Acknowledgemen/t") by the article's wrapping.
           <section key={key} className="gap-6 sm:grid sm:grid-cols-[13rem_1fr]">
             <h2 className="mb-1 h-fit border-b border-line text-xl font-bold text-navy wrap-normal sm:mb-0">{label}</h2>
-            <p className="text-[13px] leading-snug break-words">
-              <Lines text={header[key] ?? ''} />
+            <div className="text-[13px] leading-snug break-words">
+              {key === 'steward' && header.stewardEmail && !header.steward ? (
+                <StewardNote email={header.stewardEmail} />
+              ) : isRich(header, key) ? (
+                <RichHtml html={header[key] ?? ''} />
+              ) : (
+                <p>
+                  <Lines text={header[key] ?? ''} />
+                </p>
+              )}
               <InlineCredit other={header.other} part={key} what={label} />
-            </p>
+            </div>
           </section>
         ))}
       </div>

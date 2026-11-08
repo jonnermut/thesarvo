@@ -12,13 +12,19 @@ const KEEP = new Set('p br h1 h2 h3 h4 h5 h6 ul ol li strong em u s a img blockq
 const ATTRS: Record<string, string[]> = {
   a: ['data-file', 'data-page', 'href'],
   img: ['data-file', 'src', 'alt', 'width'],
+  ol: ['start'],
   td: ['colspan', 'rowspan'],
   th: ['colspan', 'rowspan'],
   iframe: ['src', 'title', 'allowfullscreen'],
 }
 /** The classes the site styles (see `.page-prose`): notes, columns and the frame around an embedded video. */
 const CLASSES = new Set(['note', 'note warning', 'columns', 'embed'])
-const LINK = /^(?:https?:|mailto:|#|\/(?!\/))/i
+/** What guide text may hold: paragraphs, breaks, bold, italic, lists and links (the editor's guide profile, `RichEditor profile="guide"`). */
+const GUIDE_KEEP = new Set('p br strong em ul ol li a'.split(' '))
+/** Block tags the guide profile does not keep: their text becomes a paragraph, so a pasted heading or quote does not run into what follows. */
+const GUIDE_BLOCKS = new Set('h1 h2 h3 h4 h5 h6 blockquote div pre tr'.split(' '))
+export type Profile = 'page' | 'guide'
+const LINK = /^(?:https?:|mailto:|tel:|#|\/(?!\/))/i
 const IMAGE = /^(?:https:\/\/|\/(?!\/))/i
 /** Dropped with everything inside them, where unknown tags only lose the tag. */
 const DROP = new Set(['script', 'style', 'noscript', 'template', 'object', 'embed', 'form', 'svg', 'math'])
@@ -28,12 +34,12 @@ type Doc = Window['document']
 export const MAX_HTML = 200_000
 
 /** The allow-listed HTML for `html`, or '' when nothing is left of it. */
-export function sanitizeHtml(html: string): string {
+export function sanitizeHtml(html: string, profile: Profile = 'page'): string {
   const doc = new Window().document
   const root = doc.createElement('div')
   root.innerHTML = html.slice(0, MAX_HTML * 2)
   const out = doc.createElement('div')
-  out.append(...clean(doc, root.childNodes, false))
+  out.append(...clean(doc, root.childNodes, false, profile))
   tidy(out)
   return out.innerHTML.trim()
 }
@@ -46,18 +52,25 @@ export function hasContent(html: string): boolean {
   return !!(root.textContent?.trim() || root.querySelector('img, iframe, hr'))
 }
 
-function clean(doc: Doc, nodes: Iterable<Node>, inEmbed: boolean): Node[] {
-  return [...nodes].flatMap((n) => convert(doc, n, inEmbed))
+function clean(doc: Doc, nodes: Iterable<Node>, inEmbed: boolean, profile: Profile): Node[] {
+  return [...nodes].flatMap((n) => convert(doc, n, inEmbed, profile))
 }
 
-function convert(doc: Doc, node: Node, inEmbed: boolean): Node[] {
+function convert(doc: Doc, node: Node, inEmbed: boolean, profile: Profile): Node[] {
   if (node.nodeType === 3) return [doc.createTextNode(node.textContent ?? '')]
   if (node.nodeType !== 1) return []
   const el = node as Element
   const tag = el.tagName.toLowerCase()
   if (DROP.has(tag)) return []
-  const inner = (embed = inEmbed) => clean(doc, el.childNodes, embed)
-  if (!KEEP.has(tag)) return inner()
+  const inner = (embed = inEmbed) => clean(doc, el.childNodes, embed, profile)
+  if (profile === 'guide' && GUIDE_BLOCKS.has(tag)) {
+    const kids = inner()
+    if (!kids.length || kids.some((k) => ['P', 'UL', 'OL'].includes(k.nodeName))) return kids
+    const p = doc.createElement('p')
+    p.append(...kids)
+    return [p]
+  }
+  if (!(profile === 'guide' ? GUIDE_KEEP : KEEP).has(tag)) return inner()
   const attrs: Record<string, string> = {}
   for (const name of ATTRS[tag] ?? []) {
     const value = el.getAttribute(name)
@@ -65,9 +78,11 @@ function convert(doc: Doc, node: Node, inEmbed: boolean): Node[] {
     if (name === 'href' && !LINK.test(value)) continue
     if (name === 'src' && tag === 'img' && !IMAGE.test(value)) continue
     if (name === 'width' && !/^\d{1,4}$/.test(value)) continue
+    if (name === 'start' && !/^\d{1,3}$/.test(value)) continue
     if ((name === 'colspan' || name === 'rowspan') && !/^\d{1,2}$/.test(value)) continue
     attrs[name] = value.slice(0, 2000)
   }
+  if (profile === 'guide') delete attrs['data-file']
   if (tag === 'div') {
     const cls = (el.getAttribute('class') ?? '').trim().replace(/\s+/g, ' ')
     if (CLASSES.has(cls)) attrs.class = cls

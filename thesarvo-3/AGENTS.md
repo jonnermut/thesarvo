@@ -53,6 +53,7 @@ The docs live in the **private** repo `thesarvo-private`, checked out as a peer 
 - **The forum is members-only:** its threads live in the bucket's `private/forum/` (never public) and are served only by `/g/api/forum` after sign-in; only `forum-recent` (titles and counts) is public. Never put forum text in `g-data/` or the site build, and keep `forum/` in the content repo out of the build. CCT threads carry `group: cct-members`.
 - **theCrag material is marked:** copyright material taken from theCrag (CC BY-NC-SA; the site is CC BY-SA) carries `other.thecragContent` and is credited on the page (`src/guide/view/credit.tsx`). Anything that copies descriptions or topos from theCrag must set the mark, and publisher topos are never copied. See the private plan-thecrag-sync.md.
 - Readers must never download the editor: `npm run check-bundle` guards it (the guide editor and the rich text editor, `src/rte`).
+- **Guide HTML is sanitised on save too:** header `rich` fields, `notices` and text blocks of cls `rich`/`note`/`warning` go through `cleanNode` (`src/guide/save/cleanRich.ts`, guide profile of `sanitizeHtml`); new rich fields are added to `RICH_FIELDS`, `validate.ts` and `cleanRich.ts`, with a test.
 - **Rich text is sanitised on the server.** Every save of prose page, forum post or comment HTML goes through `sanitizeHtml` (`src/rte/sanitize.ts`); never store or render what the browser sent as it is. New tags, attributes or embed hosts are added there (and to `extensions.ts`), with a test.
 
 ## Before every commit

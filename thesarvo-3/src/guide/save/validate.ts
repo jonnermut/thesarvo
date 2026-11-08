@@ -1,3 +1,4 @@
+import { RICH_FIELDS } from '#/guide/model/types'
 import type { GuideNode, RawElement } from '#/guide/model/types'
 import type { Changes, NodeChange } from './changes'
 
@@ -60,7 +61,8 @@ const other = opt(rec(str))
 const raw: Parse<RawElement> = (v, at) => obj({ tag: str, attrs: rec(str), children: arr(raw), text: str })(v, at)
 
 const header = obj({
-  type: oneOf('header'), id: str, name: str, rock: str, sun: str, walk: str, access: str, camping: str, steward: opt(str),
+  type: oneOf('header'), id: str, name: str, rock: str, sun: str, walk: str, access: str, camping: str, steward: opt(str), stewardEmail: opt(str),
+  rich: opt(arr(oneOf(...RICH_FIELDS), 10)), notices: opt(arr(obj({ kind: oneOf('note', 'warning'), html: str }), 20)),
   acknowledgement: str, intro: str, history: str, autonumber: str, other,
 })
 const climb = obj({ type: oneOf('climb', 'problem'), id: str, name: str, number: str, grade: str, extra: str, length: str, stars: str, fa: str, text: str, other })

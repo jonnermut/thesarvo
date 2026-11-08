@@ -10,14 +10,16 @@ export type RichEditorProps = {
   initial: string
   onChange: (html: string) => void
   /** Stores one picture and resolves with the name it was kept under (shown through `resolveFile`, saved as `data-file`). */
-  upload: (file: File, onProgress: (fraction: number) => void) => Promise<string>
+  upload?: (file: File, onProgress: (fraction: number) => void) => Promise<string>
   /** The address a stored picture is shown from. */
-  resolveFile: (name: string) => string
+  resolveFile?: (name: string) => string
   /** What the box is for, for screen readers. */
   label: string
   placeholder?: string
   /** A smaller toolbar and box, for comments: no headings, quotes, tables or video. */
   compact?: boolean
+  /** Guide text (header fields, notices, rich text blocks): only paragraphs, bold, italic, lists and links, with a small toolbar and no pictures. */
+  guide?: boolean
   autoFocus?: boolean
   /** Fired with the editor once it exists, for hosts that want to drive it (tests, a link picker). */
   onReady?: (editor: Editor) => void
@@ -33,7 +35,7 @@ const blank = (editor: Editor) => editor.isEmpty && !editor.getHTML().includes('
  * Lazy loaded (see `LazyRichEditor`), so readers never download it. It holds no storage or network code of its own:
  * the host passes `upload` and `resolveFile`, and saves what `onChange` hands over.
  */
-export default function RichEditor({ initial, onChange, upload, resolveFile, label, placeholder, compact, autoFocus, onReady }: RichEditorProps) {
+export default function RichEditor({ initial, onChange, upload, resolveFile, label, placeholder, compact, guide, autoFocus, onReady }: RichEditorProps) {
   const [uploads, setUploads] = useState<{ id: number; name: string; fraction: number }[]>([])
   const [problem, setProblem] = useState('')
   const next = useRef(0)
@@ -51,6 +53,7 @@ export default function RichEditor({ initial, onChange, upload, resolveFile, lab
         setUploads((u) => [...u, { id, name: file.name, fraction: 0 }])
         try {
           const prepared = await (await import('#/guide/edit/upload')).prepareImage(file)
+          if (!upload) return
           const stored = await upload(prepared, (fraction) => setUploads((u) => u.map((x) => (x.id === id ? { ...x, fraction } : x))))
           editorRef.current?.chain().focus().insertContent([{ type: 'image', attrs: { file: stored, alt: '' } }]).run()
         } catch (e) {
@@ -64,21 +67,21 @@ export default function RichEditor({ initial, onChange, upload, resolveFile, lab
   )
 
   const editor = useEditor({
-    extensions: extensions({ resolve: resolveFile, placeholder, compact }),
+    extensions: extensions({ resolve: resolveFile ?? ((f) => f), placeholder, compact, guide }),
     content: initial,
     autofocus: autoFocus ? 'end' : false,
     editorProps: {
-      attributes: { class: `page-prose rte-content min-h-[8rem] px-3 py-2 focus:outline-none ${compact ? '' : 'min-h-[16rem]'}`, role: 'textbox', 'aria-multiline': 'true', 'aria-label': label },
+      attributes: { class: `${guide ? 'guide-rich text-sm leading-snug' : 'page-prose'} rte-content px-3 py-2 focus:outline-none ${guide ? 'min-h-[5rem]' : compact ? 'min-h-[8rem]' : 'min-h-[8rem] min-h-[16rem]'}`, role: 'textbox', 'aria-multiline': 'true', 'aria-label': label },
       handlePaste: (_view, event) => {
         const files = [...(event.clipboardData?.files ?? [])].filter((f) => IMAGE.test(f.type))
-        if (!files.length) return false
+        if (!files.length || !upload) return false
         event.preventDefault()
         void addFiles(files)
         return true
       },
       handleDrop: (_view, event) => {
         const files = [...(event.dataTransfer?.files ?? [])].filter((f) => IMAGE.test(f.type))
-        if (!files.length) return false
+        if (!files.length || !upload) return false
         event.preventDefault()
         void addFiles(files)
         return true
@@ -94,7 +97,7 @@ export default function RichEditor({ initial, onChange, upload, resolveFile, lab
 
   return (
     <div className="rte overflow-hidden rounded-md border border-line bg-card focus-within:border-link">
-      {editor && <Toolbar editor={editor} compact={compact} onFiles={(files) => void addFiles(files)} />}
+      {editor && <Toolbar editor={editor} compact={compact} guide={guide} onFiles={(files) => void addFiles(files)} />}
       <EditorContent editor={editor} />
       {uploads.length > 0 && (
         <ul className="border-t border-line px-3 py-1.5 text-sm text-muted" aria-live="polite">
@@ -126,7 +129,7 @@ function Tool({ label, active, disabled, onClick, children }: { label: string; a
 
 const Gap = () => <span aria-hidden className="mx-1 h-5 w-px bg-line" />
 
-function Toolbar({ editor, compact, onFiles }: { editor: Editor; compact?: boolean; onFiles: (files: File[]) => void }) {
+function Toolbar({ editor, compact, guide, onFiles }: { editor: Editor; compact?: boolean; guide?: boolean; onFiles: (files: File[]) => void }) {
   const s = useEditorState({
     editor,
     selector: ({ editor: e }) => ({
@@ -170,7 +173,7 @@ function Toolbar({ editor, compact, onFiles }: { editor: Editor; compact?: boole
         <Tool label="Italic (Ctrl+I)" active={s.italic} onClick={() => chain().toggleItalic().run()}>
           <i>I</i>
         </Tool>
-        {!compact && (
+        {!compact && !guide && (
           <>
             <Tool label="Underline (Ctrl+U)" active={s.underline} onClick={() => chain().toggleUnderline().run()}>
               <u>U</u>
@@ -194,7 +197,7 @@ function Toolbar({ editor, compact, onFiles }: { editor: Editor; compact?: boole
         <Tool label="Numbered list" active={s.numbers} onClick={() => chain().toggleOrderedList().run()}>
           1.
         </Tool>
-        {!compact && (
+        {!compact && !guide && (
           <Tool label="Quote" active={s.quote} onClick={() => chain().toggleBlockquote().run()}>
             “ ”
           </Tool>
@@ -203,15 +206,17 @@ function Toolbar({ editor, compact, onFiles }: { editor: Editor; compact?: boole
         <Tool label="Link (Ctrl+K)" active={s.link || panel === 'link'} onClick={() => setPanel(panel === 'link' ? null : 'link')}>
           Link
         </Tool>
-        <Tool label="Add a picture" onClick={() => file.current?.click()}>
-          Photo
-        </Tool>
-        {!compact && (
+        {!guide && (
+          <Tool label="Add a picture" onClick={() => file.current?.click()}>
+            Photo
+          </Tool>
+        )}
+        {!compact && !guide && (
           <Tool label="Embed a video" active={panel === 'video'} onClick={() => setPanel(panel === 'video' ? null : 'video')}>
             Video
           </Tool>
         )}
-        {!compact && (
+        {!compact && !guide && (
           <Tool label="Divider" onClick={() => chain().setHorizontalRule().run()}>
             ―
           </Tool>

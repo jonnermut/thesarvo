@@ -1,6 +1,7 @@
 import type { Editor } from '#/auth/verifyToken'
 import { emailKey } from '#/guide/avatars/keys'
 import type { Guide } from '#/guide/model/types'
+import { cleanChanges } from './cleanRich'
 import { diffGuides, isEmpty, mergeChanges } from './changes'
 import type { Changes, Conflict } from './changes'
 import { describe, updateHistory } from './history'
@@ -40,7 +41,7 @@ export async function saveGuide(repo: GuideRepo, editor: Editor, request: SaveRe
   for (let attempt = 1; ; attempt++) {
     const stored = await repo.read(request.guide)
     if (!stored) return { status: 'missing' }
-    const merged = mergeChanges(stored.guide, request.changes)
+    const merged = mergeChanges(stored.guide, cleanChanges(request.changes))
     if (merged.conflicts.length) return { status: 'conflict', head: stored.head, guide: stored.guide, conflicts: merged.conflicts }
     const applied = diffGuides(stored.guide, merged.guide)
     if (isEmpty(applied)) return { status: 'saved', head: stored.head, guide: stored.guide, rename: merged.rename }

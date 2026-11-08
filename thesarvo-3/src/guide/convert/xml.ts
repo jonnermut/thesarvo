@@ -201,7 +201,8 @@ function rectToXml(r: TopoRect): RawElement {
 function nodeToXml(n: GuideNode): RawElement {
   switch (n.type) {
     case 'header': {
-      const { type: _t, other, ...fields } = n
+      // The old XML format has no rich fields, notices or steward address; they are left out.
+      const { type: _t, other, rich: _r, notices: _n, stewardEmail: _s, ...fields } = n
       return el('header', attrs(fields, other))
     }
     case 'climb':

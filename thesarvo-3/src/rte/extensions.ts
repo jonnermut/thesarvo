@@ -91,7 +91,14 @@ export const Embed = Node.create({
   },
 })
 
-export function extensions(options: { resolve: (file: string) => string; placeholder?: string; compact?: boolean }): Extensions {
+export function extensions(options: { resolve: (file: string) => string; placeholder?: string; compact?: boolean; guide?: boolean }): Extensions {
+  // The guide profile (see `sanitizeHtml`): paragraphs, bold, italic, lists and links.
+  if (options.guide)
+    return [
+      StarterKit.configure({ heading: false, blockquote: false, horizontalRule: false, codeBlock: false, code: false, underline: false, strike: false, link: false }),
+      Anchor.configure({ openOnClick: false, autolink: true, linkOnPaste: true, defaultProtocol: 'https', HTMLAttributes: { rel: 'noopener noreferrer nofollow', target: null } }),
+      Placeholder.configure({ placeholder: options.placeholder ?? '' }),
+    ]
   return [
     StarterKit.configure({
       heading: { levels: [1, 2, 3, 4, 5, 6] },

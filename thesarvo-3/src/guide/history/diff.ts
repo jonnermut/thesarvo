@@ -117,7 +117,7 @@ function fields(n: GuideNode): Field[] {
     case 'header':
       return headerFields.map(([k, words]) => {
         const v = n[k]
-        const value = typeof v !== 'string' ? '' : k === 'autonumber' ? (v === 'true' ? 'on' : '') : readable(v)
+        const value = k === 'notices' ? (n.notices ?? []).map((x) => `${x.kind === 'warning' ? 'Warning' : 'Note'}: ${readable(x.html)}`).join('\n\n') : typeof v !== 'string' ? '' : k === 'autonumber' ? (v === 'true' ? 'on' : '') : readable(v)
         return { field: capital(words), value, long: true }
       })
     case 'text':

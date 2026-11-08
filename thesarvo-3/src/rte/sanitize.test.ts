@@ -72,3 +72,24 @@ describe('embedUrl', () => {
     expect(embedUrl('https://www.youtube.com/watch')).toBeNull()
   })
 })
+
+describe('sanitizeHtml, guide profile', () => {
+  const g = (html: string) => sanitizeHtml(html, 'guide')
+  it('keeps paragraphs, breaks, bold, italic, lists and links', () => {
+    const html = '<p>One <strong>two</strong> <em>three</em><br>four</p><ul><li>a</li></ul><ol><li>b</li></ol>'
+    expect(g(html)).toBe(html)
+    expect(g('<p><a href="mailto:a@b.test">mail</a> <a href="tel:+61400000000">call</a> <a data-page="Apsley Edge">page</a></p>')).toContain('data-page="Apsley Edge"')
+    expect(g('<p><a href="tel:+61400000000">call</a></p>')).toContain('href="tel:+61400000000"')
+  })
+  it('keeps where a numbered list starts, as a number only', () => {
+    expect(g('<ol start="5"><li>a</li></ol>')).toBe('<ol start="5"><li>a</li></ol>')
+    expect(g('<ol start="x" onclick="y"><li>a</li></ol>')).toBe('<ol><li>a</li></ol>')
+  })
+  it('drops everything else the page profile allows', () => {
+    expect(g('<h2>H</h2><blockquote>q</blockquote><p><u>u</u><s>s</s></p><hr><img data-file="a.jpg"><div class="embed"><iframe src="https://www.youtube.com/embed/x"></iframe></div>')).toBe('<p>H</p><p>q</p><p>us</p>')
+  })
+  it('does not let a link keep a file reference, nor script', () => {
+    expect(g('<p><a data-file="a.pdf">x</a></p>')).not.toContain('data-file')
+    expect(g('<p><a href="javascript:alert(1)">x</a></p>')).toBe('<p>x</p>')
+  })
+})
