@@ -1,0 +1,75 @@
+thesarvo-3/src/guide/save/save.test.ts
+  s_bec7aeac916bc2::t_ada784d8ea03be 125
+thesarvo-3/src/routes/g.tree.tsx
+  s_bec7aeac916bc2::t_8ed58d908d9b2e 2-19,22-28,31-32
+  s_bec7aeac916bc2::t_d409634800d177 1,20-21,29-30
+thesarvo-3/src/guide/save/moveTree.ts
+  s_bec7aeac916bc2::t_b89924d47cfbbb 8-9,11
+  s_bec7aeac916bc2::t_51b78819dc7628 1-7,10,12-89
+thesarvo-3/src/guide/tree/TreeEditor.tsx
+  s_bec7aeac916bc2::t_d409634800d177 1-2,4-87,90-95,97-167,169-190,192-198
+  s_bec7aeac916bc2::t_a555ea18c26af3 3
+  s_bec7aeac916bc2::t_4b58bd7d03cb8f 88-89,96,168,191
+thesarvo-3/src/components/PageMenu.tsx
+  s_bec7aeac916bc2::t_4b58bd7d03cb8f 3,12,55-56,121-125
+  s_bec7aeac916bc2::t_44a915f66a9bba 126
+thesarvo-3/src/guide/tree/api.ts
+  s_bec7aeac916bc2::t_a555ea18c26af3 1-14
+thesarvo-3/src/routes/g.api.change-tree.tsx
+  s_bec7aeac916bc2::t_7ce9e7206de13e 1-11,13-16,30-57
+  s_bec7aeac916bc2::t_8ed58d908d9b2e 12,17-29
+thesarvo-3/src/guide/save/repo.ts
+  s_bec7aeac916bc2::t_b89924d47cfbbb 4
+  s_bec7aeac916bc2::t_f99b2e3becf3c4 20-21,24-25,39
+thesarvo-3/src/guide/server.ts
+  s_bec7aeac916bc2::t_b15a23104c2821 6
+  s_bec7aeac916bc2::t_56555b2896dce2 152-162
+thesarvo-3/src/routeTree.gen.ts
+  s_bec7aeac916bc2::t_7cc4bb2ea317b9 21,26,87-91,112-116,196,203,227,234,259,266,292,299,323,330,354,361,386,393,475-481,510-516,626,633
+thesarvo-3/src/guide/tree/TreeEditor.test.tsx
+  s_bec7aeac916bc2::t_1bd794c06ca244 1-63
+thesarvo-3/src/guide/save/local.ts
+  s_bec7aeac916bc2::t_f99b2e3becf3c4 10,76,79-80,92,96
+  s_bec7aeac916bc2::t_b89924d47cfbbb 11
+thesarvo-3/scripts/build-site.ts
+  s_bec7aeac916bc2::t_56555b2896dce2 91-94
+  s_bec7aeac916bc2::t_4b58bd7d03cb8f 173
+thesarvo-3/src/guide/save/moveTree.test.ts
+  s_bec7aeac916bc2::t_7ce9e7206de13e 1-2,6-79,81-85,88-123,125-137
+  s_bec7aeac916bc2::t_ada784d8ea03be 80
+  s_bec7aeac916bc2::t_9a3ab3f32b111c 86-87
+  s_bec7aeac916bc2::t_b89924d47cfbbb 3-5
+  s_bec7aeac916bc2::t_4f98f2920c6a62 124
+thesarvo-3/src/guide/tree/drop.ts
+  s_bec7aeac916bc2::t_1b9655f64235d7 1-54
+thesarvo-3/src/routes/g.$.tsx
+  s_bec7aeac916bc2::t_56555b2896dce2 2,7,54-62
+thesarvo-3/src/guide/save/github.ts
+  s_bec7aeac916bc2::t_f99b2e3becf3c4 7,54,57,132-134,140-141,153-154
+  s_bec7aeac916bc2::t_b89924d47cfbbb 8
+thesarvo-3/src/guide/save/deletePage.test.ts
+  s_bec7aeac916bc2::t_ada784d8ea03be 13
+thesarvo-3/src/guide/save/treeOps.ts
+  s_bec7aeac916bc2::t_a555ea18c26af3 16
+  s_bec7aeac916bc2::t_b89924d47cfbbb 1-15,17-73
+thesarvo-3/src/guide/tree/drop.test.ts
+  s_bec7aeac916bc2::t_1b9655f64235d7 1-47
+thesarvo-3/src/guide/save/addPage.test.ts
+  s_bec7aeac916bc2::t_ada784d8ea03be 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a7c7ee674de0b40ca4839ff8d2f985ab9447b076",
+  "prompts": {},
+  "sessions": {
+    "s_bec7aeac916bc2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "75c69653-dbd6-469c-9011-4b7a9e749c1d",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
