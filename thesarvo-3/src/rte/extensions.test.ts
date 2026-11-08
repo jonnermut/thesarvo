@@ -31,3 +31,22 @@ describe('the editor schema', () => {
     expect(roundtrip('<div class="note"><p>n</p></div>')).toContain('class="note"')
   })
 })
+
+describe('typing a link in the guide profile', () => {
+  const typed = (chars: string[]) => {
+    const editor = new Editor({ extensions: extensions({ resolve: (f) => f, guide: true }), content: '<p>See</p>' })
+    editor.commands.focus('end')
+    // One transaction per key, as typing makes them (a whole string inserted at once is not a typed word).
+    for (const c of chars) editor.view.dispatch(editor.state.tr.insertText(c))
+    const out = editor.getHTML()
+    editor.destroy()
+    return out
+  }
+  it('turns a typed address into a link once a space follows it', () => {
+    expect(typed([...' https://thesarvo.com now'])).toBe('<p>See <a rel="noopener noreferrer nofollow" href="https://thesarvo.com">https://thesarvo.com</a> now</p>')
+  })
+  it('adds https to a bare domain, and leaves ordinary words alone', () => {
+    expect(typed([...' thesarvo.com is good '])).toContain('href="https://thesarvo.com"')
+    expect(typed([...' no link here '])).not.toContain('<a')
+  })
+})
