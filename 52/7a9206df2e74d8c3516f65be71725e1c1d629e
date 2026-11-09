@@ -1,0 +1,31 @@
+thesarvo-3/src/guide/edit/NodeForms.tsx
+  s_e20d0a1ebc47aa::t_142bee400e4e4d 38-43,46,48-61,63-64,74,76-77,86-88,98-102,104,109-110
+  s_e20d0a1ebc47aa::t_4096669c76d2ea 47
+thesarvo-3/src/rte/RichField.tsx
+  s_e20d0a1ebc47aa::t_ff04c2ec3281e1 20-21
+  s_e20d0a1ebc47aa::t_142bee400e4e4d 8,28
+thesarvo-3/src/rte/RichEditor.tsx
+  s_e20d0a1ebc47aa::t_a7a513c6fa315b 173-175,178,183,186,190,193,199,202,206,211,215,220,225,251,253-256
+  s_e20d0a1ebc47aa::t_ff04c2ec3281e1 252
+  s_e20d0a1ebc47aa::t_11d374ab463f07 99-100,102,119-120,125,127,129
+  s_e20d0a1ebc47aa::t_a7492ed07211b8 229-238
+thesarvo-3/src/guide/edit/NodeForms.test.tsx
+  s_e20d0a1ebc47aa::t_4096669c76d2ea 4,81-85
+  s_e20d0a1ebc47aa::t_311fd8896a90c8 66,69-80,86-90,97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "527a9206df2e74d8c3516f65be71725e1c1d629e",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
