@@ -1,0 +1,30 @@
+thesarvo-3/src/guide/edit/topoOps.test.ts
+  s_e20d0a1ebc47aa::t_b076f191adde32 175-179
+thesarvo-3/src/guide/edit/TopoEditor.tsx
+  s_e20d0a1ebc47aa::t_6e0ca00e78418c 4-5,63-69,84-85,298-302,394-395
+  s_e20d0a1ebc47aa::t_99d399826edfb2 260
+  s_e20d0a1ebc47aa::t_4e821d314b8bfa 72,74-75
+  s_e20d0a1ebc47aa::t_59750dccabaf95 14,78-79,289,313-316,331-334,383-387
+thesarvo-3/src/guide/edit/topoOps.ts
+  s_e20d0a1ebc47aa::t_b076f191adde32 60-61
+thesarvo-3/src/guide/edit/longPress.test.ts
+  s_e20d0a1ebc47aa::t_59750dccabaf95 1-43
+thesarvo-3/src/guide/edit/longPress.ts
+  s_e20d0a1ebc47aa::t_59750dccabaf95 1-40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "21239ef6badd990e70368560a589c97d7dd9a09b",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
