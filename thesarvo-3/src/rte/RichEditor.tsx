@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { embedUrl } from './embed'
 import { extensions } from './extensions'
+import { PagePicker } from './PagePicker'
 
 export type RichEditorProps = {
   /** The HTML to start from. Read once: the editor owns the text after that. */
@@ -264,33 +265,42 @@ const small = 'rounded-md px-3 py-1 text-sm'
 /** Where the selected text should link to; empty and Apply removes the link. Bare addresses get https://. */
 function LinkBox({ editor, onDone }: { editor: Editor; onDone: () => void }) {
   const [href, setHref] = useState((editor.getAttributes('link').href as string | undefined) ?? '')
+  const [label, setLabel] = useState('')
   const apply = () => {
     const url = href.trim()
     if (!url) editor.chain().focus().extendMarkRange('link').unsetLink().run()
     else {
       const full = /^(?:[a-z][a-z0-9+.-]*:|\/|#)/i.test(url) ? url : `https://${url}`
       const { empty } = editor.state.selection
-      if (empty && !editor.isActive('link')) editor.chain().focus().insertContent({ type: 'text', text: url, marks: [{ type: 'link', attrs: { href: full } }] }).run()
+      if (empty && !editor.isActive('link')) editor.chain().focus().insertContent({ type: 'text', text: label || url, marks: [{ type: 'link', attrs: { href: full } }] }).run()
       else editor.chain().focus().extendMarkRange('link').setLink({ href: full }).run()
     }
     onDone()
   }
   return (
-    <form
-      className="flex items-center gap-2 border-t border-line px-2 py-1.5"
-      onSubmit={(e) => {
-        e.preventDefault()
-        apply()
-      }}
-    >
-      <input autoFocus value={href} onChange={(e) => setHref(e.target.value)} placeholder="Paste or type an address" aria-label="Link address" className={input} />
-      <button type="submit" className={`${small} bg-brand text-white`}>
-        Apply
-      </button>
-      <button type="button" onClick={onDone} className={`${small} text-muted hover:underline`}>
-        Cancel
-      </button>
-    </form>
+    <>
+      <form
+        className="flex items-center gap-2 border-t border-line px-2 py-1.5"
+        onSubmit={(e) => {
+          e.preventDefault()
+          apply()
+        }}
+      >
+        <input autoFocus value={href} onChange={(e) => setHref(e.target.value)} placeholder="Paste or type an address" aria-label="Link address" className={input} />
+        <button type="submit" className={`${small} bg-brand text-white`}>
+          Apply
+        </button>
+        <button type="button" onClick={onDone} className={`${small} text-muted hover:underline`}>
+          Cancel
+        </button>
+      </form>
+      <PagePicker
+        onPick={(to, text) => {
+          setHref(to)
+          setLabel(text)
+        }}
+      />
+    </>
   )
 }
 
