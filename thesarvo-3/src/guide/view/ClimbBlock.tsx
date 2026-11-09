@@ -113,7 +113,7 @@ export function splitPitches(text: string): string {
 }
 
 /** A paragraph of the description: lines kept as they were, a little space after it unless it is the last. */
-const GAP = 'mt-1.5'
+const GAP = 'mt-2'
 
 function Description({ text }: { text: string }) {
   const paras = paragraphs(text).map((p) => p.flatMap((l) => paragraphs(splitPitches(l)).flat()))
@@ -121,7 +121,7 @@ function Description({ text }: { text: string }) {
   const pitches = lines.length > 1 && lines.some((l) => parsePitch(l).label)
   if (!pitches)
     return (
-      <div className={`mt-0.5 sm:text-justify ${INDENT}`}>
+      <div className={`mt-0.5 sm:text-justify sm:hyphens-auto ${INDENT}`}>
         {paras.flatMap(sentenceParas).map((p, i) => (
           <p key={i} className={i ? GAP : ''}>
             {p.map((l, j) => (
@@ -135,7 +135,7 @@ function Description({ text }: { text: string }) {
       </div>
     )
   return (
-    <div className={`mt-0.5 grid grid-cols-[auto_1fr] gap-x-2 sm:text-justify ${INDENT}`}>
+    <div className={`mt-0.5 grid grid-cols-[auto_1fr] gap-x-2 sm:text-justify sm:hyphens-auto ${INDENT}`}>
       {paras.map((para, k) => (
         <div key={k} className={`col-span-2 grid grid-cols-subgrid ${k ? GAP : ''}`}>
           {para.map((line, i) => {

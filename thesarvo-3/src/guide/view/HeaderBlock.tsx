@@ -53,7 +53,7 @@ export function HeaderBlock({ header, stats }: { header: Header; stats: RouteSta
           // Labels are single words: never broken inside one ("Acknowledgemen/t") by the article's wrapping.
           <section key={key} className="gap-6 sm:grid sm:grid-cols-[13rem_1fr]">
             <h2 className="mb-1 h-fit border-b border-line text-xl font-bold text-navy wrap-normal sm:mb-0">{label}</h2>
-            <div className="text-[13px] leading-snug break-words">
+            <div className="text-[13px] leading-relaxed break-words sm:text-justify sm:hyphens-auto">
               {key === 'steward' && header.stewardEmail && !header.steward ? (
                 <StewardNote email={header.stewardEmail} />
               ) : isRich(header, key) ? (

@@ -1,9 +1,9 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Same typography and palette as the current thesarvo.com (Confluence): Helvetica/Arial, navy headings, blue chrome. */
-  --font-display: Helvetica, Tahoma, Arial, sans-serif;
-  --font-sans: Helvetica, Tahoma, Arial, sans-serif;
+  /* Palette as the current thesarvo.com (Confluence): navy headings, blue chrome. Type is the system UI font of each device (San Francisco, Segoe UI, Roboto), no web font. */
+  --font-display: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   --color-ink: #000000;
   --color-navy: #172b4d;
@@ -256,7 +256,7 @@ html[data-app] [data-bar].sticky {
 
 /* Guide text written in the rich text box (guide profile): paragraphs, lists and links at the guide's own type size. */
 .guide-rich > * + * {
-  margin-top: 0.6rem;
+  margin-top: 0.5rem;
 }
 .guide-rich ul {
   list-style: disc;

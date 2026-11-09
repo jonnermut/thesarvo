@@ -3,7 +3,7 @@ import { Lines } from './text'
 import { InlineCredit } from './credit'
 import { Callout, RichHtml } from './RichHtml'
 
-const BODY = 'text-[13px] leading-snug break-words sm:text-justify'
+const BODY = 'text-[13px] leading-relaxed break-words sm:text-justify sm:hyphens-auto'
 
 /** Turns bare URLs (class "html" blocks) into links. */
 function Linkified({ text }: { text: string }) {
