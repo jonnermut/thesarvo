@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { ImageTopo } from '#/guide/model/types'
-import { addPath, addRect, changePhoto, linkPath, newRouteArrow, insertPointAfter, movePoint, nudgePath, nudgePoint, nudgeRect, reframe, removePoint, resize, setPointKind, setLegendOnPhoto, snapPoint, toggleLegend } from './topoOps'
+import { labelAnchor } from '#/guide/model/geometry'
+import { addPath, addRect, addRouteLabel, changePhoto, followRoutes, linkPath, removePath, setLabelT, newRouteArrow, insertPointAfter, movePoint, nudgePath, nudgePoint, nudgeRect, reframe, removePoint, resize, setPointKind, setLegendOnPhoto, snapPoint, toggleLegend } from './topoOps'
 
 const empty: ImageTopo = {
   type: 'image', id: '1', src: 'a.jpg', width: 100, height: 100, noPrint: false, printLayout: '',
@@ -139,5 +140,36 @@ describe('changePhoto and linkPath', () => {
     expect(t.legend).toEqual(['c1', 'c2'])
     expect(linkPath(t, 'p1', 'c2').legend).toEqual(['c1', 'c2'])
     expect(linkPath(t, 'p1', '').legend).toEqual(['c1', 'c2'])
+  })
+})
+
+describe('route labels', () => {
+  const base = addPath({ ...empty, width: 400, height: 300 }, 'p1', [pt(100, 100), pt(100, 200)], 'c1')
+  const labelled = addRouteLabel(base, 'l1', 'p1')
+  const label = () => labelled.rects[0]
+
+  it('adds a label halfway along the route, up and to the right of it', () => {
+    expect(label()).toMatchObject({ route: 'p1', t: 0.5, x: 124, y: 94, width: 80, height: 36 })
+    expect(addRouteLabel(base, 'l2', 'nope')).toBe(base)
+  })
+
+  it('goes with its route when the route is moved or reshaped, but not when the label itself was moved', () => {
+    const moved = nudgePath(labelled, 'p1', 10, 20)
+    expect(followRoutes(labelled, moved).rects[0]).toMatchObject({ x: 134, y: 114 })
+    const dragged = { ...moved, rects: moved.rects.map((r) => ({ ...r, x: 5 })) }
+    expect(followRoutes(labelled, dragged).rects[0]?.x).toBe(5)
+    expect(followRoutes(labelled, labelled)).toBe(labelled)
+  })
+
+  it('slides its pointer along the route, taking the box with it', () => {
+    const t = setLabelT(labelled, 'l1', 1)
+    expect(t.rects[0]).toMatchObject({ t: 1, x: 124, y: 144 })
+  })
+
+  it('is removed with its route, and a text box is left alone', () => {
+    const withBox = addRect(labelled, 'r2', { x: 1, y: 1 })
+    expect(removePath(withBox, 'p1').rects.map((r) => r.id)).toEqual(['r2'])
+    expect(labelAnchor(withBox, withBox.rects[1])).toBeUndefined()
+    expect(labelAnchor(labelled, label())).toEqual({ x: 100, y: 150 })
   })
 })

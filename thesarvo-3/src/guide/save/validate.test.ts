@@ -19,4 +19,12 @@ describe('parseSaveRequest', () => {
     expect(() => parseSaveRequest({ ...request([]), guide: '../x' }, 'request')).toThrow('request.guide')
     expect(() => parseSaveRequest(null, 'request')).toThrow(Invalid)
   })
+
+  it('keeps the route and place of a route label, and refuses a bad place', () => {
+    const rect = { id: '5', x: 1, y: 2, width: 80, height: 36, style: 'black_text_on_solid_yellow', arrowDirection: '', text: 'Crux', route: '4', t: 0.5 }
+    const topo = { ...newTopo('3', 'a.jpg', 1, 2), rects: [rect] }
+    expect(parseSaveRequest(request([{ id: '3', before: null, after: topo }]), 'request')).toEqual(request([{ id: '3', before: null, after: topo }]))
+    const bad = { ...topo, rects: [{ ...rect, t: 'half' }] }
+    expect(() => parseSaveRequest(request([{ id: '3', before: null, after: bad }]), 'request')).toThrow(Invalid)
+  })
 })

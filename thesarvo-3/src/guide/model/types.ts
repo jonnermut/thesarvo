@@ -108,6 +108,9 @@ export type TopoRect = {
   style: RectStyle
   arrowDirection: string
   text: string
+  /** A label on a route: the route's id and how far along it the label points, 0 (start) to 1 (end). The box follows the route when it is reshaped. */
+  route?: string
+  t?: number
   other?: Other
 }
 

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { pathData } from '#/guide/model/geometry'
+import { labelAnchor, leaderEnd, pathData } from '#/guide/model/geometry'
 import { imageUrl } from '#/guide/content/paths'
 import type { Climb, ImageTopo, RoutePath, TopoRect } from '#/guide/model/types'
 import { LABEL_SIZE, labelSpots } from './labelSpot'
@@ -130,15 +130,23 @@ function arrowLine(r: TopoRect) {
   return { x1, y1, x2: x1 + dx * ARROW_LEN, y2: y1 + dy * ARROW_LEN, angle: (Math.atan2(dy, dx) * 180) / Math.PI }
 }
 
-export function Callout({ rect }: { rect: TopoRect }) {
+/** `anchor` is the spot of its route a label points at: a dot there and a thin leader line to the box, drawn only when the box sits away from the route. */
+export function Callout({ rect, anchor }: { rect: TopoRect; anchor?: { x: number; y: number } }) {
   const style = RECT_STYLES[rect.style] ?? RECT_STYLES.black_text_on_solid_white
   const lines = splitLines(rect.text)
   const lineHeight = 14
   const top = rect.y + rect.height / 2 - ((lines.length - 1) * lineHeight) / 2
   const arrow = arrowLine(rect)
   const colour = style.fill === 'none' ? style.stroke : style.fill
+  const leader = anchor && leaderEnd(rect, anchor)
   return (
     <g>
+      {anchor && leader && (
+        <g stroke={style.fill === 'none' ? style.stroke : style.fill} fill={style.fill === 'none' ? style.stroke : style.fill}>
+          <line x1={anchor.x} y1={anchor.y} x2={leader.x} y2={leader.y} strokeWidth={2} />
+          <circle cx={anchor.x} cy={anchor.y} r={4} stroke="none" />
+        </g>
+      )}
       <rect
         x={rect.x}
         y={rect.y}
@@ -202,7 +210,7 @@ export function Topo({ guideId, topo, climbs, active, onActive, onOpen, displayW
           <Route key={path.id} path={path} climb={climbs.get(path.linkedTo)} active={active} onActive={onActive} onOpen={onOpen} scale={scale} labelAt={spots.get(path.id)} />
         ))}
         {topo.rects.map((rect) => (
-          <Callout key={rect.id} rect={rect} />
+          <Callout key={rect.id} rect={rect} anchor={labelAnchor(topo, rect)} />
         ))}
       </svg>
     </div>

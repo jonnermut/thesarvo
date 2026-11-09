@@ -75,7 +75,7 @@ const image = obj({
   rects: arr(obj({
     id: str, x: num, y: num, width: num, height: num,
     style: oneOf('black_text_on_solid_white', 'white_text_on_solid_black', 'black_text_on_solid_yellow', 'white_outline', 'yellow_outline'),
-    arrowDirection: str, text: str, other,
+    arrowDirection: str, text: str, route: opt(str), t: opt(num), other,
   })),
   otherShapes: arr(raw),
   other,

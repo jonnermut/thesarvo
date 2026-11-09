@@ -1,6 +1,7 @@
 import { useSizedTopo } from '#/guide/view/useSizedTopo'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { imageUrl } from '#/guide/content/paths'
+import { labelAnchor, nearestT } from '#/guide/model/geometry'
 import type { Climb, ImageTopo, LineStyle, Point, RectStyle } from '#/guide/model/types'
 import { Callout, Route } from '#/guide/view/Topo'
 import { labelSpots } from '#/guide/view/labelSpot'
@@ -58,7 +59,7 @@ const SHORTCUTS = [
 /** How close (screen px) a new route's start must be to another route's end to join it. */
 const SNAP_PX = 12
 
-const TOOLS: [Tool, string][] = [['select', 'Select'], ['route', 'Draw route'], ['rect', 'Add label']]
+const TOOLS: [Tool, string][] = [['select', 'Select'], ['route', 'Draw route'], ['rect', 'Add text box']]
 
 export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kind, onAddClimb, onEditClimb }: Props) {
   const topo = useSizedTopo(guideId, stored)
@@ -296,7 +297,9 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
                 <Route path={path} climb={climbById.get(path.linkedTo)} active={null} onActive={() => {}} labelAt={spots.get(path.id)} />
               </g>
             ))}
-            {topo.rects.map((rect) => (
+            {topo.rects.map((rect) => {
+              const anchorAt = labelAnchor(topo, rect)
+              return (
               <g
                 key={rect.id}
                 onPointerDown={(e) => {
@@ -308,10 +311,22 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
                 }}
                 className="cursor-move"
               >
-                <Callout rect={rect} />
+                <Callout rect={rect} anchor={labelAnchor(topo, rect)} />
                 {selection?.id === rect.id && (
                   <>
                     <rect x={rect.x - 2 * u} y={rect.y - 2 * u} width={rect.width + 4 * u} height={rect.height + 4 * u} fill="none" stroke="#0ea5e9" strokeWidth={2 * u} strokeDasharray={`${5 * u} ${3 * u}`} />
+                    {rect.route && anchorAt && (
+                      <circle
+                        cx={anchorAt.x}
+                        cy={anchorAt.y}
+                        r={7 * u}
+                        fill="#0ea5e9"
+                        stroke="white"
+                        strokeWidth={u}
+                        className="cursor-grab"
+                        onPointerDown={(e) => startDrag(e, (p) => (t) => ops.setLabelT(t, rect.id, nearestT(t.paths.find((q) => q.id === rect.route)?.points ?? [], p)))}
+                      />
+                    )}
                     <rect
                       x={rect.x + rect.width - 6 * u}
                       y={rect.y + rect.height - 6 * u}
@@ -324,7 +339,8 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
                   </>
                 )}
               </g>
-            ))}
+              )
+            })}
             {selectedPath?.points.map((pt, i) => (
               <circle
                 key={i}
@@ -407,12 +423,22 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
                 >
                   {pointIndex !== null && selectedPath.points[pointIndex]?.kind === 'label' ? 'Number not here' : 'Number here'}
                 </Button>
+                <Button
+                  onClick={() => {
+                    const id = newId()
+                    onChange((t) => ops.addRouteLabel(t, id, selectedPath.id))
+                    setSelection({ kind: 'rect', id })
+                    setPointIndex(null)
+                  }}
+                >
+                  Add label to route
+                </Button>
                 <DeleteButton label={pointIndex === null ? 'Delete route' : 'Delete point'} onConfirm={removeSelected} />
               </div>
             </>
           ) : selectedRect ? (
             <>
-              <h4 className="font-semibold">Label</h4>
+              <h4 className="font-semibold">{selectedRect.route ? 'Route label' : 'Text box'}</h4>
               <AreaField label="Text" value={selectedRect.text} rows={3} onChange={(text) => onChange((t) => ops.updateRect(t, selectedRect.id, { text }), `rect-${selectedRect.id}`)} />
               <SelectField label="Style" value={selectedRect.style} options={RECT_OPTIONS} onChange={(style) => onChange((t) => ops.updateRect(t, selectedRect.id, { style }))} />
               <SelectField label="Arrow" value={selectedRect.arrowDirection} options={ARROWS} onChange={(arrowDirection) => onChange((t) => ops.updateRect(t, selectedRect.id, { arrowDirection }))} />
@@ -420,7 +446,13 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
                 <NumberField label="Width" value={selectedRect.width} onChange={(width) => onChange((t) => ops.updateRect(t, selectedRect.id, { width }), `w-${selectedRect.id}`)} />
                 <NumberField label="Height" value={selectedRect.height} onChange={(height) => onChange((t) => ops.updateRect(t, selectedRect.id, { height }), `h-${selectedRect.id}`)} />
               </div>
-              <DeleteButton label="Delete label" onConfirm={removeSelected} />
+              {selectedRect.route && (
+                <label className="block text-sm">
+                  <span className="text-muted">Pointer along the route (or drag the blue dot)</span>
+                  <input type="range" min={0} max={100} value={Math.round((selectedRect.t ?? 0.5) * 100)} className="w-full" onChange={(e) => onChange((t) => ops.setLabelT(t, selectedRect.id, Number(e.target.value) / 100), `t-${selectedRect.id}`)} />
+                </label>
+              )}
+              <DeleteButton label={selectedRect.route ? 'Delete label' : 'Delete text box'} onConfirm={removeSelected} />
             </>
           ) : (
             <>

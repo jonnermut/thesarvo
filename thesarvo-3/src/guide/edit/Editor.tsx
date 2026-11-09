@@ -18,6 +18,7 @@ import { ClimbForm, GpsForm, HeaderForm, TextForm } from './NodeForms'
 import type { Saver } from './saver'
 import { climbKind, editorReducer, initEditor, nextId, nodeId } from './state'
 import { TopoEditor } from './TopoEditor'
+import { followRoutes } from './topoOps'
 import { TopoFigure } from '#/guide/view/TopoFigure'
 import { useSaver } from './useSaver'
 
@@ -363,7 +364,7 @@ function NodeEditor({
           climbs={climbs}
           newId={() => nextId(guide)}
           onChange={(update, k) =>
-            editWith(node.id, (n) => (n.type === 'image' ? update(n) : n), k)
+            editWith(node.id, (n) => (n.type === 'image' ? followRoutes(n, update(n)) : n), k)
           }
           kind={climbKind(guide)}
           onAddClimb={(pathId) => onAddClimb(node.id, pathId)}

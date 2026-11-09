@@ -1,4 +1,4 @@
-import { pathData } from '#/guide/model/geometry'
+import { labelAnchor, pathData, pointAlong } from '#/guide/model/geometry'
 import type { ImageTopo, Point, RectStyle, RoutePath, TopoRect } from '#/guide/model/types'
 
 /** Pure edits to a topo. Each returns a new topo and keeps path data in sync with points. */
@@ -40,7 +40,8 @@ export function removePoint(topo: ImageTopo, pathId: string, index: number): Ima
   return mapPath(topo, pathId, (p) => withPoints(p, p.points.filter((_, i) => i !== index)))
 }
 
-export const removePath = (topo: ImageTopo, id: string): ImageTopo => ({ ...topo, paths: topo.paths.filter((p) => p.id !== id) })
+/** Removes a route and the labels on it. */
+export const removePath = (topo: ImageTopo, id: string): ImageTopo => ({ ...topo, paths: topo.paths.filter((p) => p.id !== id), rects: topo.rects.filter((r) => r.route !== id) })
 
 export const updatePath = (topo: ImageTopo, id: string, patch: Partial<RoutePath>) => mapPath(topo, id, (p) => ({ ...p, ...patch }))
 
@@ -55,6 +56,45 @@ export const updateRect = (topo: ImageTopo, id: string, patch: Partial<TopoRect>
 })
 
 export const removeRect = (topo: ImageTopo, id: string): ImageTopo => ({ ...topo, rects: topo.rects.filter((r) => r.id !== id) })
+
+const within = (n: number, size: number, max: number) => Math.round(Math.min(Math.max(0, n), Math.max(0, max - size)))
+
+/** A label for a route: halfway along it, with its box up and to the right, ready to be dragged where it reads best. */
+export function addRouteLabel(topo: ImageTopo, id: string, pathId: string): ImageTopo {
+  const path = topo.paths.find((p) => p.id === pathId)
+  if (!path) return topo
+  const at = pointAlong(path.points, 0.5)
+  const rect: TopoRect = { id, x: within(at.x + 24, 80, topo.width), y: within(at.y - 56, 36, topo.height), width: 80, height: 36, style: 'black_text_on_solid_yellow', arrowDirection: '', text: 'Label', route: pathId, t: 0.5 }
+  return { ...topo, rects: [...topo.rects, rect] }
+}
+
+/** Slides a label's pointer along its route; the box goes with it, keeping its place relative to the pointer. */
+export function setLabelT(topo: ImageTopo, id: string, t: number): ImageTopo {
+  const rect = topo.rects.find((r) => r.id === id)
+  const from = rect && labelAnchor(topo, rect)
+  if (!rect || !from) return topo
+  const to = labelAnchor(topo, { ...rect, t })
+  return to ? { ...topo, rects: topo.rects.map((r) => (r.id === id ? { ...r, t, x: within(r.x + to.x - from.x, r.width, topo.width), y: within(r.y + to.y - from.y, r.height, topo.height) } : r)) } : topo
+}
+
+/**
+ * After an edit: a label whose route moved or was reshaped goes with it, keeping its place relative to its pointer.
+ * A label the edit moved itself (a drag, resize, a new photo) is left as the edit placed it.
+ */
+export function followRoutes(before: ImageTopo, after: ImageTopo): ImageTopo {
+  if (!after.rects.some((r) => r.route)) return after
+  let changed = false
+  const rects = after.rects.map((r) => {
+    const was = before.rects.find((b) => b.id === r.id)
+    if (!r.route || !was || was.x !== r.x || was.y !== r.y || was.route !== r.route || was.t !== r.t) return r
+    const from = labelAnchor(before, was)
+    const to = labelAnchor(after, r)
+    if (!from || !to || (from.x === to.x && from.y === to.y)) return r
+    changed = true
+    return { ...r, x: within(r.x + to.x - from.x, r.width, after.width), y: within(r.y + to.y - from.y, r.height, after.height) }
+  })
+  return changed ? { ...after, rects } : after
+}
 
 /** Legend order follows the order climbs were ticked. */
 export const toggleLegend = (topo: ImageTopo, climbId: string): ImageTopo => ({
