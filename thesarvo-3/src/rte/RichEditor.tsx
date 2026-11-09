@@ -96,8 +96,10 @@ export default function RichEditor({ initial, onChange, upload, resolveFile, lab
   }, [editor, onReady])
 
   return (
+    // Guide text keeps its toolbar out of the page until the box is being typed in: it floats in the label row above the box (see `RichField`).
+    <div className={guide ? 'group relative' : undefined}>
     <div className="rte overflow-hidden rounded-md border border-line bg-card focus-within:border-link">
-      {editor && <Toolbar editor={editor} compact={compact} guide={guide} onFiles={(files) => void addFiles(files)} />}
+      {editor && !guide && <Toolbar editor={editor} compact={compact} onFiles={(files) => void addFiles(files)} />}
       <EditorContent editor={editor} />
       {uploads.length > 0 && (
         <ul className="border-t border-line px-3 py-1.5 text-sm text-muted" aria-live="polite">
@@ -114,14 +116,17 @@ export default function RichEditor({ initial, onChange, upload, resolveFile, lab
         </p>
       )}
     </div>
+    {editor && guide && <Toolbar editor={editor} guide onFiles={(files) => void addFiles(files)} />}
+    </div>
   )
 }
 
 const btn = 'grid h-8 min-w-8 place-items-center rounded px-1.5 text-sm hover:bg-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-link'
+const smallBtn = 'grid h-7 min-w-7 place-items-center rounded px-1 text-sm hover:bg-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-link'
 
-function Tool({ label, active, disabled, onClick, children }: { label: string; active?: boolean; disabled?: boolean; onClick: () => void; children: ReactNode }) {
+function Tool({ label, active, disabled, small, onClick, children }: { label: string; active?: boolean; disabled?: boolean; small?: boolean; onClick: () => void; children: ReactNode }) {
   return (
-    <button type="button" title={label} aria-label={label} aria-pressed={active} disabled={disabled} onMouseDown={(e) => e.preventDefault()} onClick={onClick} className={`${btn} ${active ? 'bg-paper font-semibold text-link' : ''} disabled:opacity-40`}>
+    <button type="button" title={label} aria-label={label} aria-pressed={active} disabled={disabled} onMouseDown={(e) => e.preventDefault()} onClick={onClick} className={`${small ? smallBtn : btn} ${active ? 'bg-paper font-semibold text-link' : ''} disabled:opacity-40`}>
       {children}
     </button>
   )
@@ -165,69 +170,72 @@ function Toolbar({ editor, compact, guide, onFiles }: { editor: Editor; compact?
   }, [editor])
 
   return (
-    <div className="border-b border-line">
-      <div role="toolbar" aria-label="Formatting" className="flex flex-wrap items-center gap-0.5 px-1.5 py-1">
-        <Tool label="Bold (Ctrl+B)" active={s.bold} onClick={() => chain().toggleBold().run()}>
+    <div className={guide ? 'absolute -top-7 right-0 z-10 hidden group-focus-within:block' : 'border-b border-line'}>
+      <div role="toolbar" aria-label="Formatting" className={guide ? 'flex items-center gap-px rounded-md border border-line bg-card px-0.5 shadow-sm' : 'flex flex-wrap items-center gap-0.5 px-1.5 py-1'}>
+        <Tool small={guide} label="Bold (Ctrl+B)" active={s.bold} onClick={() => chain().toggleBold().run()}>
           <b>B</b>
         </Tool>
-        <Tool label="Italic (Ctrl+I)" active={s.italic} onClick={() => chain().toggleItalic().run()}>
+        <Tool small={guide} label="Italic (Ctrl+I)" active={s.italic} onClick={() => chain().toggleItalic().run()}>
           <i>I</i>
         </Tool>
         {!compact && !guide && (
           <>
-            <Tool label="Underline (Ctrl+U)" active={s.underline} onClick={() => chain().toggleUnderline().run()}>
+            <Tool small={guide} label="Underline (Ctrl+U)" active={s.underline} onClick={() => chain().toggleUnderline().run()}>
               <u>U</u>
             </Tool>
-            <Tool label="Strikethrough" active={s.strike} onClick={() => chain().toggleStrike().run()}>
+            <Tool small={guide} label="Strikethrough" active={s.strike} onClick={() => chain().toggleStrike().run()}>
               <s>S</s>
             </Tool>
             <Gap />
-            <Tool label="Heading" active={s.h2} onClick={() => chain().toggleHeading({ level: 2 }).run()}>
+            <Tool small={guide} label="Heading" active={s.h2} onClick={() => chain().toggleHeading({ level: 2 }).run()}>
               H2
             </Tool>
-            <Tool label="Subheading" active={s.h3} onClick={() => chain().toggleHeading({ level: 3 }).run()}>
+            <Tool small={guide} label="Subheading" active={s.h3} onClick={() => chain().toggleHeading({ level: 3 }).run()}>
               H3
             </Tool>
           </>
         )}
         <Gap />
-        <Tool label="Bulleted list" active={s.bullets} onClick={() => chain().toggleBulletList().run()}>
+        <Tool small={guide} label="Bulleted list" active={s.bullets} onClick={() => chain().toggleBulletList().run()}>
           •≡
         </Tool>
-        <Tool label="Numbered list" active={s.numbers} onClick={() => chain().toggleOrderedList().run()}>
+        <Tool small={guide} label="Numbered list" active={s.numbers} onClick={() => chain().toggleOrderedList().run()}>
           1.
         </Tool>
         {!compact && !guide && (
-          <Tool label="Quote" active={s.quote} onClick={() => chain().toggleBlockquote().run()}>
+          <Tool small={guide} label="Quote" active={s.quote} onClick={() => chain().toggleBlockquote().run()}>
             “ ”
           </Tool>
         )}
         <Gap />
-        <Tool label="Link (Ctrl+K)" active={s.link || panel === 'link'} onClick={() => setPanel(panel === 'link' ? null : 'link')}>
+        <Tool small={guide} label="Link (Ctrl+K)" active={s.link || panel === 'link'} onClick={() => setPanel(panel === 'link' ? null : 'link')}>
           Link
         </Tool>
         {!guide && (
-          <Tool label="Add a picture" onClick={() => file.current?.click()}>
+          <Tool small={guide} label="Add a picture" onClick={() => file.current?.click()}>
             Photo
           </Tool>
         )}
         {!compact && !guide && (
-          <Tool label="Embed a video" active={panel === 'video'} onClick={() => setPanel(panel === 'video' ? null : 'video')}>
+          <Tool small={guide} label="Embed a video" active={panel === 'video'} onClick={() => setPanel(panel === 'video' ? null : 'video')}>
             Video
           </Tool>
         )}
         {!compact && !guide && (
-          <Tool label="Divider" onClick={() => chain().setHorizontalRule().run()}>
+          <Tool small={guide} label="Divider" onClick={() => chain().setHorizontalRule().run()}>
             ―
           </Tool>
         )}
-        <Gap />
-        <Tool label="Undo (Ctrl+Z)" disabled={!s.undo} onClick={() => chain().undo().run()}>
-          ↶
-        </Tool>
-        <Tool label="Redo (Ctrl+Shift+Z)" disabled={!s.redo} onClick={() => chain().redo().run()}>
-          ↷
-        </Tool>
+        {/* On a phone the floating guide toolbar would cover the label, so it drops undo and redo (the keyboard has them). */}
+        <span className={guide ? 'hidden items-center gap-px sm:contents' : 'contents'}>
+          <Gap />
+          <Tool small={guide} label="Undo (Ctrl+Z)" disabled={!s.undo} onClick={() => chain().undo().run()}>
+            ↶
+          </Tool>
+          <Tool small={guide} label="Redo (Ctrl+Shift+Z)" disabled={!s.redo} onClick={() => chain().redo().run()}>
+            ↷
+          </Tool>
+        </span>
         <input
           ref={file}
           type="file"
@@ -240,8 +248,12 @@ function Toolbar({ editor, compact, guide, onFiles }: { editor: Editor; compact?
           }}
         />
       </div>
-      {panel === 'link' && <LinkBox editor={editor} onDone={() => setPanel(null)} />}
-      {panel === 'video' && <VideoBox editor={editor} onDone={() => setPanel(null)} />}
+      {panel && (
+        <div className={guide ? 'absolute right-0 top-full z-20 mt-1 w-[min(20rem,calc(100vw-2rem))] rounded-md border border-line bg-card shadow-lg [&>form]:border-t-0' : undefined}>
+          {panel === 'link' && <LinkBox editor={editor} onDone={() => setPanel(null)} />}
+          {panel === 'video' && <VideoBox editor={editor} onDone={() => setPanel(null)} />}
+        </div>
+      )}
     </div>
   )
 }

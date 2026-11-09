@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { Climb, Header, TextBlock } from '#/guide/model/types'
-import { ClimbDialog, CragMarks, HeaderForm, TextForm } from './NodeForms'
+import { ClimbDialog, CragMarks, HeaderForm, richWith, TextForm } from './NodeForms'
 
 afterEach(cleanup)
 
@@ -63,18 +63,38 @@ it('converts the text when the style moves between plain and formatted, so nothi
 describe('HeaderForm', () => {
   const header: Header = { type: 'header', id: 'h', name: 'Bruny', rock: '', sun: '', walk: '', access: 'Park here.<br/><br/>Walk in.', camping: '', acknowledgement: '', intro: '', history: '', autonumber: '' }
 
-  it('turns a plain field into formatted text on request, keeping its words, and marks it', () => {
+  it('opens every field with text as a formatted box (older plain text as paragraphs) and leaves the empty ones as one "Add" line', async () => {
     const onChange = vi.fn()
     render(<HeaderForm node={header} onChange={onChange} />)
-    fireEvent.click(screen.getAllByRole('button', { name: /Add formatting/ })[3])
-    expect(onChange).toHaveBeenCalledWith({ rich: ['access'], access: '<p>Park here.</p><p>Walk in.</p>' })
+    const box = await screen.findByRole('textbox', { name: 'Access' })
+    expect(box.innerHTML).toBe('<p>Park here.</p><p>Walk in.</p>')
+    expect(screen.queryByText(/Add formatting/)).toBeNull()
+    for (const label of ['acknowledgement', 'introduction', 'history', 'camping']) expect(screen.getByRole('button', { name: `+ Add ${label}` })).toBeTruthy()
+    expect(screen.queryByRole('textbox', { name: 'History' })).toBeNull()
+    expect(onChange).not.toHaveBeenCalled()
+  })
+  it('opens an empty field in a box when it is asked for', async () => {
+    render(<HeaderForm node={header} onChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: '+ Add history' }))
+    expect(await screen.findByRole('textbox', { name: 'History' })).toBeTruthy()
+    expect(screen.queryByRole('button', { name: '+ Add history' })).toBeNull()
+  })
+  it('keeps what is typed as HTML and marks the field, and unmarks it when it is emptied', () => {
+    expect(richWith(header, 'access', '<p>Hi</p>')).toEqual({ rich: ['access'], access: '<p>Hi</p>' })
+    expect(richWith({ ...header, rich: ['intro', 'access'] }, 'access', '<p>Hi again</p>')).toEqual({ rich: ['intro', 'access'], access: '<p>Hi again</p>' })
+    expect(richWith({ ...header, rich: ['intro', 'access'] }, 'access', '')).toEqual({ rich: ['intro'], access: '' })
+  })
+  it('shows no notice box until one is added', () => {
+    render(<HeaderForm node={header} onChange={vi.fn()} />)
+    expect(screen.queryByLabelText('Kind')).toBeNull()
+    expect(screen.queryByText(/Notices \(shown/)).toBeNull()
   })
   it('edits the steward email and adds and removes notices', () => {
     const onChange = vi.fn()
     const { rerender } = render(<HeaderForm node={header} onChange={onChange} />)
     fireEvent.change(screen.getByLabelText('Crag Steward email'), { target: { value: 'bruny@climbersclubtas.org.au' } })
     expect(onChange).toHaveBeenCalledWith({ stewardEmail: 'bruny@climbersclubtas.org.au' })
-    fireEvent.click(screen.getByRole('button', { name: 'Add a notice' }))
+    fireEvent.click(screen.getByRole('button', { name: /Add a notice/ }))
     expect(onChange).toHaveBeenCalledWith({ notices: [{ kind: 'warning', html: '' }] })
     rerender(<HeaderForm node={{ ...header, notices: [{ kind: 'note', html: '<p>x</p>' }] }} onChange={onChange} />)
     fireEvent.change(screen.getByLabelText('Kind'), { target: { value: 'warning' } })

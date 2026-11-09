@@ -35,30 +35,33 @@ export function CragMarks({ other, onChange }: { other?: Other; onChange: (other
   )
 }
 
-const TEXT_FIELDS: { field: RichName; label: string; rows: number }[] = [
-  { field: 'acknowledgement', label: 'Acknowledgement', rows: 2 },
-  { field: 'intro', label: 'Introduction', rows: 6 },
-  { field: 'history', label: 'History', rows: 6 },
-  { field: 'access', label: 'Access', rows: 4 },
-  { field: 'camping', label: 'Camping', rows: 3 },
+const TEXT_FIELDS: { field: RichName; label: string }[] = [
+  { field: 'acknowledgement', label: 'Acknowledgement' },
+  { field: 'intro', label: 'Introduction' },
+  { field: 'history', label: 'History' },
+  { field: 'access', label: 'Access' },
+  { field: 'camping', label: 'Camping' },
 ]
 
-/** A header field that is text with line breaks until someone adds formatting, then a rich text box (it cannot go back: the text is kept as HTML). */
-function HeaderText({ node, field, label, rows, onChange }: { node: Header; field: RichName; label: string; rows: number; onChange: Change<Header> }) {
-  const patch = (value: string, rich = node.rich): Partial<Header> => {
-    const p: Partial<Header> = { rich }
-    p[field] = value
-    return p
-  }
-  if (isRich(node, field)) return <RichField label={label} value={node[field] ?? ''} onChange={(html) => onChange(patch(html))} className="sm:col-span-2" />
-  return (
-    <div className="sm:col-span-2">
-      <AreaField label={label} value={node[field] ?? ''} onChange={(text) => onChange(patch(text))} rows={rows} />
-      <button type="button" className="mt-1 text-xs text-link underline" onClick={() => onChange(patch(textToHtml(node[field] ?? ''), [...(node.rich ?? []), field]))}>
-        Add formatting (bold, lists, links)
+/** The header's `rich` list with a field in it (text typed in the box) or out of it (the box emptied). */
+export const richWith = (node: Header, field: RichName, html: string): Partial<Header> => {
+  const rest = (node.rich ?? []).filter((f) => f !== field)
+  return { rich: html ? [...rest, field] : rest, [field]: html }
+}
+
+/** The editor's starting HTML for a header field: formatted text as it is, older plain text (line breaks only) turned into paragraphs. */
+const editable = (node: Header, field: RichName) => (isRich(node, field) ? (node[field] ?? '') : textToHtml(node[field] ?? ''))
+
+/** A header field as a rich text box. Whatever is typed is kept as HTML; an empty one is a single "Add" line until it is wanted. */
+function HeaderText({ node, field, label, onChange }: { node: Header; field: RichName; label: string; onChange: Change<Header> }) {
+  const [wanted, setWanted] = useState(false)
+  if (!node[field] && !wanted)
+    return (
+      <button type="button" className="rounded-md border border-dashed border-line px-3 py-2 text-left text-sm text-muted hover:border-link hover:text-link sm:col-span-2" onClick={() => setWanted(true)}>
+        + Add {label.toLowerCase()}
       </button>
-    </div>
-  )
+    )
+  return <RichField label={label} value={editable(node, field)} onChange={(html) => onChange(richWith(node, field, html))} autoFocus={wanted} className="sm:col-span-2" />
 }
 
 const NOTICE_KINDS = [['warning', 'Warning'], ['note', 'Note']] as const
@@ -68,10 +71,10 @@ function NoticesField({ notices = [], onChange }: { notices?: Notice[]; onChange
   const set = (next: Notice[]) => onChange(next.length ? next : undefined)
   return (
     <fieldset className="grid gap-2 sm:col-span-2">
-      <legend className="mb-1 text-xs font-medium text-muted">Notices (shown in a box at the top of the guide)</legend>
+      {notices.length > 0 && <legend className="mb-1 text-xs font-medium text-muted">Notices (shown in a box at the top of the guide)</legend>}
       {notices.map((n, i) => (
-        <div key={i} className="grid gap-2 rounded-md border border-line p-2">
-          <div className="flex items-end justify-between gap-2">
+        <div key={i} className={`grid gap-1 rounded-md border border-l-4 border-line p-2 ${n.kind === 'warning' ? 'border-l-amber' : 'border-l-link'}`}>
+          <div className="flex items-center justify-between gap-2">
             <SelectField label="Kind" value={n.kind} options={NOTICE_KINDS} onChange={(kind) => set(notices.map((x, j) => (j === i ? { ...x, kind } : x)))} className="w-40" />
             <Button variant="danger" type="button" onClick={() => set(notices.filter((_, j) => j !== i))}>
               Remove notice
@@ -80,11 +83,9 @@ function NoticesField({ notices = [], onChange }: { notices?: Notice[]; onChange
           <RichField label="Notice text" value={n.html} onChange={(html) => set(notices.map((x, j) => (j === i ? { ...x, html } : x)))} />
         </div>
       ))}
-      <div>
-        <Button type="button" onClick={() => set([...notices, { kind: 'warning', html: '' }])}>
-          Add a notice
-        </Button>
-      </div>
+      <button type="button" className="rounded-md border border-dashed border-line px-3 py-2 text-left text-sm text-muted hover:border-link hover:text-link" onClick={() => set([...notices, { kind: 'warning', html: '' }])}>
+        + Add a notice <span className="text-xs">(a warning or note in a box at the top of the guide)</span>
+      </button>
     </fieldset>
   )
 }
@@ -93,22 +94,20 @@ export function HeaderForm({ node, onChange }: { node: Header; onChange: Change<
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       <TextField label="Name" value={node.name} onChange={(name) => onChange({ name })} className="sm:col-span-2" />
-      <TextField label="Walk" value={node.walk} onChange={(walk) => onChange({ walk })} />
-      <TextField label="Sun" value={node.sun} onChange={(sun) => onChange({ sun })} />
-      <TextField label="Rock" value={node.rock} onChange={(rock) => onChange({ rock })} />
       <NoticesField notices={node.notices} onChange={(notices) => onChange({ notices })} />
+      <div className="grid gap-3 sm:col-span-2 sm:grid-cols-3">
+        <TextField label="Walk" value={node.walk} onChange={(walk) => onChange({ walk })} />
+        <TextField label="Sun" value={node.sun} onChange={(sun) => onChange({ sun })} />
+        <TextField label="Rock" value={node.rock} onChange={(rock) => onChange({ rock })} />
+      </div>
       {TEXT_FIELDS.map((f) => (
-        <HeaderText key={f.field} node={node} field={f.field} label={f.label} rows={f.rows} onChange={onChange} />
+        <HeaderText key={f.field} node={node} field={f.field} label={f.label} onChange={onChange} />
       ))}
       <TextField label="Crag Steward email" value={node.stewardEmail ?? ''} onChange={(stewardEmail) => onChange({ stewardEmail: stewardEmail || undefined })} className="sm:col-span-2" />
       <details className="sm:col-span-2" open={!!node.steward}>
         <summary className="cursor-pointer text-xs text-muted">The standard steward text goes around the email. Own wording instead…</summary>
-        <div className="mt-2">
-          {isRich(node, 'steward') ? (
-            <RichField label="Crag Steward (own wording)" value={node.steward ?? ''} onChange={(steward) => onChange({ steward })} />
-          ) : (
-            <AreaField label="Crag Steward (own wording; empty for the standard text)" value={node.steward ?? ''} onChange={(steward) => onChange({ steward })} rows={3} />
-          )}
+        <div className="mt-1">
+          <RichField label="Crag Steward (own wording; empty for the standard text)" value={editable(node, 'steward')} onChange={(html) => onChange(richWith(node, 'steward', html))} />
         </div>
       </details>
       <CragMarks other={node.other} onChange={(other) => onChange({ other })} />
