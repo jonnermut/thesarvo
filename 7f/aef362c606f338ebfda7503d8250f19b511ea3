@@ -1,0 +1,27 @@
+thesarvo-3/src/styles.css
+  s_e20d0a1ebc47aa::t_eb0d61ac33295e 5-6
+  s_e20d0a1ebc47aa::t_bb2c456eeaabd6 4
+  s_e20d0a1ebc47aa::t_7d801c78a3b052 259
+thesarvo-3/src/guide/view/HeaderBlock.tsx
+  s_e20d0a1ebc47aa::t_7d801c78a3b052 56
+thesarvo-3/src/guide/view/ClimbBlock.tsx
+  s_e20d0a1ebc47aa::t_7d801c78a3b052 116,124,138
+thesarvo-3/src/guide/view/TextBlock.tsx
+  s_e20d0a1ebc47aa::t_7d801c78a3b052 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7faef362c606f338ebfda7503d8250f19b511ea3",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
