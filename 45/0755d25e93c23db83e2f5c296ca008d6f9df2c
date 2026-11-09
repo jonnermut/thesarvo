@@ -1,0 +1,34 @@
+thesarvo-3/src/rte/keyboardInset.test.ts
+  s_e20d0a1ebc47aa::t_e39c28b7502c21 1-9
+thesarvo-3/src/components/Breadcrumbs.tsx
+  s_e20d0a1ebc47aa::t_0fd5cfb19bee1a 5-6,19-35
+  s_e20d0a1ebc47aa::t_48aeaef077e993 7
+thesarvo-3/src/rte/keyboardInset.ts
+  s_e20d0a1ebc47aa::t_e39c28b7502c21 1-22
+thesarvo-3/src/components/Breadcrumbs.test.tsx
+  s_e20d0a1ebc47aa::t_b9a9f0ed22a3e1 6
+  s_e20d0a1ebc47aa::t_b1b8ec569fa6dc 1-5,7-30
+thesarvo-3/src/routes/g.$.tsx
+  s_e20d0a1ebc47aa::t_0fd5cfb19bee1a 129
+thesarvo-3/src/routes/__root.tsx
+  s_e20d0a1ebc47aa::t_1134bc2d55cb1f 11
+thesarvo-3/src/rte/PageBodyEditor.tsx
+  s_e20d0a1ebc47aa::t_1134bc2d55cb1f 5,39
+  s_e20d0a1ebc47aa::t_e39c28b7502c21 143
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "450755d25e93c23db83e2f5c296ca008d6f9df2c",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
