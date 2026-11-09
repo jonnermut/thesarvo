@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { call } from '#/auth/apiCall'
 import { imageUrl } from '#/guide/content/paths'
 import { LazyRichEditor } from './LazyRichEditor'
+import { useKeyboardInset } from './keyboardInset'
 import { clearRichDraft, loadRichDraft, saveRichDraft } from './drafts'
 
 type Loaded = { head: string; html: string }
@@ -35,6 +36,7 @@ function Loaded({ id, title, done, stored }: { id: string; title: string; done: 
   const [start, setStart] = useState(draft && !draft.stale ? draft.html : stored)
   const [gen, setGen] = useState(0)
   const [html, setHtml] = useState(start)
+  const keyboardInset = useKeyboardInset()
   const [dirty, setDirty] = useState(!!draft && !draft.stale)
   const [state, setState] = useState<{ busy?: boolean; error?: string; saved?: string }>({})
   const sessionId = useRef(session())
@@ -138,7 +140,7 @@ function Loaded({ id, title, done, stored }: { id: string; title: string; done: 
           placeholder="Write the page…"
         />
       </div>
-      <div className="sticky bottom-0 mt-4 flex flex-wrap items-center gap-3 border-t border-line bg-paper py-3">
+      <div style={{ bottom: keyboardInset }} className="sticky mt-4 flex flex-wrap items-center gap-3 border-t border-line bg-paper py-3">
         <button type="button" onClick={() => void save()} disabled={!dirty || state.busy} className="rounded-md bg-brand px-4 py-2 text-white disabled:opacity-50">
           {state.busy ? 'Saving…' : 'Save'}
         </button>

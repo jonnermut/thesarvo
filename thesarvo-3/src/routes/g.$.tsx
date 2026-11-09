@@ -126,7 +126,7 @@ function GuidePage() {
   if (history)
     return (
       <>
-        <Breadcrumbs trail={trail} current={node} width="max-w-4xl px-4 sm:px-6" />
+        <Breadcrumbs trail={trail} current={node} width="max-w-4xl px-4 sm:px-6" then="History" />
         <ClientOnly fallback={<p className="p-8 text-muted">Loading history…</p>}>
           <Suspense fallback={<p className="p-8 text-muted">Loading history…</p>}>
             <HistoryView node={node} guide={guide} hash={hash} />
