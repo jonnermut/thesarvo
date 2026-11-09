@@ -1,6 +1,6 @@
 import type { Climb } from '#/guide/model/types'
 import { Fragment, useState } from 'react'
-import { Lines, splitLines } from './text'
+import { paragraphs } from './breaks'
 import { Stars } from './Stars'
 import { credited, Credit } from './credit'
 
@@ -112,28 +112,45 @@ export function splitPitches(text: string): string {
   return text.replace(mark, (_, lead: string, at: number) => (at === 0 ? lead : '<br>'))
 }
 
+/** A paragraph of the description: lines kept as they were, a little space after it unless it is the last. */
+const GAP = 'mt-1.5'
+
 function Description({ text }: { text: string }) {
-  const lines = splitLines(text).flatMap((l) => splitLines(splitPitches(l)))
+  const paras = paragraphs(text).map((p) => p.flatMap((l) => paragraphs(splitPitches(l)).flat()))
+  const lines = paras.flat()
   const pitches = lines.length > 1 && lines.some((l) => parsePitch(l).label)
   if (!pitches)
     return (
-      <p className={`mt-0.5 sm:text-justify ${INDENT}`}>
-        <Lines text={text} />
-      </p>
+      <div className={`mt-0.5 sm:text-justify ${INDENT}`}>
+        {paras.map((p, i) => (
+          <p key={i} className={i ? GAP : ''}>
+            {p.map((l, j) => (
+              <Fragment key={j}>
+                {j > 0 && <br />}
+                {l}
+              </Fragment>
+            ))}
+          </p>
+        ))}
+      </div>
     )
   return (
     <div className={`mt-0.5 grid grid-cols-[auto_1fr] gap-x-2 sm:text-justify ${INDENT}`}>
-      {lines.map((line, i) => {
-        const p = parsePitch(line)
-        return p.label ? (
-          <Fragment key={i}>
-            <span className="font-bold text-grade">{p.label}</span>
-            <span>{p.text}</span>
-          </Fragment>
-        ) : (
-          <span key={i} className="col-span-2">{p.text}</span>
-        )
-      })}
+      {paras.map((para, k) => (
+        <div key={k} className={`col-span-2 grid grid-cols-subgrid ${k ? GAP : ''}`}>
+          {para.map((line, i) => {
+            const p = parsePitch(line)
+            return p.label ? (
+              <Fragment key={i}>
+                <span className="font-bold text-grade">{p.label}</span>
+                <span>{p.text}</span>
+              </Fragment>
+            ) : (
+              <span key={i} className="col-span-2">{p.text}</span>
+            )
+          })}
+        </div>
+      ))}
     </div>
   )
 }
