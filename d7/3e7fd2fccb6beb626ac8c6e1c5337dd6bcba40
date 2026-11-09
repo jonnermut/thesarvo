@@ -1,0 +1,31 @@
+thesarvo-3/src/guide/view/text.test.tsx
+  s_e20d0a1ebc47aa::t_4c18dd6254df5f 3
+  s_e20d0a1ebc47aa::t_c5bbd41c952381 21-25
+thesarvo-3/src/guide/convert/richify.ts
+  s_e20d0a1ebc47aa::t_c5bbd41c952381 6
+  s_e20d0a1ebc47aa::t_8a0d5f0b3c7c2d 64,103-104
+  s_e20d0a1ebc47aa::t_e5a3deb526638f 23-26
+thesarvo-3/src/guide/view/ClimbBlock.tsx
+  s_e20d0a1ebc47aa::t_8a0d5f0b3c7c2d 3,125
+thesarvo-3/src/guide/convert/richify.test.ts
+  s_e20d0a1ebc47aa::t_e5a3deb526638f 5-9
+  s_e20d0a1ebc47aa::t_c5bbd41c952381 10-15
+thesarvo-3/src/guide/view/breaks.ts
+  s_e20d0a1ebc47aa::t_8a0d5f0b3c7c2d 23-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d73e7fd2fccb6beb626ac8c6e1c5337dd6bcba40",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
