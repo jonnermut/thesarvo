@@ -1,8 +1,8 @@
 import { useSizedTopo } from '#/guide/view/useSizedTopo'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { imageUrl } from '#/guide/content/paths'
-import { labelAnchor, nearestT } from '#/guide/model/geometry'
-import type { Climb, ImageTopo, LineStyle, Point, RectStyle } from '#/guide/model/types'
+import { labelAnchor, nearestT, pathData } from '#/guide/model/geometry'
+import type { Climb, ImageTopo, LineStyle, Point, RectStyle, RoutePath } from '#/guide/model/types'
 import { Callout, Route } from '#/guide/view/Topo'
 import { labelSpots } from '#/guide/view/labelSpot'
 import { isMarkerKind } from '#/guide/view/markers'
@@ -11,6 +11,7 @@ import { AreaField, Button, CheckField, CommitNumberField, DeleteButton, NumberF
 import { ClimbDialog, CragMarks, STARS } from './NodeForms'
 import { editedPoint } from './photoEdit'
 import { ImagePicker } from './ImagePicker'
+import { useCoarsePointer, watchLongPress } from './longPress'
 import { PhotoEditor } from './PhotoEditor'
 import type { EditedPhoto } from './PhotoEditor'
 import * as ops from './topoOps'
@@ -59,16 +60,29 @@ const SHORTCUTS = [
 /** How close (screen px) a new route's start must be to another route's end to join it. */
 const SNAP_PX = 12
 
+/** The route being drawn as it will be saved: the clicked points plus the mouse as a trailing point, through the same curve. */
+const drawingPath = (drawing: Point[], hover: { x: number; y: number } | null, arrow: boolean): RoutePath => {
+  const last = drawing.at(-1)
+  const points = hover && last && Math.hypot(last.x - hover.x, last.y - hover.y) >= 3 ? [...drawing, { ...hover, kind: '' }] : drawing
+  return { id: 'drawing', points, d: pathData(points), linkedTo: '', lineStyle: 'solid', labelText: '', arrow }
+}
+
 const TOOLS: [Tool, string][] = [['select', 'Select'], ['route', 'Draw route'], ['rect', 'Add text box']]
 
-export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kind, onAddClimb, onEditClimb }: Props) {
+export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange: change, kind, onAddClimb, onEditClimb }: Props) {
   const topo = useSizedTopo(guideId, stored)
+  /** Edits see the topo's real size, so clamping to the photo works on old topos saved without one (it is saved with the first edit). */
+  const onChange: Props['onChange'] = (update, key) => change((t) => update({ ...t, width: topo.width, height: topo.height }), key)
   const svgRef = useRef<SVGSVGElement>(null)
   const gesture = useRef(0)
+  /** On a finger the handles are bigger, and a long press deletes. */
+  const touch = useCoarsePointer()
   const [tool, setTool] = useState<Tool>('select')
   const [selection, setSelection] = useState<Selection>(null)
   const [pointIndex, setPointIndex] = useState<number | null>(null)
   const [drawing, setDrawing] = useState<Point[]>([])
+  /** Where the mouse is while drawing, so the route shows the curve it will become; null on touch, which has no hover. */
+  const [hover, setHover] = useState<{ x: number; y: number } | null>(null)
   const [help, setHelp] = useState(false)
   /** The linked climb's full form is open in a popup. */
   const [details, setDetails] = useState(false)
@@ -243,7 +257,7 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
         ))}
         {tool === 'route' && drawing.length > 0 && <Button onClick={() => setDrawing([])}>Clear points</Button>}
         {tool === 'select' ? (
-          <span className="text-xs text-muted">Drag handles to move, or use the arrow keys. Delete removes the selection.</span>
+          <span className="text-xs text-muted">Drag handles to move, or use the arrow keys. Delete removes the selection.{touch && ' Hold a point, route or label to delete it; Undo brings it back.'}</span>
         ) : (
           <span className="flex items-center gap-2 rounded-md bg-amber/15 px-2 py-1 text-xs font-medium text-ink">
             <span className="size-2 animate-pulse rounded-full bg-amber" aria-hidden />
@@ -272,7 +286,7 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
           {(scale) => {
           // Handles keep one size on screen however far the photo is zoomed.
           zoom.current = scale
-          const u = 1 / scale
+          const u = (touch ? 1.9 : 1) / scale
           return (
           <>
           <img src={imageUrl(guideId, topo.src)} alt="" width={topo.width} height={topo.height} className="block size-full select-none" draggable={false} />
@@ -281,6 +295,11 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
             viewBox={`0 0 ${topo.width} ${topo.height}`}
             className={`absolute inset-0 size-full ${tool === 'select' ? '' : 'cursor-crosshair'}`}
             onClick={onBackgroundClick}
+            onPointerMove={(e) => {
+              if (tool !== 'route' || !drawing.length) return
+              setHover(e.pointerType === 'touch' ? null : toImage(e))
+            }}
+            onPointerLeave={() => setHover(null)}
             onDoubleClick={() => drawing.length && finishRoute()}
           >
             {topo.paths.map((path) => (
@@ -291,6 +310,10 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
                   e.stopPropagation()
                   setSelection({ kind: 'path', id: path.id })
                   setPointIndex(null)
+                  watchLongPress(e, () => {
+                    onChange((t) => ops.removePath(t, path.id))
+                    setSelection(null)
+                  })
                 }}
                 className={selection?.id === path.id ? '[&_path:nth-child(2)]:stroke-amber' : ''}
               >
@@ -305,6 +328,10 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
                 onPointerDown={(e) => {
                   if (tool !== 'select') return
                   setSelection({ kind: 'rect', id: rect.id })
+                  watchLongPress(e, () => {
+                    onChange((t) => ops.removeRect(t, rect.id))
+                    setSelection(null)
+                  })
                   const dx = toImage(e).x - rect.x
                   const dy = toImage(e).y - rect.y
                   startDrag(e, (p) => (t) => ops.updateRect(t, rect.id, { x: p.x - dx, y: p.y - dy }))
@@ -353,14 +380,19 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
                 className="cursor-grab"
                 onPointerDown={(e) => {
                   setPointIndex(i)
+                  watchLongPress(e, () => {
+                    onChange((t) => ops.removePoint(t, selectedPath.id, i))
+                    setPointIndex(null)
+                    if (selectedPath.points.length <= 2) setSelection(null)
+                  })
                   startDrag(e, (p) => (t) => ops.movePoint(t, selectedPath.id, i, p))
                 }}
               />
             ))}
             {drawing.length > 0 && (
               <g pointerEvents="none">
-                <polyline points={drawing.map((p) => `${p.x},${p.y}`).join(' ')} fill="none" stroke="#0ea5e9" strokeWidth={3 * u} strokeDasharray={`${6 * u} ${4 * u}`} />
-                {drawing.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={5 * u} fill="#0ea5e9" />)}
+                <Route path={drawingPath(drawing, hover, ops.newRouteArrow(topo, kind))} active={null} onActive={() => {}} />
+                {drawing.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={5 * u} fill="#fff" stroke="#0ea5e9" strokeWidth={2 * u} />)}
               </g>
             )}
           </svg>

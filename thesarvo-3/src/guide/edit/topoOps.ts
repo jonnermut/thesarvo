@@ -57,7 +57,8 @@ export const updateRect = (topo: ImageTopo, id: string, patch: Partial<TopoRect>
 
 export const removeRect = (topo: ImageTopo, id: string): ImageTopo => ({ ...topo, rects: topo.rects.filter((r) => r.id !== id) })
 
-const within = (n: number, size: number, max: number) => Math.round(Math.min(Math.max(0, n), Math.max(0, max - size)))
+/** Keeps a box of `size` inside `max`; a topo with no stored size (older pages) has no edge to keep inside. */
+const within = (n: number, size: number, max: number) => Math.round(max > 0 ? Math.min(Math.max(0, n), Math.max(0, max - size)) : Math.max(0, n))
 
 /** A label for a route: halfway along it, with its box up and to the right, ready to be dragged where it reads best. */
 export function addRouteLabel(topo: ImageTopo, id: string, pathId: string): ImageTopo {

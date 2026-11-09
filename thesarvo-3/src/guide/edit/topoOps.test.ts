@@ -172,4 +172,9 @@ describe('route labels', () => {
     expect(labelAnchor(withBox, withBox.rects[1])).toBeUndefined()
     expect(labelAnchor(labelled, label())).toEqual({ x: 100, y: 150 })
   })
+
+  it('does not squash labels to the corner on a topo whose size was never stored', () => {
+    const sizeless = addPath({ ...empty, width: 0, height: 0 }, 'p1', [pt(100, 100), pt(100, 200)], 'c1')
+    expect(addRouteLabel(sizeless, 'l1', 'p1').rects[0]).toMatchObject({ x: 124, y: 94 })
+  })
 })
