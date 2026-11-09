@@ -9,6 +9,7 @@ import { RECT_STYLES } from '#/guide/view/topoStyles'
 import { AreaField, Button, CheckField, CommitNumberField, DeleteButton, NumberField, SelectField, TextField } from './fields'
 import { ClimbDialog, CragMarks, STARS } from './NodeForms'
 import { editedPoint } from './photoEdit'
+import { ImagePicker } from './ImagePicker'
 import { PhotoEditor } from './PhotoEditor'
 import type { EditedPhoto } from './PhotoEditor'
 import * as ops from './topoOps'
@@ -73,6 +74,8 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
   /** The photo, open in the photo editor; an edited copy replaces it, with the drawing moved to match. */
   const [photo, setPhoto] = useState<File | null>(null)
   const [photoState, setPhotoState] = useState('')
+  /** The picker for putting the topo on another or a new photo. */
+  const [picking, setPicking] = useState(false)
   /** Screen pixels per photo pixel, to snap by a steady distance however far the photo is zoomed. */
   const zoom = useRef(1)
 
@@ -175,6 +178,19 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
     setSelection(null)
     setPointIndex(null)
     setPhoto(null)
+  }
+
+  // The drawing stays where it is on the photo; the picked photo's shape sets the topo's height.
+  const changePhoto = (name: string) => {
+    setPicking(false)
+    const img = new Image()
+    img.onload = () => {
+      onChange((t) => ops.changePhoto(t, name, img.naturalWidth, img.naturalHeight))
+      setSelection(null)
+      setPointIndex(null)
+    }
+    img.onerror = () => setPhotoState('Could not open that photo.')
+    img.src = imageUrl(guideId, name)
   }
 
   /** Starts a drag; moves are reported as one undo step. */
@@ -347,7 +363,7 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
                 label="Climb"
                 value={selectedPath.linkedTo}
                 options={[['', '— none —'], ...climbs.map((c) => [c.id, `${c.number} ${c.name}`.trim() || c.id] as const)]}
-                onChange={(linkedTo) => onChange((t) => ops.updatePath(t, selectedPath.id, { linkedTo }))}
+                onChange={(linkedTo) => onChange((t) => ops.linkPath(t, selectedPath.id, linkedTo))}
               />
               {linked ? (
                 <>
@@ -418,6 +434,8 @@ export function TopoEditor({ guideId, topo: stored, climbs, newId, onChange, kin
                 <Button onClick={openPhoto} disabled={!!photoState && !photoState.startsWith('Could')}>
                   Edit photo…
                 </Button>
+                <Button onClick={() => setPicking(true)}>Change photo…</Button>
+                {picking && <ImagePicker guideId={guideId} onPick={changePhoto} onClose={() => setPicking(false)} />}
                 <span className="text-xs text-muted">{photoState || 'Turn, straighten, crop or brighten it; routes and labels move with it.'}</span>
                 {photo && <PhotoEditor file={photo} onDone={savePhoto} onCancel={() => setPhoto(null)} />}
               </div>

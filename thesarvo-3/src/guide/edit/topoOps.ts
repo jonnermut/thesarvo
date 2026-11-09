@@ -120,6 +120,16 @@ export function reframe(topo: ImageTopo, src: string, width: number, height: num
   }
 }
 
+/** The topo on another photo, at the same width: routes, labels and the legend keep their place on the photo (as fractions of it), whatever its shape. */
+export const changePhoto = (topo: ImageTopo, src: string, width: number, height: number): ImageTopo =>
+  reframe(topo, src, topo.width, Math.round((topo.width * height) / width), (x, y) => ({ x: x / topo.width, y: y / topo.height }))
+
+/** Links a route to a climb; as in the old editor the climb joins the topo's legend too. */
+export const linkPath = (topo: ImageTopo, id: string, climbId: string): ImageTopo => {
+  const linked = updatePath(topo, id, { linkedTo: climbId })
+  return climbId && !linked.legend.includes(climbId) ? { ...linked, legend: [...linked.legend, climbId] } : linked
+}
+
 /** A new route matches the topo's other routes; on a topo with none yet, boulder problems get arrow heads. */
 export const newRouteArrow = (topo: ImageTopo, kind: 'climb' | 'problem') =>
   topo.paths.length ? topo.paths.filter((p) => p.arrow).length * 2 > topo.paths.length : kind === 'problem'

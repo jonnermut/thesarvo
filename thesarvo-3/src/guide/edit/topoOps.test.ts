@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ImageTopo } from '#/guide/model/types'
-import { addPath, addRect, newRouteArrow, insertPointAfter, movePoint, nudgePath, nudgePoint, nudgeRect, reframe, removePoint, resize, setPointKind, setLegendOnPhoto, snapPoint, toggleLegend } from './topoOps'
+import { addPath, addRect, changePhoto, linkPath, newRouteArrow, insertPointAfter, movePoint, nudgePath, nudgePoint, nudgeRect, reframe, removePoint, resize, setPointKind, setLegendOnPhoto, snapPoint, toggleLegend } from './topoOps'
 
 const empty: ImageTopo = {
   type: 'image', id: '1', src: 'a.jpg', width: 100, height: 100, noPrint: false, printLayout: '',
@@ -119,5 +119,25 @@ describe('nudging and snapping', () => {
   it('leaves a point alone when nothing is close, or only a middle point is', () => {
     expect(snapPoint(topo, { x: 40, y: 62 }, 10)).toEqual({ x: 40, y: 62 })
     expect(snapPoint(topo, { x: 70, y: 70 }, 10)).toEqual({ x: 70, y: 70 })
+  })
+})
+
+describe('changePhoto and linkPath', () => {
+  const topo = { ...addPath({ ...empty, width: 200, height: 100, legendX: 20, legendY: 10 }, 'p1', [pt(50, 50), pt(100, 20)]), legend: ['c1'] }
+
+  it('moves onto another photo at the same width, keeping the drawing in place on it', () => {
+    const t = changePhoto(topo, 'b.jpg', 3000, 1500)
+    expect(t).toMatchObject({ src: 'b.jpg', width: 200, height: 100 })
+    const tall = changePhoto(topo, 'c.jpg', 1000, 1000)
+    expect(tall).toMatchObject({ width: 200, height: 200, legendX: 20, legendY: 20 })
+    expect(tall.paths[0]?.points.map((p) => [p.x, p.y])).toEqual([[50, 100], [100, 40]])
+  })
+
+  it('links a route to a climb and puts the climb in the legend once', () => {
+    const t = linkPath(topo, 'p1', 'c2')
+    expect(t.paths[0]?.linkedTo).toBe('c2')
+    expect(t.legend).toEqual(['c1', 'c2'])
+    expect(linkPath(t, 'p1', 'c2').legend).toEqual(['c1', 'c2'])
+    expect(linkPath(t, 'p1', '').legend).toEqual(['c1', 'c2'])
   })
 })
