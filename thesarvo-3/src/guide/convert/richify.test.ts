@@ -2,6 +2,17 @@ import { describe, expect, it } from 'vitest'
 import { htmlToText, needsFormatting, textToHtml, textToParas } from './richify'
 
 describe('textToHtml', () => {
+  it('keeps the closing bracket of an address that has an opening one, and leaves a bracket around an address out', () => {
+    expect(textToHtml('see http://x.org/a-(b-c) now')).toContain('href="http://x.org/a-(b-c)"')
+    expect(textToHtml('(see http://x.org/a)')).toContain('href="http://x.org/a"')
+  })
+
+  it('starts a paragraph at a single break after a finished sentence, unless both lines are short', () => {
+    expect(textToHtml('Park at the chain gate beside the vineyard sign.<br/>For the other crag, drive a few km on.')).toBe('<p>Park at the chain gate beside the vineyard sign.</p><p>For the other crag, drive a few km on.</p>')
+    expect(textToHtml('Joe Bloggs.<br/>0400 000 000')).toBe('<p>Joe Bloggs.<br>0400 000 000</p>')
+    expect(textToHtml('Access:<br/>park at the gate and walk in for twenty minutes along the river.')).toBe('<p>Access:<br>park at the gate and walk in for twenty minutes along the river.</p>')
+  })
+
   it('makes a paragraph of a line and a <br> of a single line break', () => {
     expect(textToHtml('One line')).toBe('<p>One line</p>')
     expect(textToHtml('a<br/>b')).toBe('<p>a<br>b</p>')

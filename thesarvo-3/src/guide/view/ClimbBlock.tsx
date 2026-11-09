@@ -1,6 +1,6 @@
 import type { Climb } from '#/guide/model/types'
 import { Fragment, useState } from 'react'
-import { paragraphs } from './breaks'
+import { paragraphs, sentenceParas } from './breaks'
 import { Stars } from './Stars'
 import { credited, Credit } from './credit'
 
@@ -122,7 +122,7 @@ function Description({ text }: { text: string }) {
   if (!pitches)
     return (
       <div className={`mt-0.5 sm:text-justify ${INDENT}`}>
-        {paras.map((p, i) => (
+        {paras.flatMap(sentenceParas).map((p, i) => (
           <p key={i} className={i ? GAP : ''}>
             {p.map((l, j) => (
               <Fragment key={j}>

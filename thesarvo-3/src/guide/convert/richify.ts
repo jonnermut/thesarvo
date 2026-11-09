@@ -3,6 +3,7 @@
  * and bare addresses) turned into the HTML of the guide profile (`sanitizeHtml(html, 'guide')`). Pure strings, so the editor's
  * "Add formatting" button and the migration script (thesarvo-private/scripts) share it. Nothing here needs a DOM.
  */
+import { startsParagraph } from '../view/breaks'
 
 /** One block of the result: an HTML paragraph or list, or a notice (`kind`) whose `html` is the inline HTML of its text. */
 export type Para = { html: string; kind?: 'note' | 'warning' }
@@ -19,7 +20,10 @@ const EMAIL = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g
 /** Bare web and email addresses become links; the full stop after one stays outside it. */
 function link(text: string): string {
   const withUrls = text.replace(URL, (u) => {
-    const tail = /[.,;:!?)\]]+$/.exec(u)?.[0] ?? ''
+    let tail = /[.,;:!?)\]]+$/.exec(u)?.[0] ?? ''
+    // A closing bracket the address itself opened ("…plots-(sites-m-z)") belongs to it.
+    const open = (u.slice(0, u.length - tail.length).match(/\(/g) ?? []).length - (u.slice(0, u.length - tail.length).match(/\)/g) ?? []).length
+    for (let k = 0; k < open && tail.startsWith(')'); k++) tail = tail.slice(1)
     const url = u.slice(0, u.length - tail.length)
     return `<a href="${url}" rel="noopener noreferrer nofollow">${url}</a>${tail}`
   })
@@ -57,7 +61,7 @@ function callout(text: string): { kind: 'note' | 'warning'; text: string } | nul
   return null
 }
 
-/** The text as blocks: paragraphs (a single line break stays a `<br>`), lists and notices, in order. */
+/** The text as blocks: paragraphs (a single line break after a finished sentence starts a new one, otherwise it stays a `<br>`), lists and notices, in order. */
 export function textToParas(text: string): Para[] {
   const lines = text.split(BR).map(classify)
   const out: Para[] = []
@@ -96,6 +100,8 @@ export function textToParas(text: string): Para[] {
       i = numberEnd - 1
       continue
     }
+    // A single break after a finished sentence is a paragraph too, so nobody needs to type blank lines for spacing.
+    if (para.length && startsParagraph(para.at(-1) ?? '', line.text)) flush()
     para.push(line.text)
   }
   flush()
