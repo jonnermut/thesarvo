@@ -1,0 +1,47 @@
+thesarvo-3/src/guide/edit/topoOps.test.ts
+  s_e20d0a1ebc47aa::t_59f518a84d1abd 149,172
+  s_e20d0a1ebc47aa::t_2e527a6a444077 3-4
+  s_e20d0a1ebc47aa::t_25258f01d3dda2 145-148,150-171,173-174
+  s_e20d0a1ebc47aa::t_6541b36a1103ff 175
+thesarvo-3/src/guide/view/Topo.tsx
+  s_e20d0a1ebc47aa::t_8720e598616a99 133-134,141,144-149,213
+  s_e20d0a1ebc47aa::t_2e527a6a444077 2
+thesarvo-3/src/guide/model/geometry.ts
+  s_e20d0a1ebc47aa::t_007fc28498f24c 63-69
+  s_e20d0a1ebc47aa::t_2e527a6a444077 2
+  s_e20d0a1ebc47aa::t_59f518a84d1abd 23,27-28,33,39,44-45
+  s_e20d0a1ebc47aa::t_25258f01d3dda2 14-22,24-26,29-32,34-38,40-43,46-62
+thesarvo-3/src/guide/model/types.ts
+  s_e20d0a1ebc47aa::t_d026d2f6198082 111-113
+thesarvo-3/src/guide/edit/topoOps.ts
+  s_e20d0a1ebc47aa::t_2e527a6a444077 1
+  s_e20d0a1ebc47aa::t_25258f01d3dda2 43-44,60-97
+  s_e20d0a1ebc47aa::t_22ccf9824df5ec 98
+thesarvo-3/src/guide/model/geometry.test.ts
+  s_e20d0a1ebc47aa::t_25258f01d3dda2 1-25
+thesarvo-3/src/guide/edit/TopoEditor.tsx
+  s_e20d0a1ebc47aa::t_75983e3881ff1f 62,300-302,314,318-329,342-343,426-435,441,449-455
+  s_e20d0a1ebc47aa::t_bc10c47e07f4b5 4
+thesarvo-3/src/guide/save/validate.test.ts
+  s_e20d0a1ebc47aa::t_722a2124bbdf77 22-29
+thesarvo-3/src/guide/edit/Editor.tsx
+  s_e20d0a1ebc47aa::t_75983e3881ff1f 21,367
+thesarvo-3/src/guide/save/validate.ts
+  s_e20d0a1ebc47aa::t_d026d2f6198082 78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "71a02f3d66dc0e93782a25d03824343ef7090dd3",
+  "prompts": {},
+  "sessions": {
+    "s_e20d0a1ebc47aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ff398479-4fb5-489d-a065-a87610773e55",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
