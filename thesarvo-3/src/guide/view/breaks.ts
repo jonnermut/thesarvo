@@ -6,7 +6,7 @@ export function paragraphs(text: string): string[][] {
   const out: string[][] = []
   let gap = false
   for (const raw of splitLines(text)) {
-    const line = raw.replace(/ /g, ' ').trim()
+    const line = raw.replace(/\u00a0/g, ' ').trim()
     if (!line) {
       gap = out.length > 0
       continue

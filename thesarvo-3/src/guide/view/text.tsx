@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
-
-export { splitLines } from './breaks'
 import { splitLines } from './breaks'
+
+export { splitLines }
 
 export function Lines({ text }: { text: string }) {
   const lines = splitLines(text)
