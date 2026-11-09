@@ -1,0 +1,27 @@
+thesarvo-android/app/src/main/kotlin/com/thesarvo/guide/AppModel.kt
+  s_e9cd55a1f49583::t_a3d00bf345481b 77-79,181,249-250,325-331,339-346,350-352,393-394
+thesarvo-android/app/src/main/kotlin/com/thesarvo/guide/ui/Root.kt
+  s_e9cd55a1f49583::t_0a9cbaa62949b6 26,30,172,174,176
+thesarvo-android/app/src/main/kotlin/com/thesarvo/guide/web/WebModel.kt
+  s_e9cd55a1f49583::t_65fc241f5b81d8 163-164
+thesarvo-android/core/src/main/kotlin/com/thesarvo/core/Queue.kt
+  s_e9cd55a1f49583::t_99e90b53b534fd 52,82
+thesarvo-android/core/src/test/kotlin/com/thesarvo/core/CoreTest.kt
+  s_e9cd55a1f49583::t_c7cd7ca83b1a98 223-224
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8bf8b14c0120a9fa0f78c267653fe1573610c7f7",
+  "prompts": {},
+  "sessions": {
+    "s_e9cd55a1f49583": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1c2638e6-8c6a-42c3-85d9-4cd938b67512",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
