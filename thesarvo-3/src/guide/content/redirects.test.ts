@@ -35,3 +35,8 @@ it('sends the old Contact, Contribute, and Copyright pages to their sections of 
   expect(out['t:thesarvo/thesarvo ios and android app privacy policy']).toBe('/g/more/app-privacy-policy/')
   expect(redirectEntries(node('414', '', false), new Map())['p:407']).toBeUndefined()
 })
+
+it('sends the old North and South Esk page to the Cataract Gorge page that took its text', () => {
+  const root = node('414', '', false, [node('8683585', 'north-east/cataract-gorge', true)])
+  expect(redirectEntries(root, new Map())).toMatchObject({ 'p:95': '/g/north-east/cataract-gorge/', 't:thesarvo/north and south esk': '/g/north-east/cataract-gorge/' })
+})

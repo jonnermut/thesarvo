@@ -21,6 +21,8 @@ const FOLDED: [id: string, title: string, section: string][] = [
 const ABOUT = '296'
 /** The privacy policy is its own page again (it was a section of About): old id, old title, the new page. */
 const PRIVACY: [id: string, title: string, page: string] = ['398327814', 'thesarvo iOS and Android App Privacy Policy', '9000000022']
+/** The Launceston overview page was merged into the Cataract Gorge page (and retired): old id, old title, the page that has its text. */
+const MERGED: [id: string, title: string, page: string] = ['95', 'North and South Esk', '8683585']
 
 /**
  * What the edge needs to send old addresses to the new site, as key/value pairs for the `thesarvo-redirects` store (scripts/edge/viewer-request.js):
@@ -49,6 +51,11 @@ export function redirectEntries(index: IndexNode, oldUrls: ReadonlyMap<string, s
   if (privacy) {
     out[`p:${PRIVACY[0]}`] = `${guideUrl(privacy)}/`
     out[`t:thesarvo/${PRIVACY[1].toLowerCase()}`] = `${guideUrl(privacy)}/`
+  }
+  const merged = flatten(index).find((n) => n.id === MERGED[2])
+  if (merged) {
+    out[`p:${MERGED[0]}`] = `${guideUrl(merged)}/`
+    out[`t:thesarvo/${MERGED[1].toLowerCase()}`] = `${guideUrl(merged)}/`
   }
   return out
 }
