@@ -3,6 +3,7 @@ import { useUser } from '#/auth/session'
 import { GUIDE_PREFIX } from '#/guide/content/paths'
 import { avatarFile, emailKey, parseAvatars } from './keys'
 import type { AvatarMap } from './keys'
+import { botFor, Robot } from './Robot'
 
 const fetchMap = (url: string) =>
   fetch(url)
@@ -43,6 +44,8 @@ export function Avatar({ ids, name, className = 'size-6 text-xs', tone = 'bg-was
       window.removeEventListener('avatars-changed', look)
     }
   }, [key])
+  const bot = botFor(ids)
+  if (bot) return <Robot bot={bot} className={className} />
   return src ? (
     <img src={src} alt="" loading="lazy" className={`${className} shrink-0 rounded-full object-cover`} />
   ) : (
