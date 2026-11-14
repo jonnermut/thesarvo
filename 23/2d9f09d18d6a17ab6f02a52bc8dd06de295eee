@@ -1,0 +1,21 @@
+thesarvo-3/src/guide/view/labelSpot.test.ts
+  s_8d42cf6d35a589::t_91a7be109393bf 36-38
+thesarvo-3/src/guide/view/labelSpot.ts
+  s_8d42cf6d35a589::t_91a7be109393bf 32-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "232d9f09d18d6a17ab6f02a52bc8dd06de295eee",
+  "prompts": {},
+  "sessions": {
+    "s_8d42cf6d35a589": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5714ebbc-425b-4b0d-a3cc-59de2f063047",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
