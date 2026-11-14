@@ -39,16 +39,26 @@ export function WhatsNew() {
           {(all ? changes : changes.slice(0, SHOWN)).map((c) => (
             <li key={c.id} className="flex items-start gap-2">
               <Avatar ids={[c.sub, c.key].filter((x): x is string => !!x)} name={c.name} className="mt-0.5 size-5 shrink-0 text-[10px]" />
-              <div className="line-clamp-2 min-w-0">
-                <Link to="/g/$" params={{ _splat: c.path }} search={{ history: true }} hash={c.session} rel="nofollow" className="font-semibold text-link hover:underline">
-                  {c.title}
-                </Link>
-                <span className="text-muted">
-                  {' '}
-                  · {c.name ? `${c.name} ` : ''}
-                  {c.description} · {day(c.at)}
-                </span>
-              </div>
+              {c.guides ? (
+                <div className="line-clamp-2 min-w-0">
+                  <span className="font-semibold">{c.name}</span>
+                  <span className="text-muted">
+                    {' '}
+                    {c.description} · {day(c.at)}
+                  </span>
+                </div>
+              ) : (
+                <div className="line-clamp-2 min-w-0">
+                  <Link to="/g/$" params={{ _splat: c.path }} search={{ history: true }} hash={c.session} rel="nofollow" className="font-semibold text-link hover:underline">
+                    {c.title}
+                  </Link>
+                  <span className="text-muted">
+                    {' '}
+                    · {c.name ? `${c.name} ` : ''}
+                    {c.description} · {day(c.at)}
+                  </span>
+                </div>
+              )}
             </li>
           ))}
         </ul>

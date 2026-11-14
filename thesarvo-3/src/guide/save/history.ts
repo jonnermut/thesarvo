@@ -22,6 +22,8 @@ export type HistoryEntry = {
   /** e.g. "edited the climb Albatros", "added 4 climbs and a topo". */
   description: string
   note?: string
+  /** One run over many guides (the same `session` on each, e.g. a bot's copy-edit): What's new shows the run as one line, this text with `{n}` for the number of guides, e.g. "fixed up {n} guides". */
+  batch?: string
 }
 
 /** `guide` is the guide after the save, to name blocks that only moved. */
