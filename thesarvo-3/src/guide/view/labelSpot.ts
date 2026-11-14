@@ -29,6 +29,11 @@ export function labelSpots(paths: RoutePath[], width: number, height: number, sc
     }
     const [at, next] = path.points
     if (!at) continue
+    // A cover (see Route) hides a number drawn into an old photo, so the number stays on the point.
+    if (path.other?.cover) {
+      spots.set(path.id, { x: at.x, y: at.y })
+      continue
+    }
     const group = groups.get(key(at))!
     // Java's integer division: two routes give 0 and 1, three give -1, 0 and 1.
     const split = Math.trunc((1 - group.length) / 2) + group.indexOf(at)

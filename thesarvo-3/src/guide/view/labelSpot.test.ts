@@ -33,4 +33,7 @@ describe('labelSpots', () => {
     expect(labelSpots([path('edge', [5, 395])], 300, 400).get('edge')).toEqual({ x: 11, y: 389 })
     expect(labelSpots([path('l', [100, 300], [100, 250, 'label'], [100, 100])], 500, 500).get('l')).toEqual({ x: 100, y: 250 })
   })
+  it('keeps the number of a cover on its point', () => {
+    expect(labelSpots([{ ...path('c', [100, 300]), other: { cover: '22,22' } }], 500, 500).get('c')).toEqual({ x: 100, y: 300 })
+  })
 })
