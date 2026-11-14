@@ -1,0 +1,21 @@
+thesarvo-3/src/guide/content/recent.ts
+  s_f0f5e7cac9d508::t_8c6da915127e21 13,15-19,21-26
+thesarvo-3/src/guide/content/recent.test.ts
+  s_f0f5e7cac9d508::t_8c6da915127e21 31,34,41,43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9c57661dde95d911ce5b7a5e7d0afe783518fe90",
+  "prompts": {},
+  "sessions": {
+    "s_f0f5e7cac9d508": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5b0cd1ad-32ec-4f5e-bc04-2a7eb7b1b48d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
