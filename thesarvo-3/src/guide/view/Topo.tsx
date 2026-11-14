@@ -25,6 +25,12 @@ type Props = {
 
 const numberLabel = (c?: Climb) => c?.number.replace(/\.$/, '') ?? ''
 
+/** A one-point path with `other.cover` ("width,height") also paints a black box that size under its number, to hide a number drawn into an old photo. */
+export function coverSize(path: RoutePath): { w: number; h: number } | undefined {
+  const [w, h] = (path.other?.cover ?? '').split(',').map(Number)
+  return w && h && w > 0 && h > 0 ? { w, h } : undefined
+}
+
 export function Route({
   path,
   climb,
@@ -51,6 +57,7 @@ export function Route({
   const dimmed = active !== null && active !== path.linkedTo
   const label = numberLabel(climb)
   const d = path.d || pathData(path.points)
+  const cover = coverSize(path)
   return (
     <g
       opacity={dimmed ? 0.3 : 1}
@@ -86,6 +93,7 @@ export function Route({
       ))}
       {at && label && (
         <>
+          {cover && <rect x={at.x - cover.w / 2} y={at.y - cover.h / 2} width={cover.w} height={cover.h} rx={2} fill="#000" />}
           <circle cx={at.x} cy={at.y} r={(LABEL_SIZE / 2) * scale} fill={climb && isSport(climb.extra) ? SPORT_RED : '#000'} />
           <text x={at.x} y={at.y} textAnchor="middle" dominantBaseline="central" fontSize={(label.length > 2 ? 9 : 11) * scale} fontWeight={700} fill="#fff">
             {label}

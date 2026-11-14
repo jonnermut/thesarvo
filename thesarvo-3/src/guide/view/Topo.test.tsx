@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 import { expect, it } from 'vitest'
 import type { RoutePath } from '#/guide/model/types'
-import { Route } from './Topo'
+import { coverSize, Route } from './Topo'
 
 const path: RoutePath = {
   id: 'p1',
@@ -26,4 +26,10 @@ it('draws a marker at every belay and lower-off, not only the last point', () =>
   )
   expect(container.querySelectorAll('circle')).toHaveLength(2)
   expect(container.querySelectorAll('path[transform]')).toHaveLength(1)
+})
+
+it('reads the size of the box a one-point path covers', () => {
+  expect(coverSize({ ...path, other: { cover: '22,26' } })).toEqual({ w: 22, h: 26 })
+  expect(coverSize(path)).toBeUndefined()
+  expect(coverSize({ ...path, other: { cover: 'x' } })).toBeUndefined()
 })
