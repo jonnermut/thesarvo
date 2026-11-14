@@ -1,0 +1,22 @@
+thesarvo-3/src/guide/view/Topo.tsx
+  s_8d42cf6d35a589::t_5b984d34a059c9 28-33,60,96
+thesarvo-3/src/guide/view/Topo.test.tsx
+  s_8d42cf6d35a589::t_dfd14c393fdb91 4,30-34
+  s_8d42cf6d35a589::t_00b1e0d653d9f2 35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "540b188a10f3843054222d432e378bccb79dd559",
+  "prompts": {},
+  "sessions": {
+    "s_8d42cf6d35a589": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5714ebbc-425b-4b0d-a3cc-59de2f063047",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Jon Nermut <jon.nermut@gmail.com>"
+    }
+  }
+}
